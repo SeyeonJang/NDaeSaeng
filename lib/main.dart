@@ -1,6 +1,7 @@
 import 'package:dart_flutter/src/presentation/signup/select_image.dart';
 import 'package:dart_flutter/src/presentation/signup/user_name.dart';
 import 'package:flutter/material.dart';
+import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 
 import 'package:dart_flutter/photo_screen.dart';
 import 'package:dart_flutter/src/presentation/signup/choose_id.dart';
@@ -9,7 +10,11 @@ import 'landing_page.dart';
 
 // 랜딩페이지
 void main() {
-  runApp(const MaterialApp(home: MyApp()));
+  WidgetsFlutterBinding.ensureInitialized();
+  KakaoSdk.init(
+    nativeAppKey: 'c83df49e14c914b9bda9b902b6624da2',
+  );
+  runApp(const MyApp());
 }
 
 // stless 입력으로 기존 기본 템플릿 -> stateless로 변경
