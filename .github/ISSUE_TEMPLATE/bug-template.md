@@ -1,7 +1,7 @@
 ---
 name: Bug Template
 about: 치명적이거나 짜잘한, 기대하지 않은 모든 행동들!
-title: "[BUG] title"
+title: "[FE][BUG] title"
 labels: bug
 assignees: ''
 
@@ -11,6 +11,8 @@ assignees: ''
 > 버그 한줄 설명, 어떤 버그이고 어떤 결과(치명적)를 초래하는지
 
 <br/>
+
+
 
 ## ✨ 재현
 ### 대상 정보
@@ -28,10 +30,14 @@ ServiceVersion: v1.0.0
 
 <br/>
 
+
+
 ## 🛠 상세내용(TODO)
 - [ ] task는 최대한 상세히 나누면 좋아용
 
 <br/>
+
+
 
 ## 📙 참고사항
 - 스크린샷, 링크, 관련자료 등

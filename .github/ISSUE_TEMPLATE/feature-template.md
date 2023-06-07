@@ -1,7 +1,7 @@
 ---
 name: Feature Template
 about: 새로운 기능 추가! 또는 기존 기능 확장!
-title: "[FEAT] title"
+title: "[FE][FEAT] title"
 labels: enhancement
 assignees: ''
 
@@ -12,10 +12,14 @@ assignees: ''
 
 <br/>
 
+
+
 ## 🛠 상세내용(TODO)
 - [ ] task는 최대한 상세히 나누면 좋아용
 
 <br/>
+
+
 
 ## 📙 참고사항
 - 스크린샷, 링크, 관련자료 등
