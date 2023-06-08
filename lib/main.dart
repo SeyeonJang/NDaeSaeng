@@ -3,10 +3,10 @@ import 'package:dart_flutter/src/presentation/signup/user_name.dart';
 import 'package:flutter/material.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 
-import 'package:dart_flutter/photo_screen.dart';
+// import 'package:dart_flutter/photo_screen.dart';
 import 'package:dart_flutter/src/presentation/signup/choose_id.dart';
 import 'package:dart_flutter/src/presentation/signup/choose_school.dart';
-import 'landing_page.dart';
+// import 'landing_page.dart';
 
 // 랜딩페이지
 void main() {
@@ -32,9 +32,9 @@ class MyApp extends StatelessWidget {
               const SizedBox(
                 height: 130,
               ),
-              const Text("Dart", style: TextStyle(fontSize: 25)),
+              const Text("Dart", style: TextStyle(fontSize: 50)),
               const SizedBox(height: 50,),
-              Image.asset('assets/images/dart_logo.png'), // 앱 로고 들어갈 자리
+              Image.asset('assets/images/dart_logo.png', width: 150, height: 150,), // 앱 로고 들어갈 자리
               const SizedBox(
                 height: 100,
               ),
