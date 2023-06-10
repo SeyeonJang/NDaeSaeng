@@ -44,22 +44,33 @@ class _UserPhoneState extends State<UserPhone> {
     return Scaffold(
       appBar: AppBar(
         // title: const Text('User Phone'),
+        leading: IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            }, icon: Icon(Icons.arrow_back)),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
+      body: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          // mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text('환영해요! ${widget.userName}님'),
-            const SizedBox(height: 16.0),
-            TextField(
-              controller: _phoneController,
-              decoration: const InputDecoration(
-                // labelText: 'Phone Number',
-                hintText: "010-0000-0000 형태로 입력해주세요!"
+            const SizedBox(
+              height: 85,
+            ),
+            Text('환영해요! ${widget.userName}님', style: TextStyle(fontSize: 15)),
+            Text("전화번호 입력", style: TextStyle(fontSize: 25)),
+            const SizedBox(height: 140),
+
+            SizedBox(
+              width: 400,
+              child: TextField(
+                controller: _phoneController,
+                decoration: const InputDecoration(
+                  // labelText: 'Phone Number',
+                    hintText: "010-0000-0000 형태로 입력해주세요!"
+                ),
               ),
             ),
-            const SizedBox(height: 18.0),
+            const SizedBox(height: 160),
             ElevatedButton(
               onPressed: () {
                 Navigator.push(
@@ -72,6 +83,10 @@ class _UserPhoneState extends State<UserPhone> {
                   ),
                 );
               },
+              style: ButtonStyle(
+                foregroundColor: MaterialStateProperty.resolveWith(getColorText), // textcolor
+                backgroundColor: MaterialStateProperty.resolveWith(getColor), // backcolor
+              ),
               child: const Text('인증번호 받기'),
             ),
           ],

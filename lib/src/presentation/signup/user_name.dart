@@ -41,25 +41,31 @@ class _UserNameState extends State<UserName> {
     return Scaffold(
       appBar: AppBar(
         // title: const Text('User Name'),
+        leading: IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            }, icon: Icon(Icons.arrow_back)),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(18.0),
+      body: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          // mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const SizedBox(
               height: 100,
             ),
             const Text("이름", style: TextStyle(fontSize: 25)),
-            const SizedBox( height: 40, ),
-            TextField(
-              controller: _nameController,
-              decoration: const InputDecoration(
-                // labelText: 'Name',
-                hintText: "이름(본명)을 입력해주세요!" // 서버에서 에러메시지도 만들었으면 같이 가져오기
-              ),
+            const SizedBox( height: 140, ),
+            SizedBox( // 입력 공간 Textfield
+                width: 400,
+                child: TextField(
+                  controller: _nameController,
+                  decoration: const InputDecoration(
+                    // labelText: 'Name',
+                      hintText: "이름(본명)을 입력해주세요!" // 서버에서 에러메시지도 만들었으면 같이 가져오기
+                  ),
+                ),
             ),
-            const SizedBox(height: 16.0),
+            const SizedBox(height: 160),
             ElevatedButton(
               onPressed: () {
                 Navigator.push(
