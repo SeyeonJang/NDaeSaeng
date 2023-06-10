@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:dart_flutter/src/presentation/vote/vote_pages.dart';
 import 'package:flutter/material.dart';
 
@@ -9,6 +11,19 @@ class VoteTimer extends StatefulWidget {
 }
 
 class _VoteTimerState extends State<VoteTimer> {
+  static const fourtyMins = 2400;
+  int leftMins = fourtyMins;
+  late Timer timer;
+
+  void onTick(Timer timer) {
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    timer = Timer.periodic(const Duration(seconds: 1), onTick);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
