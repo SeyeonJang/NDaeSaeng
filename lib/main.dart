@@ -1,45 +1,33 @@
-import 'package:dart_flutter/src/presentation/vote/vote_pages.dart';
-import 'package:dart_flutter/src/presentation/vote/vote_result_view.dart';
-import 'package:dart_flutter/src/presentation/vote/vote_timer.dart';
-import 'package:dart_flutter/src/presentation/vote/vote_view.dart';
-import 'package:flutter/material.dart';
 
+import 'package:dart_flutter/src/presentation/signup/select_image.dart';
+import 'package:dart_flutter/src/presentation/signup/user_name.dart';
+
+import 'package:flutter/material.dart';
+import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
+
+// import 'package:dart_flutter/photo_screen.dart';
+import 'package:dart_flutter/src/presentation/signup/choose_id.dart';
+import 'package:dart_flutter/src/presentation/signup/land_page.dart';
+import 'package:dart_flutter/src/presentation/signup/choose_school.dart';
+
+// 랜딩페이지
 void main() {
-  runApp(const MyApp());
+  WidgetsFlutterBinding.ensureInitialized();
+  KakaoSdk.init(
+    nativeAppKey: 'c83df49e14c914b9bda9b902b6624da2',
+  );
+  runApp(const MaterialApp(home:MyApp()));
 }
 
+// stless 입력으로 기존 기본 템플릿 -> stateless로 변경
+// stless(변경 필요한 data x) vs stful(변경된 부분을 위젯에 반영하는 동적 위젯)
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  const MyApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
-      home: const VotePages(),
-      // home: const VoteView(),
-      // home: const VoteResultView(),
-      // home: const VoteTimer(),
-    );
-  }
-}
-
-class testbluewidget extends StatelessWidget {
-  const testbluewidget({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return const Scaffold(
-      backgroundColor: Colors.blue,
-      body: Padding(
-        padding: EdgeInsets.all(50),
-        child: Text("hello", style: TextStyle(fontWeight: FontWeight.w800)),
-      ),
+      home: LandingPage(),
     );
   }
 }
