@@ -14,7 +14,7 @@ void main() {
   KakaoSdk.init(
     nativeAppKey: 'c83df49e14c914b9bda9b902b6624da2',
   );
-  runApp(const MyApp());
+  runApp(const MaterialApp(home:MyApp()));
 }
 
 // stless 입력으로 기존 기본 템플릿 -> stateless로 변경
@@ -41,6 +41,12 @@ class MyApp extends StatelessWidget {
               const Text("누가 나를 선택했을지 보러가기", style: TextStyle(fontSize: 15)),
               const SizedBox(height: 20,),
               Image.asset('assets/images/main_kakao_login.png'),
+
+              // 임시 BTN **********************
+              ElevatedButton( // 다른 UI 확인용 임시 btn
+               onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => ChooseSchool())),
+               child: const Text("확인용 btn"),
+              ),
 
               // 애플 유저일 때 애플 로그인 나오도록 코드 추가하기
             ],
