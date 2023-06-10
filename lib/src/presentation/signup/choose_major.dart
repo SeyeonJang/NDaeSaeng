@@ -33,8 +33,7 @@ class ChooseMajor extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
+    return Scaffold(
         appBar: AppBar(
           leading: IconButton(
               onPressed: () {
@@ -46,7 +45,6 @@ class ChooseMajor extends StatelessWidget {
             child: ScaffoldBody(),
           ),
         ),
-      ),
     );
   }
 }
