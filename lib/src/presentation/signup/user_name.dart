@@ -57,12 +57,19 @@ class _UserNameState extends State<UserName> {
             const SizedBox( height: 140, ),
             SizedBox( // 입력 공간 Textfield
                 width: 400,
-                child: TextField(
+                child: TextFormField(
                   controller: _nameController,
                   decoration: const InputDecoration(
                     // labelText: 'Name',
                       hintText: "이름(본명)을 입력해주세요!" // 서버에서 에러메시지도 만들었으면 같이 가져오기
                   ),
+                  // 유효성검사 ************************************
+                  // String? _validator(String name) {
+                  //   if (name.length<2) {
+                  //     return ("이름을 확인해주세요!");
+                  //   }
+                  //   return null;
+                  // },
                 ),
             ),
             const SizedBox(height: 160),

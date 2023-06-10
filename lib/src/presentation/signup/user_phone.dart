@@ -62,12 +62,16 @@ class _UserPhoneState extends State<UserPhone> {
 
             SizedBox(
               width: 400,
-              child: TextField(
-                controller: _phoneController,
+              child: TextFormField(
                 decoration: const InputDecoration(
-                  // labelText: 'Phone Number',
                     hintText: "010-0000-0000 형태로 입력해주세요!"
                 ),
+                onSaved: (String? value) {},
+                // 유효성 검사 필요 ********************* (수정 안 됨)
+                // validator: (String? value) {
+                //   return (value == null || !value.contains('-')) ? "전화번호는 010-0000-0000 형식이어야 해요!" : null;
+                // },
+                controller: _phoneController,
               ),
             ),
             const SizedBox(height: 160),
