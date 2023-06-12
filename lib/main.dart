@@ -1,4 +1,5 @@
 import 'package:dart_flutter/res/app_theme.dart';
+import 'package:dart_flutter/res/size_config.dart';
 import 'package:flutter/material.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'package:dart_flutter/src/presentation/signup/land_page.dart';
@@ -9,6 +10,7 @@ void main() {
   KakaoSdk.init(
     nativeAppKey: 'c83df49e14c914b9bda9b902b6624da2',
   );
+
   runApp(MaterialApp(
     home: MyApp(),
     theme: AppTheme.lightThemeData,
@@ -22,6 +24,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    SizeConfig.init(context);  // 기준 사이즈 지정
     return LandingPage();
   }
 }
