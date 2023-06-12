@@ -1,13 +1,7 @@
-import 'package:dart_flutter/src/presentation/signup/select_image.dart';
-import 'package:dart_flutter/src/presentation/signup/user_name.dart';
-
+import 'package:dart_flutter/res/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
-
-// import 'package:dart_flutter/photo_screen.dart';
-import 'package:dart_flutter/src/presentation/signup/choose_id.dart';
 import 'package:dart_flutter/src/presentation/signup/land_page.dart';
-import 'package:dart_flutter/src/presentation/signup/choose_school.dart';
 
 // 랜딩페이지
 void main() {
@@ -17,9 +11,7 @@ void main() {
   );
   runApp(MaterialApp(
     home: MyApp(),
-    theme: ThemeData(
-      useMaterial3: true,
-    ),
+    theme: AppTheme.lightThemeData,
   ));
 }
 
