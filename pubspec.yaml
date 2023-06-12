@@ -32,12 +32,23 @@ dependencies:
     sdk: flutter
   flutter_typeahead: ^3.1.7 # 사용자 입력받는 typeahead
   image_picker: ^0.8.7+5 # 사용자 사진 가져오는 imagePicker
+  http: ^1.0.0
+  url_launcher: ^6.1.11
+
+  # service api
   kakao_flutter_sdk: ^1.4.1
 
+  # bloc
+  flutter_bloc: ^8.0.0
+  hydrated_bloc: ^9.1.1
 
-  # The following adds the Cupertino Icons font to your application.
-  # Use with the CupertinoIcons class for iOS style icons.
+  # style
   cupertino_icons: ^1.0.2
+
+  # dev
+  json_annotation: ^4.8.1
+  path_provider: ^2.0.15
+  logger: ^1.4.0
 
 dev_dependencies:
   flutter_test:
