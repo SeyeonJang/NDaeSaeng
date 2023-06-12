@@ -1,14 +1,8 @@
-
-import 'package:dart_flutter/src/presentation/signup/select_image.dart';
-import 'package:dart_flutter/src/presentation/signup/user_name.dart';
-
+import 'package:dart_flutter/res/app_theme.dart';
+import 'package:dart_flutter/res/size_config.dart';
 import 'package:flutter/material.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
-
-// import 'package:dart_flutter/photo_screen.dart';
-import 'package:dart_flutter/src/presentation/signup/choose_id.dart';
 import 'package:dart_flutter/src/presentation/signup/land_page.dart';
-import 'package:dart_flutter/src/presentation/signup/choose_school.dart';
 
 // 랜딩페이지
 void main() {
@@ -16,7 +10,11 @@ void main() {
   KakaoSdk.init(
     nativeAppKey: 'c83df49e14c914b9bda9b902b6624da2',
   );
-  runApp(const MaterialApp(home:MyApp()));
+
+  runApp(MaterialApp(
+    home: MyApp(),
+    theme: AppTheme.lightThemeData,
+  ));
 }
 
 // stless 입력으로 기존 기본 템플릿 -> stateless로 변경
@@ -26,8 +24,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: LandingPage(),
-    );
+    SizeConfig.init(context);  // 기준 사이즈 지정
+    return LandingPage();
   }
 }
