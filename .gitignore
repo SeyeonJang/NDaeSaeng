@@ -3,7 +3,8 @@
 
 ### IDEA ###
 .idea/
-*.imi
+*.iml
+.metadata
 
 ### Flutter ###
 # Flutter/Dart/Pub related
