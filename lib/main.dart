@@ -1,4 +1,3 @@
-
 import 'package:dart_flutter/src/presentation/signup/select_image.dart';
 import 'package:dart_flutter/src/presentation/signup/user_name.dart';
 
@@ -16,7 +15,12 @@ void main() {
   KakaoSdk.init(
     nativeAppKey: 'c83df49e14c914b9bda9b902b6624da2',
   );
-  runApp(const MaterialApp(home:MyApp()));
+  runApp(MaterialApp(
+    home: MyApp(),
+    theme: ThemeData(
+      useMaterial3: true,
+    ),
+  ));
 }
 
 // stless 입력으로 기존 기본 템플릿 -> stateless로 변경
@@ -26,8 +30,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: LandingPage(),
-    );
+    return LandingPage();
   }
 }
