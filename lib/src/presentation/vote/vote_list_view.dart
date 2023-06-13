@@ -1,3 +1,4 @@
+import 'package:dart_flutter/res/size_config.dart';
 import 'package:dart_flutter/src/presentation/vote/vote_detail_view.dart';
 import 'package:flutter/material.dart';
 
@@ -8,7 +9,7 @@ class VoteListView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(
-        padding: EdgeInsets.all(10),
+        padding: EdgeInsets.all(SizeConfig.defaultSize * 1.5),
         child: ListView.separated(
           itemBuilder: (context, index) {
             return dart(
@@ -18,7 +19,7 @@ class VoteListView extends StatelessWidget {
               datetime: "15초",
             );
           },
-          separatorBuilder: (context, index) => const SizedBox(height: 10),
+          separatorBuilder: (context, index) => SizedBox(height: SizeConfig.defaultSize * 1.4),
           itemCount: 70,
         ),
       ),
@@ -48,10 +49,10 @@ class dart extends StatelessWidget {
             context, MaterialPageRoute(builder: (context) => VoteDetailView()));
       },
       child: Container(
-        padding: const EdgeInsets.all(10),
+        padding: EdgeInsets.all(SizeConfig.defaultSize * 1),
         decoration: BoxDecoration(
           border: Border.all(
-            width: 1,
+            width: SizeConfig.defaultSize * 0.1,
             color: Colors.grey,
           ),
           borderRadius: BorderRadius.circular(15),
@@ -59,7 +60,7 @@ class dart extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            Icon(Icons.heart_broken, size: 40),
+            Icon(Icons.heart_broken, size: SizeConfig.defaultSize * 5),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
