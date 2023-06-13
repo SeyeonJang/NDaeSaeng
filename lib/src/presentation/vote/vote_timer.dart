@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:dart_flutter/res/size_config.dart';
 import 'package:dart_flutter/src/presentation/vote/vote_pages.dart';
 import 'package:flutter/material.dart';
 
@@ -28,7 +29,7 @@ class _VoteTimerState extends State<VoteTimer> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(
-        padding: const EdgeInsets.all(50),
+        padding: EdgeInsets.all(SizeConfig.defaultSize * 5),
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -42,21 +43,21 @@ class _VoteTimerState extends State<VoteTimer> {
                 child: Column(
                   children: [
                     Container(
-                      child: const Text(
+                      child: Text(
                         "다시 시작하기까지",
                         style: TextStyle(
                           fontWeight: FontWeight.w800,
-                          fontSize: 40,
+                          fontSize: SizeConfig.defaultSize * 4,
                         ),
                       ),
                     ),
                     Expanded(
                       child: Container(
-                        child: const Text(
+                        child: Text(
                           "40:00",
                           style: TextStyle(
                             fontWeight: FontWeight.w800,
-                            fontSize: 80,
+                            fontSize: SizeConfig.defaultSize * 9,
                           ),
                         ),
                       ),
@@ -69,16 +70,16 @@ class _VoteTimerState extends State<VoteTimer> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Text("바로 시작하려면?", style: TextStyle(fontSize: 30)),
-                    SizedBox(height:10),
+                    Text("바로 시작하려면?", style: TextStyle(fontSize: SizeConfig.defaultSize * 3.2)),
+                    SizedBox(height:SizeConfig.defaultSize * 1),
                     ElevatedButton(
                       onPressed: () {
                         Navigator.push(context, MaterialPageRoute(builder: (context) => VotePages()));
                       },
-                      child: const Text(
+                      child: Text(
                         "친구 초대하기",
                         style: TextStyle(
-                          fontSize: 35,
+                          fontSize: SizeConfig.defaultSize * 4,
                         ),
                       ),
                     ),
@@ -86,7 +87,7 @@ class _VoteTimerState extends State<VoteTimer> {
                 ),
               ),
               const Flexible(
-                flex: 3,
+                flex: 1,
                 child: SizedBox(),
               ),
             ],

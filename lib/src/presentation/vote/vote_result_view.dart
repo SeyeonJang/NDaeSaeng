@@ -1,3 +1,4 @@
+import 'package:dart_flutter/res/size_config.dart';
 import 'package:dart_flutter/src/presentation/vote/vote_timer.dart';
 import 'package:flutter/material.dart';
 
@@ -8,7 +9,7 @@ class VoteResultView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(
-        padding: const EdgeInsets.all(50),
+        padding: EdgeInsets.all(SizeConfig.defaultSize * 5),
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -21,51 +22,55 @@ class VoteResultView extends StatelessWidget {
                 flex: 1,
                 child: Container(
                   alignment: Alignment.bottomCenter,
-                  child: const Text(
+                  child: Text(
                     "축하해요!",
                     style: TextStyle(
                       fontWeight: FontWeight.w800,
-                      fontSize: 40,
+                      fontSize: SizeConfig.defaultSize * 5,
                     ),
                   ),
                 ),
               ),
               Flexible(
-                // flex: 1,
+                flex: 3,
                 child: Container(
                     alignment: Alignment.center,
-                    child: const Icon(Icons.emoji_emotions, size: 200)
+                    child: Icon(Icons.emoji_emotions, size: SizeConfig.defaultSize * 22)
                 ),
               ),
               Flexible(
                 flex: 1,
-                child: Container(
-                  alignment: Alignment.bottomCenter,
-                  child: const Text(
-                    "Dart를 통해 얻은 Point, 30!",
-                    style: TextStyle(
-                      fontWeight: FontWeight.w800,
-                      fontSize: 25,
+                child: Column(
+                  children: [
+                    Container(
+                      alignment: Alignment.bottomCenter,
+                      child: Text(
+                        "Dart를 통해 얻은 Point, 30!",
+                        style: TextStyle(
+                          fontWeight: FontWeight.w800,
+                          fontSize: SizeConfig.defaultSize * 2.5,
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-              ),
-              Flexible(
-                flex: 1,
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => VoteTimer()));
-                  },
-                  child: const Text(
-                    "포인트 받기",
-                    style: TextStyle(
-                      fontSize: 35,
+                    SizedBox(
+                      height: SizeConfig.defaultSize * 0.1,
                     ),
-                  ),
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => VoteTimer()));
+                      },
+                      child: Text(
+                        "포인트 받기",
+                        style: TextStyle(
+                          fontSize: SizeConfig.defaultSize * 3.5,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
               const Flexible(
-                flex: 3,
+                flex: 1,
                 child: SizedBox(),
               ),
             ],

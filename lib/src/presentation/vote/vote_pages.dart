@@ -1,3 +1,4 @@
+import 'package:dart_flutter/res/size_config.dart';
 import 'package:dart_flutter/src/presentation/vote/vote_view.dart';
 import 'package:flutter/material.dart';
 
@@ -8,7 +9,7 @@ class VotePages extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(
-        padding: const EdgeInsets.all(50),
+        padding: EdgeInsets.all(SizeConfig.defaultSize * 5),
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -21,11 +22,11 @@ class VotePages extends StatelessWidget {
                 flex: 1,
                 child: Container(
                   alignment: Alignment.bottomCenter,
-                  child: const Text(
+                  child: Text(
                     "이번 Dart는?",
                     style: TextStyle(
                       fontWeight: FontWeight.w800,
-                      fontSize: 40,
+                      fontSize: SizeConfig.defaultSize * 5,
                     ),
                   ),
                 ),
@@ -34,7 +35,7 @@ class VotePages extends StatelessWidget {
                 flex: 3,
                 child: Container(
                   alignment: Alignment.center,
-                    child: const Icon(Icons.emoji_emotions, size: 200)
+                    child: Icon(Icons.emoji_emotions, size: SizeConfig.defaultSize * 20)
                 ),
               ),
               Flexible(
@@ -43,10 +44,10 @@ class VotePages extends StatelessWidget {
                   onPressed: () {
                     Navigator.push(context, MaterialPageRoute(builder: (context) => VoteView()));
                   },
-                  child: const Text(
+                  child: Text(
                     "시작하기",
                     style: TextStyle(
-                      fontSize: 35,
+                      fontSize: SizeConfig.defaultSize * 4,
                     ),
                   ),
                 ),
