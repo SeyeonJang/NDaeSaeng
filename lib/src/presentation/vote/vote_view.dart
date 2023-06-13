@@ -1,3 +1,4 @@
+import 'package:dart_flutter/res/size_config.dart';
 import 'package:dart_flutter/src/presentation/vote/vote_result_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -9,23 +10,23 @@ class VoteView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(
-        padding: const EdgeInsets.all(50),
+        padding: EdgeInsets.symmetric(horizontal: SizeConfig.defaultSize * 5, vertical: SizeConfig.defaultSize * 2),
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               VoteStoryBar(),
-              const Flexible(
+              Flexible(
                 flex: 1,
-                child: Icon(Icons.emoji_emotions, size: 200),
+                child: Icon(Icons.emoji_emotions, size: SizeConfig.defaultSize * 22),
               ),
-              const Flexible(
+              Flexible(
                 flex: 2,
                 child: Text(
                   "가장 배고픈 사람을 골라주세요. 글자가 많아지면 어떻게될까요?",
                   style: TextStyle(
                     fontWeight: FontWeight.w800,
-                    fontSize: 25,
+                    fontSize: SizeConfig.defaultSize * 2.5,
                   ),
                 ),
               ),
@@ -94,21 +95,21 @@ class _VoteStoryBarState extends State<VoteStoryBar> {
           flex: 1,
           child: Row(
             children: [
-              Expanded(child: Container(height: 5, color: Colors.black,)),
+              Expanded(child: Container(height: SizeConfig.defaultSize * 0.4, color: Colors.black,)),
               SizedBox(width: 5),
-              Expanded(child: Container(height: 5, color: Colors.black,)),
+              Expanded(child: Container(height: SizeConfig.defaultSize * 0.4, color: Colors.black,)),
               SizedBox(width: 5),
-              Expanded(child: Container(height: 5, color: Colors.blueGrey,)),
+              Expanded(child: Container(height: SizeConfig.defaultSize * 0.4, color: Colors.blueGrey,)),
               SizedBox(width: 5),
-              Expanded(child: Container(height: 5, color: Colors.blueGrey,)),
+              Expanded(child: Container(height: SizeConfig.defaultSize * 0.4, color: Colors.blueGrey,)),
               SizedBox(width: 5),
-              Expanded(child: Container(height: 5, color: Colors.blueGrey,)),
+              Expanded(child: Container(height: SizeConfig.defaultSize * 0.4, color: Colors.blueGrey,)),
               SizedBox(width: 5),
-              Expanded(child: Container(height: 5, color: Colors.blueGrey,)),
+              Expanded(child: Container(height: SizeConfig.defaultSize * 0.4, color: Colors.blueGrey,)),
               SizedBox(width: 5),
-              Expanded(child: Container(height: 5, color: Colors.blueGrey,)),
+              Expanded(child: Container(height: SizeConfig.defaultSize * 0.4, color: Colors.blueGrey,)),
               SizedBox(width: 5),
-              Expanded(child: Container(height: 5, color: Colors.blueGrey,)),
+              Expanded(child: Container(height: SizeConfig.defaultSize * 0.4, color: Colors.blueGrey,)),
             ],
           ),
         ),
@@ -138,13 +139,13 @@ class ChoiceFriendButton extends StatelessWidget {
           Text(
             name,
             style: TextStyle(
-              fontSize: 25,
+              fontSize: SizeConfig.defaultSize * 2.5,
             ),
           ),
           Text(
-            "$enterYear학번, $department부",
+            "$enterYear학번 $department",
             style: TextStyle(
-              fontSize: 10,
+              fontSize: SizeConfig.defaultSize * 1,
             ),
           ),
         ],
