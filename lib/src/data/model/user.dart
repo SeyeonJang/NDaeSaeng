@@ -16,6 +16,17 @@ class UserResponse {
     required this.department,
     required this.nextVoteDateTime
   });
+
+  UserResponse.from(Map<String, dynamic> json)
+  : userId = json['userId'],
+    univId = json['univId'],
+    admissionNumber = json['admissionNumber'],
+    point = json['point'],
+    name = json['name'],
+    phone = json['phone'],
+    universityName = json['universityName'],
+    department = json['department'],
+    nextVoteDateTime = json['nextVoteDateTime'];
 }
 
 class UserRequest {
@@ -29,4 +40,10 @@ class UserRequest {
     required this.name,
     required this.phone,
   });
+
+  UserRequest.from(Map<String, dynamic> json)
+  : univId = json['univId'],
+    admissionNumber = json['admissionNumber'],
+    name = json['name'],
+    phone = json['phone'];
 }

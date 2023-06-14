@@ -12,6 +12,16 @@ class VoteRequest {
       required this.ThirdUserId,
       required this.FourthUserId,
       required this.question});
+
+  VoteRequest.from(Map<String, dynamic> json)
+  : userId = json['userId'],
+    voteId = json['voteId'],
+    pickUserId = json['pickUserId'],
+    firstUserId = json['firstUserId'],
+    secondUserId = json['secondUserId'],
+    ThirdUserId = json['ThirdUserId'],
+    FourthUserId = json['FourthUserId'],
+    question = json['question'];
 }
 
 class VoteResponse {
@@ -24,6 +34,12 @@ class VoteResponse {
       required this.voteId,
       required this.hint,
       required this.question});
+
+  VoteResponse.from(Map<String, dynamic> json)
+  : userId = json['userId'],
+    voteId = json['voteId'],
+    hint = json['hint'],
+    question = json['question'];
 }
 
 class Question {
@@ -35,6 +51,12 @@ class Question {
       required this.div1,
       required this.div2,
       required this.question});
+
+  Question.from(Map<String, dynamic> json)
+  : questionId = json['questionId'],
+    div1 = json['div1'],
+    div2 = json['div2'],
+    question = json['question'];
 }
 
 class Hint {
@@ -52,4 +74,12 @@ class Hint {
       required this.hint3,
       required this.hint4,
       required this.hint5});
+
+  Hint.from(Map<String, dynamic> json)
+  : voteId = json['voteId'],
+    hint1 = json['hint1'],
+    hint2 = json['hint2'],
+    hint3 = json['hint3'],
+    hint4 = json['hint4'],
+    hint5 = json['hint5'];
 }
