@@ -1,5 +1,7 @@
 
+import 'package:dart_flutter/src/common/auth/auth_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'choose_school.dart';
 
@@ -25,7 +27,12 @@ class LandingPage extends StatelessWidget {
             ),
             const Text("누가 나를 선택했을지 보러가기", style: TextStyle(fontSize: 15)),
             const SizedBox(height: 20,),
-            Image.asset('assets/images/main_kakao_login.png'),
+            GestureDetector(
+              onTap: () {
+                BlocProvider.of<AuthCubit>(context).kakaoLogin();
+              },
+              child: Image.asset('assets/images/main_kakao_login.png'),
+            ),
 
             // 임시 BTN **********************
             ElevatedButton( // 다른 UI 확인용 임시 btn

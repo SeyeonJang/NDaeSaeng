@@ -1,8 +1,10 @@
 import 'package:dart_flutter/res/app_theme.dart';
 import 'package:dart_flutter/res/size_config.dart';
+import 'package:dart_flutter/src/common/auth/auth_cubit.dart';
+import 'package:dart_flutter/src/presentation/signup/land_pages.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
-import 'package:dart_flutter/src/presentation/signup/land_page.dart';
 
 // 랜딩페이지
 void main() {
@@ -12,7 +14,10 @@ void main() {
   );
 
   runApp(MaterialApp(
-    home: MyApp(),
+    home: BlocProvider(
+      create: (BuildContext context) => AuthCubit(),
+      child: const MyApp(),
+    ),
     theme: AppTheme.lightThemeData,
   ));
 }
@@ -24,7 +29,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    SizeConfig.init(context);  // 기준 사이즈 지정
-    return LandingPage();
+    SizeConfig.init(context); // 기준 사이즈 지정
+    return const LandPages();
   }
 }
