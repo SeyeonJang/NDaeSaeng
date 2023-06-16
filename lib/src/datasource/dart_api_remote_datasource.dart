@@ -4,11 +4,11 @@ import 'package:dart_flutter/src/data/model/user.dart';
 
 import '../data/model/dart_auth.dart';
 import '../data/model/vote.dart';
-import 'datasource.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
 
-class DartApiRemoteDataSource extends Datasource {
+//TODO repository에 들어갈 내용인데 datasourcedㅔ 넣어버렸다...
+class DartApiRemoteDataSource {
   static const String baseUrl = "www.naver.com";
 
   /// Auth: 로그인 요청
