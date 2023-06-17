@@ -1,8 +1,7 @@
-import 'package:dart_flutter/src/common/auth/auth_state.dart';
+import 'package:dart_flutter/src/common/auth/state/auth_state.dart';
 import 'package:dart_flutter/src/data/model/kakao_user.dart';
 import 'package:dart_flutter/src/data/repository/dart_auth_repository.dart';
 import 'package:dart_flutter/src/data/repository/kakao_login_repository.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 
 class AuthCubit extends HydratedCubit<AuthState> {
@@ -46,8 +45,5 @@ class AuthCubit extends HydratedCubit<AuthState> {
   AuthState fromJson(Map<String, dynamic> json) => state.fromJson(json);
 
   @override
-  Map<String, dynamic> toJson(AuthState state) {
-    print(state.toJson());
-    return state.toJson();
-  }
+  Map<String, dynamic> toJson(AuthState state) => state.toJson();
 }

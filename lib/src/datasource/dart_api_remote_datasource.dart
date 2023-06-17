@@ -22,8 +22,9 @@ class DartApiRemoteDataSource {
   }
 
   /// Auth: 문자인증 번호 검증 요청
-  static Future<void> postCheckSnsCode(SnsRequest snsRequest) async {
+  static Future<bool> postCheckSnsCode(SnsRequest snsRequest) async {
     await _simplePost('/v1/auth/sns-check', snsRequest);
+    return true;  //TODO 추후 return 규격 확인
   }
 
   /// User: 회원가입 요청
