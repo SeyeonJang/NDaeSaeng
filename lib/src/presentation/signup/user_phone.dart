@@ -1,4 +1,7 @@
+import 'package:dart_flutter/src/presentation/signup/viewmodel/signup_cubit.dart';
+import 'package:dart_flutter/src/presentation/signup/viewmodel/state/signup_state.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'cert_num.dart';
 
 // btn 컬러 정의 (설정중)
@@ -27,17 +30,10 @@ Color getColorText(Set<MaterialState> states) {
 }
 
 
-class UserPhone extends StatefulWidget {
-  final String userName;
+class UserPhone extends StatelessWidget {
+  final TextEditingController _phoneController = TextEditingController();
 
-  UserPhone({required this.userName});
-
-  @override
-  _UserPhoneState createState() => _UserPhoneState();
-}
-
-class _UserPhoneState extends State<UserPhone> {
-  TextEditingController _phoneController = TextEditingController();
+  UserPhone({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -56,10 +52,13 @@ class _UserPhoneState extends State<UserPhone> {
             const SizedBox(
               height: 85,
             ),
-            Text('환영해요! ${widget.userName}님', style: TextStyle(fontSize: 15)),
+            BlocBuilder<SignupCubit, SignupState>(
+              builder: (context, state) {
+                return Text('환영해요! ${state.inputState.name!}님', style: TextStyle(fontSize: 15));
+              },
+            ),
             Text("전화번호 입력", style: TextStyle(fontSize: 25)),
             const SizedBox(height: 140),
-
             SizedBox(
               width: 400,
               child: TextFormField(
@@ -77,15 +76,7 @@ class _UserPhoneState extends State<UserPhone> {
             const SizedBox(height: 160),
             ElevatedButton(
               onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => CertNum(
-                      userName: widget.userName,
-                      phoneNumber: _phoneController.text,
-                    ),
-                  ),
-                );
+                BlocProvider.of<SignupCubit>(context).stepPhone(_phoneController.text);
               },
               style: ButtonStyle(
                 foregroundColor: MaterialStateProperty.resolveWith(getColorText), // textcolor

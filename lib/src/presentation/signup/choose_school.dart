@@ -1,5 +1,7 @@
 import 'package:dart_flutter/src/presentation/signup/choose_major.dart';
+import 'package:dart_flutter/src/presentation/signup/viewmodel/signup_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'dart:math';
 
@@ -125,8 +127,11 @@ class ScaffoldBody extends StatelessWidget {
         ),
         ElevatedButton(
           // 버튼
-          onPressed: () => Navigator.push(
-              context, MaterialPageRoute(builder: (_) => ChooseMajor())),
+          // onPressed: () => Navigator.push(
+          //     context, MaterialPageRoute(builder: (_) => ChooseMajor())),
+          onPressed: () {
+            BlocProvider.of<SignupCubit>(context).stepSchool("test school");
+          },
           // animation은 나중에 추가
           style: ButtonStyle(
             foregroundColor: MaterialStateProperty.resolveWith(getColorText),

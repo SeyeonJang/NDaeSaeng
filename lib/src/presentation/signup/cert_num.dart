@@ -1,18 +1,12 @@
 import 'package:dart_flutter/src/presentation/signup/choose_gender.dart';
+import 'package:dart_flutter/src/presentation/signup/viewmodel/signup_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-class CertNum extends StatefulWidget {
-  final String userName;
-  final String phoneNumber;
+class CertNum extends StatelessWidget {
+  CertNum({Key? key}) : super(key: key);
 
-  CertNum({required this.userName, required this.phoneNumber});
-
-  @override
-  _CertNumState createState() => _CertNumState();
-}
-
-class _CertNumState extends State<CertNum> {
-  TextEditingController _certNumController = TextEditingController();
+  final TextEditingController _certNumController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -80,7 +74,7 @@ class _CertNumState extends State<CertNum> {
                   // 인증번호 확인 로직 구현
 
                   // 인증번호 맞았을 때
-                  Navigator.push(context, MaterialPageRoute(builder: (_) => ChooseGender()));
+                  BlocProvider.of<SignupCubit>(context).stepValidatePhone(_certNumController.text);
                 },
                 child: const Text('동의하고 계속'),
             ),

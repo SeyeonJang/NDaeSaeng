@@ -45,6 +45,7 @@ class KakaoLoginRemoteDatasource {
         }
       }
     } else {
+      print("이 폰에는 카카오톡이 없습니다?");
       try {
         await UserApi.instance.loginWithKakaoAccount();
         print('카카오계정으로 로그인 성공');

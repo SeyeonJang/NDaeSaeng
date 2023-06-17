@@ -1,4 +1,6 @@
+import 'package:dart_flutter/src/presentation/signup/viewmodel/signup_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'user_phone.dart';
 
 // btn 컬러 정의 (설정중)
@@ -75,14 +77,7 @@ class _UserNameState extends State<UserName> {
             const SizedBox(height: 160),
             ElevatedButton(
               onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => UserPhone(
-                      userName: _nameController.text,
-                    ),
-                  ),
-                );
+                BlocProvider.of<SignupCubit>(context).stepName(_nameController.text);
               },
               style: ButtonStyle(
                 foregroundColor: MaterialStateProperty.resolveWith(getColorText), // textcolor

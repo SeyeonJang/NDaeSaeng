@@ -1,5 +1,7 @@
 import 'package:dart_flutter/src/presentation/signup/user_name.dart';
+import 'package:dart_flutter/src/presentation/signup/viewmodel/signup_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 // btn 컬러 정의 (설정중)
 Color getColor(Set<MaterialState> states) { //
@@ -97,7 +99,9 @@ class ScaffoldBody extends StatelessWidget {
 
         const SizedBox( height: 100, ),
         ElevatedButton( // 버튼
-          onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => UserName())),
+          onPressed: () {
+            BlocProvider.of<SignupCubit>(context).stepAdmissionNumber(20);
+          },
           style: ButtonStyle(
             foregroundColor: MaterialStateProperty.resolveWith(getColorText), // textcolor
             backgroundColor: MaterialStateProperty.resolveWith(getColor), // backcolor
