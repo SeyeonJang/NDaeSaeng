@@ -80,7 +80,6 @@ class SignupCubit extends Cubit<SignupState> {
   @override
   void onChange(Change<SignupState> change) {
     super.onChange(change);
-    print(state.toString());
   }
 }
 
