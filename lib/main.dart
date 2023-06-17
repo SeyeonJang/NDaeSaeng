@@ -4,14 +4,18 @@ import 'package:dart_flutter/src/common/auth/auth_cubit.dart';
 import 'package:dart_flutter/src/presentation/signup/land_pages.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
+import 'package:path_provider/path_provider.dart';
 
 // 랜딩페이지
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   KakaoSdk.init(
     nativeAppKey: 'c83df49e14c914b9bda9b902b6624da2',
   );
+
+  HydratedBloc.storage = await HydratedStorage.build(storageDirectory: await getTemporaryDirectory());
 
   runApp(MaterialApp(
     home: BlocProvider(

@@ -1,3 +1,6 @@
+import 'package:json_annotation/json_annotation.dart';
+part 'auth_state.g.dart';
+
 enum LoginType {
   kakao, apple, email;
 }
@@ -6,6 +9,7 @@ enum AuthStep {
   land, signup, login;
 }
 
+@JsonSerializable()
 class AuthState {
   bool isLoading;
   AuthStep step;
@@ -49,6 +53,9 @@ class AuthState {
     expiredAt: expiredAt,
     loginType: loginType,
   );
+
+  Map<String, dynamic> toJson() => _$AuthStateToJson(this);
+  AuthState fromJson(Map<String, dynamic> json) => _$AuthStateFromJson(json);
 
   @override
   String toString() {

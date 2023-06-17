@@ -37,7 +37,7 @@ class _LandPagesState extends State<LandPages> {
             builder: (context, state) {
               if (!state.isLoading) {
                 print("aaaa");
-                return SafeArea(child:Text(state.toString(), style: const TextStyle(fontSize: 15, color: Colors.red)));
+                return SafeArea(child:Text(state.toJson().toString(), style: const TextStyle(fontSize: 15, color: Colors.red)));
                 // return const SizedBox();
               }
               print("bbb");
