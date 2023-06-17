@@ -37,15 +37,20 @@ class _SignupPagesState extends State<SignupPages> {
               return UserName();
             }
             if (state.signupStep.isPhone) {
-              return UserPhone(userName: "fixed test name");
+              return UserPhone();
             }
             if (state.signupStep.isValidatePhone) {
-              return CertNum(userName: "fixed test name", phoneNumber: "fixed test phone");
+              return CertNum();
             }
             if (state.signupStep.isGender) {
               return const ChooseGender();
             }
             return SafeArea(child: Center(child: Text(state.toString())));
+          },
+        ),
+        BlocBuilder<SignupCubit, SignupState>(
+          builder: (context, state) {
+            return SafeArea(child: Container(alignment: Alignment.bottomCenter,child: Text(state.toString())));
           },
         ),
       ],

@@ -1,4 +1,6 @@
+import 'package:dart_flutter/src/presentation/signup/viewmodel/signup_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ChooseGender extends StatelessWidget {
   const ChooseGender({Key? key}) : super(key: key);
@@ -9,7 +11,7 @@ class ChooseGender extends StatelessWidget {
         appBar: AppBar(
           leading: IconButton(
               onPressed: () {
-                Navigator.pop(context);
+                BlocProvider.of<SignupCubit>(context).stepGender("남성이나여성");
               }, icon: Icon(Icons.arrow_back)),
         ),
         body: Center(

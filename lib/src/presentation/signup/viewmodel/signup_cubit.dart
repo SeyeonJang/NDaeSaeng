@@ -47,15 +47,16 @@ class SignupCubit extends Cubit<SignupState> {
   void stepPhone(String phone) async {
     state.inputState.phone = phone;
 
-    String deviceId = '';  //TODO device 고유 ID 얻어오기
-    await _authRepository.requestSns(SnsRequest(deviceId: '', phone: phone, snsCode: ''));
+    String deviceId = '';  //TODO device 고유 ID 얻어오기, DART API 나오면 아래 주석 풀기
+    // await _authRepository.requestSns(SnsRequest(deviceId: '', phone: phone, snsCode: ''));
 
     state.signupStep = SignupStep.validatePhone;
     emit(state.copy());
   }
 
   Future<String> stepValidatePhone(String validateCode) async {
-    bool result = await _authRepository.requestValidateSns(SnsRequest(deviceId: '', phone: state.inputState.phone!, snsCode: validateCode));
+    // bool result = await _authRepository.requestValidateSns(SnsRequest(deviceId: '', phone: state.inputState.phone!, snsCode: validateCode));
+    bool result = true;  //TODO DART API 나오면 위 주석 풀기
     if (!result) {  // 전화번호 인증 실패
       state.signupStep = SignupStep.phone;
       emit(state.copy());
@@ -74,6 +75,12 @@ class SignupCubit extends Cubit<SignupState> {
     await _dartUserRepository.signup(userRequest);
 
     emit(state.copy());
+  }
+
+  @override
+  void onChange(Change<SignupState> change) {
+    super.onChange(change);
+    print(state.toString());
   }
 }
 
