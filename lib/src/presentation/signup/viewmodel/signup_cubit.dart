@@ -1,10 +1,12 @@
 import 'package:dart_flutter/src/data/model/sns_request.dart';
+import 'package:dart_flutter/src/data/model/university.dart';
 import 'package:dart_flutter/src/data/model/user.dart';
 import 'package:dart_flutter/src/data/repository/dart_auth_repository.dart';
 import 'package:dart_flutter/src/data/repository/dart_univ_repository.dart';
 import 'package:dart_flutter/src/data/repository/dart_user_repository.dart';
 import 'package:dart_flutter/src/presentation/signup/viewmodel/state/signup_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 
 class SignupCubit extends Cubit<SignupState> {
   static final DartUniversityRepository _dartUniversityRepository = DartUniversityRepository();
@@ -13,10 +15,14 @@ class SignupCubit extends Cubit<SignupState> {
 
   SignupCubit() : super(SignupState.init());
 
-  void initState() async {
-    state.universities = await _dartUniversityRepository.getUniversitys();  // 대학 목록 불러오기
-    state.signupStep = SignupStep.school;
-    emit(state.copy());
+  // void initState() async {
+  //   state.universities = await _dartUniversityRepository.getUniversitys();  // 대학 목록 불러오기
+  //   state.signupStep = SignupStep.school;
+  //   emit(state.copy());
+  // }
+
+  Future<List<University>> getUniversitys() async {
+    return await _dartUniversityRepository.getUniversitys();
   }
 
   void stepSchool(String univName) {
@@ -82,5 +88,3 @@ class SignupCubit extends Cubit<SignupState> {
     super.onChange(change);
   }
 }
-
-//

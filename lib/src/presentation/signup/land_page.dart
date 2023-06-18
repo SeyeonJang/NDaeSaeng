@@ -36,7 +36,7 @@ class LandingPage extends StatelessWidget {
 
             // 임시 BTN **********************
             ElevatedButton( // 다른 UI 확인용 임시 btn
-              onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => ChooseSchool())),
+              onPressed: () => BlocProvider.of<AuthCubit>(context).testLogin(),
               child: const Text("확인용 btn"),
             ),
 
