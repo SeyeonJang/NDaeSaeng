@@ -1,6 +1,10 @@
 import 'package:dart_flutter/res/size_config.dart';
+import 'package:dart_flutter/src/data/model/vote.dart';
+import 'package:dart_flutter/src/presentation/vote/viewmodel/state/vote_list_state.dart';
+import 'package:dart_flutter/src/presentation/vote/viewmodel/vote_list_cubit.dart';
 import 'package:dart_flutter/src/presentation/vote/vote_detail_view.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class VoteListView extends StatelessWidget {
   const VoteListView({Key? key}) : super(key: key);
@@ -10,19 +14,27 @@ class VoteListView extends StatelessWidget {
     return Scaffold(
       body: Padding(
         padding: EdgeInsets.all(SizeConfig.defaultSize * 1.5),
-        child: ListView.separated(
-          itemBuilder: (context, index) {
-            return dart(
-              enterYear: "20",
-              sex: "여",
-              question: "질문내용~~~~~~~~~~~",
-              datetime: "15초",
-            );
-          },
-          separatorBuilder: (context, index) => SizedBox(height: SizeConfig.defaultSize * 1.4),
-          itemCount: 70,
+        child: makeList([]),
+        // child: BlocBuilder<VoteListCubit, VoteListState>(
+        //   builder: (context, state) {
+        //     return SizedBox();
+        //   },
         ),
-      ),
+      );
+  }
+
+  ListView makeList(List<VoteResponse> snapshot) {
+    return ListView.separated(
+      itemBuilder: (context, index) {
+        return dart(
+          enterYear: "20",
+          sex: "여",
+          question: "질문내용~~~~~~~~~~~",
+          datetime: "15초",
+        );
+      },
+      separatorBuilder: (context, index) => SizedBox(height: SizeConfig.defaultSize * 1.4),
+      itemCount: 70,
     );
   }
 }
