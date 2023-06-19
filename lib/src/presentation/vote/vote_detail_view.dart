@@ -1,5 +1,8 @@
-import 'package:dart_flutter/src/presentation/vote/vote_list_view.dart';
+import 'package:dart_flutter/src/data/model/vote.dart';
+import 'package:dart_flutter/src/presentation/vote/viewmodel/state/vote_list_state.dart';
+import 'package:dart_flutter/src/presentation/vote/viewmodel/vote_list_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../res/size_config.dart';
 
@@ -14,75 +17,100 @@ class VoteDetailView extends StatelessWidget {
           padding: EdgeInsets.symmetric(
               // horizontal: SizeConfig.defaultSize * 5,
               vertical: SizeConfig.defaultSize * 2),
-          child: Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  IconButton(
-                      onPressed: () {
-                        Navigator.pop(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => VoteListView()));
-                      },
-                      icon: Icon(Icons.arrow_back_ios_new_rounded,
-                          size: SizeConfig.defaultSize * 3)),
-                  Text("여학생이 보낸 Dart",
-                      style: TextStyle(
-                          fontWeight: FontWeight.w800,
-                          fontSize: SizeConfig.defaultSize * 2.5)),
-                  SizedBox(width: SizeConfig.defaultSize * 5),
-                ],
-              ),
-              Expanded(
-                child: Padding(
-                  padding: EdgeInsets.symmetric(
-                      horizontal: SizeConfig.defaultSize * 5,
-                      vertical: SizeConfig.defaultSize * 2),
-                  child: Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        SizedBox(height: SizeConfig.defaultSize * 3),
-                        Flexible(
-                          flex: 2,
-                          fit: FlexFit.tight,
-                          child: Column(
-                            children: [
-                              Icon(Icons.emoji_emotions,
-                                  size: SizeConfig.defaultSize * 22),
-                              Text(
-                                "가장 배고픈 사람을 골라주세요. 글자가 많아지면 어떻게될까요?",
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w800,
-                                  fontSize: SizeConfig.defaultSize * 2.5,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        const Flexible(
-                          flex: 1,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Text("누가 보냈는지 궁금하다면?"),
-                              HintButton(buttonName: '학번 보기', point: 100),
-                              HintButton(buttonName: '학과 보기', point: 150),
-                              HintButton(buttonName: '초성 보기 한 글자 보기', point: 500),
-                            ],
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ],
+          child: BlocBuilder<VoteListCubit,VoteListState> (
+            builder: (context, state) {
+              VoteResponse vote = state.getVoteById(state.nowVoteId);
+              return VoteDetail(
+                voteId: vote.voteId,
+                pickedUserSex: vote.pickUserSex,
+                question: vote.question.question,
+              );
+            }
           ),
         ),
       ),
+    );
+  }
+}
+
+class VoteDetail extends StatelessWidget {
+  final int voteId;
+  final String pickedUserSex;
+  final String question;
+
+  const VoteDetail({
+    super.key, required this.voteId, required this.pickedUserSex, required this.question,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            IconButton(
+                onPressed: () {
+                  BlocProvider.of<VoteListCubit>(context).backToVoteList();
+                  // Navigator.pop(
+                  //     context,
+                  //     MaterialPageRoute(
+                  //         builder: (context) => VoteListView()));
+                },
+                icon: Icon(Icons.arrow_back_ios_new_rounded,
+                    size: SizeConfig.defaultSize * 3)),
+            Text("$pickedUserSex학생이 보낸 Dart",
+                style: TextStyle(
+                    fontWeight: FontWeight.w800,
+                    fontSize: SizeConfig.defaultSize * 2.5)),
+            SizedBox(width: SizeConfig.defaultSize * 5),
+          ],
+        ),
+        Expanded(
+          child: Padding(
+            padding: EdgeInsets.symmetric(
+                horizontal: SizeConfig.defaultSize * 5,
+                vertical: SizeConfig.defaultSize * 2),
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  SizedBox(height: SizeConfig.defaultSize * 3),
+                  Flexible(
+                    flex: 2,
+                    fit: FlexFit.tight,
+                    child: Column(
+                      children: [
+                        Icon(Icons.emoji_emotions,
+                            size: SizeConfig.defaultSize * 22),
+                        Text(
+                          question,
+                          style: TextStyle(
+                            fontWeight: FontWeight.w800,
+                            fontSize: SizeConfig.defaultSize * 2.5,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const Flexible(
+                    flex: 1,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Text("누가 보냈는지 궁금하다면?"),
+                        HintButton(buttonName: '학번 보기', point: 100),
+                        HintButton(buttonName: '학과 보기', point: 150),
+                        HintButton(buttonName: '초성 보기 한 글자 보기', point: 500),
+                      ],
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

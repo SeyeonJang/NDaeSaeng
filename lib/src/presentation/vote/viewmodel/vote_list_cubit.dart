@@ -10,7 +10,7 @@ class VoteListCubit extends Cubit<VoteListState> {
 
   VoteListCubit() : super(VoteListState.init());
 
-  void initState() async {
+  void initVotes() async {
      // List<VoteResponse> votes = await _dartVoteRepository.getVotes("TODO MY ACCESSTOKEN");
     List<VoteResponse> votes = VoteMock().getVotes();
     state.setVotes(votes);
@@ -18,13 +18,21 @@ class VoteListCubit extends Cubit<VoteListState> {
      emit(state.copy());
   }
 
-  VoteResponse getVoteById(int id) {
-    VoteResponse vote = state.getVoteById(id);
-
-    state.visitByVoteId(id);
+  void firstTime() {
+    state.firstTime();
     emit(state.copy());
+  }
 
-    return vote;
+  /// 투표 리스트에서 투표를 클릭하여 상세페이지를 확인
+  void pressedVoteInList(int voteId) {
+    state.setIsDetailPage(true).setVoteId(voteId).visitByVoteId(voteId);
+    emit(state.copy());
+  }
+
+  /// 상세페이지에서 목록페이지로 돌아감
+  void backToVoteList() {
+    state.setIsDetailPage(false);
+    emit(state.copy());
   }
 
   bool isVisited(int id) {

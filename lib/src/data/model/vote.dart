@@ -30,6 +30,7 @@ class VoteResponse {
   final String pickUserSex;
   final Hint hint;
   final Question question;
+  final DateTime pickedAt;
 
   VoteResponse(
       {required this.userId,
@@ -37,7 +38,8 @@ class VoteResponse {
       required this.pickUserAdmissionNumber,
       required this.pickUserSex,
       required this.hint,
-      required this.question});
+      required this.question,
+      required this.pickedAt});
 
   VoteResponse.from(Map<String, dynamic> json)
   : userId = json['userId'],
@@ -45,7 +47,8 @@ class VoteResponse {
     pickUserAdmissionNumber = json['pickUserAdmissionNumber'],
     pickUserSex = json['pickUserSex'],
     hint = json['hint'],
-    question = json['question'];
+    question = json['question'],
+    pickedAt = json['pickedAt'];
 }
 
 class Question {

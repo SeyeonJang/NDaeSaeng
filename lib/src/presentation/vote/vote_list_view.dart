@@ -2,70 +2,85 @@ import 'package:dart_flutter/res/size_config.dart';
 import 'package:dart_flutter/src/data/model/vote.dart';
 import 'package:dart_flutter/src/presentation/vote/viewmodel/state/vote_list_state.dart';
 import 'package:dart_flutter/src/presentation/vote/viewmodel/vote_list_cubit.dart';
-import 'package:dart_flutter/src/presentation/vote/vote_detail_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class VoteListView extends StatelessWidget {
+class VoteListView extends StatefulWidget {
   const VoteListView({Key? key}) : super(key: key);
+
+  @override
+  State<VoteListView> createState() => _VoteListViewState();
+}
+
+class _VoteListViewState extends State<VoteListView> {
+
+  @override
+  void initState() {
+    super.initState();
+    BlocProvider.of<VoteListCubit>(context).initVotes();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(
         padding: EdgeInsets.all(SizeConfig.defaultSize * 1.5),
-        child: makeList([]),
-        // child: BlocBuilder<VoteListCubit, VoteListState>(
-        //   builder: (context, state) {
-        //     return SizedBox();
-        //   },
+        child: BlocBuilder<VoteListCubit, VoteListState>(
+          builder: (context, state) {
+            return makeList(state.votes);
+          },
         ),
-      );
+      ),
+    );
   }
 
   ListView makeList(List<VoteResponse> snapshot) {
     return ListView.separated(
       itemBuilder: (context, index) {
+        var vote = snapshot[index];
+        var visited = BlocProvider.of<VoteListCubit>(context).isVisited(vote.voteId);
         return dart(
-          enterYear: "20",
-          sex: "여",
-          question: "질문내용~~~~~~~~~~~",
-          datetime: "15초",
+          voteId: vote.voteId,
+          sex: vote.pickUserSex,
+          question: vote.question.question,
+          datetime: vote.pickedAt,
+          isVisited: visited,
         );
       },
       separatorBuilder: (context, index) => SizedBox(height: SizeConfig.defaultSize * 1.4),
-      itemCount: 70,
+      itemCount: snapshot.length,
     );
   }
 }
 
 class dart extends StatelessWidget {
-  final String enterYear;
+  final int voteId;
   final String sex;
   final String question;
-  final String datetime;
+  final DateTime datetime;
+  final bool isVisited;
 
   const dart({
     super.key,
-    required this.enterYear,
+    required this.voteId,
     required this.sex,
     required this.question,
     required this.datetime,
+    required this.isVisited,
   });
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => VoteDetailView()));
+        BlocProvider.of<VoteListCubit>(context).pressedVoteInList(voteId);
       },
       child: Container(
         padding: EdgeInsets.all(SizeConfig.defaultSize * 1),
         decoration: BoxDecoration(
           border: Border.all(
             width: SizeConfig.defaultSize * 0.1,
-            color: Colors.grey,
+            color: isVisited ? Colors.grey : Colors.red,
           ),
           borderRadius: BorderRadius.circular(15),
         ),
@@ -76,7 +91,7 @@ class dart extends StatelessWidget {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text("$enterYear학번의 $sex학생이 Dart를 보냈어요!"),
+                Text("$sex학생이 Dart를 보냈어요!"),
                 Text("$question"),
               ],
             ),
