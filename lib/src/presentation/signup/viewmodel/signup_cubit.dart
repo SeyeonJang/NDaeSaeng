@@ -15,16 +15,6 @@ class SignupCubit extends Cubit<SignupState> {
 
   SignupCubit() : super(SignupState.init());
 
-  // void initState() async {
-  //   state.universities = await _dartUniversityRepository.getUniversitys();  // 대학 목록 불러오기
-  //   state.signupStep = SignupStep.school;
-  //   emit(state.copy());
-  // }
-
-  Future<List<University>> getUniversitys() async {
-    return await _dartUniversityRepository.getUniversitys();
-  }
-
   void stepSchool(String univName) {
     state.inputState.tempUnivName = univName;
     state.signupStep = SignupStep.department;
