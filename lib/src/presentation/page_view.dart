@@ -1,9 +1,12 @@
 import 'package:dart_flutter/res/size_config.dart';
 import 'package:dart_flutter/src/presentation/mypage/my_page.dart';
+import 'package:dart_flutter/src/presentation/vote/viewmodel/vote_list_cubit.dart';
 import 'package:dart_flutter/src/presentation/vote/vote_list_inform_view.dart';
+import 'package:dart_flutter/src/presentation/vote/vote_list_pages.dart';
 import 'package:dart_flutter/src/presentation/vote/vote_pages.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class DartPageView extends StatefulWidget {
   const DartPageView({Key? key}) : super(key: key);
@@ -41,11 +44,14 @@ class _DartPageViewState extends State<DartPageView> {
             ),
             Expanded(
               child: PageView(
-                children: const [
+                children: [
                   // TODO, 각 Page를 cubit으로 제어하도록 해야함
-                  VoteListInformView(),
-                  VotePages(),
-                  MyPage(),
+                  BlocProvider(
+                      create: (context) => VoteListCubit(),
+                      child: const VoteListPages(),
+                  ),
+                  const VotePages(),
+                  const MyPage(),
                 ],
               ),
             ),
