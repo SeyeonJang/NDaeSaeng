@@ -1,3 +1,4 @@
+import 'package:dart_flutter/src/presentation/page_view.dart';
 import 'package:dart_flutter/src/presentation/signup/viewmodel/signup_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -11,7 +12,7 @@ class ChooseGender extends StatelessWidget {
         appBar: AppBar(
           leading: IconButton(
               onPressed: () {
-                BlocProvider.of<SignupCubit>(context).stepGender("남성이나여성");
+
               }, icon: Icon(Icons.arrow_back)),
         ),
         body: Center(
@@ -63,7 +64,10 @@ class ScaffoldBody extends StatelessWidget {
 
         const SizedBox( height: 100, ),
         ElevatedButton( // 버튼
-          onPressed: () {}, // 임시용
+          onPressed: () {
+            BlocProvider.of<SignupCubit>(context).stepGender("남성이나여성");
+            Navigator.push(context, MaterialPageRoute(builder: (context) => const DartPageView()));
+          }, // 임시용
           // onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => 2-1())), // animation은 나중에 추가 + 2-1로 가야함
           // style: ButtonStyle(
           //   foregroundColor: MaterialStateProperty.resolveWith(getColorText), // textcolor

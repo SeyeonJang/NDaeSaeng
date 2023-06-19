@@ -13,6 +13,7 @@ enum AuthStep {
 class AuthState {
   bool isLoading;
   AuthStep step;
+  String dartAccessToken;
   String socialAccessToken;
   DateTime expiredAt;
   LoginType loginType;
@@ -20,19 +21,27 @@ class AuthState {
   AuthState({
     required this.isLoading,
     required this.step,
+    required this.dartAccessToken,
     required this.socialAccessToken,
     required this.expiredAt,
     required this.loginType
   });
 
+  AuthState setDartAuth({
+    required String dartAccessToken,
+    required DateTime expiredAt,
+  }) {
+    this.dartAccessToken = dartAccessToken;
+    this.expiredAt = expiredAt;
+    return this;
+  }
+
   AuthState setSocialAuth({
     required LoginType loginType,
     required String socialAccessToken,
-    required DateTime expiredAt,
   }) {
     this.loginType = loginType;
     this.socialAccessToken = socialAccessToken;
-    this.expiredAt = expiredAt;
     return this;
   }
 
@@ -49,6 +58,7 @@ class AuthState {
   AuthState copy() => AuthState(
     isLoading: isLoading,
     step: step,
+    dartAccessToken: dartAccessToken,
     socialAccessToken: socialAccessToken,
     expiredAt: expiredAt,
     loginType: loginType,
@@ -59,6 +69,6 @@ class AuthState {
 
   @override
   String toString() {
-    return 'AuthState{isLoading: $isLoading, step: $step, accessToken: $socialAccessToken, expiredAt: $expiredAt, loginType: $loginType}';
+    return 'AuthState{isLoading: $isLoading, step: $step, dartAccessToken: $dartAccessToken, socialAccessToken: $socialAccessToken, expiredAt: $expiredAt, loginType: $loginType}';
   }
 }
