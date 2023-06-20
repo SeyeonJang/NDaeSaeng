@@ -116,6 +116,11 @@ class DartApiRemoteDataSource {
     return 0;
   }
 
+  static Future<void> updateMyNextVoteTime(String accessToken) async {
+    // return await simpleGet('/v1/votes/lefttime');  // TODO 이후 규격보고 설정
+    return;
+  }
+
   // --------------------------------------------------------------------------
 
   static Future<Map<String, dynamic>> _simplePost(String path, Object? body) async {
