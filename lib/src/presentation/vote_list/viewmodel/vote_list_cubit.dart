@@ -1,8 +1,8 @@
 
 import 'package:dart_flutter/src/data/model/vote.dart';
 import 'package:dart_flutter/src/data/repository/dart_vote_repository.dart';
-import 'package:dart_flutter/src/presentation/vote/viewmodel/state/vote_list_state.dart';
-import 'package:dart_flutter/src/presentation/vote/viewmodel/state/vote_mock.dart';
+import 'package:dart_flutter/src/presentation/vote_list/viewmodel/state/vote_list_state.dart';
+import 'package:dart_flutter/src/presentation/vote_list/viewmodel/state/vote_mock.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class VoteListCubit extends Cubit<VoteListState> {

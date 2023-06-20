@@ -1,10 +1,8 @@
 import 'package:dart_flutter/res/size_config.dart';
 import 'package:dart_flutter/src/presentation/mypage/my_page.dart';
-import 'package:dart_flutter/src/presentation/vote/viewmodel/vote_list_cubit.dart';
-import 'package:dart_flutter/src/presentation/vote/vote_list_inform_view.dart';
-import 'package:dart_flutter/src/presentation/vote/vote_list_pages.dart';
 import 'package:dart_flutter/src/presentation/vote/vote_pages.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:dart_flutter/src/presentation/vote_list/viewmodel/vote_list_cubit.dart';
+import 'package:dart_flutter/src/presentation/vote_list/vote_list_pages.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
