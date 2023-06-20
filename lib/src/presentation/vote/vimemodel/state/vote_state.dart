@@ -65,6 +65,10 @@ class VoteState {
     return nextVoteDateTime.isBefore(DateTime.now());
   }
 
+  int leftNextVoteTime() {
+    return nextVoteDateTime.difference(DateTime.now()).inSeconds;
+  }
+
   void nextVote() {
     voteIterator++;
     if (voteIterator >= MAX_VOTE_ITERATOR) {

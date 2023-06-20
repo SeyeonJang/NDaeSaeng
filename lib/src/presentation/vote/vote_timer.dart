@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:dart_flutter/res/size_config.dart';
 import 'package:dart_flutter/src/presentation/vote/vimemodel/vote_cubit.dart';
-import 'package:dart_flutter/src/presentation/vote/vote_start_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -14,11 +13,26 @@ class VoteTimer extends StatefulWidget {
 }
 
 class _VoteTimerState extends State<VoteTimer> {
-  static const fourtyMins = 2400;
-  int leftMins = fourtyMins;
+  int totalSeconds = 2400;
   late Timer timer;
 
   void onTick(Timer timer) {
+    if (totalSeconds <= 0) {
+      setState(() {
+        timer.cancel();
+        BlocProvider.of<VoteCubit>(context).stepWait();
+      });
+    } else {
+      setState(() {
+        // totalSeconds--;
+        totalSeconds = BlocProvider.of<VoteCubit>(context).state.leftNextVoteTime();
+      });
+    }
+  }
+
+  String format(int seconds) {
+    var duration = Duration(seconds: seconds); // 시간형식으로 나타내줌 0:00:00.000000
+    return duration.toString().split(".").first.substring(2);
   }
 
   @override
@@ -49,14 +63,14 @@ class _VoteTimerState extends State<VoteTimer> {
                         "다시 시작하기까지",
                         style: TextStyle(
                           fontWeight: FontWeight.w800,
-                          fontSize: SizeConfig.defaultSize * 4,
+                          fontSize: SizeConfig.defaultSize * 3.7,
                         ),
                       ),
                     ),
                     Expanded(
                       child: Container(
                         child: Text(
-                          "40:00",
+                          format(totalSeconds),
                           style: TextStyle(
                             fontWeight: FontWeight.w800,
                             fontSize: SizeConfig.defaultSize * 9,

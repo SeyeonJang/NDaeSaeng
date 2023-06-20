@@ -2,7 +2,6 @@ import 'package:dart_flutter/res/size_config.dart';
 import 'package:dart_flutter/src/data/model/friend.dart';
 import 'package:dart_flutter/src/presentation/vote/vimemodel/state/vote_state.dart';
 import 'package:dart_flutter/src/presentation/vote/vimemodel/vote_cubit.dart';
-import 'package:dart_flutter/src/presentation/vote/vote_result_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -29,11 +28,11 @@ class VoteView extends StatelessWidget {
                 children: [
                   VoteStoryBar(voteIterator: state.voteIterator, maxVoteIterator: VoteState.MAX_VOTE_ITERATOR,),
                   Flexible(
-                    flex: 1,
+                    flex: 10,
                     child: Icon(Icons.emoji_emotions, size: SizeConfig.defaultSize * 22),
                   ),
                   Flexible(
-                    flex: 2,
+                    flex: 20,
                     child: Text(
                       state.votes[state.voteIterator].question.question,
                       style: TextStyle(
@@ -43,9 +42,10 @@ class VoteView extends StatelessWidget {
                     ),
                   ),
                   Flexible(
-                    flex: 1,
-                    fit: FlexFit.tight,
+                    flex: 12,
+                    // fit: FlexFit.tight,
                     child: Column(
+                      mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -65,7 +65,7 @@ class VoteView extends StatelessWidget {
                           ],
                         ),
                         const SizedBox(
-                          height: 3,
+                          height: 10,
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -86,7 +86,10 @@ class VoteView extends StatelessWidget {
                       ],
                     ),
                   ),
-                  const SizedBox(),
+                  Flexible(
+                    flex: 0,
+                    child: Container(color: Colors.red,),
+                  )
                 ],
               );
             },

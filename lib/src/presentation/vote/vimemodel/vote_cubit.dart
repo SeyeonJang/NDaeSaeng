@@ -62,7 +62,7 @@ class VoteCubit extends Cubit<VoteState> {
 
       // 투표 리스트 비우기 + 다음투표가능시간 갱신 + (포인트는 My page에서 값 받아오면 알아서 갱신되어있음)
       // DateTime myNextVoteTime = await _dartVoteRepository.getMyNextVoteTime("TODO MY ACCESS TOKEN");
-      DateTime myNextVoteTime = DateTime.now().add(const Duration(minutes: 40));
+      DateTime myNextVoteTime = DateTime.now().add(const Duration(minutes: 1));
       state.setNextVoteDateTime(myNextVoteTime);
     }
 
