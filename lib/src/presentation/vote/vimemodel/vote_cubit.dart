@@ -60,9 +60,9 @@ class VoteCubit extends Cubit<VoteState> {
       // 투표한 내용을 서버에 전달
       // _dartVoteRepository.sendMyVotes("TODO MY ACCESSTOKEN", state.votes);
 
-      // 투표 리스트 비우기 + 다음투표가능시간 갱신 + (포인트는 My page에서 갱신하세요)
+      // 투표 리스트 비우기 + 다음투표가능시간 갱신 + (포인트는 My page에서 값 받아오면 알아서 갱신되어있음)
       // DateTime myNextVoteTime = await _dartVoteRepository.getMyNextVoteTime("TODO MY ACCESS TOKEN");
-      DateTime myNextVoteTime = DateTime.now().add(const Duration(minutes: 2400));
+      DateTime myNextVoteTime = DateTime.now().add(const Duration(minutes: 40));
       state.setNextVoteDateTime(myNextVoteTime);
     }
 
@@ -80,13 +80,21 @@ class VoteCubit extends Cubit<VoteState> {
     emit(state.copy());
   }
 
+  void inviteFriend() {
+    bool isInvited = true;
+    if (isInvited) {
+      // 정상적으로 카톡 공유하기를 전송한 경우
+      // _dartVoteRepository.updateMyNextVoteTime("TODO MY ACCESS TOKEN");
+      state.setNextVoteDateTime(DateTime.now()).setStep(VoteStep.start);
+    }
+
+    emit(state.copy());
+  }
+
   void _setStepByNextVoteTime() {
-    print(state.nextVoteDateTime);
-    print(DateTime.now());
     if (state.isVoteTimeOver()) {
       state.setStep(VoteStep.start);
     } else {
-      print("여기에 걸렷나?");
       state.setStep(VoteStep.wait);
     }
   }

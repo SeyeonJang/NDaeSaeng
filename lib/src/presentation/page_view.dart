@@ -1,6 +1,8 @@
 import 'package:dart_flutter/res/size_config.dart';
 import 'package:dart_flutter/src/presentation/mypage/my_page.dart';
+import 'package:dart_flutter/src/presentation/vote/vimemodel/vote_cubit.dart';
 import 'package:dart_flutter/src/presentation/vote/vote_pages.dart';
+import 'package:dart_flutter/src/presentation/vote/vote_start_view.dart';
 import 'package:dart_flutter/src/presentation/vote_list/viewmodel/vote_list_cubit.dart';
 import 'package:dart_flutter/src/presentation/vote_list/vote_list_pages.dart';
 import 'package:flutter/material.dart';
@@ -48,7 +50,10 @@ class _DartPageViewState extends State<DartPageView> {
                       create: (context) => VoteListCubit(),
                       child: const VoteListPages(),
                   ),
-                  const VotePages(),
+                  BlocProvider(
+                      create: (context) => VoteCubit(),
+                      child: const VotePages(),
+                  ),
                   const MyPage(),
                 ],
               ),

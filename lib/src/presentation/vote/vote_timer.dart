@@ -1,8 +1,10 @@
 import 'dart:async';
 
 import 'package:dart_flutter/res/size_config.dart';
-import 'package:dart_flutter/src/presentation/vote/vote_pages.dart';
+import 'package:dart_flutter/src/presentation/vote/vimemodel/vote_cubit.dart';
+import 'package:dart_flutter/src/presentation/vote/vote_start_view.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class VoteTimer extends StatefulWidget {
   const VoteTimer({Key? key}) : super(key: key);
@@ -74,7 +76,8 @@ class _VoteTimerState extends State<VoteTimer> {
                     SizedBox(height:SizeConfig.defaultSize * 1),
                     ElevatedButton(
                       onPressed: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => VotePages()));
+                        // BlocProvider.of<VoteCubit>(context).stepWait();
+                        BlocProvider.of<VoteCubit>(context).inviteFriend();
                       },
                       child: Text(
                         "친구 초대하기",
