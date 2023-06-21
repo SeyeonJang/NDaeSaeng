@@ -3,9 +3,9 @@ import 'package:dart_flutter/src/data/model/vote.dart';
 import 'package:dart_flutter/src/data/repository/dart_vote_repository.dart';
 import 'package:dart_flutter/src/presentation/vote_list/viewmodel/state/vote_list_state.dart';
 import 'package:dart_flutter/src/presentation/vote_list/viewmodel/state/vote_mock.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hydrated_bloc/hydrated_bloc.dart';
 
-class VoteListCubit extends Cubit<VoteListState> {
+class VoteListCubit extends HydratedCubit<VoteListState> {
   static final DartVoteRepository _dartVoteRepository = DartVoteRepository();
 
   VoteListCubit() : super(VoteListState.init());
@@ -46,4 +46,10 @@ class VoteListCubit extends Cubit<VoteListState> {
     // API 나와야 감 좀 잡히것는데
     emit(state.copy());
   }
+
+  @override
+  VoteListState fromJson(Map<String, dynamic> json) => state.fromJson(json);
+
+  @override
+  Map<String, dynamic> toJson(VoteListState state) => state.toJson();
 }

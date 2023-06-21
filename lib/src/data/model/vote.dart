@@ -1,3 +1,6 @@
+import 'package:json_annotation/json_annotation.dart';
+part 'vote.g.dart';
+
 class VoteRequest {
   int? userId, voteId;
   int? pickUserId, firstUserId, secondUserId, ThirdUserId, FourthUserId;
@@ -29,6 +32,7 @@ class VoteRequest {
     question = voteResponse.question;
 }
 
+@JsonSerializable()
 class VoteResponse {
   final int userId, voteId;
   final int pickUserAdmissionNumber;
@@ -54,8 +58,12 @@ class VoteResponse {
     hint = json['hint'],
     question = json['question'],
     pickedAt = json['pickedAt'];
+
+  Map<String, dynamic> toJson() => _$VoteResponseToJson(this);
+  static VoteResponse fromJson(Map<String, dynamic> json) => _$VoteResponseFromJson(json);
 }
 
+@JsonSerializable()
 class Question {
   final int questionId;
   final String div1, div2, question;
@@ -71,8 +79,12 @@ class Question {
     div1 = json['div1'],
     div2 = json['div2'],
     question = json['question'];
+
+  Map<String, dynamic> toJson() => _$QuestionToJson(this);
+  static Question fromJson(Map<String, dynamic> json) => _$QuestionFromJson(json);
 }
 
+@JsonSerializable()
 class Hint {
   final int voteId;
   final String hint1;
@@ -96,4 +108,7 @@ class Hint {
     hint3 = json['hint3'],
     hint4 = json['hint4'],
     hint5 = json['hint5'];
+
+  Map<String, dynamic> toJson() => _$HintToJson(this);
+  static Hint fromJson(Map<String, dynamic> json) => _$HintFromJson(json);
 }
