@@ -2,7 +2,6 @@ import 'package:dart_flutter/res/size_config.dart';
 import 'package:dart_flutter/src/presentation/mypage/my_page.dart';
 import 'package:dart_flutter/src/presentation/vote/vimemodel/vote_cubit.dart';
 import 'package:dart_flutter/src/presentation/vote/vote_pages.dart';
-import 'package:dart_flutter/src/presentation/vote/vote_start_view.dart';
 import 'package:dart_flutter/src/presentation/vote_list/viewmodel/vote_list_cubit.dart';
 import 'package:dart_flutter/src/presentation/vote_list/vote_list_pages.dart';
 import 'package:flutter/material.dart';
@@ -16,17 +15,33 @@ class DartPageView extends StatefulWidget {
 }
 
 class _DartPageViewState extends State<DartPageView> {
+  int _page = 0;
+  late PageController _pageController = PageController();
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  void _onPageChanged(int page) {
+    setState(() {
+      _page = page;
+    });
+  }
+
+  void _onTapNavigation(int page) {
+    _pageController.animateToPage(page, duration: const Duration(milliseconds: 300), curve: Curves.ease);
+  }
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: const TabBar(
-      //   cont
-      //   tabs: <Widget>[
-      //     Tab(text: "Darts"),
-      //     Tab(text: "Dart"),
-      //     Tab(text: "MY"),
-      //   ],
-      // ),
       body: SafeArea(
         child: Column(
           children: [
@@ -35,17 +50,18 @@ class _DartPageViewState extends State<DartPageView> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  // TODO pageViewCubit 임시로 만들어서 관리
-                  Text("Darts", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.8, fontWeight: FontWeight.w500, color: Colors.black)),
-                  Text("Dart", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.8, fontWeight: FontWeight.w500, color: Colors.grey)),
-                  Text(" MY ", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.8, fontWeight: FontWeight.w500, color: Colors.grey)),
+                  _TapBarButton(name: "Darts", targetPage: 0, nowPage: _page, onTapNavigation: _onTapNavigation),
+                  _TapBarButton(name: "Dart", targetPage: 1, nowPage: _page, onTapNavigation: _onTapNavigation),
+                  _TapBarButton(name: " MY ", targetPage: 2, nowPage: _page, onTapNavigation: _onTapNavigation),
+                  _TapBarButton(name: "Meet", targetPage: 3, nowPage: _page, onTapNavigation: _onTapNavigation),
                 ],
               ),
             ),
             Expanded(
               child: PageView(
+                onPageChanged: _onPageChanged,
+                controller: _pageController,
                 children: [
-                  // TODO, 각 Page를 cubit으로 제어하도록 해야함
                   BlocProvider(
                       create: (context) => VoteListCubit(),
                       child: const VoteListPages(),
@@ -55,12 +71,31 @@ class _DartPageViewState extends State<DartPageView> {
                       child: const VotePages(),
                   ),
                   const MyPage(),
+                  const MyPage(),
                 ],
               ),
             ),
           ],
         ),
       ),
+    );
+  }
+}
+
+class _TapBarButton extends StatelessWidget {
+  final String name;
+  final int targetPage;
+  final int nowPage;
+  final onTapNavigation;
+  const _TapBarButton({Key? key, required this.targetPage, this.onTapNavigation, required this.name, required this.nowPage}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+        onTap: () {
+          onTapNavigation(targetPage);
+        },
+        child: Text(name, style: TextStyle(fontSize: SizeConfig.defaultSize * 1.8, fontWeight: FontWeight.w500, color: (targetPage == nowPage) ? Colors.black : Colors.grey))
     );
   }
 }
