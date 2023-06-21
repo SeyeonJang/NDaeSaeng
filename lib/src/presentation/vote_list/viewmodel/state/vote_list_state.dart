@@ -1,5 +1,8 @@
 import 'package:dart_flutter/src/data/model/vote.dart';
+import 'package:json_annotation/json_annotation.dart';
+part 'vote_list_state.g.dart';
 
+@JsonSerializable()
 class VoteListState {
   late List<VoteResponse> votes;
   late Map<int, bool> visited;
@@ -63,6 +66,9 @@ class VoteListState {
   bool isVisited(int id) {
     return visited[id] ?? false;
   }
+
+  Map<String, dynamic> toJson() => _$VoteListStateToJson(this);
+  VoteListState fromJson(Map<String, dynamic> json) => _$VoteListStateFromJson(json);
 
   @override
   String toString() {

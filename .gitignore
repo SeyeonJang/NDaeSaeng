@@ -4,6 +4,7 @@
 ### IDEA ###
 .idea/
 *.iml
+.iml
 .metadata
 
 ### Flutter ###

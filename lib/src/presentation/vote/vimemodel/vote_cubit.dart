@@ -5,9 +5,9 @@ import 'package:dart_flutter/src/data/repository/dart_vote_repository.dart';
 import 'package:dart_flutter/src/presentation/mypage/friends_mock.dart';
 import 'package:dart_flutter/src/presentation/vote/vimemodel/state/vote_state.dart';
 import 'package:dart_flutter/src/presentation/vote_list/viewmodel/state/vote_mock.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hydrated_bloc/hydrated_bloc.dart';
 
-class VoteCubit extends Cubit<VoteState> {
+class VoteCubit extends HydratedCubit<VoteState> {
   static final DartUserRepository _dartUserRepository = DartUserRepository();
   static final DartVoteRepository _dartVoteRepository = DartVoteRepository();
 
@@ -98,4 +98,10 @@ class VoteCubit extends Cubit<VoteState> {
       state.setStep(VoteStep.wait);
     }
   }
+
+  @override
+  VoteState fromJson(Map<String, dynamic> json) => state.fromJson(json);
+
+  @override
+  Map<String, dynamic> toJson(VoteState state) => state.toJson();
 }

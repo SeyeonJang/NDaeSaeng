@@ -1,5 +1,8 @@
 import 'package:dart_flutter/src/data/model/university.dart';
+import 'package:json_annotation/json_annotation.dart';
+part 'friend.g.dart';
 
+@JsonSerializable()
 class Friend {
   final int userId;
   final University university;
@@ -24,4 +27,7 @@ class Friend {
         name = json['name'],
         phone = json['phone'],
         signUp = json['signUp'];
+
+  Map<String, dynamic> toJson() => _$FriendToJson(this);
+  static Friend fromJson(Map<String, dynamic> json) => _$FriendFromJson(json);
 }

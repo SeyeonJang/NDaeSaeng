@@ -1,4 +1,5 @@
 import 'package:dart_flutter/res/size_config.dart';
+import 'package:dart_flutter/src/common/util/timeago_util.dart';
 import 'package:dart_flutter/src/data/model/vote.dart';
 import 'package:dart_flutter/src/presentation/vote_list/viewmodel/state/vote_list_state.dart';
 import 'package:dart_flutter/src/presentation/vote_list/viewmodel/vote_list_cubit.dart';
@@ -13,7 +14,6 @@ class VoteListView extends StatefulWidget {
 }
 
 class _VoteListViewState extends State<VoteListView> {
-
   @override
   void initState() {
     super.initState();
@@ -38,12 +38,13 @@ class _VoteListViewState extends State<VoteListView> {
     return ListView.separated(
       itemBuilder: (context, index) {
         var vote = snapshot[index];
+        var timeago = TimeagoUtil().format(vote.pickedAt);
         var visited = BlocProvider.of<VoteListCubit>(context).isVisited(vote.voteId);
         return dart(
           voteId: vote.voteId,
           sex: vote.pickUserSex,
           question: vote.question.question,
-          datetime: vote.pickedAt,
+          datetime: timeago,
           isVisited: visited,
         );
       },
@@ -57,7 +58,7 @@ class dart extends StatelessWidget {
   final int voteId;
   final String sex;
   final String question;
-  final DateTime datetime;
+  final String datetime;
   final bool isVisited;
 
   const dart({
@@ -80,22 +81,40 @@ class dart extends StatelessWidget {
         decoration: BoxDecoration(
           border: Border.all(
             width: SizeConfig.defaultSize * 0.1,
-            color: isVisited ? Colors.grey : Colors.red,
+            color: isVisited ? Colors.grey : Colors.blueAccent,
           ),
           borderRadius: BorderRadius.circular(15),
         ),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          // mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            Icon(Icons.heart_broken, size: SizeConfig.defaultSize * 5),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text("$sex학생이 Dart를 보냈어요!"),
-                Text("$question"),
-              ],
+            Flexible(
+              flex: 1,
+              child: Icon(Icons.person, size: SizeConfig.defaultSize * 5),
             ),
-            Text("$datetime 전"),
+            Flexible(
+              flex: 3,
+              fit: FlexFit.tight,
+              child: Row(
+                children: [
+                  const SizedBox(width: 10),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text("$sex학생이 Dart를 보냈어요!", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.2)),
+                      Text("$question", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.5, fontWeight: FontWeight.w500)),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            Flexible(
+              flex: 1,
+              child: Container(
+                  alignment: Alignment.centerRight,
+                  child: Text("$datetime", style: TextStyle(fontSize: SizeConfig.defaultSize * 1)),
+              ),
+            ),
           ],
         ),
       ),
