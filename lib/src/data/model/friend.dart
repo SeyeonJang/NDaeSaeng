@@ -1,12 +1,15 @@
+import 'package:dart_flutter/src/data/model/university.dart';
+
 class Friend {
-  final int userId, univId;
+  final int userId;
+  final University university;
   final int admissionNumber, mutualFriend;
   final String name, phone;
   final bool signUp;
 
   Friend(
       {required this.userId,
-      required this.univId,
+      required this.university,
       required this.admissionNumber,
       required this.mutualFriend,
       required this.name,
@@ -15,7 +18,7 @@ class Friend {
 
   Friend.from(Map<String, dynamic> json)
       : userId = json['userId'],
-        univId = json['univId'],
+        university = University.fromJson(json),
         admissionNumber = json['admissionNumber'],
         mutualFriend = json['mutualFriend'],
         name = json['name'],

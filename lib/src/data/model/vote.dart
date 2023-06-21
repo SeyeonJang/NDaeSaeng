@@ -1,6 +1,6 @@
 class VoteRequest {
-  final int userId, voteId;
-  final int pickUserId, firstUserId, secondUserId, ThirdUserId, FourthUserId;
+  int? userId, voteId;
+  int? pickUserId, firstUserId, secondUserId, ThirdUserId, FourthUserId;
   final Question question;
 
   VoteRequest(
@@ -22,6 +22,11 @@ class VoteRequest {
     ThirdUserId = json['ThirdUserId'],
     FourthUserId = json['FourthUserId'],
     question = json['question'];
+
+  VoteRequest.fromVoteResponse(VoteResponse voteResponse)
+  : userId = voteResponse.userId,
+    voteId = voteResponse.voteId,
+    question = voteResponse.question;
 }
 
 class VoteResponse {
