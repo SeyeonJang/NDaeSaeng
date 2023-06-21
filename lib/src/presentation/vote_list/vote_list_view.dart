@@ -14,7 +14,6 @@ class VoteListView extends StatefulWidget {
 }
 
 class _VoteListViewState extends State<VoteListView> {
-
   @override
   void initState() {
     super.initState();
@@ -82,22 +81,40 @@ class dart extends StatelessWidget {
         decoration: BoxDecoration(
           border: Border.all(
             width: SizeConfig.defaultSize * 0.1,
-            color: isVisited ? Colors.grey : Colors.red,
+            color: isVisited ? Colors.grey : Colors.blueAccent,
           ),
           borderRadius: BorderRadius.circular(15),
         ),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          // mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            Icon(Icons.heart_broken, size: SizeConfig.defaultSize * 5),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text("$sex학생이 Dart를 보냈어요!"),
-                Text("$question"),
-              ],
+            Flexible(
+              flex: 1,
+              child: Icon(Icons.person, size: SizeConfig.defaultSize * 5),
             ),
-            Text("$datetime"),
+            Flexible(
+              flex: 3,
+              fit: FlexFit.tight,
+              child: Row(
+                children: [
+                  const SizedBox(width: 10),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text("$sex학생이 Dart를 보냈어요!", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.2)),
+                      Text("$question", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.5, fontWeight: FontWeight.w500)),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            Flexible(
+              flex: 1,
+              child: Container(
+                  alignment: Alignment.centerRight,
+                  child: Text("$datetime", style: TextStyle(fontSize: SizeConfig.defaultSize * 1)),
+              ),
+            ),
           ],
         ),
       ),
