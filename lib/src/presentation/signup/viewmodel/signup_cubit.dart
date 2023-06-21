@@ -68,7 +68,7 @@ class SignupCubit extends Cubit<SignupState> {
     state.inputState.gender = gender;
 
     UserRequest userRequest = state.inputState.toUserRequest();
-    await _dartUserRepository.signup(userRequest);
+    // await _dartUserRepository.signup(userRequest);
 
     emit(state.copy());
   }

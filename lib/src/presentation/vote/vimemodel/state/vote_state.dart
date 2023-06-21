@@ -1,6 +1,9 @@
 import 'package:dart_flutter/src/data/model/friend.dart';
 import 'package:dart_flutter/src/data/model/vote.dart';
+import 'package:json_annotation/json_annotation.dart';
+part 'vote_state.g.dart';
 
+@JsonSerializable()
 class VoteState {
   static const int MAX_VOTE_ITERATOR = 8;
 
@@ -80,6 +83,9 @@ class VoteState {
   bool isVoteDone() {
     return step == VoteStep.done;
   }
+
+  Map<String, dynamic> toJson() => _$VoteStateToJson(this);
+  VoteState fromJson(Map<String, dynamic> json) => _$VoteStateFromJson(json);
 
   @override
   String toString() {

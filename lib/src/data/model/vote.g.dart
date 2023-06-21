@@ -6,6 +6,29 @@ part of 'vote.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
+VoteRequest _$VoteRequestFromJson(Map<String, dynamic> json) => VoteRequest(
+      userId: json['userId'] as int?,
+      voteId: json['voteId'] as int?,
+      pickUserId: json['pickUserId'] as int?,
+      firstUserId: json['firstUserId'] as int?,
+      secondUserId: json['secondUserId'] as int?,
+      ThirdUserId: json['ThirdUserId'] as int?,
+      FourthUserId: json['FourthUserId'] as int?,
+      question: Question.fromJson(json['question'] as Map<String, dynamic>),
+    );
+
+Map<String, dynamic> _$VoteRequestToJson(VoteRequest instance) =>
+    <String, dynamic>{
+      'userId': instance.userId,
+      'voteId': instance.voteId,
+      'pickUserId': instance.pickUserId,
+      'firstUserId': instance.firstUserId,
+      'secondUserId': instance.secondUserId,
+      'ThirdUserId': instance.ThirdUserId,
+      'FourthUserId': instance.FourthUserId,
+      'question': instance.question,
+    };
+
 VoteResponse _$VoteResponseFromJson(Map<String, dynamic> json) => VoteResponse(
       userId: json['userId'] as int,
       voteId: json['voteId'] as int,

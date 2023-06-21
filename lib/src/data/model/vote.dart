@@ -1,6 +1,9 @@
+import 'dart:core';
+
 import 'package:json_annotation/json_annotation.dart';
 part 'vote.g.dart';
 
+@JsonSerializable()
 class VoteRequest {
   int? userId, voteId;
   int? pickUserId, firstUserId, secondUserId, ThirdUserId, FourthUserId;
@@ -30,6 +33,9 @@ class VoteRequest {
   : userId = voteResponse.userId,
     voteId = voteResponse.voteId,
     question = voteResponse.question;
+
+  Map<String, dynamic> toJson() => _$VoteRequestToJson(this);
+  static VoteRequest fromJson(Map<String, dynamic> json) => _$VoteRequestFromJson(json);
 }
 
 @JsonSerializable()
