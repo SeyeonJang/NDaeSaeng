@@ -1,4 +1,5 @@
 import 'package:dart_flutter/res/size_config.dart';
+import 'package:dart_flutter/src/common/util/timeago_util.dart';
 import 'package:dart_flutter/src/data/model/vote.dart';
 import 'package:dart_flutter/src/presentation/vote_list/viewmodel/state/vote_list_state.dart';
 import 'package:dart_flutter/src/presentation/vote_list/viewmodel/vote_list_cubit.dart';
@@ -38,12 +39,13 @@ class _VoteListViewState extends State<VoteListView> {
     return ListView.separated(
       itemBuilder: (context, index) {
         var vote = snapshot[index];
+        var timeago = TimeagoUtil().format(vote.pickedAt);
         var visited = BlocProvider.of<VoteListCubit>(context).isVisited(vote.voteId);
         return dart(
           voteId: vote.voteId,
           sex: vote.pickUserSex,
           question: vote.question.question,
-          datetime: vote.pickedAt,
+          datetime: timeago,
           isVisited: visited,
         );
       },
@@ -57,7 +59,7 @@ class dart extends StatelessWidget {
   final int voteId;
   final String sex;
   final String question;
-  final DateTime datetime;
+  final String datetime;
   final bool isVisited;
 
   const dart({
@@ -95,7 +97,7 @@ class dart extends StatelessWidget {
                 Text("$question"),
               ],
             ),
-            Text("$datetime 전"),
+            Text("$datetime"),
           ],
         ),
       ),

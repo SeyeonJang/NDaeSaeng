@@ -34,6 +34,7 @@ dependencies:
   image_picker: ^0.8.7+5 # 사용자 사진 가져오는 imagePicker
   http: ^1.0.0
   url_launcher: ^6.1.11
+  timeago: ^3.4.0
 
   # service api
   kakao_flutter_sdk: ^1.4.1
