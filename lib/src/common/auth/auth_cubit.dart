@@ -12,6 +12,7 @@ class AuthCubit extends HydratedCubit<AuthState> {
       : super(AuthState(
           isLoading: false,
           step: AuthStep.land,
+          dartAccessToken: '',
           socialAccessToken: '',
           expiredAt: DateTime.now().add(const Duration(days: 30)),
           loginType: LoginType.email,
@@ -29,15 +30,21 @@ class AuthCubit extends HydratedCubit<AuthState> {
     KakaoUser kakaoUser = await _kakaoLoginRepository.loginWithKakaoTalk();
 
     // TODO Dart 서버 로그인 진행
-    // _authRepository.loginWithKakao(kakaoUser.accessToken);
+    // DartAuth dartAuth = await _authRepository.loginWithKakao(kakaoUser.accessToken);
+    // if (dartAuth) ... state.setDartAuth(dartAccessToken: ----, expiredAt: ----).setStep(AuthStep.login).setLoading(false).copy();
 
     // 정보 등록
     state.setSocialAuth(
         loginType: LoginType.kakao,
         socialAccessToken: kakaoUser.accessToken,
-        expiredAt: DateTime.now().add(const Duration(days: 30)))
+        )
         .setStep(AuthStep.signup)
         .setLoading(false);
+    emit(state.copy());
+  }
+
+  void testLogin() {
+    state.setStep(AuthStep.signup);
     emit(state.copy());
   }
 

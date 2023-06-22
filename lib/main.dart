@@ -1,6 +1,7 @@
 import 'package:dart_flutter/res/app_theme.dart';
 import 'package:dart_flutter/res/size_config.dart';
 import 'package:dart_flutter/src/common/auth/auth_cubit.dart';
+import 'package:dart_flutter/src/common/util/timeago_util.dart';
 import 'package:dart_flutter/src/presentation/signup/land_pages.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -14,6 +15,7 @@ void main() async {
   KakaoSdk.init(
     nativeAppKey: 'c83df49e14c914b9bda9b902b6624da2',
   );
+  TimeagoUtil().initKorean();
 
   HydratedBloc.storage = await HydratedStorage.build(storageDirectory: await getTemporaryDirectory());
 

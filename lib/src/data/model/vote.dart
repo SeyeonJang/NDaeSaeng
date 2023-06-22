@@ -1,6 +1,12 @@
+import 'dart:core';
+
+import 'package:json_annotation/json_annotation.dart';
+part 'vote.g.dart';
+
+@JsonSerializable()
 class VoteRequest {
-  final int userId, voteId;
-  final int pickUserId, firstUserId, secondUserId, ThirdUserId, FourthUserId;
+  int? userId, voteId;
+  int? pickUserId, firstUserId, secondUserId, ThirdUserId, FourthUserId;
   final Question question;
 
   VoteRequest(
@@ -22,26 +28,48 @@ class VoteRequest {
     ThirdUserId = json['ThirdUserId'],
     FourthUserId = json['FourthUserId'],
     question = json['question'];
+
+  VoteRequest.fromVoteResponse(VoteResponse voteResponse)
+  : userId = voteResponse.userId,
+    voteId = voteResponse.voteId,
+    question = voteResponse.question;
+
+  Map<String, dynamic> toJson() => _$VoteRequestToJson(this);
+  static VoteRequest fromJson(Map<String, dynamic> json) => _$VoteRequestFromJson(json);
 }
 
+@JsonSerializable()
 class VoteResponse {
   final int userId, voteId;
+  final int pickUserAdmissionNumber;
+  final String pickUserSex;
   final Hint hint;
   final Question question;
+  final DateTime pickedAt;
 
   VoteResponse(
       {required this.userId,
       required this.voteId,
+      required this.pickUserAdmissionNumber,
+      required this.pickUserSex,
       required this.hint,
-      required this.question});
+      required this.question,
+      required this.pickedAt});
 
   VoteResponse.from(Map<String, dynamic> json)
   : userId = json['userId'],
     voteId = json['voteId'],
+    pickUserAdmissionNumber = json['pickUserAdmissionNumber'],
+    pickUserSex = json['pickUserSex'],
     hint = json['hint'],
-    question = json['question'];
+    question = json['question'],
+    pickedAt = json['pickedAt'];
+
+  Map<String, dynamic> toJson() => _$VoteResponseToJson(this);
+  static VoteResponse fromJson(Map<String, dynamic> json) => _$VoteResponseFromJson(json);
 }
 
+@JsonSerializable()
 class Question {
   final int questionId;
   final String div1, div2, question;
@@ -57,8 +85,12 @@ class Question {
     div1 = json['div1'],
     div2 = json['div2'],
     question = json['question'];
+
+  Map<String, dynamic> toJson() => _$QuestionToJson(this);
+  static Question fromJson(Map<String, dynamic> json) => _$QuestionFromJson(json);
 }
 
+@JsonSerializable()
 class Hint {
   final int voteId;
   final String hint1;
@@ -82,4 +114,7 @@ class Hint {
     hint3 = json['hint3'],
     hint4 = json['hint4'],
     hint5 = json['hint5'];
+
+  Map<String, dynamic> toJson() => _$HintToJson(this);
+  static Hint fromJson(Map<String, dynamic> json) => _$HintFromJson(json);
 }

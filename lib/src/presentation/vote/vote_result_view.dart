@@ -1,6 +1,8 @@
 import 'package:dart_flutter/res/size_config.dart';
+import 'package:dart_flutter/src/presentation/vote/vimemodel/vote_cubit.dart';
 import 'package:dart_flutter/src/presentation/vote/vote_timer.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class VoteResultView extends StatelessWidget {
   const VoteResultView({Key? key}) : super(key: key);
@@ -57,7 +59,7 @@ class VoteResultView extends StatelessWidget {
                     ),
                     ElevatedButton(
                       onPressed: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => VoteTimer()));
+                        BlocProvider.of<VoteCubit>(context).stepDone();
                       },
                       child: Text(
                         "포인트 받기",
