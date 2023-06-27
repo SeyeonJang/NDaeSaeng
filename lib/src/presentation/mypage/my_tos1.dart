@@ -1,37 +1,44 @@
 import 'package:flutter/material.dart';
 import 'package:dart_flutter/res/size_config.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:dart_flutter/src/presentation/mypage/viewmodel/mypages_cubit.dart';
+
 
 // 이용약관
 
-class Tos1 extends StatelessWidget {
-  const Tos1({super.key});
+class MyTos1 extends StatelessWidget {
+  MyPagesCubit _getMyPageCubit(BuildContext context) =>
+      BlocProvider.of<MyPagesCubit>(context);
+  const MyTos1({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        // 임시 View **********************
-        leading: IconButton(
-            // 이게 있어야 Navigator.pop으로 main -> choose_school 화면 전환을 할 수 있어서 임시로 넣은 코드 (AppBar 안에 있는 코드 나중에 지우면 됨)
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            icon: const Icon(Icons.arrow_back)),
-      ),
-      body: ListView(
-        children: [
-          Container(
-            padding: EdgeInsets.all(SizeConfig.defaultSize * 2),
-            width: SizeConfig.defaultSize,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Text("DART 서비스 이용약관",
-                    style: TextStyle(fontSize: SizeConfig.defaultSize * 2)),
-                SizedBox(
-                  height: SizeConfig.defaultSize * 3,
-                ),
-                const Text("""
+    return BlocProvider<MyPagesCubit>(
+      create: (BuildContext context) => MyPagesCubit(),
+      child: Scaffold(
+        appBar: AppBar(
+          // 임시 View **********************
+          leading: IconButton(
+              onPressed: () {
+                BlocProvider.of<MyPagesCubit>(context)
+                    .backToSetting();
+              },
+              icon: const Icon(Icons.arrow_back)),
+        ),
+        body: ListView(
+          children: [
+            Container(
+              padding: EdgeInsets.all(SizeConfig.defaultSize * 2),
+              width: SizeConfig.defaultSize,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text("DART 서비스 이용약관",
+                      style: TextStyle(fontSize: SizeConfig.defaultSize * 2)),
+                  SizedBox(
+                    height: SizeConfig.defaultSize * 3,
+                  ),
+                  const Text("""
 제1조(목적)
 
 이 약관은 DART (이하 '회사' 라고 합니다)가 제공하는 제반 서비스의 이용과 관련하여 회사와 회원과의 권리, 의무 및 책임사항, 기타 필요한 사항을 규정함을 목적으로 합니다.
@@ -316,11 +323,12 @@ Points 은 현금으로 환급될 수 없습니다. 포인트의 사용기간이
 제1조(시행일)
 
 본 약관은 2023.06.23부터 시행됩니다.
-                """),
+                  """),
                 ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

@@ -9,11 +9,11 @@ import 'dart:convert' as convert;
 
 //TODO repository에 들어갈 내용인데 datasourcedㅔ 넣어버렸다...
 class DartApiRemoteDataSource {
-  static const String baseUrl = "www.naver.com";
+  static const String baseUrl = "https://7d1c-221-148-248-129.ngrok-free.app";
 
   /// Auth: 로그인 요청
   static Future<DartAuth> postLoginWithKakao(String kakaoAccessToken) async {
-    return DartAuth.from(await _simplePost('/v1/auth/kakao', kakaoAccessToken));
+    return DartAuth.from(await _simplePost(baseUrl + '/v1/auth/kakao', kakaoAccessToken));
   }
 
   /// Auth: 문자인증 요청

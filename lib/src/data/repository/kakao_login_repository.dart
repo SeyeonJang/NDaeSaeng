@@ -7,4 +7,8 @@ class KakaoLoginRepository {
   Future<KakaoUser> loginWithKakaoTalk() {
     return KakaoLoginRemoteDatasource.loginWithKakaoTalk();
   }
+
+  Future<void> logout() {
+    return KakaoLoginRemoteDatasource().logout();
+  }
 }

@@ -22,4 +22,9 @@ class SizeConfig {
   static double getDefaultSize() {
     return defaultSize;
   }
+
+  static const mainSize = 10.0;
 }
+
+double getFlexibleSize({double target = 1}) =>
+    SizeConfig.defaultSize * (target / SizeConfig.mainSize);

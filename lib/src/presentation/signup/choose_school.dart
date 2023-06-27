@@ -1,4 +1,5 @@
 import 'package:dart_flutter/src/presentation/signup/choose_major.dart';
+import 'package:dart_flutter/src/presentation/signup/land_page.dart';
 import 'package:dart_flutter/src/presentation/signup/viewmodel/signup_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -50,7 +51,7 @@ class ChooseSchool extends StatelessWidget {
         leading: IconButton(
             // 이게 있어야 Navigator.pop으로 main -> choose_school 화면 전환을 할 수 있어서 임시로 넣은 코드 (AppBar 안에 있는 코드 나중에 지우면 됨)
             onPressed: () {
-              Navigator.pop(context);
+              Navigator.push(context, MaterialPageRoute(builder: (_) => LandingPage()));
             },
             icon: Icon(Icons.arrow_back)),
       ),

@@ -16,3 +16,5 @@ class University {
   Map<String, dynamic> toJson() => _$UniversityToJson(this);
   static University fromJson(Map<String, dynamic> json) => _$UniversityFromJson(json);
 }
+
+

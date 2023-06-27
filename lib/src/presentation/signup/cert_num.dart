@@ -1,4 +1,6 @@
 import 'package:dart_flutter/src/presentation/signup/choose_gender.dart';
+import 'package:dart_flutter/src/presentation/signup/tos1.dart';
+import 'package:dart_flutter/src/presentation/signup/tos2.dart';
 import 'package:dart_flutter/src/presentation/signup/viewmodel/signup_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -53,14 +55,14 @@ class CertNum extends StatelessWidget {
                 children: [
                   TextButton(
                     onPressed: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (_) => ChooseGender()));
+                      Navigator.push(context, MaterialPageRoute(builder: (_) => Tos1()));
                     },
                     child: Text("이용약관", style: TextStyle(fontSize: 14)),
                   ),
                   Text("및"),
                   TextButton(
                     onPressed: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (_) => ChooseGender()));
+                      Navigator.push(context, MaterialPageRoute(builder: (_) => Tos2()));
                     },
                     child: Text("개인정보 처리방침", style: TextStyle(fontSize: 14)),
                   ),
