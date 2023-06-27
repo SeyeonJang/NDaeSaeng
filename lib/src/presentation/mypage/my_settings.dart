@@ -121,11 +121,6 @@ class MyPageView extends StatelessWidget {
                     TextButton(
                       onPressed: () async {
                         BlocProvider.of<AuthCubit>(context).kakaoLogout();
-                        // BlocProvider(
-                        //   create: (BuildContext context) => AuthCubit(),
-                        //   child: const LandingPage(),
-                        // );
-
                         Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const LogoutTogoLandPage()), (route)=>false); // TODO : 0627 얘만 작동하면 됨 로그아웃
                       },
                       child: Text("로그아웃",
