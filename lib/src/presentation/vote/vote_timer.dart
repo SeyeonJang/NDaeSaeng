@@ -13,7 +13,7 @@ class VoteTimer extends StatefulWidget {
 }
 
 class _VoteTimerState extends State<VoteTimer> {
-  int totalSeconds = 2400;
+  late int totalSeconds;
   late Timer timer;
 
   void onTick(Timer timer) {
@@ -32,13 +32,20 @@ class _VoteTimerState extends State<VoteTimer> {
 
   String format(int seconds) {
     var duration = Duration(seconds: seconds); // 시간형식으로 나타내줌 0:00:00.000000
-    return duration.toString().split(".").first.substring(2);
+    String time = duration.toString().split(".").first.substring(2);
+
+    if (time.startsWith(':')) {
+      time.substring(1);
+    }
+
+    return time;
   }
 
   @override
   void initState() {
     super.initState();
     timer = Timer.periodic(const Duration(seconds: 1), onTick);
+    totalSeconds = BlocProvider.of<VoteCubit>(context).state.leftNextVoteTime();
   }
 
   @override

@@ -5,7 +5,41 @@ import 'package:dart_flutter/src/presentation/vote/vote_start_view.dart';
 import 'package:dart_flutter/src/presentation/vote/vote_timer.dart';
 import 'package:dart_flutter/src/presentation/vote/vote_view.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+
+void _navigateToRoute(BuildContext context, Widget route) {
+  WidgetsBinding.instance.scheduleFrameCallback(
+        (_) {
+      // When you AuthenticationState changed, and you have
+      // pushed a lot widgets, this pop all.
+      // You can change the name '/' for the name
+      // of your route that manage the AuthenticationState.
+      Navigator.popUntil(context, ModalRoute.withName('/'));
+
+      // Also you can change MaterialPageRoute
+      // for your custom implemetation
+      MaterialPageRoute newRoute = MaterialPageRoute(
+        builder: (BuildContext context) {
+          // WillPopScope for prevent to go to the previous
+          // route using the back button.
+          return WillPopScope(
+            onWillPop: () async {
+              // In Android remove this activity from the stack
+              // and return to the previous activity.
+              SystemNavigator.pop();
+              return false;
+            },
+            child: route,
+          );
+        },
+      );
+      Navigator.of(context).push(newRoute);
+    },
+  );
+}
+
 
 class VotePages extends StatelessWidget {
   const VotePages({Key? key}) : super(key: key);
