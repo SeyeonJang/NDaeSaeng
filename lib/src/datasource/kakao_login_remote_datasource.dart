@@ -56,4 +56,22 @@ class KakaoLoginRemoteDatasource {
     }
     throw Error();
   }
+
+  Future<void> logout() async {
+    try {
+      await UserApi.instance.logout();
+      print('로그아웃 성공, SDK에서 토큰 삭제');
+    } catch (error) {
+      print('로그아웃 실패, SDK에서 토큰 삭제 $error');
+    }
+  }
+
+  Future<void> unlink() async {
+    try {
+      await UserApi.instance.unlink();
+      print('연결 끊기 성공, SDK에서 토큰 삭제');
+    } catch (error) {
+      print('연결 끊기 실패 $error');
+    }
+  }
 }

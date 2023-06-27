@@ -18,6 +18,19 @@ class AuthCubit extends HydratedCubit<AuthState> {
           loginType: LoginType.email,
         ));
 
+  void kakaoLogout() async {
+    try {
+      await _kakaoLoginRepository.logout();
+      // 로그아웃 성공 후 처리할 로직 추가
+      print("로그아웃 성공");
+    } catch (error) {
+      // 로그아웃 실패 처리
+      print('로그아웃 실패: $error');
+    }
+
+    emit(state.setStep(AuthStep.land));
+  }
+
   void kakaoLogin() async {
     // loading 상태로 만든다.
     emit(state.setLoading(true).copy());

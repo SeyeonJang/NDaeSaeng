@@ -14,6 +14,10 @@ class MyPagesCubit extends HydratedCubit<MyPagesState> {
     // TODO : 실제 데이터 받아오기 (아래는 mock)
     List<Friend> friends = FriendsMock().getFriends();
     state.setUserInfo(friends);
+    // 초기값 설정
+    state.setIsSettingPage(false);
+    state.setIsTos1(false);
+    state.setIsTos2(false);
 
     emit(state.copy());
   }
@@ -26,9 +30,25 @@ class MyPagesCubit extends HydratedCubit<MyPagesState> {
     emit(newState);
   }
 
+  void pressedTos1() {
+    state.setIsTos1(true);
+    final newState = state.copy();
+    print(newState);
+    emit(newState);
+  }
+
+  void pressedTos2() {
+    state.setIsTos2(true);
+    final newState = state.copy();
+    print(newState);
+    emit(newState);
+  }
+
   // 마이페이지(MyPageLanding)로 돌아가기
   void backToMyPageLanding() {
     state.setIsSettingPage(false);
+    state.setIsTos1(false);
+    state.setIsTos2(false);
     emit(state.copy());
   }
 

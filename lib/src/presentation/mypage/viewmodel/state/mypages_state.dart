@@ -1,5 +1,6 @@
 // import 'package:dart_flutter/src/data/model/vote.dart';
 import 'package:dart_flutter/src/data/model/friend.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 @JsonSerializable()
@@ -8,12 +9,16 @@ class MyPagesState {
   late bool isSettings;
   late Map<int, bool> addedFriend;
   late int newfriendId;
+  late bool isTos1;
+  late bool isTos2;
 
   MyPagesState({
     required this.friends,
     required this.isSettings,
     required this.addedFriend,
     required this.newfriendId,
+    required this.isTos1,
+    required this.isTos2,
   });
 
   MyPagesState.init() {
@@ -21,6 +26,8 @@ class MyPagesState {
     isSettings = false;
     addedFriend = {};
     newfriendId = 0;
+    isTos1 = false;
+    isTos2 = false;
   }
 
   MyPagesState copy() => MyPagesState(
@@ -28,6 +35,8 @@ class MyPagesState {
     isSettings: isSettings,
     addedFriend: addedFriend,
     newfriendId: newfriendId,
+    isTos1: isTos1,
+    isTos2: isTos2,
   );
 
   MyPagesState setUserInfo(List<Friend> friends) {
@@ -54,6 +63,16 @@ class MyPagesState {
     return addedFriend[friendId] ?? false;
   }
 
+  MyPagesState setIsTos1(bool isTos1) {
+    this.isTos1 = isTos1;
+    return this;
+  }
+
+  MyPagesState setIsTos2(bool isTos1) {
+    this.isTos2 = isTos2;
+    return this;
+  }
+
   // ============================================= 현식오빠 state.g 따라함 // TODO: 다하고 이거 지우기
 
   MyPagesState _$MyPagesStateFromJson(Map<String, dynamic> json) =>
@@ -66,6 +85,8 @@ class MyPagesState {
             (k, e) => MapEntry(int.parse(k), e as bool),
         ),
         newfriendId: json['newfriendId'] as int,
+        isTos1: json['isTos1'] as bool,
+        isTos2: json['isTos2'] as bool,
       );
 
   Map<String, dynamic> _$MyPagesStateToJson(MyPagesState instance) =>
@@ -74,6 +95,8 @@ class MyPagesState {
         'isSettings': instance.isSettings,
         'addedFriend': instance.addedFriend.map((k, e) => MapEntry(k.toString(), e)),
         'newfriendId': instance.newfriendId,
+        'isTos1': instance.isTos1,
+        'isTos2': instance.isTos2,
       };
 
   // ============================================= 현식오빠 state 따라함 // TODO: 다하고 이거 지우기
