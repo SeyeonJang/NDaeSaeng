@@ -1,8 +1,11 @@
-import 'package:dart_flutter/src/presentation/mypage/my_page.dart';
+import 'package:dart_flutter/src/presentation/mypage/my_page_landing.dart';
+import 'package:dart_flutter/src/presentation/mypage/viewmodel/mypages_cubit.dart';
+import 'package:dart_flutter/src/presentation/mypage/viewmodel/state/mypages_state.dart';
 import 'package:dart_flutter/src/presentation/signup/tos1.dart';
 import 'package:dart_flutter/src/presentation/signup/tos2.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../res/size_config.dart';
 
@@ -13,196 +16,177 @@ class MySettings extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: Padding(
+        child:
+            BlocBuilder<MyPagesCubit, MyPagesState>(builder: (context, state) {
+          return const MyPageView();
+        }),
+      ),
+    );
+  }
+}
+
+class MyPageView extends StatelessWidget {
+  const MyPageView({super.key});
+
+  static final _defaultPadding = EdgeInsets.all(getFlexibleSize(target: 20));
+
+  MyPagesCubit _getMyPageCubit(BuildContext context) =>
+      BlocProvider.of<MyPagesCubit>(context);
+
+  Widget _topBarSection(BuildContext context) => Row(children: [
+        IconButton(
+            onPressed: () => _getMyPageCubit(context).backToMyPageLanding(),
+            icon: Icon(Icons.arrow_back_ios_new_rounded,
+                size: SizeConfig.defaultSize * 2)),
+        Text("설정",
+            style: TextStyle(
+              fontWeight: FontWeight.w800,
+              fontSize: SizeConfig.defaultSize * 2,
+            )),
+      ]);
+
+  Widget _infoSection(BuildContext context) => Padding(
+      padding: _defaultPadding,
+      child: Column(children: [
+        _topBarSection(context),
+        const DtFlexSpacer(30),
+        Padding(
             padding: EdgeInsets.symmetric(
-            vertical: SizeConfig.defaultSize * 2,
-            horizontal: SizeConfig.defaultSize),
+                vertical: getFlexibleSize(),
+                horizontal: getFlexibleSize(target: 20)),
+            child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  _infoSectionItem(title: "이름", value: "장세연"),
+                  _infoSectionItem(title: "학교", value: "가톨릭대학교"),
+                  _infoSectionItem(title: "학과", value: "컴퓨터정보공학부"),
+                  _infoSectionItem(title: "학번", value: "21학번"),
+                  _infoSectionItem(title: "성별", value: "여성"),
+                ]))
+      ]));
+
+  Widget _infoSectionItem({required String title, required String value}) =>
+      Padding(
+          padding: EdgeInsets.symmetric(vertical: getFlexibleSize(target: 12)),
+          child:
+              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+            Text(title,
+                style: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    fontSize: getFlexibleSize(target: 16))),
+            Text(value,
+                style: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    fontSize: getFlexibleSize(target: 16))),
+          ]));
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        _infoSection(context),
+        const DtFlexSpacer(20),/// 구분선
+        const DtDivider(),
+        Padding(
+          padding: _defaultPadding,
           child: Column(
             children: [
-              Row(
-                children: [
-                  IconButton(
-                    onPressed: () => {
-                      Navigator.pop(context, MaterialPageRoute(builder: (context) => MyPage()))
-                    },
-                    icon: Icon(Icons.arrow_back_ios_new_rounded,
-                      size: SizeConfig.defaultSize * 2),
-                  ),
-                  Text("설정",
-                    style: TextStyle(
-                      fontWeight: FontWeight.w800,
-                      fontSize: SizeConfig.defaultSize * 2,
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: SizeConfig.defaultSize * 3,),
-              Container(
-                height: SizeConfig.defaultSize * 20,
-                child: Expanded(
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(
-                      vertical: SizeConfig.defaultSize,
-                      horizontal: SizeConfig.defaultSize * 2),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text("이름",
-                              style: TextStyle(
-                                fontWeight: FontWeight.w500,
-                                fontSize: SizeConfig.defaultSize * 1.6,
-                              ),),
-                            Text("장세연",
-                              style: TextStyle(
-                                fontWeight: FontWeight.w500,
-                                fontSize: SizeConfig.defaultSize * 1.6,
-                              ),),
-                          ],
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text("학교",
-                              style: TextStyle(
-                                fontWeight: FontWeight.w500,
-                                fontSize: SizeConfig.defaultSize * 1.6,
-                              ),),
-                            Text("가톨릭대학교",
-                              style: TextStyle(
-                                fontWeight: FontWeight.w500,
-                                fontSize: SizeConfig.defaultSize * 1.6,
-                              ),),
-                          ],
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text("학과",
-                              style: TextStyle(
-                                fontWeight: FontWeight.w500,
-                                fontSize: SizeConfig.defaultSize * 1.6,
-                              ),),
-                            Text("컴퓨터정보공학부",
-                              style: TextStyle(
-                                fontWeight: FontWeight.w500,
-                                fontSize: SizeConfig.defaultSize * 1.6,
-                              ),),
-                          ],
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text("학번",
-                              style: TextStyle(
-                                fontWeight: FontWeight.w500,
-                                fontSize: SizeConfig.defaultSize * 1.6,
-                              ),),
-                            Text("21학번",
-                              style: TextStyle(
-                                fontWeight: FontWeight.w500,
-                                fontSize: SizeConfig.defaultSize * 1.6,
-                              ),),
-                          ],
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text("성별",
-                              style: TextStyle(
-                                fontWeight: FontWeight.w500,
-                                fontSize: SizeConfig.defaultSize * 1.6,
-                              ),),
-                            Text("여성",
-                              style: TextStyle(
-                                fontWeight: FontWeight.w500,
-                                fontSize: SizeConfig.defaultSize * 1.6,
-                              ),),
-                          ],
-                        ),
-                      ],
-                    )
-                  ),
-                ),
-              ),
-              SizedBox(height: SizeConfig.defaultSize * 2,),
-              Container( // 구분선
-                padding: EdgeInsets.only(top: 0, bottom: 0, left: 0, right: 0,),
-                height: SizeConfig.defaultSize * 2,
-                color: Colors.grey.withOpacity(0.1),
-              ),
-              SizedBox(height: SizeConfig.defaultSize * 2,),
-
+              const DtFlexSpacer(20),
               Container(
                 alignment: Alignment.centerLeft,
                 padding: EdgeInsets.only(left: 20),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text("회원탈퇴",
+                    Text(
+                      "회원탈퇴",
                       textAlign: TextAlign.start,
                       style: TextStyle(
                         fontWeight: FontWeight.w500,
-                        fontSize: SizeConfig.defaultSize * 1.6,
+                        fontSize: getFlexibleSize(target: 16),
                       ),
                     ),
-                    SizedBox(height: SizeConfig.defaultSize * 2,),
-                    Text("로그아웃",
+                    const DtFlexSpacer(20),
+                    Text(
+                      "로그아웃",
                       textAlign: TextAlign.start,
                       style: TextStyle(
                         fontWeight: FontWeight.w500,
-                        fontSize: SizeConfig.defaultSize * 1.6,
+                        fontSize: getFlexibleSize(target: 16),
                       ),
                     ),
                   ],
                 ),
               ),
-
-              SizedBox(height: SizeConfig.defaultSize * 33,),
-
-              Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    TextButton(
-                      onPressed: () {
-                        Navigator.pop(context, MaterialPageRoute(builder: (context) => Tos1()));
-                      },
-                      child: Text("이용약관", style: TextStyle(fontSize: 14)),
-                    ),
-                    TextButton(
-                      onPressed: () {
-                        Navigator.pop(context, MaterialPageRoute(builder: (context) => Tos2()));
-                      },
-                      child: Text("개인정보 처리방침", style: TextStyle(fontSize: 14)),
-                    ),
-                    TextButton(
-                      onPressed: () {
-                        // launch로 Dart 건의 구글폼으로 이동
-                        launchUrl(
-                          Uri(
-                            scheme: 'https',
-                            host: 'docs.google.com',
-                            path: 'forms/d/e/1FAIpQLSd8H_R1_sq1QZHiuSRGd7XUyLvegZEsV05kLlcxO1JLc6TseQ/viewform?usp=sf_link',
-
-                          ),
-                          mode: LaunchMode.inAppWebView,
-                        );
-                      },
-                      child: Text("Dart에 건의하기", style: TextStyle(fontSize: 14)),
-                    ),
-                    TextButton(
-                      onPressed: () {
-                        // launch로 우리 카카오톡 페이지로 연결
-                      },
-                      child: Text("1:1 문의", style: TextStyle(fontSize: 14)),
-                    ),
-                  ]
-              ),
-            ],),
+              const DtFlexSpacer(120),
+              Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context,
+                        MaterialPageRoute(builder: (context) => Tos1()));
+                  },
+                  child: Text("이용약관", style: TextStyle(fontSize: 14)),
+                ),
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context,
+                        MaterialPageRoute(builder: (context) => Tos2()));
+                  },
+                  child: Text("개인정보 처리방침", style: TextStyle(fontSize: 14)),
+                ),
+                TextButton(
+                  onPressed: () {
+                    // launch로 Dart 건의 구글폼으로 이동
+                    launchUrl(
+                      Uri(
+                        scheme: 'https',
+                        host: 'docs.google.com',
+                        path:
+                            'forms/d/e/1FAIpQLSd8H_R1_sq1QZHiuSRGd7XUyLvegZEsV05kLlcxO1JLc6TseQ/viewform?usp=sf_link',
+                      ),
+                      mode: LaunchMode.inAppWebView,
+                    );
+                  },
+                  child: Text("Dart에 건의하기", style: TextStyle(fontSize: 14)),
+                ),
+                TextButton(
+                  onPressed: () {
+                    // launch로 우리 카카오톡 페이지로 연결
+                  },
+                  child: Text("1:1 문의", style: TextStyle(fontSize: 14)),
+                ),
+              ]),
+            ],
+          ),
         ),
-      ),
+      ],
     );
+  }
+}
+
+class DtDivider extends StatelessWidget {
+  final double? height;
+
+  const DtDivider({super.key, this.height});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: height ?? getFlexibleSize(target: 20),
+      color: Colors.grey.shade200,
+    );
+  }
+}
+
+class DtFlexSpacer extends StatelessWidget {
+  final double size;
+  final bool flexible;
+
+  const DtFlexSpacer(this.size, {super.key, this.flexible = true});
+
+  @override
+  Widget build(BuildContext context) {
+    final double resultSize = flexible ? getFlexibleSize(target: size) : size;
+    return SizedBox(width: resultSize, height: resultSize);
   }
 }
