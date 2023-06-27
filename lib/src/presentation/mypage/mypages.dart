@@ -17,26 +17,33 @@ class MyPages extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Stack(
-      children: [
-        BlocBuilder<MyPagesCubit, MyPagesState> (
-          builder: (context, state) {
-            // return const MyPageLanding();
-            if (state.isSettings) {
-              // if (state.isTos1) {
-              //   return const MyTos1();
-              // }
-              // if (state.isTos2) {
-              //   return const MyTos2();
-              // }
-              return MySettings(); // TODO : 0627 이거맞나?
-            }
-            if (!state.isSettings) {
-              return const MyPageLanding();
-            }
-            return SafeArea(child: Center(child: Text(state.toString())));
-          }
-        )
-      ]
+        children: [
+          BlocBuilder<MyPagesCubit, MyPagesState>(
+              builder: (context, state) {
+                if (state.isMyLandPage) {
+                  return const MyPageLanding();
+                }
+                if (!state.isMyLandPage) {
+                  if (state.isSettings) {
+                    return MySettings();
+                  }
+                  if (state.isTos1) {
+                    return MyTos1();
+                  }
+                  if (state.isTos2) {
+                    return MyTos2();
+                  }
+                }
+                return SafeArea(child: Center(child: Text(state.toString())));
+              }
+          ),
+
+          // BlocBuilder<MyPagesCubit, MyPagesState>(
+          //   builder: (context, state) {
+          //       return SafeArea(child: Text(state.toString()));
+          //   },
+          // ),
+        ]
     );
   }
 }

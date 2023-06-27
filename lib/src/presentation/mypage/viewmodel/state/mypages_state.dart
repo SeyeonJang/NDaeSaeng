@@ -5,6 +5,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 @JsonSerializable()
 class MyPagesState {
+  late bool isMyLandPage;
   late List<Friend> friends;
   late bool isSettings;
   late Map<int, bool> addedFriend;
@@ -13,6 +14,7 @@ class MyPagesState {
   late bool isTos2;
 
   MyPagesState({
+    required this.isMyLandPage,
     required this.friends,
     required this.isSettings,
     required this.addedFriend,
@@ -22,6 +24,7 @@ class MyPagesState {
   });
 
   MyPagesState.init() {
+    isMyLandPage = true;
     friends = [];
     isSettings = false;
     addedFriend = {};
@@ -31,6 +34,7 @@ class MyPagesState {
   }
 
   MyPagesState copy() => MyPagesState(
+    isMyLandPage: isMyLandPage,
     friends: friends,
     isSettings: isSettings,
     addedFriend: addedFriend,
@@ -38,6 +42,11 @@ class MyPagesState {
     isTos1: isTos1,
     isTos2: isTos2,
   );
+
+  MyPagesState setMyLandPage(bool isMyLandPage) {
+    this.isMyLandPage = isMyLandPage;
+    return this;
+  }
 
   MyPagesState setUserInfo(List<Friend> friends) {
     this.friends = friends;
@@ -68,7 +77,7 @@ class MyPagesState {
     return this;
   }
 
-  MyPagesState setIsTos2(bool isTos1) {
+  MyPagesState setIsTos2(bool isTos2) {
     this.isTos2 = isTos2;
     return this;
   }
@@ -77,6 +86,7 @@ class MyPagesState {
 
   MyPagesState _$MyPagesStateFromJson(Map<String, dynamic> json) =>
       MyPagesState(
+        isMyLandPage: json['isMyLandPage'] as bool,
         friends: (json['friends'] as List<dynamic>)
           .map((e) => Friend.fromJson(e as Map<String, dynamic>))
           .toList(),
@@ -91,6 +101,7 @@ class MyPagesState {
 
   Map<String, dynamic> _$MyPagesStateToJson(MyPagesState instance) =>
       <String, dynamic>{
+        'isMyLandPage': instance.isMyLandPage,
         'friends': instance.friends,
         'isSettings': instance.isSettings,
         'addedFriend': instance.addedFriend.map((k, e) => MapEntry(k.toString(), e)),
@@ -106,6 +117,6 @@ class MyPagesState {
 
   @override
   String toString() {
-    return 'MyPagesState{isSettings: $isSettings}';
+    return 'MyPagesState{isMyLandPage: $isMyLandPage, isSettings: $isSettings, isTos1: $isTos1, isTos2: $isTos2}';
   }
 }
