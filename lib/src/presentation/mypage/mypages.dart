@@ -15,14 +15,14 @@ class MyPages extends StatelessWidget {
       children: [
         BlocBuilder<MyPagesCubit, MyPagesState> (
           builder: (context, state) {
-            return const MyPageLanding();
-            // if (state.isSettings) {
-            //   return const MySettings();
-            // }
-            // if (state.isInvitePage) {
-            //   return const InviteFriends();
-            // }
-            // return SafeArea(child: Center(child: Text(state.toString())));
+            // return const MyPageLanding();
+            if (state.isSettings) {
+              return const MySettings();
+            }
+            if (!state.isSettings) {
+              return const MyPageLanding();
+            }
+            return SafeArea(child: Center(child: Text(state.toString())));
           }
         )
       ]

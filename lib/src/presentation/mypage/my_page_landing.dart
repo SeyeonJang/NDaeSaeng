@@ -1,3 +1,4 @@
+import 'package:dart_flutter/src/presentation/mypage/friends_mock.dart';
 import 'package:dart_flutter/src/presentation/mypage/my_settings.dart';
 import 'package:dart_flutter/src/presentation/mypage/viewmodel/mypages_cubit.dart';
 import 'package:dart_flutter/src/presentation/mypage/viewmodel/state/mypages_state.dart';
@@ -178,7 +179,7 @@ class MyPageLandingView extends StatelessWidget {
                       ElevatedButton(
                         onPressed: () {
                           // 초대하기 페이지로 연결
-                          BlocProvider.of<MyPagesCubit>(context).pressedInviteButton();
+                          // BlocProvider.of<MyPagesCubit>(context).pressedInviteButton();
                         },
                         child: Text("초대하기", style: TextStyle(
                           fontSize: SizeConfig.defaultSize * 1.6,
@@ -190,56 +191,9 @@ class MyPageLandingView extends StatelessWidget {
                   SizedBox(height: SizeConfig.defaultSize ,),
 
                   // ================================ 친구 리스트
-                  for (int i = 0; i <5; i++) // TODO : 친구의 수만큼 반복시키기
-                    Column(
-                      children: [
-                        SizedBox(height: SizeConfig.defaultSize * 0.1,),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Row(
-                              children: [
-                                Text("이이름", style: TextStyle(
-                                  fontSize: SizeConfig.defaultSize * 1.9,
-                                  fontWeight: FontWeight.w600,
-                                )),
-                                Text("  21학번∙컴퓨터정보공학부", style: TextStyle(
-                                  fontSize: SizeConfig.defaultSize * 1.3,
-                                  fontWeight: FontWeight.w500,
-                                )),
-                              ],
-                            ),
-                            SizedBox(height: SizeConfig.defaultSize,),
-
-                            TextButton(
-                              onPressed: () {
-                                // TODO : 신고 기능
-                              },
-                              child: Text("신고", style: TextStyle(
-                                fontSize: SizeConfig.defaultSize * 1.3,
-                                fontWeight: FontWeight.w500,
-                                decoration: TextDecoration.underline,
-                                color: Colors.grey,
-                              )),
-                            ),
-
-                            ElevatedButton(
-                              onPressed: () {
-                                // TODO : 친구 삭제 기능
-                              },
-                              child: Text("삭제", style: TextStyle(
-                                fontSize: SizeConfig.defaultSize * 1.4,
-                                fontWeight: FontWeight.w500,
-                              )),
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: SizeConfig.defaultSize * 0.1,),
-                        Divider(
-                          color: Color(0xffddddddd),
-                        ),
-                      ],
-                    ),
+                  // for (int i = 0; i <5; i++) // TODO : 친구의 수만큼 반복시키기
+                  //   MyFriend(),
+                  MyFriends(friends: FriendsMock().friends, count: FriendsMock().friends.length)
                 ],
               )
           ),
@@ -275,63 +229,153 @@ class MyPageLandingView extends StatelessWidget {
                   SizedBox(height: SizeConfig.defaultSize * 2 ,),
 
                   // ================================ 친구 리스트
-                  for (int i = 0; i <5; i++) // TODO : 친구의 수만큼 반복시키기
-                    Column(
-                      children: [
-                        SizedBox(height: SizeConfig.defaultSize * 0.1,),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Row(
-                              children: [
-                                Text("이이름", style: TextStyle(
-                                  fontSize: SizeConfig.defaultSize * 1.9,
-                                  fontWeight: FontWeight.w600,
-                                )),
-                                Text("  21학번∙컴퓨터정보공학부", style: TextStyle(
-                                  fontSize: SizeConfig.defaultSize * 1.3,
-                                  fontWeight: FontWeight.w500,
-                                )),
-                              ],
-                            ),
-                            SizedBox(height: SizeConfig.defaultSize,),
-
-                            TextButton(
-                              onPressed: () {
-                                // TODO : 신고 기능
-                              },
-                              child: Text("신고하기", style: TextStyle(
-                                fontSize: SizeConfig.defaultSize * 1.3,
-                                fontWeight: FontWeight.w500,
-                                decoration: TextDecoration.underline,
-                                color: Colors.grey,
-                              )),
-                            ),
-
-                            ElevatedButton(
-                              onPressed: () {
-                                // TODO : 친구 삭제 기능
-                              },
-                              child: Text("추가", style: TextStyle(
-                                fontSize: SizeConfig.defaultSize * 1.4,
-                                fontWeight: FontWeight.w500,
-                              )),
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: SizeConfig.defaultSize * 0.1,),
-                        Divider(
-                          color: Color(0xffddddddd),
-                        ),
-                      ],
-                    ),
-                ],
-              )
+                  // for (int i = 0; i <5; i++) // TODO : 친구의 수만큼 반복시키기
+                  //   NewFriend(),
+                  NewFriends(friends: FriendsMock().friends, count: FriendsMock().friends.length),
+              ]),
           ),
         ),
 
       ],
     );
+  }
+}
+
+class MyFriends extends StatelessWidget {
+  final List<Friend> friends;
+  final int count;
+
+  const MyFriends({
+    super.key,
+    required this.friends,
+    required this.count,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        for (int i = 0; i < this.count; i++)
+          MyFriend(
+              name: friends[i].name,
+              admissionNumber:friends[i].admissionNumber,
+              department: friends[i].university.department),
+      ],
+    );
+  }
+}
+
+
+class MyFriend extends StatelessWidget {
+  final String name;
+  final int admissionNumber;
+  final String department;
+
+  const MyFriend({
+    super.key,
+    required this.name,
+    required this.admissionNumber,
+    required this.department,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        SizedBox(height: SizeConfig.defaultSize * 0.1,),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Row(
+              children: [
+                Text("$name", style: TextStyle(
+                  fontSize: SizeConfig.defaultSize * 1.9,
+                  fontWeight: FontWeight.w600,
+                )),
+                SizedBox(
+                  child: Text("  $admissionNumber학번∙$department", style: TextStyle(
+                    fontSize: SizeConfig.defaultSize * 1.3,
+                    fontWeight: FontWeight.w500,
+                    overflow: TextOverflow.ellipsis,
+                  )),
+                  width: SizeConfig.defaultSize * 16,
+                ),
+              ],
+            ),
+            SizedBox(height: SizeConfig.defaultSize,),
+
+            TextButton(
+              onPressed: () {
+                // TODO : 신고 기능
+              },
+              child: Text("신고", style: TextStyle(
+                fontSize: SizeConfig.defaultSize * 1.3,
+                fontWeight: FontWeight.w500,
+                decoration: TextDecoration.underline,
+                color: Colors.grey,
+              )),
+            ),
+
+            ElevatedButton(
+              onPressed: () {
+                // TODO : 친구 삭제 기능
+              },
+              child: Text("삭제", style: TextStyle(
+                fontSize: SizeConfig.defaultSize * 1.4,
+                fontWeight: FontWeight.w500,
+              )),
+            ),
+          ],
+        ),
+        SizedBox(height: SizeConfig.defaultSize * 0.1,),
+        Divider(
+          color: Color(0xffddddddd),
+        ),
+      ],
+    );
+  }
+}
+
+class NewFriends extends StatelessWidget {
+  final List<Friend> friends;
+  final int count;
+
+  const NewFriends({
+    super.key,
+    required this.friends,
+    required this.count,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        for (int i = 0; i < this.count; i++)
+          MyFriend(
+              name: friends[i].name,
+              admissionNumber:friends[i].admissionNumber,
+              department: friends[i].university.department),
+      ],
+    );
+  }
+}
+
+
+class NewFriend extends StatelessWidget {
+  final String name;
+  final int admissionNumber;
+  final String department;
+
+  const NewFriend({
+    super.key,
+    required this.name,
+    required this.admissionNumber,
+    required this.department,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return MyFriend(name: name, admissionNumber: admissionNumber, department: department);
   }
 }
 

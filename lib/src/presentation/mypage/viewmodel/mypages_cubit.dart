@@ -26,17 +26,8 @@ class MyPagesCubit extends HydratedCubit<MyPagesState> {
     emit(newState);
   }
 
-  // 초대하기 버튼 -> 친구 초대 페이지(InviteFriends)로 페이지 변경
-  void pressedInviteButton() {
-    state.setIsInvitePage(true);
-    final newState = state.copy();
-    print(newState);
-    emit(newState);
-  }
-
   // 마이페이지(MyPageLanding)로 돌아가기
   void backToMyPageLanding() {
-    state.setIsSettingPage(false);
     state.setIsSettingPage(false);
     emit(state.copy());
   }
