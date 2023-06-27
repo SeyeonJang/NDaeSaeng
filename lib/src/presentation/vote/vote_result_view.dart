@@ -1,12 +1,17 @@
+import 'package:confetti/confetti.dart';
 import 'package:dart_flutter/res/size_config.dart';
 import 'package:dart_flutter/src/presentation/vote/vimemodel/vote_cubit.dart';
-import 'package:dart_flutter/src/presentation/vote/vote_timer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class VoteResultView extends StatelessWidget {
-  const VoteResultView({Key? key}) : super(key: key);
+class VoteResultView extends StatefulWidget {
+  VoteResultView({Key? key}) : super(key: key);
 
+  @override
+  State<VoteResultView> createState() => _VoteResultViewState();
+}
+
+class _VoteResultViewState extends State<VoteResultView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -16,9 +21,9 @@ class VoteResultView extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              const Flexible(
+              Flexible(
                 flex: 1,
-                child: SizedBox(),
+                child: const SizedBox(),
               ),
               Flexible(
                 flex: 1,
@@ -82,3 +87,4 @@ class VoteResultView extends StatelessWidget {
     );
   }
 }
+

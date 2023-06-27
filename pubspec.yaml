@@ -45,6 +45,8 @@ dependencies:
 
   # style
   cupertino_icons: ^1.0.2
+  like_button: ^2.0.5
+  confetti: ^0.7.0
 
   # dev
   json_serializable: ^6.7.0

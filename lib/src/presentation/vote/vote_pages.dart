@@ -1,3 +1,6 @@
+import 'dart:math';
+
+import 'package:confetti/confetti.dart';
 import 'package:dart_flutter/src/presentation/vote/vimemodel/state/vote_state.dart';
 import 'package:dart_flutter/src/presentation/vote/vimemodel/vote_cubit.dart';
 import 'package:dart_flutter/src/presentation/vote/vote_result_view.dart';
@@ -57,12 +60,27 @@ class VotePages extends StatelessWidget {
               return const VoteView();
             }
             if (state.step.isDone) {
-              return const VoteResultView();
+              return VoteResultView();
             }
             if (state.step.isWait) {
               return const VoteTimer();
             }
             return SafeArea(child: Container(alignment: Alignment.bottomCenter,child: Text(state.toString())));
+          },
+        ),
+
+        BlocBuilder<VoteCubit, VoteState>(
+          builder: (context, state) {
+            if (state.step.isDone) {
+              return Container(
+                  alignment: Alignment.topCenter,
+                  child: Transform.translate(
+                      offset: const Offset(0, -100),
+                      child: const _FixedConfettiWidget()
+                  )
+              );
+            }
+            return const SizedBox();
           },
         ),
 
@@ -72,6 +90,43 @@ class VotePages extends StatelessWidget {
         //   },
         // ),
       ],
+    );
+  }
+}
+
+class _FixedConfettiWidget extends StatefulWidget {
+  const _FixedConfettiWidget({
+    super.key,
+  });
+
+  @override
+  State<_FixedConfettiWidget> createState() => _FixedConfettiWidgetState();
+}
+
+class _FixedConfettiWidgetState extends State<_FixedConfettiWidget> {
+  final ConfettiController confettiController = ConfettiController();
+
+  @override
+  void initState() {
+    super.initState();
+    confettiController.play();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    confettiController.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ConfettiWidget(
+      confettiController: confettiController,
+      shouldLoop: true,
+      blastDirectionality: BlastDirectionality.explosive,
+      // blastDirection: -pi / 2,
+      minBlastForce: 5,
+      maxBlastForce: 10,
     );
   }
 }
