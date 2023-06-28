@@ -57,7 +57,7 @@ class KakaoLoginRemoteDatasource {
     throw Error();
   }
 
-  Future<void> logout() async {
+  Future<void> logout() async { // 로그아웃
     try {
       await UserApi.instance.logout();
       print('로그아웃 성공, SDK에서 토큰 삭제');
@@ -66,7 +66,7 @@ class KakaoLoginRemoteDatasource {
     }
   }
 
-  Future<void> unlink() async {
+  Future<void> withdrawal() async { // 회원탈퇴
     try {
       await UserApi.instance.unlink();
       print('연결 끊기 성공, SDK에서 토큰 삭제');
@@ -74,4 +74,7 @@ class KakaoLoginRemoteDatasource {
       print('연결 끊기 실패 $error');
     }
   }
+
+  // 연결 끊겼을 때 알림도 설정 가능
+  // https://developers.kakao.com/docs/latest/ko/kakaologin/callback#unlink
 }

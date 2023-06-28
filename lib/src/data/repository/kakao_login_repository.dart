@@ -11,4 +11,8 @@ class KakaoLoginRepository {
   Future<void> logout() {
     return KakaoLoginRemoteDatasource().logout();
   }
+
+  Future<void> withdrawal() {
+    return KakaoLoginRemoteDatasource().withdrawal();
+  }
 }

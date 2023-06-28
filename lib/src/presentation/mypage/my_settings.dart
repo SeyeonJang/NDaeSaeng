@@ -25,7 +25,7 @@ class MySettings extends StatelessWidget {
       body: SafeArea(
         child:
             BlocBuilder<MyPagesCubit, MyPagesState>(builder: (context, state) {
-          return MyPageView(loginRepository: KakaoLoginRepository(),);
+          return MyPageView(loginRepository: KakaoLoginRepository(), withdrawalRepository: KakaoLoginRepository());
         }),
       ),
     );
@@ -33,9 +33,9 @@ class MySettings extends StatelessWidget {
 }
 
 class MyPageView extends StatelessWidget {
-  final KakaoLoginRepository loginRepository;
+  final KakaoLoginRepository loginRepository, withdrawalRepository;
 
-  const MyPageView({required this.loginRepository});
+  const MyPageView({required this.loginRepository, required this.withdrawalRepository});
 
   static final _defaultPadding = EdgeInsets.all(getFlexibleSize(target: 20));
 
@@ -109,14 +109,19 @@ class MyPageView extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      "회원탈퇴",
-                      textAlign: TextAlign.start,
-                      style: TextStyle(
-                        fontWeight: FontWeight.w500,
-                        fontSize: getFlexibleSize(target: 16),
-                      ),
-                    ),
+                    TextButton(
+                        onPressed: () async {
+                          BlocProvider.of<AuthCubit>(context).kakaoWithdrawal();
+                          Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const LogoutTogoLandPage()), (route)=>false); // TODO : 0627 얘만 작동하면 됨 로그아웃
+                        },
+                        child: Text(
+                          "회원탈퇴",
+                          textAlign: TextAlign.start,
+                          style: TextStyle(
+                            fontWeight: FontWeight.w500,
+                            fontSize: getFlexibleSize(target: 16),
+                          ),
+                        )),
                     const DtFlexSpacer(20),
                     TextButton(
                       onPressed: () async {
