@@ -111,7 +111,7 @@ class MyPageView extends StatelessWidget {
                   children: [
                     TextButton(
                         onPressed: () async {
-                          BlocProvider.of<AuthCubit>(context).kakaoWithdrawal();
+                          await BlocProvider.of<AuthCubit>(context).kakaoWithdrawal();
                           Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const LogoutTogoLandPage()), (route)=>false); // TODO : 0627 얘만 작동하면 됨 로그아웃
                         },
                         child: Text(
@@ -125,7 +125,7 @@ class MyPageView extends StatelessWidget {
                     const DtFlexSpacer(20),
                     TextButton(
                       onPressed: () async {
-                        BlocProvider.of<AuthCubit>(context).kakaoLogout();
+                        await BlocProvider.of<AuthCubit>(context).kakaoLogout();
                         Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const LogoutTogoLandPage()), (route)=>false); // TODO : 0627 얘만 작동하면 됨 로그아웃
                       },
                       child: Text("로그아웃",

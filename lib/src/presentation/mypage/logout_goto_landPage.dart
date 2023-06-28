@@ -11,7 +11,7 @@ class LogoutTogoLandPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider<AuthCubit>(
         create: (BuildContext context) => AuthCubit(),
-        child: LandPages()
+        child: const LandPages(),
     );
   }
 }
