@@ -1,4 +1,5 @@
 import 'package:dart_flutter/res/size_config.dart';
+import 'package:dart_flutter/src/common/auth/auth_cubit.dart';
 import 'package:dart_flutter/src/presentation/meet/meet_page.dart';
 import 'package:dart_flutter/src/presentation/mypage/my_page_landing.dart';
 import 'package:dart_flutter/src/presentation/mypage/mypages.dart';
@@ -73,9 +74,16 @@ class _DartPageViewState extends State<DartPageView> {
                       create: (context) => VoteCubit(),
                       child: const VotePages(),
                   ),
-                  BlocProvider(
-                    create: (context) => MyPagesCubit(),
-                    child: const MyPages(),
+                  MultiBlocProvider(
+                      providers: [
+                        BlocProvider<AuthCubit>(
+                          create: (BuildContext context) => AuthCubit(),
+                        ),
+                        BlocProvider<MyPagesCubit>(
+                          create: (BuildContext context) => MyPagesCubit(),
+                        ),
+                      ],
+                      child: const MyPages(),
                   ),
                   const MeetPage(),
                 ],
