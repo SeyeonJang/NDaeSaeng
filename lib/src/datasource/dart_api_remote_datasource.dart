@@ -1,7 +1,11 @@
+import 'dart:convert';
+
 import 'package:dart_flutter/src/data/model/contact.dart';
 import 'package:dart_flutter/src/data/model/sns_request.dart';
+import 'package:dart_flutter/src/data/model/university.dart';
 import 'package:dart_flutter/src/data/model/user.dart';
 
+import '../common/util/HttpUtil.dart';
 import '../data/model/dart_auth.dart';
 import '../data/model/vote.dart';
 import 'package:http/http.dart' as http;
@@ -9,11 +13,33 @@ import 'dart:convert' as convert;
 
 //TODO repository에 들어갈 내용인데 datasourcedㅔ 넣어버렸다...
 class DartApiRemoteDataSource {
-  static const String baseUrl = "https://7d1c-221-148-248-129.ngrok-free.app";
+  static const String baseUrl = "dart-server-aiasblaoxa-du.a.run.app";
 
-  /// Auth: 로그인 요청
+  static final _httpUtil = HttpUtil(baseUrl: 'https://dart-server-aiasblaoxa-du.a.run.app', headers: {
+    // 'Authorization': 'Bearer nothing',
+    'Accept': '*/*',
+    'Content-Type': 'application/json',
+  });
+
+  static void addAuthorizationToken(String accessToken) {
+    _httpUtil.addHeader('Authorization', 'Bearer ${accessToken}');
+  }
+
+  static get httpUtil {
+    return _httpUtil;
+  }
+
+  // Auth: 카카오 로그인 요청
   static Future<DartAuth> postLoginWithKakao(String kakaoAccessToken) async {
-    return DartAuth.from(await _simplePost(baseUrl + '/v1/auth/kakao', kakaoAccessToken));
+    const path = '/v1/auth/kakao';
+    final body = {"accessToken": kakaoAccessToken};
+
+    final response = await _httpUtil.request().post(path, data: body);
+
+    final jsonResponse = json.decode(response.toString());
+    final dartAuth = DartAuth.from(jsonResponse);
+    addAuthorizationToken(dartAuth.accessToken);
+    return dartAuth;
   }
 
   /// Auth: 문자인증 요청
@@ -24,27 +50,49 @@ class DartApiRemoteDataSource {
   /// Auth: 문자인증 번호 검증 요청
   static Future<bool> postCheckSnsCode(SnsRequest snsRequest) async {
     await _simplePost('/v1/auth/sns-check', snsRequest);
-    return true;  //TODO 추후 return 규격 확인
+    return true; //TODO 추후 return 규격 확인
+  }
+
+  /// Univ: 전체 대학 목록 가져오기
+  static Future<List<University>> getUniversities() async {
+    const path = '/v1/universities';
+
+    final response = await _httpUtil.request().get(path);
+    final List<dynamic> jsonResponse = response.data;
+
+    List<University> universities = jsonResponse.map((university) => University.fromJson(university)).toList();
+    for (int i = 0; i < 5; i++)
+      print(universities[i].toString());
+    return universities;
   }
 
   /// User: 회원가입 요청
-  static Future<void> postUserSignup(UserRequest user) async {
-    await _simplePost('/v1/user/signup', user);
+  static Future<UserResponse> postUserSignup(UserRequest user) async {
+    const path = '/v1/users/signup';
+    final body = user.toJson();
+
+    final response = await _httpUtil.request().post(path, data: body);
+
+    final jsonResponse = json.decode(response.toString());
+    // return UserResponse.from(jsonResponse);
+    print(jsonResponse);
+
+    throw Error();
   }
 
   /// User: 내 정보 가져오기
-  static Future<UserResponse> getUser(String accessToken) async {
-    final response = await http.get(Uri.https(baseUrl, '/v1/user/me', {'accessToken': "Bearer $accessToken"}));
-    if (response.statusCode == 200) {
-      final jsonResponse = convert.jsonDecode(response.body) as Map<String, dynamic>;
-      return UserResponse.from(jsonResponse);
-    }
-    throw Error();
+  static Future<UserResponse> getMyInformation() async {
+    const path = '/v1/users/me';
+    final response = await _httpUtil.request().get(path);
+
+    final jsonResponse = json.decode(response.toString());
+    return UserResponse.from(jsonResponse);
   }
 
   // User: 내 정보 업데이트하기
   static Future<void> putUser(String accessToken, UserRequest user) async {
-    final response = await http.put(Uri.https(baseUrl, '/v1/user/me', {'accessToken': "Bearer $accessToken", 'user': user}));
+    final response =
+        await http.put(Uri.https(baseUrl, '/v1/user/me', {'accessToken': "Bearer $accessToken", 'user': user}));
     return;
   }
 
@@ -86,7 +134,7 @@ class DartApiRemoteDataSource {
 
   // vote: 투표한 내용 전달하기
   static Future<void> postVotes(String accessToken, List<VoteRequest> votes) async {
-    await _simplePostWithoutDecode('/v1/votes', votes);  // TODO accessToken 사용 안하고 있음
+    await _simplePostWithoutDecode('/v1/votes', votes); // TODO accessToken 사용 안하고 있음
   }
 
   // vote: 받은 투표 리스트 확인하기
@@ -105,8 +153,10 @@ class DartApiRemoteDataSource {
   }
 
   // vote: 힌트 요청하기
-  static Future<Hint> getHint(String accessToken, int voteId, String typeOfHint) async {  // TODO 이후 규격 보고 param와 header중 어디에 변수 넣을지 확인
-    final response = await http.get(Uri.https(baseUrl, '/v1/votes/hints', {'accessToken': "Bearer $accessToken", 'voteId': voteId, 'kindOfHint': typeOfHint}));
+  static Future<Hint> getHint(String accessToken, int voteId, String typeOfHint) async {
+    // TODO 이후 규격 보고 param와 header중 어디에 변수 넣을지 확인
+    final response = await http.get(Uri.https(baseUrl, '/v1/votes/hints',
+        {'accessToken': "Bearer $accessToken", 'voteId': voteId, 'kindOfHint': typeOfHint}));
     return Hint.from(_jsonDecode(response));
   }
 
