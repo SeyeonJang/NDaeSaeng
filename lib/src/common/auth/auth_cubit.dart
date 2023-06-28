@@ -1,12 +1,16 @@
 import 'package:dart_flutter/src/common/auth/state/auth_state.dart';
+import 'package:dart_flutter/src/data/model/dart_auth.dart';
 import 'package:dart_flutter/src/data/model/kakao_user.dart';
+import 'package:dart_flutter/src/data/model/user.dart';
 import 'package:dart_flutter/src/data/repository/dart_auth_repository.dart';
+import 'package:dart_flutter/src/data/repository/dart_user_repository.dart';
 import 'package:dart_flutter/src/data/repository/kakao_login_repository.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 
 class AuthCubit extends HydratedCubit<AuthState> {
   static final KakaoLoginRepository _kakaoLoginRepository = KakaoLoginRepository();
   static final DartAuthRepository _authRepository = DartAuthRepository();
+  static final DartUserRepository _userRepository = DartUserRepository();
 
   AuthCubit()
       : super(AuthState(
@@ -49,30 +53,25 @@ class AuthCubit extends HydratedCubit<AuthState> {
   void kakaoLogin() async {
     // loading 상태로 만든다.
     emit(state.setLoading(true).copy());
-    print(state.toJson());
-
-    // 대기
-    await Future.delayed(const Duration(seconds: 3));
 
     // 카카오 로그인 진행
     KakaoUser kakaoUser = await _kakaoLoginRepository.loginWithKakaoTalk();
 
-    // TODO Dart 서버 로그인 진행
-    // DartAuth dartAuth = await _authRepository.loginWithKakao(kakaoUser.accessToken);
-    // if (dartAuth) ... state.setDartAuth(dartAccessToken: ----, expiredAt: ----).setStep(AuthStep.login).setLoading(false).copy();
+    // Dart 서버 로그인 진행
+    DartAuth dartAuth = await _authRepository.loginWithKakao(kakaoUser.accessToken);
+    state
+        .setDartAuth(dartAccessToken: dartAuth.accessToken, expiredAt: DateTime.now().add(const Duration(days: 10)))
+        .setSocialAuth(loginType: LoginType.kakao, socialAccessToken: kakaoUser.accessToken);
 
-    // 정보 등록
-    state.setSocialAuth(
-        loginType: LoginType.kakao,
-        socialAccessToken: kakaoUser.accessToken,
-        )
-        .setStep(AuthStep.signup)
-        .setLoading(false);
-    emit(state.copy());
-  }
+    // Dart 내 정보를 확인해서 이미 가입한 사용자인지 확인
+    UserResponse userResponse = await _userRepository.myInfo();
+    if (userResponse.univId == null) {
+      state.setStep(AuthStep.signup);
+    } else {
+      state.setStep(AuthStep.login);
+    }
 
-  void testLogin() {
-    state.setStep(AuthStep.signup);
+    state.setLoading(false);
     emit(state.copy());
   }
 

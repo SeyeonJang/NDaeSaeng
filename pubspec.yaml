@@ -33,6 +33,7 @@ dependencies:
   flutter_typeahead: ^3.1.7 # 사용자 입력받는 typeahead
   image_picker: ^0.8.7+5 # 사용자 사진 가져오는 imagePicker
   http: ^1.0.0
+  dio: ^5.2.1+1
   url_launcher: ^6.1.11
   timeago: ^3.4.0
 

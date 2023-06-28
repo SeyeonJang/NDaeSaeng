@@ -16,7 +16,7 @@ class KakaoLoginRemoteDatasource {
               '\n회원번호: ${user.id}'
               '\nAccessToken: ${token.accessToken}'
               '\n프사: ${user.kakaoAccount?.profile?.profileImageUrl}'
-              '\n이메일: ${user.kakaoAccount?.gender}');
+              '\n성별: ${user.kakaoAccount?.gender}');
 
           var json = user.toJson();
           return KakaoUser(
