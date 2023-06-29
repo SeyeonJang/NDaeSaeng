@@ -4,7 +4,7 @@
 
     <application
         android:label="dart_flutter"
-        android:name="${applicationName}"
+        android:name="DART"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
