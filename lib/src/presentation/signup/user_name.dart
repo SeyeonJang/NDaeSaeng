@@ -41,6 +41,7 @@ class _UserNameState extends State<UserName> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         // title: const Text('User Name'),
         leading: IconButton(
