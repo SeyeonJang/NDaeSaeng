@@ -1,5 +1,5 @@
 class DartAuth {
-  final int userId;
+  final String userId;
   final String accessToken;
 
   DartAuth({
@@ -8,8 +8,8 @@ class DartAuth {
   });
 
   DartAuth.from(Map<String, dynamic> json)
-      : userId = json['userId'],
-        accessToken = json['accessToken'];
+      : userId = json['providerId'],
+        accessToken = json['jwtToken'];
 
   @override
   String toString() {

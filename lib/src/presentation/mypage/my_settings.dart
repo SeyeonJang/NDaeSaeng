@@ -21,21 +21,20 @@ class MySettings extends StatelessWidget {
   MySettings({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child:
-            BlocBuilder<MyPagesCubit, MyPagesState>(builder: (context, state) {
-          return MyPageView(loginRepository: KakaoLoginRepository(),);
-        }),
-      ),
-    );
+    // return Scaffold(
+    //   body: SafeArea(
+    //     child:
+    //       BlocBuilder<MyPagesCubit, MyPagesState>(builder: (context, state) {
+    //         return const MyPageView();
+    //       }),
+    //   ),
+    // );
+    return const MyPageView();
   }
 }
 
 class MyPageView extends StatelessWidget {
-  final KakaoLoginRepository loginRepository;
-
-  const MyPageView({required this.loginRepository});
+  const MyPageView({super.key});
 
   static final _defaultPadding = EdgeInsets.all(getFlexibleSize(target: 20));
 
@@ -109,19 +108,24 @@ class MyPageView extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      "회원탈퇴",
-                      textAlign: TextAlign.start,
-                      style: TextStyle(
-                        fontWeight: FontWeight.w500,
-                        fontSize: getFlexibleSize(target: 16),
-                      ),
-                    ),
+                    TextButton(
+                        onPressed: () async {
+                          await BlocProvider.of<AuthCubit>(context).kakaoWithdrawal();
+                          Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const LogoutTogoLandPage()), (route)=>false); // TODO : 0627 얘만 작동하면 됨 로그아웃
+                        },
+                        child: Text(
+                          "회원탈퇴",
+                          textAlign: TextAlign.start,
+                          style: TextStyle(
+                            fontWeight: FontWeight.w500,
+                            fontSize: getFlexibleSize(target: 16),
+                          ),
+                        )),
                     const DtFlexSpacer(20),
                     TextButton(
                       onPressed: () async {
-                        BlocProvider.of<AuthCubit>(context).kakaoLogout();
-                        Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const LogoutTogoLandPage()), (route)=>false); // TODO : 0627 얘만 작동하면 됨 로그아웃
+                        await BlocProvider.of<AuthCubit>(context).kakaoLogout();
+                        Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const LogoutTogoLandPage()), (route) => false); // TODO : 0627 얘만 작동하면 됨 로그아웃
                       },
                       child: Text("로그아웃",
                         textAlign: TextAlign.start,

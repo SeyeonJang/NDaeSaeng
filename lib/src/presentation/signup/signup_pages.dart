@@ -48,12 +48,20 @@ class _SignupPagesState extends State<SignupPages> {
             return SafeArea(child: Center(child: Text(state.toString())));
           },
         ),
-        // BlocBuilder<SignupCubit, SignupState>(
-        //   builder: (context, state) {
-        //     return SafeArea(child: Container(alignment: Alignment.bottomCenter,child: Text(state.toString())));
-        //   },
-        // ),
-      ],
+        BlocBuilder<SignupCubit, SignupState>(
+          builder: (context, state) {
+            return SafeArea(child: Container(alignment: Alignment.bottomCenter,child: Text(state.toString())));
+          },
+        ),
+        BlocBuilder<SignupCubit, SignupState>(
+        builder: (context, state) {
+          if (state.isLoading) {
+            return Center(child: CircularProgressIndicator());
+          }
+          return SizedBox();
+        },
+      ),
+    ],
     );
   }
 }

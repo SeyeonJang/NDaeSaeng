@@ -112,7 +112,7 @@ class ScaffoldBody extends StatelessWidget {
         const SizedBox( height: 100, ),
         ElevatedButton( // 버튼
           onPressed: () {
-            BlocProvider.of<SignupCubit>(context).stepDepartment("test major");
+            BlocProvider.of<SignupCubit>(context).stepDepartment("멀티미디어통신학과");
           },
           style: ButtonStyle(
             foregroundColor: MaterialStateProperty.resolveWith(getColorText), // textcolor

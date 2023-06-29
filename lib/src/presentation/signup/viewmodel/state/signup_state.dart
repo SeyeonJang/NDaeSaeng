@@ -5,23 +5,27 @@ part 'signup_state.g.dart';
 
 @JsonSerializable()
 class SignupState {
+  late bool isLoading;
   late SignupInput inputState;
   late List<University> universities;
   late SignupStep signupStep;
 
   SignupState({
+    required this.isLoading,
     required this.inputState,
     required this.universities,
     required this.signupStep,
   });
 
   SignupState.init() {
+    isLoading = false;
     inputState = SignupInput();
     universities = [];
     signupStep = SignupStep.school;
   }
 
   SignupState copy() => SignupState(
+    isLoading: isLoading,
     inputState: inputState,
     universities: universities,
     signupStep: signupStep,
@@ -32,7 +36,7 @@ class SignupState {
 
   @override
   String toString() {
-    return 'SignupState{inputState: $inputState, universities: $universities, signupStep: $signupStep}';
+    return 'SignupState{isLoading: $isLoading, inputState: $inputState, universities: ${universities.length}개, signupStep: $signupStep}';
   }
 }
 

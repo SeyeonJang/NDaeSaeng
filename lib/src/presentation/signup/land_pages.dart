@@ -1,5 +1,6 @@
 import 'package:dart_flutter/src/common/auth/auth_cubit.dart';
 import 'package:dart_flutter/src/common/auth/state/auth_state.dart';
+import 'package:dart_flutter/src/presentation/page_view.dart';
 import 'package:dart_flutter/src/presentation/signup/land_page.dart';
 import 'package:dart_flutter/src/presentation/signup/signup_pages.dart';
 import 'package:dart_flutter/src/presentation/signup/viewmodel/signup_cubit.dart';
@@ -26,13 +27,13 @@ class _LandPagesState extends State<LandPages> {
               }
               if (state.step == AuthStep.signup) {
                 // 소셜 로그인을 했지만, 아직 우리 회원가입은 안햇을 때
-                return BlocProvider<SignupCubit>(
-                  create: (BuildContext context) => SignupCubit(),
+                  return BlocProvider<SignupCubit>(
+                  create: (BuildContext context) => SignupCubit()..initState(),
                   child: const SignupPages(),
                 );
               }
               if (state.step == AuthStep.login) {
-                //TODO 로그인 완료 어떤 메인 페이지로 Navigator.push
+                Navigator.push(context, MaterialPageRoute(builder: (context) => const DartPageView()));
               }
               return const SizedBox();
             }

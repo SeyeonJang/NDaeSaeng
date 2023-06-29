@@ -1,14 +1,26 @@
 class SnsRequest {
-  final String deviceId, phone, snsCode;
+  final String _phone;
 
   SnsRequest({
-    required this.deviceId,
-    required this.phone,
-    required this.snsCode,
-  });
+    required String phone,
+  }) : _phone = phone;
 
   SnsRequest.from(Map<String, dynamic> json)
-      : deviceId = json['deviceId'],
-        phone = json['phone'],
-        snsCode = json['snsCode'];
+      : _phone = json['phone'];
+
+  get getPhone {
+    return _phone;
+  }
+}
+
+class SnsVerifyingRequest {
+  final String _code;
+
+  SnsVerifyingRequest({
+    required String code,
+  }) : _code = code;
+
+  get getCode {
+    return _code;
+  }
 }

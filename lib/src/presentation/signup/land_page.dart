@@ -34,13 +34,7 @@ class LandingPage extends StatelessWidget {
               child: Image.asset('assets/images/main_kakao_login.png'),
             ),
 
-            // 임시 BTN **********************
-            ElevatedButton( // 다른 UI 확인용 임시 btn
-              onPressed: () => BlocProvider.of<AuthCubit>(context).testLogin(),
-              child: const Text("확인용 btn"),
-            ),
-
-            // 애플 유저일 때 애플 로그인 나오도록 코드 추가하기
+            // TODO 애플 유저일 때 애플 로그인 나오도록 코드 추가하기
           ],
         ),
       ),
