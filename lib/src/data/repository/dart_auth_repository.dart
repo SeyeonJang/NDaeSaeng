@@ -12,7 +12,7 @@ class DartAuthRepository {
     return await DartApiRemoteDataSource.postSnsRequest(snsRequest);
   }
 
-  Future<bool> requestValidateSns(SnsRequest snsRequest) async {
-    return await DartApiRemoteDataSource.postCheckSnsCode(snsRequest);
+  Future<bool> requestValidateSns(SnsVerifyingRequest snsVerifyingRequest) async {
+    return await DartApiRemoteDataSource.postCheckSnsCode(snsVerifyingRequest);
   }
 }

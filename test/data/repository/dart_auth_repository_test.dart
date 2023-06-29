@@ -7,10 +7,10 @@ void main() async {
 
   final String kakaoAccessToken = "4i-emZzCCzxksWy1XxwIXY-2Z4sxZJTr2UsrpojqCisM0gAAAYkBwzFt";
   DartAuth dartAuth = await DartApiRemoteDataSource.postLoginWithKakao(kakaoAccessToken);
-  // print(dartAuth);
-  //
-  // var user = UserRequest(univId: 45, admissionNumber: 20, name: "가나다", phone: "010-1234-5678");
-  // await DartApiRemoteDataSource.postUserSignup(user);
+  print(dartAuth);
+
+  var user = UserRequest(univId: 45, admissionNumber: 20, name: "가나다", phone: "010-1234-5678");
+  await DartApiRemoteDataSource.postUserSignup(user);
 
   UserResponse userResponse = await DartApiRemoteDataSource.getMyInformation();
   print(userResponse.toString());

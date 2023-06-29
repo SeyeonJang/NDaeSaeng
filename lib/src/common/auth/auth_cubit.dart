@@ -39,6 +39,7 @@ class AuthCubit extends HydratedCubit<AuthState> {
   Future<void> kakaoWithdrawal() async {
     try {
       await _kakaoLoginRepository.withdrawal();
+      await _userRepository.drawal();
       // 로그아웃 성공 후 처리할 로직 추가
       print("회원탈퇴 성공");
     } catch (error) {
@@ -70,8 +71,15 @@ class AuthCubit extends HydratedCubit<AuthState> {
     } else {
       state.setStep(AuthStep.login);
     }
+    print(state.toString());
 
     state.setLoading(false);
+    emit(state.copy());
+  }
+
+  void doneSignup() {
+    state.setStep(AuthStep.login);
+    print(state);
     emit(state.copy());
   }
 

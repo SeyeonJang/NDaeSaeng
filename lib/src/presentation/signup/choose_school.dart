@@ -1,10 +1,8 @@
-import 'package:dart_flutter/src/presentation/signup/choose_major.dart';
 import 'package:dart_flutter/src/presentation/signup/land_page.dart';
 import 'package:dart_flutter/src/presentation/signup/viewmodel/signup_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
-import 'dart:math';
 
 // btn 컬러 정의 (설정중)
 Color getColor(Set<MaterialState> states) {
@@ -40,8 +38,20 @@ Color getColorText(Set<MaterialState> states) {
 }
 
 // #1-2 학교 선택
-class ChooseSchool extends StatelessWidget {
+class ChooseSchool extends StatefulWidget {
   const ChooseSchool({Key? key}) : super(key: key);
+
+  @override
+  State<ChooseSchool> createState() => _ChooseSchoolState();
+}
+
+class _ChooseSchoolState extends State<ChooseSchool> {
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   print("choose_school init state ...");
+  //   BlocProvider.of<SignupCubit>(context).initState();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -127,13 +137,9 @@ class ScaffoldBody extends StatelessWidget {
           height: 100,
         ),
         ElevatedButton(
-          // 버튼
-          // onPressed: () => Navigator.push(
-          //     context, MaterialPageRoute(builder: (_) => ChooseMajor())),
           onPressed: () {
-            BlocProvider.of<SignupCubit>(context).stepSchool("test school");
+            BlocProvider.of<SignupCubit>(context).stepSchool("ICT폴리텍대학");
           },
-          // animation은 나중에 추가
           style: ButtonStyle(
             foregroundColor: MaterialStateProperty.resolveWith(getColorText),
             // textcolor
@@ -149,8 +155,6 @@ class ScaffoldBody extends StatelessWidget {
 
 class BackendService {
   static Future<List<Map<String, dynamic>>> getSuggestions(String query) async {
-    await Future.delayed(Duration(seconds: 1));
-
     List<Map<String, dynamic>> matches = [];
 
     List<String> cities = CitiesService.getSuggestions(query).cast<String>();
@@ -166,20 +170,14 @@ class BackendService {
 
 class CitiesService {
   static final List<String> cities = [
-    'Beirut',
-    'Damascus',
-    'San Fransisco',
-    'Rome',
-    'Los Angeles',
-    'Madrid',
-    'Bali',
-    'Barcelona',
-    'Paris',
-    'Bucharest',
-    'New York City',
-    'Philadelphia',
-    'Sydney',
+    '서울대학교',
+    '인천대학교',
+    '대구대학교',
+    '부산대학교',
+    '광주대학교',
+    '경북대학교'
   ];
+  // List<University> universities = BlocProvider.of<SignupCubit>(context).getUniversities;
 
   static List<String> getSuggestions(String query) {
     List<String> matches = [];

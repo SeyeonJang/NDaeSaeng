@@ -21,21 +21,20 @@ class MySettings extends StatelessWidget {
   MySettings({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child:
-            BlocBuilder<MyPagesCubit, MyPagesState>(builder: (context, state) {
-          return MyPageView(loginRepository: KakaoLoginRepository(), withdrawalRepository: KakaoLoginRepository());
-        }),
-      ),
-    );
+    // return Scaffold(
+    //   body: SafeArea(
+    //     child:
+    //       BlocBuilder<MyPagesCubit, MyPagesState>(builder: (context, state) {
+    //         return const MyPageView();
+    //       }),
+    //   ),
+    // );
+    return const MyPageView();
   }
 }
 
 class MyPageView extends StatelessWidget {
-  final KakaoLoginRepository loginRepository, withdrawalRepository;
-
-  const MyPageView({required this.loginRepository, required this.withdrawalRepository});
+  const MyPageView({super.key});
 
   static final _defaultPadding = EdgeInsets.all(getFlexibleSize(target: 20));
 
@@ -126,7 +125,7 @@ class MyPageView extends StatelessWidget {
                     TextButton(
                       onPressed: () async {
                         await BlocProvider.of<AuthCubit>(context).kakaoLogout();
-                        Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const LogoutTogoLandPage()), (route)=>false); // TODO : 0627 얘만 작동하면 됨 로그아웃
+                        Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const LogoutTogoLandPage()), (route) => false); // TODO : 0627 얘만 작동하면 됨 로그아웃
                       },
                       child: Text("로그아웃",
                         textAlign: TextAlign.start,

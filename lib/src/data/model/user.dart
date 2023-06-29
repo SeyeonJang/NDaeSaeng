@@ -60,4 +60,9 @@ class UserRequest {
       'phone': phone
     };
   }
+
+  @override
+  String toString() {
+    return 'UserRequest{univId: $univId, admissionNumber: $admissionNumber, name: $name, phone: $phone}';
+  }
 }

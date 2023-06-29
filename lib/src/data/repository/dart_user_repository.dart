@@ -6,6 +6,10 @@ class DartUserRepository {
     return await DartApiRemoteDataSource.postUserSignup(user);
   }
 
+  Future<void> drawal() async {
+    return await DartApiRemoteDataSource.deleteMyAccount();
+  }
+
   Future<UserResponse> myInfo() async {
     return await DartApiRemoteDataSource.getMyInformation();
   }

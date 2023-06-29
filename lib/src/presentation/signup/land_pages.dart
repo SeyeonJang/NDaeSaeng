@@ -27,8 +27,8 @@ class _LandPagesState extends State<LandPages> {
               }
               if (state.step == AuthStep.signup) {
                 // 소셜 로그인을 했지만, 아직 우리 회원가입은 안햇을 때
-                return BlocProvider<SignupCubit>(
-                  create: (BuildContext context) => SignupCubit(),
+                  return BlocProvider<SignupCubit>(
+                  create: (BuildContext context) => SignupCubit()..initState(),
                   child: const SignupPages(),
                 );
               }
