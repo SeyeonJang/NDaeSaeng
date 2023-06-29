@@ -36,7 +36,7 @@ class _MeetPageState extends State<MeetPage> {
 
             LikeButton(
               size: SizeConfig.defaultSize * 18,
-              likeCount: likes,
+              // likeCount: likes, // TODO : MVP 이후 복구하기
               countPostion: CountPostion.bottom,
               likeBuilder: (bool isLiked) {
                 return Icon(
@@ -45,24 +45,24 @@ class _MeetPageState extends State<MeetPage> {
                   size: SizeConfig.defaultSize * 17,
                 );
               },
-              countBuilder: (int? count, bool isLiked, String text) {
-                var color = isLiked ? Colors.red : Colors.grey;
-                Widget result;
-                if (count==0) {
-                  result = Text(
-                    'Like',
-                    style: TextStyle(color: color),
-                  );
-                }
-                else {
-                  result = Text(
-                    text,
-                    style: TextStyle(color: color),
-                  );
-                  return result;
-                }
-                return null;
-              },
+              // countBuilder: (int? count, bool isLiked, String text) { // TODO : MVP 이후 복구하기
+              //   var color = isLiked ? Colors.red : Colors.grey;
+              //   Widget result;
+              //   if (count==0) {
+              //     result = Text(
+              //       'Like',
+              //       style: TextStyle(color: color),
+              //     );
+              //   }
+              //   else {
+              //     result = Text(
+              //       text,
+              //       style: TextStyle(color: color),
+              //     );
+              //     return result;
+              //   }
+              //   return null;
+              // },
               onTap: (isLiked) async {
                 bool newStatus = await changedata(isLiked);
                 if (newStatus) {
