@@ -19,6 +19,16 @@ import '../../../res/size_config.dart';
 class MySettings extends StatelessWidget {
 
   MySettings({Key? key}) : super(key: key);
+
+  void onLogoutButtonPressed(BuildContext context) async {
+    await BlocProvider.of<AuthCubit>(context).kakaoLogout();
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (context) => const LogoutTogoLandPage()),
+          (route) => false,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     // return Scaffold(
@@ -37,6 +47,15 @@ class MyPageView extends StatelessWidget {
   const MyPageView({super.key});
 
   static final _defaultPadding = EdgeInsets.all(getFlexibleSize(target: 20));
+
+  void onLogoutButtonPressed(BuildContext context) async { // 로그아웃 버튼 연결
+    await BlocProvider.of<AuthCubit>(context).kakaoLogout();
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (context) => const LogoutTogoLandPage()),
+          (route) => false,
+    );
+  }
 
   MyPagesCubit _getMyPageCubit(BuildContext context) =>
       BlocProvider.of<MyPagesCubit>(context);
@@ -104,7 +123,7 @@ class MyPageView extends StatelessWidget {
               const DtFlexSpacer(20),
               Container(
                 alignment: Alignment.centerLeft,
-                padding: EdgeInsets.only(left: 20),
+                padding: EdgeInsets.only(left: 0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -123,58 +142,54 @@ class MyPageView extends StatelessWidget {
                         )),
                     const DtFlexSpacer(20),
                     TextButton(
-                      onPressed: () async {
-                        await BlocProvider.of<AuthCubit>(context).kakaoLogout();
-                        Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const LogoutTogoLandPage()), (route) => false); // TODO : 0627 얘만 작동하면 됨 로그아웃
-                      },
-                      child: Text("로그아웃",
-                        textAlign: TextAlign.start,
-                        style: TextStyle(
-                          fontWeight: FontWeight.w500,
-                          fontSize: getFlexibleSize(target: 16),
-                        ),
-                      )),
+                        onPressed: () => onLogoutButtonPressed(context),
+                        child: Text("로그아웃",
+                          textAlign: TextAlign.start,
+                          style: TextStyle(
+                            fontWeight: FontWeight.w500,
+                            fontSize: getFlexibleSize(target: 16),
+                          ),
+                        )),
                   ],
                 ),
               ),
               const DtFlexSpacer(120),
-              Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                TextButton(
-                  onPressed: () {
-                    BlocProvider.of<MyPagesCubit>(context)
-                        .pressedTos1(); // 설정 화면으로 넘어가기
-                    // Navigator.pop(context,
-                    //     MaterialPageRoute(builder: (context) => Tos1()));
-                  },
-                  child: Text("이용약관", style: TextStyle(fontSize: 14)),
-                ),
-                TextButton(
-                  onPressed: () {
-                    BlocProvider.of<MyPagesCubit>(context)
-                        .pressedTos2(); // 설정 화면으로 넘어가기
-                  },
-                  child: Text("개인정보 처리방침", style: TextStyle(fontSize: 14)),
-                ),
-                TextButton(
-                  onPressed: () {
-                    // launch로 Dart 건의 구글폼으로 이동
-                    launchUrl(
-                      Uri(
-                        scheme: 'https',
-                        host: 'docs.google.com',
-                        path: 'forms/d/e/1FAIpQLSd8H_R1_sq1QZHiuSRGd7XUyLvegZEsV05kLlcxO1JLc6TseQ/viewform?usp=sf_link',
-                      ),
-                      mode: LaunchMode.inAppWebView,
-                    );
-                  },
-                  child: Text("Dart에 건의하기", style: TextStyle(fontSize: 14)),
-                ),
-                TextButton(
-                  onPressed: () {
-                    // launch로 우리 카카오톡 페이지로 연결
-                  },
-                  child: Text("1:1 문의", style: TextStyle(fontSize: 14)),
-                ),
+              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    TextButton(
+                      onPressed: () {
+                        BlocProvider.of<MyPagesCubit>(context)
+                            .pressedTos1(); // 설정 화면으로 넘어가기
+                      },
+                      child: Text("이용약관", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.2)),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        BlocProvider.of<MyPagesCubit>(context)
+                            .pressedTos2(); // 설정 화면으로 넘어가기
+                      },
+                      child: Text("개인정보 처리방침", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.2)),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        // launch로 Dart 건의 구글폼으로 이동
+                        launchUrl(
+                          Uri(
+                            scheme: 'https',
+                            host: 'docs.google.com',
+                            path: 'forms/d/e/1FAIpQLSd8H_R1_sq1QZHiuSRGd7XUyLvegZEsV05kLlcxO1JLc6TseQ/viewform?usp=sf_link',
+                          ),
+                          mode: LaunchMode.inAppWebView,
+                        );
+                      },
+                      child: Text("Dart에 건의하기", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.2)),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        // launch로 우리 카카오톡 페이지로 연결
+                      },
+                      child: Text("1:1 문의", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.2)),
+                    ),
               ]),
             ],
           ),

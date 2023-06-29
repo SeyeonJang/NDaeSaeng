@@ -36,6 +36,8 @@ dependencies:
   dio: ^5.2.1+1
   url_launcher: ^6.1.11
   timeago: ^3.4.0
+  webview_flutter: ^4.2.2
+  fluttertoast: ^8.2.2
 
   # service api
   kakao_flutter_sdk: ^1.4.1

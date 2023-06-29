@@ -22,7 +22,23 @@ class AuthCubit extends HydratedCubit<AuthState> {
           loginType: LoginType.email,
         ));
 
-  Future<void> kakaoLogout() async {
+  // ver.1
+  // Future<void> kakaoLogout() async {
+  //   try {
+  //     await _kakaoLoginRepository.logout();
+  //     // 로그아웃 성공 후 처리할 로직 추가
+  //     print("로그아웃 성공");
+  //   } catch (error) {
+  //     // 로그아웃 실패 처리
+  //     print('로그아웃 실패: $error');
+  //   }
+  //
+  //   state.setStep(AuthStep.land).setSocialAuth(loginType: LoginType.email, socialAccessToken: "");
+  //   emit(state.copy());
+  // }
+
+  // ver.2
+  Future<AuthState> kakaoLogout() async {
     try {
       await _kakaoLoginRepository.logout();
       // 로그아웃 성공 후 처리할 로직 추가
@@ -32,9 +48,11 @@ class AuthCubit extends HydratedCubit<AuthState> {
       print('로그아웃 실패: $error');
     }
 
-    state.setStep(AuthStep.land).setSocialAuth(loginType: LoginType.email, socialAccessToken: "");
-    emit(state.copy());
+    final newState = state.setStep(AuthStep.land).setSocialAuth(loginType: LoginType.email, socialAccessToken: "");
+    emit(newState);
+    return newState;
   }
+
 
   Future<void> kakaoWithdrawal() async {
     try {

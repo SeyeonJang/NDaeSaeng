@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:dart_flutter/src/data/model/friend.dart';
 import 'package:dart_flutter/res/size_config.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class MyPageLanding extends StatefulWidget {
   const MyPageLanding({Key? key}) : super(key: key);
@@ -59,7 +60,6 @@ class MyPageLandingView extends StatelessWidget {
       children: <Widget>[
         SizedBox(height: SizeConfig.defaultSize * 0.5,),
         Container(
-          height: SizeConfig.defaultSize * 13,
           child: Padding(
               padding: EdgeInsets.symmetric(
                   vertical: SizeConfig.defaultSize,
@@ -106,7 +106,9 @@ class MyPageLandingView extends StatelessWidget {
                       ),
                     ],
                   ),
+                  SizedBox(height: SizeConfig.defaultSize * 0.3),
                   Container(
+                    height: SizeConfig.defaultSize * 4.5,
                     decoration: ShapeDecoration(
                       color: Color(0xffeeeeeee),
                       shape: RoundedRectangleBorder(
@@ -150,6 +152,7 @@ class MyPageLandingView extends StatelessWidget {
 
         // =================================================================
 
+        SizedBox(height: SizeConfig.defaultSize),
         Container( // 구분선
           padding: EdgeInsets.only(top: 0, bottom: 0, left: 0, right: 0,),
           height: SizeConfig.defaultSize * 2,
@@ -188,8 +191,6 @@ class MyPageLandingView extends StatelessWidget {
                   SizedBox(height: SizeConfig.defaultSize ,),
 
                   // ================================ 친구 리스트
-                  // for (int i = 0; i <5; i++) // TODO : 친구의 수만큼 반복시키기
-                  //   MyFriend(),
                   MyFriends(friends: FriendsMock().friends, count: FriendsMock().friends.length)
                 ],
               )
@@ -303,7 +304,8 @@ class MyFriend extends StatelessWidget {
 
             TextButton(
               onPressed: () {
-                // TODO : 신고 기능
+                showReportToast();
+                // TODO : 신고 기능 (서버 연결)
               },
               child: Text("신고", style: TextStyle(
                 fontSize: SizeConfig.defaultSize * 1.3,
@@ -331,6 +333,19 @@ class MyFriend extends StatelessWidget {
       ],
     );
   }
+}
+
+void showReportToast() {
+  Fluttertoast.showToast(
+      msg: "사용자가 신고되었어요!",
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.BOTTOM,
+      timeInSecForIosWeb: 1, // iOS 및 web에서 시간
+      backgroundColor: Color(0xff7C83FD),
+      textColor: Colors.white,
+      fontSize: 16.0
+  );
+  print("토스트테스트");
 }
 
 class NewFriends extends StatelessWidget {

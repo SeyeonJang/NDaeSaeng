@@ -38,6 +38,7 @@ class UserPhone extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         // title: const Text('User Phone'),
         leading: IconButton(

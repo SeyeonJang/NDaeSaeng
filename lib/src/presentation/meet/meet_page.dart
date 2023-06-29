@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../res/size_config.dart';
+import 'package:like_button/like_button.dart';
 
 class MeetPage extends StatefulWidget {
   const MeetPage({super.key});
@@ -33,18 +34,51 @@ class _MeetPageState extends State<MeetPage> {
               ),),
             SizedBox(height: SizeConfig.defaultSize * 5,),
 
-            IconButton(
-              icon: const Icon(Icons.ads_click),
-              // icon: const AssetImage('assets/images/meet_heart.png'), // TODO : Icon 바꾸기
-              iconSize: SizeConfig.defaultSize * 17,
-              // tooltip: 'Increase volume by 10',
-              onPressed: () {
-                setState(() {
-                  likes += 1;
-                });
+            LikeButton(
+              size: SizeConfig.defaultSize * 18,
+              likeCount: likes,
+              countPostion: CountPostion.bottom,
+              likeBuilder: (bool isLiked) {
+                return Icon(
+                  Icons.favorite,
+                  color: isLiked ? Colors.pinkAccent : Colors.red,
+                  size: SizeConfig.defaultSize * 17,
+                );
+              },
+              countBuilder: (int? count, bool isLiked, String text) {
+                var color = isLiked ? Colors.red : Colors.grey;
+                Widget result;
+                if (count==0) {
+                  result = Text(
+                    'Like',
+                    style: TextStyle(color: color),
+                  );
+                }
+                else {
+                  result = Text(
+                    text,
+                    style: TextStyle(color: color),
+                  );
+                  return result;
+                }
+                return null;
+              },
+              onTap: (isLiked) async {
+                bool newStatus = await changedata(isLiked);
+                if (newStatus) {
+                  setState(() {
+                    likes++;
+                  });
+                } else {
+                  setState(() {
+                    likes--;
+                  });
+                }
+                return newStatus;
               },
             ),
-            Text('얼른 열어주세요! : $likes',
+
+            Text('얼른 열어주세요!',
               style: TextStyle(
                 fontWeight: FontWeight.w500,
                 fontSize: SizeConfig.defaultSize * 1.9,
@@ -66,4 +100,9 @@ class _MeetPageState extends State<MeetPage> {
       ),
     );
   }
+}
+
+Future<bool> changedata(status) async {
+  //your code
+  return Future.value(!status);
 }
