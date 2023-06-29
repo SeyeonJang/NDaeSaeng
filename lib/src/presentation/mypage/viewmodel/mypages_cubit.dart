@@ -1,4 +1,5 @@
 import 'package:dart_flutter/src/data/model/friend.dart';
+import 'package:dart_flutter/src/data/repository/dart_friend_repository.dart';
 import 'package:dart_flutter/src/data/repository/dart_user_repository.dart';
 import 'package:dart_flutter/src/presentation/mypage/friends_mock.dart';
 import 'package:dart_flutter/src/presentation/mypage/viewmodel/state/mypages_state.dart';
@@ -6,21 +7,33 @@ import 'package:hydrated_bloc/hydrated_bloc.dart';
 
 class MyPagesCubit extends Cubit<MyPagesState> {
   static final DartUserRepository _dartUserRepository = DartUserRepository();
+  static final DartFriendRepository _dartFriendRepository = DartFriendRepository();
 
   MyPagesCubit() : super(MyPagesState.init());
 
   // 유저 정보, 친구 정보
   void initPages() async {
     // TODO : 실제 데이터 받아오기 (아래는 mock)
-    List<Friend> friends = FriendsMock().getFriends();
+    print("aaaaaaaaaaaaaa");
+    // List<Friend> friends = FriendsMock().getFriends();
+    List<Friend> friends = await _dartFriendRepository.getMyFriends();
     state.setUserInfo(friends);
     // 초기값 설정
+    state.userResponse = await _dartUserRepository.myInfo();
     state.setMyLandPage(true);
     state.setIsSettingPage(false);
     state.setIsTos1(false);
     state.setIsTos2(false);
 
     emit(state.copy());
+  }
+
+  void pressedFriendAddButton(int friendUserId) {
+    _dartFriendRepository.addFriend(friendUserId);
+  }
+
+  void pressedFriendDeleteButton(int friendUserId) {
+    _dartFriendRepository.deleteFriend(friendUserId);
   }
 
   void setMyLandPage() {
@@ -83,9 +96,9 @@ class MyPagesCubit extends Cubit<MyPagesState> {
     emit(state.copy());
   }
 
-  @override
-  MyPagesState fromJson(Map<String, dynamic> json) => state.fromJson(json);
-
-  @override
-  Map<String, dynamic> toJson(MyPagesState state) => state.toJson();
+  // @override
+  // MyPagesState fromJson(Map<String, dynamic> json) => state.fromJson(json);
+  //
+  // @override
+  // Map<String, dynamic> toJson(MyPagesState state) => state.toJson();
 }

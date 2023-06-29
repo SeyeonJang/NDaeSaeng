@@ -7,6 +7,8 @@ import 'package:dart_flutter/src/data/repository/dart_user_repository.dart';
 import 'package:dart_flutter/src/data/repository/kakao_login_repository.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 
+import '../../datasource/dart_api_remote_datasource.dart';
+
 class AuthCubit extends HydratedCubit<AuthState> {
   static final KakaoLoginRepository _kakaoLoginRepository = KakaoLoginRepository();
   static final DartAuthRepository _authRepository = DartAuthRepository();
@@ -22,22 +24,10 @@ class AuthCubit extends HydratedCubit<AuthState> {
           loginType: LoginType.email,
         ));
 
-  // ver.1
-  // Future<void> kakaoLogout() async {
-  //   try {
-  //     await _kakaoLoginRepository.logout();
-  //     // 로그아웃 성공 후 처리할 로직 추가
-  //     print("로그아웃 성공");
-  //   } catch (error) {
-  //     // 로그아웃 실패 처리
-  //     print('로그아웃 실패: $error');
-  //   }
-  //
-  //   state.setStep(AuthStep.land).setSocialAuth(loginType: LoginType.email, socialAccessToken: "");
-  //   emit(state.copy());
-  // }
+  void setAccessToken(String accessToken) {
+    DartApiRemoteDataSource.addAuthorizationToken(accessToken);
+  }
 
-  // ver.2
   Future<AuthState> kakaoLogout() async {
     try {
       await _kakaoLoginRepository.logout();
@@ -48,11 +38,10 @@ class AuthCubit extends HydratedCubit<AuthState> {
       print('로그아웃 실패: $error');
     }
 
-    final newState = state.setStep(AuthStep.land).setSocialAuth(loginType: LoginType.email, socialAccessToken: "");
+    final newState = state.setStep(AuthStep.land).setSocialAuth(loginType: LoginType.email, socialAccessToken: "").copy();
     emit(newState);
     return newState;
   }
-
 
   Future<void> kakaoWithdrawal() async {
     try {

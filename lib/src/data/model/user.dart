@@ -1,3 +1,7 @@
+import 'package:json_annotation/json_annotation.dart';
+part 'user.g.dart';
+
+@JsonSerializable()
 class UserResponse {
   final int? userId, univId;
   final int? admissionNumber, point;
@@ -27,6 +31,9 @@ class UserResponse {
     universityName = json['universityName'],
     department = json['department'],
     nextVoteDateTime = json['nextVoteDateTime'];
+
+  Map<String, dynamic> toJson() => _$UserResponseToJson(this);
+  static UserResponse fromJson(Map<String, dynamic> json) => _$UserResponseFromJson(json);
 
   @override
   String toString() {
