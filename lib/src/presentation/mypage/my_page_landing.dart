@@ -16,22 +16,22 @@ class MyPageLanding extends StatefulWidget {
 }
 
 class _MyPageLandingState extends State<MyPageLanding> {
-  @override
-  void initState() {
-    super.initState();
-    BlocProvider.of<MyPagesCubit>(context).initPages();
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   BlocProvider.of<MyPagesCubit>(context).initPages();
+  // }
 
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-        child: Padding(
-          padding: EdgeInsets.symmetric(
-              vertical: SizeConfig.defaultSize * 2,
-              horizontal: SizeConfig.defaultSize),
-          child: const MyPageLandingView(),
-        ),
-      );
+      child: Padding(
+        padding: EdgeInsets.symmetric(
+            vertical: SizeConfig.defaultSize * 2,
+            horizontal: SizeConfig.defaultSize),
+        child: const MyPageLandingView(),
+      ),
+    );
   }
 }
 
@@ -60,6 +60,7 @@ class MyPageLandingView extends StatelessWidget {
       children: <Widget>[
         SizedBox(height: SizeConfig.defaultSize * 0.5,),
         Container(
+          height: SizeConfig.defaultSize * 13,
           child: Padding(
               padding: EdgeInsets.symmetric(
                   vertical: SizeConfig.defaultSize,
@@ -70,32 +71,44 @@ class MyPageLandingView extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                        Text(
-                        "무슨무슨무슨학과",
-                        style: TextStyle(
-                       fontWeight: FontWeight.w500,
-                         fontSize: SizeConfig.defaultSize * 1.15,
-                         ),
-                       ),
+                      BlocBuilder<MyPagesCubit,MyPagesState>(
+                          builder: (context, state) {
+                            String department = state.userResponse.department!;
+                            return Text(
+                              department,
+                              style: TextStyle(
+                                fontWeight: FontWeight.w500,
+                                fontSize: SizeConfig.defaultSize * 1.15,
+                              ),
+                            );
+                          }
+                      ),
                     ],
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Row(
-                        children: [
-                          Text("장세연",
-                            style: TextStyle(
-                              fontWeight: FontWeight.w700,
-                              fontSize: SizeConfig.defaultSize * 2,
-                            ),),
-                          const SizedBox(width: 5),
-                          Text("21학번",
-                            style: TextStyle(
-                              fontWeight: FontWeight.w500,
-                              fontSize: SizeConfig.defaultSize * 1.6,
-                            ),),
-                        ],
+                      BlocBuilder<MyPagesCubit,MyPagesState>(
+                          builder: (context, state) {
+                            String name = state.userResponse.name!;
+                            String admissionNumber = "${state.userResponse.admissionNumber??"##"}학번";
+
+                            return Row(
+                              children: [
+                                Text(name,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w700,
+                                    fontSize: SizeConfig.defaultSize * 2,
+                                  ),),
+                                const SizedBox(width: 5),
+                                Text(admissionNumber,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: SizeConfig.defaultSize * 1.6,
+                                  ),),
+                              ],
+                            );
+                          }
                       ),
                       IconButton(
                         icon: const Icon(Icons.settings),
@@ -125,11 +138,19 @@ class MyPageLandingView extends StatelessWidget {
                                 fontWeight: FontWeight.w500,
                                 fontSize: SizeConfig.defaultSize * 1.6,
                               ),),
-                            Text("  280",
-                              style: TextStyle(
-                                fontWeight: FontWeight.w700,
-                                fontSize: SizeConfig.defaultSize * 1.6,
-                              ),),
+
+                            BlocBuilder<MyPagesCubit,MyPagesState>(
+                                builder: (context, state) {
+                                  int point = state.userResponse.point ?? 0;
+
+                                  return Text("  $point",
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w700,
+                                      fontSize: SizeConfig.defaultSize * 1.6,
+                                    ),
+                                  );
+                                }
+                            ),
                           ],
                         ),
                         TextButton(
@@ -189,9 +210,12 @@ class MyPageLandingView extends StatelessWidget {
                     ],
                   ),
                   SizedBox(height: SizeConfig.defaultSize ,),
-
-                  // ================================ 친구 리스트
-                  MyFriends(friends: FriendsMock().friends, count: FriendsMock().friends.length)
+                  BlocBuilder<MyPagesCubit,MyPagesState>(
+                      builder: (context, state) {
+                        final friends = state.friends ?? [];
+                        return MyFriends(friends: friends, count: friends.length);
+                      }
+                  ),
                 ],
               )
           ),
@@ -209,10 +233,10 @@ class MyPageLandingView extends StatelessWidget {
         Container(
           // height: SizeConfig.defaultSize * 130,
           child: Padding(
-              padding: EdgeInsets.symmetric(
-                  vertical: SizeConfig.defaultSize,
-                  horizontal: SizeConfig.defaultSize * 2),
-              child: Column(
+            padding: EdgeInsets.symmetric(
+                vertical: SizeConfig.defaultSize,
+                horizontal: SizeConfig.defaultSize * 2),
+            child: Column(
                 children: [
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -225,12 +249,13 @@ class MyPageLandingView extends StatelessWidget {
                     ],
                   ),
                   SizedBox(height: SizeConfig.defaultSize * 2 ,),
-
-                  // ================================ 친구 리스트
-                  // for (int i = 0; i <5; i++) // TODO : 친구의 수만큼 반복시키기
-                  //   NewFriend(),
-                  NewFriends(friends: FriendsMock().friends, count: FriendsMock().friends.length),
-              ]),
+                  BlocBuilder<MyPagesCubit,MyPagesState>(
+                      builder: (context, state) {
+                        final friends = state.newFriends ?? [];
+                        return NewFriends(friends: friends, count: friends.length);
+                      }
+                  ),
+                ]),
           ),
         ),
 
@@ -254,7 +279,9 @@ class MyFriends extends StatelessWidget {
     return Column(
       children: [
         for (int i = 0; i < this.count; i++)
-          MyFriend(
+          FriendComponent(
+              isAdd: false,
+              userId: friends[i].userId,
               name: friends[i].name,
               admissionNumber:friends[i].admissionNumber,
               department: friends[i].university.department),
@@ -263,18 +290,55 @@ class MyFriends extends StatelessWidget {
   }
 }
 
+class NewFriends extends StatelessWidget {
+  final List<Friend> friends;
+  final int count;
 
-class MyFriend extends StatelessWidget {
+  const NewFriends({
+    super.key,
+    required this.friends,
+    required this.count,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        for (int i = 0; i < this.count; i++)
+          FriendComponent(
+              isAdd: true,
+              userId: friends[i].userId,
+              name: friends[i].name,
+              admissionNumber:friends[i].admissionNumber,
+              department: friends[i].university.department),
+      ],
+    );
+  }
+}
+
+class FriendComponent extends StatelessWidget {
+  final bool isAdd;
+  final int userId;
   final String name;
   final int admissionNumber;
   final String department;
 
-  const MyFriend({
+  const FriendComponent({
     super.key,
+    required this.isAdd,
+    required this.userId,
     required this.name,
     required this.admissionNumber,
     required this.department,
   });
+
+  void pressedDeleteButton(BuildContext context, int userId) {
+    BlocProvider.of<MyPagesCubit>(context).pressedFriendDeleteButton(userId);
+  }
+
+  void pressedAddButton(BuildContext context, int userId) {
+    BlocProvider.of<MyPagesCubit>(context).pressedFriendAddButton(userId);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -317,9 +381,13 @@ class MyFriend extends StatelessWidget {
 
             ElevatedButton(
               onPressed: () {
-                // TODO : 친구 삭제 기능
+                if (isAdd) {
+                  pressedAddButton(context, userId);
+                } else {
+                  pressedDeleteButton(context, userId);
+                }
               },
-              child: Text("삭제", style: TextStyle(
+              child: Text(isAdd?"추가":"삭제", style: TextStyle(
                 fontSize: SizeConfig.defaultSize * 1.4,
                 fontWeight: FontWeight.w500,
               )),
@@ -346,48 +414,5 @@ void showReportToast() {
       fontSize: 16.0
   );
   print("토스트테스트");
-}
-
-class NewFriends extends StatelessWidget {
-  final List<Friend> friends;
-  final int count;
-
-  const NewFriends({
-    super.key,
-    required this.friends,
-    required this.count,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        for (int i = 0; i < this.count; i++)
-          MyFriend(
-              name: friends[i].name,
-              admissionNumber:friends[i].admissionNumber,
-              department: friends[i].university.department),
-      ],
-    );
-  }
-}
-
-
-class NewFriend extends StatelessWidget {
-  final String name;
-  final int admissionNumber;
-  final String department;
-
-  const NewFriend({
-    super.key,
-    required this.name,
-    required this.admissionNumber,
-    required this.department,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return MyFriend(name: name, admissionNumber: admissionNumber, department: department);
-  }
 }
 

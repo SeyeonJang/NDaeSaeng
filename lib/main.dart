@@ -44,6 +44,8 @@ class MyApp extends StatelessWidget {
       child: BlocBuilder<AuthCubit, AuthState>(
         builder: (context, state) {
           if (state.step == AuthStep.login && state.dartAccessToken.length > 20 && DateTime.now().microsecondsSinceEpoch < state.expiredAt.microsecondsSinceEpoch) {
+            print("now accessToken: ${state.dartAccessToken}");
+            BlocProvider.of<AuthCubit>(context).setAccessToken(state.dartAccessToken);
             return const DartPageView();
           }
           return const LandPages();

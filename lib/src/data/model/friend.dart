@@ -5,29 +5,24 @@ part 'friend.g.dart';
 @JsonSerializable()
 class Friend {
   final int userId;
+  final int admissionNumber;
+  final int mutualFriend;
+  final String name;
   final University university;
-  final int admissionNumber, mutualFriend;
-  final String name, phone;
-  final bool signUp;
 
-  Friend(
-      {required this.userId,
-      required this.university,
-      required this.admissionNumber,
-      required this.mutualFriend,
-      required this.name,
-      required this.phone,
-      required this.signUp});
-
-  Friend.from(Map<String, dynamic> json)
-      : userId = json['userId'],
-        university = University.fromJson(json),
-        admissionNumber = json['admissionNumber'],
-        mutualFriend = json['mutualFriend'],
-        name = json['name'],
-        phone = json['phone'],
-        signUp = json['signUp'];
+  Friend({
+    required this.userId,
+    required this.admissionNumber,
+    this.mutualFriend = 0,
+    required this.name,
+    required this.university,
+  });
 
   Map<String, dynamic> toJson() => _$FriendToJson(this);
   static Friend fromJson(Map<String, dynamic> json) => _$FriendFromJson(json);
+
+  @override
+  String toString() {
+    return 'Friend{userId: $userId, admissionNumber: $admissionNumber, mutualFriend: $mutualFriend, name: $name, university: $university}';
+  }
 }

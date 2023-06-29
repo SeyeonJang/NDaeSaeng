@@ -1,17 +1,22 @@
+import 'package:dart_flutter/src/data/model/friend.dart';
 import 'package:dart_flutter/src/datasource/dart_api_remote_datasource.dart';
 
 import '../model/contact.dart';
 
 class DartFriendRepository {
-  Future<List<Contact>> postContacts(List<Contact> contacts) async {
-    return await DartApiRemoteDataSource.postContacts(contacts);
+  Future<List<Friend>> getMyFriends() async {
+    return await DartApiRemoteDataSource.getMyFriends();
   }
 
-  Future<List<Contact>> getMyFriends(String accessToken) async {
-    return await DartApiRemoteDataSource.getMyFriends(accessToken, "y");
+  Future<List<Friend>> getRecommendedFriends() async {
+    return await DartApiRemoteDataSource.getMyFriends(suggested: true);
   }
 
-  Future<List<Contact>> getRecommendedFriends(String accessToken) async {
-    return await DartApiRemoteDataSource.getMyFriends(accessToken, "n");
+  Future<String> addFriend(int userId) async {
+    return await DartApiRemoteDataSource.postFriend(userId);
+  }
+
+  Future<String> deleteFriend(int userId) async {
+    return await DartApiRemoteDataSource.deleteFriend(userId);
   }
 }

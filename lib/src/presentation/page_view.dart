@@ -80,7 +80,7 @@ class _DartPageViewState extends State<DartPageView> {
                           create: (BuildContext context) => AuthCubit(),
                         ),
                         BlocProvider<MyPagesCubit>(
-                          create: (BuildContext context) => MyPagesCubit(),
+                          create: (BuildContext context) => MyPagesCubit()..initPages(),
                         ),
                       ],
                       child: const MyPages(),

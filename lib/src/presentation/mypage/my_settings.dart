@@ -9,6 +9,7 @@ import 'package:dart_flutter/src/presentation/signup/land_page.dart';
 import 'package:dart_flutter/src/presentation/signup/land_pages.dart';
 import 'package:dart_flutter/src/presentation/signup/tos1.dart';
 import 'package:dart_flutter/src/presentation/signup/tos2.dart';
+import 'package:dart_flutter/src/presentation/signup/viewmodel/signup_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -17,7 +18,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../res/size_config.dart';
 
 class MySettings extends StatelessWidget {
-
   MySettings({Key? key}) : super(key: key);
 
   void onLogoutButtonPressed(BuildContext context) async {
@@ -25,7 +25,7 @@ class MySettings extends StatelessWidget {
     Navigator.pushAndRemoveUntil(
       context,
       MaterialPageRoute(builder: (context) => const LogoutTogoLandPage()),
-          (route) => false,
+      (route) => false,
     );
   }
 
@@ -48,23 +48,22 @@ class MyPageView extends StatelessWidget {
 
   static final _defaultPadding = EdgeInsets.all(getFlexibleSize(target: 20));
 
-  void onLogoutButtonPressed(BuildContext context) async { // 로그아웃 버튼 연결
+  void onLogoutButtonPressed(BuildContext context) async {
+    // 로그아웃 버튼 연결
     await BlocProvider.of<AuthCubit>(context).kakaoLogout();
     Navigator.pushAndRemoveUntil(
       context,
       MaterialPageRoute(builder: (context) => const LogoutTogoLandPage()),
-          (route) => false,
+      (route) => false,
     );
   }
 
-  MyPagesCubit _getMyPageCubit(BuildContext context) =>
-      BlocProvider.of<MyPagesCubit>(context);
+  MyPagesCubit _getMyPageCubit(BuildContext context) => BlocProvider.of<MyPagesCubit>(context);
 
   Widget _topBarSection(BuildContext context) => Row(children: [
         IconButton(
             onPressed: () => _getMyPageCubit(context).backToMyPageLanding(),
-            icon: Icon(Icons.arrow_back_ios_new_rounded,
-                size: SizeConfig.defaultSize * 2)),
+            icon: Icon(Icons.arrow_back_ios_new_rounded, size: SizeConfig.defaultSize * 2)),
         Text("설정",
             style: TextStyle(
               fontWeight: FontWeight.w800,
@@ -73,39 +72,44 @@ class MyPageView extends StatelessWidget {
       ]);
 
   Widget _infoSection(BuildContext context) => Padding(
-      padding: _defaultPadding,
-      child: Column(children: [
-        _topBarSection(context),
-        const DtFlexSpacer(30),
-        Padding(
-            padding: EdgeInsets.symmetric(
-                vertical: getFlexibleSize(),
-                horizontal: getFlexibleSize(target: 20)),
-            child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  _infoSectionItem(title: "이름", value: "장세연"),
-                  _infoSectionItem(title: "학교", value: "가톨릭대학교"),
-                  _infoSectionItem(title: "학과", value: "컴퓨터정보공학부"),
-                  _infoSectionItem(title: "학번", value: "21학번"),
-                  _infoSectionItem(title: "성별", value: "여성"),
-                ]))
-      ]));
+        padding: _defaultPadding,
+        child: Column(
+          children: [
+            _topBarSection(context),
+            const DtFlexSpacer(30),
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: getFlexibleSize(), horizontal: getFlexibleSize(target: 20)),
+              child: BlocBuilder<MyPagesCubit, MyPagesState>(
+                builder: (context, state) {
+                  String name = state.userResponse.name ?? "XXX";
+                  String universityName = state.userResponse.universityName ?? "XX대학교";
+                  String department = state.userResponse.department ?? "XXX학과";
+                  String admissionNumber = "${state.userResponse.admissionNumber ?? 'XX'}학번";
+                  String gender = '남성';
 
-  Widget _infoSectionItem({required String title, required String value}) =>
-      Padding(
-          padding: EdgeInsets.symmetric(vertical: getFlexibleSize(target: 12)),
-          child:
-              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-            Text(title,
-                style: TextStyle(
-                    fontWeight: FontWeight.w500,
-                    fontSize: getFlexibleSize(target: 16))),
-            Text(value,
-                style: TextStyle(
-                    fontWeight: FontWeight.w500,
-                    fontSize: getFlexibleSize(target: 16))),
-          ]));
+                  return Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      _infoSectionItem(title: "이름", value: name),
+                      _infoSectionItem(title: "학교", value: universityName),
+                      _infoSectionItem(title: "학과", value: department),
+                      _infoSectionItem(title: "학번", value: admissionNumber),
+                      _infoSectionItem(title: "성별", value: gender),
+                    ],
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
+      );
+
+  Widget _infoSectionItem({required String title, required String value}) => Padding(
+      padding: EdgeInsets.symmetric(vertical: getFlexibleSize(target: 12)),
+      child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+        Text(title, style: TextStyle(fontWeight: FontWeight.w500, fontSize: getFlexibleSize(target: 16))),
+        Text(value, style: TextStyle(fontWeight: FontWeight.w500, fontSize: getFlexibleSize(target: 16))),
+      ]));
 
   @override
   Widget build(BuildContext context) {
@@ -130,7 +134,10 @@ class MyPageView extends StatelessWidget {
                     TextButton(
                         onPressed: () async {
                           await BlocProvider.of<AuthCubit>(context).kakaoWithdrawal();
-                          Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const LogoutTogoLandPage()), (route)=>false); // TODO : 0627 얘만 작동하면 됨 로그아웃
+                          Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(builder: (context) => const LogoutTogoLandPage()),
+                              (route) => false); // TODO : 0627 얘만 작동하면 됨 로그아웃
                         },
                         child: Text(
                           "회원탈퇴",
@@ -154,42 +161,39 @@ class MyPageView extends StatelessWidget {
                 ),
               ),
               const DtFlexSpacer(120),
-              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    TextButton(
-                      onPressed: () {
-                        BlocProvider.of<MyPagesCubit>(context)
-                            .pressedTos1(); // 설정 화면으로 넘어가기
-                      },
-                      child: Text("이용약관", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.2)),
-                    ),
-                    TextButton(
-                      onPressed: () {
-                        BlocProvider.of<MyPagesCubit>(context)
-                            .pressedTos2(); // 설정 화면으로 넘어가기
-                      },
-                      child: Text("개인정보 처리방침", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.2)),
-                    ),
-                    TextButton(
-                      onPressed: () {
-                        // launch로 Dart 건의 구글폼으로 이동
-                        launchUrl(
-                          Uri(
-                            scheme: 'https',
-                            host: 'docs.google.com',
-                            path: 'forms/d/e/1FAIpQLSd8H_R1_sq1QZHiuSRGd7XUyLvegZEsV05kLlcxO1JLc6TseQ/viewform?usp=sf_link',
-                          ),
-                          mode: LaunchMode.inAppWebView,
-                        );
-                      },
-                      child: Text("Dart에 건의하기", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.2)),
-                    ),
-                    TextButton(
-                      onPressed: () {
-                        // launch로 우리 카카오톡 페이지로 연결
-                      },
-                      child: Text("1:1 문의", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.2)),
-                    ),
+              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                TextButton(
+                  onPressed: () {
+                    BlocProvider.of<MyPagesCubit>(context).pressedTos1(); // 설정 화면으로 넘어가기
+                  },
+                  child: Text("이용약관", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.2)),
+                ),
+                TextButton(
+                  onPressed: () {
+                    BlocProvider.of<MyPagesCubit>(context).pressedTos2(); // 설정 화면으로 넘어가기
+                  },
+                  child: Text("개인정보 처리방침", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.2)),
+                ),
+                TextButton(
+                  onPressed: () {
+                    // launch로 Dart 건의 구글폼으로 이동
+                    launchUrl(
+                      Uri(
+                        scheme: 'https',
+                        host: 'docs.google.com',
+                        path: 'forms/d/e/1FAIpQLSd8H_R1_sq1QZHiuSRGd7XUyLvegZEsV05kLlcxO1JLc6TseQ/viewform?usp=sf_link',
+                      ),
+                      mode: LaunchMode.inAppWebView,
+                    );
+                  },
+                  child: Text("Dart에 건의하기", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.2)),
+                ),
+                TextButton(
+                  onPressed: () {
+                    // launch로 우리 카카오톡 페이지로 연결
+                  },
+                  child: Text("1:1 문의", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.2)),
+                ),
               ]),
             ],
           ),

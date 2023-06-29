@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:dart_flutter/src/data/model/contact.dart';
+import 'package:dart_flutter/src/data/model/friend.dart';
 import 'package:dart_flutter/src/data/model/sns_request.dart';
 import 'package:dart_flutter/src/data/model/university.dart';
 import 'package:dart_flutter/src/data/model/user.dart';
@@ -75,8 +76,6 @@ class DartApiRemoteDataSource {
     final List<dynamic> jsonResponse = response.data;
 
     List<University> universities = jsonResponse.map((university) => University.fromJson(university)).toList();
-    for (int i = 0; i < 5; i++)
-      print(universities[i].toString());
     return universities;
   }
 
@@ -103,6 +102,7 @@ class DartApiRemoteDataSource {
   static Future<UserResponse> getMyInformation() async {
     const path = '/v1/users/me';
     final response = await _httpUtil.request().get(path);
+    print(response);
 
     final jsonResponse = json.decode(response.toString());
     return UserResponse.from(jsonResponse);
@@ -115,30 +115,33 @@ class DartApiRemoteDataSource {
     return;
   }
 
-  // Friend: 전화번호부 전달해서 받기 (가입자/미가입자를 구분하는 로직 필요)
-  static Future<List<Contact>> postContacts(List<Contact> contacts) async {
-    List<Contact> newContacts = [];
-    final response = await _simplePostWithoutDecode('/v1/friends/contacts', contacts);
+  // Friend: 친구목록 가져오기 (realFriend를 통해 '내가 추가한 친구'와 '추천 친구'를 구분함)
+  static Future<List<Friend>> getMyFriends({bool suggested=false}) async {
+    const path = '/v1/friends';
+    final pathFull = "$path?suggested=$suggested";
+    final response = await _httpUtil.request().get(pathFull);
 
-    if (response.statusCode == 200) {
-      final List<dynamic> contactInstances = convert.jsonDecode(response.body);
-      for (final contactInstance in contactInstances) {
-        newContacts.add(Contact.from(contactInstance));
-      }
-      return newContacts;
-    }
-    throw Error();
+    final List<dynamic> jsonResponse = response.data;
+    List<Friend> friends = jsonResponse.map((friend) => Friend.fromJson(friend)).toList();
+    return friends;
   }
 
-  // Friend: 친구목록 가져오기 (realFriend를 통해 '내가 추가한 친구'와 '추천 친구'를 구분함)
-  static Future<List<Contact>> getMyFriends(String accessToken, String realFriend) async {
-    final response = await http
-        .get(Uri.https(baseUrl, '/v1/friends', {'accessToken': "Bearer $accessToken", 'realFriend': realFriend}));
-    if (response.statusCode == 200) {
-      final List<dynamic> contactInstances = convert.jsonDecode(response.body);
-      return contactInstances.map((contactInstance) => Contact.from(contactInstance)).toList();
-    }
-    throw Error();
+  // Friend: 친구 추가하기
+  static Future<String> postFriend(int friendUserId) async {
+    const path = '/v1/friends';
+    final body = {"friendUserId": friendUserId};
+
+    final response = await _httpUtil.request().post(path, data: body);
+    return response.data;
+  }
+
+  // Friend: 친구 삭제하기 (연결끊기)
+  static Future<String> deleteFriend(int friendUserId) async {
+    const path = '/v1/friends';
+    final params = {"friendUserId": friendUserId};
+
+    final response = await _httpUtil.request().delete(path, queryParameters: params);
+    return response.data;
   }
 
   // vote: 새로운 투표들을 받기
