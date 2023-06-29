@@ -49,7 +49,8 @@ class _VoteListViewState extends State<VoteListView> {
         );
       },
       separatorBuilder: (context, index) => SizedBox(height: SizeConfig.defaultSize * 1.4),
-      itemCount: snapshot.length,
+      itemCount: 1, // TODO : MVP 이후 지우기
+      // itemCount: snapshot.length, // TODO : MVP 이후 복구하기
     );
   }
 }
@@ -92,29 +93,39 @@ class dart extends StatelessWidget {
               flex: 1,
               child: Icon(Icons.person, size: SizeConfig.defaultSize * 5),
             ),
-            Flexible(
+            Flexible(  // TODO : MVP 이후 지우기
               flex: 3,
               fit: FlexFit.tight,
               child: Row(
                 children: [
                   const SizedBox(width: 10),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text("$sex학생이 Dart를 보냈어요!", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.2)),
-                      Text("$question", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.5, fontWeight: FontWeight.w500)),
-                    ],
-                  ),
+                  Text("아직 받은 투표가 없어요!", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.5, fontWeight: FontWeight.w500)),
                 ],
               ),
             ),
-            Flexible(
-              flex: 1,
-              child: Container(
-                  alignment: Alignment.centerRight,
-                  child: Text("$datetime", style: TextStyle(fontSize: SizeConfig.defaultSize * 1)),
-              ),
-            ),
+            // Flexible( // TODO : MVP 이후 복구하기
+            //   flex: 3,
+            //   fit: FlexFit.tight,
+            //   child: Row(
+            //     children: [
+            //       const SizedBox(width: 10),
+            //       Column(
+            //         crossAxisAlignment: CrossAxisAlignment.start,
+            //         children: [
+            //           Text("$sex학생이 Dart를 보냈어요!", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.2)),
+            //           Text("$question", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.5, fontWeight: FontWeight.w500)),
+            //         ],
+            //       ),
+            //     ],
+            //   ),
+            // ),
+            // Flexible(
+            //   flex: 1,
+            //   child: Container(
+            //       alignment: Alignment.centerRight,
+            //       child: Text("$datetime", style: TextStyle(fontSize: SizeConfig.defaultSize * 1)),
+            //   ),
+            // ),
           ],
         ),
       ),
