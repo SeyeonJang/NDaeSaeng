@@ -247,8 +247,8 @@ class MyPageLandingView extends StatelessWidget {
                   SizedBox(height: SizeConfig.defaultSize * 2 ,),
                   BlocBuilder<MyPagesCubit,MyPagesState>(
                       builder: (context, state) {
-                        final friends = state.friends ?? [];
-                        return MyFriends(friends: friends, count: friends.length);
+                        final friends = state.newFriends ?? [];
+                        return NewFriends(friends: friends, count: friends.length);
                       }
                   ),
                 ]),
@@ -275,7 +275,8 @@ class MyFriends extends StatelessWidget {
     return Column(
       children: [
         for (int i = 0; i < this.count; i++)
-          MyFriend(
+          FriendComponent(
+              isAdd: false,
               userId: friends[i].userId,
               name: friends[i].name,
               admissionNumber:friends[i].admissionNumber,
@@ -285,20 +286,55 @@ class MyFriends extends StatelessWidget {
   }
 }
 
+class NewFriends extends StatelessWidget {
+  final List<Friend> friends;
+  final int count;
 
-class MyFriend extends StatelessWidget {
+  const NewFriends({
+    super.key,
+    required this.friends,
+    required this.count,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        for (int i = 0; i < this.count; i++)
+          FriendComponent(
+              isAdd: true,
+              userId: friends[i].userId,
+              name: friends[i].name,
+              admissionNumber:friends[i].admissionNumber,
+              department: friends[i].university.department),
+      ],
+    );
+  }
+}
+
+class FriendComponent extends StatelessWidget {
+  final bool isAdd;
   final int userId;
   final String name;
   final int admissionNumber;
   final String department;
 
-  const MyFriend({
+  const FriendComponent({
     super.key,
+    required this.isAdd,
     required this.userId,
     required this.name,
     required this.admissionNumber,
     required this.department,
   });
+
+  void pressedDeleteButton(BuildContext context, int userId) {
+    BlocProvider.of<MyPagesCubit>(context).pressedFriendDeleteButton(userId);
+  }
+
+  void pressedAddButton(BuildContext context, int userId) {
+    BlocProvider.of<MyPagesCubit>(context).pressedFriendAddButton(userId);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -340,9 +376,13 @@ class MyFriend extends StatelessWidget {
 
             ElevatedButton(
               onPressed: () {
-                BlocProvider.of<MyPagesCubit>(context).pressedFriendDeleteButton(userId);
+                if (isAdd) {
+                  pressedAddButton(context, userId);
+                } else {
+                  pressedDeleteButton(context, userId);
+                }
               },
-              child: Text("삭제", style: TextStyle(
+              child: Text(isAdd?"추가":"삭제", style: TextStyle(
                 fontSize: SizeConfig.defaultSize * 1.4,
                 fontWeight: FontWeight.w500,
               )),
@@ -353,31 +393,6 @@ class MyFriend extends StatelessWidget {
         Divider(
           color: Color(0xffddddddd),
         ),
-      ],
-    );
-  }
-}
-
-class NewFriends extends StatelessWidget {
-  final List<Friend> friends;
-  final int count;
-
-  const NewFriends({
-    super.key,
-    required this.friends,
-    required this.count,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        for (int i = 0; i < this.count; i++)
-          MyFriend(
-              userId: friends[i].userId,
-              name: friends[i].name,
-              admissionNumber:friends[i].admissionNumber,
-              department: friends[i].university.department),
       ],
     );
   }

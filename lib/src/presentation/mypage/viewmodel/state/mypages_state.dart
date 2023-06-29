@@ -8,6 +8,7 @@ import 'package:json_annotation/json_annotation.dart';
 class MyPagesState {
   late bool isMyLandPage;
   late List<Friend> friends;
+  late List<Friend> newFriends;
   late bool isSettings;
   late Map<int, bool> addedFriend;
   late int newfriendId;
@@ -18,6 +19,7 @@ class MyPagesState {
   MyPagesState({
     required this.isMyLandPage,
     required this.friends,
+    required this.newFriends,
     required this.isSettings,
     required this.addedFriend,
     required this.newfriendId,
@@ -29,6 +31,7 @@ class MyPagesState {
   MyPagesState.init() {
     isMyLandPage = true;
     friends = [];
+    newFriends = [];
     isSettings = false;
     addedFriend = {};
     newfriendId = 0;
@@ -50,6 +53,7 @@ class MyPagesState {
   MyPagesState copy() => MyPagesState(
         isMyLandPage: isMyLandPage,
         friends: friends,
+        newFriends: newFriends,
         isSettings: isSettings,
         addedFriend: addedFriend,
         newfriendId: newfriendId,
@@ -65,6 +69,11 @@ class MyPagesState {
 
   MyPagesState setUserInfo(List<Friend> friends) {
     this.friends = friends;
+    return this;
+  }
+
+  MyPagesState setRecommendedFriends(List<Friend> friends) {
+    newFriends = friends;
     return this;
   }
 

@@ -116,9 +116,10 @@ class DartApiRemoteDataSource {
   }
 
   // Friend: 친구목록 가져오기 (realFriend를 통해 '내가 추가한 친구'와 '추천 친구'를 구분함)
-  static Future<List<Friend>> getMyFriends() async {
+  static Future<List<Friend>> getMyFriends({bool suggested=false}) async {
     const path = '/v1/friends';
-    final response = await _httpUtil.request().get(path);
+    final pathFull = "$path?suggested=$suggested";
+    final response = await _httpUtil.request().get(pathFull);
 
     final List<dynamic> jsonResponse = response.data;
     List<Friend> friends = jsonResponse.map((friend) => Friend.fromJson(friend)).toList();

@@ -14,10 +14,11 @@ class MyPagesCubit extends Cubit<MyPagesState> {
   // 유저 정보, 친구 정보
   void initPages() async {
     // TODO : 실제 데이터 받아오기 (아래는 mock)
-    print("aaaaaaaaaaaaaa");
     // List<Friend> friends = FriendsMock().getFriends();
     List<Friend> friends = await _dartFriendRepository.getMyFriends();
     state.setUserInfo(friends);
+    List<Friend> newFriends = await _dartFriendRepository.getRecommendedFriends();
+    state.setRecommendedFriends(newFriends);
     // 초기값 설정
     state.userResponse = await _dartUserRepository.myInfo();
     state.setMyLandPage(true);
@@ -66,7 +67,6 @@ class MyPagesCubit extends Cubit<MyPagesState> {
     print(newState);
     emit(newState);
   }
-
 
   void pressedTos2() {
     state.setMyLandPage(false);

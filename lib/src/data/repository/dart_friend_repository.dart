@@ -9,7 +9,7 @@ class DartFriendRepository {
   }
 
   Future<List<Friend>> getRecommendedFriends() async {
-    return await DartApiRemoteDataSource.getMyFriends();
+    return await DartApiRemoteDataSource.getMyFriends(suggested: true);
   }
 
   Future<String> addFriend(int userId) async {
