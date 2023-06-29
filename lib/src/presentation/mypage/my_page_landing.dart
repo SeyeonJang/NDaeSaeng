@@ -23,20 +23,14 @@ class _MyPageLandingState extends State<MyPageLanding> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SingleChildScrollView(
+    return SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.symmetric(
               vertical: SizeConfig.defaultSize * 2,
               horizontal: SizeConfig.defaultSize),
-          child: BlocBuilder<MyPagesCubit, MyPagesState>(
-            builder: (context, state) {
-              return MyPageLandingView();
-            }
-          ),
+          child: const MyPageLandingView(),
         ),
-      ),
-    );
+      );
   }
 }
 
@@ -76,11 +70,13 @@ class MyPageLandingView extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Text("가톨릭대학교 컴퓨터정보공학부",
+                        Text(
+                        "무슨무슨무슨학과",
                         style: TextStyle(
-                          fontWeight: FontWeight.w500,
-                          fontSize: SizeConfig.defaultSize * 1.3,
-                        ),),
+                       fontWeight: FontWeight.w500,
+                         fontSize: SizeConfig.defaultSize * 1.15,
+                         ),
+                       ),
                     ],
                   ),
                   Row(
@@ -93,7 +89,8 @@ class MyPageLandingView extends StatelessWidget {
                               fontWeight: FontWeight.w700,
                               fontSize: SizeConfig.defaultSize * 2,
                             ),),
-                          Text("  21학번",
+                          const SizedBox(width: 5),
+                          Text("21학번",
                             style: TextStyle(
                               fontWeight: FontWeight.w500,
                               fontSize: SizeConfig.defaultSize * 1.6,
