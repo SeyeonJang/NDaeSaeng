@@ -88,28 +88,28 @@ class _VoteTimerState extends State<VoteTimer> {
                   ],
                 ),
               ),
-              Flexible(
-                flex: 1,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Text("바로 시작하려면?", style: TextStyle(fontSize: SizeConfig.defaultSize * 3.2)),
-                    SizedBox(height:SizeConfig.defaultSize * 1),
-                    ElevatedButton(
-                      onPressed: () {
-                        // BlocProvider.of<VoteCubit>(context).stepWait();
-                        BlocProvider.of<VoteCubit>(context).inviteFriend();
-                      },
-                      child: Text(
-                        "친구 초대하기",
-                        style: TextStyle(
-                          fontSize: SizeConfig.defaultSize * 4,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+              // Flexible( // TODO : MVP 출시 이후 복구하기
+              //   flex: 1,
+              //   child: Column(
+              //     mainAxisAlignment: MainAxisAlignment.start,
+              //     children: [
+              //       Text("바로 시작하려면?", style: TextStyle(fontSize: SizeConfig.defaultSize * 3.2)),
+              //       SizedBox(height:SizeConfig.defaultSize * 1),
+              //       ElevatedButton(
+              //         onPressed: () {
+              //           // BlocProvider.of<VoteCubit>(context).stepWait();
+              //           BlocProvider.of<VoteCubit>(context).inviteFriend();
+              //         },
+              //         child: Text(
+              //           "친구 초대하기",
+              //           style: TextStyle(
+              //             fontSize: SizeConfig.defaultSize * 4,
+              //           ),
+              //         ),
+              //       ),
+              //     ],
+              //   ),
+              // ),
               const Flexible(
                 flex: 1,
                 child: SizedBox(),

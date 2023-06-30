@@ -190,23 +190,23 @@ class MyPageLandingView extends StatelessWidget {
               child: Column(
                 children: [
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisAlignment: MainAxisAlignment.start, // TODO : MVP 이후 복구하기 (start -> spacebetween)
                     children: [
                       Text("내 친구",
                         style: TextStyle(
                           fontWeight: FontWeight.w700,
                           fontSize: SizeConfig.defaultSize * 1.6,
                         ),),
-                      ElevatedButton(
-                        onPressed: () {
-                          // 초대하기 페이지로 연결
-                          // BlocProvider.of<MyPagesCubit>(context).pressedInviteButton();
-                        },
-                        child: Text("초대하기", style: TextStyle(
-                          fontSize: SizeConfig.defaultSize * 1.6,
-                          fontWeight: FontWeight.w500,
-                        )),
-                      ),
+                      // ElevatedButton( // TODO : MVP 이후 복구하기
+                      //   onPressed: () {
+                      //     // 초대하기 페이지로 연결
+                      //     // BlocProvider.of<MyPagesCubit>(context).pressedInviteButton();
+                      //   },
+                      //   child: Text("초대하기", style: TextStyle(
+                      //     fontSize: SizeConfig.defaultSize * 1.6,
+                      //     fontWeight: FontWeight.w500,
+                      //   )),
+                      // ),
                     ],
                   ),
                   SizedBox(height: SizeConfig.defaultSize ,),

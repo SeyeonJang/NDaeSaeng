@@ -148,16 +148,15 @@ class MyPageView extends StatelessWidget {
                           ),
                         )),
                     const DtFlexSpacer(20),
-                    TextButton(
-                        onPressed: () => onLogoutButtonPressed(context),
-                        child: Text(
-                          "로그아웃",
-                          textAlign: TextAlign.start,
-                          style: TextStyle(
-                            fontWeight: FontWeight.w500,
-                            fontSize: getFlexibleSize(target: 16),
-                          ),
-                        )),
+                    // TextButton( // TODO : MVP 이후 복구하기
+                    //     onPressed: () => onLogoutButtonPressed(context),
+                    //     child: Text("로그아웃",
+                    //       textAlign: TextAlign.start,
+                    //       style: TextStyle(
+                    //         fontWeight: FontWeight.w500,
+                    //         fontSize: getFlexibleSize(target: 16),
+                    //       ),
+                    //     )),
                   ],
                 ),
               ),
