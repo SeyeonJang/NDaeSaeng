@@ -6,9 +6,10 @@ import 'package:json_annotation/json_annotation.dart';
 
 @JsonSerializable()
 class MyPagesState {
+  late bool isLoading;
   late List<Friend> friends;
   late List<Friend> newFriends;
-  late int newfriendId;
+  late int newFriendId;
   late bool isMyLandPage;
   late bool isSettings;
   late bool isTos1;
@@ -16,22 +17,24 @@ class MyPagesState {
   late UserResponse userResponse;
 
   MyPagesState({
+    required this.isLoading,
     required this.isMyLandPage,
     required this.friends,
     required this.newFriends,
     required this.isSettings,
-    required this.newfriendId,
+    required this.newFriendId,
     required this.isTos1,
     required this.isTos2,
     required this.userResponse,
   });
 
   MyPagesState.init() {
-    isMyLandPage = true;
+    isLoading = false;
     friends = [];
     newFriends = [];
+    newFriendId = 0;
+    isMyLandPage = true;
     isSettings = false;
-    newfriendId = 0;
     isTos1 = false;
     isTos2 = false;
     userResponse = UserResponse(
@@ -48,15 +51,20 @@ class MyPagesState {
   }
 
   MyPagesState copy() => MyPagesState(
+        isLoading: isLoading,
         isMyLandPage: isMyLandPage,
         friends: friends,
         newFriends: newFriends,
         isSettings: isSettings,
-        newfriendId: newfriendId,
+        newFriendId: newFriendId,
         isTos1: isTos1,
         isTos2: isTos2,
         userResponse: userResponse,
       );
+
+  void setIsLoading(bool isLoading) {
+    this.isLoading = isLoading;
+  }
 
   MyPagesState setMyLandPage(bool isMyLandPage) {
     this.isMyLandPage = isMyLandPage;
@@ -79,7 +87,7 @@ class MyPagesState {
   }
 
   MyPagesState setFriendId(int friendId) {
-    this.newfriendId = friendId;
+    this.newFriendId = friendId;
     return this;
   }
 

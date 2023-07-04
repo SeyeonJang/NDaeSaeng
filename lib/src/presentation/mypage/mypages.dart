@@ -37,6 +37,14 @@ class MyPages extends StatelessWidget {
                 return SafeArea(child: Center(child: Text(state.toString())));
               }
           ),
+          BlocBuilder<MyPagesCubit, MyPagesState>(
+            builder: (context, state) {
+              if (state.isLoading) {
+                return Center(child: CircularProgressIndicator());
+              }
+              return SizedBox();
+            },
+          ),
 
           // BlocBuilder<MyPagesCubit, MyPagesState>(
           //   builder: (context, state) {
