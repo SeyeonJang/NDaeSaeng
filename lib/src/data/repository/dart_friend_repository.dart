@@ -1,8 +1,6 @@
 import 'package:dart_flutter/src/data/model/friend.dart';
 import 'package:dart_flutter/src/datasource/dart_api_remote_datasource.dart';
 
-import '../model/contact.dart';
-
 class DartFriendRepository {
   static const Duration cachingInterval = Duration(minutes: 10);
   static final FriendCache myFriendCache = FriendCache();
@@ -39,17 +37,17 @@ class FriendCache {
   List<Friend> _friends = [];
   DateTime _updateTime = DateTime.now().subtract(const Duration(days: 365));
 
-  void setFriends(List<Friend> friends) {
-    _friends = friends;
-    _updateTime = DateTime.now();
-  }
-
   void addFriend(Friend friend) {
     _friends.add(friend);
   }
 
   void deleteFriend(Friend friend) {
     _friends.remove(friend);
+  }
+
+  void setFriends(List<Friend> friends) {
+    _friends = friends;
+    _updateTime = DateTime.now();
   }
 
   bool isUpdateBefore(DateTime dateTime) {
