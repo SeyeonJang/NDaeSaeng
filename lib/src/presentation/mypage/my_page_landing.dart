@@ -73,7 +73,7 @@ class MyPageLandingView extends StatelessWidget {
                     children: [
                       BlocBuilder<MyPagesCubit,MyPagesState>(
                           builder: (context, state) {
-                            String department = state.userResponse.department!;
+                            String department = "${state.userResponse.department??'######학과'}";
                             return Text(
                               department,
                               style: TextStyle(
@@ -90,7 +90,7 @@ class MyPageLandingView extends StatelessWidget {
                     children: [
                       BlocBuilder<MyPagesCubit,MyPagesState>(
                           builder: (context, state) {
-                            String name = state.userResponse.name!;
+                            String name = state.userResponse.name??"###";
                             String admissionNumber = "${state.userResponse.admissionNumber??"##"}학번";
 
                             return Row(
@@ -304,7 +304,7 @@ class NewFriends extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        for (int i = 0; i < this.count; i++)
+        for (int i = 0; i < count; i++)
           FriendComponent(
               isAdd: true,
               userId: friends[i].userId,

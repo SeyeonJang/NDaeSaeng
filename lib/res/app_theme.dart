@@ -7,6 +7,7 @@ class AppTheme {
     final base = ThemeData.light();
     return base.copyWith(
       useMaterial3: true,
+      scaffoldBackgroundColor: const Color(0xFFEFEFEF),
     );
   }
 }

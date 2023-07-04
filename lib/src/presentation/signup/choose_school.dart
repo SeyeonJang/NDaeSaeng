@@ -55,26 +55,32 @@ class _ChooseSchoolState extends State<ChooseSchool> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      appBar: AppBar(
-        // 임시 View **********************
-        leading: IconButton(
-            // 이게 있어야 Navigator.pop으로 main -> choose_school 화면 전환을 할 수 있어서 임시로 넣은 코드 (AppBar 안에 있는 코드 나중에 지우면 됨)
-            onPressed: () {
-              Navigator.push(
-                  context, MaterialPageRoute(builder: (_) => LandingPage()));
-            },
-            icon: Icon(Icons.  arrow_back)),
-      ),
-      body: Center(
-        child: Container(
-          // decoration: BoxDecoration(), // 빈 BoxDecoration 설정
-          // clipBehavior: Clip.hardEdge, // clipBehavior 설정
-          child: ScaffoldBody(),
-        ),
+    return Center(
+      child: Container(
+        child: ScaffoldBody(),
       ),
     );
+
+    //   Scaffold(
+    //   resizeToAvoidBottomInset: false,
+    //   appBar: AppBar(
+    //     // 임시 View **********************
+    //     leading: IconButton(
+    //         // 이게 있어야 Navigator.pop으로 main -> choose_school 화면 전환을 할 수 있어서 임시로 넣은 코드 (AppBar 안에 있는 코드 나중에 지우면 됨)
+    //         onPressed: () {
+    //           Navigator.push(
+    //               context, MaterialPageRoute(builder: (_) => LandingPage()));
+    //         },
+    //         icon: Icon(Icons.  arrow_back)),
+    //   ),
+    //   body: Center(
+    //     child: Container(
+    //       // decoration: BoxDecoration(), // 빈 BoxDecoration 설정
+    //       // clipBehavior: Clip.hardEdge, // clipBehavior 설정
+    //       child: ScaffoldBody(),
+    //     ),
+    //   ),
+    // );
   }
 }
 

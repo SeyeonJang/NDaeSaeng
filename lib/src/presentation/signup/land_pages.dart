@@ -17,8 +17,7 @@ class LandPages extends StatefulWidget {
 class _LandPagesState extends State<LandPages> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Stack(
+    return Stack(
         children: [
           BlocBuilder<AuthCubit, AuthState>(
             builder: (context, state) {
@@ -38,18 +37,17 @@ class _LandPagesState extends State<LandPages> {
               return const SizedBox();
             }
           ),
-          BlocBuilder<AuthCubit, AuthState>(
-            builder: (context, state) {
-              if (!state.isLoading) {
-                // return SafeArea(child:Text(state.toJson().toString(), style: const TextStyle(fontSize: 15, color: Colors.red)));
-                return const SizedBox();
-              }
-              return const SafeArea(child: Center(child: CircularProgressIndicator()));
-            },
-          ),
+          // BlocBuilder<AuthCubit, AuthState>(
+          //   builder: (context, state) {
+          //     if (!state.isLoading) {
+          //       return SafeArea(child:Text(state.toJson().toString(), style: const TextStyle(fontSize: 15, color: Colors.red)));
+          //       return const SizedBox();
+          //     }
+          //     return const SafeArea(child: Center(child: CircularProgressIndicator()));
+          //   },
+          // ),
         ],
         // 화면 분배
-      ),
     );
   }
 }

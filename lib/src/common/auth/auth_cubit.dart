@@ -24,6 +24,13 @@ class AuthCubit extends HydratedCubit<AuthState> {
           loginType: LoginType.email,
         ));
 
+  void setLandPage() {
+    if (state.step == AuthStep.signup) {
+      state.setStep(AuthStep.land);
+    }
+    state.setLoading(false);
+  }
+
   void setAccessToken(String accessToken) {
     DartApiRemoteDataSource.addAuthorizationToken(accessToken);
   }
