@@ -32,13 +32,13 @@ class MyPagesCubit extends Cubit<MyPagesState> {
   }
 
   void pressedFriendAddButton(Friend friend) {
-    _dartFriendRepository.addFriend(friend.userId);
+    _dartFriendRepository.addFriend(friend);
     state.addFriend(friend);
     emit(state.copy());
   }
 
   void pressedFriendDeleteButton(Friend friend) {
-    _dartFriendRepository.deleteFriend(friend.userId);
+    _dartFriendRepository.deleteFriend(friend);
     state.deleteFriend(friend);
     emit(state.copy());
   }
