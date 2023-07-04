@@ -221,8 +221,6 @@ class MyPageLandingView extends StatelessWidget {
           ),
         ),
 
-        // =================================================================
-
         Container( // 구분선
           padding: EdgeInsets.only(top: 0, bottom: 0, left: 0, right: 0,),
           height: SizeConfig.defaultSize * 2,
@@ -255,7 +253,8 @@ class MyPageLandingView extends StatelessWidget {
                         return NewFriends(friends: friends, count: friends.length);
                       }
                   ),
-                ]),
+                ],
+            ),
           ),
         ),
 
@@ -279,12 +278,7 @@ class MyFriends extends StatelessWidget {
     return Column(
       children: [
         for (int i = 0; i < this.count; i++)
-          FriendComponent(
-              isAdd: false,
-              userId: friends[i].userId,
-              name: friends[i].name,
-              admissionNumber:friends[i].admissionNumber,
-              department: friends[i].university.department),
+          FriendComponent(false, friends[i]),
       ],
     );
   }
@@ -305,12 +299,7 @@ class NewFriends extends StatelessWidget {
     return Column(
       children: [
         for (int i = 0; i < count; i++)
-          FriendComponent(
-              isAdd: true,
-              userId: friends[i].userId,
-              name: friends[i].name,
-              admissionNumber:friends[i].admissionNumber,
-              department: friends[i].university.department),
+          FriendComponent(true, friends[i]),
       ],
     );
   }
@@ -318,26 +307,16 @@ class NewFriends extends StatelessWidget {
 
 class FriendComponent extends StatelessWidget {
   final bool isAdd;
-  final int userId;
-  final String name;
-  final int admissionNumber;
-  final String department;
+  final Friend friend;
 
-  const FriendComponent({
-    super.key,
-    required this.isAdd,
-    required this.userId,
-    required this.name,
-    required this.admissionNumber,
-    required this.department,
-  });
+  const FriendComponent(this.isAdd, this.friend, {super.key});
 
   void pressedDeleteButton(BuildContext context, int userId) {
-    BlocProvider.of<MyPagesCubit>(context).pressedFriendDeleteButton(userId);
+    BlocProvider.of<MyPagesCubit>(context).pressedFriendDeleteButton(friend);
   }
 
   void pressedAddButton(BuildContext context, int userId) {
-    BlocProvider.of<MyPagesCubit>(context).pressedFriendAddButton(userId);
+    BlocProvider.of<MyPagesCubit>(context).pressedFriendAddButton(friend);
   }
 
   @override
@@ -350,17 +329,17 @@ class FriendComponent extends StatelessWidget {
           children: [
             Row(
               children: [
-                Text("$name", style: TextStyle(
+                Text(friend.name, style: TextStyle(
                   fontSize: SizeConfig.defaultSize * 1.9,
                   fontWeight: FontWeight.w600,
                 )),
                 SizedBox(
-                  child: Text("  $admissionNumber학번∙$department", style: TextStyle(
+                  width: SizeConfig.defaultSize * 16,
+                  child: Text("  ${friend.admissionNumber}학번∙${friend.university.department}", style: TextStyle(
                     fontSize: SizeConfig.defaultSize * 1.3,
                     fontWeight: FontWeight.w500,
                     overflow: TextOverflow.ellipsis,
                   )),
-                  width: SizeConfig.defaultSize * 16,
                 ),
               ],
             ),
@@ -382,9 +361,9 @@ class FriendComponent extends StatelessWidget {
             ElevatedButton(
               onPressed: () {
                 if (isAdd) {
-                  pressedAddButton(context, userId);
+                  pressedAddButton(context, friend.userId);
                 } else {
-                  pressedDeleteButton(context, userId);
+                  pressedDeleteButton(context, friend.userId);
                 }
               },
               child: Text(isAdd?"추가":"삭제", style: TextStyle(
@@ -413,6 +392,5 @@ void showReportToast() {
       textColor: Colors.white,
       fontSize: 16.0
   );
-  print("토스트테스트");
 }
 
