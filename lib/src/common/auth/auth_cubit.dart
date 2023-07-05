@@ -38,6 +38,7 @@ class AuthCubit extends HydratedCubit<AuthState> {
   Future<AuthState> kakaoLogout() async {
     try {
       await _kakaoLoginRepository.logout();
+      _userRepository.logout();
       // 로그아웃 성공 후 처리할 로직 추가
       print("로그아웃 성공");
     } catch (error) {

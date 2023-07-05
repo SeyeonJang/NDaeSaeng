@@ -11,7 +11,12 @@ class DartUserRepository {
     return await DartApiRemoteDataSource.postUserSignup(user);
   }
 
+  void logout() {
+    userResponseCache.clean();
+  }
+
   Future<void> drawal() async {
+    userResponseCache.clean();
     return await DartApiRemoteDataSource.deleteMyAccount();
   }
 

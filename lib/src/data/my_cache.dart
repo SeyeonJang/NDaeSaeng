@@ -9,5 +9,9 @@ class MyCache {
     return _updateTime.isBefore(dateTime);
   }
 
+  void clean() {
+    _updateTime = DateTime.now().subtract(const Duration(days: 365));
+  }
+
   DateTime get updateTime => _updateTime;
 }
