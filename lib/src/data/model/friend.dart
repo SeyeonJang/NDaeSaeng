@@ -23,6 +23,6 @@ class Friend {
 
   @override
   String toString() {
-    return 'Friend{userId: $userId, admissionNumber: $admissionNumber, mutualFriend: $mutualFriend, name: $name, university: $university}';
+    return 'Friend{userId: $userId, admissionNumber: $admissionNumber, name: $name, university: $university}';
   }
 }
