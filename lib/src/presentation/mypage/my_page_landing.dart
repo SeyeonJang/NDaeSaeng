@@ -120,52 +120,55 @@ class MyPageLandingView extends StatelessWidget {
                     ],
                   ),
                   SizedBox(height: SizeConfig.defaultSize * 0.3),
-                  Container(
-                    height: SizeConfig.defaultSize * 4.5,
-                    decoration: ShapeDecoration(
-                      color: Color(0xffeeeeeee),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(7.0),
-                      ),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          children: [
-                            Text("   나의 Points",
-                              style: TextStyle(
-                                fontWeight: FontWeight.w500,
-                                fontSize: SizeConfig.defaultSize * 1.6,
-                              ),),
 
-                            BlocBuilder<MyPagesCubit,MyPagesState>(
-                                builder: (context, state) {
-                                  int point = state.userResponse.point ?? 0;
-
-                                  return Text("  $point",
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w700,
-                                      fontSize: SizeConfig.defaultSize * 1.6,
-                                    ),
-                                  );
-                                }
-                            ),
-                          ],
-                        ),
-                        TextButton(
-                          onPressed: () {
-                            // 사용 내역 페이지로 연결
-                          },
-                          child: Text("사용 내역 ", style: TextStyle(
-                            fontSize: SizeConfig.defaultSize * 1.6,
-                            fontWeight: FontWeight.w500,
-                            decoration: TextDecoration.underline,
-                          )),
-                        ),
-                      ],
-                    ),
-                  ),
+                  // TODO MVP 이후 '나의 포인트 0원' 복구
+                  // Container(
+                  //   height: SizeConfig.defaultSize * 4.5,
+                  //   decoration: ShapeDecoration(
+                  //     color: Color(0xffeeeeeee),
+                  //     shape: RoundedRectangleBorder(
+                  //       borderRadius: BorderRadius.circular(7.0),
+                  //     ),
+                  //   ),
+                  //
+                  //   child: Row(
+                  //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //     children: [
+                  //       Row(
+                  //         children: [
+                  //           Text("   나의 Points",
+                  //             style: TextStyle(
+                  //               fontWeight: FontWeight.w500,
+                  //               fontSize: SizeConfig.defaultSize * 1.6,
+                  //             ),),
+                  //
+                  //           BlocBuilder<MyPagesCubit,MyPagesState>(
+                  //               builder: (context, state) {
+                  //                 int point = state.userResponse.point ?? 0;
+                  //
+                  //                 return Text("  $point",
+                  //                   style: TextStyle(
+                  //                     fontWeight: FontWeight.w700,
+                  //                     fontSize: SizeConfig.defaultSize * 1.6,
+                  //                   ),
+                  //                 );
+                  //               }
+                  //           ),
+                  //         ],
+                  //       ),
+                  //       TextButton(
+                  //         onPressed: () {
+                  //           // 사용 내역 페이지로 연결
+                  //         },
+                  //         child: Text("사용 내역 ", style: TextStyle(
+                  //           fontSize: SizeConfig.defaultSize * 1.6,
+                  //           fontWeight: FontWeight.w500,
+                  //           decoration: TextDecoration.underline,
+                  //         )),
+                  //       ),
+                  //     ],
+                  //   ),
+                  // ),
                 ],
               )
           ),
