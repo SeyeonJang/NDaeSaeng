@@ -56,10 +56,10 @@ class _DartPageViewState extends State<DartPageView> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  _TapBarButton(name: "Darts", targetPage: 0, nowPage: _page, onTapNavigation: _onTapNavigation),
+                  _TapBarButton(name: "Meet", targetPage: 0, nowPage: _page, onTapNavigation: _onTapNavigation),
                   _TapBarButton(name: "Dart", targetPage: 1, nowPage: _page, onTapNavigation: _onTapNavigation),
-                  _TapBarButton(name: " MY ", targetPage: 2, nowPage: _page, onTapNavigation: _onTapNavigation),
-                  _TapBarButton(name: "Meet", targetPage: 3, nowPage: _page, onTapNavigation: _onTapNavigation),
+                  _TapBarButton(name: "Darts", targetPage: 2, nowPage: _page, onTapNavigation: _onTapNavigation),
+                  _TapBarButton(name: " MY ", targetPage: 3, nowPage: _page, onTapNavigation: _onTapNavigation),
                 ],
               ),
             ),
@@ -69,12 +69,16 @@ class _DartPageViewState extends State<DartPageView> {
                 controller: _pageController,
                 children: [
                   BlocProvider(
-                      create: (context) => VoteListCubit(),
-                      child: const VoteListPages(),
+                      create: (context) => MeetCubit(),
+                      child: const MeetPages()
                   ),
                   BlocProvider(
                       create: (context) => VoteCubit(),
                       child: const VotePages(),
+                  ),
+                  BlocProvider(
+                    create: (context) => VoteListCubit(),
+                    child: const VoteListPages(),
                   ),
                   MultiBlocProvider(
                       providers: [
@@ -86,10 +90,6 @@ class _DartPageViewState extends State<DartPageView> {
                         ),
                       ],
                       child: const MyPages(),
-                  ),
-                  BlocProvider(
-                      create: (context) => MeetCubit(),
-                      child: const MeetPages()
                   ),
                 ],
               ),
