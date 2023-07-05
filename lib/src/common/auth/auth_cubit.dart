@@ -79,7 +79,7 @@ class AuthCubit extends HydratedCubit<AuthState> {
         .setSocialAuth(loginType: LoginType.kakao, socialAccessToken: kakaoUser.accessToken);
 
     // Dart 내 정보를 확인해서 이미 가입한 사용자인지 확인
-    UserResponse userResponse = await _userRepository.myInfo();
+    UserResponse userResponse = await _userRepository.myInfo();  // TODO cache로 인해 문제가 생기는지 확인
     if (userResponse.univId == null) {
       state.setStep(AuthStep.signup);
     } else {

@@ -24,6 +24,9 @@ class _SignupPagesState extends State<SignupPages> {
       children: [
         BlocBuilder<SignupCubit, SignupState>(
           builder: (context, state) {
+            if (state.isLoading) {
+              return Center(child: CircularProgressIndicator());
+            }
             if (state.signupStep.isSchool) {
               return const ChooseSchool();
             }
@@ -53,15 +56,7 @@ class _SignupPagesState extends State<SignupPages> {
         //     return SafeArea(child: Container(alignment: Alignment.bottomCenter,child: Text(state.toString())));
         //   },
         // ),
-        BlocBuilder<SignupCubit, SignupState>(
-        builder: (context, state) {
-          if (state.isLoading) {
-            return Center(child: CircularProgressIndicator());
-          }
-          return SizedBox();
-        },
-      ),
-    ],
+      ],
     );
   }
 }
