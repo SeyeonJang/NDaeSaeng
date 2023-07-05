@@ -10,17 +10,22 @@ class MeetState {
     required this.meetPageState,
   });
 
-  MeetState.init() {
+  MeetState.init() { // 초기값 설정
     meetPageState = MeetStateEnum.landing;
   }
 
   MeetState copy() => MeetState(
     meetPageState: meetPageState,
   );
+
+  @override
+  String toString() { // toString은 디버깅(개발)에만 사용
+    return 'MeetState{meetPageState: $meetPageState}';
+  }
 }
 
 enum MeetStateEnum {
-  landing ,
+  landing,
   twoPeople,
   threePeople,
   twoPeopleDone,
