@@ -18,15 +18,13 @@ class SignupCubit extends Cubit<SignupState> {
   SignupCubit() : super(SignupState.init());
 
   void initState() async {
-    print(state.isLoading);
+    state.isLoading = true;
     emit(state.copy());
 
     List<University> universities = await _dartUniversityRepository.getUniversitys();
     state.universities = universities;
-    print(state.universities);
 
     state.isLoading = false;
-    print(state.isLoading);
     emit(state.copy());
   }
 
@@ -38,9 +36,10 @@ class SignupCubit extends Cubit<SignupState> {
     emit(state.copy());
   }
 
-  void stepDepartment(String univDepartment) {
-    state.inputState.tempUnivDepartment = univDepartment;
-    state.inputState.univId = _findUniversityId(state.universities, state.inputState.tempUnivName!, state.inputState.tempUnivDepartment!);
+  void stepDepartment(University university) {
+    // state.inputState.tempUnivDepartment = univDepartment;
+    // state.inputState.univId = _findUniversityId(state.universities, state.inputState.tempUnivName!, state.inputState.tempUnivDepartment!);
+    state.inputState.univId = university.id;
     print (state.inputState.univId);
     state.signupStep = SignupStep.admissionNumber;
     emit(state.copy());
