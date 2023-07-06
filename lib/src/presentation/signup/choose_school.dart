@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 
+import '../../data/model/university.dart';
+
 // btn 컬러 정의 (설정중)
 Color getColor(Set<MaterialState> states) {
   //
@@ -46,6 +48,21 @@ class ChooseSchool extends StatefulWidget {
 }
 
 class _ChooseSchoolState extends State<ChooseSchool> {
+  List<University> universities = [];
+
+  @override
+  void initState() {
+    super.initState();
+    loadUniversities();
+    print("initState 성공");
+  }
+  Future<void> loadUniversities() async {
+    List<University> loadedUniversities = BlocProvider.of<SignupCubit>(context).getUniversities;
+    setState(() {
+      universities = loadedUniversities;
+      print("setState 성공");
+    });
+  }
   // @override
   // void initState() {
   //   super.initState();
@@ -71,7 +88,9 @@ class _ChooseSchoolState extends State<ChooseSchool> {
         child: Container(
           // decoration: BoxDecoration(), // 빈 BoxDecoration 설정
           // clipBehavior: Clip.hardEdge, // clipBehavior 설정
-          child: ScaffoldBody(),
+          child: ScaffoldBody(
+            universities: universities,
+          ),
         ),
       ),
     );
@@ -79,9 +98,8 @@ class _ChooseSchoolState extends State<ChooseSchool> {
 }
 
 class ScaffoldBody extends StatelessWidget {
-  const ScaffoldBody({
-    super.key,
-  });
+  final List<University> universities;
+  const ScaffoldBody({Key? key, required this.universities}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -115,19 +133,26 @@ class ScaffoldBody extends StatelessWidget {
             suggestionsCallback: (pattern) async {
               // 실제 검색 로직 구현
               // 입력된 패턴에 기반하여 검색 결과를 반환
-              return await BackendService.getSuggestions(pattern);
+              // return await BackendService.getSuggestions(pattern);
+              return universities
+                  .where((university) => university.name
+                  .contains(pattern))
+                  .toList();
             },
 
-            itemBuilder: (context, suggestion) {
+            itemBuilder: (context, University suggestion) {
               return ListTile(
                 // leading: Icon(Icons.shopping_cart),
-                title: Text(suggestion['name']),
+                // title: Text(suggestion['name']),
+                title: Text(suggestion.name),
                 // subtitle: Text('\$${suggestion['price']}'),
               );
             },
 
             // 추천 text를 눌렀을 때 일어나는 액션 (밑의 코드는 ProductPage로 넘어감)
-            onSuggestionSelected: (suggestion) {
+            onSuggestionSelected: (University suggestion) {
+              // 선택된 대학 처리 로직 구현
+
               // 추천된 항목이 선택되었을 때의 동작
               // 터치했을 때 textfield에 글씨가 들어가도록 하는 로직 필요
 
@@ -157,44 +182,57 @@ class ScaffoldBody extends StatelessWidget {
   }
 }
 
-class BackendService {
-  static Future<List<Map<String, dynamic>>> getSuggestions(String query) async {
-    List<Map<String, dynamic>> matches = [];
+// class BackendService {
+//   static Future<List<Map<String, dynamic>>> getSuggestions(String query) async {
+//     List<Map<String, dynamic>> matches = [];
+//
+//     List<String> cities = CitiesService.getSuggestions(query).cast<String>();
+//     for (String city in cities) {
+//       matches.add({
+//         'name': city,
+//       });
+//     }
+//
+//     return matches;
+//   }
+// }
+//
+// class CitiesService {
+//   static final List<String> cities = [
+//     '서울대학교',
+//     '인천대학교',
+//     '대구대학교',
+//     '부산대학교',
+//     '광주대학교',
+//     '경북대학교'
+//   ];
+//
+//   // List<University> universities = BlocProvider.of<SignupCubit>(context).getUniversities;
+//
+//   static List<String> getSuggestions(String query) {
+//     List<String> matches = [];
+//
+//     for (String city in cities) {
+//       if (city.toLowerCase().contains(query.toLowerCase())) {
+//         matches.add(city);
+//       }
+//     }
+//     return matches;
+//   }
 
-    List<String> cities = CitiesService.getSuggestions(query).cast<String>();
-    for (String city in cities) {
-      matches.add({
-        'name': city,
-      });
-    }
 
-    return matches;
-  }
-}
 
-class CitiesService {
-  static final List<String> cities = [
-    '서울대학교',
-    '인천대학교',
-    '대구대학교',
-    '부산대학교',
-    '광주대학교',
-    '경북대학교'
-  ];
 
+  // 시도하다가 안 된 코드 ㅜㅜ
   // List<University> universities = BlocProvider.of<SignupCubit>(context).getUniversities;
-
-  static List<String> getSuggestions(String query) {
-    List<String> matches = [];
-
-    for (String city in cities) {
-      if (city.toLowerCase().contains(query.toLowerCase())) {
-        matches.add(city);
-      }
-    }
-    return matches;
-  }
-}
+  //
+  // for (var university in universities) {
+  // String name = university.name;
+  // if (name.contains(query)) {
+  // matches.add(name);
+  // }
+  // }
+  // }
 
 // const TextField( // 임시로 넣어둠. 밑에 TextAhead로 변경할 예정
 // // autofocus: true, // 키보드 자동으로 올라오는 거
