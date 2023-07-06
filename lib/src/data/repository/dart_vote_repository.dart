@@ -12,8 +12,8 @@ class DartVoteRepository {
     return await DartApiRemoteDataSource.postVotes(voteRequests);
   }
 
-  Future<List<VoteResponse>> getVotes(String accessToken) async {
-    return await DartApiRemoteDataSource.getVotes(accessToken);
+  Future<List<VoteResponse>> getVotes() async {
+    return await DartApiRemoteDataSource.getVotes();
   }
 
   Future<VoteResponse> getVote(int voteId) async {
