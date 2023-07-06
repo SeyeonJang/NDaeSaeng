@@ -49,6 +49,12 @@ class _VoteTimerState extends State<VoteTimer> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+    timer.cancel();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(
