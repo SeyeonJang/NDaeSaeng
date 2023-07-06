@@ -22,15 +22,13 @@ void main() async {
 
   runApp(MaterialApp(
     home: BlocProvider(
-      create: (BuildContext context) => AuthCubit(),
+      create: (BuildContext context) => AuthCubit()..setLandPage(),
       child: const MyApp(),
     ),
     theme: AppTheme.lightThemeData,
   ));
 }
 
-// stless 입력으로 기존 기본 템플릿 -> stateless로 변경
-// stless(변경 필요한 data x) vs stful(변경된 부분을 위젯에 반영하는 동적 위젯)
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
@@ -40,8 +38,8 @@ class MyApp extends StatelessWidget {
     TimeagoUtil().initKorean();
 
     // 로그인하지 않은 유저는 LandingPages로, 로그인한 유저는 MainPage로 이동
-    return Container(
-      child: BlocBuilder<AuthCubit, AuthState>(
+    return Scaffold(
+      body: BlocBuilder<AuthCubit, AuthState>(
         builder: (context, state) {
           if (state.step == AuthStep.login && state.dartAccessToken.length > 20 && DateTime.now().microsecondsSinceEpoch < state.expiredAt.microsecondsSinceEpoch) {
             print("now accessToken: ${state.dartAccessToken}");

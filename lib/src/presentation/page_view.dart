@@ -47,8 +47,7 @@ class _DartPageViewState extends State<DartPageView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
+    return SafeArea(
         child: Column(
           children: [
             Padding(
@@ -76,27 +75,15 @@ class _DartPageViewState extends State<DartPageView> {
                       create: (context) => VoteCubit(),
                       child: const VotePages(),
                   ),
-                  BlocProvider(
-                    create: (context) => VoteListCubit(),
-                    child: const VoteListPages(),
-                  ),
-                  MultiBlocProvider(
-                      providers: [
-                        BlocProvider<AuthCubit>(
-                          create: (BuildContext context) => AuthCubit(),
-                        ),
-                        BlocProvider<MyPagesCubit>(
-                          create: (BuildContext context) => MyPagesCubit()..initPages(),
-                        ),
-                      ],
-                      child: const MyPages(),
+                  BlocProvider<MyPagesCubit>(
+                    create: (BuildContext context) => MyPagesCubit()..initPages(),
+                    child: const MyPages(),
                   ),
                 ],
               ),
             ),
           ],
         ),
-      ),
     );
   }
 }

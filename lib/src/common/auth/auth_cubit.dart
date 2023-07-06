@@ -24,6 +24,13 @@ class AuthCubit extends HydratedCubit<AuthState> {
           loginType: LoginType.email,
         ));
 
+  void setLandPage() {
+    if (state.step == AuthStep.signup) {
+      state.setStep(AuthStep.land);
+    }
+    state.setLoading(false);
+  }
+
   void setAccessToken(String accessToken) {
     DartApiRemoteDataSource.addAuthorizationToken(accessToken);
   }
@@ -31,6 +38,7 @@ class AuthCubit extends HydratedCubit<AuthState> {
   Future<AuthState> kakaoLogout() async {
     try {
       await _kakaoLoginRepository.logout();
+      _userRepository.logout();
       // 로그아웃 성공 후 처리할 로직 추가
       print("로그아웃 성공");
     } catch (error) {
@@ -72,7 +80,7 @@ class AuthCubit extends HydratedCubit<AuthState> {
         .setSocialAuth(loginType: LoginType.kakao, socialAccessToken: kakaoUser.accessToken);
 
     // Dart 내 정보를 확인해서 이미 가입한 사용자인지 확인
-    UserResponse userResponse = await _userRepository.myInfo();
+    UserResponse userResponse = await _userRepository.myInfo();  // TODO cache로 인해 문제가 생기는지 확인
     if (userResponse.univId == null) {
       state.setStep(AuthStep.signup);
     } else {

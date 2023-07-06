@@ -1,10 +1,10 @@
+import 'package:dart_flutter/src/data/model/university.dart';
 import 'package:dart_flutter/src/presentation/signup/land_page.dart';
 import 'package:dart_flutter/src/presentation/signup/viewmodel/signup_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
-
-import '../../data/model/university.dart';
+import '../../common/util/university_finder.dart';
 
 // btn 컬러 정의 (설정중)
 Color getColor(Set<MaterialState> states) {
@@ -31,12 +31,6 @@ Color getColorText(Set<MaterialState> states) {
     return Colors.white; // text color값 설정 -> Colors
   }
   return Colors.black;
-  // if (states.contains(MaterialState.hovered)) { return color['hover']; }
-  // else if (states.contains(MaterialState.pressed) || states.contains(MaterialState.focused)) {
-  //   return color['pressed'];
-  // } else if (states.contains(MaterialState.disabled)) {
-  //   return color['disable'];
-  // } else { return color['basic']; }
 }
 
 // #1-2 학교 선택
@@ -48,58 +42,57 @@ class ChooseSchool extends StatefulWidget {
 }
 
 class _ChooseSchoolState extends State<ChooseSchool> {
-  List<University> universities = [];
-
-  @override
-  void initState() {
-    super.initState();
-    loadUniversities();
-    print("initState 성공");
-  }
-  Future<void> loadUniversities() async {
-    List<University> loadedUniversities = BlocProvider.of<SignupCubit>(context).getUniversities;
-    setState(() {
-      universities = loadedUniversities;
-      print("setState 성공");
-    });
-  }
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   print("choose_school init state ...");
-  //   BlocProvider.of<SignupCubit>(context).initState();
-  // }
-
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      appBar: AppBar(
-        // 임시 View **********************
-        leading: IconButton(
-            // 이게 있어야 Navigator.pop으로 main -> choose_school 화면 전환을 할 수 있어서 임시로 넣은 코드 (AppBar 안에 있는 코드 나중에 지우면 됨)
-            onPressed: () {
-              Navigator.push(
-                  context, MaterialPageRoute(builder: (_) => LandingPage()));
-            },
-            icon: Icon(Icons.  arrow_back)),
-      ),
-      body: Center(
-        child: Container(
-          // decoration: BoxDecoration(), // 빈 BoxDecoration 설정
-          // clipBehavior: Clip.hardEdge, // clipBehavior 설정
-          child: ScaffoldBody(
-            universities: universities,
-          ),
-        ),
+    return Center(
+      child: Container(
+        child: ScaffoldBody(),
       ),
     );
   }
 }
 
-class ScaffoldBody extends StatelessWidget {
-  final List<University> universities;
-  const ScaffoldBody({Key? key, required this.universities}) : super(key: key);
+class ScaffoldBody extends StatefulWidget {
+  const ScaffoldBody({
+    super.key,
+  });
+
+  @override
+  State<ScaffoldBody> createState() => _ScaffoldBodyState();
+}
+
+class _ScaffoldBodyState extends State<ScaffoldBody> {
+  late UniversityFinder universityFinder;
+  final TextEditingController _typeAheadController = TextEditingController();
+  late bool isSelectedOnTypeAhead;
+  String universityName = "";
+
+  void _typeOnTypeAhead() {
+    setState(() {
+      isSelectedOnTypeAhead = false;
+    });
+  }
+
+  void _selectOnTypeAhead() {
+    setState(() {
+      isSelectedOnTypeAhead = true;
+    });
+  }
+
+  void _setUniversityName(String name) {
+    universityName = name;
+    _typeAheadController.text = name;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    List<University> universities = BlocProvider.of<SignupCubit>(context).getUniversities;
+    universityFinder = UniversityFinder(universities: universities);
+    setState(() {
+      isSelectedOnTypeAhead = false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -119,46 +112,41 @@ class ScaffoldBody extends StatelessWidget {
         ),
         SingleChildScrollView(
             child: Padding(
-          padding: EdgeInsets.all(18.0),
+          padding: const EdgeInsets.all(18.0),
           child: TypeAheadField(
             // 학교 찾기
             textFieldConfiguration: TextFieldConfiguration(
-                autofocus: true, // 키보드 자동으로 올라오는 거
+                controller: _typeAheadController,
+                autofocus: false, // 키보드 자동으로 올라오는 거
                 style: DefaultTextStyle.of(context)
                     .style
-                    .copyWith(fontStyle: FontStyle.italic),
+                    .copyWith(fontStyle: FontStyle.italic, color: isSelectedOnTypeAhead ? Colors.blueAccent : Colors.black),
                 decoration: const InputDecoration(
                     border: OutlineInputBorder(), hintText: "학교명을 입력해주세요")),
 
-            suggestionsCallback: (pattern) async {
-              // 실제 검색 로직 구현
+            suggestionsCallback: (pattern) {
               // 입력된 패턴에 기반하여 검색 결과를 반환
-              // return await BackendService.getSuggestions(pattern);
-              return universities
-                  .where((university) => university.name
-                  .contains(pattern))
-                  .toList();
+              _typeOnTypeAhead();
+              if (pattern.isEmpty || isSelectedOnTypeAhead) {
+                return [];
+              }
+              return universityFinder.getNameSuggestions(pattern);
             },
 
-            itemBuilder: (context, University suggestion) {
-              return ListTile(
-                // leading: Icon(Icons.shopping_cart),
-                // title: Text(suggestion['name']),
-                title: Text(suggestion.name),
-                // subtitle: Text('\$${suggestion['price']}'),
-              );
+            itemBuilder: (context, suggestion) {
+                return ListTile(
+                  leading: Icon(Icons.school),
+                  title: Text(suggestion['name']),
+                  // subtitle: Text('\$${suggestion['price']}'),
+                );
             },
 
             // 추천 text를 눌렀을 때 일어나는 액션 (밑의 코드는 ProductPage로 넘어감)
-            onSuggestionSelected: (University suggestion) {
-              // 선택된 대학 처리 로직 구현
-
-              // 추천된 항목이 선택되었을 때의 동작
-              // 터치했을 때 textfield에 글씨가 들어가도록 하는 로직 필요
-
-              // Navigator.of(context).push(MaterialPageRoute(
-              //     builder: (context) => ProductPage(product: suggestion)
-              // ));
+            onSuggestionSelected: (suggestion) {
+              if (isSelectedOnTypeAhead == false) {
+                _selectOnTypeAhead();
+              }
+              _setUniversityName(suggestion['name']);
             },
           ),
         )),
@@ -167,7 +155,9 @@ class ScaffoldBody extends StatelessWidget {
         ),
         ElevatedButton(
           onPressed: () {
-            BlocProvider.of<SignupCubit>(context).stepSchool("ICT폴리텍대학");
+            if (isSelectedOnTypeAhead) {
+              BlocProvider.of<SignupCubit>(context).stepSchool(universityName);
+            }
           },
           style: ButtonStyle(
             foregroundColor: MaterialStateProperty.resolveWith(getColorText),
@@ -175,80 +165,9 @@ class ScaffoldBody extends StatelessWidget {
             backgroundColor:
                 MaterialStateProperty.resolveWith(getColor), // backcolor
           ),
-          child: const Text("다음으로"),
+          child: isSelectedOnTypeAhead ? const Text("다음으로") : const Text("선택해주세요"),
         ),
       ],
     );
   }
 }
-
-// class BackendService {
-//   static Future<List<Map<String, dynamic>>> getSuggestions(String query) async {
-//     List<Map<String, dynamic>> matches = [];
-//
-//     List<String> cities = CitiesService.getSuggestions(query).cast<String>();
-//     for (String city in cities) {
-//       matches.add({
-//         'name': city,
-//       });
-//     }
-//
-//     return matches;
-//   }
-// }
-//
-// class CitiesService {
-//   static final List<String> cities = [
-//     '서울대학교',
-//     '인천대학교',
-//     '대구대학교',
-//     '부산대학교',
-//     '광주대학교',
-//     '경북대학교'
-//   ];
-//
-//   // List<University> universities = BlocProvider.of<SignupCubit>(context).getUniversities;
-//
-//   static List<String> getSuggestions(String query) {
-//     List<String> matches = [];
-//
-//     for (String city in cities) {
-//       if (city.toLowerCase().contains(query.toLowerCase())) {
-//         matches.add(city);
-//       }
-//     }
-//     return matches;
-//   }
-
-
-
-
-  // 시도하다가 안 된 코드 ㅜㅜ
-  // List<University> universities = BlocProvider.of<SignupCubit>(context).getUniversities;
-  //
-  // for (var university in universities) {
-  // String name = university.name;
-  // if (name.contains(query)) {
-  // matches.add(name);
-  // }
-  // }
-  // }
-
-// const TextField( // 임시로 넣어둠. 밑에 TextAhead로 변경할 예정
-// // autofocus: true, // 키보드 자동으로 올라오는 거
-// decoration:InputDecoration(
-// hintText: "학교명을 입력해주세요",
-// labelStyle: TextStyle(color: Colors.blueAccent),
-// focusedBorder:OutlineInputBorder(
-// borderRadius: BorderRadius.all(Radius.circular(10.0)),
-// borderSide: BorderSide(width: 1, color: Colors.redAccent)
-// ),
-// enabledBorder: OutlineInputBorder(
-// borderRadius: BorderRadius.all(Radius.circular(10.0)),
-// borderSide: BorderSide(width: 1, color: Colors.blueAccent)
-// ),
-// border: OutlineInputBorder(
-// borderRadius: BorderRadius.all(Radius.circular(10.0)),
-// ),
-// ),
-// ),
