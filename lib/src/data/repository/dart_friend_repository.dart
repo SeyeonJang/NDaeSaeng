@@ -34,7 +34,7 @@ class DartFriendRepository {
 }
 
 class FriendCache {
-  List<Friend> _friends = [];
+  Set<Friend> _friends = {};
   DateTime _updateTime = DateTime.now().subtract(const Duration(days: 365));
 
   void addFriend(Friend friend) {
@@ -46,7 +46,7 @@ class FriendCache {
   }
 
   void setFriends(List<Friend> friends) {
-    _friends = friends;
+    _friends = friends.toSet();
     _updateTime = DateTime.now();
   }
 
@@ -54,6 +54,6 @@ class FriendCache {
     return _updateTime.isBefore(dateTime);
   }
 
-  List<Friend> get friends => _friends;
+  List<Friend> get friends => List<Friend>.from(_friends);
   DateTime get updateTime => _updateTime;
 }
