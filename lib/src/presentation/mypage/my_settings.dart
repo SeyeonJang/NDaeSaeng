@@ -127,7 +127,7 @@ class _MyPageViewState extends State<MyPageView> {
                                 fontWeight: FontWeight.w400,
                               ),),
                               CupertinoButton.filled(
-                                padding: EdgeInsets.fromLTRB(0,0,0,0),
+                                padding: EdgeInsets.fromLTRB(10,0,10,0),
                                 onPressed: () {
                                   showCupertinoModalPopup(
                                   context: context,
