@@ -43,7 +43,7 @@ class _VoteListViewState extends State<VoteListView> {
         return dart(
           voteId: vote.voteId,
           sex: vote.pickUserSex,
-          question: vote.question.question,
+          question: vote.question.content!,
           datetime: timeago,
           isVisited: visited,
         );

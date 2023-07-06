@@ -23,7 +23,7 @@ class VoteDetailView extends StatelessWidget {
               return VoteDetail(
                 voteId: vote.voteId,
                 pickedUserSex: vote.pickUserSex,
-                question: vote.question.question,
+                question: vote.question.content!,
               );
             }
           ),

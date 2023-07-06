@@ -12,8 +12,8 @@ class VoteListCubit extends HydratedCubit<VoteListState> {
 
   void initVotes() async {
      // List<VoteResponse> votes = await _dartVoteRepository.getVotes("TODO MY ACCESSTOKEN");
-    List<VoteResponse> votes = VoteMock().getVotes();
-    state.setVotes(votes);
+    // List<VoteResponse> votes = VoteMock().getVotes();
+    // state.setVotes(votes);
 
      emit(state.copy());
   }

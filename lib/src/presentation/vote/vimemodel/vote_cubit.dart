@@ -1,5 +1,7 @@
 import 'package:dart_flutter/src/data/model/friend.dart';
+import 'package:dart_flutter/src/data/model/question.dart';
 import 'package:dart_flutter/src/data/model/vote.dart';
+import 'package:dart_flutter/src/data/repository/dart_friend_repository.dart';
 import 'package:dart_flutter/src/data/repository/dart_user_repository.dart';
 import 'package:dart_flutter/src/data/repository/dart_vote_repository.dart';
 import 'package:dart_flutter/src/presentation/mypage/friends_mock.dart';
@@ -9,6 +11,7 @@ import 'package:hydrated_bloc/hydrated_bloc.dart';
 
 class VoteCubit extends HydratedCubit<VoteState> {
   static final DartUserRepository _dartUserRepository = DartUserRepository();
+  static final DartFriendRepository _dartFriendRepository = DartFriendRepository();
   static final DartVoteRepository _dartVoteRepository = DartVoteRepository();
 
   VoteCubit() : super(VoteState.init());
@@ -35,16 +38,17 @@ class VoteCubit extends HydratedCubit<VoteState> {
    
     if (state.step.isStart) {
       // 친구 목록 설정
-      // List<University> friends = await _dartUserRepository.getMyFriends("TODO MY ACCESSTOKEN");
-      List<Friend> friends = FriendsMock().getFriends();
+      // List<Friend> friends = FriendsMock().getFriends();
+      List<Friend> friends = await _dartFriendRepository.getMyFriends();
       state.setFriends(friends);
 
       // 새로 투표할 목록들을 가져오기
-      // List<VoteResponse> myVotes = await _dartVoteRepository.getNewVotes("TODO MY ACCESSTOKEN");
-      List<VoteResponse> myVotes = VoteMock().getVotes();
-      for (var myVote in myVotes) {
-        state.addVote(VoteRequest.fromVoteResponse(myVote));
-      }
+      List<Question> questions = await _dartVoteRepository.getNewQuestions();
+      state.setQuestions(questions);
+      // List<VoteResponse> myVotes = VoteMock().getVotes();
+      // for (var myVote in myVotes) {
+      //   state.addVote(VoteRequest.fromVoteResponse(myVote));
+      // }
 
       // 투표 화면으로 전환
       state.setStep(VoteStep.process);
@@ -53,12 +57,13 @@ class VoteCubit extends HydratedCubit<VoteState> {
     emit(state.copy());
   }
 
-  void nextVote(int numberOfVote, int pickUserId) async {
-    state.pickUserInVote(numberOfVote, pickUserId);
+  void nextVote(VoteRequest voteRequest) async {
+    print(voteRequest.toString());
+    state.pickUserInVote(voteRequest);
     state.nextVote();
     if (state.isVoteDone()) {
       // 투표한 내용을 서버에 전달
-      // _dartVoteRepository.sendMyVotes("TODO MY ACCESSTOKEN", state.votes);
+      _dartVoteRepository.sendMyVotes(state.votes);
 
       // 투표 리스트 비우기 + 다음투표가능시간 갱신 + (포인트는 My page에서 값 받아오면 알아서 갱신되어있음)
       // DateTime myNextVoteTime = await _dartVoteRepository.getMyNextVoteTime("TODO MY ACCESS TOKEN");

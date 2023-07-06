@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:dart_flutter/src/data/model/contact.dart';
 import 'package:dart_flutter/src/data/model/friend.dart';
+import 'package:dart_flutter/src/data/model/question.dart';
 import 'package:dart_flutter/src/data/model/sns_request.dart';
 import 'package:dart_flutter/src/data/model/university.dart';
 import 'package:dart_flutter/src/data/model/user.dart';
@@ -145,18 +146,22 @@ class DartApiRemoteDataSource {
   }
 
   // vote: 새로운 투표들을 받기
-  static Future<List<VoteResponse>> getNewVotes(String accessToken) async {
-    final response = await http.get(Uri.https(baseUrl, '/v1/votes/form', {'accessToken': "Bearer $accessToken"}));
-    if (response.statusCode == 200) {
-      final List<dynamic> voteInstances = convert.jsonDecode(response.body);
-      return voteInstances.map((voteInstance) => VoteResponse.from(voteInstance)).toList();
-    }
-    throw Error();
+  static Future<List<Question>> getNewQuestions() async {
+    const path = '/v1/questions';
+    final response = await _httpUtil.request().get(path);
+
+    final List<dynamic> jsonResponse = response.data;
+    List<Question> questions = jsonResponse.map((question) => Question.fromJson(question)).toList();
+    return questions;
   }
 
   // vote: 투표한 내용 전달하기
-  static Future<void> postVotes(String accessToken, List<VoteRequest> votes) async {
-    await _simplePostWithoutDecode('/v1/votes', votes); // TODO accessToken 사용 안하고 있음
+  static Future<void> postVotes(List<VoteRequest> votes) async {
+    const path = '/v1/votes';
+    final body = [];
+    votes.forEach((vote) => body.add(vote.toJson()));
+
+    final response = await _httpUtil.request().post(path, data: body);
   }
 
   // vote: 받은 투표 리스트 확인하기
@@ -172,14 +177,6 @@ class DartApiRemoteDataSource {
   static Future<VoteResponse> getVote(int voteId) async {
     final response = await _simpleGet("/v1/votes/${voteId}");
     return VoteResponse.from(response);
-  }
-
-  // vote: 힌트 요청하기
-  static Future<Hint> getHint(String accessToken, int voteId, String typeOfHint) async {
-    // TODO 이후 규격 보고 param와 header중 어디에 변수 넣을지 확인
-    final response = await http.get(Uri.https(baseUrl, '/v1/votes/hints',
-        {'accessToken': "Bearer $accessToken", 'voteId': voteId, 'kindOfHint': typeOfHint}));
-    return Hint.from(_jsonDecode(response));
   }
 
   // vote: 투표 가능한지 확인하기 (남은 시간 확인)

@@ -23,6 +23,9 @@ void main() async {
   // List<Friend> friends = await DartApiRemoteDataSource.getMyFriends(suggested: false);
   // print(friends.toString());
 
-  var friends = await DartApiRemoteDataSource.getMyFriends(suggested: false);
-  print(friends.toString());
+  // var friends = await DartApiRemoteDataSource.getMyFriends(suggested: false);
+  // print(friends.toString());
+  
+  var questions = await DartApiRemoteDataSource.getNewQuestions();
+  print(questions.toString());
 }
