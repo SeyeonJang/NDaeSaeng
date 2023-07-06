@@ -3,6 +3,7 @@ import 'package:dart_flutter/src/presentation/meet/viewmodel/meet_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:quickalert/quickalert.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 
 class MeetThreePeoplePage extends StatefulWidget {
   const MeetThreePeoplePage({super.key});
@@ -12,6 +13,7 @@ class MeetThreePeoplePage extends StatefulWidget {
 }
 
 class _MeetThreePeoplePageState extends State<MeetThreePeoplePage> {
+  CarouselController _carouselController = CarouselController();
   void showAlert() {
     QuickAlert.show(
         type: QuickAlertType.confirm,
@@ -31,7 +33,6 @@ class _MeetThreePeoplePageState extends State<MeetThreePeoplePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        // 임시 View **********************
         leading: IconButton(
             onPressed: () {
               BlocProvider.of<MeetCubit>(context).stepMeetLanding();
@@ -41,10 +42,36 @@ class _MeetThreePeoplePageState extends State<MeetThreePeoplePage> {
       body: Center(
           child: Column(
             children: [
+              CarouselSlider.builder(
+                carouselController: _carouselController,
+                itemCount: 3,
+                itemBuilder: (BuildContext context, int itemIndex, int pageViewIndex) =>
+                  Container(
+                    width: double.infinity,
+                    // color: Colors.indigoAccent.withOpacity(1),
+                      decoration: BoxDecoration(color: Colors.indigoAccent.withOpacity(1),
+                          borderRadius: BorderRadius.circular(25)),
+                    child: Center(
+                      child: Text(itemIndex.toString(), style: TextStyle(color: Colors.white, fontSize: SizeConfig.defaultSize * 4.0)),
+                    )
+                  ),
+                options: CarouselOptions(
+                  height: SizeConfig.screenHeight * 0.6,
+                  aspectRatio: 16/9,
+                  viewportFraction: 0.8,
+                  initialPage: 0,
+                  enableInfiniteScroll: false,
+                  reverse: false,
+                  // autoPlay: true,
+                  // autoPlayInterval: Duration(seconds: 3),
+                  enlargeCenterPage: true,
+                  scrollDirection: Axis.horizontal,
+                ),
+              ),
+
               ElevatedButton(
                 onPressed: () {
                   showAlert();
-                  // BlocProvider.of<MeetCubit>(context).stepTwoPeopleDone();
                 },
                 child: Text("신청하기", style: TextStyle(
                   fontSize: SizeConfig.defaultSize * 1.4,
