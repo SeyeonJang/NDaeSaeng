@@ -27,6 +27,11 @@ class _VoteListViewState extends State<VoteListView> {
         padding: EdgeInsets.all(SizeConfig.defaultSize * 1.5),
         child: BlocBuilder<VoteListCubit, VoteListState>(
           builder: (context, state) {
+            if (state.votes.length == 0) {
+              return const Center(
+                child: Text("아직 받은 투표가 없어요!")
+              );
+            }
             return makeList(state.votes);
           },
         ),
@@ -38,26 +43,25 @@ class _VoteListViewState extends State<VoteListView> {
     return ListView.separated(
       itemBuilder: (context, index) {
         var vote = snapshot[index];
-        var timeago = TimeagoUtil().format(vote.pickedAt);
-        var visited = BlocProvider.of<VoteListCubit>(context).isVisited(vote.voteId);
+        var timeago = TimeagoUtil().format(vote.pickedTime!);
+        var visited = BlocProvider.of<VoteListCubit>(context).isVisited(vote.voteId!);
         return dart(
-          voteId: vote.voteId,
-          sex: vote.pickUserSex,
-          question: vote.question.content!,
+          voteId: vote.voteId!,
+          gender: "괅", // vote.pickedUser!.gender!,
+          question: vote.question!.content!,
           datetime: timeago,
           isVisited: visited,
         );
       },
       separatorBuilder: (context, index) => SizedBox(height: SizeConfig.defaultSize * 1.4),
-      itemCount: 1, // TODO : MVP 이후 지우기
-      // itemCount: snapshot.length, // TODO : MVP 이후 복구하기
+      itemCount: snapshot.length,
     );
   }
 }
 
 class dart extends StatelessWidget {
   final int voteId;
-  final String sex;
+  final String gender;
   final String question;
   final String datetime;
   final bool isVisited;
@@ -65,7 +69,7 @@ class dart extends StatelessWidget {
   const dart({
     super.key,
     required this.voteId,
-    required this.sex,
+    required this.gender,
     required this.question,
     required this.datetime,
     required this.isVisited,
@@ -93,39 +97,40 @@ class dart extends StatelessWidget {
               flex: 1,
               child: Icon(Icons.person, size: SizeConfig.defaultSize * 5),
             ),
-            Flexible(  // TODO : MVP 이후 지우기
-              flex: 3,
-              fit: FlexFit.tight,
-              child: Row(
-                children: [
-                  const SizedBox(width: 10),
-                  Text("아직 받은 투표가 없어요!", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.5, fontWeight: FontWeight.w500)),
-                ],
-              ),
-            ),
-            // Flexible( // TODO : MVP 이후 복구하기
+            // Flexible(  // TODO : MVP 이후 지우기
             //   flex: 3,
             //   fit: FlexFit.tight,
             //   child: Row(
             //     children: [
             //       const SizedBox(width: 10),
-            //       Column(
-            //         crossAxisAlignment: CrossAxisAlignment.start,
-            //         children: [
-            //           Text("$sex학생이 Dart를 보냈어요!", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.2)),
-            //           Text("$question", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.5, fontWeight: FontWeight.w500)),
-            //         ],
-            //       ),
+            //       Text("아직 받은 투표가 없어요!", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.5, fontWeight: FontWeight.w500)),
             //     ],
             //   ),
             // ),
-            // Flexible(
-            //   flex: 1,
-            //   child: Container(
-            //       alignment: Alignment.centerRight,
-            //       child: Text("$datetime", style: TextStyle(fontSize: SizeConfig.defaultSize * 1)),
-            //   ),
-            // ),
+
+            Flexible( // TODO : MVP 이후 복구하기
+              flex: 3,
+              fit: FlexFit.tight,
+              child: Row(
+                children: [
+                  const SizedBox(width: 10),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text("$gender학생이 Dart를 보냈어요!", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.2)),
+                      Text("$question", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.5, fontWeight: FontWeight.w500)),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            Flexible(
+              flex: 1,
+              child: Container(
+                  alignment: Alignment.centerRight,
+                  child: Text("$datetime", style: TextStyle(fontSize: SizeConfig.defaultSize * 1)),
+              ),
+            ),
           ],
         ),
       ),

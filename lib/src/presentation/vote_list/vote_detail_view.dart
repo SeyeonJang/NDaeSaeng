@@ -21,9 +21,9 @@ class VoteDetailView extends StatelessWidget {
             builder: (context, state) {
               VoteResponse vote = state.getVoteById(state.nowVoteId);
               return VoteDetail(
-                voteId: vote.voteId,
-                pickedUserSex: vote.pickUserSex,
-                question: vote.question.content!,
+                voteId: vote.voteId!,
+                pickedUserSex: "궭", // vote.pickedUser!.gender!,
+                question: vote.question!.content!,
               );
             }
           ),
@@ -99,9 +99,10 @@ class VoteDetail extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Text("누가 보냈는지 궁금하다면?"),
-                        HintButton(buttonName: '학번 보기', point: 100),
-                        HintButton(buttonName: '학과 보기', point: 150),
-                        HintButton(buttonName: '초성 보기 한 글자 보기', point: 500),
+                        Text("추후 나올 기능을 기대해주세요!"),
+                        // HintButton(buttonName: '학번 보기', point: 100),
+                        // HintButton(buttonName: '학과 보기', point: 150),
+                        // HintButton(buttonName: '초성 보기 한 글자 보기', point: 500),
                       ],
                     ),
                   )

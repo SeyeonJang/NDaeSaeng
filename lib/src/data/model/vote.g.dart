@@ -7,7 +7,7 @@ part of 'vote.dart';
 // **************************************************************************
 
 VoteRequest _$VoteRequestFromJson(Map<String, dynamic> json) => VoteRequest(
-      pickUserId: json['pickUserId'] as int,
+      pickedUserId: json['pickedUserId'] as int,
       firstUserId: json['firstUserId'] as int,
       secondUserId: json['secondUserId'] as int,
       thirdUserId: json['thirdUserId'] as int,
@@ -18,28 +18,9 @@ VoteRequest _$VoteRequestFromJson(Map<String, dynamic> json) => VoteRequest(
 Map<String, dynamic> _$VoteRequestToJson(VoteRequest instance) =>
     <String, dynamic>{
       'questionId': instance.questionId,
-      'pickUserId': instance.pickUserId,
+      'pickedUserId': instance.pickedUserId,
       'firstUserId': instance.firstUserId,
       'secondUserId': instance.secondUserId,
       'thirdUserId': instance.thirdUserId,
       'fourthUserId': instance.fourthUserId,
-    };
-
-VoteResponse _$VoteResponseFromJson(Map<String, dynamic> json) => VoteResponse(
-      userId: json['userId'] as int,
-      voteId: json['voteId'] as int,
-      pickUserAdmissionNumber: json['pickUserAdmissionNumber'] as int,
-      pickUserSex: json['pickUserSex'] as String,
-      question: Question.fromJson(json['question'] as Map<String, dynamic>),
-      pickedAt: DateTime.parse(json['pickedAt'] as String),
-    );
-
-Map<String, dynamic> _$VoteResponseToJson(VoteResponse instance) =>
-    <String, dynamic>{
-      'userId': instance.userId,
-      'voteId': instance.voteId,
-      'pickUserAdmissionNumber': instance.pickUserAdmissionNumber,
-      'pickUserSex': instance.pickUserSex,
-      'question': instance.question,
-      'pickedAt': instance.pickedAt.toIso8601String(),
     };

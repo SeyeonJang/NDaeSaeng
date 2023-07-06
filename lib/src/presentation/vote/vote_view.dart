@@ -58,14 +58,14 @@ class VoteView extends StatelessWidget {
                           children: [
                             ChoiceFriendButton(
                                 userId: friend1.userId, name: friend1.name, enterYear: friend1.admissionNumber, department: friend1.university.department,
-                                questionId: int.parse(question.questionId!),
+                                questionId: question.questionId!,
                                 firstUserId: friend1.userId,
                                 secondUserId: friend2.userId,
                                 thirdUserId: friend3.userId,
                                 fourthUserId: friend4.userId
                             ),
                             ChoiceFriendButton(userId: friend2.userId, name: friend2.name, enterYear: friend2.admissionNumber, department: friend2.university.department,
-                                questionId: int.parse(question.questionId!),
+                                questionId: question.questionId!,
                                 firstUserId: friend1.userId,
                                 secondUserId: friend2.userId,
                                 thirdUserId: friend3.userId,
@@ -80,13 +80,13 @@ class VoteView extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             ChoiceFriendButton(userId: friend3.userId, name: friend3.name, enterYear: friend3.admissionNumber, department: friend3.university.department,
-                                questionId: int.parse(question.questionId!),
+                                questionId: question.questionId!,
                                 firstUserId: friend1.userId,
                                 secondUserId: friend2.userId,
                                 thirdUserId: friend3.userId,
                                 fourthUserId: friend4.userId),
                             ChoiceFriendButton(userId: friend4.userId, name: friend4.name, enterYear: friend4.admissionNumber, department: friend4.university.department,
-                                questionId: int.parse(question.questionId!),
+                                questionId: question.questionId!,
                                 firstUserId: friend1.userId,
                                 secondUserId: friend2.userId,
                                 thirdUserId: friend3.userId,
@@ -104,13 +104,13 @@ class VoteView extends StatelessWidget {
                                   BlocProvider.of<VoteCubit>(context).refresh();
                                 },
                                 icon: const Icon(CupertinoIcons.shuffle)),
-                            IconButton(
-                                onPressed: () {
-                                  // TODO 스킵 제거해야함
-                                  // Navigator.push(context, MaterialPageRoute(builder: (context) => VoteResultView()));
-                                  // BlocProvider.of<VoteCubit>(context).nextVote(state.voteIterator, 0);  // 투표안함
-                                },
-                                icon: const Icon(Icons.skip_next)),
+                            // IconButton(
+                            //     onPressed: () {
+                            //       // TODO 스킵 기능 기획 후 작성 필요
+                            //       // Navigator.push(context, MaterialPageRoute(builder: (context) => VoteResultView()));
+                            //       BlocProvider.of<VoteCubit>(context).nextVote(state.voteIterator, 0);  // 투표안함
+                            //     },
+                            //     icon: const Icon(Icons.skip_next)),
                           ],
                         ),
                       ],
@@ -203,7 +203,7 @@ class ChoiceFriendButton extends StatelessWidget {
       onPressed: () {
         VoteRequest voteRequest = VoteRequest(
           questionId: questionId,
-          pickUserId: userId,
+          pickedUserId: userId,
           firstUserId: firstUserId,
           secondUserId: secondUserId,
           thirdUserId: thirdUserId,

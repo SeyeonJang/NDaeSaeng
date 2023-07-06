@@ -1,5 +1,5 @@
 class Question {
-  String? questionId;
+  int? questionId;
   String? content;
   String? icon;
 

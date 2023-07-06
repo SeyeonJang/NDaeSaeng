@@ -155,7 +155,7 @@ class DartApiRemoteDataSource {
     return questions;
   }
 
-  // vote: 투표한 내용 전달하기
+  // vote: 투표한 내용들 전달하기
   static Future<void> postVotes(List<VoteRequest> votes) async {
     const path = '/v1/votes';
     final body = [];
@@ -164,20 +164,30 @@ class DartApiRemoteDataSource {
     final response = await _httpUtil.request().post(path, data: body);
   }
 
+  // vote: 투표한 내용 전달하기
+  static Future<void> postVote(VoteRequest vote) async {
+    const path = '/v1/votes';
+    final body = vote.toJson();
+
+    final response = await _httpUtil.request().post(path, data: body);
+  }
+
   // vote: 받은 투표 리스트 확인하기
   static Future<List<VoteResponse>> getVotes() async {
     const path = '/v1/votes';
-    final response = await _httpUtil.request().post(path);
 
+    final response = await _httpUtil.request().get(path);
     final List<dynamic> jsonResponse = response.data;
-
     List<VoteResponse> voteResponse = jsonResponse.map((vote) => VoteResponse.fromJson(vote)).toList();
     return voteResponse;
   }
 
   static Future<VoteResponse> getVote(int voteId) async {
-    final response = await _simpleGet("/v1/votes/${voteId}");
-    return VoteResponse.from(response);
+    const path = '/v1/votes';
+    final fullPath = '$path/$voteId';
+
+    final response = await _httpUtil.request().get(fullPath);
+    return VoteResponse.fromJson(response.data);
   }
 
   // vote: 투표 가능한지 확인하기 (남은 시간 확인)

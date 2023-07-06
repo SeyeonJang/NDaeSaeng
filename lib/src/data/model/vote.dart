@@ -7,10 +7,10 @@ part 'vote.g.dart';
 @JsonSerializable()
 class VoteRequest {
   int questionId;
-  int pickUserId, firstUserId, secondUserId, thirdUserId, fourthUserId;
+  int pickedUserId, firstUserId, secondUserId, thirdUserId, fourthUserId;
 
   VoteRequest(
-      {required this.pickUserId,
+      {required this.pickedUserId,
       required this.firstUserId,
       required this.secondUserId,
       required this.thirdUserId,
@@ -18,7 +18,7 @@ class VoteRequest {
       required this.questionId});
 
   VoteRequest.from(Map<String, dynamic> json)
-  : pickUserId = json['pickUserId'],
+  : pickedUserId = json['pickedUserId'],
     firstUserId = json['firstUserId'],
     secondUserId = json['secondUserId'],
     thirdUserId = json['ThirdUserId'],
@@ -30,34 +30,85 @@ class VoteRequest {
 
   @override
   String toString() {
-    return 'VoteRequest{questionId: $questionId, pickUserId: $pickUserId, firstUserId: $firstUserId, secondUserId: $secondUserId, thirdUserId: $thirdUserId, fourthUserId: $fourthUserId}';
+    return 'VoteRequest{questionId: $questionId, pickedUserId: $pickedUserId, firstUserId: $firstUserId, secondUserId: $secondUserId, thirdUserId: $thirdUserId, fourthUserId: $fourthUserId}';
   }
 }
 
-@JsonSerializable()
 class VoteResponse {
-  final int userId, voteId;
-  final int pickUserAdmissionNumber;
-  final String pickUserSex;
-  final Question question;
-  final DateTime pickedAt;
+  int? voteId;
+  Question? question;
+  PickedUser? pickedUser;
+  DateTime? pickedTime;
 
-  VoteResponse(
-      {required this.userId,
-      required this.voteId,
-      required this.pickUserAdmissionNumber,
-      required this.pickUserSex,
-      required this.question,
-      required this.pickedAt});
+  VoteResponse({this.voteId, this.question, this.pickedUser, this.pickedTime});
 
-  VoteResponse.from(Map<String, dynamic> json)
-  : userId = json['userId'],
-    voteId = json['voteId'],
-    pickUserAdmissionNumber = json['pickUserAdmissionNumber'],
-    pickUserSex = json['pickUserSex'],
-    question = json['question'],
-    pickedAt = json['pickedAt'];
+  VoteResponse.fromJson(Map<String, dynamic> json) {
+    voteId = json['voteId'];
+    question = json['question'] != null
+        ? new Question.fromJson(json['question'])
+        : null;
+    pickedUser = json['pickedUser'] != null
+        ? new PickedUser.fromJson(json['pickedUser'])
+        : null;
+    pickedTime = DateTime.parse(json['pickedTime']);
+  }
 
-  Map<String, dynamic> toJson() => _$VoteResponseToJson(this);
-  static VoteResponse fromJson(Map<String, dynamic> json) => _$VoteResponseFromJson(json);
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['voteId'] = this.voteId;
+    if (this.question != null) {
+      data['question'] = this.question!.toJson();
+    }
+    if (this.pickedUser != null) {
+      data['pickedUser'] = this.pickedUser!.toJson();
+    }
+    data['pickedTime'] = this.pickedTime?.toIso8601String();
+    return data;
+  }
+
+  @override
+  String toString() {
+    return 'VoteResponse{voteId: $voteId, question: $question, pickedUser: $pickedUser, pickedTime: $pickedTime}';
+  }
+}
+
+class PickedUser {
+  int? userId;
+  int? universityId;
+  String? name;
+  String? phone;
+  String? universityName;
+  String? department;
+  Null? nextVoteDateTime;
+
+  PickedUser(
+      {this.userId,
+        this.universityId,
+        this.name,
+        this.phone,
+        this.universityName,
+        this.department,
+        this.nextVoteDateTime});
+
+  PickedUser.fromJson(Map<String, dynamic> json) {
+    userId = json['userId'];
+    universityId = json['universityId'];
+    name = json['name'];
+    phone = json['phone'];
+    universityName = json['universityName'];
+    department = json['department'];
+    nextVoteDateTime = json['nextVoteDateTime'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['userId'] = this.userId;
+    data['universityId'] = this.universityId;
+    data['name'] = this.name;
+    data['phone'] = this.phone;
+    data['universityName'] = this.universityName;
+    data['department'] = this.department;
+    data['nextVoteDateTime'] = this.nextVoteDateTime;
+    return data;
+  }
 }

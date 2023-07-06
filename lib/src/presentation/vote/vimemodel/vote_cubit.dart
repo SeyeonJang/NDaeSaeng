@@ -63,7 +63,10 @@ class VoteCubit extends HydratedCubit<VoteState> {
     state.nextVote();
     if (state.isVoteDone()) {
       // 투표한 내용을 서버에 전달
-      _dartVoteRepository.sendMyVotes(state.votes);
+      // _dartVoteRepository.sendMyVotes(state.votes);  //TODO 서버에서 한번에 받도록 수정
+      for (var vote in state.votes) {
+        _dartVoteRepository.sendMyVote(vote);
+      }
 
       // 투표 리스트 비우기 + 다음투표가능시간 갱신 + (포인트는 My page에서 값 받아오면 알아서 갱신되어있음)
       // DateTime myNextVoteTime = await _dartVoteRepository.getMyNextVoteTime("TODO MY ACCESS TOKEN");

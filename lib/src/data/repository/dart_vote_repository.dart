@@ -12,6 +12,10 @@ class DartVoteRepository {
     return await DartApiRemoteDataSource.postVotes(voteRequests);
   }
 
+  Future<void> sendMyVote(VoteRequest voteRequest) async {
+    return await DartApiRemoteDataSource.postVote(voteRequest);
+  }
+
   Future<List<VoteResponse>> getVotes() async {
     return await DartApiRemoteDataSource.getVotes();
   }
