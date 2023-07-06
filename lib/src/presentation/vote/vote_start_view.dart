@@ -1,4 +1,6 @@
 import 'package:dart_flutter/res/size_config.dart';
+import 'package:dart_flutter/src/data/model/friend.dart';
+import 'package:dart_flutter/src/presentation/mypage/friends_mock.dart';
 import 'package:dart_flutter/src/presentation/vote/vimemodel/vote_cubit.dart';
 import 'package:dart_flutter/src/presentation/vote/vote_view.dart';
 import 'package:flutter/material.dart';
@@ -6,6 +8,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class VoteStartView extends StatelessWidget {
   const VoteStartView({Key? key}) : super(key: key);
+
+  int getFrinedCount() {
+    List<Friend> friendList = FriendsMock().getFriends(); // TODO : mockup 넣어봤는데 친구 목록으로 고치기
+    return friendList.length;
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -36,21 +44,33 @@ class VoteStartView extends StatelessWidget {
               Flexible(
                 flex: 3,
                 child: Container(
-                  alignment: Alignment.center,
-                    child: Icon(Icons.emoji_emotions, size: SizeConfig.defaultSize * 20)
-                ),
+                    alignment: Alignment.center,
+                    child: Icon(Icons.emoji_emotions,
+                        size: SizeConfig.defaultSize * 20)),
               ),
               Flexible(
                 flex: 1,
                 child: ElevatedButton(
                   onPressed: () {
-                    BlocProvider.of<VoteCubit>(context).stepStart();
+                    List<Friend> friendList = FriendsMock().getFriends(); // TODO : mockup 넣어봤는데 친구 목록으로 고치기
+                    int friendCount = friendList.length;
+                    if (friendCount >= 4) {
+                      // 시작
+                      BlocProvider.of<VoteCubit>(context).stepStart();
+                    } else {
+                      // 친구 초대
+                      // 카카오톡 공유
+                    }
                   },
-                  child: Text(
-                    "시작하기",
-                    style: TextStyle(
-                      fontSize: SizeConfig.defaultSize * 4,
-                    ),
+                  child: Builder(
+                    builder: (context) {
+                      List<Friend> friendList = FriendsMock().getFriends(); // TODO : mockup 넣어봤는데 친구 목록으로 고치기
+                      int friendCount = friendList.length;
+                      return Text(
+                        friendCount >= 4 ? "시작하기" : "친구 4명 만들고 시작하기",
+                        style: TextStyle(fontSize: SizeConfig.defaultSize * 4),
+                      );
+                    },
                   ),
                 ),
               ),

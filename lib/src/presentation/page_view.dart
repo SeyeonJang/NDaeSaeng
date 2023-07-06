@@ -1,6 +1,8 @@
 import 'package:dart_flutter/res/size_config.dart';
 import 'package:dart_flutter/src/common/auth/auth_cubit.dart';
 import 'package:dart_flutter/src/presentation/meet/meet_page.dart';
+import 'package:dart_flutter/src/presentation/meet/meetpages.dart';
+import 'package:dart_flutter/src/presentation/meet/viewmodel/meet_cubit.dart';
 import 'package:dart_flutter/src/presentation/mypage/my_page_landing.dart';
 import 'package:dart_flutter/src/presentation/mypage/mypages.dart';
 import 'package:dart_flutter/src/presentation/mypage/viewmodel/mypages_cubit.dart';
@@ -53,10 +55,10 @@ class _DartPageViewState extends State<DartPageView> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  _TapBarButton(name: "Darts", targetPage: 0, nowPage: _page, onTapNavigation: _onTapNavigation),
+                  _TapBarButton(name: "Meet", targetPage: 0, nowPage: _page, onTapNavigation: _onTapNavigation),
                   _TapBarButton(name: "Dart", targetPage: 1, nowPage: _page, onTapNavigation: _onTapNavigation),
-                  _TapBarButton(name: " MY ", targetPage: 2, nowPage: _page, onTapNavigation: _onTapNavigation),
-                  _TapBarButton(name: "Meet", targetPage: 3, nowPage: _page, onTapNavigation: _onTapNavigation),
+                  _TapBarButton(name: "Darts", targetPage: 2, nowPage: _page, onTapNavigation: _onTapNavigation),
+                  _TapBarButton(name: " MY ", targetPage: 3, nowPage: _page, onTapNavigation: _onTapNavigation),
                 ],
               ),
             ),
@@ -66,8 +68,8 @@ class _DartPageViewState extends State<DartPageView> {
                 controller: _pageController,
                 children: [
                   BlocProvider(
-                      create: (context) => VoteListCubit(),
-                      child: const VoteListPages(),
+                      create: (context) => MeetCubit(),
+                      child: const MeetPages()
                   ),
                   BlocProvider(
                       create: (context) => VoteCubit(),
@@ -77,7 +79,6 @@ class _DartPageViewState extends State<DartPageView> {
                     create: (BuildContext context) => MyPagesCubit()..initPages(),
                     child: const MyPages(),
                   ),
-                  const MeetPage(),
                 ],
               ),
             ),
