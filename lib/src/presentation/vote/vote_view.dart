@@ -27,7 +27,7 @@ class VoteView extends StatelessWidget {
               Friend friend3 = shuffledFriends[2];
               Friend friend4 = shuffledFriends[3];
 
-              print(state.votes.toString());
+              // print(state.votes.toString());
 
               return Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,

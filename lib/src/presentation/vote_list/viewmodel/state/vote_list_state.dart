@@ -4,6 +4,7 @@ part 'vote_list_state.g.dart';
 
 @JsonSerializable()
 class VoteListState {
+  late bool isLoading;
   late List<VoteResponse> votes;
   late Map<int, bool> visited;
   late bool isFirstTime;
@@ -11,6 +12,7 @@ class VoteListState {
   late int nowVoteId;
 
   VoteListState({
+    required this.isLoading,
     required this.votes,
     required this.isFirstTime,
     required this.visited,
@@ -19,6 +21,7 @@ class VoteListState {
   });
 
   VoteListState.init() {
+    isLoading = false;
     votes = [];
     isFirstTime = true;
     visited = {};
@@ -27,12 +30,18 @@ class VoteListState {
   }
 
   VoteListState copy() => VoteListState(
+    isLoading: isLoading,
     votes: votes,
     isFirstTime: isFirstTime,
     visited: visited,
     isDetailPage: isDetailPage,
     nowVoteId: nowVoteId,
   );
+
+  VoteListState setIsLoading(bool isLoading) {
+    this.isLoading = isLoading;
+    return this;
+  }
 
   VoteListState setVotes(List<VoteResponse> votes) {
     this.votes = votes;
@@ -68,10 +77,12 @@ class VoteListState {
   }
 
   Map<String, dynamic> toJson() => _$VoteListStateToJson(this);
-  VoteListState fromJson(Map<String, dynamic> json) => _$VoteListStateFromJson(json);
+  VoteListState fromJson(Map<String, dynamic> json) {
+    return _$VoteListStateFromJson(json);
+  }
 
   @override
   String toString() {
-    return 'VoteListState{votes: $votes, visited: $visited, isFirstTime: $isFirstTime}';
+    return 'VoteListState{isLoading: $isLoading, votes: $votes, visited: $visited, isFirstTime: $isFirstTime, isDetailPage: $isDetailPage, nowVoteId: $nowVoteId}';
   }
 }

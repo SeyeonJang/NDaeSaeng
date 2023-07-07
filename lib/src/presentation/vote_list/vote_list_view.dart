@@ -7,7 +7,6 @@ import 'package:dart_flutter/src/presentation/vote_list/viewmodel/state/vote_lis
 import 'package:dart_flutter/src/presentation/vote_list/viewmodel/vote_list_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:marquee/marquee.dart';
 
 class VoteListView extends StatefulWidget {
   const VoteListView({Key? key}) : super(key: key);
@@ -31,9 +30,7 @@ class _VoteListViewState extends State<VoteListView> {
         child: BlocBuilder<VoteListCubit, VoteListState>(
           builder: (context, state) {
             if (state.votes.length == 0) {
-              return const Center(
-                child: Text("아직 받은 투표가 없어요!")
-              );
+              return const Center(child: Text("아직 받은 투표가 없어요!"));
             }
             return makeList(state.votes);
           },
@@ -43,20 +40,25 @@ class _VoteListViewState extends State<VoteListView> {
   }
 
   ListView makeList(List<VoteResponse> snapshot) {
-    return ListView.separated(
+    return ListView.builder(
+      shrinkWrap: true,
       itemBuilder: (context, index) {
         var vote = snapshot[index];
         var timeago = TimeagoUtil().format(vote.pickedTime!);
         var visited = BlocProvider.of<VoteListCubit>(context).isVisited(vote.voteId!);
-        return dart(
-          voteId: vote.voteId!,
-          gender: "괅", // vote.pickedUser!.gender!,
-          question: vote.question!.content!,
-          datetime: timeago,
-          isVisited: visited,
+        return Column(
+          children: [
+            dart(
+              voteId: vote.voteId!,
+              gender: vote.pickedUser!.gender ?? "",
+              question: vote.question!.content ?? "(알수없음)",
+              datetime: timeago,
+              isVisited: visited,
+            ),
+            SizedBox(height: SizeConfig.defaultSize * 1.4),
+          ],
         );
       },
-      separatorBuilder: (context, index) => SizedBox(height: SizeConfig.defaultSize * 1.4),
       itemCount: snapshot.length,
     );
   }
@@ -111,7 +113,8 @@ class dart extends StatelessWidget {
             //   ),
             // ),
 
-            Flexible( // TODO : MVP 이후 복구하기
+            Flexible(
+              // TODO : MVP 이후 복구하기
               flex: 3,
               fit: FlexFit.tight,
               child: Row(
@@ -121,10 +124,13 @@ class dart extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text("$gender학생이 Dart를 보냈어요!", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.2)),
-                      Text("$question", style: TextStyle(
-                          fontSize: SizeConfig.defaultSize * 1.5 * ((question.length <= 15 ? 1 : 1 - ((question.length - 15) * 0.035))),
-                          fontWeight: FontWeight.w500,
-                      )),
+                      Text("$question",
+                          style: TextStyle(
+                            fontSize: SizeConfig.defaultSize *
+                                1.5 *
+                                ((question.length <= 15 ? 1 : 1 - ((question.length - 15) * 0.035))),
+                            fontWeight: FontWeight.w500,
+                          )),
                     ],
                   ),
                 ],
@@ -133,8 +139,8 @@ class dart extends StatelessWidget {
             Flexible(
               flex: 1,
               child: Container(
-                  alignment: Alignment.centerRight,
-                  child: Text("$datetime", style: TextStyle(fontSize: SizeConfig.defaultSize * 1)),
+                alignment: Alignment.centerRight,
+                child: Text("$datetime", style: TextStyle(fontSize: SizeConfig.defaultSize * 1)),
               ),
             ),
           ],

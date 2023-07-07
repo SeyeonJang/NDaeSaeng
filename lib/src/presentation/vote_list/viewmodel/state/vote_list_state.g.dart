@@ -8,6 +8,7 @@ part of 'vote_list_state.dart';
 
 VoteListState _$VoteListStateFromJson(Map<String, dynamic> json) =>
     VoteListState(
+      isLoading: json['isLoading'] as bool,
       votes: (json['votes'] as List<dynamic>)
           .map((e) => VoteResponse.fromJson(e as Map<String, dynamic>))
           .toList(),
@@ -21,6 +22,7 @@ VoteListState _$VoteListStateFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$VoteListStateToJson(VoteListState instance) =>
     <String, dynamic>{
+      'isLoading': instance.isLoading,
       'votes': instance.votes,
       'visited': instance.visited.map((k, e) => MapEntry(k.toString(), e)),
       'isFirstTime': instance.isFirstTime,

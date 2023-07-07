@@ -15,6 +15,9 @@ class VoteListPages extends StatelessWidget {
       children: [
         // SafeArea(child: Center(child: Text("hello"))),
         BlocBuilder<VoteListCubit, VoteListState>(
+          buildWhen: (previous, current) {
+            return !current.isLoading;
+          },
           builder: (context, state) {
             if (state.isFirstTime) {
               return const VoteListInformView();
@@ -28,6 +31,15 @@ class VoteListPages extends StatelessWidget {
             }
             return SafeArea(child: Center(child: Text(state.toString())));
           },
+        ),
+
+        BlocBuilder<VoteListCubit, VoteListState> (
+          builder: (context, state) {
+            if (state.isLoading) {
+              return Center(child: CircularProgressIndicator());
+            }
+            return SizedBox();
+          }
         ),
 
         // BlocBuilder<VoteListCubit, VoteListState>(

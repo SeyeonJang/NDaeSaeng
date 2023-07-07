@@ -4,9 +4,7 @@ import 'package:dart_flutter/src/data/model/vote.dart';
 import 'package:dart_flutter/src/data/repository/dart_friend_repository.dart';
 import 'package:dart_flutter/src/data/repository/dart_user_repository.dart';
 import 'package:dart_flutter/src/data/repository/dart_vote_repository.dart';
-import 'package:dart_flutter/src/presentation/mypage/friends_mock.dart';
 import 'package:dart_flutter/src/presentation/vote/vimemodel/state/vote_state.dart';
-import 'package:dart_flutter/src/presentation/vote_list/viewmodel/state/vote_mock.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 
 class VoteCubit extends HydratedCubit<VoteState> {
@@ -16,17 +14,17 @@ class VoteCubit extends HydratedCubit<VoteState> {
 
   VoteCubit() : super(VoteState.init());
 
-  void initVotes() async {
-    // 다음 투표 가능 시간을 기록
-    // DateTime nextVoteTime = await _dartUserRepository.getMyNextVoteTime("TODO MY ACCESSTOKEN");
-    DateTime nextVoteTime = DateTime.now();
-    state.setNextVoteDateTime(nextVoteTime);
-
-    // step 설정
-    _setStepByNextVoteTime();
-
-    emit(state.copy());
-  }
+  // void initVotes() async {
+  //   // 다음 투표 가능 시간을 기록
+  //   // DateTime nextVoteTime = await _dartUserRepository.getMyNextVoteTime("TODO MY ACCESSTOKEN");
+  //   DateTime nextVoteTime = DateTime.now();
+  //   state.setNextVoteDateTime(nextVoteTime);
+  //
+  //   // dfsadftep 설정
+  //   _setStepByNextVoteTime();
+  //
+  //   emit(state.copy());
+  // }
 
   void refresh() {
     emit(state.copy());
@@ -58,7 +56,6 @@ class VoteCubit extends HydratedCubit<VoteState> {
   }
 
   void nextVote(VoteRequest voteRequest) async {
-    print(voteRequest.toString());
     state.pickUserInVote(voteRequest);
     state.nextVote();
     if (state.isVoteDone()) {
@@ -108,8 +105,14 @@ class VoteCubit extends HydratedCubit<VoteState> {
   }
 
   @override
-  VoteState fromJson(Map<String, dynamic> json) => state.fromJson(json);
+  VoteState fromJson(Map<String, dynamic> json)  {
+    print("VoteFromJson: ${state.fromJson}");
+    return state.fromJson(json);
+  }
 
   @override
-  Map<String, dynamic> toJson(VoteState state) => state.toJson();
+  Map<String, dynamic> toJson(VoteState state) {
+    print("VoteToJson: ${state.toJson()}");
+    return state.toJson();
+  }
 }

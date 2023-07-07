@@ -27,6 +27,7 @@ class VoteState {
   });
 
   VoteState.init() {
+    print("init");
     step = VoteStep.start;
     voteIterator = 0;
     votes = [];

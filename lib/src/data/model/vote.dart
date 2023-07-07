@@ -77,6 +77,7 @@ class PickedUser {
   int? universityId;
   String? name;
   String? phone;
+  String? gender;
   String? universityName;
   String? department;
   Null? nextVoteDateTime;
@@ -86,6 +87,7 @@ class PickedUser {
         this.universityId,
         this.name,
         this.phone,
+        this.gender,
         this.universityName,
         this.department,
         this.nextVoteDateTime});
@@ -95,6 +97,7 @@ class PickedUser {
     universityId = json['universityId'];
     name = json['name'];
     phone = json['phone'];
+    gender = json['gender'];
     universityName = json['universityName'];
     department = json['department'];
     nextVoteDateTime = json['nextVoteDateTime'];
@@ -106,6 +109,7 @@ class PickedUser {
     data['universityId'] = this.universityId;
     data['name'] = this.name;
     data['phone'] = this.phone;
+    data['gender'] = this.gender;
     data['universityName'] = this.universityName;
     data['department'] = this.department;
     data['nextVoteDateTime'] = this.nextVoteDateTime;
