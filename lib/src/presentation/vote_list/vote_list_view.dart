@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:dart_flutter/res/size_config.dart';
 import 'package:dart_flutter/src/common/util/timeago_util.dart';
 import 'package:dart_flutter/src/data/model/vote.dart';
@@ -5,6 +7,7 @@ import 'package:dart_flutter/src/presentation/vote_list/viewmodel/state/vote_lis
 import 'package:dart_flutter/src/presentation/vote_list/viewmodel/vote_list_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:marquee/marquee.dart';
 
 class VoteListView extends StatefulWidget {
   const VoteListView({Key? key}) : super(key: key);
@@ -79,7 +82,7 @@ class dart extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        BlocProvider.of<VoteListCubit>(context).pressedVoteInList(voteId);
+        // BlocProvider.of<VoteListCubit>(context).pressedVoteInList(voteId);
       },
       child: Container(
         padding: EdgeInsets.all(SizeConfig.defaultSize * 1),
@@ -118,7 +121,10 @@ class dart extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text("$gender학생이 Dart를 보냈어요!", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.2)),
-                      Text("$question", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.5, fontWeight: FontWeight.w500)),
+                      Text("$question", style: TextStyle(
+                          fontSize: SizeConfig.defaultSize * 1.5 * ((question.length <= 15 ? 1 : 1 - ((question.length - 15) * 0.035))),
+                          fontWeight: FontWeight.w500,
+                      )),
                     ],
                   ),
                 ],
