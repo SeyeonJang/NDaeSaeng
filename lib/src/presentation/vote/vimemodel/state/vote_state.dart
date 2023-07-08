@@ -1,4 +1,5 @@
 import 'package:dart_flutter/src/data/model/friend.dart';
+import 'package:dart_flutter/src/data/model/question.dart';
 import 'package:dart_flutter/src/data/model/vote.dart';
 import 'package:json_annotation/json_annotation.dart';
 part 'vote_state.g.dart';
@@ -9,7 +10,10 @@ class VoteState {
 
   late VoteStep step;
   late int voteIterator;
+
   late List<VoteRequest> votes;
+  late List<Question> questions;
+
   late DateTime nextVoteDateTime;
   late List<Friend> friends;
 
@@ -17,14 +21,17 @@ class VoteState {
     required this.step,
     required this.voteIterator,
     required this.votes,
+    required this.questions,
     required this.nextVoteDateTime,
     required this.friends,
   });
 
   VoteState.init() {
+    print("init");
     step = VoteStep.start;
     voteIterator = 0;
     votes = [];
+    questions = [];
     nextVoteDateTime = DateTime.now();
     friends = [];
   }
@@ -33,6 +40,7 @@ class VoteState {
     step: step,
     voteIterator: voteIterator,
     votes: votes,
+    questions: questions,
     nextVoteDateTime: nextVoteDateTime,
     friends: friends,
   );
@@ -52,7 +60,14 @@ class VoteState {
     return this;
   }
 
+void setQuestions(List<Question> questions) {
+    this.questions = questions;
+}
+
   List<Friend> getShuffleFriends() {
+    if (friends.length < 4) {
+      print("친구수가 4명보다 적습니다. 투표할 수 없음");
+    }
     return friends..shuffle();
   }
 
@@ -60,8 +75,10 @@ class VoteState {
     votes.add(vote);
   }
 
-  void pickUserInVote(int numberOfVote, int pickUserId) {
-    votes[numberOfVote].pickUserId = pickUserId;
+  void pickUserInVote(VoteRequest voteRequest) {
+    votes.add(
+      voteRequest
+    );
   }
 
   bool isVoteTimeOver() {

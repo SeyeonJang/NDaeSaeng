@@ -1,8 +1,6 @@
-
 import 'package:dart_flutter/src/data/model/vote.dart';
 import 'package:dart_flutter/src/data/repository/dart_vote_repository.dart';
 import 'package:dart_flutter/src/presentation/vote_list/viewmodel/state/vote_list_state.dart';
-import 'package:dart_flutter/src/presentation/vote_list/viewmodel/state/vote_mock.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 
 class VoteListCubit extends HydratedCubit<VoteListState> {
@@ -11,11 +9,16 @@ class VoteListCubit extends HydratedCubit<VoteListState> {
   VoteListCubit() : super(VoteListState.init());
 
   void initVotes() async {
-     // List<VoteResponse> votes = await _dartVoteRepository.getVotes("TODO MY ACCESSTOKEN");
-    List<VoteResponse> votes = VoteMock().getVotes();
-    state.setVotes(votes);
+    print("hi");
+    state.setIsLoading(true);
+    emit(state.copy());
 
-     emit(state.copy());
+    // List<VoteResponse> votes = await _dartVoteRepository.getVotes();
+    // state.setVotes(votes);
+
+    print("bye");
+    state.setIsLoading(false);
+    emit(state.copy());
   }
 
   void firstTime() {
@@ -48,8 +51,12 @@ class VoteListCubit extends HydratedCubit<VoteListState> {
   }
 
   @override
-  VoteListState fromJson(Map<String, dynamic> json) => state.fromJson(json);
+  VoteListState fromJson(Map<String, dynamic> json) {
+    return state.fromJson(json);
+  }
 
   @override
-  Map<String, dynamic> toJson(VoteListState state) => state.toJson();
+  Map<String, dynamic> toJson(VoteListState state) {
+    return state.toJson();
+  }
 }

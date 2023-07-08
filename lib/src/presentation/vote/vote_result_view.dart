@@ -52,7 +52,7 @@ class _VoteResultViewState extends State<VoteResultView> {
                     Container(
                       alignment: Alignment.bottomCenter,
                       child: Text(
-                        "Dart를 통해 얻은 Point, 30!",
+                        "다음 투표도 기대해보세요!",
                         style: TextStyle(
                           fontWeight: FontWeight.w800,
                           fontSize: SizeConfig.defaultSize * 2.5,
@@ -67,7 +67,7 @@ class _VoteResultViewState extends State<VoteResultView> {
                         BlocProvider.of<VoteCubit>(context).stepDone();
                       },
                       child: Text(
-                        "포인트 받기",
+                        "다음으로",
                         style: TextStyle(
                           fontSize: SizeConfig.defaultSize * 3.5,
                         ),

@@ -19,10 +19,15 @@ void main() async {
   // await DartApiRemoteDataSource.getUniversities();
 
   // DartApiRemoteDataSource.addAuthorizationToken("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJrYWthb18yODE3MDU0MDM1IiwiaWQiOjQzLCJleHAiOjE2ODk0MjQzOTQsInVzZXJuYW1lIjoia2FrYW9fMjgxNzA1NDAzNSJ9.fU4FAbioW8u5KyVIhQ9vLsuVoEuSDtN0ScSUlaHh2doGMIgeBZR3ri8KDNiVY9Y4F1_Hap3Uu79WH0gPaLkc6AA");
+  // DartApiRemoteDataSource.addAuthorizationToken("");
+  // DartApiRemoteDataSource.addAuthorizationToken("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJrYWthb18yODE3MDU0MDM1IiwiaWQiOjQzLCJleHAiOjE2ODk0MjQzOTQsInVzZXJuYW1lIjoia2FrYW9fMjgxNzA1NDAzNSJ9.fU4FAbioW8u5KyVIhQ9vLsuVoEuSDtN0ScSUlaHh2doGMIgeBZR3ri8KDNiVY9Y4F1_Hap3Uu79WH0gPaLkc6A");
   DartApiRemoteDataSource.addAuthorizationToken("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJrYWthb18yODE3MDU0MDM1IiwiaWQiOjQzLCJleHAiOjE2ODk0MjQzOTQsInVzZXJuYW1lIjoia2FrYW9fMjgxNzA1NDAzNSJ9.fU4FAbioW8u5KyVIhQ9vLsuVoEuSDtN0ScSUlaHh2doGMIgeBZR3ri8KDNiVY9Y4F1_Hap3Uu79WH0gPaLkc6A");
-  // List<Friend> friends = await DartApiRemoteDataSource.getMyFriends(suggested: false);
-  // print(friends.toString());
+  // var questions = await DartApiRemoteDataSource.getNewQuestions();
+  // print(questions.toString());
 
-  var friends = await DartApiRemoteDataSource.getMyFriends(suggested: false);
-  print(friends.toString());
+  dynamic response = await DartApiRemoteDataSource.getVotes();
+  print(response);
+
+  response = await DartApiRemoteDataSource.getVote(83);
+  print(response);
 }

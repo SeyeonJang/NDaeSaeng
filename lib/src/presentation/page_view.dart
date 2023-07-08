@@ -1,6 +1,5 @@
 import 'package:dart_flutter/res/size_config.dart';
-import 'package:dart_flutter/src/common/auth/auth_cubit.dart';
-import 'package:dart_flutter/src/presentation/meet/meet_page.dart';
+import 'package:dart_flutter/src/presentation/meet/meet_page.dart
 import 'package:dart_flutter/src/presentation/meet/meetpages.dart';
 import 'package:dart_flutter/src/presentation/meet/viewmodel/meet_cubit.dart';
 import 'package:dart_flutter/src/presentation/mypage/my_page_landing.dart';
@@ -67,11 +66,11 @@ class _DartPageViewState extends State<DartPageView> {
                 onPageChanged: _onPageChanged,
                 controller: _pageController,
                 children: [
-                  BlocProvider(
-                      create: (context) => MeetCubit(),
-                      child: const MeetPages()
+                  BlocProvider<VoteListCubit>(
+                      create: (context) => VoteListCubit(),
+                      child: const VoteListPages(),
                   ),
-                  BlocProvider(
+                  BlocProvider<VoteCubit>(
                       create: (context) => VoteCubit(),
                       child: const VotePages(),
                   ),
