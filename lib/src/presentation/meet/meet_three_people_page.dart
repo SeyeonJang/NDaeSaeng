@@ -109,7 +109,7 @@ class _MeetThreePeoplePageState extends State<MeetThreePeoplePage> {
                               fontWeight: FontWeight.w600,
                             )),
                         SizedBox(
-                          height: SizeConfig.defaultSize * 2.0,
+                          height: SizeConfig.defaultSize * 4.0,
                         ),
                         Text("상대 팀과 만나고 싶은 지역",
                             style: TextStyle(
@@ -117,7 +117,28 @@ class _MeetThreePeoplePageState extends State<MeetThreePeoplePage> {
                               fontWeight: FontWeight.w600,
                             )),
                         SizedBox(
-                          height: SizeConfig.defaultSize * 2,
+                          height: SizeConfig.defaultSize ,
+                        ),
+                        TextField(
+                          autocorrect: true,
+                          decoration: InputDecoration(
+                            hintText: '입력 예시: 서울, 인천, 경기 북부',
+                            hintStyle: TextStyle(color: Colors.grey),
+                            filled: true,
+                            fillColor: Colors.white,
+                            contentPadding: EdgeInsets.symmetric(vertical: SizeConfig.defaultSize * 1.5, horizontal: SizeConfig.defaultSize * 1.5),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.all(Radius.circular(12.0)),
+                              borderSide: BorderSide(color: Colors.grey, width: 2),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                              borderSide: BorderSide(color: Colors.indigoAccent),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: SizeConfig.defaultSize * 2.5,
                         ),
                         Text("필요하다면 선택해주세요.",
                             style: TextStyle(
@@ -178,6 +199,7 @@ class PeopleCardView extends StatelessWidget {
   Widget build(BuildContext context) {
     return index == 1
         ? Container( // 본인
+            clipBehavior: Clip.hardEdge,
             width: double.infinity,
             decoration: BoxDecoration(
                 color: Colors.indigoAccent,
