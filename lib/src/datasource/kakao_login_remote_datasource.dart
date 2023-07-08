@@ -10,21 +10,7 @@ class KakaoLoginRemoteDatasource {
         OAuthToken token = await UserApi.instance.loginWithKakaoTalk();
         print('카카오톡으로 로그인 성공');
         try {
-          User user = await UserApi.instance.me();
-          print(user.toString());
-          print('사용자 정보 요청 성공'
-              '\n회원번호: ${user.id}'
-              '\nAccessToken: ${token.accessToken}'
-              '\n프사: ${user.kakaoAccount?.profile?.profileImageUrl}'
-              '\n성별: ${user.kakaoAccount?.gender}');
-
-          var json = user.toJson();
-          return KakaoUser(
-            uuid: json['id'].toString(),
-            profileImageUrl: json['kakao_account']['profile']['profile_image_url'],
-            gender: json['kakao_account']['gender'],
-            accessToken: token.accessToken,
-          );
+          return await getKakaoUserInform(token);
         } catch (error) {
           print('사용자 정보 요청 실패 $error');
         }
@@ -38,23 +24,42 @@ class KakaoLoginRemoteDatasource {
         }
         // 카카오톡에 연결된 카카오계정이 없는 경우, 카카오계정으로 로그인
         try {
-          await UserApi.instance.loginWithKakaoAccount();
-          print('카카오계정으로 로그인 성공');
+          OAuthToken token = await UserApi.instance.loginWithKakaoAccount();
+          print('카카오계정으로 로그인 성공!!!');
+          return await getKakaoUserInform(token);
         } catch (error) {
-          print('카카오계정으로 로그인 실패 $error');
+          print('카카오계정으로 로그인 실패!!! $error');
         }
       }
     } else {
       print("이 폰에는 카카오톡이 없습니다?");
       try {
-        await UserApi.instance.loginWithKakaoAccount();
-        print('카카오계정으로 로그인 성공');
-
+        OAuthToken token = await UserApi.instance.loginWithKakaoAccount();
+        print('카카오계정으로 로그인 성공~~~');
+        return await getKakaoUserInform(token);
       } catch (error) {
-        print('카카오계정으로 로그인 실패 $error');
+        print('카카오계정으로 로그인 실패~~~ $error');
       }
     }
     throw Error();
+  }
+
+  static Future<KakaoUser> getKakaoUserInform(OAuthToken token) async {
+    User user = await UserApi.instance.me();
+    print(user.toString());
+    print('사용자 정보 요청 성공'
+        '\n회원번호: ${user.id}'
+        '\nAccessToken: ${token.accessToken}'
+        '\n프사: ${user.kakaoAccount?.profile?.profileImageUrl}'
+        '\n성별: ${user.kakaoAccount?.gender}');
+
+    var json = user.toJson();
+    return KakaoUser(
+      uuid: json['id'].toString(),
+      profileImageUrl: json['kakao_account']['profile']['profile_image_url'],
+      gender: json['kakao_account']['gender'],
+      accessToken: token.accessToken,
+    );
   }
 
   Future<void> logout() async { // 로그아웃
