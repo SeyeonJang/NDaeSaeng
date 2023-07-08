@@ -62,7 +62,7 @@ class _MeetLandingPageState extends State<MeetLandingPage>
             SizedBox(
               height: SizeConfig.defaultSize * 0.4,
             ),
-            Text("정보통신전자공학부 친구들과",
+            Text("정보통신전자공학부 내 친구들과",
                 style: TextStyle(
                   fontSize: SizeConfig.defaultSize * 1.9,
                   fontWeight: FontWeight.w600,

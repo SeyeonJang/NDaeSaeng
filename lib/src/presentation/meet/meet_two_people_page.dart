@@ -64,7 +64,7 @@ class _MeetTwoPeoplePageState extends State<MeetTwoPeoplePage> {
                 itemCount: 2,
                 itemBuilder:
                     (BuildContext context, int itemIndex, int pageViewIndex) =>
-                    TwoPeopleCardView(index: itemIndex),
+                    TwoPeopleCards(index: itemIndex),
                 options: CarouselOptions(
                   height: SizeConfig.screenHeight * 0.6,
                   aspectRatio: 16 / 9,
@@ -172,8 +172,7 @@ class _MeetTwoPeoplePageState extends State<MeetTwoPeoplePage> {
               SizedBox(
                 height: SizeConfig.defaultSize * 5,
               ),
-              //isChecked ? // 이거 버튼 나왔다 안나왔다 하는 로직 구현
-              ElevatedButton(
+              ElevatedButton( // TODO : 이거 버튼 나왔다 안나왔다 하는 로직 구현
                 onPressed: () {
                   showAlert();
                 },
@@ -189,177 +188,375 @@ class _MeetTwoPeoplePageState extends State<MeetTwoPeoplePage> {
   }
 }
 
-class TwoPeopleCardView extends StatelessWidget {
+class TwoPeopleCards extends StatelessWidget {
   int index;
+  static bool isFriendAdded = false; // 친구 추가를 했는지 판단
 
-  TwoPeopleCardView({
+  TwoPeopleCards({
     super.key,
     required this.index,
   });
 
   @override
   Widget build(BuildContext context) {
-    return index == 0
-        ? Container( // 본인
-        clipBehavior: Clip.hardEdge,
-        width: double.infinity,
-        decoration: BoxDecoration(
-            color: Colors.indigoAccent,
-            borderRadius: BorderRadius.circular(20)),
-        child: Column( // 내 프로필
-          children: [
-            SizedBox(height: SizeConfig.defaultSize*2,),
-            Container( // 이미지
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(100)),
-                child: Padding(
-                  padding: const EdgeInsets.all(3.0),
-                  child: ClipRRect(
-                      borderRadius: BorderRadius.circular(100),
-                      child: Image.asset('assets/images/profile1.jpeg', width: SizeConfig.defaultSize * 10, height: SizeConfig.defaultSize * 10)
-                  ),
-                )
-            ),
-            SizedBox(height: SizeConfig.defaultSize * 3),
-            Padding(
-              padding: EdgeInsets.only(left: SizeConfig.defaultSize * 1.5 , right: SizeConfig.defaultSize * 1.5),
-              child: Column(
-                children: [
-                  Padding(
-                    padding: EdgeInsets.only(left: SizeConfig.defaultSize * 0.9, right: SizeConfig.defaultSize * 0.9),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text("팀장", style: TextStyle(
-                          fontSize: SizeConfig.defaultSize * 1.7,
-                          color: Colors.white,
-                          fontWeight: FontWeight.w800,
-                        ),),
-                        Text("장세연  |  21학번(02)", style: TextStyle(
-                          fontSize: SizeConfig.defaultSize * 1.7,
-                          color: Colors.white,
-                          fontWeight: FontWeight.w800,
-                        ),),
-                      ],
-                    ),
-                  ),
-                  SizedBox(height: SizeConfig.defaultSize * 1.4),
-                  Padding(
-                    padding: EdgeInsets.only(left: SizeConfig.defaultSize * 0.9, right: SizeConfig.defaultSize * 0.9),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(13)),
-                          padding: EdgeInsets.only(top: SizeConfig.defaultSize * 0.5),
-                          child: Text("MBTI",style: TextStyle(
-                            fontSize: SizeConfig.defaultSize * 1.7,
-                            color: Colors.white,
-                            fontWeight: FontWeight.w800,
-                          ),),
-                        ),
-                        Container(
-                          decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(13)),
-                          padding: EdgeInsets.only(top: SizeConfig.defaultSize * 0.5, bottom: SizeConfig.defaultSize * 0.5, left: SizeConfig.defaultSize, right: SizeConfig.defaultSize),
-                          child: Text("ENFJ", style: TextStyle(
-                            fontSize: SizeConfig.defaultSize * 1.7,
-                            color: Colors.indigoAccent,
-                            fontWeight: FontWeight.w800,
-                          ),),
-                        ),
-                      ],
-                    ),
-                  ),
-                  SizedBox(height: SizeConfig.screenHeight * 0.025,),
-                  Container( // 투표 목록 들어갈 자리
-                    height: SizeConfig.screenHeight * 0.23,
-                    decoration: BoxDecoration(
+    if (isFriendAdded == true) {
+      return index == 0 ? MyProfileView() : FriendProfileView();
+    }
+    return index == 0 ? MyProfileView() : NullView();
+  }
+}
+
+
+class MyProfileView extends StatelessWidget { // 내 프로필
+  const MyProfileView({
+    super.key,
+  });
+  @override
+  Widget build(BuildContext context) {
+    return Container( // 본인
+    clipBehavior: Clip.hardEdge,
+    width: double.infinity,
+    decoration: BoxDecoration(
+        color: Colors.indigoAccent,
+        borderRadius: BorderRadius.circular(20)),
+    child: Column( // 내 프로필
+      children: [
+        SizedBox(height: SizeConfig.defaultSize*2,),
+        Container( // 이미지
+            decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(100)),
+            child: Padding(
+              padding: const EdgeInsets.all(3.0),
+              child: ClipRRect(
+                  borderRadius: BorderRadius.circular(100),
+                  child: Image.asset('assets/images/profile1.jpeg', width: SizeConfig.defaultSize * 10, height: SizeConfig.defaultSize * 10)
+              ),
+            )
+        ),
+        SizedBox(height: SizeConfig.defaultSize * 3),
+        Padding(
+          padding: EdgeInsets.only(left: SizeConfig.defaultSize * 1.5 , right: SizeConfig.defaultSize * 1.5),
+          child: Column(
+            children: [
+              Padding(
+                padding: EdgeInsets.only(left: SizeConfig.defaultSize * 0.9, right: SizeConfig.defaultSize * 0.9),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text("팀장", style: TextStyle(
+                      fontSize: SizeConfig.defaultSize * 1.7,
+                      color: Colors.white,
+                      fontWeight: FontWeight.w800,
+                    ),),
+                    Text("장세연  |  21학번(02)", style: TextStyle(
+                      fontSize: SizeConfig.defaultSize * 1.7,
+                      color: Colors.white,
+                      fontWeight: FontWeight.w800,
+                    ),),
+                  ],
+                ),
+              ),
+              SizedBox(height: SizeConfig.defaultSize * 1.4),
+              Padding(
+                padding: EdgeInsets.only(left: SizeConfig.defaultSize * 0.9, right: SizeConfig.defaultSize * 0.9),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(13)),
+                      padding: EdgeInsets.only(top: SizeConfig.defaultSize * 0.5),
+                      child: Text("MBTI",style: TextStyle(
+                        fontSize: SizeConfig.defaultSize * 1.7,
                         color: Colors.white,
-                        borderRadius: BorderRadius.circular(13)),
-                    padding: EdgeInsets.all(SizeConfig.defaultSize),
-                    alignment: Alignment.center,
-                    child: Column(
-                      children: [
-                        SizedBox(height: SizeConfig.screenHeight * 0.008),
-                        Text("나를 대표하는 투표 3가지", style: TextStyle(
-                          fontSize: SizeConfig.defaultSize * 1.7,
-                          fontWeight: FontWeight.w600,
-                        ),),
-                        SizedBox(height: SizeConfig.screenHeight * 0.015),
-                        Container( // TODO : 투표 넣어놓은 게 없다면 Container로 감싸서 빈 거 띄우기, for문으로 투표 개수만큼 만들기
-                          height: SizeConfig.screenHeight * 0.05,
-                          width: SizeConfig.screenWidth * 0.9,
-                          decoration: BoxDecoration(
-                              color: Colors.indigoAccent,
-                              borderRadius: BorderRadius.circular(13)),
-                          alignment: Alignment.center,
-                          child: Text("첫인상이 좋은", style: TextStyle( // TODO : 글자 수 길어지면 ... 처리 하기
-                            color: Colors.white,
-                            fontSize: SizeConfig.defaultSize * 1.7,
-                            fontWeight: FontWeight.w600,
-                          ),),
-                        ),
-                        SizedBox(height: SizeConfig.screenHeight * 0.005),
-                        Container(
-                          height: SizeConfig.screenHeight * 0.05,
-                          width: SizeConfig.screenWidth * 0.9,
-                          decoration: BoxDecoration(
-                              color: Colors.indigoAccent,
-                              borderRadius: BorderRadius.circular(13)),
-                          alignment: Alignment.center,
-                          child: Text("누가봐도 프로 갓생러", style: TextStyle(
-                            color: Colors.white,
-                            fontSize: SizeConfig.defaultSize * 1.7,
-                            fontWeight: FontWeight.w600,
-                          ),),
-                        ),
-                        SizedBox(height: SizeConfig.screenHeight * 0.005),
-                        Container(
-                          height: SizeConfig.screenHeight * 0.05,
-                          width: SizeConfig.screenWidth * 0.9,
-                          decoration: BoxDecoration(
-                              color: Colors.indigoAccent,
-                              borderRadius: BorderRadius.circular(13)),
-                          alignment: Alignment.center,
-                          child: Text("여행가면 꼭 데려가고 싶은", style: TextStyle(
-                            color: Colors.white,
-                            fontSize: SizeConfig.defaultSize * 1.7,
-                            fontWeight: FontWeight.w600,
-                          ),),
-                        )
-                      ],
+                        fontWeight: FontWeight.w800,
+                      ),),
                     ),
-                  ),
-                  SizedBox(height: SizeConfig.screenHeight * 0.02),
-                  GestureDetector(
-                    onTap: () {
-                      // TODO : 투표 목록 열기
-                    },
-                    child: Container(
-                      height: SizeConfig.screenHeight * 0.05,
+                    Container(
                       decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(13)),
-                      alignment: Alignment.center,
-                      child: Text("내 투표 목록 수정하기", style: TextStyle(
+                      padding: EdgeInsets.only(top: SizeConfig.defaultSize * 0.5, bottom: SizeConfig.defaultSize * 0.5, left: SizeConfig.defaultSize, right: SizeConfig.defaultSize),
+                      child: Text("ENFJ", style: TextStyle(
+                        fontSize: SizeConfig.defaultSize * 1.7,
                         color: Colors.indigoAccent,
+                        fontWeight: FontWeight.w800,
+                      ),),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(height: SizeConfig.screenHeight * 0.025,),
+              Container( // 투표 목록 들어갈 자리
+                height: SizeConfig.screenHeight * 0.23,
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(13)),
+                padding: EdgeInsets.all(SizeConfig.defaultSize),
+                alignment: Alignment.center,
+                child: Column(
+                  children: [
+                    SizedBox(height: SizeConfig.screenHeight * 0.008),
+                    Text("나를 대표하는 투표 3가지", style: TextStyle(
+                      fontSize: SizeConfig.defaultSize * 1.7,
+                      fontWeight: FontWeight.w600,
+                    ),),
+                    SizedBox(height: SizeConfig.screenHeight * 0.015),
+                    Container( // TODO : 투표 넣어놓은 게 없다면 Container로 감싸서 빈 거 띄우기, for문으로 투표 개수만큼 만들기
+                      height: SizeConfig.screenHeight * 0.05,
+                      width: SizeConfig.screenWidth * 0.9,
+                      decoration: BoxDecoration(
+                          color: Colors.indigoAccent,
+                          borderRadius: BorderRadius.circular(13)),
+                      alignment: Alignment.center,
+                      child: Text("첫인상이 좋은", style: TextStyle( // TODO : 글자 수 길어지면 ... 처리 하기
+                        color: Colors.white,
                         fontSize: SizeConfig.defaultSize * 1.7,
                         fontWeight: FontWeight.w600,
                       ),),
                     ),
-                  )
-                ],
+                    SizedBox(height: SizeConfig.screenHeight * 0.005),
+                    Container(
+                      height: SizeConfig.screenHeight * 0.05,
+                      width: SizeConfig.screenWidth * 0.9,
+                      decoration: BoxDecoration(
+                          color: Colors.indigoAccent,
+                          borderRadius: BorderRadius.circular(13)),
+                      alignment: Alignment.center,
+                      child: Text("누가봐도 프로 갓생러", style: TextStyle(
+                        color: Colors.white,
+                        fontSize: SizeConfig.defaultSize * 1.7,
+                        fontWeight: FontWeight.w600,
+                      ),),
+                    ),
+                    SizedBox(height: SizeConfig.screenHeight * 0.005),
+                    Container(
+                      height: SizeConfig.screenHeight * 0.05,
+                      width: SizeConfig.screenWidth * 0.9,
+                      decoration: BoxDecoration(
+                          color: Colors.indigoAccent,
+                          borderRadius: BorderRadius.circular(13)),
+                      alignment: Alignment.center,
+                      child: Text("여행가면 꼭 데려가고 싶은", style: TextStyle(
+                        color: Colors.white,
+                        fontSize: SizeConfig.defaultSize * 1.7,
+                        fontWeight: FontWeight.w600,
+                      ),),
+                    )
+                  ],
+                ),
               ),
-            ),
-          ],
-        ))
-        : Container( // 타인
+              SizedBox(height: SizeConfig.screenHeight * 0.02),
+              GestureDetector(
+                onTap: () {
+                  // TODO : 투표 목록 열기
+                },
+                child: Container(
+                  height: SizeConfig.screenHeight * 0.05,
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(13)),
+                  alignment: Alignment.center,
+                  child: Text("내 투표 목록 수정하기", style: TextStyle(
+                    color: Colors.indigoAccent,
+                    fontSize: SizeConfig.defaultSize * 1.7,
+                    fontWeight: FontWeight.w600,
+                  ),),
+                ),
+              )
+            ],
+          ),
+        ),
+      ],
+    ));
+  }
+}
+
+class FriendProfileView extends StatelessWidget { // 친구 프로필
+  const FriendProfileView({
+    super.key,
+  });
+  @override
+  Widget build(BuildContext context) {
+    return Container( // 타인
+    width: double.infinity,
+    decoration: BoxDecoration(
+        border: Border.all(
+          color: Colors.indigoAccent,
+          width: 3.5,
+        ),
+        borderRadius: BorderRadius.circular(20)),
+    child: Column( // 내 프로필
+      children: [
+        SizedBox(height: SizeConfig.defaultSize*2,),
+        Container( // 이미지
+            decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(100)),
+            child: Padding(
+              padding: const EdgeInsets.all(3.0),
+              child: ClipRRect(
+                  borderRadius: BorderRadius.circular(100),
+                  child: Image.asset('assets/images/profile2.jpeg', width: SizeConfig.defaultSize * 10, height: SizeConfig.defaultSize * 10)
+              ),
+            )
+        ),
+        SizedBox(height: SizeConfig.defaultSize * 3),
+        Padding(
+          padding: EdgeInsets.only(left: SizeConfig.defaultSize * 1.5 , right: SizeConfig.defaultSize * 1.5),
+          child: Column(
+            children: [
+              Padding(
+                padding: EdgeInsets.only(left: SizeConfig.defaultSize * 0.9, right: SizeConfig.defaultSize * 0.9),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text("팀원", style: TextStyle(
+                      fontSize: SizeConfig.defaultSize * 1.7,
+                      color: Colors.black,
+                      fontWeight: FontWeight.w800,
+                    ),),
+                    Text("장세연  |  21학번(02)", style: TextStyle(
+                      fontSize: SizeConfig.defaultSize * 1.7,
+                      color: Colors.indigoAccent,
+                      fontWeight: FontWeight.w800,
+                    ),),
+                  ],
+                ),
+              ),
+              SizedBox(height: SizeConfig.defaultSize * 1.4),
+              Padding(
+                padding: EdgeInsets.only(left: SizeConfig.defaultSize * 0.9, right: SizeConfig.defaultSize * 0.9),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(13)),
+                      padding: EdgeInsets.only(top: SizeConfig.defaultSize * 0.5),
+                      child: Text("MBTI",style: TextStyle(
+                        fontSize: SizeConfig.defaultSize * 1.7,
+                        color: Colors.black,
+                        fontWeight: FontWeight.w800,
+                      ),),
+                    ),
+                    Container(
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(13)),
+                      padding: EdgeInsets.only(top: SizeConfig.defaultSize * 0.5, bottom: SizeConfig.defaultSize * 0.5, left: SizeConfig.defaultSize, right: SizeConfig.defaultSize),
+                      child: Text("ENFJ", style: TextStyle(
+                        fontSize: SizeConfig.defaultSize * 1.7,
+                        color: Colors.indigoAccent,
+                        fontWeight: FontWeight.w800,
+                      ),),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(height: SizeConfig.screenHeight * 0.025,),
+              Container( // 투표 목록 들어갈 자리
+                height: SizeConfig.screenHeight * 0.23,
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(13)),
+                padding: EdgeInsets.all(SizeConfig.defaultSize),
+                alignment: Alignment.center,
+                child: Column(
+                  children: [
+                    SizedBox(height: SizeConfig.screenHeight * 0.008),
+                    Text("친구를 대표하는 투표 3가지", style: TextStyle(
+                      fontSize: SizeConfig.defaultSize * 1.7,
+                      fontWeight: FontWeight.w600,
+                    ),),
+                    SizedBox(height: SizeConfig.screenHeight * 0.015),
+                    Container( // TODO : 투표 넣어놓은 게 없다면 Container로 감싸서 빈 거 띄우기, for문으로 투표 개수만큼 만들기
+                      height: SizeConfig.screenHeight * 0.05,
+                      width: SizeConfig.screenWidth * 0.9,
+                      decoration: BoxDecoration(
+                          color: Colors.indigoAccent,
+                          borderRadius: BorderRadius.circular(13)),
+                      alignment: Alignment.center,
+                      child: Text("첫인상이 좋은", style: TextStyle( // TODO : 글자 수 길어지면 ... 처리 하기
+                        color: Colors.white,
+                        fontSize: SizeConfig.defaultSize * 1.7,
+                        fontWeight: FontWeight.w600,
+                      ),),
+                    ),
+                    SizedBox(height: SizeConfig.screenHeight * 0.005),
+                    Container(
+                      height: SizeConfig.screenHeight * 0.05,
+                      width: SizeConfig.screenWidth * 0.9,
+                      decoration: BoxDecoration(
+                          color: Colors.indigoAccent,
+                          borderRadius: BorderRadius.circular(13)),
+                      alignment: Alignment.center,
+                      child: Text("누가봐도 프로 갓생러", style: TextStyle(
+                        color: Colors.white,
+                        fontSize: SizeConfig.defaultSize * 1.7,
+                        fontWeight: FontWeight.w600,
+                      ),),
+                    ),
+                    SizedBox(height: SizeConfig.screenHeight * 0.005),
+                    Container(
+                      height: SizeConfig.screenHeight * 0.05,
+                      width: SizeConfig.screenWidth * 0.9,
+                      decoration: BoxDecoration(
+                          color: Colors.indigoAccent,
+                          borderRadius: BorderRadius.circular(13)),
+                      alignment: Alignment.center,
+                      child: Text("여행가면 꼭 데려가고 싶은", style: TextStyle(
+                        color: Colors.white,
+                        fontSize: SizeConfig.defaultSize * 1.7,
+                        fontWeight: FontWeight.w600,
+                      ),),
+                    )
+                  ],
+                ),
+              ),
+              SizedBox(height: SizeConfig.screenHeight * 0.02),
+              GestureDetector(
+                onTap: () {
+                  // TODO : 투표 목록 열기
+                },
+                child: Container(
+                  height: SizeConfig.screenHeight * 0.05,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(13),
+                    border: Border.all(
+                      color: Colors.indigoAccent,
+                      width: 1,
+                    ),),
+                  alignment: Alignment.center,
+                  child: Text("친구 삭제하기", style: TextStyle(
+                    color: Colors.indigoAccent,
+                    fontSize: SizeConfig.defaultSize * 1.7,
+                    fontWeight: FontWeight.w600,
+                  ),),
+                ),
+              )
+            ],
+          ),
+        ),
+      ],
+    )
+    );
+  }
+}
+
+class NullView extends StatelessWidget { // 친구 추가 안 했을 때
+  const NullView({
+    super.key,
+  });
+  @override
+  Widget build(BuildContext context) {
+    return Container( // 타인
         width: double.infinity,
         decoration: BoxDecoration(
             border: Border.all(
@@ -367,163 +564,21 @@ class TwoPeopleCardView extends StatelessWidget {
               width: 3.5,
             ),
             borderRadius: BorderRadius.circular(20)),
-        child: Column( // 내 프로필
-          children: [
-            SizedBox(height: SizeConfig.defaultSize*2,),
-            Container( // 이미지
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(100)),
-                child: Padding(
-                  padding: const EdgeInsets.all(3.0),
-                  child: ClipRRect(
-                      borderRadius: BorderRadius.circular(100),
-                      child: Image.asset('assets/images/profile2.jpeg', width: SizeConfig.defaultSize * 10, height: SizeConfig.defaultSize * 10)
-                  ),
-                )
-            ),
-            SizedBox(height: SizeConfig.defaultSize * 3),
-            Padding(
-              padding: EdgeInsets.only(left: SizeConfig.defaultSize * 1.5 , right: SizeConfig.defaultSize * 1.5),
-              child: Column(
-                children: [
-                  Padding(
-                    padding: EdgeInsets.only(left: SizeConfig.defaultSize * 0.9, right: SizeConfig.defaultSize * 0.9),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text("팀원", style: TextStyle(
-                          fontSize: SizeConfig.defaultSize * 1.7,
-                          color: Colors.black,
-                          fontWeight: FontWeight.w800,
-                        ),),
-                        Text("장세연  |  21학번(02)", style: TextStyle(
-                          fontSize: SizeConfig.defaultSize * 1.7,
-                          color: Colors.indigoAccent,
-                          fontWeight: FontWeight.w800,
-                        ),),
-                      ],
-                    ),
-                  ),
-                  SizedBox(height: SizeConfig.defaultSize * 1.4),
-                  Padding(
-                    padding: EdgeInsets.only(left: SizeConfig.defaultSize * 0.9, right: SizeConfig.defaultSize * 0.9),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(13)),
-                          padding: EdgeInsets.only(top: SizeConfig.defaultSize * 0.5),
-                          child: Text("MBTI",style: TextStyle(
-                            fontSize: SizeConfig.defaultSize * 1.7,
-                            color: Colors.black,
-                            fontWeight: FontWeight.w800,
-                          ),),
-                        ),
-                        Container(
-                          decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(13)),
-                          padding: EdgeInsets.only(top: SizeConfig.defaultSize * 0.5, bottom: SizeConfig.defaultSize * 0.5, left: SizeConfig.defaultSize, right: SizeConfig.defaultSize),
-                          child: Text("ENFJ", style: TextStyle(
-                            fontSize: SizeConfig.defaultSize * 1.7,
-                            color: Colors.indigoAccent,
-                            fontWeight: FontWeight.w800,
-                          ),),
-                        ),
-                      ],
-                    ),
-                  ),
-                  SizedBox(height: SizeConfig.screenHeight * 0.025,),
-                  Container( // 투표 목록 들어갈 자리
-                    height: SizeConfig.screenHeight * 0.23,
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(13)),
-                    padding: EdgeInsets.all(SizeConfig.defaultSize),
-                    alignment: Alignment.center,
-                    child: Column(
-                      children: [
-                        SizedBox(height: SizeConfig.screenHeight * 0.008),
-                        Text("친구를 대표하는 투표 3가지", style: TextStyle(
-                          fontSize: SizeConfig.defaultSize * 1.7,
-                          fontWeight: FontWeight.w600,
-                        ),),
-                        SizedBox(height: SizeConfig.screenHeight * 0.015),
-                        Container( // TODO : 투표 넣어놓은 게 없다면 Container로 감싸서 빈 거 띄우기, for문으로 투표 개수만큼 만들기
-                          height: SizeConfig.screenHeight * 0.05,
-                          width: SizeConfig.screenWidth * 0.9,
-                          decoration: BoxDecoration(
-                              color: Colors.indigoAccent,
-                              borderRadius: BorderRadius.circular(13)),
-                          alignment: Alignment.center,
-                          child: Text("첫인상이 좋은", style: TextStyle( // TODO : 글자 수 길어지면 ... 처리 하기
-                            color: Colors.white,
-                            fontSize: SizeConfig.defaultSize * 1.7,
-                            fontWeight: FontWeight.w600,
-                          ),),
-                        ),
-                        SizedBox(height: SizeConfig.screenHeight * 0.005),
-                        Container(
-                          height: SizeConfig.screenHeight * 0.05,
-                          width: SizeConfig.screenWidth * 0.9,
-                          decoration: BoxDecoration(
-                              color: Colors.indigoAccent,
-                              borderRadius: BorderRadius.circular(13)),
-                          alignment: Alignment.center,
-                          child: Text("누가봐도 프로 갓생러", style: TextStyle(
-                            color: Colors.white,
-                            fontSize: SizeConfig.defaultSize * 1.7,
-                            fontWeight: FontWeight.w600,
-                          ),),
-                        ),
-                        SizedBox(height: SizeConfig.screenHeight * 0.005),
-                        Container(
-                          height: SizeConfig.screenHeight * 0.05,
-                          width: SizeConfig.screenWidth * 0.9,
-                          decoration: BoxDecoration(
-                              color: Colors.indigoAccent,
-                              borderRadius: BorderRadius.circular(13)),
-                          alignment: Alignment.center,
-                          child: Text("여행가면 꼭 데려가고 싶은", style: TextStyle(
-                            color: Colors.white,
-                            fontSize: SizeConfig.defaultSize * 1.7,
-                            fontWeight: FontWeight.w600,
-                          ),),
-                        )
-                      ],
-                    ),
-                  ),
-                  SizedBox(height: SizeConfig.screenHeight * 0.02),
-                  GestureDetector(
-                    onTap: () {
-                      // TODO : 투표 목록 열기
-                    },
-                    child: Container(
-                      height: SizeConfig.screenHeight * 0.05,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(13),
-                        border: Border.all(
-                          color: Colors.indigoAccent,
-                          width: 1,
-                        ),),
-                      alignment: Alignment.center,
-                      child: Text("친구 삭제하기", style: TextStyle(
-                        color: Colors.indigoAccent,
-                        fontSize: SizeConfig.defaultSize * 1.7,
-                        fontWeight: FontWeight.w600,
-                      ),),
-                    ),
-                  )
-                ],
+        child: Center(
+            child: Container(
+              height: SizeConfig.defaultSize * 10,
+              width: SizeConfig.defaultSize * 10,
+              decoration: BoxDecoration(
+                color: Colors.indigoAccent.withOpacity(0.5),
+                // border: Border.all(
+                //   color: Colors.indigoAccent,
+                //   width: SizeConfig.defaultSize * 0.4,
+                // ),
+                borderRadius: BorderRadius.circular(100),
               ),
+              child: Icon(Icons.add_rounded, size: SizeConfig.defaultSize * 7, color: Colors.white,),
             ),
-          ],
-        )
+        ),
     );
   }
 }
