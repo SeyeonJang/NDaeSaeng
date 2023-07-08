@@ -4,7 +4,6 @@ import 'package:dart_flutter/src/presentation/signup/viewmodel/signup_cubit.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
-
 import '../../common/util/university_finder.dart';
 
 // btn 컬러 정의 (설정중)
@@ -172,4 +171,3 @@ class _ScaffoldBodyState extends State<ScaffoldBody> {
     );
   }
 }
-

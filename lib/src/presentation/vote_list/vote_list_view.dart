@@ -84,7 +84,7 @@ class dart extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        // BlocProvider.of<VoteListCubit>(context).pressedVoteInList(voteId);
+        // BlocProvider.of<VoteListCubit>(context).pressedVoteInList(voteId); // TODO : MVP 이후 복구하기 (힌트 & Point가 생겼을 때)
       },
       child: Container(
         padding: EdgeInsets.all(SizeConfig.defaultSize * 1),
