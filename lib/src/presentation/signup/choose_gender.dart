@@ -1,5 +1,8 @@
+import '../../../res/size_config.dart';
 import 'package:dart_flutter/src/common/auth/auth_cubit.dart';
 import 'package:dart_flutter/src/presentation/page_view.dart';
+import 'package:dart_flutter/src/presentation/signup/tos1.dart';
+import 'package:dart_flutter/src/presentation/signup/tos2.dart';
 import 'package:dart_flutter/src/presentation/signup/viewmodel/signup_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -62,6 +65,29 @@ class _ChooseGenderState extends State<ChooseGender> {
                   Text("남자"),
                 ],
                 // children: [genders],
+              ),
+              SizedBox(height: SizeConfig.screenHeight * 0.2,),
+              const Text("본인이 만 14세 이상이며, Dart 서비스의 필수 동의 항목인",
+                style: TextStyle(fontSize: 13),
+                textAlign: TextAlign.center,),
+              Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    TextButton(
+                      onPressed: () {
+                        Navigator.push(context, MaterialPageRoute(builder: (_) => Tos1()));
+                      },
+                      child: Text("이용약관", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.3)),
+                    ),
+                    Text("및", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.3)),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.push(context, MaterialPageRoute(builder: (_) => Tos2()));
+                      },
+                      child: Text("개인정보 처리방침", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.3)),
+                    ),
+                    Text("에 동의하시면 계속 진행해주세요.", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.3)),
+                  ]
               ),
 
               const SizedBox( height: 100, ),

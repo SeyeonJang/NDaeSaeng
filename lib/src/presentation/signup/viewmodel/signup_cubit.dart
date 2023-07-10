@@ -62,7 +62,8 @@ class SignupCubit extends Cubit<SignupState> {
 
   void stepName(String name) {
     state.inputState.name = name;
-    state.signupStep = SignupStep.phone;
+    state.signupStep = SignupStep.gender; // TODO : MVP 이후 지우기
+    // state.signupStep = SignupStep.phone; // TODO : MVP 이후 복구
     emit(state.copy());
   }
 
