@@ -23,13 +23,13 @@ class DartFriendRepository {
   Future<String> addFriend(Friend friend) async {
     myFriendCache.addFriend(friend);
     recommendedFriendCache.deleteFriend(friend);
-    return await DartApiRemoteDataSource.postFriend(friend.userId);
+    return await DartApiRemoteDataSource.postFriend(friend.userId!);
   }
 
   Future<String> deleteFriend(Friend friend) async {
     myFriendCache.deleteFriend(friend);
     recommendedFriendCache.addFriend(friend);
-    return await DartApiRemoteDataSource.deleteFriend(friend.userId);
+    return await DartApiRemoteDataSource.deleteFriend(friend.userId!);
   }
 }
 
