@@ -1,9 +1,13 @@
+import 'package:json_annotation/json_annotation.dart';
+part 'user.g.dart';
+
+@JsonSerializable()
 class UserResponse {
-  final int userId, univId;
-  final int admissionNumber, point;
-  final String name, phone;
-  final String universityName, department;
-  final DateTime nextVoteDateTime;
+  final int? userId, univId;
+  final int? admissionNumber, point;
+  final String? name, phone;
+  final String? universityName, department;
+  final DateTime? nextVoteDateTime;
 
   UserResponse({
     required this.userId,
@@ -19,7 +23,7 @@ class UserResponse {
 
   UserResponse.from(Map<String, dynamic> json)
   : userId = json['userId'],
-    univId = json['univId'],
+    univId = json['universityId'],
     admissionNumber = json['admissionNumber'],
     point = json['point'],
     name = json['name'],
@@ -27,6 +31,14 @@ class UserResponse {
     universityName = json['universityName'],
     department = json['department'],
     nextVoteDateTime = json['nextVoteDateTime'];
+
+  Map<String, dynamic> toJson() => _$UserResponseToJson(this);
+  static UserResponse fromJson(Map<String, dynamic> json) => _$UserResponseFromJson(json);
+
+  @override
+  String toString() {
+    return 'UserResponse{userId: $userId, univId: $univId, admissionNumber: $admissionNumber, point: $point, name: $name, phone: $phone, universityName: $universityName, department: $department, nextVoteDateTime: $nextVoteDateTime}';
+  }
 }
 
 class UserRequest {
@@ -46,4 +58,18 @@ class UserRequest {
     admissionNumber = json['admissionNumber'],
     name = json['name'],
     phone = json['phone'];
+
+  Map<String, dynamic> toJson() {
+    return {
+      'universityId': univId,
+      'admissionNum': admissionNumber,
+      'name': name,
+      'phone': phone
+    };
+  }
+
+  @override
+  String toString() {
+    return 'UserRequest{univId: $univId, admissionNumber: $admissionNumber, name: $name, phone: $phone}';
+  }
 }

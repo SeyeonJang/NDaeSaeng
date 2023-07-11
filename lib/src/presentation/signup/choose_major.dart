@@ -1,3 +1,5 @@
+import 'package:dart_flutter/src/common/util/university_finder.dart';
+import 'package:dart_flutter/src/data/model/university.dart';
 import 'package:dart_flutter/src/presentation/signup/choose_id.dart';
 import 'package:dart_flutter/src/presentation/signup/viewmodel/signup_cubit.dart';
 import 'package:flutter/material.dart';
@@ -35,138 +37,135 @@ class ChooseMajor extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          leading: IconButton(
-              onPressed: () {
-                Navigator.pop(context);
-              }, icon: Icon(Icons.arrow_back)),
-        ),
-        body: Center(
-          child: Center(
-            child: ScaffoldBody(),
-          ),
-        ),
+    return Center(
+      child: Center(
+        child: ScaffoldBody(),
+      ),
     );
   }
 }
-class ScaffoldBody extends StatelessWidget {
+class ScaffoldBody extends StatefulWidget {
   const ScaffoldBody({
     super.key,
   });
 
   @override
+  State<ScaffoldBody> createState() => _ScaffoldBodyState();
+}
+
+class _ScaffoldBodyState extends State<ScaffoldBody> {
+  late UniversityFinder universityFinder;
+  final TextEditingController _typeAheadController = TextEditingController();
+  late bool isSelectedOnTypeAhead;
+  late String universityName;
+  String universityDepartment = "";
+  late University university;
+
+  @override
+  void initState() {
+    super.initState();
+    List<University> universities = BlocProvider.of<SignupCubit>(context).getUniversities;
+    universityFinder = UniversityFinder(universities: universities);
+    universityName = BlocProvider.of<SignupCubit>(context).state.inputState.tempUnivName!;
+    setState(() {
+      isSelectedOnTypeAhead = false;
+    });
+  }
+
+  void _typeOnTypeAhead() {
+    setState(() {
+      isSelectedOnTypeAhead = false;
+    });
+  }
+
+  void _selectOnTypeAhead() {
+    setState(() {
+      isSelectedOnTypeAhead = true;
+    });
+  }
+
+  void _setUniversity(University university) {
+    _setUniversityDepartment(university.department);
+    this.university = university;
+  }
+
+  void _setUniversityDepartment(String name) {
+    universityDepartment = name;
+    _typeAheadController.text = name;
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Column(
       children: [
+        Text("isSelected: $isSelectedOnTypeAhead"),
         const SizedBox(
           height: 100,
         ),
         const Text("학과 선택", style: TextStyle(fontSize: 25)),
-        const SizedBox( height: 40, ),
-        const Text("이후 변경할 수 없어요! 신중히 선택해주세요!", style: TextStyle(fontSize: 12, color: Colors.grey)),
-        const SizedBox( height: 100, ),
-
+        const SizedBox(
+          height: 40,
+        ),
+        const Text("이후 변경할 수 없어요! 신중히 선택해주세요!",
+            style: TextStyle(fontSize: 12, color: Colors.grey)),
+        const SizedBox(
+          height: 100,
+        ),
         SingleChildScrollView(
             child: Padding(
-              padding: EdgeInsets.all(18.0),
-              child : TypeAheadField( // 학교 찾기
+              padding: const EdgeInsets.all(18.0),
+              child: TypeAheadField(
+                // 학교 찾기
                 textFieldConfiguration: TextFieldConfiguration(
-                    autofocus: true, // 키보드 자동으로 올라오는 거
-                    style: DefaultTextStyle.of(context).style.copyWith(
-                        fontStyle: FontStyle.italic
-                    ),
+                    controller: _typeAheadController,
+                    autofocus: false, // 키보드 자동으로 올라오는 거
+                    style: DefaultTextStyle.of(context)
+                        .style
+                        .copyWith(fontStyle: FontStyle.italic, color: isSelectedOnTypeAhead ? Colors.blueAccent : Colors.black),
                     decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
-                        hintText: "학과명을 입력해주세요"
-                    )
-                ),
+                        border: OutlineInputBorder(), hintText: "학과명을 입력해주세요")),
 
-                suggestionsCallback: (pattern) async { // 실제 검색 로직 구현
+                suggestionsCallback: (pattern) {
                   // 입력된 패턴에 기반하여 검색 결과를 반환
-                  return await BackendService.getSuggestions(pattern);
+                  _typeOnTypeAhead();
+                  if (pattern.isEmpty || isSelectedOnTypeAhead) {
+                    return [];
+                  }
+                  return universityFinder.getDepartmentSuggestions(universityName, pattern);
                 },
 
                 itemBuilder: (context, suggestion) {
                   return ListTile(
-                    // leading: Icon(Icons.shopping_cart),
-                    title: Text(suggestion['name']),
-                    // subtitle: Text('\$${suggestion['price']}'),
+                    leading: Icon(Icons.school),
+                    title: Text(suggestion['department']),
+                    subtitle: Text('${suggestion['name']}'),
                   );
                 },
 
                 // 추천 text를 눌렀을 때 일어나는 액션 (밑의 코드는 ProductPage로 넘어감)
                 onSuggestionSelected: (suggestion) {
+                  if (isSelectedOnTypeAhead == false) {
+                    _selectOnTypeAhead();
+                  }
 
-                  // 추천된 항목이 선택되었을 때의 동작
-                  // 터치했을 때 textfield에 글씨가 들어가도록 하는 로직 필요
-
-                  // Navigator.of(context).push(MaterialPageRoute(
-                  //     builder: (context) => ProductPage(product: suggestion)
-                  // ));
+                  _setUniversity(University.fromJson(suggestion));
                 },
               ),
-            )
-        ),
-
+            )),
         const SizedBox( height: 100, ),
         ElevatedButton( // 버튼
           onPressed: () {
-            BlocProvider.of<SignupCubit>(context).stepDepartment("test major");
+            if (isSelectedOnTypeAhead) {
+              BlocProvider.of<SignupCubit>(context).stepDepartment(university);
+            }
           },
           style: ButtonStyle(
             foregroundColor: MaterialStateProperty.resolveWith(getColorText), // textcolor
             backgroundColor: MaterialStateProperty.resolveWith(getColor), // backcolor
           ),
-          child: const Text("다음으로"),
+          child: isSelectedOnTypeAhead ? const Text("다음으로") : const Text("선택해주세요"),
         ),
       ],
     );
-  }
-}
-
-class BackendService {
-  static Future<List<Map<String, dynamic>>> getSuggestions(String query) async {
-    await Future.delayed(Duration(seconds: 1));
-
-    List<Map<String, dynamic>> matches = [];
-
-    List<String> cities = CitiesService.getSuggestions(query).cast<String>();
-    for (String city in cities) {
-      matches.add({
-        'name': city,
-      });
-    }
-
-    return matches;
-  }
-}
-
-class CitiesService {
-  static final List<String> cities = [
-    'Beirut',
-    'Damascus',
-    'San Fransisco',
-    'Rome',
-    'Los Angeles',
-    'Madrid',
-    'Bali',
-    'Barcelona',
-    'Paris',
-    'Bucharest',
-    'New York City',
-    'Philadelphia',
-    'Sydney',
-  ];
-
-  static List<String> getSuggestions(String query) {
-    List<String> matches = [];
-
-    for (String city in cities) {
-      if (city.toLowerCase().contains(query.toLowerCase())) {
-        matches.add(city);
-      }
-    }
-    return matches;
   }
 }

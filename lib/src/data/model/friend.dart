@@ -1,24 +1,28 @@
+import 'package:dart_flutter/src/data/model/university.dart';
+import 'package:json_annotation/json_annotation.dart';
+part 'friend.g.dart';
+
+@JsonSerializable()
 class Friend {
-  final int userId, univId;
-  final int admissionNumber, mutualFriend;
-  final String name, phone;
-  final bool signUp;
+  final int userId;
+  final int admissionNum;
+  final int mutualFriend;
+  final String name;
+  final University university;
 
-  Friend(
-      {required this.userId,
-      required this.univId,
-      required this.admissionNumber,
-      required this.mutualFriend,
-      required this.name,
-      required this.phone,
-      required this.signUp});
+  Friend({
+    required this.userId,
+    required this.admissionNum,
+    this.mutualFriend = 0,
+    required this.name,
+    required this.university,
+  });
 
-  Friend.from(Map<String, dynamic> json)
-      : userId = json['userId'],
-        univId = json['univId'],
-        admissionNumber = json['admissionNumber'],
-        mutualFriend = json['mutualFriend'],
-        name = json['name'],
-        phone = json['phone'],
-        signUp = json['signUp'];
+  Map<String, dynamic> toJson() => _$FriendToJson(this);
+  static Friend fromJson(Map<String, dynamic> json) => _$FriendFromJson(json);
+
+  @override
+  String toString() {
+    return 'Friend{userId: $userId, admissionNumber: $admissionNum, name: $name, university: $university}';
+  }
 }

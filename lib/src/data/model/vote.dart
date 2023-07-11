@@ -1,85 +1,118 @@
+import 'dart:core';
+
+import 'package:dart_flutter/src/data/model/question.dart';
+import 'package:json_annotation/json_annotation.dart';
+part 'vote.g.dart';
+
+@JsonSerializable()
 class VoteRequest {
-  final int userId, voteId;
-  final int pickUserId, firstUserId, secondUserId, ThirdUserId, FourthUserId;
-  final Question question;
+  int questionId;
+  int pickedUserId, firstUserId, secondUserId, thirdUserId, fourthUserId;
 
   VoteRequest(
-      {required this.userId,
-      required this.voteId,
-      required this.pickUserId,
+      {required this.pickedUserId,
       required this.firstUserId,
       required this.secondUserId,
-      required this.ThirdUserId,
-      required this.FourthUserId,
-      required this.question});
+      required this.thirdUserId,
+      required this.fourthUserId,
+      required this.questionId});
 
   VoteRequest.from(Map<String, dynamic> json)
-  : userId = json['userId'],
-    voteId = json['voteId'],
-    pickUserId = json['pickUserId'],
+  : pickedUserId = json['pickedUserId'],
     firstUserId = json['firstUserId'],
     secondUserId = json['secondUserId'],
-    ThirdUserId = json['ThirdUserId'],
-    FourthUserId = json['FourthUserId'],
-    question = json['question'];
+    thirdUserId = json['ThirdUserId'],
+    fourthUserId = json['FourthUserId'],
+    questionId = json['questionId'];
+
+  Map<String, dynamic> toJson() => _$VoteRequestToJson(this);
+  static VoteRequest fromJson(Map<String, dynamic> json) => _$VoteRequestFromJson(json);
+
+  @override
+  String toString() {
+    return 'VoteRequest{questionId: $questionId, pickedUserId: $pickedUserId, firstUserId: $firstUserId, secondUserId: $secondUserId, thirdUserId: $thirdUserId, fourthUserId: $fourthUserId}';
+  }
 }
 
 class VoteResponse {
-  final int userId, voteId;
-  final Hint hint;
-  final Question question;
+  int? voteId;
+  Question? question;
+  PickedUser? pickedUser;
+  DateTime? pickedTime;
 
-  VoteResponse(
-      {required this.userId,
-      required this.voteId,
-      required this.hint,
-      required this.question});
+  VoteResponse({this.voteId, this.question, this.pickedUser, this.pickedTime});
 
-  VoteResponse.from(Map<String, dynamic> json)
-  : userId = json['userId'],
-    voteId = json['voteId'],
-    hint = json['hint'],
-    question = json['question'];
+  VoteResponse.fromJson(Map<String, dynamic> json) {
+    voteId = json['voteId'];
+    question = json['question'] != null
+        ? new Question.fromJson(json['question'])
+        : null;
+    pickedUser = json['pickedUser'] != null
+        ? new PickedUser.fromJson(json['pickedUser'])
+        : null;
+    pickedTime = DateTime.parse(json['pickedTime']);
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['voteId'] = this.voteId;
+    if (this.question != null) {
+      data['question'] = this.question!.toJson();
+    }
+    if (this.pickedUser != null) {
+      data['pickedUser'] = this.pickedUser!.toJson();
+    }
+    data['pickedTime'] = this.pickedTime?.toIso8601String();
+    return data;
+  }
+
+  @override
+  String toString() {
+    return 'VoteResponse{voteId: $voteId, question: $question, pickedUser: $pickedUser, pickedTime: $pickedTime}';
+  }
 }
 
-class Question {
-  final int questionId;
-  final String div1, div2, question;
+class PickedUser {
+  int? userId;
+  int? universityId;
+  String? name;
+  String? phone;
+  String? gender;
+  String? universityName;
+  String? department;
+  Null? nextVoteDateTime;
 
-  Question(
-      {required this.questionId,
-      required this.div1,
-      required this.div2,
-      required this.question});
+  PickedUser(
+      {this.userId,
+        this.universityId,
+        this.name,
+        this.phone,
+        this.gender,
+        this.universityName,
+        this.department,
+        this.nextVoteDateTime});
 
-  Question.from(Map<String, dynamic> json)
-  : questionId = json['questionId'],
-    div1 = json['div1'],
-    div2 = json['div2'],
-    question = json['question'];
-}
+  PickedUser.fromJson(Map<String, dynamic> json) {
+    userId = json['userId'];
+    universityId = json['universityId'];
+    name = json['name'];
+    phone = json['phone'];
+    gender = json['gender'];
+    universityName = json['universityName'];
+    department = json['department'];
+    nextVoteDateTime = json['nextVoteDateTime'];
+  }
 
-class Hint {
-  final int voteId;
-  final String hint1;
-  final String hint2;
-  final String hint3;
-  final String hint4;
-  final String hint5;
-
-  Hint(
-      {required this.voteId,
-      required this.hint1,
-      required this.hint2,
-      required this.hint3,
-      required this.hint4,
-      required this.hint5});
-
-  Hint.from(Map<String, dynamic> json)
-  : voteId = json['voteId'],
-    hint1 = json['hint1'],
-    hint2 = json['hint2'],
-    hint3 = json['hint3'],
-    hint4 = json['hint4'],
-    hint5 = json['hint5'];
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['userId'] = this.userId;
+    data['universityId'] = this.universityId;
+    data['name'] = this.name;
+    data['phone'] = this.phone;
+    data['gender'] = this.gender;
+    data['universityName'] = this.universityName;
+    data['department'] = this.department;
+    data['nextVoteDateTime'] = this.nextVoteDateTime;
+    return data;
+  }
 }

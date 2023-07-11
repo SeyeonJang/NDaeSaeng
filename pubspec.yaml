@@ -16,7 +16,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 # In Windows, build-name is used as the major, minor, and patch parts
 # of the product and file versions while build-number is used as the build suffix.
-version: 1.0.0+1
+version: 1.0.0+2
 
 environment:
   sdk: '>=3.0.0 <4.0.0'
@@ -33,7 +33,11 @@ dependencies:
   flutter_typeahead: ^3.1.7 # 사용자 입력받는 typeahead
   image_picker: ^0.8.7+5 # 사용자 사진 가져오는 imagePicker
   http: ^1.0.0
+  dio: ^5.2.1+1
   url_launcher: ^6.1.11
+  timeago: ^3.4.0
+  webview_flutter: ^4.2.2
+  fluttertoast: ^8.2.2
 
   # service api
   kakao_flutter_sdk: ^1.4.1
@@ -45,6 +49,10 @@ dependencies:
 
   # style
   cupertino_icons: ^1.0.2
+  like_button: ^2.0.5
+  confetti: ^0.7.0
+  quickalert: ^1.0.1
+  carousel_slider: ^4.2.1
 
   # dev
   json_serializable: ^6.7.0
@@ -53,6 +61,8 @@ dependencies:
   logger: ^1.4.0
   mocktail: ^0.3.0
   build_runner: ^2.3.3
+  firebase_core: ^2.14.0
+  firebase_dynamic_links: ^5.3.3
 
 dev_dependencies:
   flutter_test:

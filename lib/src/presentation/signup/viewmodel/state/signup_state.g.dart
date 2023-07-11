@@ -7,6 +7,7 @@ part of 'signup_state.dart';
 // **************************************************************************
 
 SignupState _$SignupStateFromJson(Map<String, dynamic> json) => SignupState(
+      isLoading: json['isLoading'] as bool,
       inputState:
           SignupInput.fromJson(json['inputState'] as Map<String, dynamic>),
       universities: (json['universities'] as List<dynamic>)
@@ -17,6 +18,7 @@ SignupState _$SignupStateFromJson(Map<String, dynamic> json) => SignupState(
 
 Map<String, dynamic> _$SignupStateToJson(SignupState instance) =>
     <String, dynamic>{
+      'isLoading': instance.isLoading,
       'inputState': instance.inputState,
       'universities': instance.universities,
       'signupStep': _$SignupStepEnumMap[instance.signupStep]!,
