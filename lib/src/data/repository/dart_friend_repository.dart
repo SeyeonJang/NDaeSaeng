@@ -26,6 +26,12 @@ class DartFriendRepository {
     return await DartApiRemoteDataSource.postFriend(friend.userId!);
   }
 
+  Future<Friend> addFriendBy(String inviteCode) async {
+    Friend friend = await DartApiRemoteDataSource.postFriendBy(inviteCode);
+    myFriendCache.addFriend(friend);
+    return friend;
+  }
+
   Future<String> deleteFriend(Friend friend) async {
     myFriendCache.deleteFriend(friend);
     recommendedFriendCache.addFriend(friend);

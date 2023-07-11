@@ -136,6 +136,14 @@ class DartApiRemoteDataSource {
     return response.data;
   }
 
+  static Future<Friend> postFriendBy(String inviteCode) async {
+    const path = '/v1/friends/invite';
+    final body = {"recommendationCode": inviteCode};
+
+    final response = await _httpUtil.request().post(path, data: body);
+    return Friend.fromJson(response.data);
+  }
+
   // Friend: 친구 삭제하기 (연결끊기)
   static Future<String> deleteFriend(int friendUserId) async {
     const path = '/v1/friends';
