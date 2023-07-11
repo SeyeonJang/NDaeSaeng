@@ -53,10 +53,10 @@ class _DartPageViewState extends State<DartPageView> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  _TapBarButton(name: "Meet", targetPage: 0, nowPage: _page, onTapNavigation: _onTapNavigation),
-                  _TapBarButton(name: "Dart", targetPage: 1, nowPage: _page, onTapNavigation: _onTapNavigation),
-                  _TapBarButton(name: "Darts", targetPage: 2, nowPage: _page, onTapNavigation: _onTapNavigation),
-                  _TapBarButton(name: " MY ", targetPage: 3, nowPage: _page, onTapNavigation: _onTapNavigation),
+                  //_TapBarButton(name: "Meet", targetPage: 0, nowPage: _page, onTapNavigation: _onTapNavigation), // TODO : Meet 만들 때 복구
+                  _TapBarButton(name: "Dart", targetPage: 0, nowPage: _page, onTapNavigation: _onTapNavigation),
+                  _TapBarButton(name: "Darts", targetPage: 1, nowPage: _page, onTapNavigation: _onTapNavigation),
+                  _TapBarButton(name: " MY ", targetPage: 2, nowPage: _page, onTapNavigation: _onTapNavigation),
                 ],
               ),
             ),
@@ -65,13 +65,17 @@ class _DartPageViewState extends State<DartPageView> {
                 onPageChanged: _onPageChanged,
                 controller: _pageController,
                 children: [
-                  BlocProvider<VoteListCubit>(
-                      create: (context) => VoteListCubit(),
-                      child: const VoteListPages(),
-                  ),
+                  // BlocProvider<MeetCubit>( // TODO : Meet 만들 때 복구
+                  //     create: (context) =>  MeetCubit()..initState(),
+                  //     child: const MeetPages(),
+                  // ),
                   BlocProvider<VoteCubit>(
                       create: (context) => VoteCubit(),
                       child: const VotePages(),
+                  ),
+                  BlocProvider(
+                    create: (context) => VoteListCubit(),
+                    child: const VoteListPages(),
                   ),
                   BlocProvider<MyPagesCubit>(
                     create: (BuildContext context) => MyPagesCubit()..initPages(),

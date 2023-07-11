@@ -38,6 +38,7 @@ dependencies:
   timeago: ^3.4.0
   webview_flutter: ^4.2.2
   fluttertoast: ^8.2.2
+  share_plus: ^7.0.2
 
   # service api
   kakao_flutter_sdk: ^1.4.1
