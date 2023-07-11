@@ -38,15 +38,8 @@ class MyPagesState {
     isTos1 = false;
     isTos2 = false;
     userResponse = UserResponse(
-      userId: null,
-      univId: null,
-      admissionNumber: null,
-      point: null,
-      name: '',
-      phone: '',
-      universityName: '',
-      department: '',
-      nextVoteDateTime: null,
+      user: null,
+      university: null,
     );
   }
 

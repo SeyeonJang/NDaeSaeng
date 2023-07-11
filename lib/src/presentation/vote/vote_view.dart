@@ -57,19 +57,19 @@ class VoteView extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             ChoiceFriendButton(
-                                userId: friend1.userId, name: friend1.name, enterYear: friend1.admissionNum, department: friend1.university.department,
+                                userId: friend1.userId!, name: friend1.name ?? "XXX", enterYear: friend1.admissionYear.toString().substring(2,4) ?? "00", department: friend1.university?.department ?? "XXXX학과",
                                 questionId: question.questionId!,
-                                firstUserId: friend1.userId,
-                                secondUserId: friend2.userId,
-                                thirdUserId: friend3.userId,
-                                fourthUserId: friend4.userId
+                                firstUserId: friend1.userId!,
+                                secondUserId: friend2.userId!,
+                                thirdUserId: friend3.userId!,
+                                fourthUserId: friend4.userId!
                             ),
-                            ChoiceFriendButton(userId: friend2.userId, name: friend2.name, enterYear: friend2.admissionNum, department: friend2.university.department,
+                            ChoiceFriendButton(userId: friend2.userId!, name: friend2.name ?? "XXX", enterYear: friend2.admissionYear.toString().substring(2,4) ?? "00", department: friend2.university?.department ?? "XXXX학과",
                                 questionId: question.questionId!,
-                                firstUserId: friend1.userId,
-                                secondUserId: friend2.userId,
-                                thirdUserId: friend3.userId,
-                                fourthUserId: friend4.userId
+                                firstUserId: friend1.userId!,
+                                secondUserId: friend2.userId!,
+                                thirdUserId: friend3.userId!,
+                                fourthUserId: friend4.userId!
                             ),
                           ],
                         ),
@@ -79,18 +79,18 @@ class VoteView extends StatelessWidget {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            ChoiceFriendButton(userId: friend3.userId, name: friend3.name, enterYear: friend3.admissionNum, department: friend3.university.department,
+                            ChoiceFriendButton(userId: friend3.userId!, name: friend3.name ?? "XXX", enterYear: friend3.admissionYear.toString().substring(2,4) ?? "00", department: friend3.university?.department ?? "XXXX학과",
                                 questionId: question.questionId!,
-                                firstUserId: friend1.userId,
-                                secondUserId: friend2.userId,
-                                thirdUserId: friend3.userId,
-                                fourthUserId: friend4.userId),
-                            ChoiceFriendButton(userId: friend4.userId, name: friend4.name, enterYear: friend4.admissionNum, department: friend4.university.department,
+                                firstUserId: friend1.userId!,
+                                secondUserId: friend2.userId!,
+                                thirdUserId: friend3.userId!,
+                                fourthUserId: friend4.userId!),
+                            ChoiceFriendButton(userId: friend4.userId!, name: friend4.name ?? "XXX", enterYear: friend4.admissionYear.toString().substring(2,4) ?? "00", department: friend4.university?.department ?? "XXXX학과",
                                 questionId: question.questionId!,
-                                firstUserId: friend1.userId,
-                                secondUserId: friend2.userId,
-                                thirdUserId: friend3.userId,
-                                fourthUserId: friend4.userId),
+                                firstUserId: friend1.userId!,
+                                secondUserId: friend2.userId!,
+                                thirdUserId: friend3.userId!,
+                                fourthUserId: friend4.userId!),
                           ],
                         ),
                         const SizedBox(
@@ -174,7 +174,7 @@ class _VoteStoryBarState extends State<VoteStoryBar> {
 class ChoiceFriendButton extends StatelessWidget {
   final int userId;
   final String name;
-  final int enterYear;
+  final String enterYear;
   final String department;
 
   final int questionId;

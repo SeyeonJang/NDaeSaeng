@@ -5,8 +5,7 @@ class FriendsMock {
   List<Friend> friends = [
     Friend(
       userId: 2,
-      admissionNum: 23,
-      mutualFriend: 0,
+      admissionYear: 2023,
       name: '최현식',
       // phone: '010-1234-5678',
       // signUp: true,
@@ -14,8 +13,7 @@ class FriendsMock {
     ),
     Friend(
       userId: 2,
-      admissionNum: 11,
-      mutualFriend: 0,
+      admissionYear: 2011,
       name: '최현일',
       // phone: '010-1234-5678',
       // signUp: true,
@@ -23,8 +21,7 @@ class FriendsMock {
     ),
     Friend(
       userId: 2,
-      admissionNum: 12,
-      mutualFriend: 0,
+      admissionYear: 2012,
       name: '최현이',
       // phone: '010-1234-5678',
       // signUp: true,
@@ -32,8 +29,7 @@ class FriendsMock {
     ),
     Friend(
       userId: 2,
-      admissionNum: 13,
-      mutualFriend: 0,
+      admissionYear: 2013,
       name: '최현삼',
       // phone: '010-1234-5678',
       // signUp: true,
@@ -41,8 +37,7 @@ class FriendsMock {
     ),
     Friend(
       userId: 2,
-      admissionNum: 14,
-      mutualFriend: 0,
+      admissionYear: 2014,
       name: '최현사',
       // phone: '010-1234-5678',
       // signUp: true,
@@ -50,8 +45,7 @@ class FriendsMock {
     ),
     Friend(
       userId: 2,
-      admissionNum: 15,
-      mutualFriend: 0,
+      admissionYear: 2015,
       name: '최현오',
       // phone: '010-1234-5678',
       // signUp: true,
@@ -59,8 +53,7 @@ class FriendsMock {
     ),
     Friend(
       userId: 2,
-      admissionNum: 16,
-      mutualFriend: 0,
+      admissionYear: 2016,
       name: '최현육',
       // phone: '010-1234-5678',
       // signUp: true,
@@ -68,8 +61,7 @@ class FriendsMock {
     ),
     Friend(
       userId: 2,
-      admissionNum: 17,
-      mutualFriend: 0,
+      admissionYear: 2017,
       name: '최현칠',
       // phone: '010-1234-5678',
       // signUp: true,

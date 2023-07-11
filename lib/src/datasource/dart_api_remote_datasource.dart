@@ -89,7 +89,7 @@ class DartApiRemoteDataSource {
     final response = await _httpUtil.request().post(path, data: body);
 
     final jsonResponse = json.decode(response.toString());
-    return UserResponse.from(jsonResponse);
+    return UserResponse.fromJson(jsonResponse);
   }
 
   /// User: 회원 탈퇴 요청
@@ -106,7 +106,7 @@ class DartApiRemoteDataSource {
     print(response);
 
     final jsonResponse = json.decode(response.toString());
-    return UserResponse.from(jsonResponse);
+    return UserResponse.fromJson(jsonResponse);
   }
 
   // User: 내 정보 업데이트하기
@@ -134,6 +134,14 @@ class DartApiRemoteDataSource {
 
     final response = await _httpUtil.request().post(path, data: body);
     return response.data;
+  }
+
+  static Future<Friend> postFriendBy(String inviteCode) async {
+    const path = '/v1/friends/invite';
+    final body = {"recommendationCode": inviteCode};
+
+    final response = await _httpUtil.request().post(path, data: body);
+    return Friend.fromJson(response.data);
   }
 
   // Friend: 친구 삭제하기 (연결끊기)

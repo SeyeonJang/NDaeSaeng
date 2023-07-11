@@ -1,45 +1,108 @@
-import 'package:json_annotation/json_annotation.dart';
-part 'user.g.dart';
+import 'package:dart_flutter/src/data/model/university.dart';
+// import 'package:json_annotation/json_annotation.dart';
+// part 'user.g.dart';
 
-@JsonSerializable()
 class UserResponse {
-  final int? userId, univId;
-  final int? admissionNumber, point;
-  final String? name, phone;
-  final String? universityName, department;
-  final DateTime? nextVoteDateTime;
+  User? user;
+  University? university;
 
-  UserResponse({
-    required this.userId,
-    required this.univId,
-    required this.admissionNumber,
-    required this.point,
-    required this.name,
-    required this.phone,
-    required this.universityName,
-    required this.department,
-    required this.nextVoteDateTime
-  });
+  UserResponse({this.user, this.university});
 
-  UserResponse.from(Map<String, dynamic> json)
-  : userId = json['userId'],
-    univId = json['universityId'],
-    admissionNumber = json['admissionNumber'],
-    point = json['point'],
-    name = json['name'],
-    phone = json['phone'],
-    universityName = json['universityName'],
-    department = json['department'],
-    nextVoteDateTime = json['nextVoteDateTime'];
+  UserResponse.fromJson(Map<String, dynamic> json) {
+    user = json['user'] != null ? User.fromJson(json['user']) : null;
+    university = json['university'] != null
+        ? University.fromJson(json['university'])
+        : null;
+  }
 
-  Map<String, dynamic> toJson() => _$UserResponseToJson(this);
-  static UserResponse fromJson(Map<String, dynamic> json) => _$UserResponseFromJson(json);
-
-  @override
-  String toString() {
-    return 'UserResponse{userId: $userId, univId: $univId, admissionNumber: $admissionNumber, point: $point, name: $name, phone: $phone, universityName: $universityName, department: $department, nextVoteDateTime: $nextVoteDateTime}';
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    if (user != null) {
+      data['user'] = user!.toJson();
+    }
+    if (university != null) {
+      data['university'] = university!.toJson();
+    }
+    return data;
   }
 }
+
+class User {
+  int? id;
+  String? name;
+  String? phone;
+  String? gender;
+  String? admissionYear;
+  String? recommendationCode;
+
+  User({this.id,
+        this.name,
+        this.phone,
+        this.gender,
+        this.admissionYear,
+        this.recommendationCode});
+
+  User.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    name = json['name'];
+    phone = json['phone'];
+    gender = json['gender'];
+    admissionYear = json['admissionYear'];
+    recommendationCode = json['recommendationCode'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = Map<String, dynamic>();
+    data['id'] = id;
+    data['name'] = name;
+    data['phone'] = phone;
+    data['gender'] = gender;
+    data['admissionYear'] = admissionYear;
+    data['recommendationCode'] = recommendationCode;
+    return data;
+  }
+}
+
+//
+// @JsonSerializable()
+// class UserResponse {
+//   final int? userId, univId;
+//   final int? admissionNumber, point;
+//   final String? name, phone;
+//   final String? universityName, department;
+//   final DateTime? nextVoteDateTime;
+//
+//   UserResponse({
+//     required this.userId,
+//     required this.univId,
+//     required this.admissionNumber,
+//     required this.point,
+//     required this.name,
+//     required this.phone,
+//     required this.universityName,
+//     required this.department,
+//     required this.nextVoteDateTime
+//   });
+//
+//   UserResponse.from(Map<String, dynamic> json)
+//   : userId = json['userId'],
+//     univId = json['universityId'],
+//     admissionNumber = json['admissionNumber'],
+//     point = json['point'],
+//     name = json['name'],
+//     phone = json['phone'],
+//     universityName = json['universityName'],
+//     department = json['department'],
+//     nextVoteDateTime = json['nextVoteDateTime'];
+//
+//   Map<String, dynamic> toJson() => _$UserResponseToJson(this);
+//   static UserResponse fromJson(Map<String, dynamic> json) => _$UserResponseFromJson(json);
+//
+//   @override
+//   String toString() {
+//     return 'UserResponse{userId: $userId, univId: $univId, admissionNumber: $admissionNumber, point: $point, name: $name, phone: $phone, universityName: $universityName, department: $department, nextVoteDateTime: $nextVoteDateTime}';
+//   }
+// }
 
 class UserRequest {
   final int univId;

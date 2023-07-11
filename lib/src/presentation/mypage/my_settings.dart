@@ -96,12 +96,12 @@ class _MyPageViewState extends State<MyPageView> {
                   horizontal: getFlexibleSize(target: 20)),
               child: BlocBuilder<MyPagesCubit, MyPagesState>(
                 builder: (context, state) {
-                  String name = state.userResponse.name ?? "XXX";
+                  String name = state.userResponse.user?.name ?? "XXX";
                   String universityName =
-                      state.userResponse.universityName ?? "XX대학교";
-                  String department = state.userResponse.department ?? "XXX학과";
+                      state.userResponse.university?.name ?? "XX대학교";
+                  String department = state.userResponse.university?.department ?? "XXX학과";
                   String admissionNumber =
-                      "${state.userResponse.admissionNumber ?? 'XX'}학번";
+                      "${state.userResponse.user?.admissionYear ?? 'XX'}학번";
                   String gender = '남성';
 
                   return Column(

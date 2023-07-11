@@ -73,7 +73,7 @@ class MyPageLandingView extends StatelessWidget {
                     children: [
                       BlocBuilder<MyPagesCubit,MyPagesState>(
                           builder: (context, state) {
-                            String department = "${state.userResponse.department??'######학과'}";
+                            String department = state.userResponse.university?.department??'######학과';
                             return Text(
                               department,
                               style: TextStyle(
@@ -90,8 +90,8 @@ class MyPageLandingView extends StatelessWidget {
                     children: [
                       BlocBuilder<MyPagesCubit,MyPagesState>(
                           builder: (context, state) {
-                            String name = state.userResponse.name??"###";
-                            String admissionNumber = "${state.userResponse.admissionNumber??"##"}학번";
+                            String name = state.userResponse.user?.name??"###";
+                            String admissionNumber = "${state.userResponse.user?.admissionYear.toString().substring(2,4)??"##"}학번";
 
                             return Row(
                               children: [
@@ -309,10 +309,13 @@ class NewFriends extends StatelessWidget {
 }
 
 class FriendComponent extends StatelessWidget {
-  final bool isAdd;
-  final Friend friend;
+  late bool isAdd;
+  late Friend friend;
 
-  const FriendComponent(this.isAdd, this.friend, {super.key});
+  FriendComponent(bool isAdd, Friend friend, {super.key}) {
+    this.isAdd = isAdd;
+    this.friend = friend;
+  }
 
   void pressedDeleteButton(BuildContext context, int userId) {
     BlocProvider.of<MyPagesCubit>(context).pressedFriendDeleteButton(friend);
@@ -332,13 +335,13 @@ class FriendComponent extends StatelessWidget {
           children: [
             Row(
               children: [
-                Text(friend.name, style: TextStyle(
+                Text(friend.name ?? "XXX", style: TextStyle(
                   fontSize: SizeConfig.defaultSize * 1.9,
                   fontWeight: FontWeight.w600,
                 )),
                 SizedBox(
                   width: SizeConfig.defaultSize * 16,
-                  child: Text("  ${friend.admissionNum}학번∙${friend.university.department}", style: TextStyle(
+                  child: Text("  ${friend.admissionYear.toString().substring(2,4)}학번∙${friend.university?.department}", style: TextStyle(
                     fontSize: SizeConfig.defaultSize * 1.3,
                     fontWeight: FontWeight.w500,
                     overflow: TextOverflow.ellipsis,
@@ -364,9 +367,9 @@ class FriendComponent extends StatelessWidget {
             ElevatedButton(
               onPressed: () {
                 if (isAdd) {
-                  pressedAddButton(context, friend.userId);
+                  pressedAddButton(context, friend.userId!);
                 } else {
-                  pressedDeleteButton(context, friend.userId);
+                  pressedDeleteButton(context, friend.userId!);
                 }
               },
               child: Text(isAdd?"추가":"삭제", style: TextStyle(
