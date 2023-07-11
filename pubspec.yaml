@@ -41,6 +41,7 @@ dependencies:
 
   # service api
   kakao_flutter_sdk: ^1.4.1
+  onesignal_flutter: ^3.5.1
 
   # bloc
   flutter_bloc: ^8.0.0
