@@ -12,7 +12,15 @@ class VoteCubit extends HydratedCubit<VoteState> {
   static final DartFriendRepository _dartFriendRepository = DartFriendRepository();
   static final DartVoteRepository _dartVoteRepository = DartVoteRepository();
 
-  VoteCubit() : super(VoteState.init());
+  // VoteCubit() : super(VoteState.init());
+  VoteCubit() : super(VoteState(
+      step: VoteStep.start,
+      voteIterator: 0,
+      votes: [],
+      questions: [],
+      nextVoteDateTime: DateTime.now(),
+      friends: [],
+  ));
 
   // void initVotes() async {
   //   // 다음 투표 가능 시간을 기록
@@ -20,7 +28,7 @@ class VoteCubit extends HydratedCubit<VoteState> {
   //   DateTime nextVoteTime = DateTime.now();
   //   state.setNextVoteDateTime(nextVoteTime);
   //
-  //   // dfsadftep 설정
+  //   // ㅇㄹㄴㅁㅇdfsadftep 설정
   //   _setStepByNextVoteTime();
   //
   //   emit(state.copy());
@@ -33,25 +41,20 @@ class VoteCubit extends HydratedCubit<VoteState> {
   void stepStart() async {
     // 투표 가능한지 확인
     _setStepByNextVoteTime();
-   
+
     if (state.step.isStart) {
       // 친구 목록 설정
-      // List<Friend> friends = FriendsMock().getFriends();
       List<Friend> friends = await _dartFriendRepository.getMyFriends();
       state.setFriends(friends);
 
       // 새로 투표할 목록들을 가져오기
       List<Question> questions = await _dartVoteRepository.getNewQuestions();
       state.setQuestions(questions);
-      // List<VoteResponse> myVotes = VoteMock().getVotes();
-      // for (var myVote in myVotes) {
-      //   state.addVote(VoteRequest.fromVoteResponse(myVote));
-      // }
 
       // 투표 화면으로 전환
       state.setStep(VoteStep.process);
     }
-    
+
     emit(state.copy());
   }
 
@@ -105,14 +108,12 @@ class VoteCubit extends HydratedCubit<VoteState> {
   }
 
   @override
-  VoteState fromJson(Map<String, dynamic> json)  {
-    print("VoteFromJson: ${state.fromJson}");
+  VoteState fromJson(Map<String, dynamic> json) {
     return state.fromJson(json);
   }
 
   @override
   Map<String, dynamic> toJson(VoteState state) {
-    print("VoteToJson: ${state.toJson()}");
     return state.toJson();
   }
 }

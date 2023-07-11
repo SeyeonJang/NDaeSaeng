@@ -5,14 +5,14 @@ part 'friend.g.dart';
 @JsonSerializable()
 class Friend {
   final int userId;
-  final int admissionNumber;
+  final int admissionNum;
   final int mutualFriend;
   final String name;
   final University university;
 
   Friend({
     required this.userId,
-    required this.admissionNumber,
+    required this.admissionNum,
     this.mutualFriend = 0,
     required this.name,
     required this.university,
@@ -23,6 +23,6 @@ class Friend {
 
   @override
   String toString() {
-    return 'Friend{userId: $userId, admissionNumber: $admissionNumber, name: $name, university: $university}';
+    return 'Friend{userId: $userId, admissionNumber: $admissionNum, name: $name, university: $university}';
   }
 }

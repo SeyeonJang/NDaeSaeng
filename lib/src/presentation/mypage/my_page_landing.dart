@@ -338,7 +338,7 @@ class FriendComponent extends StatelessWidget {
                 )),
                 SizedBox(
                   width: SizeConfig.defaultSize * 16,
-                  child: Text("  ${friend.admissionNumber}학번∙${friend.university.department}", style: TextStyle(
+                  child: Text("  ${friend.admissionNum}학번∙${friend.university.department}", style: TextStyle(
                     fontSize: SizeConfig.defaultSize * 1.3,
                     fontWeight: FontWeight.w500,
                     overflow: TextOverflow.ellipsis,
