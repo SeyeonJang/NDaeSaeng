@@ -112,36 +112,36 @@ class _MyPageViewState extends State<MyPageView> {
                       _infoSectionItem(title: "학과", value: department),
                       _infoSectionItem(title: "학번", value: admissionNumber),
                       _infoSectionItem(title: "성별", value: gender),
-                      Container(
-                        height: SizeConfig.defaultSize * 5,
-                        child: Flexible(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text("MBTI", style: TextStyle(
-                                fontSize: SizeConfig.defaultSize * 1.6,
-                                fontWeight: FontWeight.w400,
-                              ),),
-                              CupertinoButton.filled(
-                                padding: EdgeInsets.fromLTRB(10,0,10,0),
-                                onPressed: () {
-                                  showCupertinoModalPopup(
-                                  context: context,
-                                  builder: (context) => CupertinoActionSheet(
-                                    actions: [buildPicker()],
-                                    cancelButton: CupertinoActionSheetAction(
-                                      child: Text("취소"),
-                                      onPressed: () => Navigator.pop(context),
-                                    ),
-                                    ),
-                                );},
-                                child: Text(mbti1[mbtiIndex1]+mbti2[mbtiIndex2]+mbti3[mbtiIndex3]+mbti4[mbtiIndex4]),
-                                // TODO : state, cubit 만들어서 선택한 MBTI 저장해야함 + 서버 넘겨야함
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
+                      // Container( // MBTI 구현은 완료해둠
+                      //   height: SizeConfig.defaultSize * 5,
+                      //   child: Flexible(
+                      //     child: Row(
+                      //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      //       children: [
+                      //         Text("MBTI", style: TextStyle(
+                      //           fontSize: SizeConfig.defaultSize * 1.6,
+                      //           fontWeight: FontWeight.w400,
+                      //         ),),
+                      //         CupertinoButton.filled(
+                      //           padding: EdgeInsets.fromLTRB(10,0,10,0),
+                      //           onPressed: () {
+                      //             showCupertinoModalPopup(
+                      //             context: context,
+                      //             builder: (context) => CupertinoActionSheet(
+                      //               actions: [buildPicker()],
+                      //               cancelButton: CupertinoActionSheetAction(
+                      //                 child: Text("취소"),
+                      //                 onPressed: () => Navigator.pop(context),
+                      //               ),
+                      //               ),
+                      //           );},
+                      //           child: Text(mbti1[mbtiIndex1]+mbti2[mbtiIndex2]+mbti3[mbtiIndex3]+mbti4[mbtiIndex4]),
+                      //           // TODO : state, cubit 만들어서 선택한 MBTI 저장해야함 + 서버 넘겨야함 (MEET)
+                      //         ),
+                      //       ],
+                      //     ),
+                      //   ),
+                      // ),
                     ],
                   );
                 },
@@ -151,7 +151,7 @@ class _MyPageViewState extends State<MyPageView> {
         ),
       );
 
-  Container buildPicker() {
+  Container buildPicker() { // MBTI 고르는 화면
     return Container(
       height: SizeConfig.screenHeight * 0.3,
       color: Colors.white,
