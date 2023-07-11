@@ -17,7 +17,7 @@ class MyPagesCubit extends Cubit<MyPagesState> {
     emit(state.copy());
 
     List<Friend> friends = await _dartFriendRepository.getMyFriends();
-    state.setUserInfo(friends);
+    state.setMyFriends(friends);
     List<Friend> newFriends = await _dartFriendRepository.getRecommendedFriends();
     state.setRecommendedFriends(newFriends);
     // 초기값 설정

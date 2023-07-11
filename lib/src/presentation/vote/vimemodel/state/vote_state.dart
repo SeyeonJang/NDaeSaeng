@@ -2,6 +2,7 @@ import 'package:dart_flutter/src/data/model/friend.dart';
 import 'package:dart_flutter/src/data/model/question.dart';
 import 'package:dart_flutter/src/data/model/vote.dart';
 import 'package:json_annotation/json_annotation.dart';
+
 part 'vote_state.g.dart';
 
 @JsonSerializable()
@@ -27,7 +28,6 @@ class VoteState {
   });
 
   VoteState.init() {
-    print("init");
     step = VoteStep.start;
     voteIterator = 0;
     votes = [];
@@ -37,13 +37,13 @@ class VoteState {
   }
 
   VoteState copy() => VoteState(
-    step: step,
-    voteIterator: voteIterator,
-    votes: votes,
-    questions: questions,
-    nextVoteDateTime: nextVoteDateTime,
-    friends: friends,
-  );
+        step: step,
+        voteIterator: voteIterator,
+        votes: votes,
+        questions: questions,
+        nextVoteDateTime: nextVoteDateTime,
+        friends: friends,
+      );
 
   VoteState setStep(VoteStep step) {
     this.step = step;
@@ -60,9 +60,9 @@ class VoteState {
     return this;
   }
 
-void setQuestions(List<Question> questions) {
+  void setQuestions(List<Question> questions) {
     this.questions = questions;
-}
+  }
 
   List<Friend> getShuffleFriends() {
     if (friends.length < 4) {
@@ -76,9 +76,7 @@ void setQuestions(List<Question> questions) {
   }
 
   void pickUserInVote(VoteRequest voteRequest) {
-    votes.add(
-      voteRequest
-    );
+    votes.add(voteRequest);
   }
 
   bool isVoteTimeOver() {
@@ -102,6 +100,7 @@ void setQuestions(List<Question> questions) {
   }
 
   Map<String, dynamic> toJson() => _$VoteStateToJson(this);
+
   VoteState fromJson(Map<String, dynamic> json) => _$VoteStateFromJson(json);
 
   @override

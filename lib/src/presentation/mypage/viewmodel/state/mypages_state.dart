@@ -71,7 +71,7 @@ class MyPagesState {
     return this;
   }
 
-  MyPagesState setUserInfo(List<Friend> friends) {
+  MyPagesState setMyFriends(List<Friend> friends) {
     this.friends = friends;
     return this;
   }

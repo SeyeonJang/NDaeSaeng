@@ -1,5 +1,4 @@
 import 'package:dart_flutter/res/size_config.dart';
-import 'package:dart_flutter/src/presentation/meet/meet_page.dart
 import 'package:dart_flutter/src/presentation/meet/meetpages.dart';
 import 'package:dart_flutter/src/presentation/meet/viewmodel/meet_cubit.dart';
 import 'package:dart_flutter/src/presentation/mypage/my_page_landing.dart';
