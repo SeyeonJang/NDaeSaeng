@@ -45,47 +45,49 @@ class _DartPageViewState extends State<DartPageView> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-        child: Column(
-          children: [
-            Padding(
-              padding: EdgeInsets.all(SizeConfig.defaultSize * 2),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  //_TapBarButton(name: "Meet", targetPage: 0, nowPage: _page, onTapNavigation: _onTapNavigation), // TODO : Meet 만들 때 복구
-                  _TapBarButton(name: "Dart", targetPage: 0, nowPage: _page, onTapNavigation: _onTapNavigation),
-                  _TapBarButton(name: "Darts", targetPage: 1, nowPage: _page, onTapNavigation: _onTapNavigation),
-                  _TapBarButton(name: " MY ", targetPage: 2, nowPage: _page, onTapNavigation: _onTapNavigation),
-                ],
+    return Scaffold(
+      body: SafeArea(
+          child: Column(
+            children: [
+              Padding(
+                padding: EdgeInsets.all(SizeConfig.defaultSize * 2),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    //_TapBarButton(name: "Meet", targetPage: 0, nowPage: _page, onTapNavigation: _onTapNavigation), // TODO : Meet 만들 때 복구
+                    _TapBarButton(name: "Dart", targetPage: 0, nowPage: _page, onTapNavigation: _onTapNavigation),
+                    _TapBarButton(name: "Darts", targetPage: 1, nowPage: _page, onTapNavigation: _onTapNavigation),
+                    _TapBarButton(name: " MY ", targetPage: 2, nowPage: _page, onTapNavigation: _onTapNavigation),
+                  ],
+                ),
               ),
-            ),
-            Expanded(
-              child: PageView(
-                onPageChanged: _onPageChanged,
-                controller: _pageController,
-                children: [
-                  // BlocProvider<MeetCubit>( // TODO : Meet 만들 때 복구
-                  //     create: (context) =>  MeetCubit()..initState(),
-                  //     child: const MeetPages(),
-                  // ),
-                  BlocProvider<VoteCubit>(
-                      create: (context) => VoteCubit(),
-                      child: const VotePages(),
-                  ),
-                  BlocProvider(
-                    create: (context) => VoteListCubit(),
-                    child: const VoteListPages(),
-                  ),
-                  BlocProvider<MyPagesCubit>(
-                    create: (BuildContext context) => MyPagesCubit()..initPages(),
-                    child: const MyPages(),
-                  ),
-                ],
+              Expanded(
+                child: PageView(
+                  onPageChanged: _onPageChanged,
+                  controller: _pageController,
+                  children: [
+                    // BlocProvider<MeetCubit>( // TODO : Meet 만들 때 복구
+                    //     create: (context) =>  MeetCubit()..initState(),
+                    //     child: const MeetPages(),
+                    // ),
+                    BlocProvider<VoteCubit>(
+                        create: (context) => VoteCubit()..initVotes(),
+                        child: const VotePages(),
+                    ),
+                    BlocProvider(
+                      create: (context) => VoteListCubit(),
+                      child: const VoteListPages(),
+                    ),
+                    BlocProvider<MyPagesCubit>(
+                      create: (BuildContext context) => MyPagesCubit()..initPages(),
+                      child: const MyPages(),
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
-        ),
+            ],
+          ),
+      ),
     );
   }
 }

@@ -11,19 +11,15 @@ class StandbyCubit extends Cubit<StandbyState> {
 
   StandbyCubit() : super(StandbyState.init());
 
-  void hello() {
-    print("hello");
-  }
-
   void initPages() async {
-    print("대기화면 무사 진입 ~ !WEEFW"); // TODO : ERASE
+    state.isLoading = true;
     emit(state.copy());
     List<Friend> friends = await _dartFriendRepository.getMyFriends();
     state.setAddedFriends(friends);
     state.userResponse = await _dartUserRepository.myInfo();
 
     state.userResponse.user!.recommendationCode;
-
+    state.isLoading = false;
     emit(state.copy());
     print("대기화면 무사 진입 ~ !"); // TODO : ERASE
   }
@@ -31,6 +27,7 @@ class StandbyCubit extends Cubit<StandbyState> {
   void pressedFriendCodeAddButton(String inviteCode) async {
     Friend friend = await _dartFriendRepository.addFriendBy(inviteCode);
     state.addFriend(friend);
+    print("친추함 $friend");
     emit(state.copy());
   }
 }

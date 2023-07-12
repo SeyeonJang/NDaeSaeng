@@ -5,11 +5,13 @@ import 'package:dart_flutter/src/data/model/friend.dart';
 
 @JsonSerializable()
 class StandbyState {
+  late bool isLoading;
   late List<Friend> addedFriends;
   late int friendsCount;
   late UserResponse userResponse;
 
   StandbyState({
+    required this.isLoading,
     required this.addedFriends,
     required this.friendsCount,
     required this.userResponse,
@@ -23,17 +25,19 @@ class StandbyState {
       user: null,
       university: null,
     );
+    isLoading = false;
     print("init 확인");
   }
 
   StandbyState copy() => StandbyState(
+    isLoading: isLoading,
     addedFriends: addedFriends,
     friendsCount: friendsCount,
     userResponse: userResponse,
   );
 
   StandbyState setAddedFriends(List<Friend> addedFriends) {
-    addedFriends = addedFriends;
+    this.addedFriends = addedFriends;
     return this;
   }
 

@@ -22,17 +22,20 @@ class VoteCubit extends HydratedCubit<VoteState> {
       friends: [],
   ));
 
-  // void initVotes() async {
-  //   // 다음 투표 가능 시간을 기록
-  //   // DateTime nextVoteTime = await _dartUserRepository.getMyNextVoteTime("TODO MY ACCESSTOKEN");
-  //   DateTime nextVoteTime = DateTime.now();
-  //   state.setNextVoteDateTime(nextVoteTime);
-  //
-  //   // ㅇㄹㄴㅁㅇdfsadftep 설정
-  //   _setStepByNextVoteTime();
-  //
-  //   emit(state.copy());
-  // }
+  void initVotes() async {
+    // 친구 목록 설정
+    List<Friend> friends = await _dartFriendRepository.getMyFriends();
+    state.setFriends(friends);
+    // // 다음 투표 가능 시간을 기록
+    // // DateTime nextVoteTime = await _dartUserRepository.getMyNextVoteTime("TODO MY ACCESSTOKEN");
+    // DateTime nextVoteTime = DateTime.now();
+    // state.setNextVoteDateTime(nextVoteTime);
+    //
+    // // ㅇㄹㄴㅁㅇdfsadftep 설정
+    // _setStepByNextVoteTime();
+
+    emit(state.copy());
+  }
 
   void refresh() {
     emit(state.copy());

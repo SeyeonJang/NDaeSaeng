@@ -95,6 +95,7 @@ class _ChooseGenderState extends State<ChooseGender> {
                 onPressed: () {
                   BlocProvider.of<SignupCubit>(context).stepGender("M");
                   BlocProvider.of<AuthCubit>(context).doneSignup();
+                  // TODO MVP HOTFIX : 성별 -> 스탠바이로 넘어가야함
                   Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const DartPageView()), (route)=>false);
                 }, // 임시용
                 // onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => 2-1())), // animation은 나중에 추가 + 2-1로 가야함
