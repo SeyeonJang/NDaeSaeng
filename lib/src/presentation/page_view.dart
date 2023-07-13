@@ -1,4 +1,5 @@
 import 'package:dart_flutter/res/size_config.dart';
+import 'package:dart_flutter/src/common/auth/auth_cubit.dart';
 import 'package:dart_flutter/src/presentation/meet/meetpages.dart';
 import 'package:dart_flutter/src/presentation/meet/viewmodel/meet_cubit.dart';
 import 'package:dart_flutter/src/presentation/mypage/my_page_landing.dart';
@@ -78,8 +79,19 @@ class _DartPageViewState extends State<DartPageView> {
                       create: (context) => VoteListCubit(),
                       child: const VoteListPages(),
                     ),
-                    BlocProvider<MyPagesCubit>(
-                      create: (BuildContext context) => MyPagesCubit()..initPages(),
+                    // BlocProvider<MyPagesCubit>(
+                    //   create: (BuildContext context) => MyPagesCubit()..initPages(),
+                    //   child: const MyPages(),
+                    // ),
+                    MultiBlocProvider(
+                      providers: [
+                        BlocProvider<MyPagesCubit>(
+                          create: (BuildContext context) => MyPagesCubit()..initPages(),
+                        ),
+                        BlocProvider<AuthCubit>(
+                          create: (BuildContext context) => AuthCubit(),
+                        )
+                      ],
                       child: const MyPages(),
                     ),
                   ],
@@ -105,7 +117,12 @@ class _TapBarButton extends StatelessWidget {
         onTap: () {
           onTapNavigation(targetPage);
         },
-        child: Text(name, style: TextStyle(fontSize: SizeConfig.defaultSize * 1.8, fontWeight: FontWeight.w500, color: (targetPage == nowPage) ? Colors.black : Colors.grey))
+        child: Container(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(name, style: TextStyle(fontSize: SizeConfig.defaultSize * 1.8, fontWeight: FontWeight.w500, color: (targetPage == nowPage) ? Colors.black : Colors.grey)),
+            )
+        )
     );
   }
 }

@@ -24,8 +24,7 @@ class StandbyLandingPage extends StatefulWidget {
 class _StandbyLandingPageState extends State<StandbyLandingPage> {
   @override
   Widget build(BuildContext context) {
-
-    var friendCode;
+    String friendCode = "";
 
     return Scaffold(
         backgroundColor: Colors.indigoAccent,
@@ -61,7 +60,7 @@ class _StandbyLandingPageState extends State<StandbyLandingPage> {
               Container(
                 width: SizeConfig.screenWidth,
                 height: SizeConfig.screenHeight * 0.8,
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.only(
                       topRight: Radius.circular(25),
