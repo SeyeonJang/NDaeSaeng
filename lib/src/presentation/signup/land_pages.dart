@@ -4,6 +4,8 @@ import 'package:dart_flutter/src/presentation/page_view.dart';
 import 'package:dart_flutter/src/presentation/signup/land_page.dart';
 import 'package:dart_flutter/src/presentation/signup/signup_pages.dart';
 import 'package:dart_flutter/src/presentation/signup/viewmodel/signup_cubit.dart';
+import 'package:dart_flutter/src/presentation/standby/standby_landing_page.dart';
+import 'package:dart_flutter/src/presentation/standby/viewmodel/standby_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -32,7 +34,10 @@ class _LandPagesState extends State<LandPages> {
                 );
               }
               if (state.step == AuthStep.login) {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => const DartPageView()));
+                return BlocProvider<StandbyCubit>(
+                  create: (BuildContext context) => StandbyCubit()..initPages(),
+                  child: const StandbyLandingPage(),
+                );
               }
               return const SizedBox();
             }

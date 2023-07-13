@@ -1,4 +1,5 @@
 import 'package:dart_flutter/res/size_config.dart';
+import 'package:dart_flutter/src/common/auth/auth_cubit.dart';
 import 'package:dart_flutter/src/presentation/meet/meetpages.dart';
 import 'package:dart_flutter/src/presentation/meet/viewmodel/meet_cubit.dart';
 import 'package:dart_flutter/src/presentation/mypage/my_page_landing.dart';
@@ -45,43 +46,60 @@ class _DartPageViewState extends State<DartPageView> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-        child: Column(
-          children: [
-            Padding(
-              padding: EdgeInsets.all(SizeConfig.defaultSize * 2),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  _TapBarButton(name: "Meet", targetPage: 0, nowPage: _page, onTapNavigation: _onTapNavigation),
-                  _TapBarButton(name: "Dart", targetPage: 1, nowPage: _page, onTapNavigation: _onTapNavigation),
-                  _TapBarButton(name: "Darts", targetPage: 2, nowPage: _page, onTapNavigation: _onTapNavigation),
-                  _TapBarButton(name: " MY ", targetPage: 3, nowPage: _page, onTapNavigation: _onTapNavigation),
-                ],
+    return Scaffold(
+      body: SafeArea(
+          child: Column(
+            children: [
+              Padding(
+                padding: EdgeInsets.all(SizeConfig.defaultSize * 2),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    //_TapBarButton(name: "Meet", targetPage: 0, nowPage: _page, onTapNavigation: _onTapNavigation), // TODO : Meet 만들 때 복구
+                    _TapBarButton(name: "Dart", targetPage: 0, nowPage: _page, onTapNavigation: _onTapNavigation),
+                    _TapBarButton(name: "Darts", targetPage: 1, nowPage: _page, onTapNavigation: _onTapNavigation),
+                    _TapBarButton(name: " MY ", targetPage: 2, nowPage: _page, onTapNavigation: _onTapNavigation),
+                  ],
+                ),
               ),
-            ),
-            Expanded(
-              child: PageView(
-                onPageChanged: _onPageChanged,
-                controller: _pageController,
-                children: [
-                  BlocProvider<VoteListCubit>(
+              Expanded(
+                child: PageView(
+                  onPageChanged: _onPageChanged,
+                  controller: _pageController,
+                  children: [
+                    // BlocProvider<MeetCubit>( // TODO : Meet 만들 때 복구
+                    //     create: (context) =>  MeetCubit()..initState(),
+                    //     child: const MeetPages(),
+                    // ),
+                    BlocProvider<VoteCubit>(
+                        create: (context) => VoteCubit()..initVotes(),
+                        child: const VotePages(),
+                    ),
+                    BlocProvider(
                       create: (context) => VoteListCubit(),
                       child: const VoteListPages(),
-                  ),
-                  BlocProvider<VoteCubit>(
-                      create: (context) => VoteCubit(),
-                      child: const VotePages(),
-                  ),
-                  BlocProvider<MyPagesCubit>(
-                    create: (BuildContext context) => MyPagesCubit()..initPages(),
-                    child: const MyPages(),
-                  ),
-                ],
+                    ),
+                    // BlocProvider<MyPagesCubit>(
+                    //   create: (BuildContext context) => MyPagesCubit()..initPages(),
+                    //   child: const MyPages(),
+                    // ),
+                    MultiBlocProvider(
+                      providers: [
+                        BlocProvider<MyPagesCubit>(
+                          create: (BuildContext context) => MyPagesCubit()..initPages(),
+                        ),
+                        BlocProvider<AuthCubit>(
+                          create: (BuildContext context) => AuthCubit(),
+                        )
+                      ],
+                      child: const MyPages(),
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
-        ),
+            ],
+          ),
+      ),
     );
   }
 }
@@ -99,7 +117,12 @@ class _TapBarButton extends StatelessWidget {
         onTap: () {
           onTapNavigation(targetPage);
         },
-        child: Text(name, style: TextStyle(fontSize: SizeConfig.defaultSize * 1.8, fontWeight: FontWeight.w500, color: (targetPage == nowPage) ? Colors.black : Colors.grey))
+        child: Container(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(name, style: TextStyle(fontSize: SizeConfig.defaultSize * 1.8, fontWeight: FontWeight.w500, color: (targetPage == nowPage) ? Colors.black : Colors.grey)),
+            )
+        )
     );
   }
 }

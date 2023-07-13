@@ -54,25 +54,27 @@ class SignupCubit extends Cubit<SignupState> {
     return -1; // 해당 조건을 만족하는 대학을 찾지 못한 경우 -1 반환
   }
 
-  void stepAdmissionNumber(int admissionNumber) {
+  void stepAdmissionNumber(int admissionNumber, int bornYear) {
     state.inputState.admissionNumber = admissionNumber;
+    state.inputState.birthYear = bornYear;
     state.signupStep = SignupStep.name;
     emit(state.copy());
   }
 
   void stepName(String name) {
     state.inputState.name = name;
-    state.signupStep = SignupStep.gender; // TODO : MVP 이후 지우기
-    // state.signupStep = SignupStep.phone; // TODO : MVP 이후 복구
+    state.signupStep = SignupStep.phone;
     emit(state.copy());
   }
 
   void stepPhone(String phone) async {
     state.inputState.phone = phone;
+    print("phone : $phone");
 
     // await _authRepository.requestSns(SnsRequest(phone: phone));
 
-    state.signupStep = SignupStep.validatePhone;
+    // state.signupStep = SignupStep.validatePhone;
+    state.signupStep = SignupStep.gender;
     emit(state.copy());
   }
 
@@ -90,7 +92,8 @@ class SignupCubit extends Cubit<SignupState> {
   }
 
   void stepGender(String gender) {
-    state.inputState.gender = GenderExtension.from(gender);
+    state.inputState.gender = gender;
+    print(state.inputState.toString());
 
     UserRequest userRequest = state.inputState.toUserRequest();
     print(userRequest.toString());

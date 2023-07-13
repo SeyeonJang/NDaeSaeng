@@ -21,6 +21,7 @@ class _ChooseGenderState extends State<ChooseGender> {
   ];
   final List<bool> _selectedGender = List.generate(2, (_) => false);
   bool vertical = false;
+  String selectedGender = "MALE";
 
   @override
   Widget build(BuildContext context) {
@@ -48,6 +49,8 @@ class _ChooseGenderState extends State<ChooseGender> {
                     for (int i = 0; i < _selectedGender.length; i++) {
                       _selectedGender[i] = i == index;
                     }
+                    if (index == 0) selectedGender = "FEMALE";
+                    if (index == 1) selectedGender = "MALE";
                   });
                 },
                 borderRadius: const BorderRadius.all(Radius.circular(8)),
@@ -93,9 +96,9 @@ class _ChooseGenderState extends State<ChooseGender> {
               const SizedBox( height: 100, ),
               ElevatedButton( // 버튼
                 onPressed: () {
-                  BlocProvider.of<SignupCubit>(context).stepGender("M");
+                  BlocProvider.of<SignupCubit>(context).stepGender(selectedGender);  // TODO 성별선택 controller 를 통해 사용자 입력을 받아오기
                   BlocProvider.of<AuthCubit>(context).doneSignup();
-                  Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const DartPageView()), (route)=>false);
+                  // Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const DartPageView()), (route)=>false);
                 }, // 임시용
                 // onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => 2-1())), // animation은 나중에 추가 + 2-1로 가야함
                 // style: ButtonStyle(

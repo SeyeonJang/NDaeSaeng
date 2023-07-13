@@ -3,8 +3,12 @@ import 'package:dart_flutter/res/size_config.dart';
 import 'package:dart_flutter/src/common/auth/auth_cubit.dart';
 import 'package:dart_flutter/src/common/auth/state/auth_state.dart';
 import 'package:dart_flutter/src/common/util/timeago_util.dart';
+import 'package:dart_flutter/src/presentation/mypage/my_settings.dart';
 import 'package:dart_flutter/src/presentation/page_view.dart';
+import 'package:dart_flutter/src/presentation/signup/choose_gender.dart';
 import 'package:dart_flutter/src/presentation/signup/land_pages.dart';
+import 'package:dart_flutter/src/presentation/standby/standby_landing_page.dart';
+import 'package:dart_flutter/src/presentation/standby/viewmodel/standby_cubit.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -32,6 +36,7 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
+  print(await KakaoSdk.origin);
   HydratedBloc.storage = await HydratedStorage.build(storageDirectory: await getTemporaryDirectory());
 
   runApp(MaterialApp(
@@ -58,7 +63,7 @@ class MyApp extends StatelessWidget {
           if (state.step == AuthStep.login && state.dartAccessToken.length > 20 && DateTime.now().microsecondsSinceEpoch < state.expiredAt.microsecondsSinceEpoch) {
             print("now accessToken: ${state.dartAccessToken}");
             BlocProvider.of<AuthCubit>(context).setAccessToken(state.dartAccessToken);
-            return const DartPageView();
+            return const LandPages();
           }
           return const LandPages();
         },

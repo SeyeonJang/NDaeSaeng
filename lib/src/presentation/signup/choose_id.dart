@@ -82,6 +82,14 @@
 }
 
 class _ScaffoldBodyState extends State<ScaffoldBody> {
+    // TODO 로직 빼야됨
+    int twoNumberToYear(int twoNumber) {
+      if (twoNumber < 70) {  // 70을 기준으로 년도 반환
+        return twoNumber + 2000;
+      }
+      return twoNumber + 1900;
+    }
+
     @override
     Widget build(BuildContext context) {
       return Column(
@@ -190,7 +198,10 @@ class _ScaffoldBodyState extends State<ScaffoldBody> {
           SizedBox( height: SizeConfig.defaultSize * 5, ),
           ElevatedButton( // 버튼
             onPressed: () {
-              BlocProvider.of<SignupCubit>(context).stepAdmissionNumber(20);
+              BlocProvider.of<SignupCubit>(context).stepAdmissionNumber(
+                  twoNumberToYear(int.parse(ScaffoldBody.adminNumItems[ScaffoldBody.adminIndex])),
+                  twoNumberToYear(int.parse(ScaffoldBody.ageItems[ScaffoldBody.ageIndex]))
+              );
             },
             style: ButtonStyle(
               foregroundColor: MaterialStateProperty.resolveWith(getColorText), // textcolor
