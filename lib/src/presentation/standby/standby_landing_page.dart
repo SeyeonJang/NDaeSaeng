@@ -22,11 +22,10 @@ class StandbyLandingPage extends StatefulWidget {
 }
 
 class _StandbyLandingPageState extends State<StandbyLandingPage> {
+  final StandbyCubit _standbyCubit = StandbyCubit();
+
   @override
   Widget build(BuildContext context) {
-
-    var friendCode;
-
     return Scaffold(
         backgroundColor: Colors.indigoAccent,
         body: SingleChildScrollView(
@@ -60,7 +59,7 @@ class _StandbyLandingPageState extends State<StandbyLandingPage> {
               ),
               Container(
                 width: SizeConfig.screenWidth,
-                height: SizeConfig.screenHeight * 0.8,
+                height: SizeConfig.screenHeight * 0.82,
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.only(
@@ -95,77 +94,65 @@ class _StandbyLandingPageState extends State<StandbyLandingPage> {
                             builder: (context, state) {
                               if (state.isLoading) {
                                 return CircularProgressIndicator();
-                              } else {
+                              }
+                              else {
+                                List<Friend> friends = state.addedFriends;
+                                int count = friends.length;
+                                // count가 4이상이면 PageView로 보내기
+                                if (count >= 4) {
+                                  Navigator.push(context, MaterialPageRoute(builder: (context) => const DartPageView()));
+                                }
 
-
-                          List<Friend> friends = state.addedFriends;
-                          int count = friends.length;
-                          // count가 4이상이면 PageView로 보내기
-                          if (count >= 4) { // TODO : 서버에서 친구 수 변경해주면 count >= 4로 바꾸고 테스트 다시하기
-                            Navigator.push(context, MaterialPageRoute(builder: (context) => const DartPageView()));
-                          }
-
-                          return Column(
-                            children: [
-                              Padding(
-                                padding: EdgeInsets.only(
-                                    left: SizeConfig.defaultSize * 1.1,
-                                    right: SizeConfig.defaultSize * 0.3),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                return Column(
                                   children: [
-                                    count >= 1
-                                        ? FriendExistsView(
-                                            userName: friends[0].name,
-                                            admissionYear: friends[0].admissionYear.toString().substring(2, 4),
-                                          )
-                                        : FriendNotExistsView(),
-                                    count >= 2
-                                        ? FriendExistsView(
-                                            userName: friends[1].name,
-                                            admissionYear: friends[1].admissionYear.toString().substring(2, 4),
-                                          )
-                                        : FriendNotExistsView(),
+                                    Padding(
+                                      padding: EdgeInsets.only(
+                                          left: SizeConfig.defaultSize * 1.1,
+                                          right: SizeConfig.defaultSize * 0.3),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        crossAxisAlignment: CrossAxisAlignment.center,
+                                        children: [
+                                          count >= 1
+                                              ? FriendExistsView(
+                                                  userName: friends[0].name,
+                                                  admissionYear: friends[0].admissionYear.toString().substring(2, 4),)
+                                              : FriendNotExistsView(),
+                                          count >= 2
+                                              ? FriendExistsView(
+                                                  userName: friends[1].name,
+                                                  admissionYear: friends[1].admissionYear.toString().substring(2, 4),)
+                                              : FriendNotExistsView(),
+                                        ],
+                                      ),
+                                    ),
+                                    SizedBox(height: SizeConfig.defaultSize * 1),
+                                    Padding(
+                                      padding: EdgeInsets.only(
+                                          left: SizeConfig.defaultSize * 1.1,
+                                          right: SizeConfig.defaultSize * 0.3),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        crossAxisAlignment: CrossAxisAlignment.center,
+                                        children: [
+                                          count >= 3
+                                              ? FriendExistsView(
+                                                  userName: friends[2].name,
+                                                  admissionYear: friends[2].admissionYear.toString().substring(2, 4),)
+                                              : FriendNotExistsView(),
+                                          count >= 4
+                                              ? FriendExistsView(
+                                                  userName: friends[3].name,
+                                                  admissionYear: friends[3].admissionYear.toString().substring(2, 4),)
+                                              : FriendNotExistsView(),
+                                        ],
+                                      ),
+                                    ),
                                   ],
-                                ),
-                              ),
-                              SizedBox(height: SizeConfig.defaultSize * 1),
-                              Padding(
-                                padding: EdgeInsets.only(
-                                    left: SizeConfig.defaultSize * 1.1,
-                                    right: SizeConfig.defaultSize * 0.3),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    count >= 3
-                                        ? FriendExistsView(
-                                            userName: friends[2].name,
-                                            admissionYear: friends[2]
-                                                .admissionYear
-                                                .toString()
-                                                .substring(2, 4),
-                                          )
-                                        : FriendNotExistsView(),
-                                    count >= 4
-                                        ? FriendExistsView(
-                                            userName: friends[3].name,
-                                            admissionYear: friends[3]
-                                                .admissionYear
-                                                .toString()
-                                                .substring(2, 4),
-                                          )
-                                        : FriendNotExistsView(),
-                                  ],
-                                ),
-                              ),
-                              Text("내 코드 : ${state.userResponse.user?.recommendationCode ?? 'dd'}"),
-                              Text("${state.userResponse.user}")
-                            ],
-                          );  }
+                                );
+                              }
                         }),
 
                         SizedBox(
@@ -185,65 +172,10 @@ class _StandbyLandingPageState extends State<StandbyLandingPage> {
                         ),
                         SizedBox(height: SizeConfig.defaultSize * 0.9),
 
-                        // openAddFriends(myCode: state.userResponse.user!.recommendationCode!),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            SizedBox(
-                              width: SizeConfig.screenWidth * 0.6,
-                              child: TextField(
-                                onChanged: (text) {
-                                  friendCode = text;
-                                },
-                                autocorrect: true,
-                                decoration: InputDecoration(
-                                  hintText: '친구 코드를 여기에 입력해주세요!',
-                                  hintStyle: TextStyle(color: Colors.grey),
-                                  filled: true,
-                                  fillColor: Colors.white,
-                                  contentPadding: EdgeInsets.symmetric(
-                                      vertical: SizeConfig.defaultSize * 1.5,
-                                      horizontal: SizeConfig.defaultSize * 1.5),
-                                  enabledBorder: OutlineInputBorder(
-                                    borderRadius:
-                                    BorderRadius.all(Radius.circular(15.0)),
-                                    borderSide:
-                                    BorderSide(color: Colors.grey, width: 2),
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderRadius:
-                                    BorderRadius.all(Radius.circular(10.0)),
-                                    borderSide:
-                                    BorderSide(color: Colors.indigoAccent),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            SizedBox(
-                              width: SizeConfig.defaultSize * 0.7,
-                            ),
-                            ElevatedButton(
-                              onPressed: () {
-                                // print("friendCode $friendCode");
-                                BlocProvider.of<StandbyCubit>(context)
-                                    .pressedFriendCodeAddButton(friendCode);
-                                // showAddFriendToast();
-                              },
-                              style: ElevatedButton.styleFrom(
-                                  primary: Colors.indigoAccent,
-                                  onPrimary: Colors.white,
-                                  textStyle: TextStyle(
-                                    color: Colors.white,
-                                  )),
-                              child: Text("추가"),
-                            )
-                          ],
-                        ),
-                        // openAddFriends(
-                        //     myCode: 'ㅇㅇ'),
-                                // state.userResponse.user?.recommendationCode ??
-                                //     '내 코드가 없어요!'),
+                        BlocBuilder<StandbyCubit, StandbyState>(
+                          builder: (context, state) {
+                            return openAddFriends(myCode: state.userResponse.user?.recommendationCode ?? '내 코드가 없어요!', cubit: _standbyCubit);
+                          }),
 
                         Container(
                           height: SizeConfig.defaultSize * 5,
@@ -350,10 +282,12 @@ class FriendExistsView extends StatelessWidget {
 // modal bottom View
 class openAddFriends extends StatefulWidget {
   late String myCode;
+  late StandbyCubit cubit;
 
   openAddFriends({
     super.key,
     required this.myCode,
+    required this.cubit,
   });
 
   @override
@@ -374,10 +308,20 @@ class _openAddFriendsState extends State<openAddFriends> {
       fontSize: SizeConfig.defaultSize * 1.6,
     );
   }
-
   void showAddFriendToast() {
     Fluttertoast.showToast(
       msg: "친구가 추가되었어요!",
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.TOP,
+      timeInSecForIosWeb: 1,
+      backgroundColor: Colors.indigoAccent,
+      textColor: Colors.white,
+      fontSize: SizeConfig.defaultSize * 1.6,
+    );
+  }
+  void itsMyCodeToast() {
+    Fluttertoast.showToast(
+      msg: "나는 친구로 추가할 수 없어요!",
       toastLength: Toast.LENGTH_SHORT,
       gravity: ToastGravity.TOP,
       timeInSecForIosWeb: 1,
@@ -396,8 +340,7 @@ class _openAddFriendsState extends State<openAddFriends> {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      // ModalBottomSheet 열기
-      onTap: () {
+      onTap: () { // ModalBottomSheet 열기
         showModalBottomSheet(
             context: context,
             shape: RoundedRectangleBorder(
@@ -474,10 +417,14 @@ class _openAddFriendsState extends State<openAddFriends> {
                         ),
                         ElevatedButton(
                           onPressed: () {
-                            print("friendCode $friendCode");
-                            BlocProvider.of<StandbyCubit>(context)
-                                .pressedFriendCodeAddButton(friendCode);
-                            showAddFriendToast();
+                            if (friendCode == widget.myCode) {itsMyCodeToast();}
+                            else {
+                              print("friendCode $friendCode");
+                              widget.cubit.pressedFriendCodeAddButton(friendCode);
+                              // BlocProvider.of<StandbyCubit>(context)
+                              //     .pressedFriendCodeAddButton(friendCode);
+                              showAddFriendToast();
+                            }
                           },
                           style: ElevatedButton.styleFrom(
                               primary: Colors.indigoAccent,
@@ -511,47 +458,25 @@ class _openAddFriendsState extends State<openAddFriends> {
                           SizedBox(
                             height: SizeConfig.defaultSize * 2,
                           ),
-                          Container(
+                          Container( //exp. 내 코드 복사 Views
                             width: SizeConfig.screenWidth * 0.8,
                             height: SizeConfig.defaultSize * 3.3,
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                // BlocBuilder<StandbyCubit, StandbyState>(
-                                //   builder: (context, state) {
-                                //     String userCode = state.userResponse.userId.toString()??"##";
-                                //     return Text(userCode, style: TextStyle(
-                                //       fontSize: SizeConfig.defaultSize * 2,
-                                //     ),);
-                                //   }
-                                // ),
-                                Text(
-                                  widget.myCode,
-                                  // state.userResponse.user != null
-                                  //     ? state.userResponse.user!
-                                  //         .recommendationCode
-                                  //         .toString()
-                                  //     : '추천코드가 없어요!',
+                                Text(widget.myCode,
                                   style: TextStyle(
                                     fontSize: SizeConfig.defaultSize * 2,
                                   ),
                                 ),
-
                                 SizedBox(
                                   width: SizeConfig.defaultSize,
                                 ),
                                 ElevatedButton(
                                     onPressed: () {
                                       String myCodeCopy = widget.myCode;
-                                      // state.userResponse.user != null
-                                      //     ? state.userResponse.user!
-                                      //         .recommendationCode
-                                      //         .toString()
-                                      //     : '추천코드가 없어요!';
-                                      Clipboard.setData(
-                                          ClipboardData(text: myCodeCopy));
-                                      showCopyToast();
+                                      Clipboard.setData(ClipboardData(text: myCodeCopy)); // 클립보드에 복사되었어요 <- 메시지 자동으로 Android에서 뜸 TODO : iOS는 확인하고 복사멘트 띄우기
                                     },
                                     style: ElevatedButton.styleFrom(
                                       primary: Colors.white,
@@ -559,7 +484,6 @@ class _openAddFriendsState extends State<openAddFriends> {
                                       textStyle: TextStyle(
                                         color: Colors.indigoAccent,
                                       ),
-                                      // minimumSize: Size(SizeConfig.defaultSize * 15, SizeConfig.defaultSize * 15),
                                     ),
                                     child: Text(
                                       "복사하기",
