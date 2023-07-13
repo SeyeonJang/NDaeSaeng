@@ -63,7 +63,7 @@ class MyApp extends StatelessWidget {
           if (state.step == AuthStep.login && state.dartAccessToken.length > 20 && DateTime.now().microsecondsSinceEpoch < state.expiredAt.microsecondsSinceEpoch) {
             print("now accessToken: ${state.dartAccessToken}");
             BlocProvider.of<AuthCubit>(context).setAccessToken(state.dartAccessToken);
-            return LandPages();
+            return const LandPages();
           }
           return const LandPages();
         },
