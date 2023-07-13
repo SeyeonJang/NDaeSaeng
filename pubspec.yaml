@@ -39,6 +39,7 @@ dependencies:
   webview_flutter: ^4.2.2
   fluttertoast: ^8.2.2
   share_plus: ^7.0.2
+  restart_app: ^1.2.1
 
   # service api
   kakao_flutter_sdk: ^1.4.1
