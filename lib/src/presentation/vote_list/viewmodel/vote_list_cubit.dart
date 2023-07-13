@@ -12,8 +12,8 @@ class VoteListCubit extends HydratedCubit<VoteListState> {
     state.setIsLoading(true);
     emit(state.copy());
 
-    // List<VoteResponse> votes = await _dartVoteRepository.getVotes();
-    // state.setVotes(votes);
+    List<VoteResponse> votes = await _dartVoteRepository.getVotes();
+    state.setVotes(votes);
 
     state.setIsLoading(false);
     emit(state.copy());
