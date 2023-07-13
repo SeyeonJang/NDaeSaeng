@@ -74,19 +74,23 @@ class AuthCubit extends HydratedCubit<AuthState> {
     KakaoUser kakaoUser = await _kakaoLoginRepository.loginWithKakaoTalk();
 
     // Dart 서버 로그인 진행
-    DartAuth dartAuth = await _authRepository.loginWithKakao(kakaoUser.accessToken);
-    state
-        .setDartAuth(dartAccessToken: dartAuth.accessToken, expiredAt: DateTime.now().add(const Duration(days: 10)))
-        .setSocialAuth(loginType: LoginType.kakao, socialAccessToken: kakaoUser.accessToken);
+    try {
+      DartAuth dartAuth = await _authRepository.loginWithKakao(kakaoUser.accessToken);
+      state
+          .setDartAuth(dartAccessToken: dartAuth.accessToken, expiredAt: DateTime.now().add(const Duration(days: 10)))
+          .setSocialAuth(loginType: LoginType.kakao, socialAccessToken: kakaoUser.accessToken);
 
-    // Dart 내 정보를 확인해서 이미 가입한 사용자인지 확인
-    UserResponse userResponse = await _userRepository.myInfo();  // TODO cache로 인해 문제가 생기는지 확인
-    if (userResponse.user?.id == null) {
-      state.setStep(AuthStep.signup);
-    } else {
-      state.setStep(AuthStep.login);
+      // Dart 내 정보를 확인해서 이미 가입한 사용자인지 확인
+      UserResponse userResponse = await _userRepository.myInfo(); // TODO cache로 인해 문제가 생기는지 확인
+      if (userResponse.user?.name == null) {
+        state.setStep(AuthStep.signup);
+      } else {
+        state.setStep(AuthStep.login);
+      }
+      print(state.toString());
+    } catch (e, trace) {
+      print("=>Dart서버 로그인 실패 e: $e \ntrace: $trace");
     }
-    print(state.toString());
 
     state.setLoading(false);
     emit(state.copy());

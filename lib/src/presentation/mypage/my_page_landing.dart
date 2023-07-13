@@ -1,12 +1,10 @@
-import 'package:dart_flutter/src/presentation/mypage/friends_mock.dart';
-import 'package:dart_flutter/src/presentation/mypage/my_settings.dart';
+import 'package:dart_flutter/res/size_config.dart';
+import 'package:dart_flutter/src/common/util/toast_util.dart';
+import 'package:dart_flutter/src/data/model/friend.dart';
 import 'package:dart_flutter/src/presentation/mypage/viewmodel/mypages_cubit.dart';
 import 'package:dart_flutter/src/presentation/mypage/viewmodel/state/mypages_state.dart';
 import 'package:flutter/material.dart';
-import 'package:dart_flutter/src/data/model/friend.dart';
-import 'package:dart_flutter/res/size_config.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 class MyPageLanding extends StatefulWidget {
   const MyPageLanding({Key? key}) : super(key: key);
@@ -353,7 +351,7 @@ class FriendComponent extends StatelessWidget {
 
             TextButton(
               onPressed: () {
-                showReportToast();
+                ToastUtil.showToast("사용자가 신고되었어요!");
                 // TODO : 신고 기능 (서버 연결)
               },
               child: Text("신고", style: TextStyle(
@@ -387,16 +385,3 @@ class FriendComponent extends StatelessWidget {
     );
   }
 }
-
-void showReportToast() {
-  Fluttertoast.showToast(
-      msg: "사용자가 신고되었어요!",
-      toastLength: Toast.LENGTH_SHORT,
-      gravity: ToastGravity.BOTTOM,
-      timeInSecForIosWeb: 1, // iOS 및 web에서 시간
-      backgroundColor: Color(0xff7C83FD),
-      textColor: Colors.white,
-      fontSize: 16.0
-  );
-}
-

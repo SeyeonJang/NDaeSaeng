@@ -7,52 +7,26 @@ class SignupInput {
   String? name;
   String? phone;
   int? admissionNumber;
+  int? birthYear;
   int? univId;
   String? tempUnivName;
   String? tempUnivDepartment;
-  // String? gender;
-  Gender? gender;
+  String? gender;
+  // Gender? gender;
 
   Map<String, dynamic> toJson() => _$SignupInputToJson(this);
   static SignupInput fromJson(Map<String, dynamic> json) => _$SignupInputFromJson(json);
   UserRequest toUserRequest() => UserRequest(
     name: name!,
     phone: phone!,
-    admissionNumber: admissionNumber!,
+    admissionYear: admissionNumber!,
+    birthYear: birthYear!,
     univId: univId!,
+    gender: gender!,
   );
 
   @override
   String toString() {
-    return 'SignupInput{name: $name, phone: $phone, admissionNumber: $admissionNumber, univId: $univId, tempUnivName: $tempUnivName, tempUnivDepartment: $tempUnivDepartment, gender: $gender}';
-  }
-}
-
-enum Gender {
-  male, female
-}
-
-extension GenderExtension on Gender {
-  static const MALE_WORD = 'M';
-  static const FEMALE_WORD = 'F';
-
-  String get word {
-    switch (this) {
-      case Gender.male:
-        return MALE_WORD;
-      case Gender.female:
-        return FEMALE_WORD;
-    }
-  }
-
-  static Gender from(String word) {
-    switch (word) {
-      case MALE_WORD:
-        return Gender.male;
-      case FEMALE_WORD:
-        return Gender.female;
-      default:
-        throw Exception("Invalid gender word");
-    }
+    return 'SignupInput{name: $name, phone: $phone, admissionNumber: $admissionNumber, birthYear: $birthYear, univId: $univId, tempUnivName: $tempUnivName, tempUnivDepartment: $tempUnivDepartment, gender: $gender}';
   }
 }

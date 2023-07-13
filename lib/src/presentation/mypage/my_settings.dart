@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:dart_flutter/src/common/auth/auth_cubit.dart';
+import 'package:dart_flutter/src/common/util/toast_util.dart';
 import 'package:dart_flutter/src/data/repository/kakao_login_repository.dart';
 import 'package:dart_flutter/src/presentation/mypage/logout_goto_landPage.dart';
 import 'package:dart_flutter/src/presentation/mypage/my_page_landing.dart';
@@ -13,6 +16,8 @@ import 'package:dart_flutter/src/presentation/signup/viewmodel/signup_cubit.dart
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:restart_app/restart_app.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -58,6 +63,20 @@ class _MyPageViewState extends State<MyPageView> {
     // 로그아웃 버튼 연결
     await BlocProvider.of<AuthCubit>(context).kakaoLogout();
     Navigator.push(context, MaterialPageRoute(builder: (context) => const LandPages()));
+  }
+
+  void halt() {
+    print("앱을 강제 종료합니다.");
+    if (Platform.isIOS) {
+      exit(0);
+    } else {
+      SystemNavigator.pop();
+    }
+  }
+
+  void restart() {
+    print("앱을 재시작합니다.");
+    Restart.restartApp();
   }
 
   final mbti1 = ['-','E','I'];
@@ -324,8 +343,10 @@ class _MyPageViewState extends State<MyPageView> {
                   children: [
                     TextButton(
                         onPressed: () async {
-                          await BlocProvider.of<AuthCubit>(context).kakaoWithdrawal();
-                          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LogoutTogoLandPage()));
+                          BlocProvider.of<AuthCubit>(context).kakaoWithdrawal();
+                          ToastUtil.showToast("회원탈퇴가 완료되었습니다. 잠시후 앱이 종료됩니다.");
+                          await Future.delayed(const Duration(seconds: 2));
+                          restart();
                         },
                         child: Text(
                           "회원탈퇴",
@@ -338,10 +359,12 @@ class _MyPageViewState extends State<MyPageView> {
                     const DtFlexSpacer(20),
                     TextButton(
                         onPressed: () async {
-                          await BlocProvider.of<AuthCubit>(context).kakaoLogout();
-                          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LogoutTogoLandPage()));
+                          ToastUtil.showToast("로그아웃이 완료되었습니다. 잠시후 앱이 종료됩니다.");
+                          BlocProvider.of<AuthCubit>(context).kakaoLogout();
+                          await Future.delayed(const Duration(seconds: 2));
+                          restart();
                         },
-                        child: Text("로그아웃",
+                      child: Text("로그아웃",
                           textAlign: TextAlign.start,
                           style: TextStyle(
                             fontWeight: FontWeight.w500,

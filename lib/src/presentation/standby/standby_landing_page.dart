@@ -25,7 +25,8 @@ class _StandbyLandingPageState extends State<StandbyLandingPage> {
   final StandbyCubit _standbyCubit = StandbyCubit();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) 
+    String friendCode = "";
     return Scaffold(
         backgroundColor: Colors.indigoAccent,
         body: SingleChildScrollView(
@@ -60,7 +61,7 @@ class _StandbyLandingPageState extends State<StandbyLandingPage> {
               Container(
                 width: SizeConfig.screenWidth,
                 height: SizeConfig.screenHeight * 0.82,
-                decoration: BoxDecoration(
+                decoration: BoxDecoration
                   color: Colors.white,
                   borderRadius: BorderRadius.only(
                       topRight: Radius.circular(25),
