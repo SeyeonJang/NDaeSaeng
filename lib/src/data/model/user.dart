@@ -32,7 +32,8 @@ class User {
   String? name;
   String? phone;
   String? gender;
-  String? admissionYear;
+  int? admissionYear;
+  int? birthYear;
   String? recommendationCode;
 
   User({this.id,
@@ -48,6 +49,7 @@ class User {
     phone = json['phone'];
     gender = json['gender'];
     admissionYear = json['admissionYear'];
+    birthYear = json['birthYear'];
     recommendationCode = json['recommendationCode'];
   }
 
@@ -58,6 +60,7 @@ class User {
     data['phone'] = phone;
     data['gender'] = gender;
     data['admissionYear'] = admissionYear;
+    data['birthYear'] = birthYear;
     data['recommendationCode'] = recommendationCode;
     return data;
   }
@@ -106,33 +109,39 @@ class User {
 
 class UserRequest {
   final int univId;
-  final int admissionNumber;
-  final String name, phone;
+  final int admissionYear, birthYear;
+  final String name, phone, gender;
 
   UserRequest({
     required this.univId,
-    required this.admissionNumber,
+    required this.admissionYear,
+    required this.birthYear,
     required this.name,
     required this.phone,
+    required this.gender
   });
 
   UserRequest.from(Map<String, dynamic> json)
   : univId = json['univId'],
-    admissionNumber = json['admissionNumber'],
+    admissionYear = json['admissionYear'],
+    birthYear = json['birthYear'],
     name = json['name'],
-    phone = json['phone'];
+    phone = json['phone'],
+    gender = json['gender'];
 
   Map<String, dynamic> toJson() {
     return {
       'universityId': univId,
-      'admissionNum': admissionNumber,
+      'admissionYear': admissionYear,
+      'birthYear': birthYear,
       'name': name,
-      'phone': phone
+      'phone': phone,
+      'gender': gender
     };
   }
 
   @override
   String toString() {
-    return 'UserRequest{univId: $univId, admissionNumber: $admissionNumber, name: $name, phone: $phone}';
+    return 'UserRequest{univId: $univId, admissionYear: $admissionYear, birthYear: $birthYear, name: $name, phone: $phone, gender: $gender}';
   }
 }

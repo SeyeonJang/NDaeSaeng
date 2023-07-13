@@ -13,7 +13,7 @@ SignupInput _$SignupInputFromJson(Map<String, dynamic> json) => SignupInput()
   ..univId = json['univId'] as int?
   ..tempUnivName = json['tempUnivName'] as String?
   ..tempUnivDepartment = json['tempUnivDepartment'] as String?
-  ..gender = $enumDecodeNullable(_$GenderEnumMap, json['gender']);
+  ..gender = json['gender'] as String?;
 
 Map<String, dynamic> _$SignupInputToJson(SignupInput instance) =>
     <String, dynamic>{
@@ -23,10 +23,10 @@ Map<String, dynamic> _$SignupInputToJson(SignupInput instance) =>
       'univId': instance.univId,
       'tempUnivName': instance.tempUnivName,
       'tempUnivDepartment': instance.tempUnivDepartment,
-      'gender': _$GenderEnumMap[instance.gender],
+      'gender': instance.gender,
     };
 
-const _$GenderEnumMap = {
-  Gender.male: 'male',
-  Gender.female: 'female',
-};
+// const _$GenderEnumMap = {
+//   Gender.male: 'male',
+//   Gender.female: 'female',
+// };

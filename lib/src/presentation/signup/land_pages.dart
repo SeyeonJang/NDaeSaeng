@@ -34,8 +34,6 @@ class _LandPagesState extends State<LandPages> {
                 );
               }
               if (state.step == AuthStep.login) {
-                // Navigator.push(context, MaterialPageRoute(builder: (context) => const DartPageView()));
-                print("================================================================z");
                 return BlocProvider<StandbyCubit>(
                   create: (BuildContext context) => StandbyCubit()..initPages(),
                   child: const StandbyLandingPage(),

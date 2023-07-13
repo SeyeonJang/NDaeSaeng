@@ -103,7 +103,7 @@ class DartApiRemoteDataSource {
   static Future<UserResponse> getMyInformation() async {
     const path = '/v1/users/me';
     final response = await _httpUtil.request().get(path);
-    print(response);
+    print("내정보: $response");
 
     final jsonResponse = json.decode(response.toString());
     return UserResponse.fromJson(jsonResponse);
