@@ -2,24 +2,16 @@ import 'dart:io';
 
 import 'package:dart_flutter/src/common/auth/auth_cubit.dart';
 import 'package:dart_flutter/src/common/util/toast_util.dart';
-import 'package:dart_flutter/src/data/repository/kakao_login_repository.dart';
 import 'package:dart_flutter/src/presentation/mypage/logout_goto_landPage.dart';
-import 'package:dart_flutter/src/presentation/mypage/my_page_landing.dart';
-import 'package:dart_flutter/src/presentation/mypage/my_tos2.dart';
 import 'package:dart_flutter/src/presentation/mypage/viewmodel/mypages_cubit.dart';
 import 'package:dart_flutter/src/presentation/mypage/viewmodel/state/mypages_state.dart';
-import 'package:dart_flutter/src/presentation/signup/land_page.dart';
 import 'package:dart_flutter/src/presentation/signup/land_pages.dart';
-import 'package:dart_flutter/src/presentation/signup/tos1.dart';
-import 'package:dart_flutter/src/presentation/signup/tos2.dart';
-import 'package:dart_flutter/src/presentation/signup/viewmodel/signup_cubit.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:restart_app/restart_app.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../res/size_config.dart';
 
@@ -323,104 +315,126 @@ class _MyPageViewState extends State<MyPageView> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        _infoSection(context),
-        const DtFlexSpacer(20),
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          _infoSection(context),
+          const DtFlexSpacer(20),
 
-        /// 구분선
-        const DtDivider(),
-        Padding(
-          padding: MyPageView._defaultPadding,
-          child: Column(
-            children: [
-              const DtFlexSpacer(20),
-              Container(
-                alignment: Alignment.centerLeft,
-                padding: EdgeInsets.only(left: 0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    TextButton(
-                        onPressed: () async {
-                          BlocProvider.of<AuthCubit>(context).kakaoWithdrawal();
-                          ToastUtil.showToast("회원탈퇴가 완료되었습니다. 잠시후 앱이 종료됩니다.");
-                          await Future.delayed(const Duration(seconds: 2));
-                          restart();
-                        },
-                        child: Text(
-                          "회원탈퇴",
-                          textAlign: TextAlign.start,
-                          style: TextStyle(
-                            fontWeight: FontWeight.w500,
-                            fontSize: getFlexibleSize(target: 16),
+          /// 구분선
+          const DtDivider(),
+          Padding(
+            padding: MyPageView._defaultPadding,
+            child: Column(
+              children: [
+                const DtFlexSpacer(10),
+                Container(
+                  alignment: Alignment.centerLeft,
+                  padding: EdgeInsets.only(left: 0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      TextButton(
+                          onPressed: () async {
+                            BlocProvider.of<AuthCubit>(context).kakaoWithdrawal();
+                            ToastUtil.showToast("회원탈퇴가 완료되었습니다.\n잠시후 앱이 종료됩니다.");
+                            await Future.delayed(const Duration(seconds: 2));
+                            restart();
+                          },
+                          child: Text(
+                            "회원탈퇴",
+                            textAlign: TextAlign.start,
+                            style: TextStyle(
+                              fontWeight: FontWeight.w500,
+                              fontSize: getFlexibleSize(target: 16),
+                              color: Color(0xff7C83FD)
+                            ),
+                          )),
+                      const DtFlexSpacer(10),
+                      TextButton(
+                          onPressed: () async {
+                            ToastUtil.showToast("로그아웃이 완료되었습니다.\n잠시후 앱이 종료됩니다.");
+                            BlocProvider.of<AuthCubit>(context).kakaoLogout();
+                            await Future.delayed(const Duration(seconds: 2));
+                            restart();
+                          },
+                        child: Text("로그아웃",
+                            textAlign: TextAlign.start,
+                            style: TextStyle(
+                              fontWeight: FontWeight.w500,
+                              fontSize: getFlexibleSize(target: 16),
+                                color: Color(0xff7C83FD)
+
+                            ),
                           ),
-                        )),
-                    const DtFlexSpacer(20),
-                    TextButton(
-                        onPressed: () async {
-                          ToastUtil.showToast("로그아웃이 완료되었습니다. 잠시후 앱이 종료됩니다.");
-                          BlocProvider.of<AuthCubit>(context).kakaoLogout();
-                          await Future.delayed(const Duration(seconds: 2));
-                          restart();
-                        },
-                      child: Text("로그아웃",
-                          textAlign: TextAlign.start,
-                          style: TextStyle(
-                            fontWeight: FontWeight.w500,
-                            fontSize: getFlexibleSize(target: 16),
-                          ),
-                        ),
-                    ),
-                  ],
-                ),
-              ),
-              const DtFlexSpacer(120),
-              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                TextButton(
-                  onPressed: () {
-                    BlocProvider.of<MyPagesCubit>(context)
-                        .pressedTos1(); // 설정 화면으로 넘어가기
-                  },
-                  child: Text("이용약관",
-                      style: TextStyle(fontSize: SizeConfig.defaultSize * 1.2)),
-                ),
-                TextButton(
-                  onPressed: () {
-                    BlocProvider.of<MyPagesCubit>(context)
-                        .pressedTos2(); // 설정 화면으로 넘어가기
-                  },
-                  child: Text("개인정보 처리방침",
-                      style: TextStyle(fontSize: SizeConfig.defaultSize * 1.2)),
-                ),
-                TextButton(
-                  onPressed: () {
-                    // launch로 Dart 건의 구글폼으로 이동
-                    launchUrl(
-                      Uri(
-                        scheme: 'https',
-                        host: 'docs.google.com',
-                        path:
-                            'forms/d/e/1FAIpQLSd8H_R1_sq1QZHiuSRGd7XUyLvegZEsV05kLlcxO1JLc6TseQ/viewform?usp=sf_link',
                       ),
-                      mode: LaunchMode.inAppWebView,
-                    );
-                  },
-                  child: Text("Dart에 건의하기",
-                      style: TextStyle(fontSize: SizeConfig.defaultSize * 1.2)),
+                    ],
+                  ),
                 ),
-                TextButton(
-                  onPressed: () {
-                    // launch로 우리 카카오톡 페이지로 연결
-                  },
-                  child: Text("1:1 문의",
-                      style: TextStyle(fontSize: SizeConfig.defaultSize * 1.2)),
-                ),
-              ]),
-            ],
+                const DtFlexSpacer(10),
+              ],
+            ),
           ),
-        ),
-      ],
+          const DtDivider(),
+          Container(
+            alignment: Alignment.centerLeft,
+            padding: EdgeInsets.only(left: SizeConfig.defaultSize * 2),
+            child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(height: SizeConfig.defaultSize * 1.5,),
+              TextButton(
+                onPressed: () {
+                  BlocProvider.of<MyPagesCubit>(context)
+                      .pressedTos1(); // 설정 화면으로 넘어가기
+                },
+                child: Text("이용약관",
+                    style: TextStyle(fontSize: SizeConfig.defaultSize * 1.4, color: Color(0xff7C83FD))),
+              ),
+              TextButton(
+                onPressed: () {
+                  BlocProvider.of<MyPagesCubit>(context)
+                      .pressedTos2(); // 설정 화면으로 넘어가기
+                },
+                child: Text("개인정보 처리방침",
+                    style: TextStyle(fontSize: SizeConfig.defaultSize * 1.4, color: Color(0xff7C83FD))),
+              ),
+              TextButton(
+                onPressed: () {
+                  launchUrl(
+                    Uri(
+                      scheme: 'https',
+                      host: 'tally.so',
+                      path:
+                      'r/mYR270',
+                    ),
+                    mode: LaunchMode.inAppWebView,
+                  );
+                },
+                child: Text("Dart에 건의하기",
+                    style: TextStyle(fontSize: SizeConfig.defaultSize * 1.4, color: Color(0xff7C83FD))),
+              ),
+              TextButton(
+                onPressed: () {
+                  // TODO : launch로 우리 카카오톡 페이지로 연결 (카카오채널 생기면)
+                  launchUrl(
+                    Uri(
+                      scheme: 'https',
+                      host: 'tally.so',
+                      path:
+                      'r/wzNV5E',
+                    ),
+                    mode: LaunchMode.inAppWebView,
+                  );
+                },
+                child: Text("1:1 문의",
+                    style: TextStyle(fontSize: SizeConfig.defaultSize * 1.4, color: Color(0xff7C83FD))),
+              ),
+            ]),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -433,8 +447,8 @@ class DtDivider extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: height ?? getFlexibleSize(target: 20),
-      color: Colors.grey.shade200,
+      height: height ?? getFlexibleSize(target: 15),
+      color: Colors.grey.shade100,
     );
   }
 }
