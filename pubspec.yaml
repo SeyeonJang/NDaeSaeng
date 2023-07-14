@@ -65,7 +65,6 @@ dependencies:
   build_runner: ^2.3.3
   firebase_core: ^2.14.0
   firebase_dynamic_links: ^5.3.3
-  restart_app: ^1.2.1
 
 dev_dependencies:
   flutter_test:

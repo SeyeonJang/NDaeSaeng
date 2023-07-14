@@ -121,7 +121,8 @@ class _MyPageViewState extends State<MyPageView> {
                   String department = state.userResponse.university?.department ?? "XXX학과";
                   String admissionNumber =
                       "${state.userResponse.user?.admissionYear ?? 'XX'}학번";
-                  String gender = "${state.userResponse.user?.gender ?? 'XX'}";
+                  String gender = state.userResponse.user?.gender ?? 'XX';
+                  String inviteCode = state.userResponse.user?.recommendationCode ?? 'XXXXXXXX';
 
                   return Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -131,6 +132,7 @@ class _MyPageViewState extends State<MyPageView> {
                       _infoSectionItem(title: "학과", value: department),
                       _infoSectionItem(title: "학번", value: admissionNumber),
                       _infoSectionItem(title: "성별", value: gender),
+                      _infoSectionItem(title: "초대코드", value: inviteCode),
                       // Container( // MBTI 구현은 완료해둠
                       //   height: SizeConfig.defaultSize * 5,
                       //   child: Flexible(
