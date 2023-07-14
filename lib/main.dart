@@ -25,7 +25,11 @@ void main() async {
   KakaoSdk.init(
     nativeAppKey: 'c83df49e14c914b9bda9b902b6624da2',
   );
-  
+
+  // // android key hahs 확인
+  // var key = await KakaoSdk.origin;
+  // print(key);
+
   OneSignal.shared.setLogLevel(OSLogLevel.verbose, OSLogLevel.none);
   OneSignal.shared.setAppId("1f36be12-544d-4bb5-9d9a-c54789698647");
   OneSignal.shared.promptUserForPushNotificationPermission().then((accepted) {
@@ -36,7 +40,7 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  print(await KakaoSdk.origin);
+  // print(await KakaoSdk.origin);
   HydratedBloc.storage = await HydratedStorage.build(storageDirectory: await getTemporaryDirectory());
 
   runApp(MaterialApp(
