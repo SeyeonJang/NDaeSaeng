@@ -25,12 +25,35 @@ class _VoteListViewState extends State<VoteListView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       body: Padding(
         padding: EdgeInsets.all(SizeConfig.defaultSize * 1.5),
         child: BlocBuilder<VoteListCubit, VoteListState>(
           builder: (context, state) {
             if (state.votes.length == 0) {
-              return const Center(child: Text("아직 받은 투표가 없어요!"));
+              return Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text("아직 받은 투표가 없어요!", style: TextStyle(
+                        fontSize: SizeConfig.defaultSize * 2, fontWeight: FontWeight.w600
+                    ),),
+                    SizedBox(height: SizeConfig.defaultSize *2,),
+                    Text("친구들이 나를 투표하면 알림이 쌓여요!", style: TextStyle(
+                        fontSize: SizeConfig.defaultSize * 2, fontWeight: FontWeight.w600
+                    ),),
+                    // Container( // TODO HOTFIX : 투표 꿀팁 일단 보류 (넣으면 좋음)
+                    //   child: Column(
+                    //     children: [
+                    //       Text("투표를 많이 받는 꿀팁"),
+                    //       Text("Dart에서 이미지게임으로 친구들을 투표하면\n친구들에게 나의 존재를 알릴 수 있어요!\n투표를 하거나 친구들을 많이 초대해서 투표수를 늘려보세요!")
+                    //     ],
+                    //   ),
+                    // )
+                  ],
+                ),
+              );
             }
             return makeList(state.votes);
           },
@@ -91,17 +114,14 @@ class dart extends StatelessWidget {
         decoration: BoxDecoration(
           border: Border.all(
             width: SizeConfig.defaultSize * 0.1,
-            color: isVisited ? Colors.grey : Colors.blueAccent,
+            color: isVisited ? Colors.grey : Color(0xff7C83FD),
           ),
           borderRadius: BorderRadius.circular(15),
         ),
         child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           // mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            Flexible(
-              flex: 1,
-              child: Icon(Icons.person, size: SizeConfig.defaultSize * 5),
-            ),
             // Flexible(  // TODO : MVP 이후 지우기
             //   flex: 3,
             //   fit: FlexFit.tight,
@@ -112,36 +132,31 @@ class dart extends StatelessWidget {
             //     ],
             //   ),
             // ),
-
-            Flexible(
-              // TODO : MVP 이후 복구하기
-              flex: 3,
-              fit: FlexFit.tight,
-              child: Row(
-                children: [
-                  const SizedBox(width: 10),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text("$gender학생이 Dart를 보냈어요!", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.2)),
-                      Text("$question",
-                          style: TextStyle(
-                            fontSize: SizeConfig.defaultSize *
-                                1.5 *
-                                ((question.length <= 15 ? 1 : 1 - ((question.length - 15) * 0.035))),
-                            fontWeight: FontWeight.w500,
-                          )),
-                    ],
-                  ),
-                ],
-              ),
+            Row(
+              children: [
+                Icon(Icons.person_pin_rounded, size: SizeConfig.defaultSize * 4.5, color: Color(0xff7C83FD),),
+                SizedBox(width: SizeConfig.defaultSize),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text("$gender학생이 Dart를 보냈어요!", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.5, fontWeight: FontWeight.w500,)),
+                    SizedBox(height: SizeConfig.defaultSize * 0.5,),
+                    Text("$question",
+                        style: TextStyle(
+                          fontSize: SizeConfig.defaultSize *
+                              1.3 *
+                              ((question.length <= 25 ? 1 : 1 - ((question.length - 15) * 0.035))),
+                          fontWeight: FontWeight.w400,
+                        )),
+                  ],
+                ),
+              ],
             ),
-            Flexible(
-              flex: 1,
-              child: Container(
-                alignment: Alignment.centerRight,
-                child: Text("$datetime", style: TextStyle(fontSize: SizeConfig.defaultSize * 1)),
-              ),
+            Row(
+              children: [
+                Text("$datetime", style: TextStyle(fontSize: SizeConfig.defaultSize * 1)),
+                SizedBox(width: SizeConfig.defaultSize,)
+              ],
             ),
           ],
         ),
