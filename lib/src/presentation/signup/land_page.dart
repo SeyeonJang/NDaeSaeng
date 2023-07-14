@@ -1,15 +1,47 @@
 import 'dart:io';
+import 'dart:ui';
 import 'package:dart_flutter/res/size_config.dart';
 import 'package:dart_flutter/src/common/auth/auth_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'dart:async';
 
 import 'choose_school.dart';
 
-class LandingPage extends StatelessWidget {
+class LandingPage extends StatefulWidget {
   const LandingPage({
     super.key,
   });
+
+  @override
+  State<LandingPage> createState() => _LandingPageState();
+}
+
+class _LandingPageState extends State<LandingPage> {
+  late Timer _timer;
+  int _currentPage = 0;
+  List<String> _images = [
+    'assets/images/girl1.png',
+    'assets/images/boy1.png',
+    'assets/images/girl2.png',
+  ];
+  @override
+  void initState() {
+    super.initState();
+    _startTimer();
+  }
+  @override
+  void dispose() {
+    _timer.cancel();
+    super.dispose();
+  }
+  void _startTimer() {
+    _timer = Timer.periodic(Duration(seconds: 3), (Timer timer) {
+      setState(() {
+        _currentPage = (_currentPage + 1) % _images.length;
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -20,17 +52,50 @@ class LandingPage extends StatelessWidget {
       body: Center(
         child: Column(
           children: [
-            const SizedBox(
-              height: 130,
+            // const SizedBox(
+            //   height: 130,
+            // ),
+            // //const Text("Dart", style: TextStyle(fontSize: 50)),
+            // const SizedBox(height: 50,),
+            ClipRRect(
+              borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(45),
+                bottomRight: Radius.circular(45),
+              ), // radius 설정
+              child: Container(
+                width: SizeConfig.screenWidth,
+                height: SizeConfig.screenWidth,
+                decoration: BoxDecoration(
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.5), // 그림자 색상
+                      spreadRadius: 2, // 그림자 확산 범위
+                      blurRadius: 5, // 그림자 블러 효과 크기
+                      offset: Offset(0, 3), // 그림자 위치 (수직, 수평)
+                    ),
+                  ],
+                ),
+                child: Image.asset('assets/images/dart_logo_ver2.png'),
+              ),
             ),
-            const Text("Dart", style: TextStyle(fontSize: 50)),
-            const SizedBox(height: 50,),
-            Image.asset('assets/images/dart_logo.png', width: 150, height: 150,), // 앱 로고 들어갈 자리
-            const SizedBox(
-              height: 100,
+            //Image.asset('assets/images/dart_logo_ver2.png', width: SizeConfig.screenWidth * 0.6, height: SizeConfig.screenWidth * 0.6,), // 앱 로고 들어갈 자리
+            SizedBox(
+              height: SizeConfig.defaultSize * 2,
             ),
-            const Text("누가 나를 선택했을지 보러가기", style: TextStyle(fontSize: 15)),
-            const SizedBox(height: 20,),
+            Text("나에게 호감을 표시한 사람들은?", style: TextStyle(fontSize: SizeConfig.defaultSize * 2, fontWeight: FontWeight.w800)),
+            SizedBox(height: SizeConfig.defaultSize * 2,),
+            AnimatedContainer(
+              height: SizeConfig.screenHeight * 0.15,
+                duration: Duration(milliseconds: 500),
+                curve: Curves.easeInOut,
+                child: Image.asset(
+                  _images[_currentPage],
+                  fit: BoxFit.cover,
+                ),
+            ),
+            SizedBox(height: SizeConfig.defaultSize * 2,),
+            Text("3초만에 회원가입하기", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.5)),
+            SizedBox(height: SizeConfig.defaultSize * 1,),
             Container(
               width: SizeConfig.screenWidth * 0.8,
               height: SizeConfig.defaultSize * 4.8,

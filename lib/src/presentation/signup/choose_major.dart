@@ -1,3 +1,4 @@
+import 'package:dart_flutter/res/size_config.dart';
 import 'package:dart_flutter/src/common/util/university_finder.dart';
 import 'package:dart_flutter/src/data/model/university.dart';
 import 'package:dart_flutter/src/presentation/signup/choose_id.dart';
@@ -6,41 +7,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 
-// btn 컬러 정의 (설정중)
-Color getColor(Set<MaterialState> states) { //
-  const Set<MaterialState> interactiveStates = <MaterialState>{
-    MaterialState.pressed, // 클릭했을 때
-    MaterialState.hovered, // 마우스 커서를 상호작용 가능한 버튼 위에 올려두었을 때
-    MaterialState.focused,
-  };
-  if (states.any(interactiveStates.contains)) {
-    return Colors.blueAccent; // text color값 설정 -> Colors
-  }
-  return Colors.grey;
-}
-// text 컬러 정의 (설정중)
-Color getColorText(Set<MaterialState> states) {
-  const Set<MaterialState> interactiveStates = <MaterialState>{
-    MaterialState.pressed, // 클릭했을 때
-    MaterialState.hovered, // 마우스 커서를 상호작용 가능한 버튼 위에 올려두었을 때
-    MaterialState.focused,
-  };
-  if (states.any(interactiveStates.contains)) {
-    return Colors.white; // text color값 설정 -> Colors
-  }
-  return Colors.black;
-}
-
-
 class ChooseMajor extends StatelessWidget {
   const ChooseMajor({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Center(
-        child: ScaffoldBody(),
-      ),
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: SingleChildScrollView(
+        child: Center(
+          child: ScaffoldBody(),
+      ))
     );
   }
 }
@@ -99,21 +76,21 @@ class _ScaffoldBodyState extends State<ScaffoldBody> {
     return SafeArea(
       child: Column(
         children: [
-          const SizedBox(
-            height: 40,
+          SizedBox(
+            height: SizeConfig.screenHeight * 0.15,
           ),
-          const Text("학과 선택", style: TextStyle(fontSize: 25)),
-          const SizedBox(
-            height: 40,
+          Text("학과를 선택해주세요!", style: TextStyle(fontSize: SizeConfig.defaultSize * 2.7, fontWeight: FontWeight.w700)),
+          SizedBox(
+            height: SizeConfig.defaultSize * 1.5,
           ),
-          const Text("이후 변경할 수 없어요! 신중히 선택해주세요!",
-              style: TextStyle(fontSize: 12, color: Colors.grey)),
-          const SizedBox(
-            height: 100,
+          Text("이후 변경할 수 없어요! 신중히 선택해주세요!",
+              style: TextStyle(fontSize: SizeConfig.defaultSize * 1.2, color: Colors.grey)),
+          SizedBox(
+              height: SizeConfig.defaultSize * 10
           ),
           SingleChildScrollView(
               child: Padding(
-                padding: const EdgeInsets.all(18.0),
+                padding: EdgeInsets.all(SizeConfig.defaultSize * 2),
                 child: TypeAheadField(
                   // 학교 찾기
                   textFieldConfiguration: TextFieldConfiguration(
@@ -121,9 +98,25 @@ class _ScaffoldBodyState extends State<ScaffoldBody> {
                       autofocus: false, // 키보드 자동으로 올라오는 거
                       style: DefaultTextStyle.of(context)
                           .style
-                          .copyWith(fontStyle: FontStyle.italic, color: isSelectedOnTypeAhead ? Colors.blueAccent : Colors.black),
-                      decoration: const InputDecoration(
-                          border: OutlineInputBorder(), hintText: "학과명을 입력해주세요")),
+                          .copyWith(fontStyle: FontStyle.normal,
+                          fontSize: getFlexibleSize(target: 15),
+                          fontWeight: FontWeight.w400,
+                          color: isSelectedOnTypeAhead ? Color(0xff7C83FD) : Colors.black),
+                      decoration: InputDecoration(
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Colors.grey.shade200, // 테두리 색상
+                              width: 2.0,
+                            ),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Color(0xff7C83FD), // 테두리 색상
+                              width: 2.0,
+                            ),
+                          ),
+                          prefixIcon: Icon(Icons.school_rounded, color: Color(0xff7C83FD),),
+                          hintText: "학과 이름")),
 
                   suggestionsCallback: (pattern) {
                     // 입력된 패턴에 기반하여 검색 결과를 반환
@@ -152,19 +145,36 @@ class _ScaffoldBodyState extends State<ScaffoldBody> {
                   },
                 ),
               )),
-          const SizedBox( height: 100, ),
-          ElevatedButton( // 버튼
-            onPressed: () {
-              if (isSelectedOnTypeAhead) {
-                BlocProvider.of<SignupCubit>(context).stepDepartment(university);
-              }
-            },
-            style: ButtonStyle(
-              foregroundColor: MaterialStateProperty.resolveWith(getColorText), // textcolor
-              backgroundColor: MaterialStateProperty.resolveWith(getColor), // backcolor
+          SizedBox( height: SizeConfig.defaultSize * 10, ),
+          Container(
+            width: SizeConfig.screenWidth * 0.9,
+            height: SizeConfig.defaultSize * 5,
+            child: isSelectedOnTypeAhead
+                ? ElevatedButton(
+                onPressed: () {
+                  if (isSelectedOnTypeAhead) {BlocProvider.of<SignupCubit>(context).stepDepartment(university);}
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Color(0xff7C83FD),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15), // 모서리 둥글기 설정
+                  ),
+                ),
+                child: Text("다음으로", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.7, fontWeight: FontWeight.w600, color: Colors.white),)
+            )
+                : ElevatedButton(
+                onPressed: () {
+                  if (isSelectedOnTypeAhead) {
+                    BlocProvider.of<SignupCubit>(context).stepSchool(universityName);
+                  }
+                },
+                style: ElevatedButton.styleFrom(
+                  primary: Colors.white,
+                  backgroundColor: Colors.grey[200],
+                ),
+                child: Text("학과를 선택해주세요", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.7, fontWeight: FontWeight.w600, color: Colors.black38),)
             ),
-            child: isSelectedOnTypeAhead ? const Text("다음으로") : const Text("선택해주세요"),
-          ),
+          )
         ],
       ),
     );

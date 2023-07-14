@@ -49,12 +49,7 @@
     @override
     Widget build(BuildContext context) {
       return Scaffold(
-          appBar: AppBar(
-            leading: IconButton(
-              onPressed: () {
-                Navigator.pop(context);
-              }, icon: Icon(Icons.arrow_back)),
-            ),
+          backgroundColor: Colors.white,
           body: Center(
             child: ScaffoldBody(),
           ),
@@ -94,120 +89,143 @@ class _ScaffoldBodyState extends State<ScaffoldBody> {
     Widget build(BuildContext context) {
       return Column(
         children: [
-          const SizedBox(
-            height: 100,
+          SizedBox(
+            height: SizeConfig.screenHeight * 0.15,
           ),
-          const Text("학번 선택", style: TextStyle(fontSize: 25)),
-          const SizedBox( height: 100, ),
+          Text("학번과 나이를 선택해주세요!", style: TextStyle(fontSize: SizeConfig.defaultSize * 2.7, fontWeight: FontWeight.w700)),
+          SizedBox(
+            height: SizeConfig.defaultSize * 1.5,
+          ),
+          Text("이후 변경할 수 없어요! 신중히 선택해주세요!",
+              style: TextStyle(fontSize: SizeConfig.defaultSize * 1.2, color: Colors.grey)),
+          SizedBox(
+            height: SizeConfig.defaultSize * 10,
+          ),
 
           Container(
             height: SizeConfig.screenHeight * 0.4,
-            child: Flexible(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  Column( // 학번
-                    children: [
-                      SizedBox(height: SizeConfig.defaultSize * 1.2,),
-                      SizedBox(
-                        height: SizeConfig.defaultSize * 25,
-                        width: SizeConfig.screenWidth * 0.45,
-                        child: CupertinoPicker(
-                          looping: true,
-                          backgroundColor: Colors.white,
-                          itemExtent: SizeConfig.defaultSize * 5,
-                          selectionOverlay: CupertinoPickerDefaultSelectionOverlay(
-                            background: CupertinoColors.systemIndigo.withOpacity(0.3),
-                          ),
-                          children: List.generate(ScaffoldBody.adminNumItems.length, (index) {
-                            final isSelected = ScaffoldBody.adminIndex == index;
-                            final item = ScaffoldBody.adminNumItems[index];
-                            final color = isSelected ? CupertinoColors.systemIndigo :CupertinoColors.black;
-                            return Center(
-                              child: Text(item,style: TextStyle(color: color, fontSize: SizeConfig.defaultSize * 3)),
-                            );
-                          }),
-                          scrollController: FixedExtentScrollController(
-                            initialItem: 0, // 몇 번째 인덱스가 제일 먼저 나올지
-                          ),
-                          onSelectedItemChanged: (index) {
-                            setState(() => ScaffoldBody.adminIndex = index);
-                            final item = ScaffoldBody.adminNumItems[index];
-                            print('Selected item: ${ScaffoldBody.adminNumItems}');
-                          },
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Column( // 학번
+                  children: [
+                    SizedBox(height: SizeConfig.defaultSize * 1.2,),
+                    SizedBox(
+                      height: SizeConfig.defaultSize * 25,
+                      width: SizeConfig.screenWidth * 0.45,
+                      child: CupertinoPicker(
+                        looping: true,
+                        backgroundColor: Colors.white,
+                        itemExtent: SizeConfig.defaultSize * 5,
+                        selectionOverlay: CupertinoPickerDefaultSelectionOverlay(
+                          background: Color(0xff7C83FD).withOpacity(0.2),
                         ),
-                      ),
-                      SizedBox(height: SizeConfig.defaultSize * 2,),
-                      Text(
-                        ScaffoldBody.adminNumItems[ScaffoldBody.adminIndex]+"학번",
-                        style: TextStyle(
-                            fontSize: SizeConfig.defaultSize * 2.0,
-                            fontWeight: FontWeight.w600,
-                            color: Colors.black
+                        children: List.generate(ScaffoldBody.adminNumItems.length, (index) {
+                          final isSelected = ScaffoldBody.adminIndex == index;
+                          final item = ScaffoldBody.adminNumItems[index];
+                          final color = isSelected ? Color(0xff7C83FD) : CupertinoColors.black;
+                          return Center(
+                            child: Text(item,style: TextStyle(color: color, fontSize: SizeConfig.defaultSize * 3)),
+                          );
+                        }),
+                        scrollController: FixedExtentScrollController(
+                          initialItem: 0, // 몇 번째 인덱스가 제일 먼저 나올지
                         ),
+                        onSelectedItemChanged: (index) {
+                          setState(() => ScaffoldBody.adminIndex = index);
+                          final item = ScaffoldBody.adminNumItems[index];
+                          print('Selected item: ${ScaffoldBody.adminNumItems}');
+                        },
                       ),
-                    ],
-                  ),
-                  Column( // 나이
-                    children: [
-                      SizedBox(height: SizeConfig.defaultSize * 1.2,),
-                      SizedBox(
-                        height: SizeConfig.defaultSize * 25,
-                        width: SizeConfig.screenWidth * 0.45,
-                        child: CupertinoPicker(
-                          looping: true,
-                          backgroundColor: Colors.white,
-                          itemExtent: SizeConfig.defaultSize * 5,
-                          selectionOverlay: CupertinoPickerDefaultSelectionOverlay(
-                            background: CupertinoColors.systemIndigo.withOpacity(0.2),
-                          ),
-                          children: List.generate(ScaffoldBody.ageItems.length, (index) {
-                            final isSelected = ScaffoldBody.ageIndex == index;
-                            final item = ScaffoldBody.ageItems[index];
-                            final color = isSelected ? CupertinoColors.systemIndigo :CupertinoColors.black;
-                            return Center(
-                              child: Text(item,style: TextStyle(color: color, fontSize: SizeConfig.defaultSize * 3)),
-                            );
-                          }),
-                          scrollController: FixedExtentScrollController(
-                            initialItem: 0, // 몇 번째 인덱스가 제일 먼저 나올지
-                          ),
-                          onSelectedItemChanged: (index) {
-                            setState(() => ScaffoldBody.ageIndex = index);
-                            final item = ScaffoldBody.ageItems[index];
-                            print('Selected item: ${ScaffoldBody.ageItems}');
-                          },
+                    ),
+                    SizedBox(height: SizeConfig.defaultSize * 2,),
+                    Text(
+                      ScaffoldBody.adminNumItems[ScaffoldBody.adminIndex]+" 학번",
+                      style: TextStyle(
+                          fontSize: SizeConfig.defaultSize * 2.2,
+                          fontWeight: FontWeight.w600,
+                          color: Color(0xff7C83FD),
+                      ),
+                    ),
+                  ],
+                ),
+                Column( // 나이
+                  children: [
+                    SizedBox(height: SizeConfig.defaultSize * 1.2,),
+                    SizedBox(
+                      height: SizeConfig.defaultSize * 25,
+                      width: SizeConfig.screenWidth * 0.45,
+                      child: CupertinoPicker(
+                        looping: true,
+                        backgroundColor: Colors.white,
+                        itemExtent: SizeConfig.defaultSize * 5,
+                        selectionOverlay: CupertinoPickerDefaultSelectionOverlay(
+                          background: Color(0xff7C83FD).withOpacity(0.2),
                         ),
-                      ),
-                      SizedBox(height: SizeConfig.defaultSize * 2,),
-                      Text(
-                        ScaffoldBody.ageItems[ScaffoldBody.ageIndex]+"년생",
-                        style: TextStyle(
-                            fontSize: SizeConfig.defaultSize * 2.0,
-                            fontWeight: FontWeight.w600,
-                            color: Colors.black
+                        children: List.generate(ScaffoldBody.ageItems.length, (index) {
+                          final isSelected = ScaffoldBody.ageIndex == index;
+                          final item = ScaffoldBody.ageItems[index];
+                          final color = isSelected ? Color(0xff7C83FD) :CupertinoColors.black;
+                          return Center(
+                            child: Text(item,style: TextStyle(color: color, fontSize: SizeConfig.defaultSize * 3)),
+                          );
+                        }),
+                        scrollController: FixedExtentScrollController(
+                          initialItem: 0, // 몇 번째 인덱스가 제일 먼저 나올지
                         ),
+                        onSelectedItemChanged: (index) {
+                          setState(() => ScaffoldBody.ageIndex = index);
+                          final item = ScaffoldBody.ageItems[index];
+                          print('Selected item: ${ScaffoldBody.ageItems}');
+                        },
                       ),
-                    ],
-                  ),
-                ],
-              ),
+                    ),
+                    SizedBox(height: SizeConfig.defaultSize * 2,),
+                    Text(
+                      ScaffoldBody.ageItems[ScaffoldBody.ageIndex]+" 년생",
+                      style: TextStyle(
+                          fontSize: SizeConfig.defaultSize * 2.2,
+                          fontWeight: FontWeight.w600,
+                          color: Color(0xff7C83FD)
+                      ),
+                    ),
+                  ],
+                ),
+              ],
             ),
           ),
 
-          SizedBox( height: SizeConfig.defaultSize * 5, ),
-          ElevatedButton( // 버튼
-            onPressed: () {
-              BlocProvider.of<SignupCubit>(context).stepAdmissionNumber(
-                  twoNumberToYear(int.parse(ScaffoldBody.adminNumItems[ScaffoldBody.adminIndex])),
-                  twoNumberToYear(int.parse(ScaffoldBody.ageItems[ScaffoldBody.ageIndex]))
-              );
-            },
-            style: ButtonStyle(
-              foregroundColor: MaterialStateProperty.resolveWith(getColorText), // textcolor
-              backgroundColor: MaterialStateProperty.resolveWith(getColor), // backcolor
-            ),
-            child: const Text("다음으로"),
+          SizedBox(
+            height: SizeConfig.defaultSize * 5,
+          ),
+
+          Container(
+            width: SizeConfig.screenWidth * 0.9,
+            height: SizeConfig.defaultSize * 5,
+            child: ScaffoldBody.ageIndex != 0 && ScaffoldBody.adminIndex != 0
+              ? ElevatedButton(
+                onPressed: () {
+                  BlocProvider.of<SignupCubit>(context).stepAdmissionNumber(
+                      twoNumberToYear(int.parse(ScaffoldBody.adminNumItems[ScaffoldBody.adminIndex])),
+                      twoNumberToYear(int.parse(ScaffoldBody.ageItems[ScaffoldBody.ageIndex]))
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Color(0xff7C83FD),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15), // 모서리 둥글기 설정
+                  ),
+                ),
+                child: Text("다음으로", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.7, fontWeight: FontWeight.w600, color: Colors.white),)
+              )
+              : ElevatedButton(
+                onPressed: () {},
+                style: ElevatedButton.styleFrom(
+                  primary: Colors.white,
+                  backgroundColor: Colors.grey[200],
+                ),
+                child: Text("학번과 나이를 모두 선택해주세요", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.7, fontWeight: FontWeight.w600, color: Colors.black38),)
+              ),
           ),
         ],
       );

@@ -2,71 +2,80 @@ import 'package:dart_flutter/src/presentation/signup/viewmodel/signup_cubit.dart
 import 'package:dart_flutter/src/presentation/signup/viewmodel/state/signup_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../res/size_config.dart';
 import 'cert_num.dart';
 
-// btn 컬러 정의 (설정중)
-Color getColor(Set<MaterialState> states) { //
-  const Set<MaterialState> interactiveStates = <MaterialState>{
-    MaterialState.pressed, // 클릭했을 때
-    MaterialState.hovered, // 마우스 커서를 상호작용 가능한 버튼 위에 올려두었을 때
-    MaterialState.focused,
-  };
-  if (states.any(interactiveStates.contains)) {
-    return Colors.blueAccent; // text color값 설정 -> Colors
-  }
-  return Colors.grey;
-}
-// text 컬러 정의 (설정중)
-Color getColorText(Set<MaterialState> states) {
-  const Set<MaterialState> interactiveStates = <MaterialState>{
-    MaterialState.pressed, // 클릭했을 때
-    MaterialState.hovered, // 마우스 커서를 상호작용 가능한 버튼 위에 올려두었을 때
-    MaterialState.focused,
-  };
-  if (states.any(interactiveStates.contains)) {
-    return Colors.white; // text color값 설정 -> Colors
-  }
-  return Colors.black;
-}
-
-
-class UserPhone extends StatelessWidget {
-  final TextEditingController _phoneController = TextEditingController();
+class UserPhone extends StatefulWidget {
 
   UserPhone({super.key});
+
+  @override
+  State<UserPhone> createState() => _UserPhoneState();
+}
+
+class _UserPhoneState extends State<UserPhone> {
+  final TextEditingController _phoneController = TextEditingController();
+  bool isPhoneValid = false;
+  String? phoneErrorMessage;
+
+  void _checkPhoneValidity() {
+    final phonePattern = RegExp(r'^01[016789]\d{3,4}\d{4}$');
+    final phoneNumber = _phoneController.text.trim();
+
+    setState(() {
+      isPhoneValid = phonePattern.hasMatch(phoneNumber);
+      phoneErrorMessage = isPhoneValid ? null : '전화번호를 확인해주세요!';
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: AppBar(
-        // title: const Text('User Phone'),
-        leading: IconButton(
-            onPressed: () {
-              Navigator.pop(context);
-            }, icon: Icon(Icons.arrow_back)),
-      ),
+      backgroundColor: Colors.white,
       body: Center(
         child: Column(
           // mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const SizedBox(
-              height: 85,
-            ),
-            BlocBuilder<SignupCubit, SignupState>(
-              builder: (context, state) {
-                return Text('환영해요! ${state.inputState.name!}님', style: TextStyle(fontSize: 15));
-              },
-            ),
-            Text("전화번호 입력", style: TextStyle(fontSize: 25)),
-            const SizedBox(height: 140),
             SizedBox(
-              width: 400,
+              height: SizeConfig.screenHeight * 0.15,
+            ),
+            // BlocBuilder<SignupCubit, SignupState>(
+            //   builder: (context, state) {
+            //     return Text('환영해요! ${state.inputState.name!}님', style: TextStyle(fontSize: SizeConfig.defaultSize * 1.5));
+            //   },
+            // ),
+            Text("전화번호를 입력해주세요!", style: TextStyle(fontSize: SizeConfig.defaultSize * 2.7, fontWeight: FontWeight.w700)),
+            SizedBox(
+              height: SizeConfig.defaultSize * 1.5,
+            ),
+            Text("이후 변경할 수 없어요! 신중히 입력해주세요!",
+                style: TextStyle(fontSize: SizeConfig.defaultSize * 1.2, color: Colors.grey)),
+            SizedBox(
+              height: SizeConfig.defaultSize * 10,
+            ),
+
+            SizedBox(
+              width: SizeConfig.screenWidth * 0.9,
               child: TextFormField(
-                decoration: const InputDecoration(
-                    hintText: "010-0000-0000 형태로 입력해주세요!"
-                ),
+                  decoration: InputDecoration(
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Colors.grey.shade200, // 테두리 색상
+                          width: 2.0,
+                        ),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Color(0xff7C83FD), // 테두리 색상
+                          width: 2.0,
+                        ),
+                      ),
+                      prefixIcon: Icon(Icons.person_rounded, color: Color(0xff7C83FD),),
+                      hintText: "010xxxxoooo 형식으로 입력해주세요!",
+                      errorText: phoneErrorMessage,),
                 onSaved: (String? value) {},
+                onChanged: (_) => _checkPhoneValidity(),
                 // 유효성 검사 필요 ********************* (수정 안 됨)
                 // validator: (String? value) {
                 //   return (value == null || !value.contains('-')) ? "전화번호는 010-0000-0000 형식이어야 해요!" : null;
@@ -74,16 +83,33 @@ class UserPhone extends StatelessWidget {
                 controller: _phoneController,
               ),
             ),
-            const SizedBox(height: 160),
-            ElevatedButton(
-              onPressed: () {
-                BlocProvider.of<SignupCubit>(context).stepPhone(_phoneController.text);
-              },
-              style: ButtonStyle(
-                foregroundColor: MaterialStateProperty.resolveWith(getColorText), // textcolor
-                backgroundColor: MaterialStateProperty.resolveWith(getColor), // backcolor
+            SizedBox(
+              height: SizeConfig.defaultSize * 10,
+            ),
+
+            Container(
+              width: SizeConfig.screenWidth * 0.9,
+              height: SizeConfig.defaultSize * 5,
+              child: isPhoneValid
+                  ? ElevatedButton(
+                  onPressed: () {
+                    BlocProvider.of<SignupCubit>(context).stepPhone(_phoneController.text);
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Color(0xff7C83FD),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15), // 모서리 둥글기 설정
+                    ),
+                  ),
+                  child: Text("다음으로", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.7, fontWeight: FontWeight.w600, color: Colors.white),)
+              )
+                  : ElevatedButton(
+                  onPressed: () {},
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.grey[200],
+                  ),
+                  child: Text("전화번호를 입력해주세요", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.7, fontWeight: FontWeight.w600, color: Colors.black38),)
               ),
-              child: const Text('인증번호 받기'),
             ),
           ],
         ),
