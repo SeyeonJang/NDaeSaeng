@@ -102,96 +102,94 @@ class _ScaffoldBodyState extends State<ScaffoldBody> {
 
           Container(
             height: SizeConfig.screenHeight * 0.4,
-            child: Flexible(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  Column( // 학번
-                    children: [
-                      SizedBox(height: SizeConfig.defaultSize * 1.2,),
-                      SizedBox(
-                        height: SizeConfig.defaultSize * 25,
-                        width: SizeConfig.screenWidth * 0.45,
-                        child: CupertinoPicker(
-                          looping: true,
-                          backgroundColor: Colors.white,
-                          itemExtent: SizeConfig.defaultSize * 5,
-                          selectionOverlay: CupertinoPickerDefaultSelectionOverlay(
-                            background: CupertinoColors.systemIndigo.withOpacity(0.3),
-                          ),
-                          children: List.generate(ScaffoldBody.adminNumItems.length, (index) {
-                            final isSelected = ScaffoldBody.adminIndex == index;
-                            final item = ScaffoldBody.adminNumItems[index];
-                            final color = isSelected ? CupertinoColors.systemIndigo :CupertinoColors.black;
-                            return Center(
-                              child: Text(item,style: TextStyle(color: color, fontSize: SizeConfig.defaultSize * 3)),
-                            );
-                          }),
-                          scrollController: FixedExtentScrollController(
-                            initialItem: 0, // 몇 번째 인덱스가 제일 먼저 나올지
-                          ),
-                          onSelectedItemChanged: (index) {
-                            setState(() => ScaffoldBody.adminIndex = index);
-                            final item = ScaffoldBody.adminNumItems[index];
-                            print('Selected item: ${ScaffoldBody.adminNumItems}');
-                          },
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Column( // 학번
+                  children: [
+                    SizedBox(height: SizeConfig.defaultSize * 1.2,),
+                    SizedBox(
+                      height: SizeConfig.defaultSize * 25,
+                      width: SizeConfig.screenWidth * 0.45,
+                      child: CupertinoPicker(
+                        looping: true,
+                        backgroundColor: Colors.white,
+                        itemExtent: SizeConfig.defaultSize * 5,
+                        selectionOverlay: CupertinoPickerDefaultSelectionOverlay(
+                          background: CupertinoColors.systemIndigo.withOpacity(0.3),
                         ),
-                      ),
-                      SizedBox(height: SizeConfig.defaultSize * 2,),
-                      Text(
-                        ScaffoldBody.adminNumItems[ScaffoldBody.adminIndex]+"학번",
-                        style: TextStyle(
-                            fontSize: SizeConfig.defaultSize * 2.0,
-                            fontWeight: FontWeight.w600,
-                            color: Colors.black
+                        children: List.generate(ScaffoldBody.adminNumItems.length, (index) {
+                          final isSelected = ScaffoldBody.adminIndex == index;
+                          final item = ScaffoldBody.adminNumItems[index];
+                          final color = isSelected ? CupertinoColors.systemIndigo :CupertinoColors.black;
+                          return Center(
+                            child: Text(item,style: TextStyle(color: color, fontSize: SizeConfig.defaultSize * 3)),
+                          );
+                        }),
+                        scrollController: FixedExtentScrollController(
+                          initialItem: 0, // 몇 번째 인덱스가 제일 먼저 나올지
                         ),
+                        onSelectedItemChanged: (index) {
+                          setState(() => ScaffoldBody.adminIndex = index);
+                          final item = ScaffoldBody.adminNumItems[index];
+                          print('Selected item: ${ScaffoldBody.adminNumItems}');
+                        },
                       ),
-                    ],
-                  ),
-                  Column( // 나이
-                    children: [
-                      SizedBox(height: SizeConfig.defaultSize * 1.2,),
-                      SizedBox(
-                        height: SizeConfig.defaultSize * 25,
-                        width: SizeConfig.screenWidth * 0.45,
-                        child: CupertinoPicker(
-                          looping: true,
-                          backgroundColor: Colors.white,
-                          itemExtent: SizeConfig.defaultSize * 5,
-                          selectionOverlay: CupertinoPickerDefaultSelectionOverlay(
-                            background: CupertinoColors.systemIndigo.withOpacity(0.2),
-                          ),
-                          children: List.generate(ScaffoldBody.ageItems.length, (index) {
-                            final isSelected = ScaffoldBody.ageIndex == index;
-                            final item = ScaffoldBody.ageItems[index];
-                            final color = isSelected ? CupertinoColors.systemIndigo :CupertinoColors.black;
-                            return Center(
-                              child: Text(item,style: TextStyle(color: color, fontSize: SizeConfig.defaultSize * 3)),
-                            );
-                          }),
-                          scrollController: FixedExtentScrollController(
-                            initialItem: 0, // 몇 번째 인덱스가 제일 먼저 나올지
-                          ),
-                          onSelectedItemChanged: (index) {
-                            setState(() => ScaffoldBody.ageIndex = index);
-                            final item = ScaffoldBody.ageItems[index];
-                            print('Selected item: ${ScaffoldBody.ageItems}');
-                          },
+                    ),
+                    SizedBox(height: SizeConfig.defaultSize * 2,),
+                    Text(
+                      ScaffoldBody.adminNumItems[ScaffoldBody.adminIndex]+"학번",
+                      style: TextStyle(
+                          fontSize: SizeConfig.defaultSize * 2.0,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.black
+                      ),
+                    ),
+                  ],
+                ),
+                Column( // 나이
+                  children: [
+                    SizedBox(height: SizeConfig.defaultSize * 1.2,),
+                    SizedBox(
+                      height: SizeConfig.defaultSize * 25,
+                      width: SizeConfig.screenWidth * 0.45,
+                      child: CupertinoPicker(
+                        looping: true,
+                        backgroundColor: Colors.white,
+                        itemExtent: SizeConfig.defaultSize * 5,
+                        selectionOverlay: CupertinoPickerDefaultSelectionOverlay(
+                          background: CupertinoColors.systemIndigo.withOpacity(0.2),
                         ),
-                      ),
-                      SizedBox(height: SizeConfig.defaultSize * 2,),
-                      Text(
-                        ScaffoldBody.ageItems[ScaffoldBody.ageIndex]+"년생",
-                        style: TextStyle(
-                            fontSize: SizeConfig.defaultSize * 2.0,
-                            fontWeight: FontWeight.w600,
-                            color: Colors.black
+                        children: List.generate(ScaffoldBody.ageItems.length, (index) {
+                          final isSelected = ScaffoldBody.ageIndex == index;
+                          final item = ScaffoldBody.ageItems[index];
+                          final color = isSelected ? CupertinoColors.systemIndigo :CupertinoColors.black;
+                          return Center(
+                            child: Text(item,style: TextStyle(color: color, fontSize: SizeConfig.defaultSize * 3)),
+                          );
+                        }),
+                        scrollController: FixedExtentScrollController(
+                          initialItem: 0, // 몇 번째 인덱스가 제일 먼저 나올지
                         ),
+                        onSelectedItemChanged: (index) {
+                          setState(() => ScaffoldBody.ageIndex = index);
+                          final item = ScaffoldBody.ageItems[index];
+                          print('Selected item: ${ScaffoldBody.ageItems}');
+                        },
                       ),
-                    ],
-                  ),
-                ],
-              ),
+                    ),
+                    SizedBox(height: SizeConfig.defaultSize * 2,),
+                    Text(
+                      ScaffoldBody.ageItems[ScaffoldBody.ageIndex]+"년생",
+                      style: TextStyle(
+                          fontSize: SizeConfig.defaultSize * 2.0,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.black
+                      ),
+                    ),
+                  ],
+                ),
+              ],
             ),
           ),
 

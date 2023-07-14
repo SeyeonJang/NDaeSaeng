@@ -37,11 +37,19 @@ class DartFriendRepository {
     recommendedFriendCache.addFriend(friend);
     return await DartApiRemoteDataSource.deleteFriend(friend.userId!);
   }
+
+  void cleanUpCache() {
+    myFriendCache.clean();
+  }
 }
 
 class FriendCache {
   Set<Friend> _friends = {};
   DateTime _updateTime = DateTime.now().subtract(const Duration(days: 365));
+
+  void clean() {
+    _friends = {};
+  }
 
   void addFriend(Friend friend) {
     _friends.add(friend);

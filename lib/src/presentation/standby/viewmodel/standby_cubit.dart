@@ -24,10 +24,22 @@ class StandbyCubit extends Cubit<StandbyState> {
     print("대기화면 무사 진입 ~ !"); // TODO : ERASE
   }
 
+  void refresh() {
+    emit(state.copy());
+  }
+
   void pressedFriendCodeAddButton(String inviteCode) async {
+    print(state.hashCode);
+    state.isLoading = true;
+    emit(state.copy());
+
     Friend friend = await _dartFriendRepository.addFriendBy(inviteCode);
     state.addFriend(friend);
     print("친추함 $friend");
+
+    state.isLoading = false;
+    print(state.hashCode);
     emit(state.copy());
+    print(state.hashCode);
   }
 }
