@@ -47,6 +47,7 @@ class _DartPageViewState extends State<DartPageView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       body: SafeArea(
           child: Column(
             children: [
@@ -118,9 +119,12 @@ class _TapBarButton extends StatelessWidget {
           onTapNavigation(targetPage);
         },
         child: Container(
+            width: MediaQuery.of(context).size.width * 0.3, // 원하는 넓이로 설정합니다.
+          height: SizeConfig.defaultSize * 3,
+            alignment: Alignment.center,
             child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(name, style: TextStyle(fontSize: SizeConfig.defaultSize * 1.8, fontWeight: FontWeight.w500, color: (targetPage == nowPage) ? Colors.black : Colors.grey)),
+              padding: const EdgeInsets.all(0),
+              child: Text(name, style: TextStyle(fontSize: SizeConfig.defaultSize * 1.8, fontWeight: FontWeight.w600, color: (targetPage == nowPage) ? Color(0xff7C83FD) : Colors.grey)),
             )
         )
     );
