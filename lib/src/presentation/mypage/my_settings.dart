@@ -121,7 +121,7 @@ class _MyPageViewState extends State<MyPageView> {
                   String department = state.userResponse.university?.department ?? "XXX학과";
                   String admissionNumber =
                       "${state.userResponse.user?.admissionYear ?? 'XX'}학번";
-                  String gender = '남성';
+                  String gender = "${state.userResponse.user?.gender ?? 'XX'}";
 
                   return Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
