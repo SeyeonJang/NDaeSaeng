@@ -2,15 +2,18 @@ import 'package:dart_flutter/src/common/auth/state/auth_state.dart';
 import 'package:dart_flutter/src/data/model/dart_auth.dart';
 import 'package:dart_flutter/src/data/model/kakao_user.dart';
 import 'package:dart_flutter/src/data/model/user.dart';
+import 'package:dart_flutter/src/data/repository/apple_login_repository.dart';
 import 'package:dart_flutter/src/data/repository/dart_auth_repository.dart';
 import 'package:dart_flutter/src/data/repository/dart_user_repository.dart';
 import 'package:dart_flutter/src/data/repository/kakao_login_repository.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 import '../../datasource/dart_api_remote_datasource.dart';
 
 class AuthCubit extends HydratedCubit<AuthState> {
   static final KakaoLoginRepository _kakaoLoginRepository = KakaoLoginRepository();
+  static final AppleLoginRepository _appleLoginRepository = AppleLoginRepository();
   static final DartAuthRepository _authRepository = DartAuthRepository();
   static final DartUserRepository _userRepository = DartUserRepository();
 
@@ -68,38 +71,64 @@ class AuthCubit extends HydratedCubit<AuthState> {
 
   void kakaoLogin() async {
     // loading 상태로 만든다.
-    emit(state.setLoading(true).copy());
+    state.setLoading(true);
+    print(state.toString());
+    emit(state.copy());
 
     try {
-      // 카카오 로그인 진행
       KakaoUser kakaoUser = await _kakaoLoginRepository.loginWithKakaoTalk();
+      DartAuth dartAuth = await _authRepository.loginWithKakao(kakaoUser.accessToken);
+      state
+          .setDartAuth(dartAccessToken: dartAuth.accessToken, expiredAt: DateTime.now().add(const Duration(days: 10)))
+          .setSocialAuth(loginType: LoginType.kakao, socialAccessToken: kakaoUser.accessToken);
 
-      // Dart 서버 로그인 진행
-      try {
-        DartAuth dartAuth = await _authRepository.loginWithKakao(kakaoUser.accessToken);
-        state
-            .setDartAuth(dartAccessToken: dartAuth.accessToken, expiredAt: DateTime.now().add(const Duration(days: 10)))
-            .setSocialAuth(loginType: LoginType.kakao, socialAccessToken: kakaoUser.accessToken);
-
-        // Dart 내 정보를 확인해서 이미 가입한 사용자인지 확인
-        UserResponse userResponse = await _userRepository.myInfo(); // TODO cache로 인해 문제가 생기는지 확인
-        if (userResponse.user?.name == null) {
-          state.setStep(AuthStep.signup);
-        } else {
-          state.setStep(AuthStep.login);
-        }
-        print(state.toString());
-      } catch (e, trace) {
-        print("=>Dart서버 로그인 실패 e: $e \ntrace: $trace");
-        throw Error();
+      UserResponse userResponse = await _userRepository.myInfo();
+      if (userResponse.user?.name == null) {
+        state.setStep(AuthStep.signup);
+      } else {
+        state.setStep(AuthStep.login);
       }
     }
     catch (e, stackTrace) {
+      print("login error: $e, $stackTrace");
       throw Error();
     } finally {
       state.setLoading(false);
       emit(state.copy());
     }
+  }
+
+  void appleLogin() async {
+    // loading 상태로 만든다.
+    state.setLoading(true);
+    emit(state.copy());
+
+    final appleUser = await _appleLoginRepository.login();
+    print(appleUser.toString());
+    print(appleUser.authorizationCode);
+    print(appleUser.identityToken);
+
+    try {
+      DartAuth dartAuth = await _authRepository.loginWithApple(appleUser.identityToken!);
+      state
+          .setDartAuth(dartAccessToken: dartAuth.accessToken, expiredAt: DateTime.now().add(const Duration(days: 10)))
+          .setSocialAuth(loginType: LoginType.kakao, socialAccessToken: appleUser.authorizationCode);
+
+      UserResponse userResponse = await _userRepository.myInfo();
+      if (userResponse.user?.name == null) {
+        state.setStep(AuthStep.signup);
+      } else {
+        state.setStep(AuthStep.login);
+      }
+    }
+    catch (e, stackTrace) {
+      print("login error: $e, $stackTrace");
+      throw Error();
+    } finally {
+      state.setLoading(false);
+      emit(state.copy());
+    }
+    print(state.toString());
   }
 
   void doneSignup() {
@@ -114,3 +143,4 @@ class AuthCubit extends HydratedCubit<AuthState> {
   @override
   Map<String, dynamic> toJson(AuthState state) => state.toJson();
 }
+
