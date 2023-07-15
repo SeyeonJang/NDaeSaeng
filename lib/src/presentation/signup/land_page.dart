@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:dart_flutter/res/size_config.dart';
 import 'package:dart_flutter/src/common/auth/auth_cubit.dart';
+import 'package:dart_flutter/src/common/auth/type/social_type.dart';
 import 'package:dart_flutter/src/common/util/toast_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -68,8 +69,7 @@ class LandingPage extends StatelessWidget {
                 alignment: Alignment.center,
                 child: GestureDetector(
                   onTap: () {
-                    // TODO : Apple 로그인 로직
-                    // BlocProvider.of<AuthCubit>(context).kakaoLogin();
+                    BlocProvider.of<AuthCubit>(context).appleLogin();
                   },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
