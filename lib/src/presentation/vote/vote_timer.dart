@@ -57,18 +57,19 @@ class _VoteTimerState extends State<VoteTimer> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       body: Padding(
-        padding: EdgeInsets.all(SizeConfig.defaultSize * 5),
+        padding: EdgeInsets.all(0),
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               const Flexible(
-                flex: 1,
+                flex: 2,
                 child: SizedBox(),
               ),
               Flexible(
-                flex: 2,
+                flex: 3,
                 child: Column(
                   children: [
                     Container(
@@ -80,15 +81,33 @@ class _VoteTimerState extends State<VoteTimer> {
                         ),
                       ),
                     ),
-                    Expanded(
-                      child: Container(
-                        child: Text(
-                          format(totalSeconds),
-                          style: TextStyle(
-                            fontWeight: FontWeight.w800,
-                            fontSize: SizeConfig.defaultSize * 9,
-                          ),
+                    SizedBox(height: SizeConfig.defaultSize * 2,),
+                    // Expanded(
+                    //   child: Container(
+                    //     child: Text(
+                    //       format(totalSeconds),
+                    //       style: TextStyle(
+                    //         fontWeight: FontWeight.w800,
+                    //         fontSize: SizeConfig.defaultSize * 9,
+                    //       ),
+                    //     ),
+                    //   ),
+                    // ),
+                    Container(
+                      child: Text(
+                        format(totalSeconds),
+                        style: TextStyle(
+                          fontWeight: FontWeight.w800,
+                          fontSize: SizeConfig.defaultSize * 9,
                         ),
+                      ),
+                    ),
+                    SizedBox(height: SizeConfig.defaultSize * 20,),
+                    Text(
+                      "새로운 질문들이 준비되면 알림을 드릴게요!",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: SizeConfig.defaultSize * 2,
                       ),
                     ),
                   ],

@@ -27,29 +27,30 @@ class _StandbyLandingPageState extends State<StandbyLandingPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.indigoAccent,
+        backgroundColor: Color(0xff7C83FD),
+        resizeToAvoidBottomInset: false,
         body: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(
-                height: SizeConfig.screenHeight * 0.1,
+                height: SizeConfig.screenHeight * 0.05,
               ),
               Text(
                 "     반가워요!",
                 style: TextStyle(
-                  fontSize: SizeConfig.defaultSize * 2.2,
+                  fontSize: SizeConfig.defaultSize * 2.5,
                   fontWeight: FontWeight.w800,
                   color: Colors.white,
                 ),
               ),
               SizedBox(
-                height: SizeConfig.screenHeight * 0.005,
+                height: SizeConfig.screenHeight * 0.011,
               ),
               Text(
-                "      친구 4명부터 이미지게임을 시작할 수 있어요!",
+                "       친구 4명부터 이미지게임을 시작할 수 있어요!",
                 style: TextStyle(
-                  fontSize: SizeConfig.defaultSize * 1.8,
+                  fontSize: SizeConfig.defaultSize * 1.9,
                   fontWeight: FontWeight.w500,
                   color: Colors.white,
                 ),
@@ -74,10 +75,11 @@ class _StandbyLandingPageState extends State<StandbyLandingPage> {
                     child: Column(
                       children: [
                         // ßSizedBox(height: SizeConfig.screenHeight),
+                        SizedBox(height: SizeConfig.defaultSize * 0.4,),
                         Text(
                           "\n\n내가 제일 친하다고 생각하는 친구는?",
                           style: TextStyle(
-                            fontSize: SizeConfig.defaultSize * 2,
+                            fontSize: SizeConfig.defaultSize * 2.2,
                             fontWeight: FontWeight.w800,
                             color: Colors.black,
                           ),
@@ -86,10 +88,10 @@ class _StandbyLandingPageState extends State<StandbyLandingPage> {
                         SizedBox(height: SizeConfig.defaultSize * 4),
                         Image.asset(
                           'assets/images/dart_logo.png',
-                          width: 150,
-                          height: 150,
+                          width: SizeConfig.defaultSize * 15.5,
+                          height: SizeConfig.defaultSize * 15.5,
                         ),
-                        SizedBox(height: SizeConfig.defaultSize * 4),
+                        SizedBox(height: SizeConfig.defaultSize * 4.5),
                         BlocBuilder<StandbyCubit, StandbyState>(
                             builder: (context, state) {
                               if (state.isLoading) {
@@ -157,35 +159,35 @@ class _StandbyLandingPageState extends State<StandbyLandingPage> {
                         }),
 
                         SizedBox(
-                          height: SizeConfig.defaultSize * 5,
+                          height: SizeConfig.defaultSize * 3,
                         ),
                         Text(
                           "위의 예시 질문처럼 이미지게임을 할 거예요!",
                           style: TextStyle(
-                            fontSize: SizeConfig.defaultSize * 1.4,
+                            fontSize: SizeConfig.defaultSize * 1.5,
                           ),
                         ),
+                        SizedBox(height: SizeConfig.defaultSize * 0.3,),
                         Text(
-                          "선택지로 고르고 싶은 친구들을 초대하고 추가하세요!",
+                          "선택지로 고르고 싶은 친구들을 추가하세요!",
                           style: TextStyle(
-                            fontSize: SizeConfig.defaultSize * 1.4,
+                            fontSize: SizeConfig.defaultSize * 1.5,
                           ),
                         ),
-                        SizedBox(height: SizeConfig.defaultSize * 0.9),
+                        SizedBox(height: SizeConfig.defaultSize * 1),
 
                         BlocBuilder<StandbyCubit, StandbyState>(
                           builder: (context, state) {
                             return openAddFriends(myCode: state.userResponse.user?.recommendationCode ?? '내 코드가 없어요!', cubit: _standbyCubit);
                           }),
-
-                        Container(
-                          height: SizeConfig.defaultSize * 5,
-                          color: Colors.white,
-                        ),
                       ],
                     ),
                   ),
                 ),
+              ),
+              Container(
+                height: SizeConfig.defaultSize * 2,
+                color: Colors.white,
               ),
             ],
           ),
@@ -201,17 +203,28 @@ class FriendNotExistsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // 친구 없음 | 비어있어요!
-    return Container(
-      // 친구 없을 때
-      width: SizeConfig.screenWidth * 0.41,
-      height: SizeConfig.defaultSize * 8,
-      decoration: BoxDecoration(
-          color: Colors.grey[300], borderRadius: BorderRadius.circular(15)),
-      alignment: Alignment.center,
-      child: Text(
-        "비어있어요!",
-        style: TextStyle(
-          fontSize: SizeConfig.defaultSize * 1.8,
+    return GestureDetector(
+      onTap: () {
+        // TODO : 눌렀을 떄 ModalBottomSheet 뜨도록 하기 (현식오빠 수정 버전으로)
+      },
+      child: Container(
+        // 친구 없을 때
+        width: SizeConfig.screenWidth * 0.41,
+        height: SizeConfig.defaultSize * 8,
+        decoration: BoxDecoration(
+            color: Colors.grey[300], borderRadius: BorderRadius.circular(15)),
+        // decoration: BoxDecoration(
+        //     border: Border.all(
+        //       color: Colors.grey.shade400,
+        //       width: 1.3,
+        //     ),
+        //     borderRadius: BorderRadius.circular(15)),
+        alignment: Alignment.center,
+        child: Text(
+          "눌러서 친구추가",
+          style: TextStyle(
+            fontSize: SizeConfig.defaultSize * 1.8,
+          ),
         ),
       ),
     );
@@ -234,9 +247,9 @@ class FriendExistsView extends StatelessWidget {
         height: SizeConfig.defaultSize * 8,
         alignment: Alignment.center,
         decoration: BoxDecoration(
-            color: Colors.indigoAccent,
+            color: Color(0xff7C83FD),
             border: Border.all(
-              color: Colors.indigoAccent,
+              color: Color(0xff7C83FD),
             ),
             borderRadius: BorderRadius.circular(15)),
         child: Column(
@@ -358,7 +371,7 @@ class _openAddFriendsState extends State<openAddFriends> {
                     SizedBox(height: SizeConfig.screenHeight * 0.15),
                     Text("친구를 추가해요!",
                         style: TextStyle(
-                          color: Colors.indigoAccent,
+                          color: Color(0xff7C83FD),
                           fontSize: SizeConfig.defaultSize * 2.2,
                           fontWeight: FontWeight.w600,
                         )),

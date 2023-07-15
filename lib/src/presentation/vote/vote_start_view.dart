@@ -7,22 +7,60 @@ import 'package:dart_flutter/src/presentation/vote/vote_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class VoteStartView extends StatelessWidget {
+class VoteStartView extends StatefulWidget {
   const VoteStartView({Key? key}) : super(key: key);
+
+  @override
+  State<VoteStartView> createState() => _VoteStartViewState();
+}
+
+class _VoteStartViewState extends State<VoteStartView> with SingleTickerProviderStateMixin {
+  bool _isUp = true;
+  late AnimationController _controller;
+  late Animation<Offset> _animation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: Duration(seconds: 1),
+    );
+
+    _animation = Tween<Offset>(
+      begin: Offset(0,0.15),
+      end: Offset(0,0),
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
+
+    _controller.addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        _isUp = !_isUp;
+        _controller.reverse();
+      } else if (status == AnimationStatus.dismissed) {
+        _isUp = !_isUp;
+        _controller.forward();
+      }
+    });
+
+    _controller.forward();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       body: Padding(
         padding: EdgeInsets.all(SizeConfig.defaultSize * 5),
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              const Flexible(
-                flex: 1,
-                child: SizedBox(),
-              ),
               Flexible(
                 flex: 1,
                 child: Container(
@@ -40,8 +78,14 @@ class VoteStartView extends StatelessWidget {
                 flex: 3,
                 child: Container(
                     alignment: Alignment.center,
-                    child: Icon(Icons.emoji_emotions,
-                        size: SizeConfig.defaultSize * 20)),
+                  child: SlideTransition(
+                    position: _animation,
+                    child: Image.asset(
+                      'assets/images/message.png',
+                      width: SizeConfig.defaultSize * 30,
+                    ),
+                  ),
+                ),
               ),
               Flexible(
                 flex: 1,
@@ -59,14 +103,19 @@ class VoteStartView extends StatelessWidget {
                           // 카카오톡 공유
                         }
                       },
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all(Color(0xff7C83FD)),
+                        padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.only(left: SizeConfig.defaultSize * 3, right: SizeConfig.defaultSize * 3, top: 0, bottom: 0)),
+                      ),
                       child: BlocBuilder<VoteCubit, VoteState>(
                         builder: (context, state) {
                           List<Friend> friendList = state.friends;
                           int friendCount = friendList.length;
                           print(friendList);
                           return Text(
-                            friendCount >= 4 ? "시작하기" : "친구 4명 만들고 시작하기",
-                            style: TextStyle(fontSize: SizeConfig.defaultSize * 4),
+                            "시작하기",
+                            // friendCount >= 4 ? "시작하기" : "친구 4명 만들고 시작하기",
+                            style: TextStyle(fontSize: SizeConfig.defaultSize * 3.4, fontWeight: FontWeight.w600, color: Colors.white),
                           );
                         },
                       ),

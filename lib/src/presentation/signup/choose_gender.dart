@@ -23,23 +23,28 @@ class _ChooseGenderState extends State<ChooseGender> {
   bool vertical = false;
   String selectedGender = "MALE";
 
+  final List<bool> _selectedGender2 = [false, false];
+  String selectedGender2 = "";
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          leading: IconButton(
-              onPressed: () {
-
-              }, icon: Icon(Icons.arrow_back)),
-        ),
+        backgroundColor: Colors.white,
         body: Center(
           child: Column(
             children: [
-              const SizedBox(
-                height: 100,
+              SizedBox(
+                height: SizeConfig.screenHeight * 0.15,
               ),
-              const Text("성별 선택", style: TextStyle(fontSize: 25)),
-              const SizedBox( height: 140, ),
+              Text("성별을 선택해주세요!", style: TextStyle(fontSize: SizeConfig.defaultSize * 2.7, fontWeight: FontWeight.w700)),
+              SizedBox(
+                height: SizeConfig.defaultSize * 1.5,
+              ),
+              Text("이후 변경할 수 없어요! 신중히 선택해주세요!",
+                  style: TextStyle(fontSize: SizeConfig.defaultSize * 1.2, color: Colors.grey)),
+              SizedBox(
+                height: SizeConfig.defaultSize * 10,
+              ),
 
               ToggleButtons(
                 direction: Axis.horizontal,
@@ -55,24 +60,41 @@ class _ChooseGenderState extends State<ChooseGender> {
                   print("$index, ${_selectedGender[index]}, $selectedGender");
                 },
                 borderRadius: const BorderRadius.all(Radius.circular(8)),
-                selectedBorderColor: Colors.red[700],
+                selectedBorderColor: Color(0xff7C83FD),
                 selectedColor: Colors.white,
-                fillColor: Colors.red[200],
-                color: Colors.red[400],
-                constraints: const BoxConstraints(
-                  minHeight: 40.0,
-                  minWidth: 80.0,
+                fillColor: Color(0xff7C83FD).withOpacity(0.8),
+                color: Color(0xff7C83FD),
+                constraints: BoxConstraints(
+                  minHeight: SizeConfig.screenHeight * 0.2,
+                  minWidth: SizeConfig.screenWidth * 0.4,
                 ),
                 isSelected: _selectedGender,
                 children: [
-                  Text("여자"),
-                  Text("남자"),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Icon(Icons.girl_rounded, size: SizeConfig.defaultSize * 8,),
+                      Text("여자", style: TextStyle(
+                        fontSize: SizeConfig.defaultSize * 2.7,
+                        fontWeight: FontWeight.w600,
+                      ),),
+                    ],
+                  ),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Icon(Icons.boy_rounded, size: SizeConfig.defaultSize * 8),
+                      Text("남자", style: TextStyle(
+                        fontSize: SizeConfig.defaultSize * 2.7,
+                        fontWeight: FontWeight.w600,
+                      ),),
+                    ],
+                  ),
                 ],
-                // children: [genders],
               ),
-              SizedBox(height: SizeConfig.screenHeight * 0.2,),
-              const Text("본인이 만 14세 이상이며, Dart 서비스의 필수 동의 항목인",
-                style: TextStyle(fontSize: 13),
+              SizedBox(height: SizeConfig.defaultSize * 10 ,),
+              Text("본인이 만 14세 이상이며, Dart 서비스의 필수 동의 항목인",
+                style: TextStyle(fontSize: SizeConfig.defaultSize * 1.4),
                 textAlign: TextAlign.center,),
               Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -94,20 +116,36 @@ class _ChooseGenderState extends State<ChooseGender> {
                   ]
               ),
 
-              const SizedBox( height: 100, ),
-              ElevatedButton( // 버튼
-                onPressed: () {
-                  BlocProvider.of<SignupCubit>(context).stepGender(selectedGender);  // TODO 성별선택 controller 를 통해 사용자 입력을 받아오기
-                  BlocProvider.of<AuthCubit>(context).doneSignup();
-                  // Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const DartPageView()), (route)=>false);
-                }, // 임시용
-                // onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => 2-1())), // animation은 나중에 추가 + 2-1로 가야함
-                // style: ButtonStyle(
-                //   foregroundColor: MaterialStateProperty.resolveWith(getColorText), // textcolor
-                //   backgroundColor: MaterialStateProperty.resolveWith(getColor), // backcolor
-                // ),
-                child: const Text("다음으로"),
+              SizedBox(
+                height: SizeConfig.defaultSize * 5,
               ),
+
+              Container(
+                width: SizeConfig.screenWidth * 0.9,
+                height: SizeConfig.defaultSize * 5,
+                child: _selectedGender.contains(true)
+                    ? ElevatedButton(
+                    onPressed: () {
+                      BlocProvider.of<SignupCubit>(context).stepGender(selectedGender);  // TODO 성별선택 controller 를 통해 사용자 입력을 받아오기
+                      BlocProvider.of<AuthCubit>(context).doneSignup();
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Color(0xff7C83FD),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15), // 모서리 둥글기 설정
+                      ),
+                    ),
+                    child: Text("동의 후 완료하기", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.7, fontWeight: FontWeight.w600, color: Colors.white),)
+                )
+                    : ElevatedButton(
+                    onPressed: () {},
+                    style: ElevatedButton.styleFrom(
+                      primary: Colors.white,
+                      backgroundColor: Colors.grey[200],
+                    ),
+                    child: Text("학교를 선택해주세요", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.7, fontWeight: FontWeight.w600, color: Colors.black38),)
+                ),
+              )
             ],
           ),
         ),

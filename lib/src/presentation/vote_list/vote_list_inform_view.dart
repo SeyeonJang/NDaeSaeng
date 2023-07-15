@@ -10,23 +10,31 @@ class VoteListInformView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Padding(
-      padding: EdgeInsets.all(SizeConfig.defaultSize * 7),
+      backgroundColor: Colors.white,
+        body: Center(
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        // mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          SizedBox(height: SizeConfig.defaultSize * 10),
+          SizedBox(height: SizeConfig.screenHeight * 0.1),
           Text("Dart에 온 걸 환영해요!",
               style: TextStyle(fontSize: SizeConfig.defaultSize * 2.6, fontWeight: FontWeight.w600)),
-          SizedBox(height: SizeConfig.defaultSize * 5),
-          Text("이 페이지에는 우리 학교 사람이 나에게 보낸 Dart들이 도착해요!🎉",
-              style: TextStyle(fontSize: SizeConfig.defaultSize * 1.8)),
-          SizedBox(height: SizeConfig.defaultSize * 20),
+          SizedBox(height: SizeConfig.screenHeight * 0.2),
+          Text("이 페이지에는 친구들이\n나에게 보낸 Dart들이 도착할 거예요!🎉",
+              style: TextStyle(fontSize: SizeConfig.defaultSize * 1.8),
+          textAlign: TextAlign.center,),
+          SizedBox(height: SizeConfig.screenHeight * 0.2),
+          Text("시작해볼까요?",
+            style: TextStyle(fontSize: SizeConfig.defaultSize * 1.8),
+            textAlign: TextAlign.center,),
+          SizedBox(height: SizeConfig.defaultSize * 1),
           ElevatedButton(
               onPressed: () {
                 BlocProvider.of<VoteListCubit>(context).firstTime();
               },
-              child: Text("닫기", style: TextStyle(fontSize: SizeConfig.defaultSize * 3))),
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all(Color(0xff7C83FD)),
+              ),
+              child: Text("알림보기", style: TextStyle(fontSize: SizeConfig.defaultSize * 2, color: Colors.white))),
         ],
       ),
     ));

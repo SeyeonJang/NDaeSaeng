@@ -16,6 +16,7 @@ class MyTos1 extends StatelessWidget {
     return BlocProvider<MyPagesCubit>(
       create: (BuildContext context) => MyPagesCubit(),
       child: Scaffold(
+        backgroundColor: Colors.white,
         appBar: AppBar(
           // 임시 View **********************
           leading: IconButton(
