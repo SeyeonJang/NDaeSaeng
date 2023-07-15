@@ -65,7 +65,7 @@ class _VoteTimerState extends State<VoteTimer> {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               const Flexible(
-                flex: 1,
+                flex: 2,
                 child: SizedBox(),
               ),
               Flexible(

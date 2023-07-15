@@ -11,20 +11,53 @@ class VoteResultView extends StatefulWidget {
   State<VoteResultView> createState() => _VoteResultViewState();
 }
 
-class _VoteResultViewState extends State<VoteResultView> {
+class _VoteResultViewState extends State<VoteResultView> with SingleTickerProviderStateMixin {
+  bool _isUp = true;
+  late AnimationController _controller;
+  late Animation<Offset> _animation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: Duration(seconds: 1),
+    );
+
+    _animation = Tween<Offset>(
+      begin: Offset(0,0.15),
+      end: Offset(0,0),
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
+
+    _controller.addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        _isUp = !_isUp;
+        _controller.reverse();
+      } else if (status == AnimationStatus.dismissed) {
+        _isUp = !_isUp;
+        _controller.forward();
+      }
+    });
+
+    _controller.forward();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       body: Padding(
         padding: EdgeInsets.all(SizeConfig.defaultSize * 5),
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              Flexible(
-                flex: 1,
-                child: const SizedBox(),
-              ),
               Flexible(
                 flex: 1,
                 child: Container(
@@ -41,8 +74,14 @@ class _VoteResultViewState extends State<VoteResultView> {
               Flexible(
                 flex: 3,
                 child: Container(
-                    alignment: Alignment.center,
-                    child: Icon(Icons.emoji_emotions, size: SizeConfig.defaultSize * 22)
+                  alignment: Alignment.center,
+                  child: SlideTransition(
+                    position: _animation,
+                    child: Image.asset(
+                      'assets/images/cloud.png',
+                      width: SizeConfig.defaultSize * 30,
+                    ),
+                  ),
                 ),
               ),
               Flexible(
@@ -60,16 +99,20 @@ class _VoteResultViewState extends State<VoteResultView> {
                       ),
                     ),
                     SizedBox(
-                      height: SizeConfig.defaultSize * 0.1,
+                      height: SizeConfig.defaultSize * 2,
                     ),
                     ElevatedButton(
                       onPressed: () {
                         BlocProvider.of<VoteCubit>(context).stepDone();
                       },
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all(Color(0xff7C83FD)),
+                        padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.only(left: SizeConfig.defaultSize * 3, right: SizeConfig.defaultSize * 3, top: 0, bottom: 0)),
+                      ),
                       child: Text(
                         "다음으로",
                         style: TextStyle(
-                          fontSize: SizeConfig.defaultSize * 3.5,
+                            fontSize: SizeConfig.defaultSize * 3.4, fontWeight: FontWeight.w600, color: Colors.white
                         ),
                       ),
                     ),
