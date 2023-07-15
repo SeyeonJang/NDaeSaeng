@@ -68,8 +68,7 @@ class LandingPage extends StatelessWidget {
                 alignment: Alignment.center,
                 child: GestureDetector(
                   onTap: () {
-                    // TODO : Apple 로그인 로직
-                    // BlocProvider.of<AuthCubit>(context).kakaoLogin();
+                    BlocProvider.of<AuthCubit>(context).appleLogin();
                   },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,

@@ -8,6 +8,10 @@ class DartAuthRepository {
     return await DartApiRemoteDataSource.postLoginWithKakao(kakaoAccessToken);
   }
 
+  Future<DartAuth> loginWithApple(String appleIdentifyToken) async {
+    return await DartApiRemoteDataSource.postLoginWithApple(appleIdentifyToken);
+  }
+
   Future<void> requestSns(SnsRequest snsRequest) async {
     return await DartApiRemoteDataSource.postSnsRequest(snsRequest);
   }
