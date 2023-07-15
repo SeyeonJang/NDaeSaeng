@@ -34,7 +34,7 @@ class _StandbyLandingPageState extends State<StandbyLandingPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(
-                height: SizeConfig.screenHeight * 0.04,
+                height: SizeConfig.screenHeight * 0.05,
               ),
               Text(
                 "     반가워요!",
@@ -45,7 +45,7 @@ class _StandbyLandingPageState extends State<StandbyLandingPage> {
                 ),
               ),
               SizedBox(
-                height: SizeConfig.screenHeight * 0.01,
+                height: SizeConfig.screenHeight * 0.011,
               ),
               Text(
                 "       친구 4명부터 이미지게임을 시작할 수 있어요!",
@@ -179,15 +179,14 @@ class _StandbyLandingPageState extends State<StandbyLandingPage> {
                           builder: (context, state) {
                             return openAddFriends(myCode: state.userResponse.user?.recommendationCode ?? '내 코드가 없어요!', cubit: _standbyCubit);
                           }),
-
-                        Container(
-                          height: SizeConfig.defaultSize * 5,
-                          color: Colors.white,
-                        ),
                       ],
                     ),
                   ),
                 ),
+              ),
+              Container(
+                height: SizeConfig.defaultSize * 2,
+                color: Colors.white,
               ),
             ],
           ),
