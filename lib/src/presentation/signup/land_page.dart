@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'package:dart_flutter/res/size_config.dart';
 import 'package:dart_flutter/src/common/auth/auth_cubit.dart';
-import 'package:dart_flutter/src/common/auth/type/social_type.dart';
 import 'package:dart_flutter/src/common/util/toast_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

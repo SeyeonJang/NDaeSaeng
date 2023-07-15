@@ -46,7 +46,7 @@ class DartApiRemoteDataSource {
 
   static Future<DartAuth> postLoginWithApple(String appleIdentifyToken) async {
     const path = '/v1/auth/apple';
-    final body = {"accessToken": appleIdentifyToken};
+    final body = {"idToken": appleIdentifyToken};
 
     final response = await _httpUtil.request().post(path, data: body);
 
