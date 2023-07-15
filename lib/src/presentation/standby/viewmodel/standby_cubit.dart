@@ -28,18 +28,19 @@ class StandbyCubit extends Cubit<StandbyState> {
     emit(state.copy());
   }
 
-  void pressedFriendCodeAddButton(String inviteCode) async {
-    print(state.hashCode);
+  Future<void> pressedFriendCodeAddButton(String inviteCode) async {
     state.isLoading = true;
     emit(state.copy());
 
-    Friend friend = await _dartFriendRepository.addFriendBy(inviteCode);
-    state.addFriend(friend);
-    print("친추함 $friend");
-
-    state.isLoading = false;
-    print(state.hashCode);
-    emit(state.copy());
-    print(state.hashCode);
+    try {
+      Friend friend = await _dartFriendRepository.addFriendBy(inviteCode);
+      state.addFriend(friend);
+    } catch (e, trace) {
+      print("친구추가 실패! $e $trace");
+      throw Error();
+    } finally {
+      state.isLoading = false;
+      emit(state.copy());
+    }
   }
 }
