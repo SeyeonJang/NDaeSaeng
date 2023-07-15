@@ -1,3 +1,4 @@
+import 'package:dart_flutter/src/common/util/toast_util.dart';
 import 'package:dart_flutter/src/presentation/page_view.dart';
 import 'package:dart_flutter/src/presentation/standby/viewmodel/standby_cubit.dart';
 import 'package:dart_flutter/src/presentation/standby/viewmodel/state/standby_state.dart';
@@ -430,15 +431,18 @@ class _openAddFriendsState extends State<openAddFriends> {
                           width: SizeConfig.defaultSize * 0.7,
                         ),
                         ElevatedButton(
-                          onPressed: () {
+                          onPressed: () async {
                             if (friendCode == widget.myCode) {itsMyCodeToast();}
                             else {
                               print("friendCode $friendCode");
-                              // widget.cubit.pressedFriendCodeAddButton(friendCode);
-                              BlocProvider.of<StandbyCubit>(context)
-                                  .pressedFriendCodeAddButton(friendCode);
-                              showAddFriendToast();
-                              Navigator.pop(context);
+                              // try {
+                              try {
+                                await BlocProvider.of<StandbyCubit>(context).pressedFriendCodeAddButton(friendCode);
+                                showAddFriendToast();
+                                Navigator.pop(context);
+                              } catch (e) {
+                                ToastUtil.showToast('친구코드를 다시 한번 확인해주세요!');
+                              }
                             }
                           },
                           style: ElevatedButton.styleFrom(
