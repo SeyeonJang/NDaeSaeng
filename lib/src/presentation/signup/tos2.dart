@@ -9,6 +9,7 @@ class Tos2 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         // 임시 View **********************
         leading: IconButton(
