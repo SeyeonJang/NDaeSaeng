@@ -44,6 +44,18 @@ class DartApiRemoteDataSource {
     return dartAuth;
   }
 
+  static Future<DartAuth> postLoginWithApple(String appleIdentifyToken) async {
+    const path = '/v1/auth/apple';
+    final body = {"idToken": appleIdentifyToken};
+
+    final response = await _httpUtil.request().post(path, data: body);
+
+    final jsonResponse = json.decode(response.toString());
+    final dartAuth = DartAuth.from(jsonResponse);
+    addAuthorizationToken(dartAuth.accessToken);
+    return dartAuth;
+  }
+
   /// Auth: 문자인증 요청
   static Future<void> postSnsRequest(SnsRequest snsRequest) async {
     const path = '/v1/auth/sms';

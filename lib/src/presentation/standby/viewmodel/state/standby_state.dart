@@ -45,4 +45,8 @@ class StandbyState {
     addedFriends.add(friend); // List에 추가
   }
 
+  @override
+  String toString() {
+    return 'StandbyState{isLoading: $isLoading, addedFriends: $addedFriends, friendsCount: $friendsCount, userResponse: $userResponse}';
+  }
 }

@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:ui';
 import 'package:dart_flutter/res/size_config.dart';
 import 'package:dart_flutter/src/common/auth/auth_cubit.dart';
+import 'package:dart_flutter/src/common/util/toast_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'dart:async';
@@ -104,7 +105,11 @@ class _LandingPageState extends State<LandingPage> {
                   borderRadius: BorderRadius.circular(10)),
               child: GestureDetector(
                 onTap: () {
-                  BlocProvider.of<AuthCubit>(context).kakaoLogin();
+                  try {
+                    BlocProvider.of<AuthCubit>(context).kakaoLogin();
+                  } catch (e) {
+                    ToastUtil.showToast("로그인에 실패하였습니다. 다시 시도해주세요.");
+                  }
                 },
                 child: Image.asset('assets/images/kakao_login_btn.png'), // TODO : MVP HOTFIX 카카오 로그인 깨짐 현상 개선
               ),
@@ -128,8 +133,7 @@ class _LandingPageState extends State<LandingPage> {
                 alignment: Alignment.center,
                 child: GestureDetector(
                   onTap: () {
-                    // TODO : Apple 로그인 로직
-                    // BlocProvider.of<AuthCubit>(context).kakaoLogin();
+                    BlocProvider.of<AuthCubit>(context).appleLogin();
                   },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,

@@ -102,9 +102,10 @@ class _StandbyLandingPageState extends State<StandbyLandingPage> {
                                 int count = friends.length;
                                 // count가 4이상이면 PageView로 보내기
                                 if (count >= 4) {
-                                  Navigator.push(context, MaterialPageRoute(builder: (context) => const DartPageView()));
+                                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                                    Navigator.push(context, MaterialPageRoute(builder: (context) => const DartPageView()));
+                                  });
                                 }
-
                                 return Column(
                                   children: [
                                     Padding(
@@ -361,7 +362,7 @@ class _openAddFriendsState extends State<openAddFriends> {
             ),
             backgroundColor: Colors.white,
             isScrollControlled: true,
-            builder: (context) {
+            builder: (BuildContext _) {
               return Container(
                 height: SizeConfig.screenHeight,
                 width: SizeConfig.screenWidth,
@@ -433,10 +434,11 @@ class _openAddFriendsState extends State<openAddFriends> {
                             if (friendCode == widget.myCode) {itsMyCodeToast();}
                             else {
                               print("friendCode $friendCode");
-                              widget.cubit.pressedFriendCodeAddButton(friendCode);
-                              // BlocProvider.of<StandbyCubit>(context)
-                              //     .pressedFriendCodeAddButton(friendCode);
+                              // widget.cubit.pressedFriendCodeAddButton(friendCode);
+                              BlocProvider.of<StandbyCubit>(context)
+                                  .pressedFriendCodeAddButton(friendCode);
                               showAddFriendToast();
+                              Navigator.pop(context);
                             }
                           },
                           style: ElevatedButton.styleFrom(

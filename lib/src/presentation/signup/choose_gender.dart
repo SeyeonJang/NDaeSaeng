@@ -57,6 +57,7 @@ class _ChooseGenderState extends State<ChooseGender> {
                     if (index == 0) selectedGender = "FEMALE";
                     if (index == 1) selectedGender = "MALE";
                   });
+                  print("$index, ${_selectedGender[index]}, $selectedGender");
                 },
                 borderRadius: const BorderRadius.all(Radius.circular(8)),
                 selectedBorderColor: Color(0xff7C83FD),
