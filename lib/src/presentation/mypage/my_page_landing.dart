@@ -1,10 +1,14 @@
+import 'package:contextmenu/contextmenu.dart';
 import 'package:dart_flutter/res/size_config.dart';
 import 'package:dart_flutter/src/common/util/toast_util.dart';
 import 'package:dart_flutter/src/data/model/friend.dart';
 import 'package:dart_flutter/src/presentation/mypage/viewmodel/mypages_cubit.dart';
 import 'package:dart_flutter/src/presentation/mypage/viewmodel/state/mypages_state.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:quickalert/models/quickalert_type.dart';
+import 'package:quickalert/widgets/quickalert_dialog.dart';
 
 class MyPageLanding extends StatefulWidget {
   const MyPageLanding({Key? key}) : super(key: key);
@@ -229,6 +233,7 @@ class MyPageLandingView extends StatelessWidget {
                         style: TextStyle(
                           fontWeight: FontWeight.w700,
                           fontSize: SizeConfig.defaultSize * 1.7,
+                          color: Color(0xff7C83FD)
                         ),),
                       // ElevatedButton( // TODO : MVP 이후 복구하기
                       //   onPressed: () {
@@ -276,6 +281,7 @@ class MyPageLandingView extends StatelessWidget {
                         style: TextStyle(
                           fontWeight: FontWeight.w700,
                           fontSize: SizeConfig.defaultSize * 1.7,
+                          color: Color(0xff7C83FD)
                         ),),
                     ],
                   ),
@@ -381,45 +387,114 @@ class FriendComponent extends StatelessWidget {
             ),
             SizedBox(height: SizeConfig.defaultSize,),
 
-            // Expanded( // TODO MVP HOTFIX : 신고, 삭제 버튼을 menu로 숨기기
-            //   child: Align(
-            //     alignment: Alignment.centerRight,
-            //     child: PopupMenuButton(
-            //       icon: Icon(Icons.more_horiz_rounded, color: Colors.grey, size: SizeConfig.defaultSize,),
-            //       iconSize: SizeConfig.defaultSize * 5,
-            //       itemBuilder: (context) => [
-            //         PopupMenuItem(child: Text("친구 삭제"), value: "친구 삭제"),
-            //         PopupMenuItem(child: Text("신고"), value: "신고"),
-            //       ],
-            //       onSelected: (value) {
-            //         if (value=="친구 삭제"){
-            //           if (isAdd) {
-            //             pressedAddButton(context, friend.userId!);
-            //           } else {
-            //             pressedDeleteButton(context, friend.userId!);
-            //           }
-            //         }
-            //         if (value=="신고"){
-            //           ToastUtil.showToast("사용자가 신고되었어요!");
-            //           // TODO : 신고 기능 (서버 연결)
-            //         }
-            //       },
-            //     ),
-            //   ),
-            // ),
+            IconButton(
+                onPressed: () {
+                  ToastUtil.showToast("사용자가 신고되었어요!");
+                  // TODO : 신고 기능 (서버 연결)
+                  // TODO : 신고 확정 Dialog | Popupmenu, contextmnu, QuickAlert, AlertDialog 모두 시도해봤는데 안 됨. 여기서 띄울 수 없는 것 같음.
 
-            TextButton(
-              onPressed: () {
-                ToastUtil.showToast("사용자가 신고되었어요!");
-                // TODO : 신고 기능 (서버 연결)
-              },
-              child: Text("신고", style: TextStyle(
-                fontSize: SizeConfig.defaultSize * 1.3,
-                fontWeight: FontWeight.w500,
-                decoration: TextDecoration.underline,
-                color: Colors.grey,
-              )),
-            ),
+                  // showAlert() {
+                  //   QuickAlert.show(
+                  //       type: QuickAlertType.confirm,
+                  //       context: context,
+                  //       title: "사용자를 신고하시겠어요?",
+                  //       // text: "제출하면 프로필을 수정할 수 없어요!\n신중히 제출해주세요!",
+                  //       confirmBtnText: '신청',
+                  //       cancelBtnText: '취소',
+                  //       onConfirmBtnTap: () {
+                  //         ToastUtil.showToast("사용자가 신고되었어요!");
+                  //         Navigator.of(context).pop(); // QuickAlert 닫기
+                  //       });
+                  // }
+
+                  // ContextMenuArea(
+                  //   builder: (context) => [
+                  //     ListTile(
+                  //       title: Text('Option 1'),
+                  //       onTap: () {
+                  //         Navigator.of(context).pop();
+                  //         // ScaffoldMessenger.of(context).showSnackBar(
+                  //         //   SnackBar(
+                  //         //     content: Text('Whatever'),
+                  //         //   ),
+                  //         // );
+                  //       },
+                  //     ),
+                  //     ListTile(
+                  //       leading: Icon(Icons.model_training),
+                  //       title: Text('Option 2'),
+                  //       onTap: () {
+                  //         Navigator.of(context).pop();
+                  //         // ScaffoldMessenger.of(context).showSnackBar(
+                  //         //   SnackBar(
+                  //         //     content: Text('Foo!'),
+                  //         //   ),
+                  //         // );
+                  //       },
+                  //     )
+                  //   ],
+                  //   child: Card(
+                  //     color: Theme.of(context).primaryColor,
+                  //     child: Center(
+                  //       child: Text(
+                  //         'Press somewhere for context menu.',
+                  //         style: TextStyle(
+                  //           color: Theme.of(context).colorScheme.onPrimary,
+                  //         ),
+                  //       ),
+                  //     ),
+                  //   ),
+                  // );
+
+                  // showCupertinoModalPopup(context: context, builder: (BuildContext context) => CupertinoActionSheet(
+                  //   title: Text("사용자를 신고하시겠어요?"),
+                  //   actions: <CupertinoActionSheetAction>[
+                  //     CupertinoActionSheetAction(
+                  //         onPressed: () {
+                  //           Navigator.pop(context);
+                  //           // TODO: 신고 기능 (서버 연결)
+                  //           ToastUtil.showToast("사용자가 신고되었습니다!");
+                  //         },
+                  //         child: Text("신고하기", style: TextStyle(color: Colors.redAccent))
+                  //     ),
+                  //     CupertinoActionSheetAction(
+                  //         onPressed: () {
+                  //           Navigator.pop(context);
+                  //           // TODO: 신고 기능 (서버 연결)
+                  //         },
+                  //         child: Text("취소", style: TextStyle(color: Colors.indigoAccent),)
+                  //     )
+                  //   ],
+                  // ));
+
+                  // showDialog(
+                  //   context: context,
+                  //   builder: (BuildContext context) {
+                  //     return CupertinoAlertDialog(
+                  //       title: Text("사용자 신고"),
+                  //       content: Text("이 사용자를 신고하시겠습니까?"),
+                  //       actions: [
+                  //         TextButton(
+                  //           onPressed: () {
+                  //             Navigator.of(context).pop(); // 다이얼로그 닫기
+                  //             // TODO: 신고 기능 (서버 연결)
+                  //             ToastUtil.showToast("사용자가 신고되었습니다!");
+                  //           },
+                  //           child: Text("신고하기"),
+                  //         ),
+                  //         TextButton(
+                  //           onPressed: () {
+                  //             Navigator.of(context).pop(); // 다이얼로그 닫기
+                  //           },
+                  //           child: Text("취소"),
+                  //         ),
+                  //       ],
+                  //     );
+                  //     print("printprint");
+                  //   },
+                  // );
+                },
+                icon: Icon(Icons.warning_rounded, color: Colors.grey.shade200)),
 
             ElevatedButton(
               onPressed: () {
@@ -488,18 +563,114 @@ class NotFriendComponent extends StatelessWidget {
             ),
             SizedBox(height: SizeConfig.defaultSize,),
 
-            TextButton(
-              onPressed: () {
-                ToastUtil.showToast("사용자가 신고되었어요!");
-                // TODO : 신고 기능 (서버 연결)
-              },
-              child: Text("신고", style: TextStyle(
-                fontSize: SizeConfig.defaultSize * 1.3,
-                fontWeight: FontWeight.w500,
-                decoration: TextDecoration.underline,
-                color: Colors.grey,
-              )),
-            ),
+            IconButton(
+                onPressed: () {
+                  ToastUtil.showToast("사용자가 신고되었어요!");
+                  // TODO : 신고 기능 (서버 연결)
+                  // TODO : 신고 확정 Dialog | Popupmenu, contextmnu, QuickAlert, AlertDialog 모두 시도해봤는데 안 됨. 여기서 띄울 수 없는 것 같음.
+
+                  // showAlert() {
+                  //   QuickAlert.show(
+                  //       type: QuickAlertType.confirm,
+                  //       context: context,
+                  //       title: "사용자를 신고하시겠어요?",
+                  //       // text: "제출하면 프로필을 수정할 수 없어요!\n신중히 제출해주세요!",
+                  //       confirmBtnText: '신청',
+                  //       cancelBtnText: '취소',
+                  //       onConfirmBtnTap: () {
+                  //         ToastUtil.showToast("사용자가 신고되었어요!");
+                  //         Navigator.of(context).pop(); // QuickAlert 닫기
+                  //       });
+                  // }
+
+                  // ContextMenuArea(
+                  //   builder: (context) => [
+                  //     ListTile(
+                  //       title: Text('Option 1'),
+                  //       onTap: () {
+                  //         Navigator.of(context).pop();
+                  //         // ScaffoldMessenger.of(context).showSnackBar(
+                  //         //   SnackBar(
+                  //         //     content: Text('Whatever'),
+                  //         //   ),
+                  //         // );
+                  //       },
+                  //     ),
+                  //     ListTile(
+                  //       leading: Icon(Icons.model_training),
+                  //       title: Text('Option 2'),
+                  //       onTap: () {
+                  //         Navigator.of(context).pop();
+                  //         // ScaffoldMessenger.of(context).showSnackBar(
+                  //         //   SnackBar(
+                  //         //     content: Text('Foo!'),
+                  //         //   ),
+                  //         // );
+                  //       },
+                  //     )
+                  //   ],
+                  //   child: Card(
+                  //     color: Theme.of(context).primaryColor,
+                  //     child: Center(
+                  //       child: Text(
+                  //         'Press somewhere for context menu.',
+                  //         style: TextStyle(
+                  //           color: Theme.of(context).colorScheme.onPrimary,
+                  //         ),
+                  //       ),
+                  //     ),
+                  //   ),
+                  // );
+
+                  // showCupertinoModalPopup(context: context, builder: (BuildContext context) => CupertinoActionSheet(
+                  //   title: Text("사용자를 신고하시겠어요?"),
+                  //   actions: <CupertinoActionSheetAction>[
+                  //     CupertinoActionSheetAction(
+                  //         onPressed: () {
+                  //           Navigator.pop(context);
+                  //           // TODO: 신고 기능 (서버 연결)
+                  //           ToastUtil.showToast("사용자가 신고되었습니다!");
+                  //         },
+                  //         child: Text("신고하기", style: TextStyle(color: Colors.redAccent))
+                  //     ),
+                  //     CupertinoActionSheetAction(
+                  //         onPressed: () {
+                  //           Navigator.pop(context);
+                  //           // TODO: 신고 기능 (서버 연결)
+                  //         },
+                  //         child: Text("취소", style: TextStyle(color: Colors.indigoAccent),)
+                  //     )
+                  //   ],
+                  // ));
+
+                  // showDialog(
+                  //   context: context,
+                  //   builder: (BuildContext context) {
+                  //     return CupertinoAlertDialog(
+                  //       title: Text("사용자 신고"),
+                  //       content: Text("이 사용자를 신고하시겠습니까?"),
+                  //       actions: [
+                  //         TextButton(
+                  //           onPressed: () {
+                  //             Navigator.of(context).pop(); // 다이얼로그 닫기
+                  //             // TODO: 신고 기능 (서버 연결)
+                  //             ToastUtil.showToast("사용자가 신고되었습니다!");
+                  //           },
+                  //           child: Text("신고하기"),
+                  //         ),
+                  //         TextButton(
+                  //           onPressed: () {
+                  //             Navigator.of(context).pop(); // 다이얼로그 닫기
+                  //           },
+                  //           child: Text("취소"),
+                  //         ),
+                  //       ],
+                  //     );
+                  //     print("printprint");
+                  //   },
+                  // );
+                },
+                icon: Icon(Icons.warning_rounded, color: Colors.grey.shade200)),
 
             ElevatedButton(
               onPressed: () {
@@ -516,7 +687,7 @@ class NotFriendComponent extends StatelessWidget {
                 ),
               ),
               child: Text(isAdd?"추가":"삭제", style: TextStyle(
-                fontSize: SizeConfig.defaultSize * 1.4,
+                fontSize: SizeConfig.defaultSize * 1.5,
                 fontWeight: FontWeight.w500,
                 color: Colors.white,
               )),

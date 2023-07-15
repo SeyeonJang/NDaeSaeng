@@ -6,6 +6,8 @@ import 'package:dart_flutter/src/common/util/timeago_util.dart';
 import 'package:dart_flutter/src/presentation/mypage/my_settings.dart';
 import 'package:dart_flutter/src/presentation/page_view.dart';
 import 'package:dart_flutter/src/presentation/signup/choose_gender.dart';
+import 'package:dart_flutter/src/presentation/signup/choose_id.dart';
+import 'package:dart_flutter/src/presentation/signup/land_page.dart';
 import 'package:dart_flutter/src/presentation/signup/land_pages.dart';
 import 'package:dart_flutter/src/presentation/standby/standby_landing_page.dart';
 import 'package:dart_flutter/src/presentation/standby/viewmodel/standby_cubit.dart';
@@ -58,15 +60,17 @@ class MyApp extends StatelessWidget {
 
     // 로그인하지 않은 유저는 LandingPages로, 로그인한 유저는 MainPage로 이동
     return Scaffold(
-      body: BlocBuilder<AuthCubit, AuthState>(
-        builder: (context, state) {
-          if (state.step == AuthStep.login && state.dartAccessToken.length > 20 && DateTime.now().microsecondsSinceEpoch < state.expiredAt.microsecondsSinceEpoch) {
-            print("now accessToken: ${state.dartAccessToken}");
-            BlocProvider.of<AuthCubit>(context).setAccessToken(state.dartAccessToken);
+      body: SafeArea(
+        child: BlocBuilder<AuthCubit, AuthState>(
+          builder: (context, state) {
+            if (state.step == AuthStep.login && state.dartAccessToken.length > 20 && DateTime.now().microsecondsSinceEpoch < state.expiredAt.microsecondsSinceEpoch) {
+              print("now accessToken: ${state.dartAccessToken}");
+              BlocProvider.of<AuthCubit>(context).setAccessToken(state.dartAccessToken);
+              return const LandPages();
+            }
             return const LandPages();
-          }
-          return const LandPages();
-        },
+          },
+        ),
       ),
     );
   }
