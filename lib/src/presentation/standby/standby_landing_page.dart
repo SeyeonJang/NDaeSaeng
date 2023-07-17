@@ -104,7 +104,7 @@ class _StandbyLandingPageState extends State<StandbyLandingPage> {
                                 // count가 4이상이면 PageView로 보내기
                                 if (count >= 4) {
                                   WidgetsBinding.instance.addPostFrameCallback((_) {
-                                    Navigator.push(context, MaterialPageRoute(builder: (context) => const DartPageView()));
+                                    Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const DartPageView()), (route) => false);
                                   });
                                 }
                                 return Column(
