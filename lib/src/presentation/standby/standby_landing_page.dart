@@ -179,7 +179,7 @@ class _StandbyLandingPageState extends State<StandbyLandingPage> {
 
                         BlocBuilder<StandbyCubit, StandbyState>(
                           builder: (context, state) {
-                            return openAddFriends(myCode: state.userResponse.user?.recommendationCode ?? '내 코드가 없어요!', cubit: _standbyCubit);
+                            return openAddFriends(myCode: state.userResponse.user?.recommendationCode ?? '내 코드가 없어요!');
                           }),
                       ],
                     ),
@@ -206,7 +206,7 @@ class FriendNotExistsView extends StatelessWidget {
     // 친구 없음 | 비어있어요!
     return GestureDetector(
       onTap: () {
-        // TODO : 눌렀을 떄 ModalBottomSheet 뜨도록 하기 (현식오빠 수정 버전으로)
+        dfdfdf
       },
       child: Container(
         // 친구 없을 때
@@ -297,12 +297,10 @@ class FriendExistsView extends StatelessWidget {
 // modal bottom View
 class openAddFriends extends StatefulWidget {
   late String myCode;
-  late StandbyCubit cubit;
 
   openAddFriends({
     super.key,
     required this.myCode,
-    required this.cubit,
   });
 
   @override
