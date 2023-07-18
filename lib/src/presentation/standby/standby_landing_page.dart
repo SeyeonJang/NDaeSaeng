@@ -22,8 +22,43 @@ class StandbyLandingPage extends StatefulWidget {
   State<StandbyLandingPage> createState() => _StandbyLandingPageState();
 }
 
-class _StandbyLandingPageState extends State<StandbyLandingPage> {
+class _StandbyLandingPageState extends State<StandbyLandingPage> with SingleTickerProviderStateMixin{
   final StandbyCubit _standbyCubit = StandbyCubit();
+  bool _isUp = true;
+  late AnimationController _controller;
+  late Animation<Offset> _animation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: Duration(seconds: 1),
+    );
+
+    _animation = Tween<Offset>(
+      begin: Offset(0,0.15),
+      end: Offset(0,0),
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
+
+    _controller.addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        _isUp = !_isUp;
+        _controller.reverse();
+      } else if (status == AnimationStatus.dismissed) {
+        _isUp = !_isUp;
+        _controller.forward();
+      }
+    });
+
+    _controller.forward();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -78,7 +113,7 @@ class _StandbyLandingPageState extends State<StandbyLandingPage> {
                         // ßSizedBox(height: SizeConfig.screenHeight),
                         SizedBox(height: SizeConfig.defaultSize * 0.4,),
                         Text(
-                          "\n\n내가 제일 친하다고 생각하는 친구는?",
+                          "\n내가 제일 친하다고 생각하는 친구는?",
                           style: TextStyle(
                             fontSize: SizeConfig.defaultSize * 2.2,
                             fontWeight: FontWeight.w800,
@@ -86,13 +121,23 @@ class _StandbyLandingPageState extends State<StandbyLandingPage> {
                           ),
                         ),
 
-                        SizedBox(height: SizeConfig.defaultSize * 4),
-                        Image.asset(
-                          'assets/images/dart_logo.png',
-                          width: SizeConfig.defaultSize * 15.5,
-                          height: SizeConfig.defaultSize * 15.5,
+                        SizedBox(height: SizeConfig.defaultSize ),
+                        // Image.asset(
+                        //   'assets/images/dart_logo.png',
+                        //   width: SizeConfig.defaultSize * 15.5,
+                        //   height: SizeConfig.defaultSize * 15.5,
+                        // ),
+                        Container(
+                          alignment: Alignment.center,
+                          child: SlideTransition(
+                            position: _animation,
+                            child: Image.asset(
+                              'assets/images/letter.png',
+                              width: SizeConfig.defaultSize * 25,
+                            ),
+                          ),
                         ),
-                        SizedBox(height: SizeConfig.defaultSize * 4.5),
+                        // SizedBox(height: SizeConfig.defaultSize * 1.5),
                         BlocBuilder<StandbyCubit, StandbyState>(
                             builder: (context, state) {
                               if (state.isLoading) {
@@ -206,11 +251,11 @@ class FriendNotExistsView extends StatelessWidget {
     // 친구 없음 | 비어있어요!
     return GestureDetector(
       onTap: () {
-        dfdfdf
+        // TODO : 눌렀을 떄 ModalBottomSheet 뜨도록 하기 (현식오빠 수정 버전으로)
       },
       child: Container(
         // 친구 없을 때
-        width: SizeConfig.screenWidth * 0.41,
+        width: SizeConfig.screenWidth * 0.4,
         height: SizeConfig.defaultSize * 8,
         decoration: BoxDecoration(
             color: Colors.grey[300], borderRadius: BorderRadius.circular(15)),
@@ -244,7 +289,7 @@ class FriendExistsView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
         // 친구 있을 때
-        width: SizeConfig.screenWidth * 0.41,
+        width: SizeConfig.screenWidth * 0.4,
         height: SizeConfig.defaultSize * 8,
         alignment: Alignment.center,
         decoration: BoxDecoration(
