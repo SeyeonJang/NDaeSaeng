@@ -105,7 +105,7 @@ class _VoteStartViewState extends State<VoteStartView> with SingleTickerProvider
                       },
                       style: ButtonStyle(
                         backgroundColor: MaterialStateProperty.all(Color(0xff7C83FD)),
-                        padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.only(left: SizeConfig.defaultSize * 3, right: SizeConfig.defaultSize * 3, top: 0, bottom: 0)),
+                        padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.only(left: SizeConfig.defaultSize * 3, right: SizeConfig.defaultSize * 3, top: SizeConfig.defaultSize * 0.5, bottom: SizeConfig.defaultSize * 0.5)),
                       ),
                       child: BlocBuilder<VoteCubit, VoteState>(
                         builder: (context, state) {
@@ -115,7 +115,7 @@ class _VoteStartViewState extends State<VoteStartView> with SingleTickerProvider
                           return Text(
                             "시작하기",
                             // friendCount >= 4 ? "시작하기" : "친구 4명 만들고 시작하기",
-                            style: TextStyle(fontSize: SizeConfig.defaultSize * 3.4, fontWeight: FontWeight.w600, color: Colors.white),
+                            style: TextStyle(fontSize: SizeConfig.defaultSize * 3, fontWeight: FontWeight.w600, color: Colors.white),
                           );
                         },
                       ),
