@@ -9,12 +9,16 @@ class SignupState {
   late SignupInput inputState;
   late List<University> universities;
   late SignupStep signupStep;
+  late String loginType;
+  late String memo;
 
   SignupState({
     required this.isLoading,
     required this.inputState,
     required this.universities,
     required this.signupStep,
+    required this.loginType,
+    required this.memo,
   });
 
   SignupState.init() {
@@ -22,6 +26,8 @@ class SignupState {
     inputState = SignupInput();
     universities = [];
     signupStep = SignupStep.school;
+    loginType = "email";
+    memo = "";
   }
 
   SignupState copy() => SignupState(
@@ -29,6 +35,8 @@ class SignupState {
     inputState: inputState,
     universities: universities,
     signupStep: signupStep,
+    loginType: loginType,
+    memo: memo,
   );
 
   Map<String, dynamic> toJson() => _$SignupStateToJson(this);
