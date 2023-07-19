@@ -25,6 +25,7 @@ class AuthCubit extends HydratedCubit<AuthState> {
           socialAccessToken: '',
           expiredAt: DateTime.now().add(const Duration(days: 30)),
           loginType: LoginType.email,
+          memo: '',
         ));
 
   void setLandPage() {
@@ -112,7 +113,8 @@ class AuthCubit extends HydratedCubit<AuthState> {
       DartAuth dartAuth = await _authRepository.loginWithApple(appleUser.identityToken!);
       state
           .setDartAuth(dartAccessToken: dartAuth.accessToken, expiredAt: DateTime.now().add(const Duration(days: 10)))
-          .setSocialAuth(loginType: LoginType.kakao, socialAccessToken: appleUser.authorizationCode);
+          .setSocialAuth(loginType: LoginType.apple, socialAccessToken: appleUser.authorizationCode)
+          .setMemo('${appleUser.familyName ?? "오"}${appleUser.givenName ?? "늘"}');
 
       UserResponse userResponse = await _userRepository.myInfo();
       if (userResponse.user?.name == null) {

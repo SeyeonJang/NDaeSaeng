@@ -17,6 +17,7 @@ class AuthState {
   String socialAccessToken;
   DateTime expiredAt;
   LoginType loginType;
+  String memo;
 
   AuthState({
     required this.isLoading,
@@ -24,7 +25,8 @@ class AuthState {
     required this.dartAccessToken,
     required this.socialAccessToken,
     required this.expiredAt,
-    required this.loginType
+    required this.loginType,
+    required this.memo,
   });
 
   AuthState setDartAuth({
@@ -50,6 +52,11 @@ class AuthState {
     return this;
   }
 
+  AuthState setMemo(String memo) {
+    this.memo = memo;
+    return this;
+  }
+
   AuthState setLoading(bool boolean) {
     isLoading = boolean;
     return this;
@@ -62,6 +69,7 @@ class AuthState {
     socialAccessToken: socialAccessToken,
     expiredAt: expiredAt,
     loginType: loginType,
+    memo: memo,
   );
 
   Map<String, dynamic> toJson() => _$AuthStateToJson(this);
