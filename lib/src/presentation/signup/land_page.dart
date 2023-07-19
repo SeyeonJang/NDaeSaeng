@@ -52,34 +52,37 @@ class _LandingPageState extends State<LandingPage> {
       backgroundColor: Colors.white,
       body: Center(
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             // const SizedBox(
             //   height: 130,
             // ),
             // //const Text("Dart", style: TextStyle(fontSize: 50)),
             // const SizedBox(height: 50,),
-            ClipRRect(
-              borderRadius: BorderRadius.only(
-                bottomLeft: Radius.circular(45),
-                bottomRight: Radius.circular(45),
-              ), // radius 설정
-              child: Container(
-                width: SizeConfig.screenWidth,
-                height: SizeConfig.screenWidth,
-                decoration: BoxDecoration(
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.5), // 그림자 색상
-                      spreadRadius: 2, // 그림자 확산 범위
-                      blurRadius: 5, // 그림자 블러 효과 크기
-                      offset: Offset(0, 3), // 그림자 위치 (수직, 수평)
-                    ),
-                  ],
-                ),
-                child: Image.asset('assets/images/dart_logo_ver2.png'),
-              ),
-            ),
-            //Image.asset('assets/images/dart_logo_ver2.png', width: SizeConfig.screenWidth * 0.6, height: SizeConfig.screenWidth * 0.6,), // 앱 로고 들어갈 자리
+
+            // ClipRRect(
+            //   borderRadius: BorderRadius.only(
+            //     bottomLeft: Radius.circular(45),
+            //     bottomRight: Radius.circular(45),
+            //   ), // radius 설정
+            //   child: Container(
+            //     width: SizeConfig.screenWidth,
+            //     height: SizeConfig.screenWidth,
+            //     decoration: BoxDecoration(
+            //       boxShadow: [
+            //         BoxShadow(
+            //           color: Colors.grey.withOpacity(0.5), // 그림자 색상
+            //           spreadRadius: 2, // 그림자 확산 범위
+            //           blurRadius: 5, // 그림자 블러 효과 크기
+            //           offset: Offset(0, 3), // 그림자 위치 (수직, 수평)
+            //         ),
+            //       ],
+            //     ),
+            //     child: Image.asset('assets/images/dart_logo_ver2.png'),
+            //   ),
+            // ),
+            // Image.asset('asset/images/logo.png', width: SizeConfig.screenWidth * 0.5, height: SizeConfig.screenWidth * 0.5,), // 앱 로고 들어갈 자리
+
             SizedBox(
               height: SizeConfig.defaultSize * 2,
             ),
@@ -115,7 +118,7 @@ class _LandingPageState extends State<LandingPage> {
               ),
             ),
             SizedBox(height: SizeConfig.defaultSize * 1,),
-            if (isAppleUser) // Apple 유저일 때만 실행
+            // if (isAppleUser) // Apple 유저일 때만 실행
               /* TODO : MVP HOTFIX 다만, iOS 플랫폼에서 실행 중인지 확인하려면 Flutter 프로젝트의 iOS 설정도 확인해야 합니다.
                   OS 설정에서 ios 폴더의 Runner 프로젝트를 열고 Runner.xcodeproj를 찾아 Xcode에서 열 수 있습니다.
                   그런 다음, Runner 프로젝트의 Runner 타겟 설정으로 이동하고, Build Settings 탭에서 Preprocessor Macros
