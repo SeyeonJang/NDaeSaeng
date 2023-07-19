@@ -13,6 +13,7 @@ AuthState _$AuthStateFromJson(Map<String, dynamic> json) => AuthState(
       socialAccessToken: json['socialAccessToken'] as String,
       expiredAt: DateTime.parse(json['expiredAt'] as String),
       loginType: $enumDecode(_$LoginTypeEnumMap, json['loginType']),
+      memo: json['memo'] as String,
     );
 
 Map<String, dynamic> _$AuthStateToJson(AuthState instance) => <String, dynamic>{
@@ -22,6 +23,7 @@ Map<String, dynamic> _$AuthStateToJson(AuthState instance) => <String, dynamic>{
       'socialAccessToken': instance.socialAccessToken,
       'expiredAt': instance.expiredAt.toIso8601String(),
       'loginType': _$LoginTypeEnumMap[instance.loginType]!,
+      'memo': instance.memo,
     };
 
 const _$AuthStepEnumMap = {
