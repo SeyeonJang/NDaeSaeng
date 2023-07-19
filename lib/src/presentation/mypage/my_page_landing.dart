@@ -380,59 +380,57 @@ class FriendComponent extends StatelessWidget {
             ),
             SizedBox(height: SizeConfig.defaultSize,),
 
-            Theme(
-              data: Theme.of(context).copyWith(
-                cardColor: Colors.white,
-              ),
-              child: PopupMenuButton<String>(
-                icon: Icon(Icons.more_horiz_rounded, color: Colors.grey.shade300,),
-                color: Colors.white,
-                onSelected: (value) {
-                  // 팝업 메뉴에서 선택된 값 처리
-                  if (value == 'report') {
-                    showDialog<String>(
-                      context: context,
-                      builder: (BuildContext context) => AlertDialog(
-                        title: const Text('사용자를 신고하시겠어요?'),
-                        content: const Text('사용자를 신고하면 Dart에서 빠르게 신고 처리를 해드려요!'),
-                        actions: <Widget>[
-                          TextButton(
-                            onPressed: () => Navigator.pop(context, '취소'),
-                            child: const Text('취소'),
-                          ),
-                          TextButton(
-                            onPressed: () => {
-                              Navigator.pop(context, '네'),
-                              ToastUtil.showToast("사용자가 신고되었어요!"),
-                              // TODO : 신고 기능 (서버 연결)
-                            },
-                            child: const Text('네'),
-                          ),
-                        ],
-                      ),
-                    );
-                  }
-                  else if (value == 'delete') {
-                    if (isAdd) {
-                      pressedAddButton(context, friend.userId!);
-                    } else {
-                      pressedDeleteButton(context, friend.userId!);
-                    }
-                  }
-                },
-                itemBuilder: (BuildContext context) {
-                  return [
-                    PopupMenuItem<String>(
-                      value: 'delete',
-                      child: Text("친구 삭제", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.5),),
+            PopupMenuButton<String>(
+              icon: Icon(Icons.more_horiz_rounded, color: Colors.grey.shade300,),
+              color: Colors.white,
+              surfaceTintColor: Colors.white,
+              onSelected: (value) {
+                // 팝업 메뉴에서 선택된 값 처리
+                if (value == 'report') {
+                  showDialog<String>(
+                    context: context,
+                    builder: (BuildContext context) => AlertDialog(
+                      title: const Text('사용자를 신고하시겠어요?'),
+                      content: const Text('사용자를 신고하면 Dart에서 빠르게 신고 처리를 해드려요!'),
+                      backgroundColor: Colors.white,
+                      surfaceTintColor: Colors.white,
+                      actions: <Widget>[
+                        TextButton(
+                          onPressed: () => Navigator.pop(context, '취소'),
+                          child: const Text('취소', style: TextStyle(color: Color(0xff7C83FD)),),
+                        ),
+                        TextButton(
+                          onPressed: () => {
+                            Navigator.pop(context, '신고'),
+                            ToastUtil.showToast("사용자가 신고되었어요!"),
+                            // TODO : 신고 기능 (서버 연결)
+                          },
+                          child: const Text('신고', style: TextStyle(color: Color(0xff7C83FD)),),
+                        ),
+                      ],
                     ),
-                    PopupMenuItem<String>(
-                      value: 'report',
-                      child: Text("신고하기", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.5)),
-                    ),
-                  ];
-                },
-              ),
+                  );
+                }
+                else if (value == 'delete') {
+                  if (isAdd) {
+                    pressedAddButton(context, friend.userId!);
+                  } else {
+                    pressedDeleteButton(context, friend.userId!);
+                  }
+                }
+              },
+              itemBuilder: (BuildContext context) {
+                return [
+                  PopupMenuItem<String>(
+                    value: 'delete',
+                    child: Text("친구 삭제", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.5)),
+                  ),
+                  PopupMenuItem<String>(
+                    value: 'report',
+                    child: Text("신고하기", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.5)),
+                  ),
+                ];
+              },
             ),
 
             // ElevatedButton(
@@ -505,156 +503,47 @@ class NotFriendComponent extends StatelessWidget {
             ),
             SizedBox(height: SizeConfig.defaultSize,),
 
-            Material(
-              color: Colors.transparent,
-              child: PopupMenuButton<String>(
-                icon: Icon(Icons.more_horiz_rounded, color: Colors.grey.shade300,),
-                color: Colors.white,
-                onSelected: (value) {
-                  // 팝업 메뉴에서 선택된 값 처리
-                  if (value == 'report') {
-                    showDialog<String>(
-                      context: context,
-                      builder: (BuildContext context) => AlertDialog(
-                        title: const Text('사용자를 신고하시겠어요?'),
-                        content: const Text('사용자를 신고하면 Dart에서 빠르게 신고 처리를 해드려요!'),
-                        actions: <Widget>[
-                          TextButton(
-                            onPressed: () => Navigator.pop(context, '취소'),
-                            child: const Text('취소'),
-                          ),
-                          TextButton(
-                            onPressed: () => {
-                              Navigator.pop(context, '네'),
-                              ToastUtil.showToast("사용자가 신고되었어요!"),
-                              // TODO : 신고 기능 (서버 연결)
-                            },
-                            child: const Text('네'),
-                          ),
-                        ],
-                      ),
-                    );
-                  }
-                },
-                itemBuilder: (BuildContext context) {
-                  return [
-                    PopupMenuItem<String>(
-                      value: 'report',
-                      child: Text("신고하기", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.5)),
+            PopupMenuButton<String>(
+              icon: Icon(Icons.more_horiz_rounded, color: Colors.grey.shade300,),
+              color: Colors.white,
+              surfaceTintColor: Colors.white,
+              onSelected: (value) {
+                // 팝업 메뉴에서 선택된 값 처리
+                if (value == 'report') {
+                  showDialog<String>(
+                    context: context,
+                    builder: (BuildContext context) => AlertDialog(
+                      backgroundColor: Colors.white,
+                      surfaceTintColor: Colors.white,
+                      title: const Text('사용자를 신고하시겠어요?'),
+                      content: const Text('사용자를 신고하면 Dart에서 빠르게 신고 처리를 해드려요!'),
+                      actions: <Widget>[
+                        TextButton(
+                          onPressed: () => Navigator.pop(context, '취소'),
+                          child: const Text('취소', style: TextStyle(color: Color(0xff7C83FD)),),
+                        ),
+                        TextButton(
+                          onPressed: () => {
+                            Navigator.pop(context, '신고'),
+                            ToastUtil.showToast("사용자가 신고되었어요!"),
+                            // TODO : 신고 기능 (서버 연결)
+                          },
+                          child: const Text('신고', style: TextStyle(color: Color(0xff7C83FD)),),
+                        ),
+                      ],
                     ),
-                  ];
-                },
-              ),
+                  );
+                }
+              },
+              itemBuilder: (BuildContext context) {
+                return [
+                  PopupMenuItem<String>(
+                    value: 'report',
+                    child: Text("신고하기", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.5)),
+                  ),
+                ];
+              },
             ),
-
-            // IconButton(
-            //     onPressed: () {
-            //       ToastUtil.showToast("사용자가 신고되었어요!");
-            //       // TODO : 신고 기능 (서버 연결)
-            //       // TODO : 신고 확정 Dialog | Popupmenu, contextmenu, QuickAlert, AlertDialog 모두 시도해봤는데 안 됨. 여기서 띄울 수 없는 것 같음.
-            //
-            //       // showAlert() {
-            //       //   QuickAlert.show(
-            //       //       type: QuickAlertType.confirm,
-            //       //       context: context,
-            //       //       title: "사용자를 신고하시겠어요?",
-            //       //       // text: "제출하면 프로필을 수정할 수 없어요!\n신중히 제출해주세요!",
-            //       //       confirmBtnText: '신청',
-            //       //       cancelBtnText: '취소',
-            //       //       onConfirmBtnTap: () {
-            //       //         ToastUtil.showToast("사용자가 신고되었어요!");
-            //       //         Navigator.of(context).pop(); // QuickAlert 닫기
-            //       //       });
-            //       // }
-            //
-            //       // ContextMenuArea(
-            //       //   builder: (context) => [
-            //       //     ListTile(
-            //       //       title: Text('Option 1'),
-            //       //       onTap: () {
-            //       //         Navigator.of(context).pop();
-            //       //         // ScaffoldMessenger.of(context).showSnackBar(
-            //       //         //   SnackBar(
-            //       //         //     content: Text('Whatever'),
-            //       //         //   ),
-            //       //         // );
-            //       //       },
-            //       //     ),
-            //       //     ListTile(
-            //       //       leading: Icon(Icons.model_training),
-            //       //       title: Text('Option 2'),
-            //       //       onTap: () {
-            //       //         Navigator.of(context).pop();
-            //       //         // ScaffoldMessenger.of(context).showSnackBar(
-            //       //         //   SnackBar(
-            //       //         //     content: Text('Foo!'),
-            //       //         //   ),
-            //       //         // );
-            //       //       },
-            //       //     )
-            //       //   ],
-            //       //   child: Card(
-            //       //     color: Theme.of(context).primaryColor,
-            //       //     child: Center(
-            //       //       child: Text(
-            //       //         'Press somewhere for context menu.',
-            //       //         style: TextStyle(
-            //       //           color: Theme.of(context).colorScheme.onPrimary,
-            //       //         ),
-            //       //       ),
-            //       //     ),
-            //       //   ),
-            //       // );
-            //
-            //       // showCupertinoModalPopup(context: context, builder: (BuildContext context) => CupertinoActionSheet(
-            //       //   title: Text("사용자를 신고하시겠어요?"),
-            //       //   actions: <CupertinoActionSheetAction>[
-            //       //     CupertinoActionSheetAction(
-            //       //         onPressed: () {
-            //       //           Navigator.pop(context);
-            //       //           // TODO: 신고 기능 (서버 연결)
-            //       //           ToastUtil.showToast("사용자가 신고되었습니다!");
-            //       //         },
-            //       //         child: Text("신고하기", style: TextStyle(color: Colors.redAccent))
-            //       //     ),
-            //       //     CupertinoActionSheetAction(
-            //       //         onPressed: () {
-            //       //           Navigator.pop(context);
-            //       //           // TODO: 신고 기능 (서버 연결)
-            //       //         },
-            //       //         child: Text("취소", style: TextStyle(color: Colors.indigoAccent),)
-            //       //     )
-            //       //   ],
-            //       // ));
-            //
-            //       // showDialog(
-            //       //   context: context,
-            //       //   builder: (BuildContext context) {
-            //       //     return CupertinoAlertDialog(
-            //       //       title: Text("사용자 신고"),
-            //       //       content: Text("이 사용자를 신고하시겠습니까?"),
-            //       //       actions: [
-            //       //         TextButton(
-            //       //           onPressed: () {
-            //       //             Navigator.of(context).pop(); // 다이얼로그 닫기
-            //       //             // TODO: 신고 기능 (서버 연결)
-            //       //             ToastUtil.showToast("사용자가 신고되었습니다!");
-            //       //           },
-            //       //           child: Text("신고하기"),
-            //       //         ),
-            //       //         TextButton(
-            //       //           onPressed: () {
-            //       //             Navigator.of(context).pop(); // 다이얼로그 닫기
-            //       //           },
-            //       //           child: Text("취소"),
-            //       //         ),
-            //       //       ],
-            //       //     );
-            //       //     print("printprint");
-            //       //   },
-            //       // );
-            //     },
-            //     icon: Icon(Icons.warning_rounded, color: Colors.grey.shade200)),
 
             ElevatedButton(
               onPressed: () {
@@ -964,7 +853,6 @@ class _openAddFriendsState extends State<openAddFriends> {
         ),
         child: Container(
           // 친구 추가 버튼
-          // width: SizeConfig.screenWidth * 0.25,
           height: SizeConfig.defaultSize * 3.5,
           alignment: Alignment.center,
           decoration: BoxDecoration(
