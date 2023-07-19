@@ -64,6 +64,11 @@ class User {
     data['recommendationCode'] = recommendationCode;
     return data;
   }
+
+  @override
+  String toString() {
+    return 'User{id: $id, name: $name, phone: $phone, gender: $gender, admissionYear: $admissionYear, birthYear: $birthYear, recommendationCode: $recommendationCode}';
+  }
 }
 
 //
