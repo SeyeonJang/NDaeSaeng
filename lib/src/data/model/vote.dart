@@ -1,6 +1,8 @@
 import 'dart:core';
 
 import 'package:dart_flutter/src/data/model/question.dart';
+import 'package:dart_flutter/src/data/model/university.dart';
+import 'package:dart_flutter/src/data/model/user.dart';
 import 'package:json_annotation/json_annotation.dart';
 part 'vote.g.dart';
 
@@ -18,12 +20,12 @@ class VoteRequest {
       required this.questionId});
 
   VoteRequest.from(Map<String, dynamic> json)
-  : pickedUserId = json['pickedUserId'],
-    firstUserId = json['firstUserId'],
-    secondUserId = json['secondUserId'],
-    thirdUserId = json['ThirdUserId'],
-    fourthUserId = json['FourthUserId'],
-    questionId = json['questionId'];
+      : pickedUserId = json['pickedUserId'],
+        firstUserId = json['firstUserId'],
+        secondUserId = json['secondUserId'],
+        thirdUserId = json['ThirdUserId'],
+        fourthUserId = json['FourthUserId'],
+        questionId = json['questionId'];
 
   Map<String, dynamic> toJson() => _$VoteRequestToJson(this);
   static VoteRequest fromJson(Map<String, dynamic> json) => _$VoteRequestFromJson(json);
@@ -44,25 +46,21 @@ class VoteResponse {
 
   VoteResponse.fromJson(Map<String, dynamic> json) {
     voteId = json['voteId'];
-    question = json['question'] != null
-        ? new Question.fromJson(json['question'])
-        : null;
-    pickedUser = json['pickedUser'] != null
-        ? new PickedUser.fromJson(json['pickedUser'])
-        : null;
+    question = json['question'] != null ? Question.fromJson(json['question']) : null;
+    pickedUser = json['pickedUser'] != null ? PickedUser.fromJson(json['pickedUser']) : null;
     pickedTime = DateTime.parse(json['pickedTime']);
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['voteId'] = this.voteId;
-    if (this.question != null) {
-      data['question'] = this.question!.toJson();
+    final Map<String, dynamic> data = Map<String, dynamic>();
+    data['voteId'] = voteId;
+    if (question != null) {
+      data['question'] = question!.toJson();
     }
-    if (this.pickedUser != null) {
-      data['pickedUser'] = this.pickedUser!.toJson();
+    if (pickedUser != null) {
+      data['pickedUser'] = pickedUser!.toJson();
     }
-    data['pickedTime'] = this.pickedTime?.toIso8601String();
+    data['pickedTime'] = pickedTime?.toIso8601String();
     return data;
   }
 
@@ -73,46 +71,29 @@ class VoteResponse {
 }
 
 class PickedUser {
-  int? userId;
-  int? universityId;
-  String? name;
-  String? phone;
-  String? gender;
-  String? universityName;
-  String? department;
-  Null? nextVoteDateTime;
+  User? user;
+  University? university;
 
-  PickedUser(
-      {this.userId,
-        this.universityId,
-        this.name,
-        this.phone,
-        this.gender,
-        this.universityName,
-        this.department,
-        this.nextVoteDateTime});
+  PickedUser({this.user, this.university});
 
   PickedUser.fromJson(Map<String, dynamic> json) {
-    userId = json['userId'];
-    universityId = json['universityId'];
-    name = json['name'];
-    phone = json['phone'];
-    gender = json['gender'];
-    universityName = json['universityName'];
-    department = json['department'];
-    nextVoteDateTime = json['nextVoteDateTime'];
+    user = json['user'] != null ? User.fromJson(json['user']) : null;
+    university = json['university'] != null ? University.fromJson(json['university']) : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['userId'] = this.userId;
-    data['universityId'] = this.universityId;
-    data['name'] = this.name;
-    data['phone'] = this.phone;
-    data['gender'] = this.gender;
-    data['universityName'] = this.universityName;
-    data['department'] = this.department;
-    data['nextVoteDateTime'] = this.nextVoteDateTime;
+    final Map<String, dynamic> data = Map<String, dynamic>();
+    if (user != null) {
+      data['user'] = user!.toJson();
+    }
+    if (university != null) {
+      data['university'] = university!.toJson();
+    }
     return data;
+  }
+
+  @override
+  String toString() {
+    return 'PickedUser{user: $user, university: $university}';
   }
 }

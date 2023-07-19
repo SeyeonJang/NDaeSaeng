@@ -211,14 +211,11 @@ class DartApiRemoteDataSource {
   }
 
   // vote: 투표 가능한지 확인하기 (남은 시간 확인)
-  static Future<int> getCanIVote(String accessToken) async {
-    // return await simpleGet('/v1/votes/lefttime');  // TODO 이후 규격보고 설정
-    return 0;
-  }
+  static Future<DateTime> getNextVoteTime() async {
+    const path = '/v1/users/me/next-voting-time';
 
-  static Future<void> updateMyNextVoteTime(String accessToken) async {
-    // return await simpleGet('/v1/votes/lefttime');  // TODO 이후 규격보고 설정
-    return;
+    final response = await _httpUtil.request().get(path);
+    return DateTime.parse(response.data['nextVoteAvailableDateTime']);
   }
 
   // --------------------------------------------------------------------------
