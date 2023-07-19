@@ -73,7 +73,7 @@ class _VoteListViewState extends State<VoteListView> {
           children: [
             dart(
               voteId: vote.voteId!,
-              gender: vote.pickedUser!.gender ?? "",
+              gender: vote.pickedUser!.user!.gender ?? "",
               question: vote.question!.content ?? "(알수없음)",
               datetime: timeago,
               isVisited: visited,
@@ -102,6 +102,13 @@ class dart extends StatelessWidget {
     required this.datetime,
     required this.isVisited,
   });
+
+  String getGender(String gender) {
+    print(gender);
+      if (gender == "FEMALE") return "여";
+      if (gender == "MALE") return "남";
+      return "";
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -139,7 +146,7 @@ class dart extends StatelessWidget {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text("$gender학생이 Dart를 보냈어요!", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.5, fontWeight: FontWeight.w500,)),
+                    Text("${getGender(gender)}학생이 Dart를 보냈어요!", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.5, fontWeight: FontWeight.w500,)),
                     SizedBox(height: SizeConfig.defaultSize * 0.5,),
                     Text("$question",
                         style: TextStyle(

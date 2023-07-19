@@ -24,11 +24,7 @@ class DartVoteRepository {
     return await DartApiRemoteDataSource.getVote(voteId);
   }
 
-  Future<int> canIVote(String accessToken) async {
-    return await DartApiRemoteDataSource.getCanIVote(accessToken);
-  }
-
-  Future<void> updateMyNextVoteTime(String accessToken) async {
-    return await DartApiRemoteDataSource.updateMyNextVoteTime(accessToken);
+  Future<DateTime> canIVote() async {
+    return await DartApiRemoteDataSource.getNextVoteTime();
   }
 }
