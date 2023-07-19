@@ -59,6 +59,11 @@ class MyPagesState {
     this.isLoading = isLoading;
   }
 
+  MyPagesState setUserResponse(UserResponse userResponse) {
+    this.userResponse = userResponse;
+    return this;
+  }
+
   MyPagesState setMyLandPage(bool isMyLandPage) {
     this.isMyLandPage = isMyLandPage;
     return this;
