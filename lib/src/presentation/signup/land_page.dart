@@ -111,7 +111,7 @@ class _LandingPageState extends State<LandingPage> {
                     ToastUtil.showToast("로그인에 실패하였습니다. 다시 시도해주세요.");
                   }
                 },
-                child: Image.asset('assets/images/kakao_login_btn.png'), // TODO : MVP HOTFIX 카카오 로그인 깨짐 현상 개선
+                child: Image.asset('assets/images/kakao_login_large_wide.png'),
               ),
             ),
             SizedBox(height: SizeConfig.defaultSize * 1,),
