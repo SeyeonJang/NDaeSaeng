@@ -33,7 +33,7 @@ class ScaffoldBody extends StatefulWidget {
 class _ScaffoldBodyState extends State<ScaffoldBody> {
   late UniversityFinder universityFinder;
   final TextEditingController _typeAheadController = TextEditingController();
-  late bool isSelectedOnTypeAhead;
+  late bool isSelectedOnTypeAhead = false;
   late String universityName;
   String universityDepartment = "";
   late University university;
@@ -49,9 +49,25 @@ class _ScaffoldBodyState extends State<ScaffoldBody> {
     });
   }
 
-  void _typeOnTypeAhead() {
-    setState(() {
-      isSelectedOnTypeAhead = false;
+  // void _typeOnTypeAhead() { // ver.1
+  //   setState(() {
+  //     isSelectedOnTypeAhead = false;
+  //   });
+  // }
+  // void _typeOnTypeAhead() { // ver.2
+  //   if (!_typeAheadController.text.isEmpty) { // 텍스트 필드가 비어있을 때에만 업데이트
+  //     setState(() {
+  //       isSelectedOnTypeAhead = false;
+  //     });
+  //   }
+  // }
+  void _typeOnTypeAhead() { // ver.3
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
+      if (!_typeAheadController.text.isEmpty) {
+        setState(() {
+          isSelectedOnTypeAhead = false;
+        });
+      }
     });
   }
 
@@ -92,7 +108,20 @@ class _ScaffoldBodyState extends State<ScaffoldBody> {
               child: Padding(
                 padding: EdgeInsets.all(SizeConfig.defaultSize * 2),
                 child: TypeAheadField(
-                  // 학교 찾기
+                  noItemsFoundBuilder: (context) {
+                    return Padding(
+                      padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+                      child: Text(
+                        "학과를 입력해주세요!",
+                        style: TextStyle(fontSize: 16, color: Colors.grey),
+                      ),
+                    );
+                  },
+                  suggestionsBoxDecoration: SuggestionsBoxDecoration( // 목록 배경색
+                    color: Colors.white,
+                    elevation: 2.0,
+                  ),
+                  // 학과 찾기
                   textFieldConfiguration: TextFieldConfiguration(
                       controller: _typeAheadController,
                       autofocus: false, // 키보드 자동으로 올라오는 거
