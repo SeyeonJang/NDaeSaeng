@@ -18,11 +18,8 @@ class MyPagesCubit extends Cubit<MyPagesState> {
     emit(state.copy());
 
     // 초기값 설정
-    final userResponse = await _dartUserRepository.myInfo();
-    state.userResponse = userResponse;
-    print("초기값 ${state.userResponse}");
-    // UserResponse userResponse = await _dartUserRepository.myInfo();
-    // state.setUserResponse(userResponse);
+    UserResponse userResponse = await _dartUserRepository.myInfo();
+    state.setUserResponse(userResponse);
 
     List<Friend> friends = await _dartFriendRepository.getMyFriends();
     state.setMyFriends(friends);

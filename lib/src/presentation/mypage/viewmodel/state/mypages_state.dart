@@ -7,6 +7,7 @@ import 'package:json_annotation/json_annotation.dart';
 @JsonSerializable()
 class MyPagesState {
   late bool isLoading;
+  late UserResponse userResponse;
   late List<Friend> friends;
   late List<Friend> newFriends;
   late int newFriendId;
@@ -14,10 +15,10 @@ class MyPagesState {
   late bool isSettings;
   late bool isTos1;
   late bool isTos2;
-  late UserResponse userResponse;
 
   MyPagesState({
     required this.isLoading,
+    required this.userResponse,
     required this.isMyLandPage,
     required this.friends,
     required this.newFriends,
@@ -25,11 +26,14 @@ class MyPagesState {
     required this.newFriendId,
     required this.isTos1,
     required this.isTos2,
-    required this.userResponse,
   });
 
   MyPagesState.init() {
     isLoading = false;
+    userResponse = UserResponse(
+      user: null,
+      university: null,
+    );
     friends = [];
     newFriends = [];
     newFriendId = 0;
@@ -37,22 +41,18 @@ class MyPagesState {
     isSettings = false;
     isTos1 = false;
     isTos2 = false;
-    userResponse = UserResponse(
-      user: null,
-      university: null,
-    );
   }
 
   MyPagesState copy() => MyPagesState(
         isLoading: isLoading,
         isMyLandPage: isMyLandPage,
+        userResponse: userResponse,
         friends: friends,
         newFriends: newFriends,
         isSettings: isSettings,
         newFriendId: newFriendId,
         isTos1: isTos1,
         isTos2: isTos2,
-        userResponse: userResponse,
       );
 
   void setIsLoading(bool isLoading) {
