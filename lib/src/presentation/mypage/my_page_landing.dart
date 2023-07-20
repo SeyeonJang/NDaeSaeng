@@ -82,9 +82,8 @@ class MyPageLandingView extends StatelessWidget {
                       children: [
                         BlocBuilder<MyPagesCubit,MyPagesState>(
                             builder: (context, state) {
-                              String name = state.userResponse.user?.name??"###";
-                              // String admissionNumber = "${state.userResponse.user?.admissionYear.toString().substring(2,4)??"##"}학번";
-                              String admissionNumber = "학번";
+                              String name = state.userResponse.user?.name ?? "###";
+                              String admissionNumber = "${state.userResponse.user?.admissionYear.toString().substring(2,4)??"##"}학번";
 
                               return Row(
                                 children: [
@@ -208,11 +207,6 @@ class MyPageLandingView extends StatelessWidget {
         // =================================================================
 
         SizedBox(height: SizeConfig.defaultSize),
-        // Container( // 구분선
-        //   padding: EdgeInsets.only(top: 0, bottom: 0, left: 0, right: 0,),
-        //   height: SizeConfig.defaultSize * 2,
-        //   color: Colors.grey.withOpacity(0.1),
-        // ),
 
         Container(
           // height: SizeConfig.defaultSize * 130,
