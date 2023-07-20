@@ -106,14 +106,18 @@ class _VoteViewState extends State<VoteView> with SingleTickerProviderStateMixin
                     ),
                   ),
                   SizedBox(height: SizeConfig.screenHeight * 0.04,),
-                  Text(
-                    splitSentence(question.content!), // 길면 2줄 변환
-                    style: TextStyle(
-                      fontWeight: FontWeight.w800,
-                      fontSize: SizeConfig.defaultSize * 2.5,
-                      height: 1.5
+                  Container(
+                    height: SizeConfig.screenHeight * 0.1,
+                    alignment: Alignment.center,
+                    child: Text(
+                        splitSentence(question.content!), // 길면 2줄 변환
+                        style: TextStyle(
+                            fontWeight: FontWeight.w800,
+                            fontSize: SizeConfig.defaultSize * 2.5,
+                            height: 1.5
+                        ),
+                        textAlign: TextAlign.center
                     ),
-                    textAlign: TextAlign.center
                   ),
                   SizedBox(height: SizeConfig.screenHeight * 0.04,),
                   Container(
