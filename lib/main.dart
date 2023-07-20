@@ -2,6 +2,7 @@ import 'package:dart_flutter/res/app_theme.dart';
 import 'package:dart_flutter/res/size_config.dart';
 import 'package:dart_flutter/src/common/auth/auth_cubit.dart';
 import 'package:dart_flutter/src/common/auth/state/auth_state.dart';
+import 'package:dart_flutter/src/common/util/push_notification_util.dart';
 import 'package:dart_flutter/src/common/util/timeago_util.dart';
 import 'package:dart_flutter/src/presentation/mypage/my_settings.dart';
 import 'package:dart_flutter/src/presentation/page_view.dart';
@@ -32,12 +33,19 @@ void main() async {
   // var key = await KakaoSdk.origin;
   // print(key);
 
-  OneSignal.shared.setLogLevel(OSLogLevel.verbose, OSLogLevel.none);
-  OneSignal.shared.setAppId("1f36be12-544d-4bb5-9d9a-c54789698647");
-  OneSignal.shared.promptUserForPushNotificationPermission().then((accepted) {
-    print("Accepted permission: $accepted");
-  });
-  
+  // OneSignal.shared.setLogLevel(OSLogLevel.verbose, OSLogLevel.none);
+  // OneSignal.shared.setAppId("1f36be12-544d-4bb5-9d9a-c54789698647");
+  // OneSignal.shared.promptUserForPushNotificationPermission().then((accepted) {
+  //   print("Accepted permission: $accepted");
+  // });
+  // final String externalUserId = '123456789';
+  // OneSignal.shared.setExternalUserId(externalUserId).then((results) {
+  // }).catchError((error) {
+  //   print(error);
+  // });
+
+  PushNotificationUtil.init();
+
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
