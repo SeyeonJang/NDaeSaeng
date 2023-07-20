@@ -24,7 +24,11 @@ class DartVoteRepository {
     return await DartApiRemoteDataSource.getVote(voteId);
   }
 
-  Future<DateTime> canIVote() async {
+  Future<DateTime> getNextVoteTime() async {
     return await DartApiRemoteDataSource.getNextVoteTime();
+  }
+
+  Future<DateTime> postNextVoteTime() async {
+    return await DartApiRemoteDataSource.postNextVoteTime();
   }
 }
