@@ -71,6 +71,16 @@ class _MyPageViewState extends State<MyPageView> {
     Restart.restartApp();
   }
 
+  String getId(String admissionYear) {
+    return admissionYear.substring(2,6);
+  }
+
+  String getGender(String gender) {
+    if (gender == "FEMALE") return "여자";
+    if (gender == "MALE") return "남자";
+    return "";
+  }
+
   final mbti1 = ['-','E','I'];
   final mbti2 = ['-','N','S'];
   final mbti3 = ['-','F','T'];
@@ -113,7 +123,9 @@ class _MyPageViewState extends State<MyPageView> {
                   String department = state.userResponse.university?.department ?? "XXX학과";
                   String admissionNumber =
                       "${state.userResponse.user?.admissionYear ?? 'XX'}학번";
+                  String newAdmissionNumber = getId(admissionNumber);
                   String gender = state.userResponse.user?.gender ?? 'XX';
+                  String newGender = getGender(gender);
                   String inviteCode = state.userResponse.user?.recommendationCode ?? 'XXXXXXXX';
 
                   return Column(
@@ -122,8 +134,8 @@ class _MyPageViewState extends State<MyPageView> {
                       _infoSectionItem(title: "이름", value: name),
                       _infoSectionItem(title: "학교", value: universityName),
                       _infoSectionItem(title: "학과", value: department),
-                      _infoSectionItem(title: "학번", value: admissionNumber),
-                      _infoSectionItem(title: "성별", value: gender),
+                      _infoSectionItem(title: "학번", value: newAdmissionNumber),
+                      _infoSectionItem(title: "성별", value: newGender),
                       _infoSectionItem(title: "초대코드", value: inviteCode),
                       // Container( // MBTI 구현은 완료해둠
                       //   height: SizeConfig.defaultSize * 5,
