@@ -16,6 +16,7 @@ class StandbyCubit extends Cubit<StandbyState> {
     emit(state.copy());
     List<Friend> friends = await _dartFriendRepository.getMyFriends();
     state.setAddedFriends(friends);
+    _dartUserRepository.cleanUpUserResponseCache();
     state.userResponse = await _dartUserRepository.myInfo();
 
     state.userResponse.user!.recommendationCode;
