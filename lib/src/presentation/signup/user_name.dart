@@ -13,10 +13,13 @@ class UserName extends StatefulWidget {
 class _UserNameState extends State<UserName> {
   TextEditingController _nameController = TextEditingController();
   bool isNameValid = false;
+  String errorMessage = '';
 
   void _checkNameValidity() {
     setState(() {
-      isNameValid = _nameController.text.trim().isNotEmpty;
+      String name = _nameController.text.trim();
+      isNameValid = name.isNotEmpty && name.length <= 4;
+      errorMessage = !isNameValid ? '이름은 실명 & 4글자 이하로 입력해주세요.' : '';
     });
   }
 
@@ -44,24 +47,38 @@ class _UserNameState extends State<UserName> {
 
             SizedBox( // 입력 공간 Textfield
                 width: SizeConfig.screenWidth * 0.9,
-                child: TextFormField(
-                  controller: _nameController,
-                    onChanged: (_) => _checkNameValidity(),
-                    decoration: InputDecoration(
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: Colors.grey.shade200, // 테두리 색상
-                            width: 2.0,
-                          ),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: Color(0xff7C83FD), // 테두리 색상
-                            width: 2.0,
-                          ),
-                        ),
-                        prefixIcon: Icon(Icons.person_rounded, color: Color(0xff7C83FD),),
-                        hintText: "이름(본명)을 입력해주세요!")),
+                child: Column(
+                  children: [
+                    TextFormField(
+                      controller: _nameController,
+                        onChanged: (_) => _checkNameValidity(),
+                        decoration: InputDecoration(
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Colors.grey.shade200, // 테두리 색상
+                                width: 2.0,
+                              ),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Color(0xff7C83FD), // 테두리 색상
+                                width: 2.0,
+                              ),
+                            ),
+                            prefixIcon: Icon(Icons.person_rounded, color: Color(0xff7C83FD),),
+                            hintText: "이름(본명)을 입력해주세요!")),
+                    SizedBox(height: SizeConfig.defaultSize * 0.8), // 에러 메시지와 입력 필드 사이의 간격 조정
+                    Container(
+                      width: SizeConfig.screenWidth,
+                      padding: EdgeInsets.only(left: SizeConfig.defaultSize * 0.6),
+                      child: Text(
+                        errorMessage,
+                        style: TextStyle(color: Colors.red, fontSize: SizeConfig.defaultSize * 1.3),
+                        textAlign: TextAlign.start,
+                      ),
+                    ),
+                  ],
+                ),
                 ),
             SizedBox(
               height: SizeConfig.defaultSize * 10,
