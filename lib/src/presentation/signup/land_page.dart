@@ -90,7 +90,7 @@ class _LandingPageState extends State<LandingPage> {
             SizedBox(height: SizeConfig.defaultSize * 2,),
             AnimatedContainer(
               height: SizeConfig.screenHeight * 0.15,
-                duration: Duration(milliseconds: 500),
+                duration: Duration(milliseconds: 400),
                 curve: Curves.easeInOut,
                 child: Image.asset(
                   _images[_currentPage],
