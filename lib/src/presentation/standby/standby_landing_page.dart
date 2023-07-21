@@ -72,23 +72,31 @@ class _StandbyLandingPageState extends State<StandbyLandingPage> with SingleTick
               SizedBox(
                 height: SizeConfig.screenHeight * 0.05,
               ),
-              Text(
-                "     반가워요!",
-                style: TextStyle(
-                  fontSize: SizeConfig.defaultSize * 2.5,
-                  fontWeight: FontWeight.w800,
-                  color: Colors.white,
+              Container(
+                width: SizeConfig.screenWidth,
+                padding: EdgeInsets.only(left: SizeConfig.screenWidth * 0.07),
+                child: Text(
+                  "반가워요!",
+                  style: TextStyle(
+                    fontSize: SizeConfig.defaultSize * 2.5,
+                    fontWeight: FontWeight.w800,
+                    color: Colors.white,
+                  ),
                 ),
               ),
               SizedBox(
                 height: SizeConfig.screenHeight * 0.011,
               ),
-              Text(
-                "       친구 4명부터 이미지게임을 시작할 수 있어요!",
-                style: TextStyle(
-                  fontSize: SizeConfig.defaultSize * 1.9,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.white,
+              Container(
+                width: SizeConfig.screenWidth,
+                padding: EdgeInsets.only(left: SizeConfig.screenWidth * 0.07),
+                child: Text(
+                  "친구 4명부터 이미지게임을 시작할 수 있어요!",
+                  style: TextStyle(
+                    fontSize: SizeConfig.defaultSize * 1.9,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.white,
+                  ),
                 ),
               ),
               SizedBox(
