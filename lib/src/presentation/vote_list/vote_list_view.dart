@@ -73,6 +73,7 @@ class _VoteListViewState extends State<VoteListView> {
           children: [
             dart(
               voteId: vote.voteId!,
+              admissionYear: vote.pickedUser!.user!.admissionYear.toString() ?? "",
               gender: vote.pickedUser!.user!.gender ?? "",
               question: vote.question!.content ?? "(알수없음)",
               datetime: timeago,
@@ -89,6 +90,7 @@ class _VoteListViewState extends State<VoteListView> {
 
 class dart extends StatelessWidget {
   final int voteId;
+  final String admissionYear;
   final String gender;
   final String question;
   final String datetime;
@@ -97,6 +99,7 @@ class dart extends StatelessWidget {
   const dart({
     super.key,
     required this.voteId,
+    required this.admissionYear,
     required this.gender,
     required this.question,
     required this.datetime,
@@ -120,7 +123,7 @@ class dart extends StatelessWidget {
         padding: EdgeInsets.all(SizeConfig.defaultSize * 1),
         decoration: BoxDecoration(
           border: Border.all(
-            width: SizeConfig.defaultSize * 0.1,
+            width: SizeConfig.defaultSize * 0.06,
             color: isVisited ? Colors.grey : Color(0xff7C83FD),
           ),
           borderRadius: BorderRadius.circular(15),
@@ -146,13 +149,29 @@ class dart extends StatelessWidget {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text("${getGender(gender)}학생이 Dart를 보냈어요!", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.5, fontWeight: FontWeight.w500,)),
+                    RichText(
+                      text: TextSpan(
+                        style: TextStyle(fontSize: SizeConfig.defaultSize * 1.5),
+                          children: <TextSpan>[
+                            TextSpan(text:'${admissionYear.substring(2,4)}',
+                                style: TextStyle(color: Color(0xff7C83FD), fontWeight: FontWeight.w600)),
+                            TextSpan(text:'학번 ',
+                              style: TextStyle(color: Colors.black, fontWeight: FontWeight.w400)),
+                            TextSpan(text:'${getGender(gender)}학생',
+                                style: TextStyle(color: Color(0xff7C83FD), fontWeight: FontWeight.w600)),
+                            TextSpan(text:'이 Dart를 보냈어요!',
+                                style: TextStyle(color: Colors.black, fontWeight: FontWeight.w400)),
+                          ]
+                      ),
+                    ),
+                    // Text("${admissionYear.substring(2,4)}학번 ${getGender(gender)}학생이 Dart를 보냈어요!", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.5, fontWeight: FontWeight.w500,)),
                     SizedBox(height: SizeConfig.defaultSize * 0.5,),
                     Text("$question",
                         style: TextStyle(
                           fontSize: SizeConfig.defaultSize *
                               1.3 *
-                              ((question.length <= 25 ? 1 : 1 - ((question.length - 15) * 0.035))),
+                              ((question.length <= 25 ? 1 : 1 - ((question.length - 15) * 0.01))),
+                              // ((question.length <= 25 ? 1 : 1 - ((question.length - 15) * 0.035))), // 원래 식
                           fontWeight: FontWeight.w400,
                         )),
                   ],
@@ -162,7 +181,7 @@ class dart extends StatelessWidget {
             Row(
               children: [
                 Text("$datetime", style: TextStyle(fontSize: SizeConfig.defaultSize * 1)),
-                SizedBox(width: SizeConfig.defaultSize,)
+                SizedBox(width: SizeConfig.defaultSize * 0.5,)
               ],
             ),
           ],
