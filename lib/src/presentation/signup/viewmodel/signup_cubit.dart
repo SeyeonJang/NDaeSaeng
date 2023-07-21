@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dart_flutter/src/data/model/university.dart';
 import 'package:dart_flutter/src/data/model/user.dart';
 import 'package:dart_flutter/src/data/repository/dart_auth_repository.dart';
@@ -17,13 +19,15 @@ class SignupCubit extends Cubit<SignupState> {
 
   SignupCubit() : super(SignupState.init());
 
-  void initState() async {
+  void initState([String memo = "", String loginType = ""]) async {
     state.isLoading = true;
     emit(state.copy());
 
     List<University> universities = await _dartUniversityRepository.getUniversitys();
     state.universities = universities;
 
+    state.memo = memo;
+    state.loginType = loginType;
     state.isLoading = false;
     emit(state.copy());
   }
@@ -57,13 +61,24 @@ class SignupCubit extends Cubit<SignupState> {
   void stepAdmissionNumber(int admissionNumber, int bornYear) {
     state.inputState.admissionNumber = admissionNumber;
     state.inputState.birthYear = bornYear;
-    state.signupStep = SignupStep.name;
+
+    state.inputState.phone = '01000000000';  //TODO 전화번호 인증 적용후 제거
+
+    bool isIos = state.loginType.contains("apple");
+    if (isIos) {
+      state.memo = state.memo ?? '';
+      state.inputState.name = state.memo.isEmpty ? '오늘' : state.memo;
+      state.signupStep = SignupStep.gender;
+    } else {
+      state.signupStep = SignupStep.name;
+    }
+
     emit(state.copy());
   }
 
   void stepName(String name) {
     state.inputState.name = name;
-    state.signupStep = SignupStep.phone;
+    state.signupStep = SignupStep.gender;
     emit(state.copy());
   }
 

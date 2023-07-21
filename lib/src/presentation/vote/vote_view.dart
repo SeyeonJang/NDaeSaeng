@@ -53,6 +53,26 @@ class _VoteViewState extends State<VoteView> with SingleTickerProviderStateMixin
     super.dispose();
   }
 
+  String splitSentence(String sentence) { // 긴 질문 2줄 변환
+    if (sentence.length <= 18) { // 18글자 이하면 그대로 반환
+      return sentence;
+    } else { // 18글자 이상이면 공백을 기준으로 단어를 나눔
+      List<String> words = sentence.split(' ');
+      String firstLine = '';
+      String secondLine = '';
+
+      for (String word in words) {
+        if (firstLine.length + word.length + 1 <= 18) { // 첫 줄에 단어를 추가할 수 있는 경우
+          firstLine += (firstLine.isEmpty ? '' : ' ') + word;
+        } else { // 두 번째 줄에 단어를 추가
+          secondLine += (secondLine.isEmpty ? '' : ' ') + word;
+        }
+      }
+
+      return '$firstLine\n$secondLine';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -76,7 +96,7 @@ class _VoteViewState extends State<VoteView> with SingleTickerProviderStateMixin
                 children: [
                   SizedBox(height: SizeConfig.defaultSize * 0.5,),
                   VoteStoryBar(voteIterator: state.voteIterator, maxVoteIterator: VoteState.MAX_VOTE_ITERATOR,),
-                  SizedBox(height: SizeConfig.screenHeight * 0.09),
+                  SizedBox(height: SizeConfig.screenHeight * 0.06),
                   // Icon(Icons.emoji_emotions, size: SizeConfig.defaultSize * 22),
                   SlideTransition(
                     position: _animation,
@@ -86,14 +106,20 @@ class _VoteViewState extends State<VoteView> with SingleTickerProviderStateMixin
                     ),
                   ),
                   SizedBox(height: SizeConfig.screenHeight * 0.04,),
-                  Text(
-                    question.content!,
-                    style: TextStyle(
-                      fontWeight: FontWeight.w800,
-                      fontSize: SizeConfig.defaultSize * 2.5,
+                  Container(
+                    height: SizeConfig.screenHeight * 0.1,
+                    alignment: Alignment.center,
+                    child: Text(
+                        splitSentence(question.content!), // 길면 2줄 변환
+                        style: TextStyle(
+                            fontWeight: FontWeight.w800,
+                            fontSize: SizeConfig.defaultSize * 2.5,
+                            height: 1.5
+                        ),
+                        textAlign: TextAlign.center
                     ),
                   ),
-                  SizedBox(height: SizeConfig.screenHeight * 0.08,),
+                  SizedBox(height: SizeConfig.screenHeight * 0.04,),
                   Container(
                     width: SizeConfig.screenWidth * 0.83,
                     height: SizeConfig.defaultSize * 18,

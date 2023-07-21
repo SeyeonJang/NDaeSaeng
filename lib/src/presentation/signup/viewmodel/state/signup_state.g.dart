@@ -14,6 +14,8 @@ SignupState _$SignupStateFromJson(Map<String, dynamic> json) => SignupState(
           .map((e) => University.fromJson(e as Map<String, dynamic>))
           .toList(),
       signupStep: $enumDecode(_$SignupStepEnumMap, json['signupStep']),
+      loginType: json['loginType'] as String,
+      memo: json['memo'] as String,
     );
 
 Map<String, dynamic> _$SignupStateToJson(SignupState instance) =>
@@ -22,6 +24,8 @@ Map<String, dynamic> _$SignupStateToJson(SignupState instance) =>
       'inputState': instance.inputState,
       'universities': instance.universities,
       'signupStep': _$SignupStepEnumMap[instance.signupStep]!,
+      'loginType': instance.loginType,
+      'memo': instance.memo,
     };
 
 const _$SignupStepEnumMap = {

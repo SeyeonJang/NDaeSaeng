@@ -1,4 +1,5 @@
 import 'package:dart_flutter/src/common/auth/state/auth_state.dart';
+import 'package:dart_flutter/src/common/util/push_notification_util.dart';
 import 'package:dart_flutter/src/data/model/dart_auth.dart';
 import 'package:dart_flutter/src/data/model/kakao_user.dart';
 import 'package:dart_flutter/src/data/model/user.dart';
@@ -25,6 +26,7 @@ class AuthCubit extends HydratedCubit<AuthState> {
           socialAccessToken: '',
           expiredAt: DateTime.now().add(const Duration(days: 30)),
           loginType: LoginType.email,
+          memo: '',
         ));
 
   void setLandPage() {
@@ -84,6 +86,7 @@ class AuthCubit extends HydratedCubit<AuthState> {
 
       UserResponse userResponse = await _userRepository.myInfo();
       if (userResponse.user?.name == null) {
+        PushNotificationUtil.setUserId(userResponse.user!.id!.toString());
         state.setStep(AuthStep.signup);
       } else {
         state.setStep(AuthStep.login);
@@ -112,10 +115,12 @@ class AuthCubit extends HydratedCubit<AuthState> {
       DartAuth dartAuth = await _authRepository.loginWithApple(appleUser.identityToken!);
       state
           .setDartAuth(dartAccessToken: dartAuth.accessToken, expiredAt: DateTime.now().add(const Duration(days: 10)))
-          .setSocialAuth(loginType: LoginType.kakao, socialAccessToken: appleUser.authorizationCode);
+          .setSocialAuth(loginType: LoginType.apple, socialAccessToken: appleUser.authorizationCode)
+          .setMemo('${appleUser.familyName ?? "오"}${appleUser.givenName ?? "늘"}');
 
       UserResponse userResponse = await _userRepository.myInfo();
       if (userResponse.user?.name == null) {
+        PushNotificationUtil.setUserId(userResponse.user!.id!.toString());
         state.setStep(AuthStep.signup);
       } else {
         state.setStep(AuthStep.login);

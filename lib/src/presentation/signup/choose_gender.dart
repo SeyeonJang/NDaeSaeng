@@ -143,7 +143,7 @@ class _ChooseGenderState extends State<ChooseGender> {
                       primary: Colors.white,
                       backgroundColor: Colors.grey[200],
                     ),
-                    child: Text("학교를 선택해주세요", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.7, fontWeight: FontWeight.w600, color: Colors.black38),)
+                    child: Text("성별을 선택해주세요", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.7, fontWeight: FontWeight.w600, color: Colors.black38),)
                 ),
               )
             ],

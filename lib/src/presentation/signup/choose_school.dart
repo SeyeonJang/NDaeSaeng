@@ -43,12 +43,28 @@ class ScaffoldBody extends StatefulWidget {
 class _ScaffoldBodyState extends State<ScaffoldBody> {
   late UniversityFinder universityFinder;
   final TextEditingController _typeAheadController = TextEditingController();
-  late bool isSelectedOnTypeAhead;
+  late bool isSelectedOnTypeAhead = false;
   String universityName = "";
 
+  // void _typeOnTypeAhead() { // ver.1
+  //   setState(() {
+  //     isSelectedOnTypeAhead = false;
+  //   });
+  // }
+  // void _typeOnTypeAhead() { // ver.2
+  //   if (!_typeAheadController.text.isEmpty) { // 텍스트 필드가 비어있을 때에만 업데이트
+  //     setState(() {
+  //       isSelectedOnTypeAhead = false;
+  //     });
+  //   }
+  // }
   void _typeOnTypeAhead() {
-    setState(() {
-      isSelectedOnTypeAhead = false;
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
+      if (!_typeAheadController.text.isEmpty) {
+        setState(() {
+          isSelectedOnTypeAhead = false;
+        });
+      }
     });
   }
 
@@ -93,6 +109,19 @@ class _ScaffoldBodyState extends State<ScaffoldBody> {
           child: Padding(
             padding: EdgeInsets.all(SizeConfig.defaultSize * 2),
             child: TypeAheadField(
+              noItemsFoundBuilder: (context) {
+                return Padding(
+                  padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+                  child: Text(
+                    "학교를 입력해주세요!",
+                    style: TextStyle(fontSize: 16, color: Colors.grey),
+                  ),
+                );
+              },
+              suggestionsBoxDecoration: SuggestionsBoxDecoration( // 목록 배경색
+                color: Colors.white,
+                elevation: 2.0,
+              ),
             // 학교 찾기
             textFieldConfiguration: TextFieldConfiguration(
                 controller: _typeAheadController,

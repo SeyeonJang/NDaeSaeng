@@ -2,13 +2,17 @@ import 'package:contextmenu/contextmenu.dart';
 import 'package:dart_flutter/res/size_config.dart';
 import 'package:dart_flutter/src/common/util/toast_util.dart';
 import 'package:dart_flutter/src/data/model/friend.dart';
+import 'package:dart_flutter/src/presentation/meet/viewmodel/meet_cubit.dart';
 import 'package:dart_flutter/src/presentation/mypage/viewmodel/mypages_cubit.dart';
 import 'package:dart_flutter/src/presentation/mypage/viewmodel/state/mypages_state.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:quickalert/models/quickalert_type.dart';
 import 'package:quickalert/widgets/quickalert_dialog.dart';
+import 'package:share_plus/share_plus.dart';
 
 class MyPageLanding extends StatefulWidget {
   const MyPageLanding({Key? key}) : super(key: key);
@@ -38,196 +42,182 @@ class _MyPageLandingState extends State<MyPageLanding> {
 }
 
 class MyPageLandingView extends StatelessWidget {
-  // User 정보
-
-  // Friends 정보
-  // final String name;
-  // final int admissionNumber;
-  // final String univ_name;
-  // final String univ_department;
-  // final bool isAdded;
 
   const MyPageLandingView({
     super.key,
-    // required this.name,
-    // required this.admissionNumber,
-    // required this.univ_name,
-    // required this.univ_department,
-    // required this.isAdded,
   });
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
-        Container(
-          decoration: BoxDecoration(
-            color: Color(0xff7C83FD),
-            borderRadius: BorderRadius.circular(13),
-            // boxShadow: [ // Boxshadow 필요하면 쓰기
-            //   BoxShadow(
-            //     color: Colors.grey.withOpacity(0.2),
-            //     spreadRadius: 5,
-            //     blurRadius: 7,
-            //     offset: Offset(0, 3), // changes position of shadow
-            //   ),
-            // ],
-          ),
-          height: SizeConfig.defaultSize * 10,
-          child: Padding(
-              padding: EdgeInsets.symmetric(
-                  vertical: SizeConfig.defaultSize,
-                  horizontal: SizeConfig.defaultSize * 2),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Row( // 1층
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      BlocBuilder<MyPagesCubit,MyPagesState>(
-                          builder: (context, state) {
-                            String name = state.userResponse.user?.name??"###";
-                            String admissionNumber = "${state.userResponse.user?.admissionYear.toString().substring(2,4)??"##"}학번";
+        Padding(
+          padding: EdgeInsets.symmetric(
+              vertical: SizeConfig.defaultSize,
+              horizontal: SizeConfig.defaultSize * 0.5),
+          child: Container(
+            decoration: BoxDecoration(
+              color: Color(0xff7C83FD),
+              borderRadius: BorderRadius.circular(13),
+              // boxShadow: [ // Boxshadow 필요하면 쓰기
+              //   BoxShadow(
+              //     color: Colors.grey.withOpacity(0.2),
+              //     spreadRadius: 5,
+              //     blurRadius: 7,
+              //     offset: Offset(0, 3), // changes position of shadow
+              //   ),
+              // ],
+            ),
+            height: SizeConfig.defaultSize * 10,
+            child: Padding(
+                padding: EdgeInsets.symmetric(
+                    vertical: SizeConfig.defaultSize,
+                    horizontal: SizeConfig.defaultSize * 1.5),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Row( // 1층
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        BlocBuilder<MyPagesCubit,MyPagesState>(
+                            builder: (context, state) {
+                              String name = state.userResponse.user?.name ?? "###";
+                              String admissionNumber = "${state.userResponse.user?.admissionYear.toString().substring(2,4)??"##"}학번";
 
-                            return Row(
-                              children: [
-                                SizedBox(width: SizeConfig.defaultSize * 0.5,),
-                                Text(name,
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w700,
-                                    fontSize: SizeConfig.defaultSize * 2,
-                                    color: Colors.white,
-                                  ),),
-                                SizedBox(width: SizeConfig.defaultSize * 0.5),
-                                Text(admissionNumber,
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: SizeConfig.defaultSize * 1.6,
-                                    color: Colors.white,
-                                  ),),
-                              ],
-                            );
-                          }
-                      ),
-                      IconButton(
-                        icon: const Icon(Icons.settings, color: Colors.white,),
-                        onPressed: () {
-                          BlocProvider.of<MyPagesCubit>(context).pressedSettingsIcon(); // 설정 화면으로 넘어가기
-                        },
-                        iconSize: SizeConfig.defaultSize * 2.4,
-                      ),
-                    ],
-                  ),
-                  Row( // 2층
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      BlocBuilder<MyPagesCubit,MyPagesState>(
-                          builder: (context, state) {
-                            String university = state.userResponse.university?.name??'#####학교';
-                            String department = state.userResponse.university?.department??'######학과';
-                            return Row(
-                              children: [
-                                SizedBox(width: SizeConfig.defaultSize * 0.5,),
-                                Text(
-                                  university,
-                                  style: TextStyle(
+                              return Row(
+                                children: [
+                                  SizedBox(width: SizeConfig.defaultSize * 0.5,),
+                                  Text(name,
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w700,
+                                      fontSize: SizeConfig.defaultSize * 2,
+                                      color: Colors.white,
+                                    ),),
+                                  SizedBox(width: SizeConfig.defaultSize * 0.5),
+                                  Text(admissionNumber,
+                                    style: TextStyle(
                                       fontWeight: FontWeight.w500,
-                                      fontSize: SizeConfig.defaultSize * 1.3,
-                                      color: Colors.white
+                                      fontSize: SizeConfig.defaultSize * 1.6,
+                                      color: Colors.white,
+                                    ),),
+                                ],
+                              );
+                            }
+                        ),
+                        IconButton(
+                          icon: const Icon(Icons.settings, color: Colors.white,),
+                          onPressed: () {
+                            BlocProvider.of<MyPagesCubit>(context).pressedSettingsIcon(); // 설정 화면으로 넘어가기
+                          },
+                          iconSize: SizeConfig.defaultSize * 2.4,
+                        ),
+                      ],
+                    ),
+                    Row( // 2층
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        BlocBuilder<MyPagesCubit,MyPagesState>(
+                            builder: (context, state) {
+                              String university = state.userResponse.university?.name??'#####학교';
+                              String department = state.userResponse.university?.department??'######학과';
+                              return Row(
+                                children: [
+                                  SizedBox(width: SizeConfig.defaultSize * 0.5,),
+                                  Text(
+                                    university,
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: SizeConfig.defaultSize * 1.3,
+                                        color: Colors.white
+                                    ),
                                   ),
-                                ),
-                                SizedBox(width: SizeConfig.defaultSize * 0.5,),
-                                Text(
-                                  department,
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: SizeConfig.defaultSize * 1.3,
-                                      color: Colors.white
+                                  SizedBox(width: SizeConfig.defaultSize * 0.5,),
+                                  Text(
+                                    department,
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: SizeConfig.defaultSize * 1.3,
+                                        color: Colors.white
+                                    ),
                                   ),
-                                ),
-                              ],
-                            );
-                          }
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: SizeConfig.defaultSize,),
+                                ],
+                              );
+                            }
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: SizeConfig.defaultSize,),
 
 
-                  // TODO MVP 이후 '나의 포인트 0원' 복구
-                  // Container(
-                  //   height: SizeConfig.defaultSize * 4.5,
-                  //   decoration: ShapeDecoration(
-                  //     color: Color(0xffeeeeeee),
-                  //     shape: RoundedRectangleBorder(
-                  //       borderRadius: BorderRadius.circular(7.0),
-                  //     ),
-                  //   ),
-                  //
-                  //   child: Row(
-                  //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  //     children: [
-                  //       Row(
-                  //         children: [
-                  //           Text("   나의 Points",
-                  //             style: TextStyle(
-                  //               fontWeight: FontWeight.w500,
-                  //               fontSize: SizeConfig.defaultSize * 1.6,
-                  //             ),),
-                  //
-                  //           BlocBuilder<MyPagesCubit,MyPagesState>(
-                  //               builder: (context, state) {
-                  //                 int point = state.userResponse.point ?? 0;
-                  //
-                  //                 return Text("  $point",
-                  //                   style: TextStyle(
-                  //                     fontWeight: FontWeight.w700,
-                  //                     fontSize: SizeConfig.defaultSize * 1.6,
-                  //                   ),
-                  //                 );
-                  //               }
-                  //           ),
-                  //         ],
-                  //       ),
-                  //       TextButton(
-                  //         onPressed: () {
-                  //           // 사용 내역 페이지로 연결
-                  //         },
-                  //         child: Text("사용 내역 ", style: TextStyle(
-                  //           fontSize: SizeConfig.defaultSize * 1.6,
-                  //           fontWeight: FontWeight.w500,
-                  //           decoration: TextDecoration.underline,
-                  //         )),
-                  //       ),
-                  //     ],
-                  //   ),
-                  // ),
-                ],
-              )
+                    // TODO MVP 이후 '나의 포인트 0원' 복구
+                    // Container(
+                    //   height: SizeConfig.defaultSize * 4.5,
+                    //   decoration: ShapeDecoration(
+                    //     color: Color(0xffeeeeeee),
+                    //     shape: RoundedRectangleBorder(
+                    //       borderRadius: BorderRadius.circular(7.0),
+                    //     ),
+                    //   ),
+                    //
+                    //   child: Row(
+                    //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    //     children: [
+                    //       Row(
+                    //         children: [
+                    //           Text("   나의 Points",
+                    //             style: TextStyle(
+                    //               fontWeight: FontWeight.w500,
+                    //               fontSize: SizeConfig.defaultSize * 1.6,
+                    //             ),),
+                    //
+                    //           BlocBuilder<MyPagesCubit,MyPagesState>(
+                    //               builder: (context, state) {
+                    //                 int point = state.userResponse.point ?? 0;
+                    //
+                    //                 return Text("  $point",
+                    //                   style: TextStyle(
+                    //                     fontWeight: FontWeight.w700,
+                    //                     fontSize: SizeConfig.defaultSize * 1.6,
+                    //                   ),
+                    //                 );
+                    //               }
+                    //           ),
+                    //         ],
+                    //       ),
+                    //       TextButton(
+                    //         onPressed: () {
+                    //           // 사용 내역 페이지로 연결
+                    //         },
+                    //         child: Text("사용 내역 ", style: TextStyle(
+                    //           fontSize: SizeConfig.defaultSize * 1.6,
+                    //           fontWeight: FontWeight.w500,
+                    //           decoration: TextDecoration.underline,
+                    //         )),
+                    //       ),
+                    //     ],
+                    //   ),
+                    // ),
+                  ],
+                )
+            ),
           ),
         ),
 
         // =================================================================
 
         SizedBox(height: SizeConfig.defaultSize),
-        // Container( // 구분선
-        //   padding: EdgeInsets.only(top: 0, bottom: 0, left: 0, right: 0,),
-        //   height: SizeConfig.defaultSize * 2,
-        //   color: Colors.grey.withOpacity(0.1),
-        // ),
 
-        SizedBox(height: SizeConfig.defaultSize * 1,),
         Container(
           // height: SizeConfig.defaultSize * 130,
           child: Padding(
               padding: EdgeInsets.symmetric(
                   vertical: SizeConfig.defaultSize,
-                  horizontal: SizeConfig.defaultSize * 2),
+                  horizontal: SizeConfig.defaultSize * 1.5),
               child: Column(
                 children: [
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.start, // TODO : MVP 이후 복구하기 (start -> spacebetween)
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text("내 친구",
                         style: TextStyle(
@@ -235,19 +225,13 @@ class MyPageLandingView extends StatelessWidget {
                           fontSize: SizeConfig.defaultSize * 1.7,
                           color: Color(0xff7C83FD)
                         ),),
-                      // ElevatedButton( // TODO : MVP 이후 복구하기
-                      //   onPressed: () {
-                      //     // 초대하기 페이지로 연결
-                      //     // BlocProvider.of<MyPagesCubit>(context).pressedInviteButton();
-                      //   },
-                      //   child: Text("초대하기", style: TextStyle(
-                      //     fontSize: SizeConfig.defaultSize * 1.6,
-                      //     fontWeight: FontWeight.w500,
-                      //   )),
-                      // ),
+                      BlocBuilder<MyPagesCubit, MyPagesState>(
+                          builder: (context, state) {
+                            return openAddFriends(myCode: state.userResponse.user?.recommendationCode ?? '내 코드가 없어요!');
+                          }),
                     ],
                   ),
-                  SizedBox(height: SizeConfig.defaultSize ,),
+                  SizedBox(height: SizeConfig.defaultSize * 1.5,),
                   BlocBuilder<MyPagesCubit,MyPagesState>(
                       builder: (context, state) {
                         final friends = state.friends ?? [];
@@ -271,7 +255,7 @@ class MyPageLandingView extends StatelessWidget {
           child: Padding(
             padding: EdgeInsets.symmetric(
                 vertical: SizeConfig.defaultSize,
-                horizontal: SizeConfig.defaultSize * 2),
+                horizontal: SizeConfig.defaultSize * 1.5),
             child: Column(
                 children: [
                   Row(
@@ -369,146 +353,93 @@ class FriendComponent extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Row(
-              children: [
-                Text(friend.name ?? "XXX", style: TextStyle(
-                  fontSize: SizeConfig.defaultSize * 1.9,
-                  fontWeight: FontWeight.w600,
-                )),
-                SizedBox(
-                  width: SizeConfig.defaultSize * 16,
-                  child: Text("  ${friend.admissionYear.toString().substring(2,4)}학번∙${friend.university?.department}", style: TextStyle(
-                    fontSize: SizeConfig.defaultSize * 1.3,
-                    fontWeight: FontWeight.w500,
-                    overflow: TextOverflow.ellipsis,
+            Container(
+              width: SizeConfig.screenWidth * 0.7,
+              child: Row(
+                children: [
+                  Text(friend.name ?? "XXX", style: TextStyle(
+                fontSize: SizeConfig.defaultSize * 1.9,
+                    fontWeight: FontWeight.w600,
                   )),
-                ),
-              ],
+                  Container(
+                    width: SizeConfig.screenWidth * 0.48,
+                    child: Text("  ${friend.admissionYear.toString().substring(2,4)}학번∙${friend.university?.department}", style: TextStyle(
+                      fontSize: SizeConfig.defaultSize * 1.3,
+                      fontWeight: FontWeight.w500,
+                      overflow: TextOverflow.ellipsis,
+                    )),
+                  ),
+                ],
+              ),
             ),
             SizedBox(height: SizeConfig.defaultSize,),
 
-            IconButton(
-                onPressed: () {
-                  ToastUtil.showToast("사용자가 신고되었어요!");
-                  // TODO : 신고 기능 (서버 연결)
-                  // TODO : 신고 확정 Dialog | Popupmenu, contextmnu, QuickAlert, AlertDialog 모두 시도해봤는데 안 됨. 여기서 띄울 수 없는 것 같음.
-
-                  // showAlert() {
-                  //   QuickAlert.show(
-                  //       type: QuickAlertType.confirm,
-                  //       context: context,
-                  //       title: "사용자를 신고하시겠어요?",
-                  //       // text: "제출하면 프로필을 수정할 수 없어요!\n신중히 제출해주세요!",
-                  //       confirmBtnText: '신청',
-                  //       cancelBtnText: '취소',
-                  //       onConfirmBtnTap: () {
-                  //         ToastUtil.showToast("사용자가 신고되었어요!");
-                  //         Navigator.of(context).pop(); // QuickAlert 닫기
-                  //       });
-                  // }
-
-                  // ContextMenuArea(
-                  //   builder: (context) => [
-                  //     ListTile(
-                  //       title: Text('Option 1'),
-                  //       onTap: () {
-                  //         Navigator.of(context).pop();
-                  //         // ScaffoldMessenger.of(context).showSnackBar(
-                  //         //   SnackBar(
-                  //         //     content: Text('Whatever'),
-                  //         //   ),
-                  //         // );
-                  //       },
-                  //     ),
-                  //     ListTile(
-                  //       leading: Icon(Icons.model_training),
-                  //       title: Text('Option 2'),
-                  //       onTap: () {
-                  //         Navigator.of(context).pop();
-                  //         // ScaffoldMessenger.of(context).showSnackBar(
-                  //         //   SnackBar(
-                  //         //     content: Text('Foo!'),
-                  //         //   ),
-                  //         // );
-                  //       },
-                  //     )
-                  //   ],
-                  //   child: Card(
-                  //     color: Theme.of(context).primaryColor,
-                  //     child: Center(
-                  //       child: Text(
-                  //         'Press somewhere for context menu.',
-                  //         style: TextStyle(
-                  //           color: Theme.of(context).colorScheme.onPrimary,
-                  //         ),
-                  //       ),
-                  //     ),
-                  //   ),
-                  // );
-
-                  // showCupertinoModalPopup(context: context, builder: (BuildContext context) => CupertinoActionSheet(
-                  //   title: Text("사용자를 신고하시겠어요?"),
-                  //   actions: <CupertinoActionSheetAction>[
-                  //     CupertinoActionSheetAction(
-                  //         onPressed: () {
-                  //           Navigator.pop(context);
-                  //           // TODO: 신고 기능 (서버 연결)
-                  //           ToastUtil.showToast("사용자가 신고되었습니다!");
-                  //         },
-                  //         child: Text("신고하기", style: TextStyle(color: Colors.redAccent))
-                  //     ),
-                  //     CupertinoActionSheetAction(
-                  //         onPressed: () {
-                  //           Navigator.pop(context);
-                  //           // TODO: 신고 기능 (서버 연결)
-                  //         },
-                  //         child: Text("취소", style: TextStyle(color: Colors.indigoAccent),)
-                  //     )
-                  //   ],
-                  // ));
-
-                  // showDialog(
-                  //   context: context,
-                  //   builder: (BuildContext context) {
-                  //     return CupertinoAlertDialog(
-                  //       title: Text("사용자 신고"),
-                  //       content: Text("이 사용자를 신고하시겠습니까?"),
-                  //       actions: [
-                  //         TextButton(
-                  //           onPressed: () {
-                  //             Navigator.of(context).pop(); // 다이얼로그 닫기
-                  //             // TODO: 신고 기능 (서버 연결)
-                  //             ToastUtil.showToast("사용자가 신고되었습니다!");
-                  //           },
-                  //           child: Text("신고하기"),
-                  //         ),
-                  //         TextButton(
-                  //           onPressed: () {
-                  //             Navigator.of(context).pop(); // 다이얼로그 닫기
-                  //           },
-                  //           child: Text("취소"),
-                  //         ),
-                  //       ],
-                  //     );
-                  //     print("printprint");
-                  //   },
-                  // );
-                },
-                icon: Icon(Icons.warning_rounded, color: Colors.grey.shade200)),
-
-            ElevatedButton(
-              onPressed: () {
-                if (isAdd) {
-                  pressedAddButton(context, friend.userId!);
-                } else {
-                  pressedDeleteButton(context, friend.userId!);
+            PopupMenuButton<String>(
+              icon: Icon(Icons.more_horiz_rounded, color: Colors.grey.shade300,),
+              color: Colors.white,
+              surfaceTintColor: Colors.white,
+              onSelected: (value) {
+                // 팝업 메뉴에서 선택된 값 처리
+                if (value == 'report') {
+                  showDialog<String>(
+                    context: context,
+                    builder: (BuildContext context) => AlertDialog(
+                      title: const Text('사용자를 신고하시겠어요?'),
+                      content: const Text('사용자를 신고하면 Dart에서 빠르게 신고 처리를 해드려요!'),
+                      backgroundColor: Colors.white,
+                      surfaceTintColor: Colors.white,
+                      actions: <Widget>[
+                        TextButton(
+                          onPressed: () => Navigator.pop(context, '취소'),
+                          child: const Text('취소', style: TextStyle(color: Color(0xff7C83FD)),),
+                        ),
+                        TextButton(
+                          onPressed: () => {
+                            Navigator.pop(context, '신고'),
+                            ToastUtil.showToast("사용자가 신고되었어요!"),
+                            // TODO : 신고 기능 (서버 연결)
+                          },
+                          child: const Text('신고', style: TextStyle(color: Color(0xff7C83FD)),),
+                        ),
+                      ],
+                    ),
+                  );
+                }
+                else if (value == 'delete') {
+                  if (isAdd) {
+                    pressedAddButton(context, friend.userId!);
+                  } else {
+                    pressedDeleteButton(context, friend.userId!);
+                  }
                 }
               },
-              child: Text(isAdd?"추가":"삭제", style: TextStyle(
-                fontSize: SizeConfig.defaultSize * 1.4,
-                fontWeight: FontWeight.w500,
-              )),
+              itemBuilder: (BuildContext context) {
+                return [
+                  PopupMenuItem<String>(
+                    value: 'delete',
+                    child: Text("친구 삭제", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.5)),
+                  ),
+                  PopupMenuItem<String>(
+                    value: 'report',
+                    child: Text("신고하기", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.5)),
+                  ),
+                ];
+              },
             ),
+
+            // ElevatedButton(
+            //   onPressed: () {
+            //     if (isAdd) {
+            //       pressedAddButton(context, friend.userId!);
+            //     } else {
+            //       pressedDeleteButton(context, friend.userId!);
+            //     }
+            //   },
+            //   child: Text(isAdd?"추가":"삭제", style: TextStyle(
+            //     fontSize: SizeConfig.defaultSize * 1.4,
+            //     fontWeight: FontWeight.w500,
+            //   )),
+            // ),
           ],
         ),
         SizedBox(height: SizeConfig.defaultSize * 0.1,),
@@ -545,132 +476,68 @@ class NotFriendComponent extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Row(
-              children: [
-                Text(friend.name ?? "XXX", style: TextStyle(
-                  fontSize: SizeConfig.defaultSize * 1.9,
-                  fontWeight: FontWeight.w600,
-                )),
-                SizedBox(
-                  width: SizeConfig.defaultSize * 16,
-                  child: Text("  ${friend.admissionYear.toString().substring(2,4)}학번∙${friend.university?.department}", style: TextStyle(
-                    fontSize: SizeConfig.defaultSize * 1.3,
-                    fontWeight: FontWeight.w500,
-                    overflow: TextOverflow.ellipsis,
+            Container(
+              width: SizeConfig.screenWidth * 0.52,
+              child: Row(
+                children: [
+                  Text(friend.name ?? "XXX", style: TextStyle(
+                    fontSize: SizeConfig.defaultSize * 1.9,
+                    fontWeight: FontWeight.w600,
                   )),
-                ),
-              ],
+                  Container(
+                    width: SizeConfig.screenWidth * 0.36,
+                    child: Text("  ${friend.admissionYear.toString().substring(2,4)}학번∙${friend.university?.department}", style: TextStyle(
+                      fontSize: SizeConfig.defaultSize * 1.3,
+                      fontWeight: FontWeight.w500,
+                      overflow: TextOverflow.ellipsis,
+                    )),
+                  ),
+                ],
+              ),
             ),
             SizedBox(height: SizeConfig.defaultSize,),
 
-            IconButton(
-                onPressed: () {
-                  ToastUtil.showToast("사용자가 신고되었어요!");
-                  // TODO : 신고 기능 (서버 연결)
-                  // TODO : 신고 확정 Dialog | Popupmenu, contextmnu, QuickAlert, AlertDialog 모두 시도해봤는데 안 됨. 여기서 띄울 수 없는 것 같음.
-
-                  // showAlert() {
-                  //   QuickAlert.show(
-                  //       type: QuickAlertType.confirm,
-                  //       context: context,
-                  //       title: "사용자를 신고하시겠어요?",
-                  //       // text: "제출하면 프로필을 수정할 수 없어요!\n신중히 제출해주세요!",
-                  //       confirmBtnText: '신청',
-                  //       cancelBtnText: '취소',
-                  //       onConfirmBtnTap: () {
-                  //         ToastUtil.showToast("사용자가 신고되었어요!");
-                  //         Navigator.of(context).pop(); // QuickAlert 닫기
-                  //       });
-                  // }
-
-                  // ContextMenuArea(
-                  //   builder: (context) => [
-                  //     ListTile(
-                  //       title: Text('Option 1'),
-                  //       onTap: () {
-                  //         Navigator.of(context).pop();
-                  //         // ScaffoldMessenger.of(context).showSnackBar(
-                  //         //   SnackBar(
-                  //         //     content: Text('Whatever'),
-                  //         //   ),
-                  //         // );
-                  //       },
-                  //     ),
-                  //     ListTile(
-                  //       leading: Icon(Icons.model_training),
-                  //       title: Text('Option 2'),
-                  //       onTap: () {
-                  //         Navigator.of(context).pop();
-                  //         // ScaffoldMessenger.of(context).showSnackBar(
-                  //         //   SnackBar(
-                  //         //     content: Text('Foo!'),
-                  //         //   ),
-                  //         // );
-                  //       },
-                  //     )
-                  //   ],
-                  //   child: Card(
-                  //     color: Theme.of(context).primaryColor,
-                  //     child: Center(
-                  //       child: Text(
-                  //         'Press somewhere for context menu.',
-                  //         style: TextStyle(
-                  //           color: Theme.of(context).colorScheme.onPrimary,
-                  //         ),
-                  //       ),
-                  //     ),
-                  //   ),
-                  // );
-
-                  // showCupertinoModalPopup(context: context, builder: (BuildContext context) => CupertinoActionSheet(
-                  //   title: Text("사용자를 신고하시겠어요?"),
-                  //   actions: <CupertinoActionSheetAction>[
-                  //     CupertinoActionSheetAction(
-                  //         onPressed: () {
-                  //           Navigator.pop(context);
-                  //           // TODO: 신고 기능 (서버 연결)
-                  //           ToastUtil.showToast("사용자가 신고되었습니다!");
-                  //         },
-                  //         child: Text("신고하기", style: TextStyle(color: Colors.redAccent))
-                  //     ),
-                  //     CupertinoActionSheetAction(
-                  //         onPressed: () {
-                  //           Navigator.pop(context);
-                  //           // TODO: 신고 기능 (서버 연결)
-                  //         },
-                  //         child: Text("취소", style: TextStyle(color: Colors.indigoAccent),)
-                  //     )
-                  //   ],
-                  // ));
-
-                  // showDialog(
-                  //   context: context,
-                  //   builder: (BuildContext context) {
-                  //     return CupertinoAlertDialog(
-                  //       title: Text("사용자 신고"),
-                  //       content: Text("이 사용자를 신고하시겠습니까?"),
-                  //       actions: [
-                  //         TextButton(
-                  //           onPressed: () {
-                  //             Navigator.of(context).pop(); // 다이얼로그 닫기
-                  //             // TODO: 신고 기능 (서버 연결)
-                  //             ToastUtil.showToast("사용자가 신고되었습니다!");
-                  //           },
-                  //           child: Text("신고하기"),
-                  //         ),
-                  //         TextButton(
-                  //           onPressed: () {
-                  //             Navigator.of(context).pop(); // 다이얼로그 닫기
-                  //           },
-                  //           child: Text("취소"),
-                  //         ),
-                  //       ],
-                  //     );
-                  //     print("printprint");
-                  //   },
-                  // );
-                },
-                icon: Icon(Icons.warning_rounded, color: Colors.grey.shade200)),
+            PopupMenuButton<String>(
+              icon: Icon(Icons.more_horiz_rounded, color: Colors.grey.shade300,),
+              color: Colors.white,
+              surfaceTintColor: Colors.white,
+              onSelected: (value) {
+                // 팝업 메뉴에서 선택된 값 처리
+                if (value == 'report') {
+                  showDialog<String>(
+                    context: context,
+                    builder: (BuildContext context) => AlertDialog(
+                      backgroundColor: Colors.white,
+                      surfaceTintColor: Colors.white,
+                      title: const Text('사용자를 신고하시겠어요?'),
+                      content: const Text('사용자를 신고하면 Dart에서 빠르게 신고 처리를 해드려요!'),
+                      actions: <Widget>[
+                        TextButton(
+                          onPressed: () => Navigator.pop(context, '취소'),
+                          child: const Text('취소', style: TextStyle(color: Color(0xff7C83FD)),),
+                        ),
+                        TextButton(
+                          onPressed: () => {
+                            Navigator.pop(context, '신고'),
+                            ToastUtil.showToast("사용자가 신고되었어요!"),
+                            // TODO : 신고 기능 (서버 연결)
+                          },
+                          child: const Text('신고', style: TextStyle(color: Color(0xff7C83FD)),),
+                        ),
+                      ],
+                    ),
+                  );
+                }
+              },
+              itemBuilder: (BuildContext context) {
+                return [
+                  PopupMenuItem<String>(
+                    value: 'report',
+                    child: Text("신고하기", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.5)),
+                  ),
+                ];
+              },
+            ),
 
             ElevatedButton(
               onPressed: () {
@@ -699,6 +566,308 @@ class NotFriendComponent extends StatelessWidget {
           color: Color(0xffddddddd),
         ),
       ],
+    );
+  }
+}
+
+class openAddFriends extends StatefulWidget {
+  late String myCode;
+
+  openAddFriends({
+    super.key,
+    required this.myCode,
+  });
+
+  @override
+  State<openAddFriends> createState() => _openAddFriendsState();
+}
+
+class _openAddFriendsState extends State<openAddFriends> {
+  var friendCode = "";
+
+  void showCopyToast() {
+    Fluttertoast.showToast(
+      msg: "내 코드가 복사되었어요!",
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.BOTTOM,
+      timeInSecForIosWeb: 1,
+      backgroundColor: Colors.grey[200],
+      textColor: Colors.black,
+      fontSize: SizeConfig.defaultSize * 1.6,
+    );
+  }
+  void showAddFriendToast() {
+    Fluttertoast.showToast(
+      msg: "친구가 추가되었어요!",
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.TOP,
+      timeInSecForIosWeb: 1,
+      backgroundColor: Colors.indigoAccent,
+      textColor: Colors.white,
+      fontSize: SizeConfig.defaultSize * 1.6,
+    );
+  }
+  void itsMyCodeToast() {
+    Fluttertoast.showToast(
+      msg: "나는 친구로 추가할 수 없어요!",
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.TOP,
+      timeInSecForIosWeb: 1,
+      backgroundColor: Colors.indigoAccent,
+      textColor: Colors.white,
+      fontSize: SizeConfig.defaultSize * 1.6,
+    );
+  }
+
+  void shareContent(BuildContext context) {
+    Share.share(
+        '앱에서 친구들이 당신에게 관심을 표현하고 있어요! 들어와서 확인해보세요! https://dart.page.link/TG78');
+    print("셰어");
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: () { // ModalBottomSheet 열기
+        showModalBottomSheet(
+            context: context,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+            ),
+            backgroundColor: Colors.white,
+            isScrollControlled: true,
+            builder: (BuildContext _) {
+              return Container(
+                height: SizeConfig.screenHeight,
+                width: SizeConfig.screenWidth,
+                child: Column(
+                  children: [
+                    SizedBox(height: SizeConfig.screenHeight * 0.15),
+                    Text("친구를 추가해요!",
+                        style: TextStyle(
+                          color: Color(0xff7C83FD),
+                          fontSize: SizeConfig.defaultSize * 2.2,
+                          fontWeight: FontWeight.w600,
+                        )),
+                    SizedBox(height: SizeConfig.defaultSize * 7),
+                    // BlocBuilder<StandbyCubit,StandbyState>(
+                    //     builder: (context, state) {
+                    //       final friends = state.friends ?? [];
+                    //       return MeetMyFriends(friends: friends, count: friends.length);
+                    //     }
+                    // ),
+                    Text("친구 코드 입력",
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: SizeConfig.defaultSize * 2,
+                          fontWeight: FontWeight.w600,
+                        )),
+                    SizedBox(
+                      height: SizeConfig.defaultSize * 2,
+                    ),
+
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        SizedBox(
+                          width: SizeConfig.screenWidth * 0.7,
+                          child: TextField(
+                            onChanged: (text) {
+                              friendCode = text;
+                            },
+                            autocorrect: true,
+                            decoration: InputDecoration(
+                              hintText: '친구 코드를 여기에 입력해주세요!',
+                              hintStyle: TextStyle(color: Colors.grey),
+                              filled: true,
+                              fillColor: Colors.white,
+                              contentPadding: EdgeInsets.symmetric(
+                                  vertical: SizeConfig.defaultSize * 1.5,
+                                  horizontal: SizeConfig.defaultSize * 1.5),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius:
+                                BorderRadius.all(Radius.circular(15.0)),
+                                borderSide:
+                                BorderSide(color: Colors.grey, width: 2),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius:
+                                BorderRadius.all(Radius.circular(10.0)),
+                                borderSide:
+                                BorderSide(color: Colors.indigoAccent),
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          width: SizeConfig.defaultSize * 0.7,
+                        ),
+                        ElevatedButton(
+                          onPressed: () async {
+                            if (friendCode == widget.myCode) {itsMyCodeToast();}
+                            else {
+                              print("friendCode $friendCode");
+                              // try {
+                              try {
+                                await BlocProvider.of<MyPagesCubit>(context).pressedFriendCodeAddButton(friendCode);
+                                showAddFriendToast();
+                                Navigator.pop(context);
+                              } catch (e) {
+                                ToastUtil.showToast('친구코드를 다시 한번 확인해주세요!');
+                              }
+                            }
+                          },
+                          style: ElevatedButton.styleFrom(
+                              primary: Colors.indigoAccent,
+                              onPrimary: Colors.white,
+                              textStyle: TextStyle(
+                                color: Colors.white,
+                              )),
+                          child: Text("추가"),
+                        )
+                      ],
+                    ),
+
+                    SizedBox(
+                      height: SizeConfig.defaultSize * 3,
+                    ),
+
+                    Container(
+                      color: Colors.indigoAccent.withOpacity(0.3),
+                      width: SizeConfig.screenWidth,
+                      height: SizeConfig.defaultSize * 12,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text("내 코드",
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: SizeConfig.defaultSize * 2,
+                                fontWeight: FontWeight.w600,
+                              )),
+                          SizedBox(
+                            height: SizeConfig.defaultSize * 2,
+                          ),
+                          Container( //exp. 내 코드 복사 Views
+                            width: SizeConfig.screenWidth * 0.8,
+                            height: SizeConfig.defaultSize * 3.3,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Text(widget.myCode,
+                                  style: TextStyle(
+                                    fontSize: SizeConfig.defaultSize * 2,
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: SizeConfig.defaultSize,
+                                ),
+                                ElevatedButton(
+                                    onPressed: () {
+                                      String myCodeCopy = widget.myCode;
+                                      Clipboard.setData(ClipboardData(text: myCodeCopy)); // 클립보드에 복사되었어요 <- 메시지 자동으로 Android에서 뜸 TODO : iOS는 확인하고 복사멘트 띄우기
+                                    },
+                                    style: ElevatedButton.styleFrom(
+                                      primary: Colors.white,
+                                      onPrimary: Colors.indigoAccent,
+                                      textStyle: TextStyle(
+                                        color: Colors.indigoAccent,
+                                      ),
+                                    ),
+                                    child: Text(
+                                      "복사하기",
+                                      style: TextStyle(
+                                        fontSize: SizeConfig.defaultSize * 1.8,
+                                      ),
+                                    )),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+
+                    SizedBox(height: SizeConfig.defaultSize * 5),
+
+                    GestureDetector(
+                      onTap: () {
+                        shareContent(context);
+                      },
+                      child: Padding(
+                        padding: EdgeInsets.only(
+                            left: SizeConfig.defaultSize,
+                            right: SizeConfig.defaultSize),
+                        child: Container(
+                          // 친구 추가 버튼
+                          width: SizeConfig.screenWidth * 0.9,
+                          height: SizeConfig.defaultSize * 5.5,
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              border: Border.all(
+                                color: Colors.indigoAccent,
+                              ),
+                              borderRadius: BorderRadius.circular(15)),
+                          child: Text(
+                            "아직 가입하지 않은 친구 초대하기",
+                            style: TextStyle(
+                              fontSize: SizeConfig.defaultSize * 1.8,
+                              fontWeight: FontWeight.w800,
+                              color: Colors.indigoAccent,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+
+                    SizedBox(height: SizeConfig.defaultSize * 10),
+                    TextButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: Text(
+                          "닫기",
+                          style: TextStyle(
+                            color: Colors.grey[500],
+                            fontSize: SizeConfig.defaultSize * 1.5,
+                          ),
+                        ))
+                  ],
+                ),
+              );
+            });
+      },
+      child: Padding(
+        padding: EdgeInsets.only(
+            left: SizeConfig.defaultSize,
+            // right: SizeConfig.defaultSize
+        ),
+        child: Container(
+          // 친구 추가 버튼
+          height: SizeConfig.defaultSize * 3.5,
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+              color: Colors.white,
+              border: Border.all(
+                color: Color(0xff7C83FD),
+              ),
+              borderRadius: BorderRadius.circular(10)),
+          child: Padding(
+            padding: EdgeInsets.only(left: SizeConfig.defaultSize, right: SizeConfig.defaultSize),
+            child: Text(
+              "코드로 추가",
+              style: TextStyle(
+                fontSize: SizeConfig.defaultSize * 1.8,
+                fontWeight: FontWeight.w600,
+                color: Color(0xff7C83FD),
+              ),
+            ),
+          ),
+        ),
+      ),
     );
   }
 }
