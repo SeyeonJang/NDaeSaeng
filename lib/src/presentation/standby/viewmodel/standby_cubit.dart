@@ -22,7 +22,6 @@ class StandbyCubit extends Cubit<StandbyState> {
     state.userResponse.user!.recommendationCode;
     state.isLoading = false;
     emit(state.copy());
-    print("대기화면 무사 진입 ~ !"); // TODO : ERASE
   }
 
   void refresh() {

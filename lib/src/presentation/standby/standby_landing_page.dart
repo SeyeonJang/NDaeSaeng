@@ -232,8 +232,12 @@ class _StandbyLandingPageState extends State<StandbyLandingPage> with SingleTick
 
                         BlocBuilder<StandbyCubit, StandbyState>(
                           builder: (context, state) {
-                            return openAddFriends(myCode: state.userResponse.user?.recommendationCode ?? '내 코드가 없어요!');
-                          }),
+                            return openAddFriends(
+                                myCode: state.userResponse.user?.recommendationCode ?? '내 코드가 없어요!',
+                                disabledFunctions: state.isLoading,
+                            );
+                          },
+                        ),
                       ],
                     ),
                   ),
@@ -350,10 +354,12 @@ class FriendExistsView extends StatelessWidget {
 // modal bottom View
 class openAddFriends extends StatefulWidget {
   late String myCode;
+  late bool disabledFunctions;
 
   openAddFriends({
     super.key,
     required this.myCode,
+    this.disabledFunctions = false,
   });
 
   @override
@@ -409,212 +415,242 @@ class _openAddFriendsState extends State<openAddFriends> {
       onTap: () { // ModalBottomSheet 열기
         showModalBottomSheet(
             context: context,
-            shape: RoundedRectangleBorder(
+            shape: const RoundedRectangleBorder(
               borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
             ),
             backgroundColor: Colors.white,
             isScrollControlled: true,
             builder: (BuildContext _) {
-              return Container(
-                height: SizeConfig.screenHeight,
-                width: SizeConfig.screenWidth,
-                child: Column(
-                  children: [
-                    SizedBox(height: SizeConfig.screenHeight * 0.15),
-                    Text("친구를 추가해요!",
-                        style: TextStyle(
-                          color: Color(0xff7C83FD),
-                          fontSize: SizeConfig.defaultSize * 2.2,
-                          fontWeight: FontWeight.w600,
-                        )),
-                    SizedBox(height: SizeConfig.defaultSize * 7),
-                    // BlocBuilder<StandbyCubit,StandbyState>(
-                    //     builder: (context, state) {
-                    //       final friends = state.friends ?? [];
-                    //       return MeetMyFriends(friends: friends, count: friends.length);
-                    //     }
-                    // ),
-                    Text("친구 코드 입력",
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: SizeConfig.defaultSize * 2,
-                          fontWeight: FontWeight.w600,
-                        )),
-                    SizedBox(
-                      height: SizeConfig.defaultSize * 2,
-                    ),
-
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
+              return StatefulBuilder(
+                builder: (BuildContext statefulContext, StateSetter thisState) {
+                  return Container(
+                    height: SizeConfig.screenHeight,
+                    width: SizeConfig.screenWidth,
+                    child: Column(
                       children: [
-                        SizedBox(
-                          width: SizeConfig.screenWidth * 0.7,
-                          child: TextField(
-                            onChanged: (text) {
-                              friendCode = text;
-                            },
-                            autocorrect: true,
-                            decoration: InputDecoration(
-                              hintText: '친구 코드를 여기에 입력해주세요!',
-                              hintStyle: TextStyle(color: Colors.grey),
-                              filled: true,
-                              fillColor: Colors.white,
-                              contentPadding: EdgeInsets.symmetric(
-                                  vertical: SizeConfig.defaultSize * 1.5,
-                                  horizontal: SizeConfig.defaultSize * 1.5),
-                              enabledBorder: OutlineInputBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(15.0)),
-                                borderSide:
-                                    BorderSide(color: Colors.grey, width: 2),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(10.0)),
-                                borderSide:
-                                    BorderSide(color: Colors.indigoAccent),
-                              ),
+                        SizedBox(height: SizeConfig.screenHeight * 0.15),
+                        Text("친구를 추가해요!",
+                            style: TextStyle(
+                              color: Color(0xff7C83FD),
+                              fontSize: SizeConfig.defaultSize * 2.2,
+                              fontWeight: FontWeight.w600,
                             ),
-                          ),
+                        ),
+                        SizedBox(height: SizeConfig.defaultSize * 2),
+                        SizedBox(
+                            width: SizeConfig.defaultSize * 3,
+                            height: SizeConfig.defaultSize * 3,
+                            child: widget.disabledFunctions ? const CircularProgressIndicator() : null,
+                        ),
+                        SizedBox(height: SizeConfig.defaultSize * 2),
+                        Text("친구 코드 입력",
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: SizeConfig.defaultSize * 2,
+                              fontWeight: FontWeight.w600,
+                            ),
                         ),
                         SizedBox(
-                          width: SizeConfig.defaultSize * 0.7,
+                          height: SizeConfig.defaultSize * 2,
                         ),
-                        ElevatedButton(
-                          onPressed: () async {
-                            if (friendCode == widget.myCode) {itsMyCodeToast();}
-                            else {
-                              print("friendCode $friendCode");
-                              // try {
-                              try {
-                                await BlocProvider.of<StandbyCubit>(context).pressedFriendCodeAddButton(friendCode);
-                                showAddFriendToast();
-                                Navigator.pop(context);
-                              } catch (e) {
-                                ToastUtil.showToast('친구코드를 다시 한번 확인해주세요!');
-                              }
-                            }
-                          },
-                          style: ElevatedButton.styleFrom(
-                              primary: Colors.indigoAccent,
-                              onPrimary: Colors.white,
-                              textStyle: TextStyle(
-                                color: Colors.white,
-                              )),
-                          child: Text("추가"),
-                        )
-                      ],
-                    ),
 
-                    SizedBox(
-                      height: SizeConfig.defaultSize * 3,
-                    ),
-
-                    Container(
-                      color: Colors.indigoAccent.withOpacity(0.3),
-                      width: SizeConfig.screenWidth,
-                      height: SizeConfig.defaultSize * 12,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Text("내 코드",
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: SizeConfig.defaultSize * 2,
-                                fontWeight: FontWeight.w600,
-                              )),
-                          SizedBox(
-                            height: SizeConfig.defaultSize * 2,
-                          ),
-                          Container( //exp. 내 코드 복사 Views
-                            width: SizeConfig.screenWidth * 0.8,
-                            height: SizeConfig.defaultSize * 3.3,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Text(widget.myCode,
-                                  style: TextStyle(
-                                    fontSize: SizeConfig.defaultSize * 2,
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            SizedBox(
+                              width: SizeConfig.screenWidth * 0.7,
+                              child: TextField(
+                                onChanged: (text) {
+                                  friendCode = text;
+                                },
+                                autocorrect: true,
+                                decoration: InputDecoration(
+                                  hintText: '친구 코드를 여기에 입력해주세요!',
+                                  hintStyle: TextStyle(color: Colors.grey),
+                                  filled: true,
+                                  fillColor: Colors.white,
+                                  contentPadding: EdgeInsets.symmetric(
+                                      vertical: SizeConfig.defaultSize * 1.5,
+                                      horizontal: SizeConfig.defaultSize * 1.5),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderRadius:
+                                    BorderRadius.all(Radius.circular(15.0)),
+                                    borderSide:
+                                    BorderSide(color: Colors.grey, width: 2),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderRadius:
+                                    BorderRadius.all(Radius.circular(10.0)),
+                                    borderSide:
+                                    BorderSide(color: Colors.indigoAccent),
                                   ),
                                 ),
-                                SizedBox(
-                                  width: SizeConfig.defaultSize,
-                                ),
-                                ElevatedButton(
-                                    onPressed: () {
-                                      String myCodeCopy = widget.myCode;
-                                      Clipboard.setData(ClipboardData(text: myCodeCopy)); // 클립보드에 복사되었어요 <- 메시지 자동으로 Android에서 뜸 TODO : iOS는 확인하고 복사멘트 띄우기
-                                    },
-                                    style: ElevatedButton.styleFrom(
-                                      primary: Colors.white,
-                                      onPrimary: Colors.indigoAccent,
-                                      textStyle: TextStyle(
-                                        color: Colors.indigoAccent,
+                              ),
+                            ),
+                            SizedBox(
+                              width: SizeConfig.defaultSize * 0.7,
+                            ),
+                            ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: widget.disabledFunctions ? Colors.grey : Colors.blueAccent,
+                              ),
+                              onPressed: () async {
+                                // 친구추가 중인 경우 버튼 동작 X
+                                if (widget.disabledFunctions) {
+                                  return;
+                                }
+
+                                if (friendCode == widget.myCode) {
+                                  itsMyCodeToast();
+                                }
+                                else {
+                                  print("friendCode $friendCode");
+                                  // try {
+                                  try {
+                                    // ModalBottomSheet 상태 update를 위해 필요함
+                                    thisState(() {
+                                      setState(() {
+                                        widget.disabledFunctions = true;
+                                      });
+                                    });
+
+                                    // 실제 친구 추가 동작
+                                    await BlocProvider.of<StandbyCubit>(context).pressedFriendCodeAddButton(friendCode);
+                                    await Future.delayed(Duration(seconds: 3));
+                                    showAddFriendToast();
+                                    Navigator.pop(context);
+                                  } catch (e) {
+                                    print(e);
+                                    ToastUtil.showToast('친구코드를 다시 한번 확인해주세요!');
+                                  }
+
+                                  thisState(() {
+                                    setState(() {
+                                      widget.disabledFunctions = false;
+                                    });
+                                  });
+                                }
+                              },
+                              child: Text("추가", style: TextStyle(color: Colors.white)),
+                            ),
+                            // widget.disabledFunctions ? CircularProgressIndicator() : SizedBox(),
+                          ],
+                        ),
+
+                        SizedBox(
+                          height: SizeConfig.defaultSize * 3,
+                        ),
+
+                        Container(
+                          color: Colors.indigoAccent.withOpacity(0.3),
+                          width: SizeConfig.screenWidth,
+                          height: SizeConfig.defaultSize * 12,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text("내 코드",
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: SizeConfig.defaultSize * 2,
+                                    fontWeight: FontWeight.w600,
+                                  )),
+                              SizedBox(
+                                height: SizeConfig.defaultSize * 2,
+                              ),
+                              Container( //exp. 내 코드 복사 Views
+                                width: SizeConfig.screenWidth * 0.8,
+                                height: SizeConfig.defaultSize * 3.3,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Text(widget.myCode,
+                                      style: TextStyle(
+                                        fontSize: SizeConfig.defaultSize * 2,
                                       ),
                                     ),
-                                    child: Text(
-                                      "복사하기",
-                                      style: TextStyle(
-                                        fontSize: SizeConfig.defaultSize * 1.8,
+                                    SizedBox(
+                                      width: SizeConfig.defaultSize,
+                                    ),
+                                    ElevatedButton(
+                                      onPressed: () {
+                                        String myCodeCopy = widget.myCode;
+                                        Clipboard.setData(ClipboardData(
+                                            text: myCodeCopy)); // 클립보드에 복사되었어요 <- 메시지 자동으로 Android에서 뜸 TODO : iOS는 확인하고 복사멘트 띄우기
+                                      },
+                                      style: ElevatedButton.styleFrom(
+                                        primary: Colors.white,
+                                        onPrimary: Colors.indigoAccent,
+                                        textStyle: TextStyle(
+                                          color: Colors.indigoAccent,
+                                        ),
                                       ),
-                                    )),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-
-                    SizedBox(height: SizeConfig.defaultSize * 5),
-
-                    GestureDetector(
-                      onTap: () {
-                        shareContent(context);
-                      },
-                      child: Padding(
-                        padding: EdgeInsets.only(
-                            left: SizeConfig.defaultSize,
-                            right: SizeConfig.defaultSize),
-                        child: Container(
-                          // 친구 추가 버튼
-                          width: SizeConfig.screenWidth * 0.9,
-                          height: SizeConfig.defaultSize * 5.5,
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                              color: Colors.white,
-                              border: Border.all(
-                                color: Colors.indigoAccent,
+                                      child: Text(
+                                        "복사하기",
+                                        style: TextStyle(
+                                          fontSize: SizeConfig.defaultSize * 1.8,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
-                              borderRadius: BorderRadius.circular(15)),
-                          child: Text(
-                            "아직 가입하지 않은 친구 초대하기",
-                            style: TextStyle(
-                              fontSize: SizeConfig.defaultSize * 1.8,
-                              fontWeight: FontWeight.w800,
-                              color: Colors.indigoAccent,
+                            ],
+                          ),
+                        ),
+
+                        SizedBox(height: SizeConfig.defaultSize * 5),
+
+                        GestureDetector(
+                          onTap: () {
+                            shareContent(context);
+                          },
+                          child: Padding(
+                            padding: EdgeInsets.only(
+                                left: SizeConfig.defaultSize,
+                                right: SizeConfig.defaultSize),
+                            child: Container(
+                              // 친구 추가 버튼
+                              width: SizeConfig.screenWidth * 0.9,
+                              height: SizeConfig.defaultSize * 5.5,
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  border: Border.all(
+                                    color: Colors.indigoAccent,
+                                  ),
+                                  borderRadius: BorderRadius.circular(15)),
+                              child: Text(
+                                "아직 가입하지 않은 친구 초대하기",
+                                style: TextStyle(
+                                  fontSize: SizeConfig.defaultSize * 1.8,
+                                  fontWeight: FontWeight.w800,
+                                  color: Colors.indigoAccent,
+                                ),
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                    ),
 
-                    SizedBox(height: SizeConfig.defaultSize * 10),
-                    TextButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        child: Text(
-                          "닫기",
-                          style: TextStyle(
-                            color: Colors.grey[500],
-                            fontSize: SizeConfig.defaultSize * 1.5,
+                        SizedBox(height: SizeConfig.defaultSize * 10),
+                        TextButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          child: Text(
+                            "닫기",
+                            style: TextStyle(
+                              color: Colors.grey[500],
+                              fontSize: SizeConfig.defaultSize * 1.5,
+                            ),
                           ),
-                        ))
-                  ],
-                ),
+                        ),
+                      ],
+                    ),
+                  );
+                },
               );
             });
       },
