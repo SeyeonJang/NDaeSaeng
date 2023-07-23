@@ -154,7 +154,6 @@ class _StandbyLandingPageState extends State<StandbyLandingPage> with SingleTick
                               else {
                                 List<Friend> friends = state.addedFriends;
                                 int count = friends.length;
-                                // count가 4이상이면 PageView로 보내기
                                 if (count >= 4) {
                                   WidgetsBinding.instance.addPostFrameCallback((_) {
                                     Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const DartPageView()), (route) => false);
