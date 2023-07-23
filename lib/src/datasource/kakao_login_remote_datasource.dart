@@ -37,12 +37,11 @@ class KakaoLoginRemoteDatasource {
         '\n프사: ${user.kakaoAccount?.profile?.profileImageUrl}'
         '\n성별: ${user.kakaoAccount?.gender}');
 
-    var json = user.toJson();
     return KakaoUser(
-      uuid: json['id'].toString(),
-      profileImageUrl: json['kakao_account']['profile']['profile_image_url'],
-      gender: json['kakao_account']['gender'],
+      uuid: user.id.toString(),
       accessToken: token.accessToken,
+      profileImageUrl: user.kakaoAccount?.profile?.profileImageUrl,
+      gender: user.kakaoAccount?.gender.toString().toUpperCase(),
     );
   }
 
