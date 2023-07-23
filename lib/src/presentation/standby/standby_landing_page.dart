@@ -368,40 +368,6 @@ class openAddFriends extends StatefulWidget {
 class _openAddFriendsState extends State<openAddFriends> {
   var friendCode = "";
 
-  void showCopyToast() {
-    Fluttertoast.showToast(
-      msg: "내 코드가 복사되었어요!",
-      toastLength: Toast.LENGTH_SHORT,
-      gravity: ToastGravity.BOTTOM,
-      timeInSecForIosWeb: 1,
-      backgroundColor: Colors.grey[200],
-      textColor: Colors.black,
-      fontSize: SizeConfig.defaultSize * 1.6,
-    );
-  }
-  void showAddFriendToast() {
-    Fluttertoast.showToast(
-      msg: "친구가 추가되었어요!",
-      toastLength: Toast.LENGTH_SHORT,
-      gravity: ToastGravity.TOP,
-      timeInSecForIosWeb: 1,
-      backgroundColor: Colors.indigoAccent,
-      textColor: Colors.white,
-      fontSize: SizeConfig.defaultSize * 1.6,
-    );
-  }
-  void itsMyCodeToast() {
-    Fluttertoast.showToast(
-      msg: "나는 친구로 추가할 수 없어요!",
-      toastLength: Toast.LENGTH_SHORT,
-      gravity: ToastGravity.TOP,
-      timeInSecForIosWeb: 1,
-      backgroundColor: Colors.indigoAccent,
-      textColor: Colors.white,
-      fontSize: SizeConfig.defaultSize * 1.6,
-    );
-  }
-
   void shareContent(BuildContext context) {
     Share.share(
         '앱에서 친구들이 당신에게 관심을 표현하고 있어요! 들어와서 확인해보세요! https://dart.page.link/TG78');
@@ -501,7 +467,7 @@ class _openAddFriendsState extends State<openAddFriends> {
                                 }
 
                                 if (friendCode == widget.myCode) {
-                                  itsMyCodeToast();
+                                  ToastUtil.itsMyCodeToast("나는 친구로 추가할 수 없어요!");
                                 }
                                 else {
                                   print("friendCode $friendCode");
@@ -517,7 +483,7 @@ class _openAddFriendsState extends State<openAddFriends> {
                                     // 실제 친구 추가 동작
                                     await BlocProvider.of<StandbyCubit>(context).pressedFriendCodeAddButton(friendCode);
                                     await Future.delayed(Duration(seconds: 3));
-                                    showAddFriendToast();
+                                    ToastUtil.showAddFriendToast("친구가 추가되었어요!");
                                     Navigator.pop(context);
                                   } catch (e) {
                                     print(e);
