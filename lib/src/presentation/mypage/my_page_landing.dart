@@ -301,7 +301,7 @@ class MyFriends extends StatelessWidget {
     return Column(
       children: [
         for (int i = 0; i < this.count; i++)
-          FriendComponent(false, friends[i]),
+          FriendComponent(false, friends[i], count),
       ],
     );
   }
@@ -331,10 +331,12 @@ class NewFriends extends StatelessWidget {
 class FriendComponent extends StatelessWidget {
   late bool isAdd;
   late Friend friend;
+  late int count;
 
-  FriendComponent(bool isAdd, Friend friend, {super.key}) {
+  FriendComponent(bool isAdd, Friend friend, int count, {super.key}) {
     this.isAdd = isAdd;
     this.friend = friend;
+    this.count = count;
   }
 
   void pressedDeleteButton(BuildContext context, int userId) {
@@ -343,6 +345,18 @@ class FriendComponent extends StatelessWidget {
 
   void pressedAddButton(BuildContext context, int userId) {
     BlocProvider.of<MyPagesCubit>(context).pressedFriendAddButton(friend);
+  }
+
+  void showCannotAddFriendToast() {
+    Fluttertoast.showToast(
+      msg: "친구가 4명일 때는 삭제할 수 없어요!",
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.BOTTOM,
+      timeInSecForIosWeb: 1,
+      backgroundColor: Color(0xff7C83FD),
+      textColor: Colors.white,
+      fontSize: SizeConfig.defaultSize * 1.6,
+    );
   }
 
   @override
@@ -406,10 +420,14 @@ class FriendComponent extends StatelessWidget {
                   );
                 }
                 else if (value == 'delete') {
-                  if (isAdd) {
-                    pressedAddButton(context, friend.userId!);
+                  if (count >= 5) {
+                    if (isAdd) {
+                      pressedAddButton(context, friend.userId!);
+                    } else {
+                      pressedDeleteButton(context, friend.userId!);
+                    }
                   } else {
-                    pressedDeleteButton(context, friend.userId!);
+                      showCannotAddFriendToast();
                   }
                 }
               },
