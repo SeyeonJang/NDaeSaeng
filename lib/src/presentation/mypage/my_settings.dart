@@ -426,7 +426,7 @@ class _MyPageViewState extends State<MyPageView> {
                     mode: LaunchMode.inAppWebView,
                   );
                 },
-                child: Text("Dart에 건의하기",
+                child: Text("건의하기",
                     style: TextStyle(fontSize: SizeConfig.defaultSize * 1.4, color: Color(0xff7C83FD))),
               ),
               TextButton(
