@@ -1,5 +1,6 @@
 import 'package:dart_flutter/res/size_config.dart';
 import 'package:dart_flutter/src/common/auth/auth_cubit.dart';
+import 'package:dart_flutter/src/common/util/toast_util.dart';
 import 'package:dart_flutter/src/presentation/meet/meetpages.dart';
 import 'package:dart_flutter/src/presentation/meet/viewmodel/meet_cubit.dart';
 import 'package:dart_flutter/src/presentation/mypage/my_page_landing.dart';
@@ -21,7 +22,8 @@ class DartPageView extends StatefulWidget {
 
 class _DartPageViewState extends State<DartPageView> {
   int _page = 0;
-  late PageController _pageController = PageController();
+  late final PageController _pageController = PageController();
+  DateTime? currentBackPressTime;
 
   @override
   void initState() {
@@ -44,62 +46,85 @@ class _DartPageViewState extends State<DartPageView> {
     super.dispose();
   }
 
+  Future<bool> _onWillPop(){
+    DateTime now = DateTime.now();
+
+    switch (_page) {
+      case 0:  // Vote
+        if(currentBackPressTime == null || now.difference(currentBackPressTime!) > const Duration(seconds: 2)) {
+          currentBackPressTime = now;
+          const msg = "'뒤로가기'를 한 번 더 누르면 종료됩니다.";
+          ToastUtil.showToast(msg);
+          return Future.value(false);
+        }
+        return Future.value(true);
+      case 1 || 2:  // VoteList, MyPage
+        _onTapNavigation(0);
+        return Future.value(false);
+      default:
+        return Future.value(false);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: SafeArea(
-          child: Column(
-            children: [
-              Padding(
-                padding: EdgeInsets.all(SizeConfig.defaultSize * 2),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    //_TapBarButton(name: "Meet", targetPage: 0, nowPage: _page, onTapNavigation: _onTapNavigation), // TODO : Meet 만들 때 복구
-                    _TapBarButton(name: "Dart", targetPage: 0, nowPage: _page, onTapNavigation: _onTapNavigation),
-                    _TapBarButton(name: "Darts", targetPage: 1, nowPage: _page, onTapNavigation: _onTapNavigation),
-                    _TapBarButton(name: " MY ", targetPage: 2, nowPage: _page, onTapNavigation: _onTapNavigation),
-                  ],
+      body: WillPopScope(
+        onWillPop: _onWillPop,
+        child: SafeArea(
+            child: Column(
+              children: [
+                Padding(
+                  padding: EdgeInsets.all(SizeConfig.defaultSize * 2),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      //_TapBarButton(name: "Meet", targetPage: 0, nowPage: _page, onTapNavigation: _onTapNavigation), // TODO : Meet 만들 때 복구
+                      _TapBarButton(name: "Dart", targetPage: 0, nowPage: _page, onTapNavigation: _onTapNavigation),
+                      _TapBarButton(name: "Darts", targetPage: 1, nowPage: _page, onTapNavigation: _onTapNavigation),
+                      _TapBarButton(name: " MY ", targetPage: 2, nowPage: _page, onTapNavigation: _onTapNavigation),
+                    ],
+                  ),
                 ),
-              ),
-              Expanded(
-                child: PageView(
-                  onPageChanged: _onPageChanged,
-                  controller: _pageController,
-                  children: [
-                    // BlocProvider<MeetCubit>( // TODO : Meet 만들 때 복구
-                    //     create: (context) =>  MeetCubit()..initState(),
-                    //     child: const MeetPages(),
-                    // ),
-                    BlocProvider<VoteCubit>(
-                        create: (context) => VoteCubit()..initVotes(),
-                        child: const VotePages(),
-                    ),
-                    BlocProvider(
-                      create: (context) => VoteListCubit(),
-                      child: const VoteListPages(),
-                    ),
-                    // BlocProvider<MyPagesCubit>(
-                    //   create: (BuildContext context) => MyPagesCubit()..initPages(),
-                    //   child: const MyPages(),
-                    // ),
-                    MultiBlocProvider(
-                      providers: [
-                        BlocProvider<MyPagesCubit>(
-                          create: (BuildContext context) => MyPagesCubit()..initPages(),
-                        ),
-                        BlocProvider<AuthCubit>(
-                          create: (BuildContext context) => AuthCubit(),
-                        )
-                      ],
-                      child: const MyPages(),
-                    ),
-                  ],
+                Expanded(
+                  child: PageView(
+                    onPageChanged: _onPageChanged,
+                    controller: _pageController,
+                    children: [
+                      // BlocProvider<MeetCubit>( // TODO : Meet 만들 때 복구
+                      //     create: (context) =>  MeetCubit()..initState(),
+                      //     child: const MeetPages(),
+                      // ),
+                      BlocProvider<VoteCubit>(
+                          create: (context) => VoteCubit()..initVotes(),
+                          child: const VotePages(),
+                      ),
+                      BlocProvider(
+                        create: (context) => VoteListCubit(),
+                        child: const VoteListPages(),
+                      ),
+                      // BlocProvider<MyPagesCubit>(
+                      //   create: (BuildContext context) => MyPagesCubit()..initPages(),
+                      //   child: const MyPages(),
+                      // ),
+                      MultiBlocProvider(
+                        providers: [
+                          BlocProvider<MyPagesCubit>(
+                            create: (BuildContext context) => MyPagesCubit()..initPages(),
+                          ),
+                          BlocProvider<AuthCubit>(
+                            create: (BuildContext context) => AuthCubit(),
+                          )
+                        ],
+                        child: const MyPages(),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            ],
-          ),
+              ],
+            ),
+        ),
       ),
     );
   }
