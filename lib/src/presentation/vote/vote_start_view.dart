@@ -66,10 +66,10 @@ class _VoteStartViewState extends State<VoteStartView> with SingleTickerProvider
                 child: Container(
                   alignment: Alignment.bottomCenter,
                   child: Text(
-                    "이번 Dart는?",
+                    "새로운 질문 도착!",
                     style: TextStyle(
-                      fontWeight: FontWeight.w800,
-                      fontSize: SizeConfig.defaultSize * 5,
+                      fontWeight: FontWeight.w900,
+                      fontSize: SizeConfig.defaultSize * 4.2,
                     ),
                   ),
                 ),
