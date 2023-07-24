@@ -15,11 +15,33 @@ class VoteListView extends StatefulWidget {
   State<VoteListView> createState() => _VoteListViewState();
 }
 
-class _VoteListViewState extends State<VoteListView> {
+class _VoteListViewState extends State<VoteListView> with SingleTickerProviderStateMixin {
+  late AnimationController _animationController;
+  late Animation<double> _animation;
+
   @override
   void initState() {
     super.initState();
     BlocProvider.of<VoteListCubit>(context).initVotes();
+
+    _animationController = AnimationController(
+      vsync: this,
+      duration: Duration(milliseconds: 1500),
+    );
+    _animation = Tween<double>(begin: 1.0, end: 0.95).animate(
+      CurvedAnimation(
+        parent: _animationController,
+        curve: Curves.easeInOut,
+      ),
+    );
+    // 애니메이션을 반복 실행하도록 설정
+    _animationController.repeat(reverse: true);
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
   }
 
   @override
@@ -36,11 +58,33 @@ class _VoteListViewState extends State<VoteListView> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
+                    Container(
+                      child: AnimatedBuilder(
+                        animation: _animationController,
+                        builder: (context, child) {
+                          return Transform.scale(
+                            scale: _animation.value,
+                            child: Column(
+                              mainAxisAlignment:
+                              MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Image.asset(
+                                  'assets/images/letter.png',
+                                  // color: Colors.indigo,
+                                  width: SizeConfig.defaultSize * 30,
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      ),
+                    ),
                     Text("아직 받은 투표가 없어요!", style: TextStyle(
                         fontSize: SizeConfig.defaultSize * 2, fontWeight: FontWeight.w600
                     ),),
                     SizedBox(height: SizeConfig.defaultSize *2,),
-                    Text("친구들이 나를 투표하면 알림이 쌓여요!", style: TextStyle(
+                    Text("친구들이 나를 투표하면 알림을 줄게요!", style: TextStyle(
                         fontSize: SizeConfig.defaultSize * 2, fontWeight: FontWeight.w600
                     ),),
                     // Container( // TODO HOTFIX : 투표 꿀팁 일단 보류 (넣으면 좋음)
