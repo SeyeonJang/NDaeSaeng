@@ -130,50 +130,43 @@ class dart extends StatelessWidget {
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          // mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            // Flexible(  // TODO : MVP 이후 지우기
-            //   flex: 3,
-            //   fit: FlexFit.tight,
-            //   child: Row(
-            //     children: [
-            //       const SizedBox(width: 10),
-            //       Text("아직 받은 투표가 없어요!", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.5, fontWeight: FontWeight.w500)),
-            //     ],
-            //   ),
-            // ),
             Row(
               children: [
                 Icon(Icons.person_pin_rounded, size: SizeConfig.defaultSize * 4.5, color: Color(0xff7C83FD),),
-                SizedBox(width: SizeConfig.defaultSize),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    RichText(
-                      text: TextSpan(
-                        style: TextStyle(fontSize: SizeConfig.defaultSize * 1.5),
-                          children: <TextSpan>[
-                            TextSpan(text:'${admissionYear.substring(2,4)}',
-                                style: TextStyle(color: Color(0xff7C83FD), fontWeight: FontWeight.w600)),
-                            TextSpan(text:'학번 ',
-                              style: TextStyle(color: Colors.black, fontWeight: FontWeight.w400)),
-                            TextSpan(text:'${getGender(gender)}학생',
-                                style: TextStyle(color: Color(0xff7C83FD), fontWeight: FontWeight.w600)),
-                            TextSpan(text:'이 보냈어요!',
+                SizedBox(width: SizeConfig.defaultSize * 0.7),
+                Container(
+                  width: SizeConfig.screenWidth * 0.63,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      RichText(
+                        text: TextSpan(
+                          style: TextStyle(fontSize: SizeConfig.defaultSize * 1.5),
+                            children: <TextSpan>[
+                              TextSpan(text:'${admissionYear.substring(2,4)}',
+                                  style: TextStyle(color: Color(0xff7C83FD), fontWeight: FontWeight.w600)),
+                              TextSpan(text:'학번 ',
                                 style: TextStyle(color: Colors.black, fontWeight: FontWeight.w400)),
-                          ]
+                              TextSpan(text:'${getGender(gender)}학생',
+                                  style: TextStyle(color: Color(0xff7C83FD), fontWeight: FontWeight.w600)),
+                              TextSpan(text:'이 보냈어요!',
+                                  style: TextStyle(color: Colors.black, fontWeight: FontWeight.w400)),
+                            ]
+                        ),
                       ),
-                    ),
-                    // Text("${admissionYear.substring(2,4)}학번 ${getGender(gender)}학생이 Dart를 보냈어요!", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.5, fontWeight: FontWeight.w500,)),
-                    SizedBox(height: SizeConfig.defaultSize * 0.5,),
-                    Text("$question",
-                        style: TextStyle(
-                          fontSize: SizeConfig.defaultSize * 1.3
-                              * ((question.length <= 25 ? 1 : 1 - ((question.length - 25) * 0.01))),
-                              // ((question.length <= 25 ? 1 : 1 - ((question.length - 15) * 0.035))), // 원래 식
-                          fontWeight: FontWeight.w400,
-                        )),
-                  ],
+                      // Text("${admissionYear.substring(2,4)}학번 ${getGender(gender)}학생이 Dart를 보냈어요!", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.5, fontWeight: FontWeight.w500,)),
+                      SizedBox(height: SizeConfig.defaultSize * 0.5,),
+                      Text("$question",
+                          style: TextStyle(
+                            fontSize: SizeConfig.defaultSize * 1.3
+                                * ((question.length <= 25 ? 1 : 1 - ((question.length - 25) * 0.01))),
+                                // ((question.length <= 25 ? 1 : 1 - ((question.length - 15) * 0.035))), // 원래 식
+                            fontWeight: FontWeight.w400,
+                            overflow: TextOverflow.ellipsis,
+                          )),
+                    ],
+                  ),
                 ),
               ],
             ),
