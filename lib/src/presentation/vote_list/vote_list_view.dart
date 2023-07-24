@@ -159,7 +159,7 @@ class dart extends StatelessWidget {
                               style: TextStyle(color: Colors.black, fontWeight: FontWeight.w400)),
                             TextSpan(text:'${getGender(gender)}학생',
                                 style: TextStyle(color: Color(0xff7C83FD), fontWeight: FontWeight.w600)),
-                            TextSpan(text:'이 Dart를 보냈어요!',
+                            TextSpan(text:'이 보냈어요!',
                                 style: TextStyle(color: Colors.black, fontWeight: FontWeight.w400)),
                           ]
                       ),
@@ -168,9 +168,8 @@ class dart extends StatelessWidget {
                     SizedBox(height: SizeConfig.defaultSize * 0.5,),
                     Text("$question",
                         style: TextStyle(
-                          fontSize: SizeConfig.defaultSize *
-                              1.3 *
-                              ((question.length <= 25 ? 1 : 1 - ((question.length - 15) * 0.01))),
+                          fontSize: SizeConfig.defaultSize * 1.3
+                              * ((question.length <= 25 ? 1 : 1 - ((question.length - 25) * 0.01))),
                               // ((question.length <= 25 ? 1 : 1 - ((question.length - 15) * 0.035))), // 원래 식
                           fontWeight: FontWeight.w400,
                         )),

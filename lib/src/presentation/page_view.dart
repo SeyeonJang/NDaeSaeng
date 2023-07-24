@@ -1,5 +1,6 @@
 import 'package:dart_flutter/res/size_config.dart';
 import 'package:dart_flutter/src/common/auth/auth_cubit.dart';
+import 'package:dart_flutter/src/presentation/meet/meet_page.dart';
 import 'package:dart_flutter/src/presentation/meet/meetpages.dart';
 import 'package:dart_flutter/src/presentation/meet/viewmodel/meet_cubit.dart';
 import 'package:dart_flutter/src/presentation/mypage/my_page_landing.dart';
@@ -46,9 +47,13 @@ class _DartPageViewState extends State<DartPageView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: SafeArea(
+    return WillPopScope(
+      onWillPop: () async {
+        return false;
+      },
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        body: SafeArea(
           child: Column(
             children: [
               Padding(
@@ -56,10 +61,10 @@ class _DartPageViewState extends State<DartPageView> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    //_TapBarButton(name: "Meet", targetPage: 0, nowPage: _page, onTapNavigation: _onTapNavigation), // TODO : Meet 만들 때 복구
-                    _TapBarButton(name: "Dart", targetPage: 0, nowPage: _page, onTapNavigation: _onTapNavigation),
-                    _TapBarButton(name: "Darts", targetPage: 1, nowPage: _page, onTapNavigation: _onTapNavigation),
-                    _TapBarButton(name: " MY ", targetPage: 2, nowPage: _page, onTapNavigation: _onTapNavigation),
+                    _TapBarButton(name: "투표", targetPage: 0, nowPage: _page, onTapNavigation: _onTapNavigation),
+                    _TapBarButton(name: "받은 투표", targetPage: 1, nowPage: _page, onTapNavigation: _onTapNavigation),
+                    _TapBarButton(name: "마이", targetPage: 2, nowPage: _page, onTapNavigation: _onTapNavigation),
+                    // _TapBarButton(name: "Meet", targetPage: 3, nowPage: _page, onTapNavigation: _onTapNavigation),
                   ],
                 ),
               ),
@@ -68,22 +73,14 @@ class _DartPageViewState extends State<DartPageView> {
                   onPageChanged: _onPageChanged,
                   controller: _pageController,
                   children: [
-                    // BlocProvider<MeetCubit>( // TODO : Meet 만들 때 복구
-                    //     create: (context) =>  MeetCubit()..initState(),
-                    //     child: const MeetPages(),
-                    // ),
                     BlocProvider<VoteCubit>(
-                        create: (context) => VoteCubit()..initVotes(),
-                        child: const VotePages(),
+                      create: (context) => VoteCubit()..initVotes(),
+                      child: const VotePages(),
                     ),
                     BlocProvider(
                       create: (context) => VoteListCubit(),
                       child: const VoteListPages(),
                     ),
-                    // BlocProvider<MyPagesCubit>(
-                    //   create: (BuildContext context) => MyPagesCubit()..initPages(),
-                    //   child: const MyPages(),
-                    // ),
                     MultiBlocProvider(
                       providers: [
                         BlocProvider<MyPagesCubit>(
@@ -95,11 +92,17 @@ class _DartPageViewState extends State<DartPageView> {
                       ],
                       child: const MyPages(),
                     ),
+                    // const MeetPage() // TODO : Meet 대기페이지 만들 때 복구
+                    // BlocProvider<MeetCubit>( // TODO : Meet(과팅) 만들 때 복구
+                    //     create: (context) =>  MeetCubit()..initState(),
+                    //     child: const MeetPages(),
+                    // ),
                   ],
                 ),
               ),
             ],
           ),
+        ),
       ),
     );
   }
@@ -119,8 +122,9 @@ class _TapBarButton extends StatelessWidget {
           onTapNavigation(targetPage);
         },
         child: Container(
-            width: MediaQuery.of(context).size.width * 0.3, // 원하는 넓이로 설정합니다.
-          height: SizeConfig.defaultSize * 3,
+            width: SizeConfig.screenWidth * 0.22,
+            //width: MediaQuery.of(context).size.width * 0.22, // 원하는 넓이로 설정합니다.
+            height: SizeConfig.defaultSize * 3,
             alignment: Alignment.center,
             child: Padding(
               padding: const EdgeInsets.all(0),
