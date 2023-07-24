@@ -28,8 +28,6 @@ class MyPagesCubit extends Cubit<MyPagesState> {
 
     state.setMyLandPage(true);
     state.setIsSettingPage(false);
-    state.setIsTos1(false);
-    state.setIsTos2(false);
 
     state.setIsLoading(false);
     emit(state.copy());
@@ -67,8 +65,6 @@ class MyPagesCubit extends Cubit<MyPagesState> {
   void setMyLandPage() {
     state.setMyLandPage(true);
     state.setIsSettingPage(false);
-    state.setIsTos1(false);
-    state.setIsTos2(false);
     final newState = state.copy();
     print(newState);
     emit(newState);
@@ -78,8 +74,6 @@ class MyPagesCubit extends Cubit<MyPagesState> {
   void pressedSettingsIcon() {
     state.setIsSettingPage(true);
     state.setMyLandPage(false);
-    state.setIsTos1(false);
-    state.setIsTos2(false);
     final newState = state.copy();
     print(newState);
     emit(newState);
@@ -88,8 +82,6 @@ class MyPagesCubit extends Cubit<MyPagesState> {
   void pressedTos1() {
     state.setMyLandPage(false);
     state.setIsSettingPage(false);
-    state.setIsTos1(true);
-    state.setIsTos2(false);
     final newState = state.copy();
     print(newState);
     emit(newState);
@@ -98,8 +90,6 @@ class MyPagesCubit extends Cubit<MyPagesState> {
   void pressedTos2() {
     state.setMyLandPage(false);
     state.setIsSettingPage(false);
-    state.setIsTos1(false);
-    state.setIsTos2(true);
     final newState = state.copy();
     print(newState);
     emit(newState);
@@ -109,8 +99,6 @@ class MyPagesCubit extends Cubit<MyPagesState> {
   void backToMyPageLanding() {
     state.setMyLandPage(true);
     state.setIsSettingPage(false);
-    state.setIsTos1(false);
-    state.setIsTos2(false);
     emit(state.copy());
   }
 
@@ -118,8 +106,6 @@ class MyPagesCubit extends Cubit<MyPagesState> {
   void backToSetting() {
     state.setMyLandPage(false);
     state.setIsSettingPage(true);
-    state.setIsTos1(false);
-    state.setIsTos2(false);
     emit(state.copy());
   }
 

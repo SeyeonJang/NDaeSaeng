@@ -27,12 +27,6 @@ class MyPages extends StatelessWidget {
                   if (state.isSettings) {
                     return MySettings();
                   }
-                  if (state.isTos1) {
-                    return MyTos1();
-                  }
-                  if (state.isTos2) {
-                    return MyTos2();
-                  }
                 }
                 return SafeArea(child: Center(child: Text(state.toString())));
               }

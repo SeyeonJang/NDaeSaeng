@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:dart_flutter/src/common/auth/auth_cubit.dart';
 import 'package:dart_flutter/src/common/util/toast_util.dart';
 import 'package:dart_flutter/src/presentation/mypage/logout_goto_landPage.dart';
+import 'package:dart_flutter/src/presentation/mypage/my_tos1.dart';
+import 'package:dart_flutter/src/presentation/mypage/my_tos2.dart';
 import 'package:dart_flutter/src/presentation/mypage/viewmodel/mypages_cubit.dart';
 import 'package:dart_flutter/src/presentation/mypage/viewmodel/state/mypages_state.dart';
 import 'package:dart_flutter/src/presentation/signup/land_pages.dart';
@@ -400,16 +402,14 @@ class _MyPageViewState extends State<MyPageView> {
                   SizedBox(height: SizeConfig.defaultSize * 1.5,),
               TextButton(
                 onPressed: () {
-                  BlocProvider.of<MyPagesCubit>(context)
-                      .pressedTos1(); // 설정 화면으로 넘어가기
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => const MyTos1()));
                 },
                 child: Text("이용약관",
                     style: TextStyle(fontSize: SizeConfig.defaultSize * 1.4, color: Color(0xff7C83FD))),
               ),
               TextButton(
                 onPressed: () {
-                  BlocProvider.of<MyPagesCubit>(context)
-                      .pressedTos2(); // 설정 화면으로 넘어가기
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => const MyTos2()));
                 },
                 child: Text("개인정보 처리방침",
                     style: TextStyle(fontSize: SizeConfig.defaultSize * 1.4, color: Color(0xff7C83FD))),
