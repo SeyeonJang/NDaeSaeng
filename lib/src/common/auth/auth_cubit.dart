@@ -1,14 +1,17 @@
 import 'package:dart_flutter/src/common/auth/state/auth_state.dart';
 import 'package:dart_flutter/src/common/util/analytics_util.dart';
 import 'package:dart_flutter/src/common/util/push_notification_util.dart';
+import 'package:dart_flutter/src/common/util/version_comparator.dart';
 import 'package:dart_flutter/src/data/model/dart_auth.dart';
 import 'package:dart_flutter/src/data/model/kakao_user.dart';
 import 'package:dart_flutter/src/data/model/user.dart';
+import 'package:dart_flutter/src/data/repository/app_platform_repoistory.dart';
 import 'package:dart_flutter/src/data/repository/apple_login_repository.dart';
 import 'package:dart_flutter/src/data/repository/dart_auth_repository.dart';
 import 'package:dart_flutter/src/data/repository/dart_user_repository.dart';
 import 'package:dart_flutter/src/data/repository/kakao_login_repository.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 import '../../datasource/dart_api_remote_datasource.dart';
@@ -18,6 +21,7 @@ class AuthCubit extends HydratedCubit<AuthState> {
   static final AppleLoginRepository _appleLoginRepository = AppleLoginRepository();
   static final DartAuthRepository _authRepository = DartAuthRepository();
   static final DartUserRepository _userRepository = DartUserRepository();
+  static final AppPlatformRepository _appPlatformRepository = AppPlatformRepository();
 
   AuthCubit()
       : super(AuthState(
@@ -28,7 +32,8 @@ class AuthCubit extends HydratedCubit<AuthState> {
           expiredAt: DateTime.now().add(const Duration(days: 30)),
           loginType: LoginType.email,
           memo: '',
-          tutorialStatus: TutorialStatus.notShown
+          tutorialStatus: TutorialStatus.notShown,
+          appVersionStatus: AppVersionStatus.latest
         ));
 
   void setLandPage() {
@@ -36,6 +41,17 @@ class AuthCubit extends HydratedCubit<AuthState> {
       state.setStep(AuthStep.land);
     }
     state.setLoading(false);
+  }
+
+  void appVersionCheck() async {
+    final packageInfo = await PackageInfo.fromPlatform();
+    final version = packageInfo.version;
+    final buildNumber = packageInfo.buildNumber;
+
+    final (minVer, latestVer) = await _appPlatformRepository.getAppVersion();
+
+    state.setAppVersionStatus(VersionComparator.compareVersions(version, minVer, latestVer));
+    emit(state.copy());
   }
 
   void setAccessToken(String accessToken) {

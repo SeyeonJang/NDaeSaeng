@@ -9,6 +9,14 @@ enum AuthStep {
   land, signup, login;
 }
 
+enum AppVersionStatus {
+  latest, update, mustUpdate;
+
+  bool get isLatest => this == AppVersionStatus.latest;
+  bool get isUpdate => this == AppVersionStatus.update;
+  bool get isMustUpdate => this == AppVersionStatus.mustUpdate;
+}
+
 enum TutorialStatus {
   notShown,
   shown,
@@ -24,6 +32,7 @@ class AuthState {
   LoginType loginType;
   String memo;
   TutorialStatus tutorialStatus;
+  AppVersionStatus appVersionStatus;
 
   AuthState({
     required this.isLoading,
@@ -34,6 +43,7 @@ class AuthState {
     required this.loginType,
     required this.memo,
     required this.tutorialStatus,
+    required this.appVersionStatus
   });
 
   AuthState setDartAuth({
@@ -74,6 +84,11 @@ class AuthState {
     return this;
   }
 
+  AuthState setAppVersionStatus(AppVersionStatus status) {
+    appVersionStatus = status;
+    return this;
+  }
+
   AuthState copy() => AuthState(
     isLoading: isLoading,
     step: step,
@@ -82,7 +97,8 @@ class AuthState {
     expiredAt: expiredAt,
     loginType: loginType,
     memo: memo,
-    tutorialStatus: tutorialStatus
+    tutorialStatus: tutorialStatus,
+    appVersionStatus: appVersionStatus
   );
 
   Map<String, dynamic> toJson() => _$AuthStateToJson(this);
@@ -90,6 +106,6 @@ class AuthState {
 
   @override
   String toString() {
-    return 'AuthState{isLoading: $isLoading, step: $step, dartAccessToken: $dartAccessToken, socialAccessToken: $socialAccessToken, expiredAt: $expiredAt, loginType: $loginType, tutorialStatus: $tutorialStatus}';
+    return 'AuthState{isLoading: $isLoading, step: $step, dartAccessToken: $dartAccessToken, socialAccessToken: $socialAccessToken, expiredAt: $expiredAt, loginType: $loginType, tutorialStatus: $tutorialStatus, appVersionStatus: $appVersionStatus}';
   }
 }

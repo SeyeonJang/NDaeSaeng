@@ -44,7 +44,7 @@ void main() async {
   HydratedBloc.storage = await HydratedStorage.build(storageDirectory: await getTemporaryDirectory());
 
   runApp(BlocProvider(
-      create: (BuildContext context) => AuthCubit()..setLandPage(),
+      create: (BuildContext context) => AuthCubit()..appVersionCheck()..setLandPage(),
       child: MaterialApp(
         home: const MyApp(),
         theme: AppTheme.lightThemeData,

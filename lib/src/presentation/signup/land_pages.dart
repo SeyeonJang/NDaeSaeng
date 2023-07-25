@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dart_flutter/src/common/auth/auth_cubit.dart';
 import 'package:dart_flutter/src/common/auth/state/auth_state.dart';
 import 'package:dart_flutter/src/common/util/analytics_util.dart';
@@ -11,6 +13,7 @@ import 'package:dart_flutter/src/presentation/standby/viewmodel/standby_cubit.da
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class LandPages extends StatefulWidget {
   const LandPages({Key? key}) : super(key: key);
@@ -61,6 +64,81 @@ class _LandPagesState extends State<LandPages> {
           }
           return const SizedBox();
         }),
+
+        // update 여부 확인
+        BlocBuilder<AuthCubit, AuthState> (
+          builder: (context, state) {
+            if (state.appVersionStatus.isUpdate) {
+              return Container(
+                color: Colors.black.withOpacity(0.4),
+                child: AlertDialog(
+                  surfaceTintColor: Colors.white,
+                  title: const Text('새로운 버전이 나왔어요!'),
+                  content: const SingleChildScrollView(
+                    child: ListBody(
+                      children: <Widget>[
+                        Text('새로운 버전이 출시되었어요!'),
+                        Text('더 재밌는 기능과 함께 친구들과 즐겨봐요!'),
+                      ],
+                    ),
+                  ),
+                  actions: <Widget>[
+                    // TextButton(
+                    //   child: const Text('다음에하기'),
+                    //   onPressed: () {
+                    //     Navigator.pop(context);
+                    //   },
+                    // ),
+                    TextButton(
+                      child: const Text('업데이트'),
+                      onPressed: () {
+                        bool isAppleUser = Platform.isIOS;
+                        if (isAppleUser) {
+                          launchUrl(Uri.parse("https://apps.apple.com/us/app/dart/id6451335598"));
+                        } else {
+                          launchUrl(Uri.parse("https://play.google.com/store/apps/details?id=com.sshdart.dart_flutter"));
+                        }
+                      },
+                    ),
+                  ],
+                ),
+              );
+            }
+
+            if (state.appVersionStatus.isMustUpdate) {
+              return Container(
+                color: Colors.black.withOpacity(0.4),
+                child: AlertDialog(
+                  surfaceTintColor: Colors.white,
+                  title: const Text('업데이트가 필요해요!'),
+                  content: const SingleChildScrollView(
+                    child: ListBody(
+                      children: <Widget>[
+                        Text('더 이상 지원되지 않는 버전이에요.'),
+                        Text('업데이트하고 친구들을 만나봐요!'),
+                      ],
+                    ),
+                  ),
+                  actions: <Widget>[
+                    TextButton(
+                      child: const Text('업데이트'),
+                      onPressed: () {
+                        bool isAppleUser = Platform.isIOS;
+                        if (isAppleUser) {
+                          launchUrl(Uri.parse("https://apps.apple.com/us/app/dart/id6451335598"));
+                        } else {
+                          launchUrl(Uri.parse("https://play.google.com/store/apps/details?id=com.sshdart.dart_flutter"));
+                        }
+                      },
+                    ),
+                  ],
+                ),
+              );
+
+            }
+            return const SizedBox.shrink();
+          }
+        )
 
         // BlocBuilder<AuthCubit, AuthState>(
         //   builder: (context, state) {
