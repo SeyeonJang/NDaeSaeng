@@ -1,4 +1,5 @@
 import 'package:dart_flutter/src/common/auth/state/auth_state.dart';
+import 'package:dart_flutter/src/common/util/analytics_util.dart';
 import 'package:dart_flutter/src/common/util/push_notification_util.dart';
 import 'package:dart_flutter/src/data/model/dart_auth.dart';
 import 'package:dart_flutter/src/data/model/kakao_user.dart';
@@ -87,7 +88,9 @@ class AuthCubit extends HydratedCubit<AuthState> {
 
       UserResponse userResponse = await _userRepository.myInfo();
       if (userResponse.user?.name == null) {
-        PushNotificationUtil.setUserId(userResponse.user!.id!.toString());
+        String userId = userResponse.user!.id!.toString();
+        PushNotificationUtil.setUserId(userId);
+        AnalyticsUtil.setUserId(userId);
         state.setStep(AuthStep.signup);
       } else {
         state.setStep(AuthStep.login);
