@@ -108,6 +108,7 @@ class _VoteListViewState extends State<VoteListView> with SingleTickerProviderSt
 
   ListView makeList(List<VoteResponse> snapshot) {
     return ListView.builder(
+      reverse: true,
       shrinkWrap: true,
       itemBuilder: (context, index) {
         var vote = snapshot[index];
