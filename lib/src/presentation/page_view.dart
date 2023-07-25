@@ -134,8 +134,10 @@ class _TapBarButton extends StatelessWidget {
           onTapNavigation(targetPage);
         },
         child: Container(
-            width: MediaQuery.of(context).size.width * 0.3, // 원하는 넓이로 설정합니다.
-          height: SizeConfig.defaultSize * 3,
+            color: Colors.white,
+            width: SizeConfig.screenWidth * 0.3,
+            //width: MediaQuery.of(context).size.width * 0.22, // 원하는 넓이로 설정합니다.
+            height: SizeConfig.defaultSize * 4,
             alignment: Alignment.center,
             child: Padding(
               padding: const EdgeInsets.all(0),

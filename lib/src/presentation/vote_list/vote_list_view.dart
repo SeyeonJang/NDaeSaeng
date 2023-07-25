@@ -15,11 +15,33 @@ class VoteListView extends StatefulWidget {
   State<VoteListView> createState() => _VoteListViewState();
 }
 
-class _VoteListViewState extends State<VoteListView> {
+class _VoteListViewState extends State<VoteListView> with SingleTickerProviderStateMixin {
+  late AnimationController _animationController;
+  late Animation<double> _animation;
+
   @override
   void initState() {
     super.initState();
     BlocProvider.of<VoteListCubit>(context).initVotes();
+
+    _animationController = AnimationController(
+      vsync: this,
+      duration: Duration(milliseconds: 1500),
+    );
+    _animation = Tween<double>(begin: 1.0, end: 0.95).animate(
+      CurvedAnimation(
+        parent: _animationController,
+        curve: Curves.easeInOut,
+      ),
+    );
+    // 애니메이션을 반복 실행하도록 설정
+    _animationController.repeat(reverse: true);
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
   }
 
   @override
@@ -36,11 +58,33 @@ class _VoteListViewState extends State<VoteListView> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
+                    Container(
+                      child: AnimatedBuilder(
+                        animation: _animationController,
+                        builder: (context, child) {
+                          return Transform.scale(
+                            scale: _animation.value,
+                            child: Column(
+                              mainAxisAlignment:
+                              MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Image.asset(
+                                  'assets/images/letter.png',
+                                  // color: Colors.indigo,
+                                  width: SizeConfig.defaultSize * 30,
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      ),
+                    ),
                     Text("아직 받은 투표가 없어요!", style: TextStyle(
                         fontSize: SizeConfig.defaultSize * 2, fontWeight: FontWeight.w600
                     ),),
                     SizedBox(height: SizeConfig.defaultSize *2,),
-                    Text("친구들이 나를 투표하면 알림이 쌓여요!", style: TextStyle(
+                    Text("친구들이 나를 투표하면 알림을 줄게요!", style: TextStyle(
                         fontSize: SizeConfig.defaultSize * 2, fontWeight: FontWeight.w600
                     ),),
                     // Container( // TODO HOTFIX : 투표 꿀팁 일단 보류 (넣으면 좋음)
@@ -130,50 +174,43 @@ class dart extends StatelessWidget {
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          // mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            // Flexible(  // TODO : MVP 이후 지우기
-            //   flex: 3,
-            //   fit: FlexFit.tight,
-            //   child: Row(
-            //     children: [
-            //       const SizedBox(width: 10),
-            //       Text("아직 받은 투표가 없어요!", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.5, fontWeight: FontWeight.w500)),
-            //     ],
-            //   ),
-            // ),
             Row(
               children: [
                 Icon(Icons.person_pin_rounded, size: SizeConfig.defaultSize * 4.5, color: Color(0xff7C83FD),),
-                SizedBox(width: SizeConfig.defaultSize),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    RichText(
-                      text: TextSpan(
-                        style: TextStyle(fontSize: SizeConfig.defaultSize * 1.5),
-                          children: <TextSpan>[
-                            TextSpan(text:'${admissionYear.substring(2,4)}',
-                                style: TextStyle(color: Color(0xff7C83FD), fontWeight: FontWeight.w600)),
-                            TextSpan(text:'학번 ',
-                              style: TextStyle(color: Colors.black, fontWeight: FontWeight.w400)),
-                            TextSpan(text:'${getGender(gender)}학생',
-                                style: TextStyle(color: Color(0xff7C83FD), fontWeight: FontWeight.w600)),
-                            TextSpan(text:'이 보냈어요!',
+                SizedBox(width: SizeConfig.defaultSize * 0.7),
+                Container(
+                  width: SizeConfig.screenWidth * 0.63,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      RichText(
+                        text: TextSpan(
+                          style: TextStyle(fontSize: SizeConfig.defaultSize * 1.5),
+                            children: <TextSpan>[
+                              TextSpan(text:'${admissionYear.substring(2,4)}',
+                                  style: TextStyle(color: Color(0xff7C83FD), fontWeight: FontWeight.w600)),
+                              TextSpan(text:'학번 ',
                                 style: TextStyle(color: Colors.black, fontWeight: FontWeight.w400)),
-                          ]
+                              TextSpan(text:'${getGender(gender)}학생',
+                                  style: TextStyle(color: Color(0xff7C83FD), fontWeight: FontWeight.w600)),
+                              TextSpan(text:'이 보냈어요!',
+                                  style: TextStyle(color: Colors.black, fontWeight: FontWeight.w400)),
+                            ]
+                        ),
                       ),
-                    ),
-                    // Text("${admissionYear.substring(2,4)}학번 ${getGender(gender)}학생이 Dart를 보냈어요!", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.5, fontWeight: FontWeight.w500,)),
-                    SizedBox(height: SizeConfig.defaultSize * 0.5,),
-                    Text("$question",
-                        style: TextStyle(
-                          fontSize: SizeConfig.defaultSize * 1.3
-                              * ((question.length <= 25 ? 1 : 1 - ((question.length - 25) * 0.01))),
-                              // ((question.length <= 25 ? 1 : 1 - ((question.length - 15) * 0.035))), // 원래 식
-                          fontWeight: FontWeight.w400,
-                        )),
-                  ],
+                      // Text("${admissionYear.substring(2,4)}학번 ${getGender(gender)}학생이 Dart를 보냈어요!", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.5, fontWeight: FontWeight.w500,)),
+                      SizedBox(height: SizeConfig.defaultSize * 0.5,),
+                      Text("$question",
+                          style: TextStyle(
+                            fontSize: SizeConfig.defaultSize * 1.3
+                                * ((question.length <= 25 ? 1 : 1 - ((question.length - 25) * 0.01))),
+                                // ((question.length <= 25 ? 1 : 1 - ((question.length - 15) * 0.035))), // 원래 식
+                            fontWeight: FontWeight.w400,
+                            overflow: TextOverflow.ellipsis,
+                          )),
+                    ],
+                  ),
                 ),
               ],
             ),

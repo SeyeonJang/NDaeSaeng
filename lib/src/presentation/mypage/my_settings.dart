@@ -323,7 +323,8 @@ class _MyPageViewState extends State<MyPageView> {
           /// 구분선
           const DtDivider(),
           Padding(
-            padding: MyPageView._defaultPadding,
+            // padding: MyPageView._defaultPadding,
+            padding: EdgeInsets.only(left: SizeConfig.defaultSize * 2),
             child: Column(
               children: [
                 const DtFlexSpacer(10),
@@ -345,11 +346,11 @@ class _MyPageViewState extends State<MyPageView> {
                             textAlign: TextAlign.start,
                             style: TextStyle(
                               fontWeight: FontWeight.w500,
-                              fontSize: getFlexibleSize(target: 16),
-                              color: Color(0xff7C83FD)
+                              fontSize: getFlexibleSize(target: 14),
+                              color: Colors.grey
                             ),
                           )),
-                      const DtFlexSpacer(10),
+                      const DtFlexSpacer(2),
                       TextButton(
                           onPressed: () async {
                             ToastUtil.showToast("로그아웃이 완료되었습니다.\n잠시후 앱이 종료됩니다.");
@@ -361,8 +362,8 @@ class _MyPageViewState extends State<MyPageView> {
                             textAlign: TextAlign.start,
                             style: TextStyle(
                               fontWeight: FontWeight.w500,
-                              fontSize: getFlexibleSize(target: 16),
-                                color: Color(0xff7C83FD)
+                              fontSize: getFlexibleSize(target: 14),
+                                color: Colors.grey
 
                             ),
                           ),
