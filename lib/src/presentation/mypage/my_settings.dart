@@ -2,6 +2,11 @@ import 'dart:io';
 
 import 'package:dart_flutter/src/common/auth/auth_cubit.dart';
 import 'package:dart_flutter/src/common/util/toast_util.dart';
+import 'package:dart_flutter/src/presentation/mypage/logout_goto_landPage.dart';
+import 'package:dart_flutter/src/presentation/mypage/my_ask.dart';
+import 'package:dart_flutter/src/presentation/mypage/my_opinion.dart';
+import 'package:dart_flutter/src/presentation/mypage/viewmodel/mypages_cubit.dart';
+import 'package:dart_flutter/src/presentation/mypage/viewmodel/state/mypages_state.dart';
 import 'package:dart_flutter/src/data/model/user.dart';
 import 'package:dart_flutter/src/presentation/mypage/my_tos1.dart';
 import 'package:dart_flutter/src/presentation/mypage/my_tos2.dart';
@@ -336,10 +341,53 @@ class _MyPageViewState extends State<MyPageView> {
                     children: [
                       TextButton(
                           onPressed: () async {
-                            BlocProvider.of<AuthCubit>(context).kakaoWithdrawal();
-                            ToastUtil.showToast("회원탈퇴가 완료되었습니다.\n잠시후 앱이 종료됩니다.");
-                            await Future.delayed(const Duration(seconds: 2));
-                            restart();
+                            TextEditingController textController = TextEditingController();
+                            showDialog<String>(
+                              context: context,
+                              builder: (BuildContext dialogContext) {
+                                return StatefulBuilder(
+                                    builder: (statefulContext, setState) => AlertDialog(
+                                      title: Text('앱을 회원탈퇴 하시겠어요?', style: TextStyle(fontSize: SizeConfig.defaultSize * 2), textAlign: TextAlign.center,),
+                                      content: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Text('Frolic을 떠나지 말아요 ... 🥺', style: TextStyle(fontSize: SizeConfig.defaultSize * 1.4), textAlign: TextAlign.start,),
+                                          const Text('회원탈퇴를 원하시면 \'회원탈퇴를 원해요\'라고 적어주세요.'),
+                                          TextField(
+                                            controller: textController,
+                                            onChanged: (text) {
+                                              setState(() {}); // Rebuild the AlertDialog when text changes
+                                            },
+                                          ),
+                                        ],
+                                      ),
+                                      backgroundColor: Colors.white,
+                                      surfaceTintColor: Colors.white,
+                                      actions: <Widget>[
+                                        TextButton(
+                                          onPressed: () => Navigator.pop(dialogContext, '아니요'),
+                                          child: const Text('아니요', style: TextStyle(color: Color(0xff7C83FD)),),
+                                        ),
+                                        TextButton(
+                                            onPressed: textController.text == '회원탈퇴를 원해요' ? () async {
+                                              Navigator.pop(dialogContext);
+                                              print("1ok");
+                                              BlocProvider.of<AuthCubit>(context).kakaoWithdrawal();
+                                              print("2ok");
+                                              ToastUtil.showToast("회원탈퇴가 완료되었습니다.\n잠시후 앱이 종료됩니다.");
+                                              await Future.delayed(const Duration(seconds: 2));
+                                              restart();
+                                            } : null,
+                                            child: textController.text == '회원탈퇴를 원해요'
+                                                ? Text('탈퇴', style: TextStyle(color: Color(0xff7C83FD)))
+                                                : Text('탈퇴', style: TextStyle(color: Colors.grey,))
+                                        ),
+                                      ],
+                                    ),
+                                );
+                              }
+                            );
                           },
                           child: Text(
                             "회원탈퇴",
@@ -352,11 +400,32 @@ class _MyPageViewState extends State<MyPageView> {
                           )),
                       const DtFlexSpacer(2),
                       TextButton(
-                          onPressed: () async {
-                            ToastUtil.showToast("로그아웃이 완료되었습니다.\n잠시후 앱이 종료됩니다.");
-                            BlocProvider.of<AuthCubit>(context).kakaoLogout();
-                            await Future.delayed(const Duration(seconds: 2));
-                            restart();
+                          onPressed: () {
+                            showDialog<String>(
+                              context: context,
+                              builder: (BuildContext dialogContext) => AlertDialog(
+                                title: Text('로그아웃을 하시겠어요?', style: TextStyle(fontSize: SizeConfig.defaultSize * 2),),
+                                // content: const Text('사용자를 신고하면 Dart에서 빠르게 신고 처리를 해드려요!'),
+                                backgroundColor: Colors.white,
+                                surfaceTintColor: Colors.white,
+                                actions: <Widget>[
+                                  TextButton(
+                                    onPressed: () => Navigator.pop(dialogContext, '아니요'),
+                                    child: const Text('아니요', style: TextStyle(color: Color(0xff7C83FD)),),
+                                  ),
+                                  TextButton(
+                                    onPressed: () async {
+                                      Navigator.pop(dialogContext);
+                                      ToastUtil.showToast("로그아웃이 완료되었습니다.\n잠시후 앱이 종료됩니다.");
+                                      BlocProvider.of<AuthCubit>(context).kakaoLogout();
+                                      await Future.delayed(const Duration(seconds: 2));
+                                      restart();
+                                    },
+                                    child: const Text('네', style: TextStyle(color: Color(0xff7C83FD)),),
+                                  ),
+                                ],
+                              ),
+                            );
                           },
                         child: Text("로그아웃",
                             textAlign: TextAlign.start,
@@ -400,31 +469,32 @@ class _MyPageViewState extends State<MyPageView> {
               ),
               TextButton(
                 onPressed: () {
-                  launchUrl(
-                    Uri(
-                      scheme: 'https',
-                      host: 'tally.so',
-                      path:
-                      'r/mYR270',
-                    ),
-                    mode: LaunchMode.inAppWebView,
-                  );
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => const MyOpinion()));
+                  // launchUrl(
+                  //   Uri(
+                  //     scheme: 'https',
+                  //     host: 'tally.so',
+                  //     path:
+                  //     'r/mYR270',
+                  //   ),
+                  //   mode: LaunchMode.inAppWebView,
+                  // );
                 },
                 child: Text("건의하기",
                     style: TextStyle(fontSize: SizeConfig.defaultSize * 1.4, color: Color(0xff7C83FD))),
               ),
               TextButton(
                 onPressed: () {
-                  // TODO : launch로 우리 카카오톡 페이지로 연결 (카카오채널 생기면)
-                  launchUrl(
-                    Uri(
-                      scheme: 'https',
-                      host: 'tally.so',
-                      path:
-                      'r/wzNV5E',
-                    ),
-                    mode: LaunchMode.inAppWebView,
-                  );
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => const MyAsk()));
+                //   launchUrl(
+                //     Uri(
+                //       scheme: 'https',
+                //       host: 'tally.so',
+                //       path:
+                //       'r/wzNV5E',
+                //     ),
+                //     mode: LaunchMode.inAppWebView,
+                //   );
                 },
                 child: Text("1:1 문의",
                     style: TextStyle(fontSize: SizeConfig.defaultSize * 1.4, color: Color(0xff7C83FD))),
