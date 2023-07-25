@@ -105,19 +105,8 @@ class _DartPageViewState extends State<DartPageView> {
                         create: (context) => VoteListCubit(),
                         child: const VoteListPages(),
                       ),
-                      // BlocProvider<MyPagesCubit>(
-                      //   create: (BuildContext context) => MyPagesCubit()..initPages(),
-                      //   child: const MyPages(),
-                      // ),
-                      MultiBlocProvider(
-                        providers: [
-                          BlocProvider<MyPagesCubit>(
-                            create: (BuildContext context) => MyPagesCubit()..initPages(),
-                          ),
-                          BlocProvider<AuthCubit>(
-                            create: (BuildContext context) => AuthCubit(),
-                          )
-                        ],
+                      BlocProvider<MyPagesCubit>(
+                        create: (BuildContext context) => MyPagesCubit()..initPages(),
                         child: const MyPages(),
                       ),
                     ],
@@ -145,9 +134,8 @@ class _TapBarButton extends StatelessWidget {
           onTapNavigation(targetPage);
         },
         child: Container(
-            width: SizeConfig.screenWidth * 0.22,
-            //width: MediaQuery.of(context).size.width * 0.22, // 원하는 넓이로 설정합니다.
-            height: SizeConfig.defaultSize * 3,
+            width: MediaQuery.of(context).size.width * 0.3, // 원하는 넓이로 설정합니다.
+          height: SizeConfig.defaultSize * 3,
             alignment: Alignment.center,
             child: Padding(
               padding: const EdgeInsets.all(0),
