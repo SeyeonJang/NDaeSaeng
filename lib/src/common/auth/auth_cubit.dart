@@ -27,6 +27,7 @@ class AuthCubit extends HydratedCubit<AuthState> {
           expiredAt: DateTime.now().add(const Duration(days: 30)),
           loginType: LoginType.email,
           memo: '',
+          tutorialStatus: TutorialStatus.notShown
         ));
 
   void setLandPage() {
@@ -140,6 +141,13 @@ class AuthCubit extends HydratedCubit<AuthState> {
     state.setStep(AuthStep.login);
     print(state);
     emit(state.copy());
+  }
+
+  void markTutorialShown() { // 온보딩 튜토리얼
+    state.setTutorialStatus(TutorialStatus.shown);
+    emit(state.copy());
+    print('shown으로 변경');
+    print(state.copy());
   }
 
   @override

@@ -9,6 +9,11 @@ enum AuthStep {
   land, signup, login;
 }
 
+enum TutorialStatus {
+  notShown,
+  shown,
+}
+
 @JsonSerializable()
 class AuthState {
   bool isLoading;
@@ -18,6 +23,7 @@ class AuthState {
   DateTime expiredAt;
   LoginType loginType;
   String memo;
+  TutorialStatus tutorialStatus;
 
   AuthState({
     required this.isLoading,
@@ -27,6 +33,7 @@ class AuthState {
     required this.expiredAt,
     required this.loginType,
     required this.memo,
+    required this.tutorialStatus,
   });
 
   AuthState setDartAuth({
@@ -62,6 +69,11 @@ class AuthState {
     return this;
   }
 
+  AuthState setTutorialStatus(TutorialStatus status) {
+    tutorialStatus = status;
+    return this;
+  }
+
   AuthState copy() => AuthState(
     isLoading: isLoading,
     step: step,
@@ -70,6 +82,7 @@ class AuthState {
     expiredAt: expiredAt,
     loginType: loginType,
     memo: memo,
+    tutorialStatus: tutorialStatus
   );
 
   Map<String, dynamic> toJson() => _$AuthStateToJson(this);
@@ -77,6 +90,6 @@ class AuthState {
 
   @override
   String toString() {
-    return 'AuthState{isLoading: $isLoading, step: $step, dartAccessToken: $dartAccessToken, socialAccessToken: $socialAccessToken, expiredAt: $expiredAt, loginType: $loginType}';
+    return 'AuthState{isLoading: $isLoading, step: $step, dartAccessToken: $dartAccessToken, socialAccessToken: $socialAccessToken, expiredAt: $expiredAt, loginType: $loginType, tutorialStatus: $tutorialStatus}';
   }
 }

@@ -1,8 +1,12 @@
 import 'package:dart_flutter/res/size_config.dart';
+import 'package:dart_flutter/src/common/auth/auth_cubit.dart';
 import 'package:dart_flutter/src/presentation/signup/land_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+
+import '../../common/auth/state/auth_state.dart';
 
 class TutorialSlide extends StatefulWidget {
   final VoidCallback onTutorialFinished;
@@ -20,9 +24,11 @@ class _TutorialSlideState extends State<TutorialSlide> with TickerProviderStateM
   bool _isUp = true; // 첫 번째 화면 애니메이션
   late AnimationController _animationController;
   late Animation<Offset> _animation;
-
-  late AnimationController _letterAnimationController;
-  late Animation<double> _letterAnimation;
+  // 질문 애니메이션
+  int currentIndex = 0;
+  late AnimationController _fadeController;
+  late Animation<double> _fadeAnimation;
+  List<String> questions = ["인스타에서 제일 관심가는 사람은?", "데뷔해 ! 너무 예뻐", "Y2K 무드가 잘 어울리는", "쇼핑 같이 가고 싶은 사람", "주식으로 10억 벌 것 같은 사람"];
 
   // 두 번째 화면 애니메이션
   late AnimationController _fadeInOutController;
@@ -36,7 +42,9 @@ class _TutorialSlideState extends State<TutorialSlide> with TickerProviderStateM
   late Animation<double> _fadeInOutAnimation4;
   late Animation<double> _fadeInOutAnimation5;
 
-  List<String> questions = ["인스타에서 제일 관심가는 사람은?", "6번째 뉴진스 멤버"];
+  // 세 번째 화면 애니메이션
+  late AnimationController _letterAnimationController;
+  late Animation<double> _letterAnimation;
 
   @override
   void initState() {
@@ -197,6 +205,24 @@ class _TutorialSlideState extends State<TutorialSlide> with TickerProviderStateM
       ),
     );
     _letterAnimationController.repeat(reverse: true);
+
+    _fadeController = AnimationController(
+      vsync: this,
+      duration: Duration(seconds: 2),
+    );
+    _fadeAnimation = Tween<double>(begin: 0.3, end: 1).animate(_fadeController);
+    _fadeController.addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        Future.delayed(Duration(seconds: 2), () {
+          setState(() {
+            currentIndex = (currentIndex + 1) % questions.length;
+          });
+          _fadeController.reset();
+          _fadeController.forward();
+        });
+      }
+    });
+    _fadeController.forward();
   }
 
   @override
@@ -209,6 +235,7 @@ class _TutorialSlideState extends State<TutorialSlide> with TickerProviderStateM
     _fadeInOutController4.dispose();
     _fadeInOutController5.dispose();
     _letterAnimationController.dispose();
+    _fadeController.dispose();
     super.dispose();
   }
 
@@ -251,42 +278,54 @@ class _TutorialSlideState extends State<TutorialSlide> with TickerProviderStateM
                             ]
                         )
                     ),
-                    SizedBox(height: SizeConfig.screenHeight * 0.08),
+                    SizedBox(height: SizeConfig.screenHeight * 0.11),
 
                     SlideTransition(
                       position: _animation,
                       child: Image.asset(
                         'assets/images/contacts.png',
-                        width: SizeConfig.defaultSize * 20,
+                        width: SizeConfig.defaultSize * 25,
                       ),
                     ),
-                    SizedBox(height: SizeConfig.screenHeight * 0.06,),
-                    Text("${questions[0]}", style: TextStyle(fontSize: SizeConfig.defaultSize * 2, fontWeight: FontWeight.w600),),
+                    SizedBox(height: SizeConfig.screenHeight * 0.11,),
+                    AnimatedBuilder(
+                      animation: _fadeAnimation,
+                      builder: (context, child) {
+                        return Opacity(
+                          opacity: _fadeAnimation.value,
+                          child: Text(
+                            questions[currentIndex],
+                            style: TextStyle(fontSize: SizeConfig.defaultSize * 2.5, fontWeight: FontWeight.w500),
+                          ),
+                        );
+                      },
+                    ),
+                    // Text("${questions[0]}", style: TextStyle(fontSize: SizeConfig.defaultSize * 2, fontWeight: FontWeight.w600),),
                     SizedBox(height: SizeConfig.defaultSize * 2.5,),
 
-                    Container(
-                      width: SizeConfig.screenWidth * 0.83,
-                      height: SizeConfig.defaultSize * 18,
-                      child: Column(
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              FriendView(name: "강해린", enterYear: "23", department: "경영학과"),
-                              FriendView(name: "김민지", enterYear: "22", department: "물리학과")
-                            ],
-                          ),
-                          SizedBox(height: SizeConfig.defaultSize,),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              FriendView(name: "이영지", enterYear: "21", department: "실용음악과"),
-                              FriendView(name: "카리나", enterYear: "19", department: "패션디자인학과")
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
+                    // Container(
+                    //   width: SizeConfig.screenWidth * 0.83,
+                    //   height: SizeConfig.defaultSize * 18,
+                    //   child: Column(
+                    //     children: [
+                    //       Row(
+                    //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    //         children: [
+                    //           FriendView(name: "강해린", enterYear: "23", department: "경영학과"),
+                    //           FriendView(name: "김민지", enterYear: "22", department: "물리학과")
+                    //         ],
+                    //       ),
+                    //       SizedBox(height: SizeConfig.defaultSize,),
+                    //       Row(
+                    //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    //         children: [
+                    //           FriendView(name: "이영지", enterYear: "21", department: "실용음악과"),
+                    //           FriendView(name: "카리나", enterYear: "19", department: "패션디자인학과")
+                    //         ],
+                    //       ),
+                    //     ],
+                    //   ),
+                    // ),
                   ],
                 ),
               ),
@@ -381,12 +420,8 @@ class _TutorialSlideState extends State<TutorialSlide> with TickerProviderStateM
       bottomSheet: isLastPage
           ? TextButton(
             onPressed: () async {
-              final prefs = await SharedPreferences.getInstance();
-              prefs.setBool('showHome', true);
-
-              Navigator.of(context).pushReplacement(
-                MaterialPageRoute(builder: (context) => LandingPage())
-              );
+              widget.onTutorialFinished(); // 튜토리얼 완료 후 콜백 호출
+              print("위젯 끝");
             },
             child: Text("Frolic 즐기러가기", style: TextStyle(fontSize: SizeConfig.defaultSize * 2.2, fontWeight: FontWeight.w600),),
             style: TextButton.styleFrom(

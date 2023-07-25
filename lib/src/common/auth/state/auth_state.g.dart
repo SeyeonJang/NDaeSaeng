@@ -14,7 +14,9 @@ AuthState _$AuthStateFromJson(Map<String, dynamic> json) => AuthState(
       expiredAt: DateTime.parse(json['expiredAt'] as String),
       loginType: $enumDecode(_$LoginTypeEnumMap, json['loginType']),
       memo: json['memo'] as String,
-    );
+      // tutorialStatus: TutorialStatus.notShown // TODO : fixfixfixfixfix
+      tutorialStatus: $enumDecode(_$TutorialStateEnumMap, json['tutorialStatus']),
+);
 
 Map<String, dynamic> _$AuthStateToJson(AuthState instance) => <String, dynamic>{
       'isLoading': instance.isLoading,
@@ -24,6 +26,7 @@ Map<String, dynamic> _$AuthStateToJson(AuthState instance) => <String, dynamic>{
       'expiredAt': instance.expiredAt.toIso8601String(),
       'loginType': _$LoginTypeEnumMap[instance.loginType]!,
       'memo': instance.memo,
+      'tutorialStatus':  _$TutorialStateEnumMap[instance.tutorialStatus]!,
     };
 
 const _$AuthStepEnumMap = {
@@ -36,4 +39,9 @@ const _$LoginTypeEnumMap = {
   LoginType.kakao: 'kakao',
   LoginType.apple: 'apple',
   LoginType.email: 'email',
+};
+
+const _$TutorialStateEnumMap = {
+  TutorialStatus.shown: 'shown',
+  TutorialStatus.notShown: 'notShown',
 };
