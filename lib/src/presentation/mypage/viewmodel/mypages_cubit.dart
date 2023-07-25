@@ -2,7 +2,6 @@ import 'package:dart_flutter/src/data/model/friend.dart';
 import 'package:dart_flutter/src/data/model/user.dart';
 import 'package:dart_flutter/src/data/repository/dart_friend_repository.dart';
 import 'package:dart_flutter/src/data/repository/dart_user_repository.dart';
-import 'package:dart_flutter/src/presentation/mypage/friends_mock.dart';
 import 'package:dart_flutter/src/presentation/mypage/viewmodel/state/mypages_state.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 
@@ -25,9 +24,6 @@ class MyPagesCubit extends Cubit<MyPagesState> {
     state.setMyFriends(friends);
     List<Friend> newFriends = await _dartFriendRepository.getRecommendedFriends();
     state.setRecommendedFriends(newFriends);
-
-    state.setMyLandPage(true);
-    state.setIsSettingPage(false);
 
     state.setIsLoading(false);
     emit(state.copy());
@@ -64,54 +60,8 @@ class MyPagesCubit extends Cubit<MyPagesState> {
 
   void setMyLandPage() {
     state.setMyLandPage(true);
-    state.setIsSettingPage(false);
     final newState = state.copy();
     print(newState);
     emit(newState);
   }
-
-  // 설정 아이콘 -> 설정페이지(MySettings)로 변경
-  void pressedSettingsIcon() {
-    state.setIsSettingPage(true);
-    state.setMyLandPage(false);
-    final newState = state.copy();
-    print(newState);
-    emit(newState);
-  }
-
-  void pressedTos1() {
-    state.setMyLandPage(false);
-    state.setIsSettingPage(false);
-    final newState = state.copy();
-    print(newState);
-    emit(newState);
-  }
-
-  void pressedTos2() {
-    state.setMyLandPage(false);
-    state.setIsSettingPage(false);
-    final newState = state.copy();
-    print(newState);
-    emit(newState);
-  }
-
-  // 마이페이지(MyPageLanding)로 돌아가기
-  void backToMyPageLanding() {
-    state.setMyLandPage(true);
-    state.setIsSettingPage(false);
-    emit(state.copy());
-  }
-
-  // 설정(MySettings)로 돌아가기
-  void backToSetting() {
-    state.setMyLandPage(false);
-    state.setIsSettingPage(true);
-    emit(state.copy());
-  }
-
-  // @override
-  // MyPagesState fromJson(Map<String, dynamic> json) => state.fromJson(json);
-  //
-  // @override
-  // Map<String, dynamic> toJson(MyPagesState state) => state.toJson();
 }

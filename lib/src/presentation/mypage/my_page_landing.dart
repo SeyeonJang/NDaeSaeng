@@ -2,7 +2,7 @@ import 'package:contextmenu/contextmenu.dart';
 import 'package:dart_flutter/res/size_config.dart';
 import 'package:dart_flutter/src/common/util/toast_util.dart';
 import 'package:dart_flutter/src/data/model/friend.dart';
-import 'package:dart_flutter/src/presentation/meet/viewmodel/meet_cubit.dart';
+import 'package:dart_flutter/src/presentation/mypage/my_settings.dart';
 import 'package:dart_flutter/src/presentation/mypage/viewmodel/mypages_cubit.dart';
 import 'package:dart_flutter/src/presentation/mypage/viewmodel/state/mypages_state.dart';
 import 'package:flutter/cupertino.dart';
@@ -22,11 +22,6 @@ class MyPageLanding extends StatefulWidget {
 }
 
 class _MyPageLandingState extends State<MyPageLanding> {
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   BlocProvider.of<MyPagesCubit>(context).initPages();
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -101,14 +96,16 @@ class MyPageLandingView extends StatelessWidget {
                                       fontSize: SizeConfig.defaultSize * 1.6,
                                       color: Colors.white,
                                     ),),
-                                ],
+                                ]
                               );
                             }
                         ),
                         IconButton(
                           icon: const Icon(Icons.settings, color: Colors.white,),
                           onPressed: () {
-                            BlocProvider.of<MyPagesCubit>(context).pressedSettingsIcon(); // 설정 화면으로 넘어가기
+                            Navigator.push(context, MaterialPageRoute(builder: (_) => MySettings(
+                              userResponse: BlocProvider.of<MyPagesCubit>(context).state.userResponse,
+                            )));
                           },
                           iconSize: SizeConfig.defaultSize * 2.4,
                         ),

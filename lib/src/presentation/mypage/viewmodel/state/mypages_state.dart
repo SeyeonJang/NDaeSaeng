@@ -12,7 +12,6 @@ class MyPagesState {
   late List<Friend> newFriends;
   late int newFriendId;
   late bool isMyLandPage;
-  late bool isSettings;
 
   MyPagesState({
     required this.isLoading,
@@ -20,7 +19,6 @@ class MyPagesState {
     required this.isMyLandPage,
     required this.friends,
     required this.newFriends,
-    required this.isSettings,
     required this.newFriendId,
   });
 
@@ -34,7 +32,6 @@ class MyPagesState {
     newFriends = [];
     newFriendId = 0;
     isMyLandPage = true;
-    isSettings = false;
   }
 
   MyPagesState copy() => MyPagesState(
@@ -43,7 +40,6 @@ class MyPagesState {
         userResponse: userResponse,
         friends: friends,
         newFriends: newFriends,
-        isSettings: isSettings,
         newFriendId: newFriendId,
       );
 
@@ -68,11 +64,6 @@ class MyPagesState {
 
   MyPagesState setRecommendedFriends(List<Friend> friends) {
     newFriends = friends;
-    return this;
-  }
-
-  MyPagesState setIsSettingPage(bool isSettings) {
-    this.isSettings = isSettings;
     return this;
   }
 
