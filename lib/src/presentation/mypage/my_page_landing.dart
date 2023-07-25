@@ -295,11 +295,15 @@ class MyFriends extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        for (int i = 0; i < this.count; i++)
-          FriendComponent(false, friends[i], count),
-      ],
+    return BlocBuilder<MyPagesCubit,MyPagesState>(
+      builder: (context, state) {
+        return Column(
+          children: [
+            for (int i = 0; i < this.count; i++)
+              FriendComponent(false, friends[i], count),
+          ],
+        );
+      }
     );
   }
 }
@@ -421,7 +425,30 @@ class FriendComponent extends StatelessWidget {
                     if (isAdd) {
                       pressedAddButton(context, friend.userId!);
                     } else {
-                      pressedDeleteButton(context, friend.userId!);
+                      // pressedDeleteButton(context, friend.userId!); // 원래 코드
+                      showDialog<String>(
+                        context: context,
+                        builder: (BuildContext dialogContext) => AlertDialog(
+                          title: Text('\'${friend.name}\' 친구를 삭제하시겠어요?', style: TextStyle(fontSize: SizeConfig.defaultSize * 2),),
+                          // content: const Text('사용자를 신고하면 Dart에서 빠르게 신고 처리를 해드려요!'),
+                          backgroundColor: Colors.white,
+                          surfaceTintColor: Colors.white,
+                          actions: <Widget>[
+                            TextButton(
+                              onPressed: () => Navigator.pop(dialogContext, '취소'),
+                              child: const Text('취소', style: TextStyle(color: Color(0xff7C83FD)),),
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                pressedDeleteButton(context, friend.userId!);
+                                // BlocProvider.of<MyPagesCubit>(context).pressedFriendDeleteButton(friend);
+                                Navigator.pop(dialogContext); // 팝업 창을 닫는 로직 추가
+                              },
+                              child: const Text('삭제', style: TextStyle(color: Color(0xff7C83FD)),),
+                            ),
+                          ],
+                        ),
+                      );
                     }
                   } else {
                       showCannotAddFriendToast();
@@ -441,20 +468,6 @@ class FriendComponent extends StatelessWidget {
                 ];
               },
             ),
-
-            // ElevatedButton(
-            //   onPressed: () {
-            //     if (isAdd) {
-            //       pressedAddButton(context, friend.userId!);
-            //     } else {
-            //       pressedDeleteButton(context, friend.userId!);
-            //     }
-            //   },
-            //   child: Text(isAdd?"추가":"삭제", style: TextStyle(
-            //     fontSize: SizeConfig.defaultSize * 1.4,
-            //     fontWeight: FontWeight.w500,
-            //   )),
-            // ),
           ],
         ),
         SizedBox(height: SizeConfig.defaultSize * 0.1,),
