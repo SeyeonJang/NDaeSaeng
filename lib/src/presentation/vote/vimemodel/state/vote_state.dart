@@ -84,6 +84,7 @@ class VoteState {
   }
 
   int leftNextVoteTime() {
+    print(nextVoteDateTime.toString());
     return nextVoteDateTime.difference(DateTime.now()).inSeconds;
   }
 

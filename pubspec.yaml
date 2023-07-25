@@ -32,8 +32,6 @@ dependencies:
     sdk: flutter
   flutter_typeahead: ^3.1.7 # 사용자 입력받는 typeahead
   image_picker: ^0.8.7+5 # 사용자 사진 가져오는 imagePicker
-  http: ^1.0.0
-  dio: ^5.2.1+1
   url_launcher: ^6.1.11
   timeago: ^3.4.0
   webview_flutter: ^4.2.2
@@ -41,10 +39,17 @@ dependencies:
   share_plus: ^7.0.2
   restart_app: ^1.2.1
 
+  # network
+  http: ^1.0.0
+  dio: ^5.2.1+1
+
   # service api
   kakao_flutter_sdk: ^1.4.1
   onesignal_flutter: ^3.5.1
   sign_in_with_apple: ^5.0.0
+  amplitude_flutter: ^3.15.0
+  firebase_core: ^2.14.0
+  firebase_dynamic_links: ^5.3.3
 
   # bloc
   flutter_bloc: ^8.0.0
@@ -67,8 +72,6 @@ dependencies:
   logger: ^1.4.0
   mocktail: ^0.3.0
   build_runner: ^2.3.3
-  firebase_core: ^2.14.0
-  firebase_dynamic_links: ^5.3.3
 
 dev_dependencies:
   flutter_test:
