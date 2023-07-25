@@ -14,6 +14,7 @@ class StandbyCubit extends Cubit<StandbyState> {
   void initPages() async {
     state.isLoading = true;
     emit(state.copy());
+
     List<Friend> friends = await _dartFriendRepository.getMyFriends();
     state.setAddedFriends(friends);
     _dartUserRepository.cleanUpUserResponseCache();
@@ -21,8 +22,8 @@ class StandbyCubit extends Cubit<StandbyState> {
 
     state.userResponse.user!.recommendationCode;
     state.isLoading = false;
+    state.isFirstCommCompleted = true;
     emit(state.copy());
-    print("대기화면 무사 진입 ~ !"); // TODO : ERASE
   }
 
   void refresh() {
@@ -43,5 +44,10 @@ class StandbyCubit extends Cubit<StandbyState> {
       state.isLoading = false;
       emit(state.copy());
     }
+  }
+
+  Future<int> getFriendsCount() async {
+    List<Friend> friends = await _dartFriendRepository.getMyFriends();
+    return friends.length;
   }
 }
