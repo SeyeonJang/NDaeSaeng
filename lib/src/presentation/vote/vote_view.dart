@@ -1,4 +1,5 @@
 import 'package:dart_flutter/res/size_config.dart';
+import 'package:dart_flutter/src/common/util/analytics_util.dart';
 import 'package:dart_flutter/src/data/model/friend.dart';
 import 'package:dart_flutter/src/data/model/vote.dart';
 import 'package:dart_flutter/src/presentation/vote/vimemodel/state/vote_state.dart';
@@ -98,11 +99,16 @@ class _VoteViewState extends State<VoteView> with SingleTickerProviderStateMixin
                   VoteStoryBar(voteIterator: state.voteIterator, maxVoteIterator: VoteState.MAX_VOTE_ITERATOR,),
                   SizedBox(height: SizeConfig.screenHeight * 0.06),
                   // Icon(Icons.emoji_emotions, size: SizeConfig.defaultSize * 22),
-                  SlideTransition(
-                    position: _animation,
-                    child: Image.asset(
-                      'assets/images/contacts.png',
-                      width: SizeConfig.defaultSize * 22,
+                  GestureDetector(
+                    onTap: () {
+                      AnalyticsUtil.logEvent("투표_세부_아이콘터치");
+                    },
+                    child: SlideTransition(
+                      position: _animation,
+                      child: Image.asset(
+                        'assets/images/contacts.png',
+                        width: SizeConfig.defaultSize * 22,
+                      ),
                     ),
                   ),
                   SizedBox(height: SizeConfig.screenHeight * 0.04,),
@@ -134,14 +140,22 @@ class _VoteViewState extends State<VoteView> with SingleTickerProviderStateMixin
                                 firstUserId: friend1.userId!,
                                 secondUserId: friend2.userId!,
                                 thirdUserId: friend3.userId!,
-                                fourthUserId: friend4.userId!
+                                fourthUserId: friend4.userId!,
+                                voteIndex: state.voteIterator,
+                                question: question.content!,
+                                gender: friend1.gender!,
+                                school: friend1.university!.name,
                             ),
                             ChoiceFriendButton(userId: friend2.userId!, name: friend2.name ?? "XXX", enterYear: friend2.admissionYear.toString().substring(2,4) ?? "00", department: friend2.university?.department ?? "XXXX학과",
                                 questionId: question.questionId!,
                                 firstUserId: friend1.userId!,
                                 secondUserId: friend2.userId!,
                                 thirdUserId: friend3.userId!,
-                                fourthUserId: friend4.userId!
+                                fourthUserId: friend4.userId!,
+                                voteIndex: state.voteIterator,
+                                question: question.content!,
+                                gender: friend2.gender!,
+                                school: friend2.university!.name,
                             ),
                           ],
                         ),
@@ -154,13 +168,23 @@ class _VoteViewState extends State<VoteView> with SingleTickerProviderStateMixin
                                 firstUserId: friend1.userId!,
                                 secondUserId: friend2.userId!,
                                 thirdUserId: friend3.userId!,
-                                fourthUserId: friend4.userId!),
+                                fourthUserId: friend4.userId!,
+                                voteIndex: state.voteIterator,
+                                question: question.content!,
+                                gender: friend3.gender!,
+                                school: friend3.university!.name,
+                            ),
                             ChoiceFriendButton(userId: friend4.userId!, name: friend4.name ?? "XXX", enterYear: friend4.admissionYear.toString().substring(2,4) ?? "00", department: friend4.university?.department ?? "XXXX학과",
                                 questionId: question.questionId!,
                                 firstUserId: friend1.userId!,
                                 secondUserId: friend2.userId!,
                                 thirdUserId: friend3.userId!,
-                                fourthUserId: friend4.userId!),
+                                fourthUserId: friend4.userId!,
+                                voteIndex: state.voteIterator,
+                                question: question.content!,
+                                gender: friend4.gender!,
+                                school: friend4.university!.name,
+                            ),
                           ],
                         ),
                       ],
@@ -171,6 +195,9 @@ class _VoteViewState extends State<VoteView> with SingleTickerProviderStateMixin
                   ),
                   InkWell(
                     onTap: () {
+                      AnalyticsUtil.logEvent("투표_세부_셔플", properties: {
+                        "질문 인덱스": question.questionId, "질문 내용": question.content
+                      });
                       BlocProvider.of<VoteCubit>(context).refresh();
                     },
                     child: Container(
@@ -260,6 +287,11 @@ class ChoiceFriendButton extends StatefulWidget {
   final int secondUserId;
   final int thirdUserId;
   final int fourthUserId;
+  //
+  final int voteIndex;
+  final String question;
+  final String gender;
+  final String school;
 
   const ChoiceFriendButton({
     super.key,
@@ -273,6 +305,11 @@ class ChoiceFriendButton extends StatefulWidget {
     required this.secondUserId,
     required this.thirdUserId,
     required this.fourthUserId,
+
+    required this.voteIndex,
+    required this.question,
+    required this.gender,
+    required this.school
   });
 
   @override
@@ -316,6 +353,15 @@ class _ChoiceFriendButtonState extends State<ChoiceFriendButton> {
       color: Colors.white,
       child: ElevatedButton(
         onPressed: () {
+          AnalyticsUtil.logEvent("투표_세부_선택", properties: {
+            "투표 인덱스": widget.voteIndex,
+            "질문 인덱스": widget.questionId,
+            "질문 내용": widget.question,
+            "투표 당한 사람 성별": widget.gender=="FEMALE" ? '여자' : '남자',
+            "투표 당한 사람 학번": widget.enterYear,
+            "투표 당한 사람 학교": widget.school,
+            "투표 당한 사람 학과": widget.department
+          });
           _onVoteButtonPressed();
         },
         style: ElevatedButton.styleFrom( // TODO : 터치한 버튼은 색 변하게 하려고 했는데 구현 못함

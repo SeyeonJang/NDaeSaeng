@@ -1,3 +1,4 @@
+import 'package:dart_flutter/src/common/util/analytics_util.dart';
 import 'package:dart_flutter/src/presentation/mypage/my_page_landing.dart';
 import 'package:dart_flutter/src/presentation/mypage/viewmodel/mypages_cubit.dart';
 import 'package:dart_flutter/src/presentation/mypage/viewmodel/state/mypages_state.dart';
@@ -14,6 +15,7 @@ class MyPages extends StatelessWidget {
           BlocBuilder<MyPagesCubit, MyPagesState>(
               builder: (context, state) {
                 if (state.isMyLandPage) {
+                  AnalyticsUtil.logEvent("내정보_마이_접속");
                   return const MyPageLanding();
                 }
                 return SafeArea(child: Center(child: Text(state.toString())));

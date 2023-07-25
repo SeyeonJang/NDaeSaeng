@@ -1,43 +1,11 @@
   import 'package:dart_flutter/res/size_config.dart';
+import 'package:dart_flutter/src/common/util/analytics_util.dart';
   import 'package:dart_flutter/src/presentation/signup/user_name.dart';
   import 'package:dart_flutter/src/presentation/signup/viewmodel/signup_cubit.dart';
   import 'package:flutter/cupertino.dart';
   import 'package:flutter/material.dart';
   import 'package:flutter_bloc/flutter_bloc.dart';
 
-  // btn 컬러 정의 (설정중)
-  Color getColor(Set<MaterialState> states) { //
-    const Set<MaterialState> interactiveStates = <MaterialState>{
-      MaterialState.pressed, // 클릭했을 때
-      MaterialState.hovered, // 마우스 커서를 상호작용 가능한 버튼 위에 올려두었을 때
-      MaterialState.focused,
-    };
-    if (states.any(interactiveStates.contains)) {
-      return Colors.blueAccent; // text color값 설정 -> Colors
-    }
-    return Colors.grey;
-  }
-  // text 컬러 정의 (설정중)
-  Color getColorText(Set<MaterialState> states) {
-    const Set<MaterialState> interactiveStates = <MaterialState>{
-      MaterialState.pressed, // 클릭했을 때
-      MaterialState.hovered, // 마우스 커서를 상호작용 가능한 버튼 위에 올려두었을 때
-      MaterialState.focused,
-    };
-    if (states.any(interactiveStates.contains)) {
-      return Colors.white; // text color값 설정 -> Colors
-    }
-    return Colors.black;
-    // if (states.contains(MaterialState.hovered)) { return color['hover']; }
-    // else if (states.contains(MaterialState.pressed) || states.contains(MaterialState.focused)) {
-    //   return color['pressed'];
-    // } else if (states.contains(MaterialState.disabled)) {
-    //   return color['disable'];
-    // } else { return color['basic']; }
-  }
-
-
-  // #1-4 학번 선택
   class ChooseId extends StatefulWidget {
     const ChooseId({Key? key}) : super(key: key);
 
@@ -46,6 +14,12 @@
   }
 
   class _ChooseIdState extends State<ChooseId> {
+    @override
+  void initState() {
+    super.initState();
+    AnalyticsUtil.logEvent("회원가입_학번나이_접속");
+  }
+
     @override
     Widget build(BuildContext context) {
       return Scaffold(
@@ -132,6 +106,9 @@ class _ScaffoldBodyState extends State<ScaffoldBody> {
                           initialItem: 0, // 몇 번째 인덱스가 제일 먼저 나올지
                         ),
                         onSelectedItemChanged: (index) {
+                          AnalyticsUtil.logEvent("회원가입_학번나이_학번선택", properties: {
+                            '학번': ScaffoldBody.ageIndex,
+                          });
                           setState(() => ScaffoldBody.adminIndex = index);
                           final item = ScaffoldBody.adminNumItems[index];
                           print('Selected item: ${ScaffoldBody.adminNumItems}');
@@ -174,6 +151,9 @@ class _ScaffoldBodyState extends State<ScaffoldBody> {
                           initialItem: 0, // 몇 번째 인덱스가 제일 먼저 나올지
                         ),
                         onSelectedItemChanged: (index) {
+                          AnalyticsUtil.logEvent("회원가입_학번나이_나이선택", properties: {
+                            '나이': ScaffoldBody.ageIndex,
+                          });
                           setState(() => ScaffoldBody.ageIndex = index);
                           final item = ScaffoldBody.ageItems[index];
                           print('Selected item: ${ScaffoldBody.ageItems}');
@@ -205,6 +185,7 @@ class _ScaffoldBodyState extends State<ScaffoldBody> {
             child: ScaffoldBody.ageIndex != 0 && ScaffoldBody.adminIndex != 0
               ? ElevatedButton(
                 onPressed: () {
+                  AnalyticsUtil.logEvent("회원가입_학번나이_다음");
                   BlocProvider.of<SignupCubit>(context).stepAdmissionNumber(
                       twoNumberToYear(int.parse(ScaffoldBody.adminNumItems[ScaffoldBody.adminIndex])),
                       twoNumberToYear(int.parse(ScaffoldBody.ageItems[ScaffoldBody.ageIndex]))

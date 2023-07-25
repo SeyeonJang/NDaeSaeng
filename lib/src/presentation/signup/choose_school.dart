@@ -1,4 +1,5 @@
 import 'package:dart_flutter/res/size_config.dart';
+import 'package:dart_flutter/src/common/util/analytics_util.dart';
 import 'package:dart_flutter/src/data/model/university.dart';
 import 'package:dart_flutter/src/presentation/signup/land_page.dart';
 import 'package:dart_flutter/src/presentation/signup/viewmodel/signup_cubit.dart';
@@ -71,6 +72,7 @@ class _ScaffoldBodyState extends State<ScaffoldBody> {
   void _selectOnTypeAhead() {
     setState(() {
       isSelectedOnTypeAhead = true;
+      AnalyticsUtil.logEvent("회원가입_학교_선택");
     });
   }
 
@@ -184,6 +186,7 @@ class _ScaffoldBodyState extends State<ScaffoldBody> {
           child: isSelectedOnTypeAhead
               ? ElevatedButton(
                 onPressed: () {
+                  AnalyticsUtil.logEvent("회원가입_학교_다음");
                   if (isSelectedOnTypeAhead) {BlocProvider.of<SignupCubit>(context).stepSchool(universityName);}
                 },
                 style: ElevatedButton.styleFrom(

@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:confetti/confetti.dart';
+import 'package:dart_flutter/src/common/util/analytics_util.dart';
 import 'package:dart_flutter/src/presentation/vote/vimemodel/state/vote_state.dart';
 import 'package:dart_flutter/src/presentation/vote/vimemodel/vote_cubit.dart';
 import 'package:dart_flutter/src/presentation/vote/vote_result_view.dart';
@@ -54,15 +55,19 @@ class VotePages extends StatelessWidget {
         BlocBuilder<VoteCubit, VoteState>(
           builder: (context, state) {
             if (state.step.isStart) {
+              AnalyticsUtil.logEvent("투표_시작_접속");
               return const VoteStartView();
             }
             if (state.step.isProcess) {
+              AnalyticsUtil.logEvent("투표_세부_접속");
               return const VoteView();
             }
             if (state.step.isDone) {
+              AnalyticsUtil.logEvent("투표_끝_접속");
               return VoteResultView();
             }
             if (state.step.isWait) {
+              AnalyticsUtil.logEvent("투표_타이머_접속");
               return const VoteTimer();
             }
             return SafeArea(child: Container(alignment: Alignment.bottomCenter,child: Text(state.toString())));

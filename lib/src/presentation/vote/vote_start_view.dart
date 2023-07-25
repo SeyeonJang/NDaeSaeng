@@ -1,4 +1,5 @@
 import 'package:dart_flutter/res/size_config.dart';
+import 'package:dart_flutter/src/common/util/analytics_util.dart';
 import 'package:dart_flutter/src/data/model/friend.dart';
 import 'package:dart_flutter/src/presentation/mypage/friends_mock.dart';
 import 'package:dart_flutter/src/presentation/vote/vimemodel/state/vote_state.dart';
@@ -78,11 +79,16 @@ class _VoteStartViewState extends State<VoteStartView> with SingleTickerProvider
                 flex: 3,
                 child: Container(
                     alignment: Alignment.center,
-                  child: SlideTransition(
-                    position: _animation,
-                    child: Image.asset(
-                      'assets/images/message.png',
-                      width: SizeConfig.defaultSize * 30,
+                  child: GestureDetector(
+                    onTap: () {
+                      AnalyticsUtil.logEvent("투표_시작_아이콘터치");
+                    },
+                    child: SlideTransition(
+                      position: _animation,
+                      child: Image.asset(
+                        'assets/images/message.png',
+                        width: SizeConfig.defaultSize * 30,
+                      ),
                     ),
                   ),
                 ),
@@ -93,6 +99,7 @@ class _VoteStartViewState extends State<VoteStartView> with SingleTickerProvider
                   builder: (context, state) {
                     return ElevatedButton(
                       onPressed: () {
+                        AnalyticsUtil.logEvent("투표_시작_다음");
                         List<Friend> friendList = state.friends;
                         int friendCount = friendList.length;
                         if (friendCount >= 4) {

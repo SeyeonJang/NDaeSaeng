@@ -1,4 +1,5 @@
 import 'package:dart_flutter/res/size_config.dart';
+import 'package:dart_flutter/src/common/util/analytics_util.dart';
 import 'package:dart_flutter/src/presentation/signup/viewmodel/signup_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -89,6 +90,7 @@ class _UserNameState extends State<UserName> {
               child: isNameValid
                   ? ElevatedButton(
                   onPressed: () {
+                    AnalyticsUtil.logEvent("회원가입_이름_다음");
                     BlocProvider.of<SignupCubit>(context).stepName(_nameController.text);
                   },
                   style: ElevatedButton.styleFrom(

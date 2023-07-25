@@ -1,5 +1,6 @@
 import 'package:contextmenu/contextmenu.dart';
 import 'package:dart_flutter/res/size_config.dart';
+import 'package:dart_flutter/src/common/util/analytics_util.dart';
 import 'package:dart_flutter/src/common/util/toast_util.dart';
 import 'package:dart_flutter/src/data/model/friend.dart';
 import 'package:dart_flutter/src/presentation/mypage/my_settings.dart';
@@ -103,6 +104,7 @@ class MyPageLandingView extends StatelessWidget {
                         IconButton(
                           icon: const Icon(Icons.settings, color: Colors.white,),
                           onPressed: () {
+                            AnalyticsUtil.logEvent("내정보_마이_설정버튼");
                             Navigator.push(context, MaterialPageRoute(builder: (_) => MySettings(
                               userResponse: BlocProvider.of<MyPagesCubit>(context).state.userResponse,
                             )));
@@ -368,23 +370,34 @@ class FriendComponent extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Container(
-              width: SizeConfig.screenWidth * 0.7,
-              child: Row(
-                children: [
-                  Text(friend.name ?? "XXX", style: TextStyle(
-                fontSize: SizeConfig.defaultSize * 1.9,
-                    fontWeight: FontWeight.w600,
-                  )),
-                  Container(
-                    width: SizeConfig.screenWidth * 0.48,
-                    child: Text("  ${friend.admissionYear.toString().substring(2,4)}학번∙${friend.university?.department}", style: TextStyle(
-                      fontSize: SizeConfig.defaultSize * 1.3,
-                      fontWeight: FontWeight.w500,
-                      overflow: TextOverflow.ellipsis,
+            GestureDetector(
+              onTap: () {
+                AnalyticsUtil.logEvent("내정보_마이_친구터치", properties: {
+                  "친구 성별": friend.gender=="FEMALE" ? "여자" : "남자",
+                  "친구 학번": friend.admissionYear.toString().substring(2,4),
+                  "친구 학교": friend.university!.name,
+                  "친구 학교코드": friend.university!.id,
+                  "친구 학과": friend.university!.department
+                });
+              },
+              child: Container(
+                width: SizeConfig.screenWidth * 0.7,
+                child: Row(
+                  children: [
+                    Text(friend.name ?? "XXX", style: TextStyle(
+                  fontSize: SizeConfig.defaultSize * 1.9,
+                      fontWeight: FontWeight.w600,
                     )),
-                  ),
-                ],
+                    Container(
+                      width: SizeConfig.screenWidth * 0.48,
+                      child: Text("  ${friend.admissionYear.toString().substring(2,4)}학번∙${friend.university?.department}", style: TextStyle(
+                        fontSize: SizeConfig.defaultSize * 1.3,
+                        fontWeight: FontWeight.w500,
+                        overflow: TextOverflow.ellipsis,
+                      )),
+                    ),
+                  ],
+                ),
               ),
             ),
             SizedBox(height: SizeConfig.defaultSize,),
@@ -396,6 +409,7 @@ class FriendComponent extends StatelessWidget {
               onSelected: (value) {
                 // 팝업 메뉴에서 선택된 값 처리
                 if (value == 'report') {
+                  AnalyticsUtil.logEvent("내정보_마이_내친구더보기_신고");
                   showDialog<String>(
                     context: context,
                     builder: (BuildContext context) => AlertDialog(
@@ -405,11 +419,15 @@ class FriendComponent extends StatelessWidget {
                       surfaceTintColor: Colors.white,
                       actions: <Widget>[
                         TextButton(
-                          onPressed: () => Navigator.pop(context, '취소'),
+                          onPressed: () {
+                            Navigator.pop(context, '취소');
+                            AnalyticsUtil.logEvent("내정보_마이_내친구신고_취소");
+                          },
                           child: const Text('취소', style: TextStyle(color: Color(0xff7C83FD)),),
                         ),
                         TextButton(
                           onPressed: () => {
+                            AnalyticsUtil.logEvent("내정보_마이_내친구신고_신고확정"),
                             Navigator.pop(context, '신고'),
                             ToastUtil.showToast("사용자가 신고되었어요!"),
                             // TODO : 신고 기능 (서버 연결)
@@ -421,6 +439,7 @@ class FriendComponent extends StatelessWidget {
                   );
                 }
                 else if (value == 'delete') {
+                  AnalyticsUtil.logEvent("내정보_마이_내친구더보기_친구삭제");
                   if (count >= 5) {
                     if (isAdd) {
                       pressedAddButton(context, friend.userId!);
@@ -435,11 +454,15 @@ class FriendComponent extends StatelessWidget {
                           surfaceTintColor: Colors.white,
                           actions: <Widget>[
                             TextButton(
-                              onPressed: () => Navigator.pop(dialogContext, '취소'),
+                              onPressed: () {
+                                AnalyticsUtil.logEvent("내정보_마이_내친구삭제_취소");
+                                Navigator.pop(dialogContext, '취소');
+                              },
                               child: const Text('취소', style: TextStyle(color: Color(0xff7C83FD)),),
                             ),
                             TextButton(
                               onPressed: () {
+                                AnalyticsUtil.logEvent("내정보_마이_내친구삭제_삭제확정");
                                 pressedDeleteButton(context, friend.userId!);
                                 // BlocProvider.of<MyPagesCubit>(context).pressedFriendDeleteButton(friend);
                                 Navigator.pop(dialogContext); // 팝업 창을 닫는 로직 추가
@@ -504,23 +527,34 @@ class NotFriendComponent extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Container(
-              width: SizeConfig.screenWidth * 0.52,
-              child: Row(
-                children: [
-                  Text(friend.name ?? "XXX", style: TextStyle(
-                    fontSize: SizeConfig.defaultSize * 1.9,
-                    fontWeight: FontWeight.w600,
-                  )),
-                  Container(
-                    width: SizeConfig.screenWidth * 0.36,
-                    child: Text("  ${friend.admissionYear.toString().substring(2,4)}학번∙${friend.university?.department}", style: TextStyle(
-                      fontSize: SizeConfig.defaultSize * 1.3,
-                      fontWeight: FontWeight.w500,
-                      overflow: TextOverflow.ellipsis,
+            GestureDetector(
+              onTap: () {
+                AnalyticsUtil.logEvent("내정보_마이_친구터치", properties: {
+                  "친구 성별": friend.gender=="FEMALE" ? "여자" : "남자",
+                  "친구 학번": friend.admissionYear.toString().substring(2,4),
+                  "친구 학교": friend.university!.name,
+                  "친구 학교코드": friend.university!.id,
+                  "친구 학과": friend.university!.department
+                });
+              },
+              child: Container(
+                width: SizeConfig.screenWidth * 0.52,
+                child: Row(
+                  children: [
+                    Text(friend.name ?? "XXX", style: TextStyle(
+                      fontSize: SizeConfig.defaultSize * 1.9,
+                      fontWeight: FontWeight.w600,
                     )),
-                  ),
-                ],
+                    Container(
+                      width: SizeConfig.screenWidth * 0.36,
+                      child: Text("  ${friend.admissionYear.toString().substring(2,4)}학번∙${friend.university?.department}", style: TextStyle(
+                        fontSize: SizeConfig.defaultSize * 1.3,
+                        fontWeight: FontWeight.w500,
+                        overflow: TextOverflow.ellipsis,
+                      )),
+                    ),
+                  ],
+                ),
               ),
             ),
             SizedBox(height: SizeConfig.defaultSize,),
@@ -532,6 +566,7 @@ class NotFriendComponent extends StatelessWidget {
               onSelected: (value) {
                 // 팝업 메뉴에서 선택된 값 처리
                 if (value == 'report') {
+                  AnalyticsUtil.logEvent("내정보_마이_알수도있는친구더보기_신고");
                   showDialog<String>(
                     context: context,
                     builder: (BuildContext context) => AlertDialog(
@@ -541,11 +576,15 @@ class NotFriendComponent extends StatelessWidget {
                       content: const Text('사용자를 신고하면 Dart에서 빠르게 신고 처리를 해드려요!'),
                       actions: <Widget>[
                         TextButton(
-                          onPressed: () => Navigator.pop(context, '취소'),
+                          onPressed: () {
+                            AnalyticsUtil.logEvent("내정보_마이_알수도있는친구더보기_신고_취소");
+                            Navigator.pop(context, '취소');
+                          },
                           child: const Text('취소', style: TextStyle(color: Color(0xff7C83FD)),),
                         ),
                         TextButton(
                           onPressed: () => {
+                            AnalyticsUtil.logEvent("내정보_마이_알수도있는친구더보기_신고_신고확정"),
                             Navigator.pop(context, '신고'),
                             ToastUtil.showToast("사용자가 신고되었어요!"),
                             // TODO : 신고 기능 (서버 연결)
@@ -569,6 +608,7 @@ class NotFriendComponent extends StatelessWidget {
 
             ElevatedButton(
               onPressed: () {
+                AnalyticsUtil.logEvent("내정보_마이_알수도있는친구_친구추가");
                 if (isAdd) {
                   pressedAddButton(context, friend.userId!);
                 } else {
@@ -657,6 +697,7 @@ class _openAddFriendsState extends State<openAddFriends> {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () { // ModalBottomSheet 열기
+        AnalyticsUtil.logEvent("내정보_마이_코드로추가버튼");
         showModalBottomSheet(
             context: context,
             shape: RoundedRectangleBorder(
@@ -665,6 +706,7 @@ class _openAddFriendsState extends State<openAddFriends> {
             backgroundColor: Colors.white,
             isScrollControlled: true,
             builder: (BuildContext _) {
+              AnalyticsUtil.logEvent("내정보_친추_접속");
               return Container(
                 height: SizeConfig.screenHeight,
                 width: SizeConfig.screenWidth,
@@ -733,7 +775,11 @@ class _openAddFriendsState extends State<openAddFriends> {
                         ),
                         ElevatedButton(
                           onPressed: () async {
-                            if (friendCode == widget.myCode) {itsMyCodeToast();}
+                            String friendCodeConfirm = "";
+                            if (friendCode == widget.myCode) {
+                              itsMyCodeToast();
+                              friendCodeConfirm = "나";
+                            }
                             else {
                               print("friendCode $friendCode");
                               // try {
@@ -741,10 +787,15 @@ class _openAddFriendsState extends State<openAddFriends> {
                                 await BlocProvider.of<MyPagesCubit>(context).pressedFriendCodeAddButton(friendCode);
                                 showAddFriendToast();
                                 Navigator.pop(context);
+                                friendCodeConfirm = "정상";
                               } catch (e) {
                                 ToastUtil.showToast('친구코드를 다시 한번 확인해주세요!');
+                                friendCodeConfirm = "없거나 이미 친구임";
                               }
                             }
+                            AnalyticsUtil.logEvent('내정보_친추_친구코드_추가', properties: {
+                              '친구코드 번호': friendCode, '친구코드 정상여부': friendCodeConfirm
+                            });
                           },
                           style: ElevatedButton.styleFrom(
                               primary: Colors.indigoAccent,
@@ -795,6 +846,7 @@ class _openAddFriendsState extends State<openAddFriends> {
                                 ),
                                 ElevatedButton(
                                     onPressed: () {
+                                      AnalyticsUtil.logEvent("내정보_친추_내코드복사");
                                       String myCodeCopy = widget.myCode;
                                       Clipboard.setData(ClipboardData(text: myCodeCopy)); // 클립보드에 복사되었어요 <- 메시지 자동으로 Android에서 뜸 TODO : iOS는 확인하고 복사멘트 띄우기
                                     },
@@ -822,6 +874,7 @@ class _openAddFriendsState extends State<openAddFriends> {
 
                     GestureDetector(
                       onTap: () {
+                        AnalyticsUtil.logEvent("내정보_친추_링크공유");
                         shareContent(context);
                       },
                       child: Padding(
@@ -854,6 +907,7 @@ class _openAddFriendsState extends State<openAddFriends> {
                     SizedBox(height: SizeConfig.defaultSize * 10),
                     TextButton(
                         onPressed: () {
+                          AnalyticsUtil.logEvent("내정보_친추_닫기");
                           Navigator.pop(context);
                         },
                         child: Text(

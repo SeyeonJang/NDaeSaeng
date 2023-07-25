@@ -1,3 +1,4 @@
+import 'package:dart_flutter/src/common/util/analytics_util.dart';
 import 'package:dart_flutter/src/common/util/toast_util.dart';
 import 'package:dart_flutter/src/presentation/page_view.dart';
 import 'package:dart_flutter/src/presentation/signup/tutorial_slide.dart';
@@ -39,6 +40,8 @@ class _StandbyLandingPageState extends State<StandbyLandingPage> with TickerProv
   @override
   void initState() {
     super.initState();
+    AnalyticsUtil.logEvent("대기_접속");
+    
     _controller = AnimationController(
       vsync: this,
       duration: Duration(seconds: 1),
@@ -144,17 +147,22 @@ class _StandbyLandingPageState extends State<StandbyLandingPage> with TickerProv
                       children: [
                         // ßSizedBox(height: SizeConfig.screenHeight),
                         SizedBox(height: SizeConfig.defaultSize * 0.4,),
-                        AnimatedBuilder(
-                          animation: _fadeAnimation,
-                          builder: (context, child) {
-                            return Opacity(
-                              opacity: _fadeAnimation.value,
-                              child: Text(
-                                '\n${questions[currentIndex]}',
-                                style: TextStyle(fontSize: SizeConfig.defaultSize * 2.4, fontWeight: FontWeight.w600, color: Colors.black),
-                              ),
-                            );
+                        GestureDetector(
+                          onTap: () {
+                            AnalyticsUtil.logEvent("대기_질문터치", properties: {"질문 인덱스": currentIndex});
                           },
+                          child: AnimatedBuilder(
+                            animation: _fadeAnimation,
+                            builder: (context, child) {
+                              return Opacity(
+                                opacity: _fadeAnimation.value,
+                                child: Text(
+                                  '\n${questions[currentIndex]}',
+                                  style: TextStyle(fontSize: SizeConfig.defaultSize * 2.4, fontWeight: FontWeight.w600, color: Colors.black),
+                                ),
+                              );
+                            },
+                          ),
                         ),
 
                         SizedBox(height: SizeConfig.defaultSize ),
@@ -165,11 +173,16 @@ class _StandbyLandingPageState extends State<StandbyLandingPage> with TickerProv
                         // ),
                         Container(
                           alignment: Alignment.center,
-                          child: SlideTransition(
-                            position: _animation,
-                            child: Image.asset(
-                              'assets/images/letter.png',
-                              width: SizeConfig.defaultSize * 25,
+                          child: GestureDetector(
+                            onTap: () {
+                              AnalyticsUtil.logEvent("대기_아이콘터치");
+                            },
+                            child: SlideTransition(
+                              position: _animation,
+                              child: Image.asset(
+                                'assets/images/letter.png',
+                                width: SizeConfig.defaultSize * 25,
+                              ),
                             ),
                           ),
                         ),
@@ -204,7 +217,7 @@ class _StandbyLandingPageState extends State<StandbyLandingPage> with TickerProv
                                                   admissionYear: friends[0].admissionYear.toString().substring(2, 4),)
                                               : BlocBuilder<StandbyCubit, StandbyState>(
                                                   builder: (context, state) {
-                                                    return FriendNotExistsView(myCode: state.userResponse.user?.recommendationCode ?? '내 코드가 없어요!');
+                                                    return FriendNotExistsView(myCode: state.userResponse.user?.recommendationCode ?? '내 코드가 없어요!', index: 0, friendCount: count,);
                                                   }),
                                           count >= 2
                                               ? FriendExistsView(
@@ -212,7 +225,7 @@ class _StandbyLandingPageState extends State<StandbyLandingPage> with TickerProv
                                                   admissionYear: friends[1].admissionYear.toString().substring(2, 4),)
                                               : BlocBuilder<StandbyCubit, StandbyState>(
                                                   builder: (context, state) {
-                                                    return FriendNotExistsView(myCode: state.userResponse.user?.recommendationCode ?? '내 코드가 없어요!');
+                                                    return FriendNotExistsView(myCode: state.userResponse.user?.recommendationCode ?? '내 코드가 없어요!', index: 1, friendCount: count,);
                                                   }),
                                         ],
                                       ),
@@ -233,7 +246,7 @@ class _StandbyLandingPageState extends State<StandbyLandingPage> with TickerProv
                                                   admissionYear: friends[2].admissionYear.toString().substring(2, 4),)
                                               : BlocBuilder<StandbyCubit, StandbyState>(
                                                   builder: (context, state) {
-                                                    return FriendNotExistsView(myCode: state.userResponse.user?.recommendationCode ?? '내 코드가 없어요!');
+                                                    return FriendNotExistsView(myCode: state.userResponse.user?.recommendationCode ?? '내 코드가 없어요!', index: 2, friendCount: count,);
                                                   }),
                                           count >= 4
                                               ? FriendExistsView(
@@ -241,7 +254,7 @@ class _StandbyLandingPageState extends State<StandbyLandingPage> with TickerProv
                                                   admissionYear: friends[3].admissionYear.toString().substring(2, 4),)
                                               : BlocBuilder<StandbyCubit, StandbyState>(
                                                   builder: (context, state) {
-                                                    return FriendNotExistsView(myCode: state.userResponse.user?.recommendationCode ?? '내 코드가 없어요!');
+                                                    return FriendNotExistsView(myCode: state.userResponse.user?.recommendationCode ?? '내 코드가 없어요!', index: 3, friendCount: count,);
                                                   }),
                                         ],
                                       ),
@@ -271,9 +284,12 @@ class _StandbyLandingPageState extends State<StandbyLandingPage> with TickerProv
 
                         BlocBuilder<StandbyCubit, StandbyState>(
                           builder: (context, state) {
+                            List<Friend> friends = state.addedFriends;
+                            int count = friends.length;
                             return openAddFriends(
                                 myCode: state.userResponse.user?.recommendationCode ?? '내 코드가 없어요!',
                                 disabledFunctions: state.isLoading,
+                                friendCount: count,
                             );
                           },
                         ),
@@ -543,166 +559,181 @@ class _OnboardingSlideState extends State<OnboardingSlide> with TickerProviderSt
                     setState(() => isLastPage = index == 2);
                   },
                   children: [
-                    Container(
-                      color: Colors.white,
-                      child: Center(
-                        child: Column(
-                          children: [
-                            SizedBox(height: SizeConfig.screenHeight * 0.05,),
-                            RichText(
-                                text: TextSpan(
-                                    style: TextStyle(fontSize: SizeConfig.defaultSize * 2.2, fontWeight: FontWeight.w600),
-                                    children: <TextSpan>[
-                                      TextSpan(text: "Frolic에서는 ", style: TextStyle(color: Colors.black)),
-                                      TextSpan(text: "긍정적인 질문", style: TextStyle(color: Color(0xff7C83FD), fontWeight: FontWeight.w800)),
-                                      TextSpan(text: "에 대해", style: TextStyle(color: Colors.black)),
-                                    ]
-                                )
-                            ),
-                            SizedBox(height: SizeConfig.defaultSize * 0.3),
-                            RichText(
-                                text: TextSpan(
-                                    style: TextStyle(fontSize: SizeConfig.defaultSize * 2.2, fontWeight: FontWeight.w600),
-                                    children: <TextSpan>[
-                                      TextSpan(text: "내 친구들을 ", style: TextStyle(color: Colors.black)),
-                                      TextSpan(text: "투표", style: TextStyle(color: Color(0xff7C83FD))),
-                                      TextSpan(text: "할 수 있어요!", style: TextStyle(color: Colors.black)),
-                                    ]
-                                )
-                            ),
-                            SizedBox(height: SizeConfig.screenHeight * 0.08),
-
-                            SlideTransition(
-                              position: _animation,
-                              child: Image.asset(
-                                'assets/images/contacts.png',
-                                width: SizeConfig.defaultSize * 20,
+                    GestureDetector(
+                      onTap: () {
+                        AnalyticsUtil.logEvent("대기_온보딩_첫번째터치");
+                      },
+                      child: Container(
+                        color: Colors.white,
+                        child: Center(
+                          child: Column(
+                            children: [
+                              SizedBox(height: SizeConfig.screenHeight * 0.05,),
+                              RichText(
+                                  text: TextSpan(
+                                      style: TextStyle(fontSize: SizeConfig.defaultSize * 2.2, fontWeight: FontWeight.w600),
+                                      children: <TextSpan>[
+                                        TextSpan(text: "Frolic에서는 ", style: TextStyle(color: Colors.black)),
+                                        TextSpan(text: "긍정적인 질문", style: TextStyle(color: Color(0xff7C83FD), fontWeight: FontWeight.w800)),
+                                        TextSpan(text: "에 대해", style: TextStyle(color: Colors.black)),
+                                      ]
+                                  )
                               ),
-                            ),
-                            SizedBox(height: SizeConfig.screenHeight * 0.06,),
-                            AnimatedBuilder(
-                              animation: _fadeAnimation,
-                              builder: (context, child) {
-                                return Opacity(
-                                  opacity: _fadeAnimation.value,
-                                  child: Text(
-                                    questions[currentIndex],
-                                    style: TextStyle(fontSize: SizeConfig.defaultSize * 2.4),
-                                  ),
-                                );
-                              },
-                            ),
-                            // Text("${questions[0]}", style: TextStyle(fontSize: SizeConfig.defaultSize * 2, fontWeight: FontWeight.w600),),
-                            SizedBox(height: SizeConfig.defaultSize * 2.5,),
-
-                            Container(
-                              width: SizeConfig.screenWidth * 0.83,
-                              height: SizeConfig.defaultSize * 18,
-                              child: Column(
-                                children: [
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      FriendView(name: "강해린", enterYear: "23", department: "경영학과"),
-                                      FriendView(name: "김민지", enterYear: "22", department: "물리학과")
-                                    ],
-                                  ),
-                                  SizedBox(height: SizeConfig.defaultSize,),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      FriendView(name: "이영지", enterYear: "21", department: "실용음악과"),
-                                      FriendView(name: "카리나", enterYear: "19", department: "패션디자인학과")
-                                    ],
-                                  ),
-                                ],
+                              SizedBox(height: SizeConfig.defaultSize * 0.3),
+                              RichText(
+                                  text: TextSpan(
+                                      style: TextStyle(fontSize: SizeConfig.defaultSize * 2.2, fontWeight: FontWeight.w600),
+                                      children: <TextSpan>[
+                                        TextSpan(text: "내 친구들을 ", style: TextStyle(color: Colors.black)),
+                                        TextSpan(text: "투표", style: TextStyle(color: Color(0xff7C83FD))),
+                                        TextSpan(text: "할 수 있어요!", style: TextStyle(color: Colors.black)),
+                                      ]
+                                  )
                               ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    Container(
-                      color: Colors.white,
-                      child: Center(
-                        child: Column(
-                          children: [
-                            SizedBox(height: SizeConfig.screenHeight * 0.1,),
-                            RichText(
-                                text: TextSpan(
-                                    style: TextStyle(fontSize: SizeConfig.defaultSize * 2.2, fontWeight: FontWeight.w600),
-                                    children: <TextSpan>[
-                                      TextSpan(text: "내가 투표받으면 ", style: TextStyle(color: Colors.black)),
-                                      TextSpan(text: "알림", style: TextStyle(color: Color(0xff7C83FD), fontWeight: FontWeight.w800)),
-                                      TextSpan(text: "이 와요!", style: TextStyle(color: Colors.black)),
-                                    ]
-                                )
-                            ),
-                            SizedBox(height: SizeConfig.defaultSize * 0.3),
-                            Text("친구들도 내가 보낸 투표를 봐요!", style: TextStyle(fontSize: SizeConfig.defaultSize * 2.2, fontWeight: FontWeight.w600),),
-                            SizedBox(height: SizeConfig.screenHeight * 0.1),
+                              SizedBox(height: SizeConfig.screenHeight * 0.08),
 
-                            FadeTransition(
-                              opacity: _fadeInOutAnimation,
-                              child: VoteFriend(admissionYear: "23", gender: "여", question: "6번째 뉴진스 멤버", datetime: "10초 전",),
-                            ), SizedBox(height: SizeConfig.defaultSize * 1.6),
-                            FadeTransition(
-                              opacity: _fadeInOutAnimation2,
-                              child: VoteFriend(admissionYear: "21", gender: "남", question: "모임에 꼭 있어야 하는", datetime: "1분 전",),
-                            ), SizedBox(height: SizeConfig.defaultSize * 1.6),
-                            FadeTransition(
-                              opacity: _fadeInOutAnimation3,
-                              child: VoteFriend(admissionYear: "22", gender: "여", question: "OO와의 2023 ... 여름이었다", datetime: "5분 전",),
-                            ), SizedBox(height: SizeConfig.defaultSize * 1.6),
-                            FadeTransition(
-                              opacity: _fadeInOutAnimation4,
-                              child: VoteFriend(admissionYear: "20", gender: "남", question: "디올 엠베서더 할 것 같은 사람", datetime: "10분 전",),
-                            ), SizedBox(height: SizeConfig.defaultSize * 1.6),
-                            FadeTransition(
-                              opacity: _fadeInOutAnimation5,
-                              child: VoteFriend(admissionYear: "23", gender: "남", question: "OOO 갓생 폼 미쳤다", datetime: "30분 전",),
-                            ), SizedBox(height: SizeConfig.defaultSize * 1.6),
-                          ],
-                        ),
-                      ),
-                    ),
-                    Container(
-                      color: Colors.white,
-                      child: Center(
-                        child: Column(
-                          children: [
-                            SizedBox(height: SizeConfig.screenHeight * 0.1,),
-                            Text("누가 나에게 관심을 갖고 있는지", style: TextStyle(fontSize: SizeConfig.defaultSize * 2.2, fontWeight: FontWeight.w600),),
-                            SizedBox(height: SizeConfig.defaultSize * 0.3),
-                            Text("궁금하지 않으신가요?", style: TextStyle(fontSize: SizeConfig.defaultSize * 2.2, fontWeight: FontWeight.w600),),
-                            SizedBox(height: SizeConfig.screenHeight * 0.1),
-                            Container(
-                              child: AnimatedBuilder(
-                                animation: _letterAnimationController,
+                              SlideTransition(
+                                position: _animation,
+                                child: Image.asset(
+                                  'assets/images/contacts.png',
+                                  width: SizeConfig.defaultSize * 20,
+                                ),
+                              ),
+                              SizedBox(height: SizeConfig.screenHeight * 0.06,),
+                              AnimatedBuilder(
+                                animation: _fadeAnimation,
                                 builder: (context, child) {
-                                  return Transform.scale(
-                                    scale: _letterAnimation.value,
-                                    child: Column(
-                                      mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                      crossAxisAlignment: CrossAxisAlignment.center,
-                                      children: [
-                                        Image.asset(
-                                          'assets/images/letter.png',
-                                          // color: Colors.indigo,
-                                          width: SizeConfig.defaultSize * 33,
-                                        ),
-                                      ],
+                                  return Opacity(
+                                    opacity: _fadeAnimation.value,
+                                    child: Text(
+                                      questions[currentIndex],
+                                      style: TextStyle(fontSize: SizeConfig.defaultSize * 2.4),
                                     ),
                                   );
                                 },
                               ),
-                            ),
-                            SizedBox(height: SizeConfig.screenHeight * 0.01),
-                            Text("나를 향한 투표들이 기다리고 있어요!", style: TextStyle(fontSize: SizeConfig.defaultSize * 2, fontWeight: FontWeight.w600),),
-                            SizedBox(height: SizeConfig.defaultSize * 1),
-                            Text("친구들과 즐기러 가볼까요?", style: TextStyle(fontSize: SizeConfig.defaultSize * 2, fontWeight: FontWeight.w600),),
-                          ],
+                              // Text("${questions[0]}", style: TextStyle(fontSize: SizeConfig.defaultSize * 2, fontWeight: FontWeight.w600),),
+                              SizedBox(height: SizeConfig.defaultSize * 2.5,),
+
+                              Container(
+                                width: SizeConfig.screenWidth * 0.83,
+                                height: SizeConfig.defaultSize * 18,
+                                child: Column(
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        FriendView(name: "강해린", enterYear: "23", department: "경영학과"),
+                                        FriendView(name: "김민지", enterYear: "22", department: "물리학과")
+                                      ],
+                                    ),
+                                    SizedBox(height: SizeConfig.defaultSize,),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        FriendView(name: "이영지", enterYear: "21", department: "실용음악과"),
+                                        FriendView(name: "카리나", enterYear: "19", department: "패션디자인학과")
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        AnalyticsUtil.logEvent("대기_온보딩_두번째터치");
+                      },
+                      child: Container(
+                        color: Colors.white,
+                        child: Center(
+                          child: Column(
+                            children: [
+                              SizedBox(height: SizeConfig.screenHeight * 0.1,),
+                              RichText(
+                                  text: TextSpan(
+                                      style: TextStyle(fontSize: SizeConfig.defaultSize * 2.2, fontWeight: FontWeight.w600),
+                                      children: <TextSpan>[
+                                        TextSpan(text: "내가 투표받으면 ", style: TextStyle(color: Colors.black)),
+                                        TextSpan(text: "알림", style: TextStyle(color: Color(0xff7C83FD), fontWeight: FontWeight.w800)),
+                                        TextSpan(text: "이 와요!", style: TextStyle(color: Colors.black)),
+                                      ]
+                                  )
+                              ),
+                              SizedBox(height: SizeConfig.defaultSize * 0.3),
+                              Text("친구들도 내가 보낸 투표를 봐요!", style: TextStyle(fontSize: SizeConfig.defaultSize * 2.2, fontWeight: FontWeight.w600),),
+                              SizedBox(height: SizeConfig.screenHeight * 0.1),
+
+                              FadeTransition(
+                                opacity: _fadeInOutAnimation,
+                                child: VoteFriend(admissionYear: "23", gender: "여", question: "6번째 뉴진스 멤버", datetime: "10초 전", index: 0),
+                              ), SizedBox(height: SizeConfig.defaultSize * 1.6),
+                              FadeTransition(
+                                opacity: _fadeInOutAnimation2,
+                                child: VoteFriend(admissionYear: "21", gender: "남", question: "모임에 꼭 있어야 하는", datetime: "1분 전", index: 1,),
+                              ), SizedBox(height: SizeConfig.defaultSize * 1.6),
+                              FadeTransition(
+                                opacity: _fadeInOutAnimation3,
+                                child: VoteFriend(admissionYear: "22", gender: "여", question: "OO와의 2023 ... 여름이었다", datetime: "5분 전", index: 2,),
+                              ), SizedBox(height: SizeConfig.defaultSize * 1.6),
+                              FadeTransition(
+                                opacity: _fadeInOutAnimation4,
+                                child: VoteFriend(admissionYear: "20", gender: "남", question: "디올 엠베서더 할 것 같은 사람", datetime: "10분 전", index: 3,),
+                              ), SizedBox(height: SizeConfig.defaultSize * 1.6),
+                              FadeTransition(
+                                opacity: _fadeInOutAnimation5,
+                                child: VoteFriend(admissionYear: "23", gender: "남", question: "OOO 갓생 폼 미쳤다", datetime: "30분 전", index: 4,),
+                              ), SizedBox(height: SizeConfig.defaultSize * 1.6),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        AnalyticsUtil.logEvent("대기_온보딩_세번째터치");
+                      },
+                      child: Container(
+                        color: Colors.white,
+                        child: Center(
+                          child: Column(
+                            children: [
+                              SizedBox(height: SizeConfig.screenHeight * 0.1,),
+                              Text("누가 나에게 관심을 갖고 있는지", style: TextStyle(fontSize: SizeConfig.defaultSize * 2.2, fontWeight: FontWeight.w600),),
+                              SizedBox(height: SizeConfig.defaultSize * 0.3),
+                              Text("궁금하지 않으신가요?", style: TextStyle(fontSize: SizeConfig.defaultSize * 2.2, fontWeight: FontWeight.w600),),
+                              SizedBox(height: SizeConfig.screenHeight * 0.1),
+                              Container(
+                                child: AnimatedBuilder(
+                                  animation: _letterAnimationController,
+                                  builder: (context, child) {
+                                    return Transform.scale(
+                                      scale: _letterAnimation.value,
+                                      child: Column(
+                                        mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                        crossAxisAlignment: CrossAxisAlignment.center,
+                                        children: [
+                                          Image.asset(
+                                            'assets/images/letter.png',
+                                            // color: Colors.indigo,
+                                            width: SizeConfig.defaultSize * 33,
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ),
+                              SizedBox(height: SizeConfig.screenHeight * 0.01),
+                              Text("나를 향한 투표들이 기다리고 있어요!", style: TextStyle(fontSize: SizeConfig.defaultSize * 2, fontWeight: FontWeight.w600),),
+                              SizedBox(height: SizeConfig.defaultSize * 1),
+                              Text("친구들과 즐기러 가볼까요?", style: TextStyle(fontSize: SizeConfig.defaultSize * 2, fontWeight: FontWeight.w600),),
+                            ],
+                          ),
                         ),
                       ),
                     ),
@@ -738,10 +769,14 @@ class _OnboardingSlideState extends State<OnboardingSlide> with TickerProviderSt
 
 class FriendNotExistsView extends StatefulWidget {
   final String myCode;
+  final int index;
+  final int friendCount;
 
   const FriendNotExistsView({
     super.key,
     required this.myCode,
+    required this.index,
+    required this.friendCount,
   });
 
   @override
@@ -756,6 +791,9 @@ class _FriendNotExistsViewState extends State<FriendNotExistsView> {
     // 친구 없음 | 비어있어요!
     return GestureDetector(
       onTap: () {
+        AnalyticsUtil.logEvent("대기_눌러서친구추가", properties: {
+          "버튼 인덱스": widget.index, "현재 친구 수": widget.friendCount
+        });
         showModalBottomSheet(
             context: context,
             shape: RoundedRectangleBorder(
@@ -764,6 +802,7 @@ class _FriendNotExistsViewState extends State<FriendNotExistsView> {
             backgroundColor: Colors.white,
             isScrollControlled: true,
             builder: (BuildContext _) {
+              AnalyticsUtil.logEvent("대기_친추_접속");
               return Container(
                 height: SizeConfig.screenHeight,
                 width: SizeConfig.screenWidth,
@@ -832,18 +871,26 @@ class _FriendNotExistsViewState extends State<FriendNotExistsView> {
                         ),
                         ElevatedButton(
                           onPressed: () {
-                            if (friendCode == widget.myCode) {ToastUtil.showToast('나는 친구로 추가할 수 없어요!');}
+                            String friendCodeConfirm = "";
+                            if (friendCode == widget.myCode) {
+                              ToastUtil.showToast('나는 친구로 추가할 수 없어요!');
+                              friendCodeConfirm = "나";
+                            }
                             else {
                               print("friendCode $friendCode");
-                              // try {
                               try {
                                 BlocProvider.of<StandbyCubit>(context).pressedFriendCodeAddButton(friendCode);
                                 ToastUtil.showToast('친구가 추가 되었어요!');
                                 Navigator.pop(context);
+                                friendCodeConfirm = "정상";
                               } catch (e) {
                                 ToastUtil.showToast('친구코드를 다시 한번 확인해주세요!');
+                                friendCodeConfirm = "없거나 이미 친구임";
                               }
                             }
+                            AnalyticsUtil.logEvent('대기_친추_친구코드_추가', properties: {
+                              '친구코드 번호': friendCode, '친구코드 정상여부': friendCodeConfirm
+                            });
                           },
                           style: ElevatedButton.styleFrom(
                               primary: Colors.indigoAccent,
@@ -894,6 +941,7 @@ class _FriendNotExistsViewState extends State<FriendNotExistsView> {
                                 ),
                                 ElevatedButton(
                                     onPressed: () {
+                                      AnalyticsUtil.logEvent("대기_친추_내코드복사");
                                       String myCodeCopy = widget.myCode;
                                       Clipboard.setData(ClipboardData(text: myCodeCopy)); // 클립보드에 복사되었어요 <- 메시지 자동으로 Android에서 뜸 TODO : iOS는 확인하고 복사멘트 띄우기
                                     },
@@ -921,6 +969,7 @@ class _FriendNotExistsViewState extends State<FriendNotExistsView> {
 
                     GestureDetector(
                       onTap: () {
+                        AnalyticsUtil.logEvent("대기_친추_링크공유");
                         shareContent(context);
                       },
                       child: Padding(
@@ -1057,11 +1106,13 @@ class FriendExistsView extends StatelessWidget {
 class openAddFriends extends StatefulWidget {
   late String myCode;
   late bool disabledFunctions;
+  late int friendCount;
 
   openAddFriends({
     super.key,
     required this.myCode,
     this.disabledFunctions = false,
+    required this.friendCount,
   });
 
   @override
@@ -1075,6 +1126,7 @@ class _openAddFriendsState extends State<openAddFriends> {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () { // ModalBottomSheet 열기
+        AnalyticsUtil.logEvent('대기_선택지에친구넣기', properties: {"현재 친구 수": widget.friendCount});
         showModalBottomSheet(
             context: context,
             shape: const RoundedRectangleBorder(
@@ -1299,6 +1351,7 @@ class _openAddFriendsState extends State<openAddFriends> {
                         SizedBox(height: SizeConfig.defaultSize * 10),
                         TextButton(
                           onPressed: () {
+                            AnalyticsUtil.logEvent("대기_친추_닫기");
                             Navigator.pop(context);
                           },
                           child: Text(

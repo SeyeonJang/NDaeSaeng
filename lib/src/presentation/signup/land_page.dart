@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:ui';
 import 'package:dart_flutter/res/size_config.dart';
 import 'package:dart_flutter/src/common/auth/auth_cubit.dart';
+import 'package:dart_flutter/src/common/util/analytics_util.dart';
 import 'package:dart_flutter/src/common/util/toast_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -108,6 +109,7 @@ class _LandingPageState extends State<LandingPage> {
                   borderRadius: BorderRadius.circular(10)),
               child: GestureDetector(
                 onTap: () {
+                  _clickLogin('카카오');
                   try {
                     BlocProvider.of<AuthCubit>(context).kakaoLogin();
                   } catch (e) {
@@ -129,6 +131,7 @@ class _LandingPageState extends State<LandingPage> {
                */
               GestureDetector(
                 onTap: () {
+                  _clickLogin('애플');
                   BlocProvider.of<AuthCubit>(context).appleLogin();
                 },
                 child: Container(
@@ -155,4 +158,8 @@ class _LandingPageState extends State<LandingPage> {
       ),
     );
   }
+}
+
+void _clickLogin(String state) {
+  AnalyticsUtil.logEvent("로그인_버튼클릭", properties: {"로그인 타입" : state});
 }
