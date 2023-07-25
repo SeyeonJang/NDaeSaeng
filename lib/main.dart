@@ -53,13 +53,14 @@ void main() async {
   // print(await KakaoSdk.origin);
   HydratedBloc.storage = await HydratedStorage.build(storageDirectory: await getTemporaryDirectory());
 
-  runApp(MaterialApp(
-    home: BlocProvider(
+  runApp(BlocProvider(
       create: (BuildContext context) => AuthCubit()..setLandPage(),
-      child: const MyApp(),
+      child: MaterialApp(
+        home: const MyApp(),
+        theme: AppTheme.lightThemeData,
+      ),
     ),
-    theme: AppTheme.lightThemeData,
-  ));
+  );
 }
 
 class MyApp extends StatelessWidget {

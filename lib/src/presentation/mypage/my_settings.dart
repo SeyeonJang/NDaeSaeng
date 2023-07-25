@@ -2,9 +2,9 @@ import 'dart:io';
 
 import 'package:dart_flutter/src/common/auth/auth_cubit.dart';
 import 'package:dart_flutter/src/common/util/toast_util.dart';
-import 'package:dart_flutter/src/presentation/mypage/logout_goto_landPage.dart';
-import 'package:dart_flutter/src/presentation/mypage/viewmodel/mypages_cubit.dart';
-import 'package:dart_flutter/src/presentation/mypage/viewmodel/state/mypages_state.dart';
+import 'package:dart_flutter/src/data/model/user.dart';
+import 'package:dart_flutter/src/presentation/mypage/my_tos1.dart';
+import 'package:dart_flutter/src/presentation/mypage/my_tos2.dart';
 import 'package:dart_flutter/src/presentation/signup/land_pages.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -16,33 +16,24 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../../res/size_config.dart';
 
 class MySettings extends StatelessWidget {
-  MySettings({Key? key}) : super(key: key);
+  final UserResponse userResponse;
 
-  void onLogoutButtonPressed(BuildContext context) async {
-    await BlocProvider.of<AuthCubit>(context).kakaoLogout();
-    Navigator.pushAndRemoveUntil(
-      context,
-      MaterialPageRoute(builder: (context) => const LogoutTogoLandPage()),
-      (route) => false,
-    );
-  }
+  MySettings({super.key, required this.userResponse});
 
   @override
   Widget build(BuildContext context) {
-    // return Scaffold(
-    //   body: SafeArea(
-    //     child:
-    //       BlocBuilder<MyPagesCubit, MyPagesState>(builder: (context, state) {
-    //         return const MyPageView();
-    //       }),
-    //   ),
-    // );
-    return const MyPageView();
+    return Scaffold(
+        backgroundColor: Colors.white,
+        body: SafeArea(
+            child: MyPageView(userResponse: userResponse),
+        ),
+    );
   }
 }
 
 class MyPageView extends StatefulWidget {
-  const MyPageView({super.key});
+  final UserResponse userResponse;
+  MyPageView({super.key, required this.userResponse});
 
   static final _defaultPadding = EdgeInsets.all(getFlexibleSize(target: 20));
 
@@ -51,6 +42,16 @@ class MyPageView extends StatefulWidget {
 }
 
 class _MyPageViewState extends State<MyPageView> {
+  String get name => widget.userResponse.user?.name ?? "XXX";
+  String get universityName => widget.userResponse.university?.name ?? "XX대학교";
+  String get department => widget.userResponse.university?.department ?? "XXX학과";
+  String get admissionNumber =>
+      "${widget.userResponse.user?.admissionYear ?? 'XX'}학번";
+  String get newAdmissionNumber => getId(admissionNumber);
+  String get gender => widget.userResponse.user?.gender ?? 'XX';
+  String get newGender => getGender(gender);
+  String get inviteCode => widget.userResponse.user?.recommendationCode ?? 'XXXXXXXX';
+
   void onLogoutButtonPressed(BuildContext context) async {
     // 로그아웃 버튼 연결
     await BlocProvider.of<AuthCubit>(context).kakaoLogout();
@@ -90,12 +91,11 @@ class _MyPageViewState extends State<MyPageView> {
   int mbtiIndex3 = 0;
   int mbtiIndex4 = 0;
 
-  MyPagesCubit _getMyPageCubit(BuildContext context) =>
-      BlocProvider.of<MyPagesCubit>(context);
-
   Widget _topBarSection(BuildContext context) => Row(children: [
         IconButton(
-            onPressed: () => _getMyPageCubit(context).backToMyPageLanding(),
+            onPressed: () => {
+              Navigator.pop(context)
+            },
             icon: Icon(Icons.arrow_back_ios_new_rounded,
                 size: SizeConfig.defaultSize * 2)),
         Text("설정",
@@ -106,75 +106,60 @@ class _MyPageViewState extends State<MyPageView> {
       ]);
 
   Widget _infoSection(BuildContext context) => Padding(
-        padding: MyPageView._defaultPadding,
-        child: Column(
-          children: [
-            _topBarSection(context),
-            const DtFlexSpacer(30),
-            Padding(
-              padding: EdgeInsets.symmetric(
-                  vertical: getFlexibleSize(),
-                  horizontal: getFlexibleSize(target: 20)),
-              child: BlocBuilder<MyPagesCubit, MyPagesState>(
-                builder: (context, state) {
-                  String name = state.userResponse.user?.name ?? "XXX";
-                  String universityName =
-                      state.userResponse.university?.name ?? "XX대학교";
-                  String department = state.userResponse.university?.department ?? "XXX학과";
-                  String admissionNumber =
-                      "${state.userResponse.user?.admissionYear ?? 'XX'}학번";
-                  String newAdmissionNumber = getId(admissionNumber);
-                  String gender = state.userResponse.user?.gender ?? 'XX';
-                  String newGender = getGender(gender);
-                  String inviteCode = state.userResponse.user?.recommendationCode ?? 'XXXXXXXX';
-
-                  return Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      _infoSectionItem(title: "이름", value: name),
-                      _infoSectionItem(title: "학교", value: universityName),
-                      _infoSectionItem(title: "학과", value: department),
-                      _infoSectionItem(title: "학번", value: newAdmissionNumber),
-                      _infoSectionItem(title: "성별", value: newGender),
-                      _infoSectionItem(title: "초대코드", value: inviteCode),
-                      // Container( // MBTI 구현은 완료해둠
-                      //   height: SizeConfig.defaultSize * 5,
-                      //   child: Flexible(
-                      //     child: Row(
-                      //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      //       children: [
-                      //         Text("MBTI", style: TextStyle(
-                      //           fontSize: SizeConfig.defaultSize * 1.6,
-                      //           fontWeight: FontWeight.w400,
-                      //         ),),
-                      //         CupertinoButton.filled(
-                      //           padding: EdgeInsets.fromLTRB(10,0,10,0),
-                      //           onPressed: () {
-                      //             showCupertinoModalPopup(
-                      //             context: context,
-                      //             builder: (context) => CupertinoActionSheet(
-                      //               actions: [buildPicker()],
-                      //               cancelButton: CupertinoActionSheetAction(
-                      //                 child: Text("취소"),
-                      //                 onPressed: () => Navigator.pop(context),
-                      //               ),
-                      //               ),
-                      //           );},
-                      //           child: Text(mbti1[mbtiIndex1]+mbti2[mbtiIndex2]+mbti3[mbtiIndex3]+mbti4[mbtiIndex4]),
-                      //           // TODO : state, cubit 만들어서 선택한 MBTI 저장해야함 + 서버 넘겨야함 (MEET)
-                      //         ),
-                      //       ],
-                      //     ),
-                      //   ),
-                      // ),
-                    ],
-                  );
-                },
-              ),
-            ),
-          ],
+    padding: MyPageView._defaultPadding,
+    child: Column(
+      children: [
+        _topBarSection(context),
+        const DtFlexSpacer(30),
+        Padding(
+          padding: EdgeInsets.symmetric(
+              vertical: getFlexibleSize(),
+              horizontal: getFlexibleSize(target: 20)), // Comma was missing here
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              _infoSectionItem(title: "이름", value: name),
+              _infoSectionItem(title: "학교", value: universityName),
+              _infoSectionItem(title: "학과", value: department),
+              _infoSectionItem(title: "학번", value: newAdmissionNumber),
+              _infoSectionItem(title: "성별", value: newGender),
+              _infoSectionItem(title: "초대코드", value: inviteCode),
+              // Container( // MBTI 구현은 완료해둠
+              //   height: SizeConfig.defaultSize * 5,
+              //   child: Flexible(
+              //     child: Row(
+              //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //       children: [
+              //         Text("MBTI", style: TextStyle(
+              //           fontSize: SizeConfig.defaultSize * 1.6,
+              //           fontWeight: FontWeight.w400,
+              //         ),),
+              //         CupertinoButton.filled(
+              //           padding: EdgeInsets.fromLTRB(10,0,10,0),
+              //           onPressed: () {
+              //             showCupertinoModalPopup(
+              //             context: context,
+              //             builder: (context) => CupertinoActionSheet(
+              //               actions: [buildPicker()],
+              //               cancelButton: CupertinoActionSheetAction(
+              //                 child: Text("취소"),
+              //                 onPressed: () => Navigator.pop(context),
+              //               ),
+              //               ),
+              //           );},
+              //           child: Text(mbti1[mbtiIndex1]+mbti2[mbtiIndex2]+mbti3[mbtiIndex3]+mbti4[mbtiIndex4]),
+              //           // TODO : state, cubit 만들어서 선택한 MBTI 저장해야함 + 서버 넘겨야함 (MEET)
+              //         ),
+              //       ],
+              //     ),
+              //   ),
+              // ),
+            ],
+          ),
         ),
-      );
+      ],
+    ),
+  );
 
   Container buildPicker() { // MBTI 고르는 화면
     return Container(
@@ -401,16 +386,14 @@ class _MyPageViewState extends State<MyPageView> {
                   SizedBox(height: SizeConfig.defaultSize * 1.5,),
               TextButton(
                 onPressed: () {
-                  BlocProvider.of<MyPagesCubit>(context)
-                      .pressedTos1(); // 설정 화면으로 넘어가기
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => const MyTos1()));
                 },
                 child: Text("이용약관",
                     style: TextStyle(fontSize: SizeConfig.defaultSize * 1.4, color: Color(0xff7C83FD))),
               ),
               TextButton(
                 onPressed: () {
-                  BlocProvider.of<MyPagesCubit>(context)
-                      .pressedTos2(); // 설정 화면으로 넘어가기
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => const MyTos2()));
                 },
                 child: Text("개인정보 처리방침",
                     style: TextStyle(fontSize: SizeConfig.defaultSize * 1.4, color: Color(0xff7C83FD))),
