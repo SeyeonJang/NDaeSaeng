@@ -1,3 +1,4 @@
+import 'package:dart_flutter/res/size_config.dart';
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
@@ -9,10 +10,16 @@ class MyOpinion extends StatefulWidget {
 }
 
 class _MyOpinionState extends State<MyOpinion> {
-  WebViewController _webViewController = WebViewController()..loadRequest(Uri.parse('https://tally.so/r/wzNV5E'));
+  WebViewController _webViewController = WebViewController()..loadRequest(Uri.parse('https://tally.so/r/mYR270'));
 
   @override
   Widget build(BuildContext context) {
-    return WebViewWidget(controller: _webViewController);
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: SafeArea(child: Padding(
+        padding: EdgeInsets.all(SizeConfig.defaultSize * 3),
+        child: WebViewWidget(controller: _webViewController),
+      )),
+    );
   }
 }
