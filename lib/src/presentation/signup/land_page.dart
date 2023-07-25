@@ -90,7 +90,7 @@ class _LandingPageState extends State<LandingPage> {
             SizedBox(height: SizeConfig.defaultSize * 2,),
             AnimatedContainer(
               height: SizeConfig.screenHeight * 0.15,
-                duration: Duration(milliseconds: 500),
+                duration: Duration(milliseconds: 400),
                 curve: Curves.easeInOut,
                 child: Image.asset(
                   _images[_currentPage],
@@ -127,17 +127,17 @@ class _LandingPageState extends State<LandingPage> {
 
                   TODO : 애플 로그인은 iOS 13부터 지원함 -> 코드에 적용하기 (UI나 로직)
                */
-              Container(
-                width: SizeConfig.screenWidth * 0.8,
-                height: SizeConfig.defaultSize * 4.8,
-                decoration: BoxDecoration(
-                    color: Colors.black,
-                    borderRadius: BorderRadius.circular(10)),
-                alignment: Alignment.center,
-                child: GestureDetector(
-                  onTap: () {
-                    BlocProvider.of<AuthCubit>(context).appleLogin();
-                  },
+              GestureDetector(
+                onTap: () {
+                  BlocProvider.of<AuthCubit>(context).appleLogin();
+                },
+                child: Container(
+                  width: SizeConfig.screenWidth * 0.8,
+                  height: SizeConfig.defaultSize * 4.8,
+                  decoration: BoxDecoration(
+                      color: Colors.black,
+                      borderRadius: BorderRadius.circular(10)),
+                  alignment: Alignment.center,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -148,7 +148,8 @@ class _LandingPageState extends State<LandingPage> {
                     ],
                   ),
                 ),
-              ),
+              )
+
           ],
         ),
       ),

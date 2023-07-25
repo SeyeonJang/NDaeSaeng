@@ -30,6 +30,10 @@ class DartUserRepository {
   Future<void> updateMyInfo(String accessToken, UserRequest userRequest) async {
     return await DartApiRemoteDataSource.putUser(accessToken, userRequest);
   }
+
+  void cleanUpUserResponseCache() {
+    userResponseCache.clean();
+  }
 }
 
 class UserResponseCache extends MyCache {

@@ -1,5 +1,6 @@
 class KakaoUser {
-  final String uuid, profileImageUrl, gender, accessToken;
+  final String uuid, accessToken;
+  final String? profileImageUrl, gender;
 
   KakaoUser({
     required this.uuid,

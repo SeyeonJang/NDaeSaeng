@@ -26,13 +26,12 @@ class VoteCubit extends HydratedCubit<VoteState> {
     // 친구 목록 설정
     List<Friend> friends = await _dartFriendRepository.getMyFriends();
     state.setFriends(friends);
-    // // 다음 투표 가능 시간을 기록
-    // // DateTime nextVoteTime = await _dartUserRepository.getMyNextVoteTime("TODO MY ACCESSTOKEN");
-    // DateTime nextVoteTime = DateTime.now();
-    // state.setNextVoteDateTime(nextVoteTime);
-    //
-    // // ㅇㄹㄴㅁㅇdfsadftep 설정
-    // _setStepByNextVoteTime();
+
+    // 다음 투표 가능 시간을 기록
+    await getNextVoteTime();
+
+    // 다음 스텝 지정
+    _setStepByNextVoteTime();
 
     emit(state.copy());
   }
@@ -63,20 +62,13 @@ class VoteCubit extends HydratedCubit<VoteState> {
 
   void nextVote(VoteRequest voteRequest) async {
     state.pickUserInVote(voteRequest);
+    _dartVoteRepository.sendMyVote(voteRequest);  // 투표한 내용을 서버로 전달
     state.nextVote();
     if (state.isVoteDone()) {
-      // 투표한 내용을 서버에 전달
-      // _dartVoteRepository.sendMyVotes(state.votes);  //TODO 서버에서 한번에 받도록 수정
-      for (var vote in state.votes) {
-        _dartVoteRepository.sendMyVote(vote);
-      }
-
       // 투표 리스트 비우기 + 다음투표가능시간 갱신 + (포인트는 My page에서 값 받아오면 알아서 갱신되어있음)
-      DateTime myNextVoteTime = await _dartVoteRepository.getNextVoteTime();
+      DateTime myNextVoteTime = await _dartVoteRepository.postNextVoteTime();
       state.setNextVoteDateTime(myNextVoteTime);
     }
-
-    // 상태 갱신
     emit(state.copy());
   }
 
@@ -86,8 +78,15 @@ class VoteCubit extends HydratedCubit<VoteState> {
   }
 
   void stepWait() {
+    getNextVoteTime();
     _setStepByNextVoteTime();
     emit(state.copy());
+  }
+
+  Future<DateTime> getNextVoteTime() async {
+    DateTime myNextVoteTime = await _dartVoteRepository.getNextVoteTime();
+    state.setNextVoteDateTime(myNextVoteTime);
+    return myNextVoteTime;
   }
 
   void inviteFriend() {
@@ -102,11 +101,15 @@ class VoteCubit extends HydratedCubit<VoteState> {
   }
 
   void _setStepByNextVoteTime() {
-    if (state.isVoteTimeOver()) {
+    if (isVoteTimeOver()) {
       state.setStep(VoteStep.start);
     } else {
       state.setStep(VoteStep.wait);
     }
+  }
+
+  bool isVoteTimeOver() {
+    return state.isVoteTimeOver();
   }
 
   @override

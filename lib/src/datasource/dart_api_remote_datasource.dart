@@ -218,6 +218,14 @@ class DartApiRemoteDataSource {
     return DateTime.parse(response.data['nextVoteAvailableDateTime']);
   }
 
+  // vote: 투표 완료 사인을 보내서 갱신하기
+  static Future<DateTime> postNextVoteTime() async {
+    const path = '/v1/users/me/next-voting-time';
+
+    final response = await _httpUtil.request().post(path);
+    return DateTime.parse(response.data['nextVoteAvailableDateTime']);
+  }
+
   // --------------------------------------------------------------------------
 
   static Future<Map<String, dynamic>> _simplePost(String path, Object? body) async {

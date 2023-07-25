@@ -24,21 +24,19 @@ class _VoteTimerState extends State<VoteTimer> {
       });
     } else {
       setState(() {
-        // totalSeconds--;
         totalSeconds = BlocProvider.of<VoteCubit>(context).state.leftNextVoteTime();
       });
     }
   }
 
   String format(int seconds) {
-    var duration = Duration(seconds: seconds); // 시간형식으로 나타내줌 0:00:00.000000
-    String time = duration.toString().split(".").first.substring(2);
+    var duration = Duration(seconds: seconds).toString(); // 시간형식으로 나타내줌 0:00:00.000000
 
-    if (time.startsWith(':')) {
-      time.substring(1);
-    }
+    List<String> parts = duration.split(":"); // 콜론을 기준으로 문자열을 분할합니다.
+    String hh = parts[1]; // 시간 부분을 hh에 저장합니다.
+    String ss = parts[2].split(".")[0]; // 초 부분을 ss에 저장합니다. (소수점 이하 자릿수를 제거하기 위해 "."을 기준으로 분할)
 
-    return time;
+    return "$hh:$ss"; // 가운데 hh:ss 형식으로 반환합니다.
   }
 
   @override

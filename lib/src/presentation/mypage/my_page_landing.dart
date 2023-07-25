@@ -2,7 +2,7 @@ import 'package:contextmenu/contextmenu.dart';
 import 'package:dart_flutter/res/size_config.dart';
 import 'package:dart_flutter/src/common/util/toast_util.dart';
 import 'package:dart_flutter/src/data/model/friend.dart';
-import 'package:dart_flutter/src/presentation/meet/viewmodel/meet_cubit.dart';
+import 'package:dart_flutter/src/presentation/mypage/my_settings.dart';
 import 'package:dart_flutter/src/presentation/mypage/viewmodel/mypages_cubit.dart';
 import 'package:dart_flutter/src/presentation/mypage/viewmodel/state/mypages_state.dart';
 import 'package:flutter/cupertino.dart';
@@ -22,11 +22,6 @@ class MyPageLanding extends StatefulWidget {
 }
 
 class _MyPageLandingState extends State<MyPageLanding> {
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   BlocProvider.of<MyPagesCubit>(context).initPages();
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -82,9 +77,8 @@ class MyPageLandingView extends StatelessWidget {
                       children: [
                         BlocBuilder<MyPagesCubit,MyPagesState>(
                             builder: (context, state) {
-                              String name = state.userResponse.user?.name??"###";
-                              // String admissionNumber = "${state.userResponse.user?.admissionYear.toString().substring(2,4)??"##"}학번";
-                              String admissionNumber = "학번";
+                              String name = state.userResponse.user?.name ?? "###";
+                              String admissionNumber = "${state.userResponse.user?.admissionYear.toString().substring(2,4)??"##"}학번";
 
                               return Row(
                                 children: [
@@ -102,14 +96,16 @@ class MyPageLandingView extends StatelessWidget {
                                       fontSize: SizeConfig.defaultSize * 1.6,
                                       color: Colors.white,
                                     ),),
-                                ],
+                                ]
                               );
                             }
                         ),
                         IconButton(
                           icon: const Icon(Icons.settings, color: Colors.white,),
                           onPressed: () {
-                            BlocProvider.of<MyPagesCubit>(context).pressedSettingsIcon(); // 설정 화면으로 넘어가기
+                            Navigator.push(context, MaterialPageRoute(builder: (_) => MySettings(
+                              userResponse: BlocProvider.of<MyPagesCubit>(context).state.userResponse,
+                            )));
                           },
                           iconSize: SizeConfig.defaultSize * 2.4,
                         ),
@@ -208,11 +204,6 @@ class MyPageLandingView extends StatelessWidget {
         // =================================================================
 
         SizedBox(height: SizeConfig.defaultSize),
-        // Container( // 구분선
-        //   padding: EdgeInsets.only(top: 0, bottom: 0, left: 0, right: 0,),
-        //   height: SizeConfig.defaultSize * 2,
-        //   color: Colors.grey.withOpacity(0.1),
-        // ),
 
         Container(
           // height: SizeConfig.defaultSize * 130,
@@ -304,11 +295,15 @@ class MyFriends extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        for (int i = 0; i < this.count; i++)
-          FriendComponent(false, friends[i]),
-      ],
+    return BlocBuilder<MyPagesCubit,MyPagesState>(
+      builder: (context, state) {
+        return Column(
+          children: [
+            for (int i = 0; i < this.count; i++)
+              FriendComponent(false, friends[i], count),
+          ],
+        );
+      }
     );
   }
 }
@@ -337,10 +332,12 @@ class NewFriends extends StatelessWidget {
 class FriendComponent extends StatelessWidget {
   late bool isAdd;
   late Friend friend;
+  late int count;
 
-  FriendComponent(bool isAdd, Friend friend, {super.key}) {
+  FriendComponent(bool isAdd, Friend friend, int count, {super.key}) {
     this.isAdd = isAdd;
     this.friend = friend;
+    this.count = count;
   }
 
   void pressedDeleteButton(BuildContext context, int userId) {
@@ -349,6 +346,18 @@ class FriendComponent extends StatelessWidget {
 
   void pressedAddButton(BuildContext context, int userId) {
     BlocProvider.of<MyPagesCubit>(context).pressedFriendAddButton(friend);
+  }
+
+  void showCannotAddFriendToast() {
+    Fluttertoast.showToast(
+      msg: "친구가 4명일 때는 삭제할 수 없어요!",
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.BOTTOM,
+      timeInSecForIosWeb: 1,
+      backgroundColor: Color(0xff7C83FD),
+      textColor: Colors.white,
+      fontSize: SizeConfig.defaultSize * 1.6,
+    );
   }
 
   @override
@@ -412,10 +421,37 @@ class FriendComponent extends StatelessWidget {
                   );
                 }
                 else if (value == 'delete') {
-                  if (isAdd) {
-                    pressedAddButton(context, friend.userId!);
+                  if (count >= 5) {
+                    if (isAdd) {
+                      pressedAddButton(context, friend.userId!);
+                    } else {
+                      // pressedDeleteButton(context, friend.userId!); // 원래 코드
+                      showDialog<String>(
+                        context: context,
+                        builder: (BuildContext dialogContext) => AlertDialog(
+                          title: Text('\'${friend.name}\' 친구를 삭제하시겠어요?', style: TextStyle(fontSize: SizeConfig.defaultSize * 2),),
+                          // content: const Text('사용자를 신고하면 Dart에서 빠르게 신고 처리를 해드려요!'),
+                          backgroundColor: Colors.white,
+                          surfaceTintColor: Colors.white,
+                          actions: <Widget>[
+                            TextButton(
+                              onPressed: () => Navigator.pop(dialogContext, '취소'),
+                              child: const Text('취소', style: TextStyle(color: Color(0xff7C83FD)),),
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                pressedDeleteButton(context, friend.userId!);
+                                // BlocProvider.of<MyPagesCubit>(context).pressedFriendDeleteButton(friend);
+                                Navigator.pop(dialogContext); // 팝업 창을 닫는 로직 추가
+                              },
+                              child: const Text('삭제', style: TextStyle(color: Color(0xff7C83FD)),),
+                            ),
+                          ],
+                        ),
+                      );
+                    }
                   } else {
-                    pressedDeleteButton(context, friend.userId!);
+                      showCannotAddFriendToast();
                   }
                 }
               },
@@ -432,20 +468,6 @@ class FriendComponent extends StatelessWidget {
                 ];
               },
             ),
-
-            // ElevatedButton(
-            //   onPressed: () {
-            //     if (isAdd) {
-            //       pressedAddButton(context, friend.userId!);
-            //     } else {
-            //       pressedDeleteButton(context, friend.userId!);
-            //     }
-            //   },
-            //   child: Text(isAdd?"추가":"삭제", style: TextStyle(
-            //     fontSize: SizeConfig.defaultSize * 1.4,
-            //     fontWeight: FontWeight.w500,
-            //   )),
-            // ),
           ],
         ),
         SizedBox(height: SizeConfig.defaultSize * 0.1,),
