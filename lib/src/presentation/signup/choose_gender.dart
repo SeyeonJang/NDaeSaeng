@@ -1,3 +1,5 @@
+import 'package:dart_flutter/src/common/util/analytics_util.dart';
+
 import '../../../res/size_config.dart';
 import 'package:dart_flutter/src/common/auth/auth_cubit.dart';
 import 'package:dart_flutter/src/presentation/page_view.dart';
@@ -25,7 +27,7 @@ class _ChooseGenderState extends State<ChooseGender> {
 
   final List<bool> _selectedGender2 = [false, false];
   String selectedGender2 = "";
-
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -56,6 +58,9 @@ class _ChooseGenderState extends State<ChooseGender> {
                     }
                     if (index == 0) selectedGender = "FEMALE";
                     if (index == 1) selectedGender = "MALE";
+                  });
+                  AnalyticsUtil.logEvent("회원가입_성별_선택", properties: {
+                    "성별": selectedGender=="FEMALE" ? "여자" : "남자"
                   });
                   print("$index, ${_selectedGender[index]}, $selectedGender");
                 },
@@ -101,6 +106,7 @@ class _ChooseGenderState extends State<ChooseGender> {
                   children: [
                     TextButton(
                       onPressed: () {
+                        AnalyticsUtil.logEvent("회원가입_성별_이용약관");
                         Navigator.push(context, MaterialPageRoute(builder: (_) => Tos1()));
                       },
                       child: Text("이용약관", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.3)),
@@ -108,6 +114,7 @@ class _ChooseGenderState extends State<ChooseGender> {
                     Text("및", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.3)),
                     TextButton(
                       onPressed: () {
+                        AnalyticsUtil.logEvent("회원가입_성별_개인정보");
                         Navigator.push(context, MaterialPageRoute(builder: (_) => Tos2()));
                       },
                       child: Text("개인정보 처리방침", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.3)),
@@ -126,6 +133,7 @@ class _ChooseGenderState extends State<ChooseGender> {
                 child: _selectedGender.contains(true)
                     ? ElevatedButton(
                     onPressed: () {
+                      AnalyticsUtil.logEvent("회원가입_성별_다음");
                       BlocProvider.of<SignupCubit>(context).stepGender(selectedGender);  // TODO 성별선택 controller 를 통해 사용자 입력을 받아오기
                       BlocProvider.of<AuthCubit>(context).doneSignup();
                     },

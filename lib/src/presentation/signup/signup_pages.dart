@@ -1,3 +1,4 @@
+import 'package:dart_flutter/src/common/util/analytics_util.dart';
 import 'package:dart_flutter/src/presentation/signup/cert_num.dart';
 import 'package:dart_flutter/src/presentation/signup/choose_gender.dart';
 import 'package:dart_flutter/src/presentation/signup/choose_id.dart';
@@ -28,15 +29,19 @@ class _SignupPagesState extends State<SignupPages> {
               return Center(child: CircularProgressIndicator());
             }
             if (state.signupStep.isSchool) {
+              AnalyticsUtil.logEvent("회원가입_학교_접속");
               return const ChooseSchool();
             }
             if (state.signupStep.isDepartment) {
+              AnalyticsUtil.logEvent("회원가입_학과_접속");
               return const ChooseMajor();
             }
             if (state.signupStep.isAdmissionNumber) {
+              AnalyticsUtil.logEvent("회원가입_학번나이_접속");
               return const ChooseId();
             }
             if (state.signupStep.isName) {
+              AnalyticsUtil.logEvent("회원가입_이름_접속");
               return UserName();
             }
             if (state.signupStep.isPhone) {
@@ -46,6 +51,7 @@ class _SignupPagesState extends State<SignupPages> {
               return CertNum();
             }
             if (state.signupStep.isGender) {
+              AnalyticsUtil.logEvent("회원가입_성별_접속");
               return const ChooseGender();
             }
             return SafeArea(child: Center(child: Text(state.toString())));

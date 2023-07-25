@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:dart_flutter/res/size_config.dart';
+import 'package:dart_flutter/src/common/util/analytics_util.dart';
 import 'package:dart_flutter/src/common/util/timeago_util.dart';
 import 'package:dart_flutter/src/data/model/vote.dart';
 import 'package:dart_flutter/src/presentation/vote_list/viewmodel/state/vote_list_state.dart';
@@ -59,34 +60,49 @@ class _VoteListViewState extends State<VoteListView> with SingleTickerProviderSt
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Container(
-                      child: AnimatedBuilder(
-                        animation: _animationController,
-                        builder: (context, child) {
-                          return Transform.scale(
-                            scale: _animation.value,
-                            child: Column(
-                              mainAxisAlignment:
-                              MainAxisAlignment.spaceBetween,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Image.asset(
-                                  'assets/images/letter.png',
-                                  // color: Colors.indigo,
-                                  width: SizeConfig.defaultSize * 30,
-                                ),
-                              ],
-                            ),
-                          );
+                      child: GestureDetector(
+                        onTap: () {
+                          AnalyticsUtil.logEvent("투표목록_받은투표없음_아이콘터치");
                         },
+                        child: AnimatedBuilder(
+                          animation: _animationController,
+                          builder: (context, child) {
+                            return Transform.scale(
+                              scale: _animation.value,
+                              child: Column(
+                                mainAxisAlignment:
+                                MainAxisAlignment.spaceBetween,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Image.asset(
+                                    'assets/images/letter.png',
+                                    // color: Colors.indigo,
+                                    width: SizeConfig.defaultSize * 30,
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
+                        ),
                       ),
                     ),
-                    Text("아직 받은 투표가 없어요!", style: TextStyle(
-                        fontSize: SizeConfig.defaultSize * 2, fontWeight: FontWeight.w600
-                    ),),
+                    GestureDetector(
+                      onTap: () {
+                        AnalyticsUtil.logEvent("투표목록_받은투표없음_텍스트터치");
+                      },
+                      child: Text("아직 받은 투표가 없어요!", style: TextStyle(
+                          fontSize: SizeConfig.defaultSize * 2, fontWeight: FontWeight.w600
+                      ),),
+                    ),
                     SizedBox(height: SizeConfig.defaultSize *2,),
-                    Text("친구들이 나를 투표하면 알림을 줄게요!", style: TextStyle(
-                        fontSize: SizeConfig.defaultSize * 2, fontWeight: FontWeight.w600
-                    ),),
+                    GestureDetector(
+                      onTap: () {
+                        AnalyticsUtil.logEvent("투표목록_받은투표없음_텍스트터치");
+                      },
+                      child: Text("친구들이 나를 투표하면 알림을 줄게요!", style: TextStyle(
+                          fontSize: SizeConfig.defaultSize * 2, fontWeight: FontWeight.w600
+                      ),),
+                    ),
                     // Container( // TODO HOTFIX : 투표 꿀팁 일단 보류 (넣으면 좋음)
                     //   child: Column(
                     //     children: [
@@ -122,6 +138,7 @@ class _VoteListViewState extends State<VoteListView> with SingleTickerProviderSt
               question: vote.question!.content ?? "(알수없음)",
               datetime: timeago,
               isVisited: visited,
+              questionId: vote.question!.questionId!
             ),
             SizedBox(height: SizeConfig.defaultSize * 1.4),
           ],
@@ -139,6 +156,7 @@ class dart extends StatelessWidget {
   final String question;
   final String datetime;
   final bool isVisited;
+  final int questionId;
 
   const dart({
     super.key,
@@ -148,6 +166,7 @@ class dart extends StatelessWidget {
     required this.question,
     required this.datetime,
     required this.isVisited,
+    required this.questionId,
   });
 
   String getGender(String gender) {
@@ -161,6 +180,13 @@ class dart extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
+        AnalyticsUtil.logEvent("투표목록_받은투표_받은투표상자", properties: {
+          "질문 인덱스": questionId,
+          "질문 내용": question,
+          "투표한 사람 성별": gender,
+          "투표한 사람 학번": admissionYear.substring(2,4),
+          "투표한 시간": datetime
+        });
         // BlocProvider.of<VoteListCubit>(context).pressedVoteInList(voteId); // TODO : MVP 이후 복구하기 (힌트 & Point가 생겼을 때)
       },
       child: Container(

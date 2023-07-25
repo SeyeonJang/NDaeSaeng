@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:dart_flutter/src/common/auth/auth_cubit.dart';
+import 'package:dart_flutter/src/common/util/analytics_util.dart';
 import 'package:dart_flutter/src/common/util/toast_util.dart';
 import 'package:dart_flutter/src/presentation/mypage/logout_goto_landPage.dart';
 import 'package:dart_flutter/src/presentation/mypage/my_ask.dart';
@@ -27,6 +28,7 @@ class MySettings extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    AnalyticsUtil.logEvent("내정보_설정_접속");
     return Scaffold(
         backgroundColor: Colors.white,
         body: SafeArea(
@@ -98,8 +100,9 @@ class _MyPageViewState extends State<MyPageView> {
 
   Widget _topBarSection(BuildContext context) => Row(children: [
         IconButton(
-            onPressed: () => {
-              Navigator.pop(context)
+            onPressed: () {
+              AnalyticsUtil.logEvent("내정보_설정_뒤로가기버튼");
+              Navigator.pop(context);
             },
             icon: Icon(Icons.arrow_back_ios_new_rounded,
                 size: SizeConfig.defaultSize * 2)),
@@ -306,7 +309,19 @@ class _MyPageViewState extends State<MyPageView> {
       Padding(
           padding: EdgeInsets.symmetric(vertical: getFlexibleSize(target: 12)),
           child:
-              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+              GestureDetector(
+                onTap: () {
+                  if (title != '이름') {
+                    AnalyticsUtil.logEvent("내정보_설정_내정보", properties: {
+                      "회원 정보 타입": title, "회원 정보 내용" : "이름"
+                    });
+                  } else {
+                    AnalyticsUtil.logEvent("내정보_설정_내정보", properties: {
+                      "회원 정보 타입": title, "회원 정보 내용" : "이름"
+                    });
+                  }
+                },
+                child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
             Text(title,
                 style: TextStyle(
                     fontWeight: FontWeight.w500,
@@ -315,7 +330,8 @@ class _MyPageViewState extends State<MyPageView> {
                 style: TextStyle(
                     fontWeight: FontWeight.w500,
                     fontSize: getFlexibleSize(target: 16))),
-          ]));
+          ]),
+              ));
 
   @override
   Widget build(BuildContext context) {
@@ -341,6 +357,7 @@ class _MyPageViewState extends State<MyPageView> {
                     children: [
                       TextButton(
                           onPressed: () async {
+                            AnalyticsUtil.logEvent("내정보_설정_회원탈퇴버튼");
                             TextEditingController textController = TextEditingController();
                             showDialog<String>(
                               context: context,
@@ -366,15 +383,17 @@ class _MyPageViewState extends State<MyPageView> {
                                       surfaceTintColor: Colors.white,
                                       actions: <Widget>[
                                         TextButton(
-                                          onPressed: () => Navigator.pop(dialogContext, '아니요'),
+                                          onPressed: () {
+                                            AnalyticsUtil.logEvent("내정보_설정_회원탈퇴_취소");
+                                            Navigator.pop(dialogContext, '아니요');
+                                          },
                                           child: const Text('아니요', style: TextStyle(color: Color(0xff7C83FD)),),
                                         ),
                                         TextButton(
                                             onPressed: textController.text == '회원탈퇴를 원해요' ? () async {
+                                              AnalyticsUtil.logEvent("내정보_설정_회원탈퇴_탈퇴확정");
                                               Navigator.pop(dialogContext);
-                                              print("1ok");
                                               BlocProvider.of<AuthCubit>(context).kakaoWithdrawal();
-                                              print("2ok");
                                               ToastUtil.showToast("회원탈퇴가 완료되었습니다.\n잠시후 앱이 종료됩니다.");
                                               await Future.delayed(const Duration(seconds: 2));
                                               restart();
@@ -401,6 +420,7 @@ class _MyPageViewState extends State<MyPageView> {
                       const DtFlexSpacer(2),
                       TextButton(
                           onPressed: () {
+                            AnalyticsUtil.logEvent("내정보_설정_로그아웃버튼");
                             showDialog<String>(
                               context: context,
                               builder: (BuildContext dialogContext) => AlertDialog(
@@ -410,11 +430,15 @@ class _MyPageViewState extends State<MyPageView> {
                                 surfaceTintColor: Colors.white,
                                 actions: <Widget>[
                                   TextButton(
-                                    onPressed: () => Navigator.pop(dialogContext, '아니요'),
+                                    onPressed: () {
+                                      AnalyticsUtil.logEvent("내정보_설정_로그아웃_취소");
+                                      Navigator.pop(dialogContext, '아니요');
+                                    },
                                     child: const Text('아니요', style: TextStyle(color: Color(0xff7C83FD)),),
                                   ),
                                   TextButton(
                                     onPressed: () async {
+                                      AnalyticsUtil.logEvent("내정보_설정_로그아웃_로그아웃확정");
                                       Navigator.pop(dialogContext);
                                       ToastUtil.showToast("로그아웃이 완료되었습니다.\n잠시후 앱이 종료됩니다.");
                                       BlocProvider.of<AuthCubit>(context).kakaoLogout();
@@ -455,6 +479,7 @@ class _MyPageViewState extends State<MyPageView> {
                   SizedBox(height: SizeConfig.defaultSize * 1.5,),
               TextButton(
                 onPressed: () {
+                  AnalyticsUtil.logEvent("내정보_설정_이용약관");
                   Navigator.push(context, MaterialPageRoute(builder: (context) => const MyTos1()));
                 },
                 child: Text("이용약관",
@@ -462,6 +487,7 @@ class _MyPageViewState extends State<MyPageView> {
               ),
               TextButton(
                 onPressed: () {
+                  AnalyticsUtil.logEvent("내정보_설정_개인정보처리방침");
                   Navigator.push(context, MaterialPageRoute(builder: (context) => const MyTos2()));
                 },
                 child: Text("개인정보 처리방침",
@@ -469,6 +495,7 @@ class _MyPageViewState extends State<MyPageView> {
               ),
               TextButton(
                 onPressed: () {
+                  AnalyticsUtil.logEvent("내정보_설정_건의하기");
                   Navigator.push(context, MaterialPageRoute(builder: (context) => const MyOpinion()));
                   // launchUrl(
                   //   Uri(
@@ -485,6 +512,7 @@ class _MyPageViewState extends State<MyPageView> {
               ),
               TextButton(
                 onPressed: () {
+                  AnalyticsUtil.logEvent("내정보_설정_1대1");
                   Navigator.push(context, MaterialPageRoute(builder: (context) => const MyAsk()));
                 //   launchUrl(
                 //     Uri(

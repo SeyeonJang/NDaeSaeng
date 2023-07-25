@@ -1,3 +1,4 @@
+import 'package:dart_flutter/src/common/util/analytics_util.dart';
 import 'package:dart_flutter/src/presentation/vote_list/viewmodel/state/vote_list_state.dart';
 import 'package:dart_flutter/src/presentation/vote_list/viewmodel/vote_list_cubit.dart';
 import 'package:dart_flutter/src/presentation/vote_list/vote_detail_view.dart';
@@ -20,12 +21,16 @@ class VoteListPages extends StatelessWidget {
           },
           builder: (context, state) {
             if (state.isFirstTime) {
+              AnalyticsUtil.logEvent("투표목록_안내_접속");
               return const VoteListInformView();
             }
             if (!state.isFirstTime) {
               if (state.isDetailPage) {
                 return const VoteDetailView();
               } else {
+                AnalyticsUtil.logEvent("투표목록_받은투표_접속", properties: {
+                  "받은 투표 개수": state.votes.length
+                });
                 return const VoteListView();
               }
             }

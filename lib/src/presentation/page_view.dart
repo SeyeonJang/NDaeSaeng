@@ -1,5 +1,6 @@
 import 'package:dart_flutter/res/size_config.dart';
 import 'package:dart_flutter/src/common/auth/auth_cubit.dart';
+import 'package:dart_flutter/src/common/util/analytics_util.dart';
 import 'package:dart_flutter/src/presentation/meet/meet_page.dart';
 import 'package:dart_flutter/src/common/util/toast_util.dart';
 import 'package:dart_flutter/src/presentation/meet/meetpages.dart';
@@ -131,6 +132,7 @@ class _TapBarButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
         onTap: () {
+          AnalyticsUtil.logEvent("상단탭_선택", properties: {"탭 이름": name});
           onTapNavigation(targetPage);
         },
         child: Container(

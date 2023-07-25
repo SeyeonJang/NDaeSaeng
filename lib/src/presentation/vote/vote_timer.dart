@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:dart_flutter/res/size_config.dart';
+import 'package:dart_flutter/src/common/util/analytics_util.dart';
 import 'package:dart_flutter/src/presentation/vote/vimemodel/vote_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -80,11 +81,16 @@ class _VoteTimerState extends State<VoteTimer> {
                       ),
                     ),
                     Container(
-                      child: Text(
-                        format(totalSeconds),
-                        style: TextStyle(
-                          fontWeight: FontWeight.w800,
-                          fontSize: SizeConfig.defaultSize * 9,
+                      child: GestureDetector(
+                        onTap: () {
+                          AnalyticsUtil.logEvent("투표_타이머_시간", properties: {"남은 시간": totalSeconds});
+                        },
+                        child: Text(
+                          format(totalSeconds),
+                          style: TextStyle(
+                            fontWeight: FontWeight.w800,
+                            fontSize: SizeConfig.defaultSize * 9,
+                          ),
                         ),
                       ),
                     ),

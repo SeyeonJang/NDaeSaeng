@@ -4,9 +4,10 @@ class Friend {
   int? userId;
   String? name;
   int? admissionYear;
+  String? gender;
   University? university;
 
-  Friend({this.userId, this.name, this.admissionYear, this.university});
+  Friend({this.userId, this.name, this.admissionYear, this.gender, this.university});
 
   Friend.fromJson(Map<String, dynamic> json) {
     userId = json['userId'];
@@ -15,6 +16,7 @@ class Friend {
     university = json['university'] != null
         ? University.fromJson(json['university'])
         : null;
+    gender = json['gender'];
   }
 
   Map<String, dynamic> toJson() {
@@ -25,12 +27,13 @@ class Friend {
     if (university != null) {
       data['university'] = university!.toJson();
     }
+    data['gender'] = gender;
     return data;
   }
 
   @override
   String toString() {
-    return 'Friend{userId: $userId, name: $name, admissionYear: $admissionYear, university: $university}';
+    return 'Friend{userId: $userId, name: $name, gender: $gender, admissionYear: $admissionYear, university: $university}';
   }
 }
 

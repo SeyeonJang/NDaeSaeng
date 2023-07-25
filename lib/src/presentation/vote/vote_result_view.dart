@@ -1,5 +1,6 @@
 import 'package:confetti/confetti.dart';
 import 'package:dart_flutter/res/size_config.dart';
+import 'package:dart_flutter/src/common/util/analytics_util.dart';
 import 'package:dart_flutter/src/presentation/vote/vimemodel/vote_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -75,11 +76,16 @@ class _VoteResultViewState extends State<VoteResultView> with SingleTickerProvid
                 flex: 3,
                 child: Container(
                   alignment: Alignment.center,
-                  child: SlideTransition(
-                    position: _animation,
-                    child: Image.asset(
-                      'assets/images/cloud.png',
-                      width: SizeConfig.defaultSize * 30,
+                  child: GestureDetector(
+                    onTap: () {
+                      AnalyticsUtil.logEvent("투표_끝_아이콘터치");
+                    },
+                    child: SlideTransition(
+                      position: _animation,
+                      child: Image.asset(
+                        'assets/images/cloud.png',
+                        width: SizeConfig.defaultSize * 30,
+                      ),
                     ),
                   ),
                 ),
@@ -103,6 +109,7 @@ class _VoteResultViewState extends State<VoteResultView> with SingleTickerProvid
                     ),
                     ElevatedButton(
                       onPressed: () {
+                        AnalyticsUtil.logEvent("투표_끝_다음");
                         BlocProvider.of<VoteCubit>(context).stepDone();
                       },
                       style: ButtonStyle(
