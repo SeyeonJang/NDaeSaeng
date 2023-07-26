@@ -7,6 +7,7 @@ part of 'vote_state.dart';
 // **************************************************************************
 
 VoteState _$VoteStateFromJson(Map<String, dynamic> json) => VoteState(
+      isLoading: false,
       step: $enumDecode(_$VoteStepEnumMap, json['step']),
       voteIterator: json['voteIterator'] as int,
       votes: (json['votes'] as List<dynamic>)
@@ -22,6 +23,7 @@ VoteState _$VoteStateFromJson(Map<String, dynamic> json) => VoteState(
     );
 
 Map<String, dynamic> _$VoteStateToJson(VoteState instance) => <String, dynamic>{
+      'isLoading': false,
       'step': _$VoteStepEnumMap[instance.step]!,
       'voteIterator': instance.voteIterator,
       'votes': instance.votes,

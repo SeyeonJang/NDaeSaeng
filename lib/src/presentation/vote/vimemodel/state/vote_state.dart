@@ -9,6 +9,7 @@ part 'vote_state.g.dart';
 class VoteState {
   static const int MAX_VOTE_ITERATOR = 8;
 
+  late bool isLoading;
   late VoteStep step;
   late int voteIterator;
 
@@ -19,6 +20,7 @@ class VoteState {
   late List<Friend> friends;
 
   VoteState({
+    required this.isLoading,
     required this.step,
     required this.voteIterator,
     required this.votes,
@@ -28,6 +30,7 @@ class VoteState {
   });
 
   VoteState.init() {
+    isLoading = false;
     step = VoteStep.start;
     voteIterator = 0;
     votes = [];
@@ -37,6 +40,7 @@ class VoteState {
   }
 
   VoteState copy() => VoteState(
+        isLoading: isLoading,
         step: step,
         voteIterator: voteIterator,
         votes: votes,
@@ -44,6 +48,11 @@ class VoteState {
         nextVoteDateTime: nextVoteDateTime,
         friends: friends,
       );
+
+  VoteState setIsLoading(bool isLoading) {
+    this.isLoading = isLoading;
+    return this;
+  }
 
   VoteState setStep(VoteStep step) {
     this.step = step;
@@ -84,7 +93,6 @@ class VoteState {
   }
 
   int leftNextVoteTime() {
-    print(nextVoteDateTime.toString());
     return nextVoteDateTime.difference(DateTime.now()).inSeconds;
   }
 
@@ -106,7 +114,7 @@ class VoteState {
 
   @override
   String toString() {
-    return 'VoteState{step: $step, voteIterator: $voteIterator, votes: $votes, nextVoteDateTime: $nextVoteDateTime}';
+    return 'VoteState{isLoading: $isLoading, step: $step, voteIterator: $voteIterator, votes: $votes, nextVoteDateTime: $nextVoteDateTime}';
   }
 }
 
