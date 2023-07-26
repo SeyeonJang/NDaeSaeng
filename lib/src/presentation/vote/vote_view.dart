@@ -145,6 +145,7 @@ class _VoteViewState extends State<VoteView> with SingleTickerProviderStateMixin
                                 question: question.content!,
                                 gender: friend1.gender!,
                                 school: friend1.university!.name,
+                                disabledFunction: state.isLoading,
                             ),
                             ChoiceFriendButton(userId: friend2.userId!, name: friend2.name ?? "XXX", enterYear: friend2.admissionYear.toString().substring(2,4) ?? "00", department: friend2.university?.department ?? "XXXX학과",
                                 questionId: question.questionId!,
@@ -156,6 +157,7 @@ class _VoteViewState extends State<VoteView> with SingleTickerProviderStateMixin
                                 question: question.content!,
                                 gender: friend2.gender!,
                                 school: friend2.university!.name,
+                                disabledFunction: state.isLoading,
                             ),
                           ],
                         ),
@@ -173,6 +175,7 @@ class _VoteViewState extends State<VoteView> with SingleTickerProviderStateMixin
                                 question: question.content!,
                                 gender: friend3.gender!,
                                 school: friend3.university!.name,
+                                disabledFunction: state.isLoading,
                             ),
                             ChoiceFriendButton(userId: friend4.userId!, name: friend4.name ?? "XXX", enterYear: friend4.admissionYear.toString().substring(2,4) ?? "00", department: friend4.university?.department ?? "XXXX학과",
                                 questionId: question.questionId!,
@@ -184,6 +187,7 @@ class _VoteViewState extends State<VoteView> with SingleTickerProviderStateMixin
                                 question: question.content!,
                                 gender: friend4.gender!,
                                 school: friend4.university!.name,
+                                disabledFunction: state.isLoading,
                             ),
                           ],
                         ),
@@ -277,6 +281,8 @@ class _VoteStoryBarState extends State<VoteStoryBar> {
 }
 
 class ChoiceFriendButton extends StatefulWidget {
+  final bool disabledFunction;
+
   final int userId;
   final String name;
   final String enterYear;
@@ -287,7 +293,7 @@ class ChoiceFriendButton extends StatefulWidget {
   final int secondUserId;
   final int thirdUserId;
   final int fourthUserId;
-  //
+
   final int voteIndex;
   final String question;
   final String gender;
@@ -295,6 +301,8 @@ class ChoiceFriendButton extends StatefulWidget {
 
   const ChoiceFriendButton({
     super.key,
+    this.disabledFunction = false,
+
     required this.userId,
     required this.name,
     required this.enterYear,
@@ -322,14 +330,13 @@ class _ChoiceFriendButtonState extends State<ChoiceFriendButton> {
 
     Color backgroundColor = Colors.white;
     Color textColor = Color(0xff7C83FD);
-    Future<void> _onVoteButtonPressed() async {
+    void _onVoteButtonPressed() {
       // 버튼이 눌린 상태일 때 색상 변경
       setState(() {
         backgroundColor = Color(0xff7C83FD);
         textColor = Colors.white;
       });
-      // 5초 딜레이
-      await Future.delayed(Duration(milliseconds: 400));
+
       // 버튼이 떼어진 상태일 때 색상 변경
       setState(() {
         backgroundColor = Colors.white;
@@ -344,7 +351,10 @@ class _ChoiceFriendButtonState extends State<ChoiceFriendButton> {
         thirdUserId: widget.thirdUserId,
         fourthUserId: widget.fourthUserId,
       );
-      BlocProvider.of<VoteCubit>(context).nextVote(voteRequest);
+
+      if (!widget.disabledFunction) {
+        BlocProvider.of<VoteCubit>(context).nextVote(voteRequest);
+      }
     }
 
     return Container(
@@ -353,6 +363,10 @@ class _ChoiceFriendButtonState extends State<ChoiceFriendButton> {
       color: Colors.white,
       child: ElevatedButton(
         onPressed: () {
+          if (widget.disabledFunction) {
+            return;
+          }
+
           AnalyticsUtil.logEvent("투표_세부_선택", properties: {
             "투표 인덱스": widget.voteIndex,
             "질문 인덱스": widget.questionId,
