@@ -30,11 +30,12 @@ class VoteCubit extends HydratedCubit<VoteState> {
     List<Friend> friends = await _dartFriendRepository.getMyFriends();
     state.setFriends(friends);
 
-    // 다음 투표 가능 시간을 기록
-    await getNextVoteTime();
-
-    // 다음 스텝 지정
-    _setStepByNextVoteTime();
+    // 투표중이지 않았던 경우, 다음 투표 가능 시간을 기록
+    if (!state.step.isProcess) {
+      // 다음 스텝 지정
+      await getNextVoteTime();
+      _setStepByNextVoteTime();
+    }
 
     state.setIsLoading(false);
     emit(state.copy());
