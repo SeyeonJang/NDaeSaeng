@@ -85,8 +85,8 @@ class AuthCubit extends HydratedCubit<AuthState> {
       print('회원탈퇴 실패: $error');
     }
 
-    state.setStep(AuthStep.land);
-    emit(state.copy());
+    final newState = state.setStep(AuthStep.land).setSocialAuth(loginType: LoginType.email, socialAccessToken: "").copy();
+    emit(newState);
   }
 
   void kakaoLogin() async {
