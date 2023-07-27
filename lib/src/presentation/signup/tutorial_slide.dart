@@ -274,7 +274,7 @@ class _TutorialSlideState extends State<TutorialSlide> with TickerProviderStateM
                         text: TextSpan(
                           style: TextStyle(fontSize: SizeConfig.defaultSize * 2.2, fontWeight: FontWeight.w600),
                           children: <TextSpan>[
-                            TextSpan(text: "Frolic에서는 ", style: TextStyle(color: Colors.black)),
+                            TextSpan(text: "엔대생에서는 ", style: TextStyle(color: Colors.black)),
                             TextSpan(text: "긍정적인 질문", style: TextStyle(color: Color(0xff7C83FD), fontWeight: FontWeight.w800)),
                             TextSpan(text: "에 대해", style: TextStyle(color: Colors.black)),
                           ]
@@ -446,7 +446,7 @@ class _TutorialSlideState extends State<TutorialSlide> with TickerProviderStateM
               widget.onTutorialFinished(); // 튜토리얼 완료 후 콜백 호출
               AnalyticsUtil.logEvent("온보딩_세번째_다음");
             },
-            child: Text("Frolic 즐기러가기", style: TextStyle(fontSize: SizeConfig.defaultSize * 2.2, fontWeight: FontWeight.w600),),
+            child: Text("엔대생 즐기러가기", style: TextStyle(fontSize: SizeConfig.defaultSize * 2.2, fontWeight: FontWeight.w600),),
             style: TextButton.styleFrom(
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(0)

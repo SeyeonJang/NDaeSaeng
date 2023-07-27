@@ -85,7 +85,7 @@ class _DartPageViewState extends State<DartPageView> {
                       //_TapBarButton(name: "Meet", targetPage: 0, nowPage: _page, onTapNavigation: _onTapNavigation), // TODO : Meet 만들 때 복구
                       _TapBarButton(name: "투표", targetPage: 0, nowPage: _page, onTapNavigation: _onTapNavigation),
                       _TapBarButton(name: "받은 투표", targetPage: 1, nowPage: _page, onTapNavigation: _onTapNavigation),
-                      _TapBarButton(name: "마이", targetPage: 2, nowPage: _page, onTapNavigation: _onTapNavigation),
+                      _TapBarButton(name: "내정보", targetPage: 2, nowPage: _page, onTapNavigation: _onTapNavigation),
                     ],
                   ),
                 ),
