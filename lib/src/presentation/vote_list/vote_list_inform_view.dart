@@ -17,10 +17,10 @@ class VoteListInformView extends StatelessWidget {
         // mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           SizedBox(height: SizeConfig.screenHeight * 0.1),
-          Text("Frolic에 온 걸 환영해요!",
+          Text("엔대생에 온 걸 환영해요!",
               style: TextStyle(fontSize: SizeConfig.defaultSize * 2.6, fontWeight: FontWeight.w600)),
           SizedBox(height: SizeConfig.screenHeight * 0.2),
-          Text("이 페이지에는 친구들이\n나에게 보낸 Dart들이 도착할 거예요!🎉",
+          Text("이 페이지에는 친구들이\n나에게 보낸 투표들이 도착할 거예요!🎉",
               style: TextStyle(fontSize: SizeConfig.defaultSize * 1.8),
           textAlign: TextAlign.center,),
           SizedBox(height: SizeConfig.screenHeight * 0.2),

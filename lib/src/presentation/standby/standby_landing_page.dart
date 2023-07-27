@@ -626,7 +626,7 @@ class _OnboardingSlideState extends State<OnboardingSlide> with TickerProviderSt
                                       style: TextStyle(
                                           fontSize: SizeConfig.defaultSize * 2.2, fontWeight: FontWeight.w600),
                                       children: <TextSpan>[
-                                    TextSpan(text: "Frolic에서는 ", style: TextStyle(color: Colors.black)),
+                                    TextSpan(text: "엔대생에서는 ", style: TextStyle(color: Colors.black)),
                                     TextSpan(
                                         text: "긍정적인 질문",
                                         style: TextStyle(color: Color(0xff7C83FD), fontWeight: FontWeight.w800)),
@@ -1101,8 +1101,8 @@ class _FriendNotExistsViewState extends State<FriendNotExistsView> {
                         SizedBox(height: SizeConfig.defaultSize * 5),
                         GestureDetector(
                           onTap: () {
-                            AnalyticsUtil.logEvent("대기_눌러서친추_링크공유");
-                            shareContent(context);
+                            AnalyticsUtil.logEvent("대기_눌러서친추_링크공유}");
+                            shareContent(context, widget.myCode);
                           },
                           child: Padding(
                             padding: EdgeInsets.only(left: SizeConfig.defaultSize, right: SizeConfig.defaultSize),
@@ -1462,7 +1462,7 @@ class _openAddFriendsState extends State<openAddFriends> {
                         GestureDetector(
                           onTap: () {
                             AnalyticsUtil.logEvent("대기_친추_링크공유");
-                            shareContent(context);
+                            shareContent(context, widget.myCode);
                           },
                           child: Padding(
                             padding: EdgeInsets.only(left: SizeConfig.defaultSize, right: SizeConfig.defaultSize),
@@ -1536,7 +1536,7 @@ class _openAddFriendsState extends State<openAddFriends> {
   }
 }
 
-void shareContent(BuildContext context) {
-  Share.share('앱에서 친구들이 당신에게 관심을 표현하고 있어요! 들어와서 확인해보세요! https://dart.page.link/TG78');
+void shareContent(BuildContext context, String myCode) {
+  Share.share('엔대생에서 내가 널 칭찬 대상으로 투표하고 싶어! 앱에 들어와줘!\n내 코드는 $myCode 야. 나를 친구 추가하고 같이하자!\nhttps://dart.page.link/TG78\n\n내 코드 : $myCode');
   print("셰어");
 }

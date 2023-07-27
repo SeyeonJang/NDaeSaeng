@@ -85,8 +85,8 @@ class AuthCubit extends HydratedCubit<AuthState> {
       print('회원탈퇴 실패: $error');
     }
 
-    state.setStep(AuthStep.land);
-    emit(state.copy());
+    final newState = state.setStep(AuthStep.land).setSocialAuth(loginType: LoginType.email, socialAccessToken: "").copy();
+    emit(newState);
   }
 
   void kakaoLogin() async {
@@ -127,12 +127,8 @@ class AuthCubit extends HydratedCubit<AuthState> {
     state.setLoading(true);
     emit(state.copy());
 
-    final appleUser = await _appleLoginRepository.login();
-    print(appleUser.toString());
-    print(appleUser.authorizationCode);
-    print(appleUser.identityToken);
-
     try {
+      final appleUser = await _appleLoginRepository.login();
       DartAuth dartAuth = await _authRepository.loginWithApple(appleUser.identityToken!);
       state
           .setDartAuth(dartAccessToken: dartAuth.accessToken, expiredAt: DateTime.now().add(const Duration(days: 10)))
