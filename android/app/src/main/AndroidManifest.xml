@@ -3,7 +3,7 @@
     <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
-        android:label="dart_flutter"
+        android:label="엔대생"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
 
@@ -50,5 +50,6 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+        <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>
     </application>
 </manifest>
