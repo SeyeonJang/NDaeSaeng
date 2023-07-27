@@ -127,12 +127,8 @@ class AuthCubit extends HydratedCubit<AuthState> {
     state.setLoading(true);
     emit(state.copy());
 
-    final appleUser = await _appleLoginRepository.login();
-    print(appleUser.toString());
-    print(appleUser.authorizationCode);
-    print(appleUser.identityToken);
-
     try {
+      final appleUser = await _appleLoginRepository.login();
       DartAuth dartAuth = await _authRepository.loginWithApple(appleUser.identityToken!);
       state
           .setDartAuth(dartAccessToken: dartAuth.accessToken, expiredAt: DateTime.now().add(const Duration(days: 10)))
