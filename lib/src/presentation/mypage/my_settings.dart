@@ -369,7 +369,7 @@ class _MyPageViewState extends State<MyPageView> {
                                         mainAxisSize: MainAxisSize.min,
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
-                                          Text('Frolic을 떠나지 말아요 ... 🥺', style: TextStyle(fontSize: SizeConfig.defaultSize * 1.4), textAlign: TextAlign.start,),
+                                          Text('엔대생을 떠나지 말아요 ... 🥺', style: TextStyle(fontSize: SizeConfig.defaultSize * 1.4), textAlign: TextAlign.start,),
                                           const Text('회원탈퇴를 원하시면 \'회원탈퇴를 원해요\'라고 적어주세요.'),
                                           TextField(
                                             controller: textController,

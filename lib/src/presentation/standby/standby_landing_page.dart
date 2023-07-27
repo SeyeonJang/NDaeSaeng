@@ -626,7 +626,7 @@ class _OnboardingSlideState extends State<OnboardingSlide> with TickerProviderSt
                                       style: TextStyle(
                                           fontSize: SizeConfig.defaultSize * 2.2, fontWeight: FontWeight.w600),
                                       children: <TextSpan>[
-                                    TextSpan(text: "Frolic에서는 ", style: TextStyle(color: Colors.black)),
+                                    TextSpan(text: "엔대생에서는 ", style: TextStyle(color: Colors.black)),
                                     TextSpan(
                                         text: "긍정적인 질문",
                                         style: TextStyle(color: Color(0xff7C83FD), fontWeight: FontWeight.w800)),
