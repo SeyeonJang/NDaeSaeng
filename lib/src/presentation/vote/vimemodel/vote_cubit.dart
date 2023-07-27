@@ -14,6 +14,7 @@ class VoteCubit extends HydratedCubit<VoteState> {
 
   // VoteCubit() : super(VoteState.init());
   VoteCubit() : super(VoteState(
+      isLoading: false,
       step: VoteStep.start,
       voteIterator: 0,
       votes: [],
@@ -23,16 +24,20 @@ class VoteCubit extends HydratedCubit<VoteState> {
   ));
 
   void initVotes() async {
+    state.setIsLoading(true);
+
     // 친구 목록 설정
     List<Friend> friends = await _dartFriendRepository.getMyFriends();
     state.setFriends(friends);
 
-    // 다음 투표 가능 시간을 기록
-    await getNextVoteTime();
+    // 투표중이지 않았던 경우, 다음 투표 가능 시간을 기록
+    if (!state.step.isProcess) {
+      // 다음 스텝 지정
+      await getNextVoteTime();
+      _setStepByNextVoteTime();
+    }
 
-    // 다음 스텝 지정
-    _setStepByNextVoteTime();
-
+    state.setIsLoading(false);
     emit(state.copy());
   }
 
@@ -61,6 +66,12 @@ class VoteCubit extends HydratedCubit<VoteState> {
   }
 
   void nextVote(VoteRequest voteRequest) async {
+    state.setIsLoading(true);
+    emit(state.copy());
+    print(state.toString());
+
+    // await Future.delayed(Duration(seconds: 3));
+
     state.pickUserInVote(voteRequest);
     _dartVoteRepository.sendMyVote(voteRequest);  // 투표한 내용을 서버로 전달
     state.nextVote();
@@ -69,7 +80,10 @@ class VoteCubit extends HydratedCubit<VoteState> {
       DateTime myNextVoteTime = await _dartVoteRepository.postNextVoteTime();
       state.setNextVoteDateTime(myNextVoteTime);
     }
+
+    state.setIsLoading(false);
     emit(state.copy());
+    print(state.toString());
   }
 
   void stepDone() {

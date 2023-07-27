@@ -111,7 +111,8 @@ class _LandingPageState extends State<LandingPage> {
                 onTap: () {
                   _clickLogin('카카오');
                   try {
-                    BlocProvider.of<AuthCubit>(context).kakaoLogin();
+                    if (!BlocProvider.of<AuthCubit>(context).state.isLoading) BlocProvider.of<AuthCubit>(context).kakaoLogin();
+                    else {ToastUtil.showToast("로그인 처리 중입니다. 잠시만 기다려주세요.");};
                   } catch (e) {
                     ToastUtil.showToast("로그인에 실패하였습니다. 다시 시도해주세요.");
                   }
@@ -132,7 +133,8 @@ class _LandingPageState extends State<LandingPage> {
               GestureDetector(
                 onTap: () {
                   _clickLogin('애플');
-                  BlocProvider.of<AuthCubit>(context).appleLogin();
+                  if (!BlocProvider.of<AuthCubit>(context).state.isLoading) BlocProvider.of<AuthCubit>(context).appleLogin();
+                  else {ToastUtil.showToast("로그인 처리 중입니다. 잠시만 기다려주세요.");};
                 },
                 child: Container(
                   width: SizeConfig.screenWidth * 0.8,

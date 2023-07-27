@@ -138,18 +138,16 @@ class _LandPagesState extends State<LandPages> {
             }
             return const SizedBox.shrink();
           }
-        )
+        ),
 
-        // BlocBuilder<AuthCubit, AuthState>(
-        //   builder: (context, state) {
-        //     if (!state.isLoading) {
-        //       return SafeArea(
-        //           child: Text(state.toJson().toString(), style: const TextStyle(fontSize: 15, color: Colors.red)));
-        //       // return const SizedBox();
-        //     }
-        //     return const SafeArea(child: Center(child: CircularProgressIndicator()));
-        //   },
-        // ),
+        BlocBuilder<AuthCubit, AuthState>(
+          builder: (context, state) {
+            if (!state.isLoading) {
+              return const SizedBox.shrink();
+            }
+            return const SafeArea(child: Center(child: CircularProgressIndicator()));
+          },
+        ),
 
         // Andorid Key Hash 확인 로직
         // FutureBuilder<String>(
