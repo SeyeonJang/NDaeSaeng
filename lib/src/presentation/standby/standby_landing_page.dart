@@ -1118,7 +1118,7 @@ class _FriendNotExistsViewState extends State<FriendNotExistsView> {
                                   ),
                                   borderRadius: BorderRadius.circular(15)),
                               child: Text(
-                                "아직 가입하지 않은 친구 초대하기",
+                                "친구에게 링크 공유하기",
                                 style: TextStyle(
                                   fontSize: SizeConfig.defaultSize * 1.8,
                                   fontWeight: FontWeight.w800,
@@ -1478,7 +1478,7 @@ class _openAddFriendsState extends State<openAddFriends> {
                                   ),
                                   borderRadius: BorderRadius.circular(15)),
                               child: Text(
-                                "아직 가입하지 않은 친구 초대하기",
+                                "친구에게 링크 공유하기",
                                 style: TextStyle(
                                   fontSize: SizeConfig.defaultSize * 1.8,
                                   fontWeight: FontWeight.w800,
