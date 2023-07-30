@@ -98,7 +98,7 @@ class _ChooseGenderState extends State<ChooseGender> {
                 ],
               ),
               SizedBox(height: SizeConfig.defaultSize * 10 ,),
-              Text("본인이 만 14세 이상이며, Dart 서비스의 필수 동의 항목인",
+              Text("본인이 만 14세 이상이며, 엔대생 서비스의 필수 동의 항목인",
                 style: TextStyle(fontSize: SizeConfig.defaultSize * 1.4),
                 textAlign: TextAlign.center,),
               Row(

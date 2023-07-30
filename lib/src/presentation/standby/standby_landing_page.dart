@@ -139,7 +139,7 @@ class _StandbyLandingPageState extends State<StandbyLandingPage> with TickerProv
               ),
               Container(
                 width: SizeConfig.screenWidth,
-                height: SizeConfig.screenHeight * 0.82,
+                height: SizeConfig.screenHeight * 1.0,
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.only(topRight: Radius.circular(25), topLeft: Radius.circular(25)),
@@ -331,13 +331,17 @@ class _StandbyLandingPageState extends State<StandbyLandingPage> with TickerProv
                             );
                           },
                         ),
+                        SizedBox(height: SizeConfig.defaultSize,),
+                        Icon(Icons.keyboard_double_arrow_down_rounded,
+                          size: SizeConfig.defaultSize * 4,
+                          color: Colors.grey.shade300,),
                       ],
                     ),
                   ),
                 ),
               ),
               Container(
-                height: SizeConfig.screenHeight * 0.8,
+                height: SizeConfig.defaultSize * 75,
                 child: OnboardingSlide(),
               ),
               Container(
@@ -602,7 +606,6 @@ class _OnboardingSlideState extends State<OnboardingSlide> with TickerProviderSt
           Expanded(
             child: Center(
               child: Container(
-                // padding: EdgeInsets.only(bottom: SizeConfig.screenWidth * 0.2),
                 child: PageView(
                   controller: _pageController,
                   onPageChanged: (index) {
@@ -1118,7 +1121,7 @@ class _FriendNotExistsViewState extends State<FriendNotExistsView> {
                                   ),
                                   borderRadius: BorderRadius.circular(15)),
                               child: Text(
-                                "아직 가입하지 않은 친구 초대하기",
+                                "친구에게 링크 공유하기",
                                 style: TextStyle(
                                   fontSize: SizeConfig.defaultSize * 1.8,
                                   fontWeight: FontWeight.w800,
@@ -1478,7 +1481,7 @@ class _openAddFriendsState extends State<openAddFriends> {
                                   ),
                                   borderRadius: BorderRadius.circular(15)),
                               child: Text(
-                                "아직 가입하지 않은 친구 초대하기",
+                                "친구에게 링크 공유하기",
                                 style: TextStyle(
                                   fontSize: SizeConfig.defaultSize * 1.8,
                                   fontWeight: FontWeight.w800,
