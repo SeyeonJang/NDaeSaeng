@@ -1,10 +1,13 @@
+import 'package:dart_flutter/res/environment/app_environment.dart';
 import 'package:dart_flutter/src/common/analytics/amplitude.dart';
 
 import '../analytics/analytics.dart';
 
 class AnalyticsUtil {
-  // static final Analytics amplitudeTool = AmplitudeTool()..initialize(name: "debug", key: "f5f0a3c27ca9f7ed5e85ea41016906aa");
-  static final Analytics amplitudeTool = AmplitudeTool()..initialize(name: "release", key: "80d10abfd195bcb705201ac03f15456b");
+  static final Analytics amplitudeTool = AmplitudeTool()..initialize(
+      name: AppEnvironment.buildType.toString(),
+      key: AppEnvironment.getEnv.getAmplitudeKey()
+  );
 
   static void logEvent(String eventName, {Map<String, dynamic> properties = const {}}) {
     print("LogEventWith: $eventName, $properties");

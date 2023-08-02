@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:dart_flutter/src/data/model/contact.dart';
+import 'package:dart_flutter/res/environment/app_environment.dart';
 import 'package:dart_flutter/src/data/model/friend.dart';
 import 'package:dart_flutter/src/data/model/question.dart';
 import 'package:dart_flutter/src/data/model/sns_request.dart';
@@ -13,12 +13,9 @@ import '../data/model/vote.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
 
-//TODO repository에 들어갈 내용인데 datasourcedㅔ 넣어버렸다...
 class DartApiRemoteDataSource {
-  static const String baseUrl = "dart-server-aiasblaoxa-du.a.run.app";
-
-  static final _httpUtil = HttpUtil(baseUrl: 'https://dart-server-aiasblaoxa-du.a.run.app', headers: {
-    // 'Authorization': 'Bearer nothing',
+  static final String baseUrl = AppEnvironment.getEnv.getApiBaseUrl();
+  static final _httpUtil = HttpUtil(baseUrl: baseUrl, headers: {
     'Accept': '*/*',
     'Content-Type': 'application/json',
   });
@@ -224,36 +221,5 @@ class DartApiRemoteDataSource {
 
     final response = await _httpUtil.request().post(path);
     return DateTime.parse(response.data['nextVoteAvailableDateTime']);
-  }
-
-  // --------------------------------------------------------------------------
-
-  static Future<Map<String, dynamic>> _simplePost(String path, Object? body) async {
-    final uri = Uri.https(baseUrl, path);
-    final response = await http.post(uri, body: body);
-    return _jsonDecode(response);
-  }
-
-  static Future<http.Response> _simplePostWithoutDecode(String path, Object? body) async {
-    final uri = Uri.https(baseUrl, path);
-    return await http.post(uri, body: body);
-  }
-
-  static Future<Map<String, dynamic>> _simpleGet(String path) async {
-    final uri = Uri.https(baseUrl, path);
-    final response = await http.get(uri);
-    return _jsonDecode(response);
-  }
-
-  static Map<String, dynamic> _jsonDecode(http.Response response) {
-    if (response.statusCode == 200) {
-      final jsonResponse = convert.jsonDecode(response.body) as Map<String, dynamic>;
-      return jsonResponse;
-    }
-    throw _errorHandler(response);
-  }
-
-  static Error _errorHandler(http.Response response) {
-    throw Error();
   }
 }
