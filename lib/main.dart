@@ -1,3 +1,4 @@
+import 'package:dart_flutter/res/environment/app_environment.dart';
 import 'package:dart_flutter/res/app_theme.dart';
 import 'package:dart_flutter/res/size_config.dart';
 import 'package:dart_flutter/src/common/auth/auth_cubit.dart';
@@ -5,20 +6,13 @@ import 'package:dart_flutter/src/common/auth/state/auth_state.dart';
 import 'package:dart_flutter/src/common/util/analytics_util.dart';
 import 'package:dart_flutter/src/common/util/push_notification_util.dart';
 import 'package:dart_flutter/src/common/util/timeago_util.dart';
-import 'package:dart_flutter/src/presentation/mypage/my_settings.dart';
-import 'package:dart_flutter/src/presentation/page_view.dart';
-import 'package:dart_flutter/src/presentation/signup/choose_gender.dart';
-import 'package:dart_flutter/src/presentation/signup/choose_id.dart';
-import 'package:dart_flutter/src/presentation/signup/land_page.dart';
+import 'package:dart_flutter/src/common/util/toast_util.dart';
 import 'package:dart_flutter/src/presentation/signup/land_pages.dart';
-import 'package:dart_flutter/src/presentation/standby/standby_landing_page.dart';
-import 'package:dart_flutter/src/presentation/standby/viewmodel/standby_cubit.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
-import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
@@ -26,21 +20,17 @@ import 'firebase_options.dart';
 // 랜딩페이지
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  KakaoSdk.init(
-    nativeAppKey: 'c83df49e14c914b9bda9b902b6624da2',
-  );
 
-  // // android key hahs 확인
-  // var key = await KakaoSdk.origin;
-  // print(key);
+  const BUILD_TYPE = String.fromEnvironment('BUILD_TYPE', defaultValue: 'DEFAULT');
+  AppEnvironment.setupEnv(BuildType.from(BUILD_TYPE));
+  if (AppEnvironment.buildType == BuildType.dev) ToastUtil.showToast("실행환경: Develop");
+  if (AppEnvironment.buildType == BuildType.stage) ToastUtil.showToast("실행환경: Staging");
+  print("실행환경: ${AppEnvironment.getEnv.toString()}");
 
+  AnalyticsUtil.initialize();
+  KakaoSdk.init(nativeAppKey: AppEnvironment.getEnv.getKakaoSdkKey());
   PushNotificationUtil.init();
-
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
-
-  // print(await KakaoSdk.origin);
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   HydratedBloc.storage = await HydratedStorage.build(storageDirectory: await getTemporaryDirectory());
 
   runApp(BlocProvider(

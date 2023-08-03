@@ -17,6 +17,8 @@ class StandbyCubit extends Cubit<StandbyState> {
 
     List<Friend> friends = await _dartFriendRepository.getMyFriends();
     state.setAddedFriends(friends);
+    List<Friend> newFriends = await _dartFriendRepository.getRecommendedFriends();
+    state.setRecommendedFriends(newFriends);
     _dartUserRepository.cleanUpUserResponseCache();
     state.userResponse = await _dartUserRepository.myInfo();
 
@@ -36,6 +38,23 @@ class StandbyCubit extends Cubit<StandbyState> {
 
     try {
       Friend friend = await _dartFriendRepository.addFriendBy(inviteCode);
+      state.addFriend(friend);
+      state.newFriends = await _dartFriendRepository.getRecommendedFriends(put: true);
+      } catch (e, trace) {
+        print("친구추가 실패! $e $trace");
+        throw Error();
+      } finally {
+      state.isLoading = false;
+      emit(state.copy());
+    }
+  }
+
+  void pressedFriendAddButton(Friend friend) {
+    state.isLoading = true;
+    emit(state.copy());
+
+    try {
+      _dartFriendRepository.addFriend(friend);
       state.addFriend(friend);
     } catch (e, trace) {
       print("친구추가 실패! $e $trace");

@@ -54,6 +54,13 @@ class VotePages extends StatelessWidget {
       children: [
         BlocBuilder<VoteCubit, VoteState>(
           builder: (context, state) {
+            if (state.step.isDone) {  // 투표 결과 페이지는 로딩없이 나타납니다.
+              AnalyticsUtil.logEvent("투표_끝_접속");
+              return VoteResultView();
+            }
+            if (state.isLoading) {
+              return const Center(child: CircularProgressIndicator());
+            }
             if (state.step.isStart) {
               AnalyticsUtil.logEvent("투표_시작_접속");
               return const VoteStartView();
@@ -61,10 +68,6 @@ class VotePages extends StatelessWidget {
             if (state.step.isProcess) {
               AnalyticsUtil.logEvent("투표_세부_접속");
               return const VoteView();
-            }
-            if (state.step.isDone) {
-              AnalyticsUtil.logEvent("투표_끝_접속");
-              return VoteResultView();
             }
             if (state.step.isWait) {
               AnalyticsUtil.logEvent("투표_타이머_접속");
@@ -88,12 +91,6 @@ class VotePages extends StatelessWidget {
             return const SizedBox();
           },
         ),
-
-        // BlocBuilder<VoteCubit,VoteState> (
-        //   builder: (context, state) {
-        //     return SafeArea(child: Container(alignment: Alignment.bottomCenter,child: Text(state.toString(), style: TextStyle(color: Colors.red))));
-        //   },
-        // ),
       ],
     );
   }

@@ -4,9 +4,11 @@ import 'package:dart_flutter/src/common/analytics/analytics.dart';
 
 class AmplitudeTool implements Analytics {
   late Amplitude amplitude;
+  late String name;
 
   @override
   void initialize({String name = "", String key = ""}) {
+    this.name = name;
     amplitude = Amplitude(name);
     amplitude.init(key);
   }
@@ -28,9 +30,11 @@ class AmplitudeTool implements Analytics {
   @override
   void setUserInformation(Map<String, dynamic> properties) {
     final Identify identify = Identify();
+      // ..set('gender', 'female')
+      // ..set('age',20);
     properties.forEach((key, value) {
       identify.set(key, value);
     });
-    Amplitude.getInstance().identify(identify);
+    Amplitude.getInstance(instanceName: name).identify(identify);
   }
 }

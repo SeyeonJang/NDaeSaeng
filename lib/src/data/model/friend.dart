@@ -32,6 +32,14 @@ class Friend {
   }
 
   @override
+  bool operator == (Object other) {
+    if (userId == (other as Friend).userId) {
+      return true;
+    }
+    return false;
+  }
+
+  @override
   String toString() {
     return 'Friend{userId: $userId, name: $name, gender: $gender, admissionYear: $admissionYear, university: $university}';
   }

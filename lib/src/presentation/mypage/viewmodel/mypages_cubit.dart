@@ -49,12 +49,13 @@ class MyPagesCubit extends Cubit<MyPagesState> {
     try {
       Friend friend = await _dartFriendRepository.addFriendBy(inviteCode);
       state.addFriend(friend);
+      state.newFriends = (await _dartFriendRepository.getRecommendedFriends(put: true)).toSet();
     } catch (e, trace) {
-      print("친구추가 실패! $e $trace");
-      throw Error();
-    } finally {
-      state.isLoading = false;
-      emit(state.copy());
+        print("친구추가 실패! $e $trace");
+        throw Error();
+      } finally {
+        state.isLoading = false;
+        emit(state.copy());
     }
   }
 
