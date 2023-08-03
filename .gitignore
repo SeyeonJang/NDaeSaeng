@@ -75,3 +75,8 @@ lib/generated_plugin_registrant.dart
 
 # VCS
 .github/
+
+## Environment ##
+environment_dev.dart
+environment_stage.dart
+environment_prod.dart
