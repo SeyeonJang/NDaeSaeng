@@ -8,8 +8,8 @@ import 'package:json_annotation/json_annotation.dart';
 class MyPagesState {
   late bool isLoading;
   late UserResponse userResponse;
-  late List<Friend> friends;
-  late List<Friend> newFriends;
+  late Set<Friend> friends;
+  late Set<Friend> newFriends;
   late int newFriendId;
   late bool isMyLandPage;
 
@@ -28,8 +28,8 @@ class MyPagesState {
       user: null,
       university: null,
     );
-    friends = [];
-    newFriends = [];
+    friends = {};
+    newFriends = {};
     newFriendId = 0;
     isMyLandPage = true;
   }
@@ -58,12 +58,12 @@ class MyPagesState {
   }
 
   MyPagesState setMyFriends(List<Friend> friends) {
-    this.friends = friends;
+    this.friends = friends.toSet();
     return this;
   }
 
   MyPagesState setRecommendedFriends(List<Friend> friends) {
-    newFriends = friends;
+    newFriends = friends.toSet();
     return this;
   }
 
