@@ -1137,6 +1137,7 @@ class _FriendNotExistsViewState extends State<FriendNotExistsView> {
                                       SizedBox(
                                         width: SizeConfig.screenWidth * 0.65,
                                         child: TextField(
+                                          scrollPadding: EdgeInsets.only(bottom: SizeConfig.screenHeight * 0.4),
                                           onChanged: (text) {
                                             friendCode = text;
                                           },
@@ -1244,7 +1245,19 @@ class _FriendNotExistsViewState extends State<FriendNotExistsView> {
                                   ],
                                 ),
                                 SizedBox(height: SizeConfig.defaultSize * 1.5,),
-                                BlocProvider<StandbyCubit>.value( // BlocProvider로 감싸기
+                                SizedBox(height: SizeConfig.defaultSize * 0.5),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text("나를 추가한 / 같은 학교 / 내 친구의 친구들이에요!",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w400,
+                                          fontSize: SizeConfig.defaultSize * 1.4,
+                                          color: Colors.grey
+                                      ),),
+                                  ],
+                                ),
+                                BlocProvider<StandbyCubit>.value(
                                     value: BlocProvider.of<StandbyCubit>(context),
                                     child: BlocBuilder<StandbyCubit, StandbyState>(
                                       builder: (friendContext, state) {
@@ -1254,7 +1267,17 @@ class _FriendNotExistsViewState extends State<FriendNotExistsView> {
                                     ),
                                   ),
                                 SizedBox(height: SizeConfig.defaultSize * 1.5,),
-
+                                BlocProvider<StandbyCubit>.value( // BlocProvider로 감싸기
+                                  value: BlocProvider.of<StandbyCubit>(context),
+                                  child: BlocBuilder<StandbyCubit, StandbyState>(
+                                    builder: (friendContext, state) {
+                                      final friends = state.newFriends ?? [];
+                                      return friends.length <= 2
+                                          ? SizedBox(height: SizeConfig.screenHeight * 0.4,)
+                                          : SizedBox(height: SizeConfig.defaultSize * 2,);
+                                    },
+                                  ),
+                                ),
                               ],
                             ),
                           ),
@@ -1611,6 +1634,7 @@ class _openAddFriendsState extends State<openAddFriends> {
                                       SizedBox(
                                         width: SizeConfig.screenWidth * 0.65,
                                         child: TextField(
+                                          scrollPadding: EdgeInsets.only(bottom: SizeConfig.screenHeight * 0.4),
                                           onChanged: (text) {
                                             friendCode = text;
                                           },
@@ -1717,8 +1741,20 @@ class _openAddFriendsState extends State<openAddFriends> {
                                       ),),
                                   ],
                                 ),
+                                SizedBox(height: SizeConfig.defaultSize * 0.5),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text("나를 추가한 / 같은 학교 / 내 친구의 친구들이에요!",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w400,
+                                          fontSize: SizeConfig.defaultSize * 1.4,
+                                          color: Colors.grey
+                                      ),),
+                                  ],
+                                ),
                                 SizedBox(height: SizeConfig.defaultSize * 1.5,),
-                                BlocProvider<StandbyCubit>.value( // BlocProvider로 감싸기
+                                BlocProvider<StandbyCubit>.value(
                                   value: BlocProvider.of<StandbyCubit>(context),
                                   child: BlocBuilder<StandbyCubit, StandbyState>(
                                     builder: (friendContext, state) {
@@ -1727,8 +1763,17 @@ class _openAddFriendsState extends State<openAddFriends> {
                                     },
                                   ),
                                 ),
-                                SizedBox(height: SizeConfig.defaultSize * 1.5,),
-
+                                BlocProvider<StandbyCubit>.value( // BlocProvider로 감싸기
+                                  value: BlocProvider.of<StandbyCubit>(context),
+                                  child: BlocBuilder<StandbyCubit, StandbyState>(
+                                    builder: (friendContext, state) {
+                                      final friends = state.newFriends ?? [];
+                                      return friends.length <= 2
+                                          ? SizedBox(height: SizeConfig.screenHeight * 0.4,)
+                                          : SizedBox(height: SizeConfig.defaultSize * 2,);
+                                    },
+                                  ),
+                                ),
                               ],
                             ),
                           ),
