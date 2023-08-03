@@ -1,3 +1,4 @@
+import 'package:dart_flutter/src/common/util/analytics_util.dart';
 import 'package:dart_flutter/src/presentation/standby/standby_landing_page.dart';
 import 'package:dart_flutter/src/presentation/standby/viewmodel/standby_cubit.dart';
 import 'package:dart_flutter/src/presentation/standby/viewmodel/state/standby_state.dart';
@@ -18,6 +19,10 @@ class StandbyLoading extends StatelessWidget {
             children: [
               BlocBuilder<StandbyCubit, StandbyState> (
                 builder: (context, state) {
+                  // 내 정보를 분석툴에 저장
+                  print(state.userResponse.toString());
+                  AnalyticsUtil.setUserInformation(state.userResponse.toAnalytics());
+
                   if (state.isFirstCommCompleted) {
                     // 친구가 4명이상이면 메인화면으로 이동
                     int count = state.addedFriends.length;

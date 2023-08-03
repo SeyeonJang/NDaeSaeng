@@ -26,6 +26,7 @@ void main() async {
   if (AppEnvironment.buildType == BuildType.stage) ToastUtil.showToast("실행환경: Staging");
   print("실행환경: ${AppEnvironment.getEnv.toString()}");
 
+  AnalyticsUtil.initialize();
   KakaoSdk.init(nativeAppKey: AppEnvironment.getEnv.getKakaoSdkKey());
   PushNotificationUtil.init();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
