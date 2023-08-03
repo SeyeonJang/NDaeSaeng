@@ -10,6 +10,7 @@ class StandbyState {
   late List<Friend> addedFriends;
   late int friendsCount;
   late UserResponse userResponse;
+  late List<Friend> newFriends;
 
   StandbyState({
     required this.isLoading,
@@ -17,6 +18,7 @@ class StandbyState {
     required this.addedFriends,
     required this.friendsCount,
     required this.userResponse,
+    required this.newFriends,
   });
 
   StandbyState.init() {
@@ -28,6 +30,7 @@ class StandbyState {
     );
     isLoading = false;
     isFirstCommCompleted = false;
+    newFriends = [];
   }
 
   StandbyState copy() => StandbyState(
@@ -36,6 +39,7 @@ class StandbyState {
     addedFriends: addedFriends,
     friendsCount: friendsCount,
     userResponse: userResponse,
+    newFriends: newFriends,
   );
 
   StandbyState setAddedFriends(List<Friend> addedFriends) {
@@ -43,8 +47,20 @@ class StandbyState {
     return this;
   }
 
+  StandbyState setRecommendedFriends(List<Friend> friends) {
+    newFriends = friends;
+    return this;
+  }
+
   void addFriend(Friend friend) {
     addedFriends.add(friend); // List에 추가
+    print("add - ${friend.toString()}");
+    newFriends.remove(friend);
+    print("removed - ${friend.toString()}");
+
+    print("=========================[");
+    print(addedFriends.toString());
+    print(newFriends.toString());
   }
 
   @override
