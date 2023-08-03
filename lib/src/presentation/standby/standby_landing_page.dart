@@ -930,7 +930,21 @@ class _FriendNotExistsViewState extends State<FriendNotExistsView> {
                     child: SingleChildScrollView(
                       child: Column(
                         children: [
-                          SizedBox(height: SizeConfig.screenHeight * 0.09),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Padding(
+                                padding: EdgeInsets.all(SizeConfig.defaultSize),
+                                child: IconButton(
+                                    onPressed: () {
+                                      AnalyticsUtil.logEvent("대기_눌러서친추_닫기");
+                                      Navigator.pop(context);
+                                    },
+                                    icon: Icon(Icons.close_rounded, color: Colors.black, size: SizeConfig.defaultSize * 3,)),
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: SizeConfig.defaultSize * 2),
                           Text(
                             "친구를 추가해요!",
                             style: TextStyle(
@@ -1022,23 +1036,21 @@ class _FriendNotExistsViewState extends State<FriendNotExistsView> {
                               ),
                             ),
                           ),
-                          SizedBox(height: SizeConfig.defaultSize * 3),
+                          SizedBox(height: SizeConfig.defaultSize * 3.2),
 
-                          Padding(
-                            padding: EdgeInsets.only(left: SizeConfig.defaultSize * 2.5),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Text("친구가 아직 엔대생에 가입하지 않았다면?",
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: SizeConfig.defaultSize * 1.8,
-                                      fontWeight: FontWeight.w500,
-                                    )),
-                              ],
-                            ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text("친구가 아직 엔대생에 가입하지 않았다면?",
+                                  style: TextStyle(
+                                    color: Colors.grey,
+                                    fontSize: SizeConfig.defaultSize * 1.5,
+                                    fontWeight: FontWeight.w500,
+                                  )),
+                            ],
                           ),
-                          SizedBox(height: SizeConfig.defaultSize * 1.2,),
+                          SizedBox(height: SizeConfig.defaultSize ,),
+
                           GestureDetector(
                             onTap: () {
                               AnalyticsUtil.logEvent("대기_눌러서친추_링크공유");
@@ -1070,21 +1082,7 @@ class _FriendNotExistsViewState extends State<FriendNotExistsView> {
                               ),
                             ),
                           ),
-                          SizedBox(height: SizeConfig.defaultSize * 2),
-                          TextButton(
-                            onPressed: () {
-                              AnalyticsUtil.logEvent("대기_눌러서친추_닫기");
-                              Navigator.pop(context);
-                            },
-                            child: Text(
-                              "닫기",
-                              style: TextStyle(
-                                color: Colors.grey,
-                                fontSize: SizeConfig.defaultSize * 1.7,
-                              ),
-                            ),
-                          ),
-                          SizedBox(height: SizeConfig.defaultSize * 2),
+                          SizedBox(height: SizeConfig.defaultSize * 4),
 
                           Container(
                             width: SizeConfig.screenWidth,
@@ -1427,7 +1425,21 @@ class _openAddFriendsState extends State<openAddFriends> {
                     child: SingleChildScrollView(
                       child: Column(
                         children: [
-                          SizedBox(height: SizeConfig.screenHeight * 0.09),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Padding(
+                                padding: EdgeInsets.all(SizeConfig.defaultSize),
+                                child: IconButton(
+                                    onPressed: () {
+                                      AnalyticsUtil.logEvent("대기_친추_닫기");
+                                      Navigator.pop(context);
+                                    },
+                                    icon: Icon(Icons.close_rounded, color: Colors.black, size: SizeConfig.defaultSize * 3,)),
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: SizeConfig.defaultSize * 2),
                           Text(
                             "친구를 추가해요!",
                             style: TextStyle(
@@ -1519,23 +1531,20 @@ class _openAddFriendsState extends State<openAddFriends> {
                               ),
                             ),
                           ),
-                          SizedBox(height: SizeConfig.defaultSize * 3),
+                          SizedBox(height: SizeConfig.defaultSize * 3.2),
 
-                          Padding(
-                            padding: EdgeInsets.only(left: SizeConfig.defaultSize * 2.5),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Text("친구가 아직 엔대생에 가입하지 않았다면?",
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: SizeConfig.defaultSize * 1.8,
-                                      fontWeight: FontWeight.w500,
-                                    )),
-                              ],
-                            ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text("친구가 아직 엔대생에 가입하지 않았다면?",
+                                  style: TextStyle(
+                                    color: Colors.grey,
+                                    fontSize: SizeConfig.defaultSize * 1.5,
+                                    fontWeight: FontWeight.w500,
+                                  )),
+                            ],
                           ),
-                          SizedBox(height: SizeConfig.defaultSize * 1.2,),
+                          SizedBox(height: SizeConfig.defaultSize ,),
                           GestureDetector(
                             onTap: () {
                               AnalyticsUtil.logEvent("대기_친추_링크공유");
@@ -1567,21 +1576,7 @@ class _openAddFriendsState extends State<openAddFriends> {
                               ),
                             ),
                           ),
-                          SizedBox(height: SizeConfig.defaultSize * 2),
-                          TextButton(
-                            onPressed: () {
-                              AnalyticsUtil.logEvent("대기_친추_닫기");
-                              Navigator.pop(context);
-                            },
-                            child: Text(
-                              "닫기",
-                              style: TextStyle(
-                                color: Colors.grey,
-                                fontSize: SizeConfig.defaultSize * 1.7,
-                              ),
-                            ),
-                          ),
-                          SizedBox(height: SizeConfig.defaultSize * 2),
+                          SizedBox(height: SizeConfig.defaultSize * 4),
 
                           Container(
                               width: SizeConfig.screenWidth,
