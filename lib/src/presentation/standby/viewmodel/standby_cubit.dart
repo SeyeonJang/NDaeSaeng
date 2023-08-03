@@ -39,7 +39,8 @@ class StandbyCubit extends Cubit<StandbyState> {
     try {
       Friend friend = await _dartFriendRepository.addFriendBy(inviteCode);
       state.addFriend(friend);
-          } catch (e, trace) {
+      state.newFriends = await _dartFriendRepository.getRecommendedFriends(put: true);
+      } catch (e, trace) {
         print("친구추가 실패! $e $trace");
         throw Error();
       } finally {

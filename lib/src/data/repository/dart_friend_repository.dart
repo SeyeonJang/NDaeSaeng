@@ -13,8 +13,8 @@ class DartFriendRepository {
     return myFriendCache.friends;
   }
 
-  Future<List<Friend>> getRecommendedFriends() async {
-    if (recommendedFriendCache.isUpdateBefore(DateTime.now().subtract(cachingInterval))) {
+  Future<List<Friend>> getRecommendedFriends({bool put = false}) async {
+    if (put || recommendedFriendCache.isUpdateBefore(DateTime.now().subtract(cachingInterval))) {
       recommendedFriendCache.setFriends(await DartApiRemoteDataSource.getMyFriends(suggested: true));
     }
     return recommendedFriendCache.friends;

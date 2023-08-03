@@ -1244,19 +1244,19 @@ class _FriendNotExistsViewState extends State<FriendNotExistsView> {
                                       ),),
                                   ],
                                 ),
+                                // SizedBox(height: SizeConfig.defaultSize * 0.5,),
+                                // Row(
+                                //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                //   children: [
+                                //     Text("나를 추가한 / 같은 학교 / 내 친구의 친구들이에요!",
+                                //       style: TextStyle(
+                                //           fontWeight: FontWeight.w400,
+                                //           fontSize: SizeConfig.defaultSize * 1.4,
+                                //           color: Colors.grey
+                                //       ),),
+                                //   ],
+                                // ),
                                 SizedBox(height: SizeConfig.defaultSize * 1.5,),
-                                SizedBox(height: SizeConfig.defaultSize * 0.5),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text("나를 추가한 / 같은 학교 / 내 친구의 친구들이에요!",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.w400,
-                                          fontSize: SizeConfig.defaultSize * 1.4,
-                                          color: Colors.grey
-                                      ),),
-                                  ],
-                                ),
                                 BlocProvider<StandbyCubit>.value(
                                     value: BlocProvider.of<StandbyCubit>(context),
                                     child: BlocBuilder<StandbyCubit, StandbyState>(
@@ -1741,18 +1741,18 @@ class _openAddFriendsState extends State<openAddFriends> {
                                       ),),
                                   ],
                                 ),
-                                SizedBox(height: SizeConfig.defaultSize * 0.5),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text("나를 추가한 / 같은 학교 / 내 친구의 친구들이에요!",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.w400,
-                                          fontSize: SizeConfig.defaultSize * 1.4,
-                                          color: Colors.grey
-                                      ),),
-                                  ],
-                                ),
+                                // SizedBox(height: SizeConfig.defaultSize * 0.5),
+                                // Row(
+                                //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                //   children: [
+                                //     Text("나를 추가한 / 같은 학교 / 내 친구의 친구들이에요!",
+                                //       style: TextStyle(
+                                //           fontWeight: FontWeight.w400,
+                                //           fontSize: SizeConfig.defaultSize * 1.4,
+                                //           color: Colors.grey
+                                //       ),),
+                                //   ],
+                                // ),
                                 SizedBox(height: SizeConfig.defaultSize * 1.5,),
                                 BlocProvider<StandbyCubit>.value(
                                   value: BlocProvider.of<StandbyCubit>(context),
