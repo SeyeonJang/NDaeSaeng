@@ -25,6 +25,7 @@ class VoteCubit extends HydratedCubit<VoteState> {
 
   void initVotes() async {
     state.setIsLoading(true);
+    emit(state.copy());
 
     // 친구 목록 설정
     List<Friend> friends = await _dartFriendRepository.getMyFriends();
@@ -94,6 +95,8 @@ class VoteCubit extends HydratedCubit<VoteState> {
   void stepWait() {
     getNextVoteTime();
     _setStepByNextVoteTime();
+
+    print(state.toString());
     emit(state.copy());
   }
 

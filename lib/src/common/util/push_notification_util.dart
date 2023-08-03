@@ -1,7 +1,8 @@
+import 'package:dart_flutter/res/environment/app_environment.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 
 class PushNotificationUtil {
-  static const String appId = "1f36be12-544d-4bb5-9d9a-c54789698647";
+  static final String appId = AppEnvironment.getEnv.getOneSignalAppId();
 
   static void init() {
     OneSignal.shared.setLogLevel(OSLogLevel.verbose, OSLogLevel.none);
