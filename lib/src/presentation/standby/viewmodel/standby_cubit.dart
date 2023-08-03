@@ -39,10 +39,10 @@ class StandbyCubit extends Cubit<StandbyState> {
     try {
       Friend friend = await _dartFriendRepository.addFriendBy(inviteCode);
       state.addFriend(friend);
-    } catch (e, trace) {
-      print("친구추가 실패! $e $trace");
-      throw Error();
-    } finally {
+          } catch (e, trace) {
+        print("친구추가 실패! $e $trace");
+        throw Error();
+      } finally {
       state.isLoading = false;
       emit(state.copy());
     }
@@ -50,7 +50,6 @@ class StandbyCubit extends Cubit<StandbyState> {
 
   void pressedFriendAddButton(Friend friend) {
     state.isLoading = true;
-    print("로딩중");
     emit(state.copy());
 
     try {
@@ -61,7 +60,6 @@ class StandbyCubit extends Cubit<StandbyState> {
       throw Error();
     } finally {
       state.isLoading = false;
-      print("로딩끝");
       emit(state.copy());
     }
   }

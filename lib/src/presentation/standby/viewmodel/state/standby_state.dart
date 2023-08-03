@@ -24,7 +24,7 @@ class StandbyState {
   StandbyState.init() {
     addedFriends = [];
     friendsCount = 0;
-    userResponse = UserResponse( // TODO : 초대코드를 받아와야함!!!!!!!!!
+    userResponse = UserResponse(
       user: null,
       university: null,
     );
@@ -54,13 +54,7 @@ class StandbyState {
 
   void addFriend(Friend friend) {
     addedFriends.add(friend); // List에 추가
-    print("add - ${friend.toString()}");
     newFriends.remove(friend);
-    print("removed - ${friend.toString()}");
-
-    print("=========================[");
-    print(addedFriends.toString());
-    print(newFriends.toString());
   }
 
   @override
