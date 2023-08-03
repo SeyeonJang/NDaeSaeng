@@ -414,7 +414,7 @@ class FriendComponent extends StatelessWidget {
                     context: context,
                     builder: (BuildContext context) => AlertDialog(
                       title: const Text('사용자를 신고하시겠어요?'),
-                      content: const Text('사용자를 신고하면 Dart에서 빠르게 신고 처리를 해드려요!'),
+                      content: const Text('사용자를 신고하면 엔대생에서 빠르게 신고 처리를 해드려요!'),
                       backgroundColor: Colors.white,
                       surfaceTintColor: Colors.white,
                       actions: <Widget>[
@@ -573,7 +573,7 @@ class NotFriendComponent extends StatelessWidget {
                       backgroundColor: Colors.white,
                       surfaceTintColor: Colors.white,
                       title: const Text('사용자를 신고하시겠어요?'),
-                      content: const Text('사용자를 신고하면 Dart에서 빠르게 신고 처리를 해드려요!'),
+                      content: const Text('사용자를 신고하면 엔대생에서 빠르게 신고 처리를 해드려요!'),
                       actions: <Widget>[
                         TextButton(
                           onPressed: () {
