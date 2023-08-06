@@ -3,9 +3,7 @@ import 'dart:convert';
 import 'package:dart_flutter/res/environment/app_environment.dart';
 import 'package:dart_flutter/src/data/model/friend.dart';
 import 'package:dart_flutter/src/data/model/question.dart';
-import 'package:dart_flutter/src/data/model/sns_request.dart';
 import 'package:dart_flutter/src/data/model/university.dart';
-import 'package:dart_flutter/src/data/model/user.dart';
 
 import '../common/util/HttpUtil.dart';
 import '../data/model/dart_auth.dart';
@@ -55,31 +53,6 @@ class DartApiRemoteDataSource {
     final dartAuth = DartAuth.from(jsonResponse);
     addAuthorizationToken(dartAuth.accessToken);
     return dartAuth;
-  }
-
-  /// Auth: 문자인증 요청
-  static Future<void> postSnsRequest(SnsRequest snsRequest) async {
-    const path = '/v1/auth/sms';
-    final body = {"phoneNumber": snsRequest.getPhone};
-
-    final response = await _httpUtil.request().post(path, data: body);
-    return;
-  }
-
-  /// Auth: 문자인증 번호 검증 요청
-  static Future<bool> postCheckSnsCode(SnsVerifyingRequest snsVerifyingRequest) async {
-    const path = '/v1/auth/sms/verifying';
-    final body = {"code": snsVerifyingRequest.getCode};
-
-    final response = await _httpUtil.request().post(path, data: body);
-
-    final jsonResponse = json.decode(response.toString());
-    if (jsonResponse['status'] == 'ok') {
-      return true;
-    } else {
-      print(jsonResponse['status']);
-      return false;
-    }
   }
 
   /// Univ: 전체 대학 목록 가져오기

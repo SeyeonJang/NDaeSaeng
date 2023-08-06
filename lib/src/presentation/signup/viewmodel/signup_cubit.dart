@@ -1,15 +1,12 @@
 import 'dart:io';
 
 import 'package:dart_flutter/src/data/model/university.dart';
-import 'package:dart_flutter/src/data/model/user.dart';
 import 'package:dart_flutter/src/data/repository/dart_auth_repository.dart';
 import 'package:dart_flutter/src/data/repository/dart_univ_repository.dart';
 import 'package:dart_flutter/src/data/repository/dart_user_repository.dart';
-import 'package:dart_flutter/src/presentation/signup/viewmodel/state/signup_input.dart';
 import 'package:dart_flutter/src/presentation/signup/viewmodel/state/signup_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../data/model/sns_request.dart';
 import '../../../data/model/user_request.dart';
 
 
