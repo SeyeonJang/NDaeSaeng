@@ -1,11 +1,9 @@
 import 'package:json_annotation/json_annotation.dart';
-part 'university.g.dart';
 
-@JsonSerializable()
 class University {
-  final int id;
-  final String name;
-  final String department;
+  late int id;
+  late String name;
+  late String department;
 
   University({
     required this.id,
@@ -13,8 +11,19 @@ class University {
     required this.department,
   });
 
-  Map<String, dynamic> toJson() => _$UniversityToJson(this);
-  static University fromJson(Map<String, dynamic> json) => _$UniversityFromJson(json);
+  University.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    name = json['name'];
+    department = json['department'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['name'] = this.name;
+    data['department'] = this.department;
+    return data;
+  }
 
   @override
   String toString() {

@@ -1,6 +1,4 @@
 import 'package:dart_flutter/src/data/model/university.dart';
-// import 'package:json_annotation/json_annotation.dart';
-// part 'user.g.dart';
 
 class UserResponse {
   User? user;
@@ -90,47 +88,6 @@ class User {
     return 'User{id: $id, name: $name, phone: $phone, gender: $gender, admissionYear: $admissionYear, birthYear: $birthYear, recommendationCode: $recommendationCode}';
   }
 }
-
-//
-// @JsonSerializable()
-// class UserResponse {
-//   final int? userId, univId;
-//   final int? admissionNumber, point;
-//   final String? name, phone;
-//   final String? universityName, department;
-//   final DateTime? nextVoteDateTime;
-//
-//   UserResponse({
-//     required this.userId,
-//     required this.univId,
-//     required this.admissionNumber,
-//     required this.point,
-//     required this.name,
-//     required this.phone,
-//     required this.universityName,
-//     required this.department,
-//     required this.nextVoteDateTime
-//   });
-//
-//   UserResponse.from(Map<String, dynamic> json)
-//   : userId = json['userId'],
-//     univId = json['universityId'],
-//     admissionNumber = json['admissionNumber'],
-//     point = json['point'],
-//     name = json['name'],
-//     phone = json['phone'],
-//     universityName = json['universityName'],
-//     department = json['department'],
-//     nextVoteDateTime = json['nextVoteDateTime'];
-//
-//   Map<String, dynamic> toJson() => _$UserResponseToJson(this);
-//   static UserResponse fromJson(Map<String, dynamic> json) => _$UserResponseFromJson(json);
-//
-//   @override
-//   String toString() {
-//     return 'UserResponse{userId: $userId, univId: $univId, admissionNumber: $admissionNumber, point: $point, name: $name, phone: $phone, universityName: $universityName, department: $department, nextVoteDateTime: $nextVoteDateTime}';
-//   }
-// }
 
 class UserRequest {
   final int univId;

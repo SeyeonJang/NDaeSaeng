@@ -3,13 +3,10 @@ import 'dart:core';
 import 'package:dart_flutter/src/data/model/question.dart';
 import 'package:dart_flutter/src/data/model/university.dart';
 import 'package:dart_flutter/src/data/model/user.dart';
-import 'package:json_annotation/json_annotation.dart';
-part 'vote.g.dart';
 
-@JsonSerializable()
 class VoteRequest {
-  int questionId;
-  int pickedUserId, firstUserId, secondUserId, thirdUserId, fourthUserId;
+  late int questionId;
+  late int pickedUserId, firstUserId, secondUserId, thirdUserId, fourthUserId;
 
   VoteRequest(
       {required this.pickedUserId,
@@ -27,8 +24,25 @@ class VoteRequest {
         fourthUserId = json['FourthUserId'],
         questionId = json['questionId'];
 
-  Map<String, dynamic> toJson() => _$VoteRequestToJson(this);
-  static VoteRequest fromJson(Map<String, dynamic> json) => _$VoteRequestFromJson(json);
+  VoteRequest.fromJson(Map<String, dynamic> json) {
+    questionId = json['questionId'];
+    pickedUserId = json['pickedUserId'];
+    firstUserId = json['firstUserId'];
+    secondUserId = json['secondUserId'];
+    thirdUserId = json['thirdUserId'];
+    fourthUserId = json['fourthUserId'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['questionId'] = this.questionId;
+    data['pickedUserId'] = this.pickedUserId;
+    data['firstUserId'] = this.firstUserId;
+    data['secondUserId'] = this.secondUserId;
+    data['thirdUserId'] = this.thirdUserId;
+    data['fourthUserId'] = this.fourthUserId;
+    return data;
+  }
 
   @override
   String toString() {
