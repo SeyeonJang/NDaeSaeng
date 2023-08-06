@@ -1,7 +1,7 @@
 import 'package:dart_flutter/res/size_config.dart';
 import 'package:dart_flutter/src/common/util/analytics_util.dart';
 import 'package:dart_flutter/src/data/model/friend.dart';
-import 'package:dart_flutter/src/data/model/vote.dart';
+import 'package:dart_flutter/src/data/model/vote_request.dart';
 import 'package:dart_flutter/src/presentation/vote/vimemodel/state/vote_state.dart';
 import 'package:dart_flutter/src/presentation/vote/vimemodel/vote_cubit.dart';
 import 'package:flutter/cupertino.dart';

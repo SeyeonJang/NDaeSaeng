@@ -2,6 +2,8 @@ import 'package:dart_flutter/src/data/model/user.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:dart_flutter/src/data/model/friend.dart';
 
+import '../../../../data/model/user_response.dart';
+
 
 @JsonSerializable()
 class StandbyState {

@@ -1,7 +1,8 @@
 import 'package:dart_flutter/src/data/model/question.dart';
 
 import '../../datasource/dart_api_remote_datasource.dart';
-import '../model/vote.dart';
+import '../model/vote_request.dart';
+import '../model/vote_response.dart';
 
 class DartVoteRepository {
   Future<List<Question>> getNewQuestions() async {

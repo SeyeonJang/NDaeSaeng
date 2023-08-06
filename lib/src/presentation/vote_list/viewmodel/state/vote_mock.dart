@@ -1,4 +1,3 @@
-// import 'package:dart_flutter/src/data/model/vote.dart';
 //
 // class VoteMock {
 //   final List<VoteResponse> _votes = [

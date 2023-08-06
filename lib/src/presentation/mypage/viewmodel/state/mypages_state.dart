@@ -1,8 +1,9 @@
-// import 'package:dart_flutter/src/data/model/vote.dart';
 import 'package:dart_flutter/src/data/model/friend.dart';
 import 'package:dart_flutter/src/data/model/user.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:json_annotation/json_annotation.dart';
+
+import '../../../../data/model/user_response.dart';
 
 @JsonSerializable()
 class MyPagesState {

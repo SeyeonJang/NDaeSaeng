@@ -20,6 +20,7 @@ import 'package:restart_app/restart_app.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../res/size_config.dart';
+import '../../data/model/user_response.dart';
 
 class MySettings extends StatelessWidget {
   final UserResponse userResponse;

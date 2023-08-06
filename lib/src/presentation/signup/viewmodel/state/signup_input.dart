@@ -1,5 +1,7 @@
 import 'package:dart_flutter/src/data/model/user.dart';
 import 'package:json_annotation/json_annotation.dart';
+
+import '../../../../data/model/user_request.dart';
 part 'signup_input.g.dart';
 
 @JsonSerializable()

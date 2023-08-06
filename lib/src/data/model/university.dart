@@ -1,5 +1,3 @@
-import 'package:json_annotation/json_annotation.dart';
-
 class University {
   late int id;
   late String name;
@@ -30,5 +28,3 @@ class University {
     return 'University{id: $id, name: $name, department: $department}';
   }
 }
-
-

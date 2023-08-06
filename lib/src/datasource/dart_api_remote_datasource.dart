@@ -9,9 +9,13 @@ import 'package:dart_flutter/src/data/model/user.dart';
 
 import '../common/util/HttpUtil.dart';
 import '../data/model/dart_auth.dart';
-import '../data/model/vote.dart';
+import '../data/model/user_request.dart';
+import '../data/model/user_response.dart';
+import '../data/model/vote_request.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
+
+import '../data/model/vote_response.dart';
 
 class DartApiRemoteDataSource {
   static final String baseUrl = AppEnvironment.getEnv.getApiBaseUrl();

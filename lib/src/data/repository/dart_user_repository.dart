@@ -2,6 +2,8 @@ import 'package:dart_flutter/src/data/my_cache.dart';
 
 import '../../datasource/dart_api_remote_datasource.dart';
 import '../model/user.dart';
+import '../model/user_request.dart';
+import '../model/user_response.dart';
 
 class DartUserRepository {
   static const Duration cachingInterval = Duration(minutes: 10);

@@ -1,6 +1,6 @@
 import 'package:dart_flutter/src/data/model/friend.dart';
 import 'package:dart_flutter/src/data/model/question.dart';
-import 'package:dart_flutter/src/data/model/vote.dart';
+import 'package:dart_flutter/src/data/model/vote_request.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'vote_state.g.dart';

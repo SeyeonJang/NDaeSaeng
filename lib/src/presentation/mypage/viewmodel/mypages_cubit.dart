@@ -5,6 +5,8 @@ import 'package:dart_flutter/src/data/repository/dart_user_repository.dart';
 import 'package:dart_flutter/src/presentation/mypage/viewmodel/state/mypages_state.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 
+import '../../../data/model/user_response.dart';
+
 class MyPagesCubit extends Cubit<MyPagesState> {
   static final DartUserRepository _dartUserRepository = DartUserRepository();
   static final DartFriendRepository _dartFriendRepository = DartFriendRepository();

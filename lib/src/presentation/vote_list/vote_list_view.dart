@@ -3,11 +3,12 @@ import 'dart:math';
 import 'package:dart_flutter/res/size_config.dart';
 import 'package:dart_flutter/src/common/util/analytics_util.dart';
 import 'package:dart_flutter/src/common/util/timeago_util.dart';
-import 'package:dart_flutter/src/data/model/vote.dart';
 import 'package:dart_flutter/src/presentation/vote_list/viewmodel/state/vote_list_state.dart';
 import 'package:dart_flutter/src/presentation/vote_list/viewmodel/vote_list_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../data/model/vote_response.dart';
 
 class VoteListView extends StatefulWidget {
   const VoteListView({Key? key}) : super(key: key);

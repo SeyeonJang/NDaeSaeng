@@ -44,32 +44,3 @@ class Friend {
     return 'Friend{userId: $userId, name: $name, gender: $gender, admissionYear: $admissionYear, university: $university}';
   }
 }
-
-// import 'package:dart_flutter/src/data/model/university.dart';
-// import 'package:json_annotation/json_annotation.dart';
-// part 'friend.g.dart';
-//
-// @JsonSerializable()
-// class Friend {
-//   final int userId;
-//   final int admissionNum;
-//   final int mutualFriend;
-//   final String name;
-//   final University university;
-//
-//   Friend({
-//     required this.userId,
-//     required this.admissionNum,
-//     this.mutualFriend = 0,
-//     required this.name,
-//     required this.university,
-//   });
-//
-//   Map<String, dynamic> toJson() => _$FriendToJson(this);
-//   static Friend fromJson(Map<String, dynamic> json) => _$FriendFromJson(json);
-//
-//   @override
-//   String toString() {
-//     return 'Friend{userId: $userId, admissionNumber: $admissionNum, name: $name, university: $university}';
-//   }
-// }

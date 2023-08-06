@@ -14,6 +14,7 @@ import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
+import '../../data/model/user_response.dart';
 import '../../datasource/dart_api_remote_datasource.dart';
 
 class AuthCubit extends HydratedCubit<AuthState> {

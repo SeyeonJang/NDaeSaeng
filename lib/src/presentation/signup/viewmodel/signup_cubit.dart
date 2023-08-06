@@ -10,6 +10,7 @@ import 'package:dart_flutter/src/presentation/signup/viewmodel/state/signup_stat
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../data/model/sns_request.dart';
+import '../../../data/model/user_request.dart';
 
 
 class SignupCubit extends Cubit<SignupState> {

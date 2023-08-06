@@ -1,7 +1,8 @@
-import 'package:dart_flutter/src/data/model/vote.dart';
 import 'package:dart_flutter/src/data/repository/dart_vote_repository.dart';
 import 'package:dart_flutter/src/presentation/vote_list/viewmodel/state/vote_list_state.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
+
+import '../../../data/model/vote_response.dart';
 
 class VoteListCubit extends HydratedCubit<VoteListState> {
   static final DartVoteRepository _dartVoteRepository = DartVoteRepository();
