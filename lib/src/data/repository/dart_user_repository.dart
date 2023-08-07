@@ -25,7 +25,7 @@ class DartUserRepository {
 
   Future<UserResponse> myInfo() async {
     if (userResponseCache.isUpdateBefore(DateTime.now().subtract(cachingInterval))) {
-      userResponseCache.setObject(await DartApiRemoteDataSource.getMyInformation());
+      userResponseCache.setObject((await DartApiRemoteDataSource.getMyInformation()).newUserResponse());
     }
     return userResponseCache.userResponse;
   }

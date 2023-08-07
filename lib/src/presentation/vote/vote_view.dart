@@ -2,6 +2,9 @@ import 'package:dart_flutter/res/size_config.dart';
 import 'package:dart_flutter/src/common/util/analytics_util.dart';
 import 'package:dart_flutter/src/data/model/friend_dto.dart';
 import 'package:dart_flutter/src/data/model/vote_request_dto.dart';
+import 'package:dart_flutter/src/domain/entity/friend.dart';
+import 'package:dart_flutter/src/domain/entity/question.dart';
+import 'package:dart_flutter/src/domain/entity/vote_request.dart';
 import 'package:dart_flutter/src/presentation/vote/vimemodel/state/vote_state.dart';
 import 'package:dart_flutter/src/presentation/vote/vimemodel/vote_cubit.dart';
 import 'package:flutter/cupertino.dart';
@@ -83,12 +86,12 @@ class _VoteViewState extends State<VoteView> with SingleTickerProviderStateMixin
         body: Center(
           child: BlocBuilder<VoteCubit, VoteState>(
             builder: (context, state) {
-              QuestionDto question = state.questions[state.voteIterator];
-              List<FriendDto> shuffledFriends = state.getShuffleFriends();
-              FriendDto friend1 = shuffledFriends[0];
-              FriendDto friend2 = shuffledFriends[1];
-              FriendDto friend3 = shuffledFriends[2];
-              FriendDto friend4 = shuffledFriends[3];
+              Question question = state.questions[state.voteIterator];
+              List<Friend> shuffledFriends = state.getShuffleFriends();
+              Friend friend1 = shuffledFriends[0];
+              Friend friend2 = shuffledFriends[1];
+              Friend friend3 = shuffledFriends[2];
+              Friend friend4 = shuffledFriends[3];
 
               // print(state.votes.toString());
 
@@ -343,7 +346,7 @@ class _ChoiceFriendButtonState extends State<ChoiceFriendButton> {
         textColor = Color(0xff7C83FD);
       });
       // 투표 요청 로직
-      VoteRequestDto voteRequest = VoteRequestDto(
+      VoteRequest voteRequest = VoteRequest(
         questionId: widget.questionId,
         pickedUserId: widget.userId,
         firstUserId: widget.firstUserId,

@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:dart_flutter/res/size_config.dart';
 import 'package:dart_flutter/src/common/util/analytics_util.dart';
 import 'package:dart_flutter/src/common/util/timeago_util.dart';
+import 'package:dart_flutter/src/domain/entity/vote_response.dart';
 import 'package:dart_flutter/src/presentation/vote_list/viewmodel/state/vote_list_state.dart';
 import 'package:dart_flutter/src/presentation/vote_list/viewmodel/vote_list_cubit.dart';
 import 'package:flutter/material.dart';
@@ -123,7 +124,7 @@ class _VoteListViewState extends State<VoteListView> with SingleTickerProviderSt
     );
   }
 
-  ListView makeList(List<VoteResponseDto> snapshot) {
+  ListView makeList(List<VoteResponse> snapshot) {
     return ListView.builder(
       reverse: true,
       shrinkWrap: true,

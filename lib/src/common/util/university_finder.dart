@@ -1,7 +1,7 @@
-import '../../data/model/university_dto.dart';
+import 'package:dart_flutter/src/domain/entity/university.dart';
 
 class UniversityFinder {
-  final List<UniversityDto> universities;
+  final List<University> universities;
 
   UniversityFinder({
     required this.universities,
@@ -22,7 +22,7 @@ class UniversityFinder {
   List<Map<String, dynamic>> getDepartmentSuggestions(String univName, String query) {
     List<Map<String, dynamic>> matches = [];
 
-    List<UniversityDto> univs = _getDepartmentSuggestions(univName, query);
+    List<University> univs = _getDepartmentSuggestions(univName, query);
     for (var univ in univs) {
       matches.add(univ.toJson());
     }
@@ -40,8 +40,8 @@ class UniversityFinder {
     return matches;
   }
 
-  List<UniversityDto> _getDepartmentSuggestions(String univName, String query) {
-    List<UniversityDto> matches = [];
+  List<University> _getDepartmentSuggestions(String univName, String query) {
+    List<University> matches = [];
 
     for (var university in universities) {
       if (university.name == univName && university.department.contains(query)) {

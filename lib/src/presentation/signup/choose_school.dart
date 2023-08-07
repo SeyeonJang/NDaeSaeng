@@ -1,6 +1,7 @@
 import 'package:dart_flutter/res/size_config.dart';
 import 'package:dart_flutter/src/common/util/analytics_util.dart';
 import 'package:dart_flutter/src/data/model/university_dto.dart';
+import 'package:dart_flutter/src/domain/entity/university.dart';
 import 'package:dart_flutter/src/presentation/signup/land_page.dart';
 import 'package:dart_flutter/src/presentation/signup/viewmodel/signup_cubit.dart';
 import 'package:flutter/material.dart';
@@ -84,7 +85,7 @@ class _ScaffoldBodyState extends State<ScaffoldBody> {
   @override
   void initState() {
     super.initState();
-    List<UniversityDto> universities = BlocProvider.of<SignupCubit>(context).getUniversities;
+    List<University> universities = BlocProvider.of<SignupCubit>(context).getUniversities;
     universityFinder = UniversityFinder(universities: universities);
     setState(() {
       isSelectedOnTypeAhead = false;

@@ -3,12 +3,9 @@ import 'dart:io';
 import 'package:dart_flutter/src/common/auth/auth_cubit.dart';
 import 'package:dart_flutter/src/common/util/analytics_util.dart';
 import 'package:dart_flutter/src/common/util/toast_util.dart';
-import 'package:dart_flutter/src/presentation/mypage/logout_goto_landPage.dart';
+import 'package:dart_flutter/src/domain/entity/user_response.dart';
 import 'package:dart_flutter/src/presentation/mypage/my_ask.dart';
 import 'package:dart_flutter/src/presentation/mypage/my_opinion.dart';
-import 'package:dart_flutter/src/presentation/mypage/viewmodel/mypages_cubit.dart';
-import 'package:dart_flutter/src/presentation/mypage/viewmodel/state/mypages_state.dart';
-import 'package:dart_flutter/src/data/model/user_dto.dart';
 import 'package:dart_flutter/src/presentation/mypage/my_tos1.dart';
 import 'package:dart_flutter/src/presentation/mypage/my_tos2.dart';
 import 'package:dart_flutter/src/presentation/signup/land_pages.dart';
@@ -17,13 +14,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:restart_app/restart_app.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import '../../../res/size_config.dart';
 import '../../data/model/user_response_dto.dart';
 
 class MySettings extends StatelessWidget {
-  final UserResponseDto userResponse;
+  final UserResponse userResponse;
 
   MySettings({super.key, required this.userResponse});
 
@@ -40,7 +36,7 @@ class MySettings extends StatelessWidget {
 }
 
 class MyPageView extends StatefulWidget {
-  final UserResponseDto userResponse;
+  final UserResponse userResponse;
   MyPageView({super.key, required this.userResponse});
 
   static final _defaultPadding = EdgeInsets.all(getFlexibleSize(target: 20));
@@ -394,7 +390,7 @@ class _MyPageViewState extends State<MyPageView> {
                                             onPressed: textController.text == '회원탈퇴를 원해요' ? () async {
                                               AnalyticsUtil.logEvent("내정보_설정_회원탈퇴_탈퇴확정");
                                               Navigator.pop(dialogContext);
-                                              BlocProvider.of<AuthCubit>(context).kakaoWithdrawal();
+                                              await BlocProvider.of<AuthCubit>(context).kakaoWithdrawal();
                                               ToastUtil.showToast("회원탈퇴가 완료되었습니다.\n잠시후 앱이 종료됩니다.");
                                               await Future.delayed(const Duration(seconds: 2));
                                               restart();

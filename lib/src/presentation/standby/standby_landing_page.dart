@@ -1,5 +1,6 @@
 import 'package:dart_flutter/src/common/util/analytics_util.dart';
 import 'package:dart_flutter/src/common/util/toast_util.dart';
+import 'package:dart_flutter/src/domain/entity/friend.dart';
 import 'package:dart_flutter/src/presentation/page_view.dart';
 import 'package:dart_flutter/src/presentation/signup/tutorial_slide.dart';
 import 'package:dart_flutter/src/presentation/standby/viewmodel/standby_cubit.dart';
@@ -202,7 +203,7 @@ class _StandbyLandingPageState extends State<StandbyLandingPage> with TickerProv
                           if (state.isLoading) {
                             return CircularProgressIndicator();
                           } else {
-                            List<FriendDto> friends = state.addedFriends;
+                            List<Friend> friends = state.addedFriends;
                             int count = friends.length;
                             if (count >= 4) {
                               WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -216,7 +217,7 @@ class _StandbyLandingPageState extends State<StandbyLandingPage> with TickerProv
                         }),
 
                         BlocBuilder<StandbyCubit, StandbyState>(builder: (context, state) {
-                          List<FriendDto> friends = state.addedFriends;
+                          List<Friend> friends = state.addedFriends;
                           int count = friends.length;
 
                           return Column(
@@ -324,7 +325,7 @@ class _StandbyLandingPageState extends State<StandbyLandingPage> with TickerProv
 
                         BlocBuilder<StandbyCubit, StandbyState>(
                           builder: (context, state) {
-                            List<FriendDto> friends = state.addedFriends;
+                            List<Friend> friends = state.addedFriends;
                             int count = friends.length;
                             return openAddFriends(
                               myCode: state.userResponse.user?.recommendationCode ?? '내 코드가 없어요!',
@@ -1813,7 +1814,7 @@ void shareContent(BuildContext context, String myCode) {
 }
 
 class NewFriends extends StatelessWidget {
-  final List<FriendDto> friends;
+  final List<Friend> friends;
   final int count;
 
   const NewFriends({
@@ -1834,9 +1835,9 @@ class NewFriends extends StatelessWidget {
 }
 class NotFriendComponent extends StatelessWidget {
   late bool isAdd;
-  late FriendDto friend;
+  late Friend friend;
 
-  NotFriendComponent(bool isAdd, FriendDto friend, {super.key}) {
+  NotFriendComponent(bool isAdd, Friend friend, {super.key}) {
     this.isAdd = isAdd;
     this.friend = friend;
   }

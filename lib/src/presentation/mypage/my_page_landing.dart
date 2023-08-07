@@ -1,8 +1,7 @@
-import 'package:contextmenu/contextmenu.dart';
 import 'package:dart_flutter/res/size_config.dart';
 import 'package:dart_flutter/src/common/util/analytics_util.dart';
 import 'package:dart_flutter/src/common/util/toast_util.dart';
-import 'package:dart_flutter/src/data/model/friend_dto.dart';
+import 'package:dart_flutter/src/domain/entity/friend.dart';
 import 'package:dart_flutter/src/presentation/mypage/my_settings.dart';
 import 'package:dart_flutter/src/presentation/mypage/viewmodel/mypages_cubit.dart';
 import 'package:dart_flutter/src/presentation/mypage/viewmodel/state/mypages_state.dart';
@@ -11,8 +10,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:quickalert/models/quickalert_type.dart';
-import 'package:quickalert/widgets/quickalert_dialog.dart';
 import 'package:share_plus/share_plus.dart';
 
 class MyPageLanding extends StatefulWidget {
@@ -286,7 +283,7 @@ class MyPageLandingView extends StatelessWidget {
 }
 
 class MyFriends extends StatelessWidget {
-  final Set<FriendDto> friends;
+  final Set<Friend> friends;
   final int count;
 
   const MyFriends({
@@ -320,7 +317,7 @@ class MyFriends extends StatelessWidget {
 }
 
 class NewFriends extends StatelessWidget {
-  final Set<FriendDto> friends;
+  final Set<Friend> friends;
   final int count;
 
   const NewFriends({
@@ -351,10 +348,10 @@ class NewFriends extends StatelessWidget {
 
 class FriendComponent extends StatelessWidget {
   late bool isAdd;
-  late FriendDto friend;
+  late Friend friend;
   late int count;
 
-  FriendComponent(bool isAdd, FriendDto friend, int count, {super.key}) {
+  FriendComponent(bool isAdd, Friend friend, int count, {super.key}) {
     this.isAdd = isAdd;
     this.friend = friend;
     this.count = count;
@@ -522,9 +519,9 @@ class FriendComponent extends StatelessWidget {
 
 class NotFriendComponent extends StatelessWidget {
   late bool isAdd;
-  late FriendDto friend;
+  late Friend friend;
 
-  NotFriendComponent(bool isAdd, FriendDto friend, {super.key}) {
+  NotFriendComponent(bool isAdd, Friend friend, {super.key}) {
     this.isAdd = isAdd;
     this.friend = friend;
   }

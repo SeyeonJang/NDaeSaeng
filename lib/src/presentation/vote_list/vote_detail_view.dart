@@ -1,3 +1,4 @@
+import 'package:dart_flutter/src/domain/entity/vote_response.dart';
 import 'package:dart_flutter/src/presentation/vote_list/viewmodel/state/vote_list_state.dart';
 import 'package:dart_flutter/src/presentation/vote_list/viewmodel/vote_list_cubit.dart';
 import 'package:flutter/material.dart';
@@ -19,7 +20,7 @@ class VoteDetailView extends StatelessWidget {
               vertical: SizeConfig.defaultSize * 2),
           child: BlocBuilder<VoteListCubit,VoteListState> (
             builder: (context, state) {
-              VoteResponseDto vote = state.getVoteById(state.nowVoteId);
+              VoteResponse vote = state.getVoteById(state.nowVoteId);
               return VoteDetail(
                 voteId: vote.voteId!,
                 pickedUserSex: "궭", // vote.pickedUser!.gender!,
