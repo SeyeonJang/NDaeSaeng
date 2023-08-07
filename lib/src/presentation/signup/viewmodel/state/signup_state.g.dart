@@ -11,7 +11,7 @@ SignupState _$SignupStateFromJson(Map<String, dynamic> json) => SignupState(
       inputState:
           SignupInput.fromJson(json['inputState'] as Map<String, dynamic>),
       universities: (json['universities'] as List<dynamic>)
-          .map((e) => UniversityDto.fromJson(e as Map<String, dynamic>))
+          .map((e) => University.fromJson(e as Map<String, dynamic>))
           .toList(),
       signupStep: $enumDecode(_$SignupStepEnumMap, json['signupStep']),
       loginType: json['loginType'] as String,

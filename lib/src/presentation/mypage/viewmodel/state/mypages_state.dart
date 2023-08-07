@@ -1,16 +1,12 @@
-import 'package:dart_flutter/src/data/model/friend_dto.dart';
-import 'package:dart_flutter/src/data/model/user_dto.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:dart_flutter/src/domain/entity/friend.dart';
+import 'package:dart_flutter/src/domain/entity/user_response.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-import '../../../../data/model/user_response_dto.dart';
-
-@JsonSerializable()
 class MyPagesState {
   late bool isLoading;
-  late UserResponseDto userResponse;
-  late Set<FriendDto> friends;
-  late Set<FriendDto> newFriends;
+  late UserResponse userResponse;
+  late Set<Friend> friends;
+  late Set<Friend> newFriends;
   late int newFriendId;
   late bool isMyLandPage;
 
@@ -25,7 +21,7 @@ class MyPagesState {
 
   MyPagesState.init() {
     isLoading = false;
-    userResponse = UserResponseDto(
+    userResponse = UserResponse(
       user: null,
       university: null,
     );
@@ -48,7 +44,7 @@ class MyPagesState {
     this.isLoading = isLoading;
   }
 
-  MyPagesState setUserResponse(UserResponseDto userResponse) {
+  MyPagesState setUserResponse(UserResponse userResponse) {
     this.userResponse = userResponse;
     return this;
   }
@@ -58,12 +54,12 @@ class MyPagesState {
     return this;
   }
 
-  MyPagesState setMyFriends(List<FriendDto> friends) {
+  MyPagesState setMyFriends(List<Friend> friends) {
     this.friends = friends.toSet();
     return this;
   }
 
-  MyPagesState setRecommendedFriends(List<FriendDto> friends) {
+  MyPagesState setRecommendedFriends(List<Friend> friends) {
     newFriends = friends.toSet();
     return this;
   }
@@ -73,12 +69,12 @@ class MyPagesState {
     return this;
   }
 
-  void addFriend(FriendDto friend) {
+  void addFriend(Friend friend) {
     friends.add(friend);
     newFriends.remove(friend);
   }
 
-  void deleteFriend(FriendDto friend) {
+  void deleteFriend(Friend friend) {
     friends.remove(friend);
     newFriends.add(friend);
   }

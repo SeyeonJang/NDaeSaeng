@@ -11,14 +11,14 @@ VoteState _$VoteStateFromJson(Map<String, dynamic> json) => VoteState(
       step: $enumDecode(_$VoteStepEnumMap, json['step']),
       voteIterator: json['voteIterator'] as int,
       votes: (json['votes'] as List<dynamic>)
-          .map((e) => VoteRequestDto.fromJson(e as Map<String, dynamic>))
+          .map((e) => VoteRequest.fromJson(e as Map<String, dynamic>))
           .toList(),
       questions: (json['questions'] as List<dynamic>)
-          .map((e) => QuestionDto.fromJson(e as Map<String, dynamic>))
+          .map((e) => Question.fromJson(e as Map<String, dynamic>))
           .toList(),
       nextVoteDateTime: DateTime.parse(json['nextVoteDateTime'] as String),
       friends: (json['friends'] as List<dynamic>)
-          .map((e) => FriendDto.fromJson(e as Map<String, dynamic>))
+          .map((e) => Friend.fromJson(e as Map<String, dynamic>))
           .toList(),
     );
 

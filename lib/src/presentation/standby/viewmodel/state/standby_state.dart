@@ -1,4 +1,6 @@
 import 'package:dart_flutter/src/data/model/user_dto.dart';
+import 'package:dart_flutter/src/domain/entity/friend.dart';
+import 'package:dart_flutter/src/domain/entity/user_response.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:dart_flutter/src/data/model/friend_dto.dart';
 
@@ -9,10 +11,10 @@ import '../../../../data/model/user_response_dto.dart';
 class StandbyState {
   late bool isLoading;
   late bool isFirstCommCompleted;
-  late List<FriendDto> addedFriends;
+  late List<Friend> addedFriends;
   late int friendsCount;
-  late UserResponseDto userResponse;
-  late List<FriendDto> newFriends;
+  late UserResponse userResponse;
+  late List<Friend> newFriends;
 
   StandbyState({
     required this.isLoading,
@@ -26,7 +28,7 @@ class StandbyState {
   StandbyState.init() {
     addedFriends = [];
     friendsCount = 0;
-    userResponse = UserResponseDto(
+    userResponse = UserResponse(
       user: null,
       university: null,
     );
@@ -44,17 +46,17 @@ class StandbyState {
     newFriends: newFriends,
   );
 
-  StandbyState setAddedFriends(List<FriendDto> addedFriends) {
+  StandbyState setAddedFriends(List<Friend> addedFriends) {
     this.addedFriends = addedFriends;
     return this;
   }
 
-  StandbyState setRecommendedFriends(List<FriendDto> friends) {
+  StandbyState setRecommendedFriends(List<Friend> friends) {
     newFriends = friends;
     return this;
   }
 
-  void addFriend(FriendDto friend) {
+  void addFriend(Friend friend) {
     addedFriends.add(friend); // List에 추가
     newFriends.remove(friend);
   }

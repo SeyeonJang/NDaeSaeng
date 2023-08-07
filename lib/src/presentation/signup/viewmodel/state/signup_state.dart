@@ -1,4 +1,5 @@
 import 'package:dart_flutter/src/data/model/university_dto.dart';
+import 'package:dart_flutter/src/domain/entity/university.dart';
 import 'package:dart_flutter/src/presentation/signup/viewmodel/state/signup_input.dart';
 import 'package:json_annotation/json_annotation.dart';
 part 'signup_state.g.dart';
@@ -7,7 +8,7 @@ part 'signup_state.g.dart';
 class SignupState {
   late bool isLoading;
   late SignupInput inputState;
-  late List<UniversityDto> universities;
+  late List<University> universities;
   late SignupStep signupStep;
   late String loginType;
   late String memo;

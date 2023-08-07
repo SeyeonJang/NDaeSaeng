@@ -1,5 +1,7 @@
 import 'dart:core';
 
+import 'package:dart_flutter/src/data/model/vote_request_dto.dart';
+
 class VoteRequest {
   late int questionId;
   late int pickedUserId, firstUserId, secondUserId, thirdUserId, fourthUserId;

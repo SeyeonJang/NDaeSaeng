@@ -37,6 +37,17 @@ class UserRequestDto {
     return UserRequest(univId: univId, admissionYear: admissionYear, birthYear: birthYear, name: name, phone: phone, gender: gender);
   }
 
+  static UserRequestDto fromUserRequest(UserRequest userRequest) {
+    return UserRequestDto(
+      univId: userRequest.univId,
+      admissionYear: userRequest.admissionYear,
+      birthYear: userRequest.birthYear,
+      name: userRequest.name,
+      phone: userRequest.phone,
+      gender: userRequest.gender
+    );
+  }
+
   @override
   String toString() {
     return 'UserRequest{univId: $univId, admissionYear: $admissionYear, birthYear: $birthYear, name: $name, phone: $phone, gender: $gender}';

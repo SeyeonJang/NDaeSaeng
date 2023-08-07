@@ -2,6 +2,8 @@ import 'package:dart_flutter/src/data/model/friend_dto.dart';
 import 'package:dart_flutter/src/data/model/user_dto.dart';
 import 'package:dart_flutter/src/data/repository/dart_friend_repository.dart';
 import 'package:dart_flutter/src/data/repository/dart_user_repository.dart';
+import 'package:dart_flutter/src/domain/entity/friend.dart';
+import 'package:dart_flutter/src/domain/entity/user_response.dart';
 import 'package:dart_flutter/src/presentation/mypage/viewmodel/state/mypages_state.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 
@@ -19,12 +21,12 @@ class MyPagesCubit extends Cubit<MyPagesState> {
     emit(state.copy());
 
     // 초기값 설정
-    UserResponseDto userResponse = await _dartUserRepository.myInfo();
+    UserResponse userResponse = await _dartUserRepository.myInfo();
     state.setUserResponse(userResponse);
 
-    List<FriendDto> friends = await _dartFriendRepository.getMyFriends();
+    List<Friend> friends = await _dartFriendRepository.getMyFriends();
     state.setMyFriends(friends);
-    List<FriendDto> newFriends = await _dartFriendRepository.getRecommendedFriends();
+    List<Friend> newFriends = await _dartFriendRepository.getRecommendedFriends();
     state.setRecommendedFriends(newFriends);
 
     state.setIsLoading(false);
@@ -32,13 +34,13 @@ class MyPagesCubit extends Cubit<MyPagesState> {
     print("mypage init 끝");
   }
 
-  void pressedFriendAddButton(FriendDto friend) {
+  void pressedFriendAddButton(Friend friend) {
     _dartFriendRepository.addFriend(friend);
     state.addFriend(friend);
     emit(state.copy());
   }
 
-  void pressedFriendDeleteButton(FriendDto friend) {
+  void pressedFriendDeleteButton(Friend friend) {
     _dartFriendRepository.deleteFriend(friend);
     state.deleteFriend(friend);
     emit(state.copy());
@@ -49,7 +51,7 @@ class MyPagesCubit extends Cubit<MyPagesState> {
     emit(state.copy());
 
     try {
-      FriendDto friend = await _dartFriendRepository.addFriendBy(inviteCode);
+      Friend friend = await _dartFriendRepository.addFriendBy(inviteCode);
       state.addFriend(friend);
       state.newFriends = (await _dartFriendRepository.getRecommendedFriends(put: true)).toSet();
     } catch (e, trace) {

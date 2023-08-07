@@ -10,7 +10,7 @@ VoteListState _$VoteListStateFromJson(Map<String, dynamic> json) =>
     VoteListState(
       isLoading: json['isLoading'] as bool,
       votes: (json['votes'] as List<dynamic>)
-          .map((e) => VoteResponseDto.fromJson(e as Map<String, dynamic>))
+          .map((e) => VoteResponse.fromJson(e as Map<String, dynamic>))
           .toList(),
       isFirstTime: json['isFirstTime'] as bool,
       visited: (json['visited'] as Map<String, dynamic>).map(

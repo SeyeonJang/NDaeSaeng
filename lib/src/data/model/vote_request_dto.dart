@@ -53,6 +53,17 @@ class VoteRequestDto {
     );
   }
 
+  static VoteRequestDto fromVoteRequest(VoteRequest voteRequest) {
+    return VoteRequestDto(
+        questionId: voteRequest.questionId,
+        pickedUserId: voteRequest.pickedUserId,
+        firstUserId: voteRequest.firstUserId,
+        secondUserId: voteRequest.secondUserId,
+        thirdUserId: voteRequest.thirdUserId,
+        fourthUserId: voteRequest.fourthUserId
+    );
+  }
+
   @override
   String toString() {
     return 'VoteRequest{questionId: $questionId, pickedUserId: $pickedUserId, firstUserId: $firstUserId, secondUserId: $secondUserId, thirdUserId: $thirdUserId, fourthUserId: $fourthUserId}';

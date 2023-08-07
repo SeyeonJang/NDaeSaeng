@@ -1,4 +1,5 @@
 import 'package:dart_flutter/src/data/repository/dart_vote_repository.dart';
+import 'package:dart_flutter/src/domain/entity/vote_response.dart';
 import 'package:dart_flutter/src/presentation/vote_list/viewmodel/state/vote_list_state.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 
@@ -13,7 +14,7 @@ class VoteListCubit extends HydratedCubit<VoteListState> {
     state.setIsLoading(true);
     emit(state.copy());
 
-    List<VoteResponseDto> votes = await _dartVoteRepository.getVotes();
+    List<VoteResponse> votes = await _dartVoteRepository.getVotes();
     state.setVotes(votes);
 
     state.setIsLoading(false);
