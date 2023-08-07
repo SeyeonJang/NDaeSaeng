@@ -1,14 +1,14 @@
 import 'package:dart_flutter/src/domain/entity/university.dart';
 
 class UniversityDto {
-  late int id;
-  late String name;
-  late String department;
+  int? id;
+  String? name;
+  String? department;
 
   UniversityDto({
-    required this.id,
-    required this.name,
-    required this.department,
+    this.id,
+    this.name,
+    this.department,
   });
 
   UniversityDto.fromJson(Map<String, dynamic> json) {
@@ -26,7 +26,7 @@ class UniversityDto {
   }
 
   University newUniversity() {
-    return University(id: id, name: name, department: department);
+    return University(id: id ?? 0, name: name ?? 'ㅇㅇ대학교', department: department ?? 'ㅇㅇ학과');
   }
 
   @override

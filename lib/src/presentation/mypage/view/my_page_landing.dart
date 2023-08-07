@@ -1,8 +1,7 @@
-import 'package:dart_flutter/res/size_config.dart';
+import 'package:dart_flutter/res/config/size_config.dart';
 import 'package:dart_flutter/src/common/util/analytics_util.dart';
 import 'package:dart_flutter/src/common/util/toast_util.dart';
 import 'package:dart_flutter/src/domain/entity/friend.dart';
-import 'package:dart_flutter/src/presentation/mypage/my_settings.dart';
 import 'package:dart_flutter/src/presentation/mypage/viewmodel/mypages_cubit.dart';
 import 'package:dart_flutter/src/presentation/mypage/viewmodel/state/mypages_state.dart';
 import 'package:flutter/cupertino.dart';
@@ -11,6 +10,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:share_plus/share_plus.dart';
+
+import 'my_settings.dart';
 
 class MyPageLanding extends StatefulWidget {
   const MyPageLanding({Key? key}) : super(key: key);
@@ -230,7 +231,7 @@ class MyPageLandingView extends StatelessWidget {
                   SizedBox(height: SizeConfig.defaultSize * 1.5,),
                   BlocBuilder<MyPagesCubit,MyPagesState>(
                       builder: (context, state) {
-                        final friends = state.friends ?? {};
+                        final friends = state.friends;
                         return MyFriends(friends: friends, count: friends.length);
                       }
                   ),
@@ -268,7 +269,7 @@ class MyPageLandingView extends StatelessWidget {
                   SizedBox(height: SizeConfig.defaultSize * 2 ,),
                   BlocBuilder<MyPagesCubit,MyPagesState>(
                       builder: (context, state) {
-                        final friends = state.newFriends ?? {};
+                        final friends = state.newFriends;
                         return NewFriends(friends: friends, count: friends.length);
                       }
                   ),

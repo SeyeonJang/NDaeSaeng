@@ -1,5 +1,5 @@
 import 'package:dart_flutter/src/common/util/analytics_util.dart';
-import 'package:dart_flutter/src/presentation/mypage/my_page_landing.dart';
+import 'package:dart_flutter/src/presentation/mypage/view/my_page_landing.dart';
 import 'package:dart_flutter/src/presentation/mypage/viewmodel/mypages_cubit.dart';
 import 'package:dart_flutter/src/presentation/mypage/viewmodel/state/mypages_state.dart';
 import 'package:flutter/material.dart';

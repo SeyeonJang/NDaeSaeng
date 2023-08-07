@@ -1,6 +1,5 @@
-  import 'package:dart_flutter/res/size_config.dart';
+  import 'package:dart_flutter/res/config/size_config.dart';
 import 'package:dart_flutter/src/common/util/analytics_util.dart';
-  import 'package:dart_flutter/src/presentation/signup/user_name.dart';
   import 'package:dart_flutter/src/presentation/signup/viewmodel/signup_cubit.dart';
   import 'package:flutter/cupertino.dart';
   import 'package:flutter/material.dart';
@@ -110,7 +109,6 @@ class _ScaffoldBodyState extends State<ScaffoldBody> {
                             '학번': ScaffoldBody.ageIndex,
                           });
                           setState(() => ScaffoldBody.adminIndex = index);
-                          final item = ScaffoldBody.adminNumItems[index];
                           print('Selected item: ${ScaffoldBody.adminNumItems}');
                         },
                       ),
@@ -155,7 +153,6 @@ class _ScaffoldBodyState extends State<ScaffoldBody> {
                             '나이': ScaffoldBody.ageIndex,
                           });
                           setState(() => ScaffoldBody.ageIndex = index);
-                          final item = ScaffoldBody.ageItems[index];
                           print('Selected item: ${ScaffoldBody.ageItems}');
                         },
                       ),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-import '../../../res/size_config.dart';
+import '../../../res/config/size_config.dart';
 
 class ToastUtil {
   static void showToast(String message) {

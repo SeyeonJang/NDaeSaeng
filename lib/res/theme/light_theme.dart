@@ -1,4 +1,4 @@
-import 'package:dart_flutter/res/size_config.dart';
+import 'package:dart_flutter/res/config/size_config.dart';
 import 'package:flutter/material.dart';
 
 ThemeData lightTheme = ThemeData(

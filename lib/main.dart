@@ -1,13 +1,13 @@
 import 'package:dart_flutter/res/environment/app_environment.dart';
-import 'package:dart_flutter/res/app_theme.dart';
-import 'package:dart_flutter/res/size_config.dart';
+import 'package:dart_flutter/res/theme/app_theme.dart';
+import 'package:dart_flutter/res/config/size_config.dart';
 import 'package:dart_flutter/src/common/auth/auth_cubit.dart';
 import 'package:dart_flutter/src/common/auth/state/auth_state.dart';
 import 'package:dart_flutter/src/common/util/analytics_util.dart';
 import 'package:dart_flutter/src/common/util/push_notification_util.dart';
 import 'package:dart_flutter/src/common/util/timeago_util.dart';
 import 'package:dart_flutter/src/common/util/toast_util.dart';
-import 'package:dart_flutter/src/presentation/signup/land_pages.dart';
+import 'package:dart_flutter/src/presentation/landing/land_pages.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:dart_flutter/res/size_config.dart';
+import 'package:dart_flutter/res/config/size_config.dart';
 
 // 개인정보 처리방침
 class MyTos2 extends StatelessWidget {

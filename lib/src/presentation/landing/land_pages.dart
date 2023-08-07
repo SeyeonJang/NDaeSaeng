@@ -3,10 +3,9 @@ import 'dart:io';
 import 'package:dart_flutter/src/common/auth/auth_cubit.dart';
 import 'package:dart_flutter/src/common/auth/state/auth_state.dart';
 import 'package:dart_flutter/src/common/util/analytics_util.dart';
-import 'package:dart_flutter/src/presentation/page_view.dart';
-import 'package:dart_flutter/src/presentation/signup/land_page.dart';
+import 'package:dart_flutter/src/presentation/landing/view/land_page.dart';
 import 'package:dart_flutter/src/presentation/signup/signup_pages.dart';
-import 'package:dart_flutter/src/presentation/signup/tutorial_slide.dart';
+import 'package:dart_flutter/src/presentation/landing/view/tutorial_slide.dart';
 import 'package:dart_flutter/src/presentation/signup/viewmodel/signup_cubit.dart';
 import 'package:dart_flutter/src/presentation/standby/standby_loading.dart';
 import 'package:dart_flutter/src/presentation/standby/viewmodel/standby_cubit.dart';
@@ -44,7 +43,7 @@ class _LandPagesState extends State<LandPages> {
               );
             }
             AnalyticsUtil.logEvent("로그인_접속");
-            return const LandingPage();
+            return const LoginPage();
           }
           if (state.step == AuthStep.signup) {
             // 소셜 로그인을 했지만, 아직 우리 회원가입은 안햇을 때

@@ -1,7 +1,7 @@
 import 'package:flutter/services.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 
-import '../data/model/kakao_user_dto.dart';
+import '../model/kakao_user_dto.dart';
 
 class KakaoLoginRemoteDatasource {
   static Future<KakaoUserDto> loginWithKakaoTalk() async {

@@ -1,4 +1,4 @@
-import 'package:dart_flutter/src/datasource/dart_api_remote_datasource.dart';
+import 'package:dart_flutter/src/data/datasource/dart_api_remote_datasource.dart';
 import 'package:dart_flutter/src/domain/entity/dart_auth.dart';
 import 'package:dart_flutter/src/domain/repository/dart_auth_repository.dart';
 

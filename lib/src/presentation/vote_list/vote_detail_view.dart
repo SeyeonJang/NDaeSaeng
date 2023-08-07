@@ -4,8 +4,7 @@ import 'package:dart_flutter/src/presentation/vote_list/viewmodel/vote_list_cubi
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../res/size_config.dart';
-import '../../data/model/vote_response_dto.dart';
+import '../../../res/config/size_config.dart';
 
 class VoteDetailView extends StatelessWidget {
   const VoteDetailView({Key? key}) : super(key: key);

@@ -10,7 +10,7 @@ import 'package:dart_flutter/src/domain/use_case/user_use_case.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
-import '../../datasource/dart_api_remote_datasource.dart';
+import '../../data/datasource/dart_api_remote_datasource.dart';
 import '../../domain/entity/dart_auth.dart';
 
 class AuthCubit extends HydratedCubit<AuthState> {

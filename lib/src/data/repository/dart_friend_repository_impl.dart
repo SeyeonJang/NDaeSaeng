@@ -1,5 +1,5 @@
 import 'package:dart_flutter/src/data/model/friend_dto.dart';
-import 'package:dart_flutter/src/datasource/dart_api_remote_datasource.dart';
+import 'package:dart_flutter/src/data/datasource/dart_api_remote_datasource.dart';
 import 'package:dart_flutter/src/domain/entity/friend.dart';
 import 'package:dart_flutter/src/domain/repository/friend_repository.dart';
 

@@ -1,10 +1,9 @@
 import 'package:dart_flutter/src/common/util/analytics_util.dart';
 
-import '../../../res/size_config.dart';
+import '../../../../res/config/size_config.dart';
 import 'package:dart_flutter/src/common/auth/auth_cubit.dart';
-import 'package:dart_flutter/src/presentation/page_view.dart';
-import 'package:dart_flutter/src/presentation/signup/tos1.dart';
-import 'package:dart_flutter/src/presentation/signup/tos2.dart';
+import 'package:dart_flutter/src/presentation/signup/view/tos1.dart';
+import 'package:dart_flutter/src/presentation/signup/view/tos2.dart';
 import 'package:dart_flutter/src/presentation/signup/viewmodel/signup_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -25,9 +24,6 @@ class _ChooseGenderState extends State<ChooseGender> {
   bool vertical = false;
   String selectedGender = "MALE";
 
-  final List<bool> _selectedGender2 = [false, false];
-  String selectedGender2 = "";
-  
   @override
   Widget build(BuildContext context) {
     return Scaffold(

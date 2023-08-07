@@ -2,22 +2,16 @@ import 'package:dart_flutter/src/common/util/analytics_util.dart';
 import 'package:dart_flutter/src/common/util/toast_util.dart';
 import 'package:dart_flutter/src/domain/entity/friend.dart';
 import 'package:dart_flutter/src/presentation/page_view.dart';
-import 'package:dart_flutter/src/presentation/signup/tutorial_slide.dart';
+import 'package:dart_flutter/src/presentation/landing/view/tutorial_slide.dart';
 import 'package:dart_flutter/src/presentation/standby/viewmodel/standby_cubit.dart';
 import 'package:dart_flutter/src/presentation/standby/viewmodel/state/standby_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
-import '../../../res/size_config.dart';
+import '../../../res/config/size_config.dart';
 import 'package:flutter/material.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:flutter/services.dart';
-
-import '../../data/model/friend_dto.dart';
-import '../mypage/friends_mock.dart';
-import '../mypage/viewmodel/mypages_cubit.dart';
-import '../mypage/viewmodel/state/mypages_state.dart';
 
 class StandbyLandingPage extends StatefulWidget {
   const StandbyLandingPage({
@@ -29,7 +23,6 @@ class StandbyLandingPage extends StatefulWidget {
 }
 
 class _StandbyLandingPageState extends State<StandbyLandingPage> with TickerProviderStateMixin {
-  final StandbyCubit _standbyCubit = StandbyCubit();
   bool _isUp = true;
   late AnimationController _controller;
   late Animation<Offset> _animation;
@@ -1260,7 +1253,7 @@ class _FriendNotExistsViewState extends State<FriendNotExistsView> {
                                     value: BlocProvider.of<StandbyCubit>(context),
                                     child: BlocBuilder<StandbyCubit, StandbyState>(
                                       builder: (friendContext, state) {
-                                        final friends = state.newFriends ?? [];
+                                        final friends = state.newFriends;
                                         return NewFriends(friends: friends, count: friends.length);
                                       },
                                     ),
@@ -1270,7 +1263,7 @@ class _FriendNotExistsViewState extends State<FriendNotExistsView> {
                                   value: BlocProvider.of<StandbyCubit>(context),
                                   child: BlocBuilder<StandbyCubit, StandbyState>(
                                     builder: (friendContext, state) {
-                                      final friends = state.newFriends ?? [];
+                                      final friends = state.newFriends;
                                       return friends.length <= 2
                                           ? SizedBox(height: SizeConfig.screenHeight * 0.4,)
                                           : SizedBox(height: SizeConfig.defaultSize * 2,);
@@ -1754,7 +1747,7 @@ class _openAddFriendsState extends State<openAddFriends> {
                                   value: BlocProvider.of<StandbyCubit>(context),
                                   child: BlocBuilder<StandbyCubit, StandbyState>(
                                     builder: (friendContext, state) {
-                                      final friends = state.newFriends ?? [];
+                                      final friends = state.newFriends;
                                       return NewFriends(friends: friends, count: friends.length);
                                     },
                                   ),
@@ -1763,7 +1756,7 @@ class _openAddFriendsState extends State<openAddFriends> {
                                   value: BlocProvider.of<StandbyCubit>(context),
                                   child: BlocBuilder<StandbyCubit, StandbyState>(
                                     builder: (friendContext, state) {
-                                      final friends = state.newFriends ?? [];
+                                      final friends = state.newFriends;
                                       return friends.length <= 2
                                           ? SizedBox(height: SizeConfig.screenHeight * 0.4,)
                                           : SizedBox(height: SizeConfig.defaultSize * 2,);

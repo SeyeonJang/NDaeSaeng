@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:dart_flutter/res/size_config.dart';
+import 'package:dart_flutter/res/config/size_config.dart';
 import 'package:dart_flutter/src/common/util/analytics_util.dart';
 import 'package:dart_flutter/src/presentation/vote/vimemodel/vote_cubit.dart';
 import 'package:flutter/material.dart';

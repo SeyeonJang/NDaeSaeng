@@ -1,6 +1,5 @@
-import 'package:dart_flutter/src/presentation/signup/choose_gender.dart';
-import 'package:dart_flutter/src/presentation/signup/tos1.dart';
-import 'package:dart_flutter/src/presentation/signup/tos2.dart';
+import 'package:dart_flutter/src/presentation/signup/view/tos1.dart';
+import 'package:dart_flutter/src/presentation/signup/view/tos2.dart';
 import 'package:dart_flutter/src/presentation/signup/viewmodel/signup_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

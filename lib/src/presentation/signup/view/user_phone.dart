@@ -1,9 +1,7 @@
 import 'package:dart_flutter/src/presentation/signup/viewmodel/signup_cubit.dart';
-import 'package:dart_flutter/src/presentation/signup/viewmodel/state/signup_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../res/size_config.dart';
-import 'cert_num.dart';
+import '../../../../res/config/size_config.dart';
 
 class UserPhone extends StatefulWidget {
 

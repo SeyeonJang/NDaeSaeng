@@ -5,15 +5,13 @@ import 'package:dart_flutter/src/data/model/friend_dto.dart';
 import 'package:dart_flutter/src/data/model/question_dto.dart';
 import 'package:dart_flutter/src/data/model/university_dto.dart';
 
-import '../common/util/HttpUtil.dart';
-import '../data/model/dart_auth_dto.dart';
-import '../data/model/user_request_dto.dart';
-import '../data/model/user_response_dto.dart';
-import '../data/model/vote_request_dto.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert' as convert;
+import '../../common/util/HttpUtil.dart';
+import '../../data/model/dart_auth_dto.dart';
+import '../../data/model/user_request_dto.dart';
+import '../../data/model/user_response_dto.dart';
+import '../../data/model/vote_request_dto.dart';
 
-import '../data/model/vote_response_dto.dart';
+import '../../data/model/vote_response_dto.dart';
 
 class DartApiRemoteDataSource {
   static final String baseUrl = AppEnvironment.getEnv.getApiBaseUrl();

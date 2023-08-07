@@ -1,16 +1,17 @@
-import 'package:dart_flutter/res/size_config.dart';
+import 'package:dart_flutter/res/config/size_config.dart';
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
-class MyOpinion extends StatefulWidget {
-  const MyOpinion({super.key});
+class MyAsk extends StatefulWidget {
+  const MyAsk({super.key});
 
   @override
-  State<MyOpinion> createState() => _MyOpinionState();
+  State<MyAsk> createState() => _MyAskState();
 }
 
-class _MyOpinionState extends State<MyOpinion> {
-  WebViewController _webViewController = WebViewController()..loadRequest(Uri.parse('https://tally.so/r/mYR270'));
+class _MyAskState extends State<MyAsk> {
+  WebViewController _webViewController = WebViewController()..loadRequest(Uri.parse('https://tally.so/r/wzNV5E'));
+
 
   @override
   Widget build(BuildContext context) {

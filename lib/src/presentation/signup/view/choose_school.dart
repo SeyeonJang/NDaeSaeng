@@ -1,13 +1,11 @@
-import 'package:dart_flutter/res/size_config.dart';
+import 'package:dart_flutter/res/config/size_config.dart';
 import 'package:dart_flutter/src/common/util/analytics_util.dart';
-import 'package:dart_flutter/src/data/model/university_dto.dart';
 import 'package:dart_flutter/src/domain/entity/university.dart';
-import 'package:dart_flutter/src/presentation/signup/land_page.dart';
 import 'package:dart_flutter/src/presentation/signup/viewmodel/signup_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
-import '../../common/util/university_finder.dart';
+import '../../../common/util/university_finder.dart';
 
 // #1-2 학교 선택
 class ChooseSchool extends StatefulWidget {
@@ -61,7 +59,7 @@ class _ScaffoldBodyState extends State<ScaffoldBody> {
   //   }
   // }
   void _typeOnTypeAhead() {
-    WidgetsBinding.instance!.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!_typeAheadController.text.isEmpty) {
         setState(() {
           isSelectedOnTypeAhead = false;

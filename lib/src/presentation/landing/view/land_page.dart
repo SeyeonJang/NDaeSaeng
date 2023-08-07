@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'dart:ui';
-import 'package:dart_flutter/res/size_config.dart';
+import 'package:dart_flutter/res/config/size_config.dart';
 import 'package:dart_flutter/src/common/auth/auth_cubit.dart';
 import 'package:dart_flutter/src/common/util/analytics_util.dart';
 import 'package:dart_flutter/src/common/util/toast_util.dart';
@@ -8,18 +8,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'dart:async';
 
-import 'choose_school.dart';
-
-class LandingPage extends StatefulWidget {
-  const LandingPage({
+class LoginPage extends StatefulWidget {
+  const LoginPage({
     super.key,
   });
 
   @override
-  State<LandingPage> createState() => _LandingPageState();
+  State<LoginPage> createState() => _LoginPageState();
 }
 
-class _LandingPageState extends State<LandingPage> {
+class _LoginPageState extends State<LoginPage> {
   late Timer _timer;
   int _currentPage = 0;
   List<String> _images = [

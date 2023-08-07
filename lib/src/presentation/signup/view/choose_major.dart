@@ -1,9 +1,7 @@
-import 'package:dart_flutter/res/size_config.dart';
+import 'package:dart_flutter/res/config/size_config.dart';
 import 'package:dart_flutter/src/common/util/analytics_util.dart';
 import 'package:dart_flutter/src/common/util/university_finder.dart';
-import 'package:dart_flutter/src/data/model/university_dto.dart';
 import 'package:dart_flutter/src/domain/entity/university.dart';
-import 'package:dart_flutter/src/presentation/signup/choose_id.dart';
 import 'package:dart_flutter/src/presentation/signup/viewmodel/signup_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -64,7 +62,7 @@ class _ScaffoldBodyState extends State<ScaffoldBody> {
   //   }
   // }
   void _typeOnTypeAhead() { // ver.3
-    WidgetsBinding.instance!.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!_typeAheadController.text.isEmpty) {
         setState(() {
           isSelectedOnTypeAhead = false;

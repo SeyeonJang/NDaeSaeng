@@ -4,7 +4,7 @@ import 'package:dart_flutter/src/domain/entity/user_request.dart';
 import 'package:dart_flutter/src/domain/entity/user_response.dart';
 import 'package:dart_flutter/src/domain/repository/user_repository.dart';
 
-import '../../datasource/dart_api_remote_datasource.dart';
+import '../../data/datasource/dart_api_remote_datasource.dart';
 
 class DartUserRepositoryImpl implements UserRepository {
   static const Duration cachingInterval = Duration(minutes: 10);

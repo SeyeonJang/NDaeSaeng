@@ -1,13 +1,7 @@
-import 'package:dart_flutter/res/size_config.dart';
-import 'package:dart_flutter/src/common/auth/auth_cubit.dart';
+import 'package:dart_flutter/res/config/size_config.dart';
 import 'package:dart_flutter/src/common/util/analytics_util.dart';
-import 'package:dart_flutter/src/presentation/signup/land_page.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
-
-import '../../common/auth/state/auth_state.dart';
 
 class TutorialSlide extends StatefulWidget {
   final VoidCallback onTutorialFinished;
