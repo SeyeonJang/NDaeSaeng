@@ -1,17 +1,15 @@
 
-import 'package:dart_flutter/src/data/repository/dart_auth_repository.dart';
-import 'package:dart_flutter/src/data/repository/dart_univ_repository.dart';
-import 'package:dart_flutter/src/data/repository/dart_user_repository.dart';
 import 'package:dart_flutter/src/domain/entity/university.dart';
+import 'package:dart_flutter/src/domain/use_case/university_use_case.dart';
+import 'package:dart_flutter/src/domain/use_case/user_use_case.dart';
 import 'package:dart_flutter/src/presentation/signup/viewmodel/state/signup_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../domain/entity/user_request.dart';
 
 class SignupCubit extends Cubit<SignupState> {
-  static final DartUniversityRepository _dartUniversityRepository = DartUniversityRepository();
-  static final DartAuthRepository _authRepository = DartAuthRepository();
-  static final DartUserRepository _dartUserRepository = DartUserRepository();
+  static final UniversityUseCase _universityUseCase = UniversityUseCase();
+  static final UserUseCase _userUseCase = UserUseCase();
 
   SignupCubit() : super(SignupState.init());
 
@@ -19,7 +17,7 @@ class SignupCubit extends Cubit<SignupState> {
     state.isLoading = true;
     emit(state.copy());
 
-    List<University> universities = await _dartUniversityRepository.getUniversites();
+    List<University> universities = await _universityUseCase.getUniversities();
     state.universities = universities;
 
     state.memo = memo;
@@ -114,7 +112,7 @@ class SignupCubit extends Cubit<SignupState> {
   }
 
   void _signupRequest(UserRequest userRequest) async {
-    await _dartUserRepository.signup(userRequest);
+    await _userUseCase.signup(userRequest);
   }
 
   // @override

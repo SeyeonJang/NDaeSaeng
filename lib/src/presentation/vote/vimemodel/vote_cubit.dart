@@ -1,16 +1,14 @@
-import 'package:dart_flutter/src/data/repository/dart_friend_repository.dart';
-import 'package:dart_flutter/src/data/repository/dart_user_repository.dart';
-import 'package:dart_flutter/src/data/repository/dart_vote_repository.dart';
 import 'package:dart_flutter/src/domain/entity/friend.dart';
 import 'package:dart_flutter/src/domain/entity/question.dart';
 import 'package:dart_flutter/src/domain/entity/vote_request.dart';
+import 'package:dart_flutter/src/domain/use_case/friend_use_case.dart';
+import 'package:dart_flutter/src/domain/use_case/vote_use_case.dart';
 import 'package:dart_flutter/src/presentation/vote/vimemodel/state/vote_state.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 
 class VoteCubit extends HydratedCubit<VoteState> {
-  static final DartUserRepository _dartUserRepository = DartUserRepository();
-  static final DartFriendRepository _dartFriendRepository = DartFriendRepository();
-  static final DartVoteRepository _dartVoteRepository = DartVoteRepository();
+  static final FriendUseCase _friendUseCase = FriendUseCase();
+  static final VoteUseCase _voteUseCase = VoteUseCase();
 
   // VoteCubit() : super(VoteState.init());
   VoteCubit() : super(VoteState(
@@ -28,7 +26,7 @@ class VoteCubit extends HydratedCubit<VoteState> {
     emit(state.copy());
 
     // 친구 목록 설정
-    List<Friend> friends = await _dartFriendRepository.getMyFriends();
+    List<Friend> friends = await _friendUseCase.getMyFriends();
     state.setFriends(friends);
 
     // 투표중이지 않았던 경우, 다음 투표 가능 시간을 기록
@@ -52,11 +50,11 @@ class VoteCubit extends HydratedCubit<VoteState> {
 
     if (state.step.isStart) {
       // 친구 목록 설정
-      List<Friend> friends = await _dartFriendRepository.getMyFriends();
+      List<Friend> friends = await _friendUseCase.getMyFriends();
       state.setFriends(friends);
 
       // 새로 투표할 목록들을 가져오기
-      List<Question> questions = await _dartVoteRepository.getNewQuestions();
+      List<Question> questions = await _voteUseCase.getNewQuestions();
       state.setQuestions(questions);
 
       // 투표 화면으로 전환
@@ -74,11 +72,11 @@ class VoteCubit extends HydratedCubit<VoteState> {
     // await Future.delayed(Duration(seconds: 3));
 
     state.pickUserInVote(voteRequest);
-    _dartVoteRepository.sendMyVote(voteRequest);  // 투표한 내용을 서버로 전달
+    _voteUseCase.sendMyVote(voteRequest);  // 투표한 내용을 서버로 전달
     state.nextVote();
     if (state.isVoteDone()) {
       // 투표 리스트 비우기 + 다음투표가능시간 갱신 + (포인트는 My page에서 값 받아오면 알아서 갱신되어있음)
-      DateTime myNextVoteTime = await _dartVoteRepository.postNextVoteTime();
+      DateTime myNextVoteTime = await _voteUseCase.setNextVoteTime();
       state.setNextVoteDateTime(myNextVoteTime);
     }
 
@@ -101,7 +99,7 @@ class VoteCubit extends HydratedCubit<VoteState> {
   }
 
   Future<DateTime> getNextVoteTime() async {
-    DateTime myNextVoteTime = await _dartVoteRepository.getNextVoteTime();
+    DateTime myNextVoteTime = await _voteUseCase.getNextVoteTime();
     state.setNextVoteDateTime(myNextVoteTime);
     return myNextVoteTime;
   }
@@ -110,7 +108,6 @@ class VoteCubit extends HydratedCubit<VoteState> {
     bool isInvited = true;
     if (isInvited) {
       // 정상적으로 카톡 공유하기를 전송한 경우
-      // _dartVoteRepository.updateMyNextVoteTime("TODO MY ACCESS TOKEN");
       state.setNextVoteDateTime(DateTime.now()).setStep(VoteStep.start);
     }
 

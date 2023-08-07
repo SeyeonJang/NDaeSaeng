@@ -2,30 +2,21 @@ import 'package:dart_flutter/src/common/auth/state/auth_state.dart';
 import 'package:dart_flutter/src/common/util/analytics_util.dart';
 import 'package:dart_flutter/src/common/util/push_notification_util.dart';
 import 'package:dart_flutter/src/common/util/version_comparator.dart';
-import 'package:dart_flutter/src/data/model/dart_auth_dto.dart';
-import 'package:dart_flutter/src/data/model/kakao_user_dto.dart';
-import 'package:dart_flutter/src/data/model/user_dto.dart';
-import 'package:dart_flutter/src/data/repository/app_platform_repoistory.dart';
-import 'package:dart_flutter/src/data/repository/apple_login_repository.dart';
-import 'package:dart_flutter/src/data/repository/dart_auth_repository.dart';
-import 'package:dart_flutter/src/data/repository/dart_user_repository.dart';
-import 'package:dart_flutter/src/data/repository/kakao_login_repository.dart';
 import 'package:dart_flutter/src/domain/entity/kakao_user.dart';
 import 'package:dart_flutter/src/domain/entity/user_response.dart';
+import 'package:dart_flutter/src/domain/use_case/app_platform_use_case.dart';
+import 'package:dart_flutter/src/domain/use_case/auth_use_case.dart';
+import 'package:dart_flutter/src/domain/use_case/user_use_case.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
-import '../../data/model/user_response_dto.dart';
 import '../../datasource/dart_api_remote_datasource.dart';
 import '../../domain/entity/dart_auth.dart';
 
 class AuthCubit extends HydratedCubit<AuthState> {
-  static final KakaoLoginRepository _kakaoLoginRepository = KakaoLoginRepository();
-  static final AppleLoginRepository _appleLoginRepository = AppleLoginRepository();
-  static final DartAuthRepository _authRepository = DartAuthRepository();
-  static final DartUserRepository _userRepository = DartUserRepository();
-  static final AppPlatformRepository _appPlatformRepository = AppPlatformRepository();
+  static final AppPlatformUseCase _appPlatformUseCase = AppPlatformUseCase();
+  static final AuthUseCase _authUseCase = AuthUseCase();
+  static final UserUseCase _userUseCase = UserUseCase();
 
   AuthCubit()
       : super(AuthState(
@@ -52,7 +43,7 @@ class AuthCubit extends HydratedCubit<AuthState> {
     final version = packageInfo.version;
     final buildNumber = packageInfo.buildNumber;
 
-    final (minVer, latestVer) = await _appPlatformRepository.getAppVersion();
+    final (minVer, latestVer) = await _appPlatformUseCase.getRemoteConfigAppVersion();
 
     state.setAppVersionStatus(VersionComparator.compareVersions(version, minVer, latestVer));
     emit(state.copy());
@@ -64,8 +55,8 @@ class AuthCubit extends HydratedCubit<AuthState> {
 
   Future<AuthState> kakaoLogout() async {
     try {
-      await _kakaoLoginRepository.logout();
-      _userRepository.logout();
+      _authUseCase.logoutWithKakaoTalk();
+      _userUseCase.logout();
       // 로그아웃 성공 후 처리할 로직 추가
       print("로그아웃 성공");
     } catch (error) {
@@ -80,8 +71,8 @@ class AuthCubit extends HydratedCubit<AuthState> {
 
   Future<void> kakaoWithdrawal() async {
     try {
-      await _kakaoLoginRepository.withdrawal();
-      await _userRepository.drawal();
+      _authUseCase.withdrawalWithKakaoTalk();
+      _userUseCase.withdrawal();
       // 로그아웃 성공 후 처리할 로직 추가
       print("회원탈퇴 성공");
     } catch (error) {
@@ -100,13 +91,13 @@ class AuthCubit extends HydratedCubit<AuthState> {
     emit(state.copy());
 
     try {
-      KakaoUser kakaoUser = await _kakaoLoginRepository.loginWithKakaoTalk();
-      DartAuth dartAuth = await _authRepository.loginWithKakao(kakaoUser.accessToken);
+      KakaoUser kakaoUser = await _authUseCase.loginWithKakaoTalk();
+      DartAuth dartAuth = await _authUseCase.loginWithKakao(kakaoUser.accessToken);
       state
           .setDartAuth(dartAccessToken: dartAuth.accessToken, expiredAt: DateTime.now().add(const Duration(days: 10)))
           .setSocialAuth(loginType: LoginType.kakao, socialAccessToken: kakaoUser.accessToken);
 
-      UserResponse userResponse = await _userRepository.myInfo();
+      UserResponse userResponse = await _userUseCase.myInfo();
 
       String userId = userResponse.user!.id!.toString();
       AnalyticsUtil.setUserId(userId);
@@ -132,14 +123,14 @@ class AuthCubit extends HydratedCubit<AuthState> {
     emit(state.copy());
 
     try {
-      final appleUser = await _appleLoginRepository.login();
-      DartAuth dartAuth = await _authRepository.loginWithApple(appleUser.identityToken!);
+      final appleUser = await _authUseCase.loginWithAppleID();
+      DartAuth dartAuth = await _authUseCase.loginWithApple(appleUser.identityToken!);
       state
           .setDartAuth(dartAccessToken: dartAuth.accessToken, expiredAt: DateTime.now().add(const Duration(days: 10)))
           .setSocialAuth(loginType: LoginType.apple, socialAccessToken: appleUser.authorizationCode)
           .setMemo('${appleUser.familyName ?? "오"}${appleUser.givenName ?? "늘"}');
 
-      UserResponse userResponse = await _userRepository.myInfo();
+      UserResponse userResponse = await _userUseCase.myInfo();
 
       String userId = userResponse.user!.id!.toString();
       AnalyticsUtil.setUserId(userId);

@@ -1,12 +1,10 @@
-import 'package:dart_flutter/src/data/repository/dart_vote_repository.dart';
 import 'package:dart_flutter/src/domain/entity/vote_response.dart';
+import 'package:dart_flutter/src/domain/use_case/vote_use_case.dart';
 import 'package:dart_flutter/src/presentation/vote_list/viewmodel/state/vote_list_state.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 
-import '../../../data/model/vote_response_dto.dart';
-
 class VoteListCubit extends HydratedCubit<VoteListState> {
-  static final DartVoteRepository _dartVoteRepository = DartVoteRepository();
+  static final VoteUseCase _voteUseCase = VoteUseCase();
 
   VoteListCubit() : super(VoteListState.init());
 
@@ -14,7 +12,7 @@ class VoteListCubit extends HydratedCubit<VoteListState> {
     state.setIsLoading(true);
     emit(state.copy());
 
-    List<VoteResponse> votes = await _dartVoteRepository.getVotes();
+    List<VoteResponse> votes = await _voteUseCase.getVotes();
     state.setVotes(votes);
 
     state.setIsLoading(false);
@@ -40,14 +38,6 @@ class VoteListCubit extends HydratedCubit<VoteListState> {
 
   bool isVisited(int id) {
     return state.isVisited(id);
-  }
-
-  void requestHintById(int id, String typeOfHint) {
-    // Point 확인
-
-    // _dartVoteRepository.getHint("TODO MY ACCESSTOKEN", id, "typeOfHint");
-    // API 나와야 감 좀 잡히것는데
-    emit(state.copy());
   }
 
   @override

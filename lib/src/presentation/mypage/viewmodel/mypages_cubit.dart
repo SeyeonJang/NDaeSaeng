@@ -1,17 +1,13 @@
-import 'package:dart_flutter/src/data/model/friend_dto.dart';
-import 'package:dart_flutter/src/data/model/user_dto.dart';
-import 'package:dart_flutter/src/data/repository/dart_friend_repository.dart';
-import 'package:dart_flutter/src/data/repository/dart_user_repository.dart';
 import 'package:dart_flutter/src/domain/entity/friend.dart';
 import 'package:dart_flutter/src/domain/entity/user_response.dart';
+import 'package:dart_flutter/src/domain/use_case/friend_use_case.dart';
+import 'package:dart_flutter/src/domain/use_case/user_use_case.dart';
 import 'package:dart_flutter/src/presentation/mypage/viewmodel/state/mypages_state.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 
-import '../../../data/model/user_response_dto.dart';
-
 class MyPagesCubit extends Cubit<MyPagesState> {
-  static final DartUserRepository _dartUserRepository = DartUserRepository();
-  static final DartFriendRepository _dartFriendRepository = DartFriendRepository();
+  static final UserUseCase _userUseCase = UserUseCase();
+  static final FriendUseCase _friendUseCase = FriendUseCase();
 
   MyPagesCubit() : super(MyPagesState.init());
 
@@ -21,12 +17,12 @@ class MyPagesCubit extends Cubit<MyPagesState> {
     emit(state.copy());
 
     // 초기값 설정
-    UserResponse userResponse = await _dartUserRepository.myInfo();
+    UserResponse userResponse = await _userUseCase.myInfo();
     state.setUserResponse(userResponse);
 
-    List<Friend> friends = await _dartFriendRepository.getMyFriends();
+    List<Friend> friends = await _friendUseCase.getMyFriends();
     state.setMyFriends(friends);
-    List<Friend> newFriends = await _dartFriendRepository.getRecommendedFriends();
+    List<Friend> newFriends = await _friendUseCase.getRecommendedFriends();
     state.setRecommendedFriends(newFriends);
 
     state.setIsLoading(false);
@@ -35,13 +31,13 @@ class MyPagesCubit extends Cubit<MyPagesState> {
   }
 
   void pressedFriendAddButton(Friend friend) {
-    _dartFriendRepository.addFriend(friend);
+    _friendUseCase.addFriend(friend);
     state.addFriend(friend);
     emit(state.copy());
   }
 
   void pressedFriendDeleteButton(Friend friend) {
-    _dartFriendRepository.deleteFriend(friend);
+    _friendUseCase.removeFriend(friend);
     state.deleteFriend(friend);
     emit(state.copy());
   }
@@ -51,9 +47,9 @@ class MyPagesCubit extends Cubit<MyPagesState> {
     emit(state.copy());
 
     try {
-      Friend friend = await _dartFriendRepository.addFriendBy(inviteCode);
+      Friend friend = await _friendUseCase.addFriendBy(inviteCode);
       state.addFriend(friend);
-      state.newFriends = (await _dartFriendRepository.getRecommendedFriends(put: true)).toSet();
+      state.newFriends = (await _friendUseCase.getRecommendedFriends(put: true)).toSet();
     } catch (e, trace) {
         print("친구추가 실패! $e $trace");
         throw Error();

@@ -10,7 +10,7 @@ class AuthUseCase {
   final KakaoLoginRepository _kakaoLoginRepository = KakaoLoginRepository();
   final AppleLoginRepository _appleLoginRepository = AppleLoginRepository();
 
-  Future<DartAuth> loginWithKakao(String kakaoAccessToken) {
+  Future<DartAuth> loginWithKakao(String kakaoAccessToken) {  // TODO loginWith 메소드가 너무많아서 헷갈림
     return _dartAuthRepository.loginWithKakao(kakaoAccessToken);
   }
 
@@ -30,7 +30,7 @@ class AuthUseCase {
     _kakaoLoginRepository.withdrawal();
   }
 
-  Future<AuthorizationCredentialAppleID> login() {
+  Future<AuthorizationCredentialAppleID> loginWithAppleID() {
     return _appleLoginRepository.login();
   }
 

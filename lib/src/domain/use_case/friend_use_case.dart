@@ -16,8 +16,8 @@ class FriendUseCase {
     _dartFriendRepository.addFriend(friend);
   }
 
-  void addFriendBy(String inviteCode) {
-    _dartFriendRepository.addFriendBy(inviteCode);
+  Future<Friend> addFriendBy(String inviteCode) async {
+    return await _dartFriendRepository.addFriendBy(inviteCode);
   }
 
   void removeFriend(Friend friend) {
