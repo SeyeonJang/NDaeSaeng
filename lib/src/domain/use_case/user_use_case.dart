@@ -1,9 +1,10 @@
-import 'package:dart_flutter/src/data/repository/dart_user_repository.dart';
+import 'package:dart_flutter/src/data/repository/dart_user_repository_impl.dart';
 import 'package:dart_flutter/src/domain/entity/user_request.dart';
 import 'package:dart_flutter/src/domain/entity/user_response.dart';
+import 'package:dart_flutter/src/domain/repository/user_repository.dart';
 
 class UserUseCase {
-  final DartUserRepository _dartUserRepository = DartUserRepository();
+  final UserRepository _dartUserRepository = DartUserRepositoryImpl();
 
   Future<UserResponse> myInfo() {
     return _dartUserRepository.myInfo();
@@ -14,7 +15,7 @@ class UserUseCase {
   }
 
   void withdrawal() {
-    _dartUserRepository.drawal();
+    _dartUserRepository.withdrawal();
   }
 
   void logout() {

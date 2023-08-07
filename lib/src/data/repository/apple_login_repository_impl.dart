@@ -1,7 +1,8 @@
 import 'package:dart_flutter/src/datasource/apple_login_remote_datasource.dart';
+import 'package:dart_flutter/src/domain/repository/apple_login_repository.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
-class AppleLoginRepository {
+class AppleLoginRepositoryImpl implements AppleLoginRepository {
   Future<AuthorizationCredentialAppleID> login() async {
     return AppleLoginRemoteDatasource.login();
   }

@@ -1,10 +1,11 @@
-import 'package:dart_flutter/src/data/repository/dart_univ_repository.dart';
+import 'package:dart_flutter/src/data/repository/dart_univ_repository_impl.dart';
 import 'package:dart_flutter/src/domain/entity/university.dart';
+import 'package:dart_flutter/src/domain/repository/university_repository.dart';
 
 class UniversityUseCase {
-  final DartUniversityRepository _dartUniversityRepository = DartUniversityRepository();
+  final UniversityRepository _dartUniversityRepository = DartUniversityRepositoryImpl();
 
   Future<List<University>> getUniversities() {
-    return _dartUniversityRepository.getUniversites();
+    return _dartUniversityRepository.getUniversities();
   }
 }

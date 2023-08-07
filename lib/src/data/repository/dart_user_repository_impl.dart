@@ -2,10 +2,11 @@ import 'package:dart_flutter/src/data/model/user_request_dto.dart';
 import 'package:dart_flutter/src/data/my_cache.dart';
 import 'package:dart_flutter/src/domain/entity/user_request.dart';
 import 'package:dart_flutter/src/domain/entity/user_response.dart';
+import 'package:dart_flutter/src/domain/repository/user_repository.dart';
 
 import '../../datasource/dart_api_remote_datasource.dart';
 
-class DartUserRepository {
+class DartUserRepositoryImpl implements UserRepository {
   static const Duration cachingInterval = Duration(minutes: 10);
   static final UserResponseCache userResponseCache = UserResponseCache();
 
@@ -18,7 +19,7 @@ class DartUserRepository {
     userResponseCache.clean();
   }
 
-  Future<void> drawal() async {
+  Future<void> withdrawal() async {
     userResponseCache.clean();
     return await DartApiRemoteDataSource.deleteMyAccount();
   }

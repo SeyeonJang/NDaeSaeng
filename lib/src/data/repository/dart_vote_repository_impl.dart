@@ -1,11 +1,12 @@
 import 'package:dart_flutter/src/domain/entity/question.dart';
 import 'package:dart_flutter/src/domain/entity/vote_request.dart';
 import 'package:dart_flutter/src/domain/entity/vote_response.dart';
+import 'package:dart_flutter/src/domain/repository/vote_repository.dart';
 
 import '../../datasource/dart_api_remote_datasource.dart';
 import '../model/vote_request_dto.dart';
 
-class DartVoteRepository {
+class DartVoteRepositoryImpl implements VoteRepository {
   Future<List<Question>> getNewQuestions() async {
     return (await DartApiRemoteDataSource.getNewQuestions()).map((question) => question.newQuestion()).toList();
   }

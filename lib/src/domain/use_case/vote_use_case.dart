@@ -1,10 +1,11 @@
-import 'package:dart_flutter/src/data/repository/dart_vote_repository.dart';
+import 'package:dart_flutter/src/data/repository/dart_vote_repository_impl.dart';
 import 'package:dart_flutter/src/domain/entity/question.dart';
 import 'package:dart_flutter/src/domain/entity/vote_request.dart';
 import 'package:dart_flutter/src/domain/entity/vote_response.dart';
+import 'package:dart_flutter/src/domain/repository/vote_repository.dart';
 
 class VoteUseCase {
-  final DartVoteRepository _dartVoteRepository = DartVoteRepository();
+  final VoteRepository _dartVoteRepository = DartVoteRepositoryImpl();
 
   Future<List<Question>> getNewQuestions() {
     return _dartVoteRepository.getNewQuestions();

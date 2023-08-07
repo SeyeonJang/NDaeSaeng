@@ -1,7 +1,8 @@
 import 'package:dart_flutter/src/datasource/dart_api_remote_datasource.dart';
 import 'package:dart_flutter/src/domain/entity/dart_auth.dart';
+import 'package:dart_flutter/src/domain/repository/dart_auth_repository.dart';
 
-class DartAuthRepository {
+class DartAuthRepositoryImpl implements DartAuthRepository {
   Future<DartAuth> loginWithKakao(String kakaoAccessToken) async {
     return (await DartApiRemoteDataSource.postLoginWithKakao(kakaoAccessToken)).newDartAuth();
   }
