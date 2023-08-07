@@ -19,7 +19,7 @@ class SignupCubit extends Cubit<SignupState> {
     state.isLoading = true;
     emit(state.copy());
 
-    List<University> universities = await _dartUniversityRepository.getUniversitys();
+    List<University> universities = await _dartUniversityRepository.getUniversites();
     state.universities = universities;
 
     state.memo = memo;

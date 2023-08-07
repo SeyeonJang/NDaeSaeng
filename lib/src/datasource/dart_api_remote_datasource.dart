@@ -95,13 +95,6 @@ class DartApiRemoteDataSource {
     return UserResponseDto.fromJson(jsonResponse);
   }
 
-  // User: 내 정보 업데이트하기
-  static Future<void> putUser(String accessToken, UserRequestDto user) async {
-    final response =
-        await http.put(Uri.https(baseUrl, '/v1/user/me', {'accessToken': "Bearer $accessToken", 'user': user}));
-    return;
-  }
-
   // Friend: 친구목록 가져오기 (realFriend를 통해 '내가 추가한 친구'와 '추천 친구'를 구분함)
   static Future<List<FriendDto>> getMyFriends({bool suggested=false}) async {
     const path = '/v1/friends';

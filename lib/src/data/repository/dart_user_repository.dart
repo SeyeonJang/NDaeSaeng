@@ -14,7 +14,7 @@ class DartUserRepository {
     return (await DartApiRemoteDataSource.postUserSignup(userRequestDto)).newUserResponse();
   }
 
-  void logout() {
+  void logout() {  // auth?
     userResponseCache.clean();
   }
 
@@ -30,17 +30,13 @@ class DartUserRepository {
     return userResponseCache.userResponse;
   }
 
-  Future<void> updateMyInfo(String accessToken, UserRequestDto userRequest) async {
-    return await DartApiRemoteDataSource.putUser(accessToken, userRequest);
-  }
-
   void cleanUpUserResponseCache() {
     userResponseCache.clean();
   }
 }
 
 class UserResponseCache extends MyCache {
-  UserResponse? _userResponse = null;
+  UserResponse? _userResponse;
 
   @override
   void setObject(dynamic userResponse) {
