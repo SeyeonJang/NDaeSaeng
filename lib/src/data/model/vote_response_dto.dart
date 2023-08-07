@@ -1,11 +1,12 @@
 import 'package:dart_flutter/src/data/model/question_dto.dart';
 import 'package:dart_flutter/src/data/model/university_dto.dart';
 import 'package:dart_flutter/src/data/model/user_dto.dart';
+import 'package:dart_flutter/src/domain/entity/vote_response.dart';
 
 class VoteResponseDto {
   int? voteId;
   QuestionDto? question;
-  _PickedUser? pickedUser;
+  _PickedUserDto? pickedUser;
   DateTime? pickedTime;
 
   VoteResponseDto({this.voteId, this.question, this.pickedUser, this.pickedTime});
@@ -13,7 +14,7 @@ class VoteResponseDto {
   VoteResponseDto.fromJson(Map<String, dynamic> json) {
     voteId = json['voteId'];
     question = json['question'] != null ? QuestionDto.fromJson(json['question']) : null;
-    pickedUser = json['pickedUser'] != null ? _PickedUser.fromJson(json['pickedUser']) : null;
+    pickedUser = json['pickedUser'] != null ? _PickedUserDto.fromJson(json['pickedUser']) : null;
     pickedTime = DateTime.parse(json['pickedTime']);
   }
 
@@ -30,19 +31,28 @@ class VoteResponseDto {
     return data;
   }
 
+  VoteResponse newVoteResponse() {
+    return VoteResponse(
+      voteId: voteId,
+      question: question?.newQuestion(),
+      pickedUser: pickedUser?.newPickedUser(),
+      pickedTime: pickedTime,
+    );
+  }
+
   @override
   String toString() {
     return 'VoteResponse{voteId: $voteId, question: $question, pickedUser: $pickedUser, pickedTime: $pickedTime}';
   }
 }
 
-class _PickedUser {
+class _PickedUserDto {
   UserDto? user;
   UniversityDto? university;
 
-  _PickedUser({this.user, this.university});
+  _PickedUserDto({this.user, this.university});
 
-  _PickedUser.fromJson(Map<String, dynamic> json) {
+  _PickedUserDto.fromJson(Map<String, dynamic> json) {
     user = json['user'] != null ? UserDto.fromJson(json['user']) : null;
     university = json['university'] != null ? UniversityDto.fromJson(json['university']) : null;
   }
@@ -56,6 +66,13 @@ class _PickedUser {
       data['university'] = university!.toJson();
     }
     return data;
+  }
+
+  PickedUser newPickedUser() {
+    return PickedUser(
+      user: user?.newUser(),
+      university: university?.newUniversity(),
+    );
   }
 
   @override

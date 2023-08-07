@@ -1,5 +1,7 @@
 import 'dart:core';
 
+import 'package:dart_flutter/src/domain/entity/vote_request.dart';
+
 class VoteRequestDto {
   late int questionId;
   late int pickedUserId, firstUserId, secondUserId, thirdUserId, fourthUserId;
@@ -38,6 +40,17 @@ class VoteRequestDto {
     data['thirdUserId'] = this.thirdUserId;
     data['fourthUserId'] = this.fourthUserId;
     return data;
+  }
+
+  VoteRequest newVoteRequest() {
+    return VoteRequest(
+      questionId: questionId,
+      pickedUserId: pickedUserId,
+      firstUserId: firstUserId,
+      secondUserId: secondUserId,
+      thirdUserId: thirdUserId,
+      fourthUserId: fourthUserId,
+    );
   }
 
   @override

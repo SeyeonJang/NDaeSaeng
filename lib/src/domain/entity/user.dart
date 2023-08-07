@@ -11,6 +11,7 @@ class User {
         this.name,
         this.phone,
         this.gender,
+        this.birthYear,
         this.admissionYear,
         this.recommendationCode});
 

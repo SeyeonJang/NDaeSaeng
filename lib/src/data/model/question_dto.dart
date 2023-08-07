@@ -1,3 +1,5 @@
+import 'package:dart_flutter/src/domain/entity/question.dart';
+
 class QuestionDto {
   int? questionId;
   String? content;
@@ -17,6 +19,14 @@ class QuestionDto {
     data['content'] = this.content;
     data['icon'] = this.icon;
     return data;
+  }
+
+  Question newQuestion() {
+    return Question(
+      questionId: questionId,
+      content: content,
+      icon: icon
+    );
   }
 
   @override

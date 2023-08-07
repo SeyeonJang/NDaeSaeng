@@ -1,3 +1,5 @@
+import 'package:dart_flutter/src/domain/entity/user_request.dart';
+
 class UserRequestDto {
   final int univId;
   final int admissionYear, birthYear;
@@ -29,6 +31,10 @@ class UserRequestDto {
       'phone': phone,
       'gender': gender
     };
+  }
+
+  UserRequest newUserRequest() {
+    return UserRequest(univId: univId, admissionYear: admissionYear, birthYear: birthYear, name: name, phone: phone, gender: gender);
   }
 
   @override

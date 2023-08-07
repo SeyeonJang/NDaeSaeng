@@ -1,5 +1,6 @@
 import 'package:dart_flutter/src/data/model/university_dto.dart';
 import 'package:dart_flutter/src/data/model/user_dto.dart';
+import 'package:dart_flutter/src/domain/entity/user_response.dart';
 
 class UserResponseDto {
   UserDto? user;
@@ -38,6 +39,13 @@ class UserResponseDto {
       data['department'] = university!.department;
     }
     return data;
+  }
+
+  UserResponse newUserResponse() {
+    return UserResponse(
+      user: user?.newUser(),
+      university: university?.newUniversity(),
+    );
   }
 
   @override

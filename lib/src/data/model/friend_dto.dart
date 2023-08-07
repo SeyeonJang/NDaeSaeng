@@ -1,4 +1,5 @@
 import 'package:dart_flutter/src/data/model/university_dto.dart';
+import 'package:dart_flutter/src/domain/entity/friend.dart';
 
 class FriendDto {
   int? userId;
@@ -29,6 +30,16 @@ class FriendDto {
     }
     data['gender'] = gender;
     return data;
+  }
+
+  Friend newFriend() {
+    return Friend(
+      userId: userId,
+      name: name,
+      admissionYear: admissionYear,
+      gender: gender,
+      university: university?.newUniversity(),
+    );
   }
 
   @override

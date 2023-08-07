@@ -1,3 +1,5 @@
+import 'package:dart_flutter/src/domain/entity/university.dart';
+
 class UniversityDto {
   late int id;
   late String name;
@@ -21,6 +23,10 @@ class UniversityDto {
     data['name'] = this.name;
     data['department'] = this.department;
     return data;
+  }
+
+  University newUniversity() {
+    return University(id: id, name: name, department: department);
   }
 
   @override

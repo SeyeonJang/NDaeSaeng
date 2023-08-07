@@ -1,3 +1,5 @@
+import 'package:dart_flutter/src/domain/entity/dart_auth.dart';
+
 class DartAuthDto {
   final String providerId;
   final String accessToken;
@@ -10,6 +12,10 @@ class DartAuthDto {
   DartAuthDto.from(Map<String, dynamic> json)
       : providerId = json['providerId'],
         accessToken = json['jwtToken'];
+
+  DartAuth newDartAuth() {
+    return DartAuth(providerId: providerId, accessToken: accessToken);
+  }
 
   @override
   String toString() {

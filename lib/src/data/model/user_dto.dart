@@ -1,3 +1,5 @@
+import '../../domain/entity/user.dart';
+
 class UserDto {
   int? id;
   String? name;
@@ -11,6 +13,7 @@ class UserDto {
         this.name,
         this.phone,
         this.gender,
+        this.birthYear,
         this.admissionYear,
         this.recommendationCode});
 
@@ -34,6 +37,10 @@ class UserDto {
     data['birthYear'] = birthYear;
     data['recommendationCode'] = recommendationCode;
     return data;
+  }
+
+  User newUser() {
+    return User(id: id, name: name, phone: phone, gender: gender, admissionYear: admissionYear, birthYear: birthYear, recommendationCode: recommendationCode);
   }
 
   @override
