@@ -1,20 +1,20 @@
-import 'package:dart_flutter/src/data/model/university.dart';
+import 'package:dart_flutter/src/data/model/university_dto.dart';
 
-class Friend {
+class FriendDto {
   int? userId;
   String? name;
   int? admissionYear;
   String? gender;
-  University? university;
+  UniversityDto? university;
 
-  Friend({this.userId, this.name, this.admissionYear, this.gender, this.university});
+  FriendDto({this.userId, this.name, this.admissionYear, this.gender, this.university});
 
-  Friend.fromJson(Map<String, dynamic> json) {
+  FriendDto.fromJson(Map<String, dynamic> json) {
     userId = json['userId'];
     name = json['name'];
     admissionYear = json['admissionYear'];
     university = json['university'] != null
-        ? University.fromJson(json['university'])
+        ? UniversityDto.fromJson(json['university'])
         : null;
     gender = json['gender'];
   }
@@ -33,7 +33,7 @@ class Friend {
 
   @override
   bool operator == (Object other) {
-    if (userId == (other as Friend).userId) {
+    if (userId == (other as FriendDto).userId) {
       return true;
     }
     return false;

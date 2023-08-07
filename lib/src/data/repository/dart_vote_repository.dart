@@ -1,27 +1,27 @@
-import 'package:dart_flutter/src/data/model/question.dart';
+import 'package:dart_flutter/src/data/model/question_dto.dart';
 
 import '../../datasource/dart_api_remote_datasource.dart';
-import '../model/vote_request.dart';
-import '../model/vote_response.dart';
+import '../model/vote_request_dto.dart';
+import '../model/vote_response_dto.dart';
 
 class DartVoteRepository {
-  Future<List<Question>> getNewQuestions() async {
+  Future<List<QuestionDto>> getNewQuestions() async {
     return await DartApiRemoteDataSource.getNewQuestions();
   }
 
-  Future<void> sendMyVotes(List<VoteRequest> voteRequests) async {
+  Future<void> sendMyVotes(List<VoteRequestDto> voteRequests) async {
     return await DartApiRemoteDataSource.postVotes(voteRequests);
   }
 
-  Future<void> sendMyVote(VoteRequest voteRequest) async {
+  Future<void> sendMyVote(VoteRequestDto voteRequest) async {
     return await DartApiRemoteDataSource.postVote(voteRequest);
   }
 
-  Future<List<VoteResponse>> getVotes() async {
+  Future<List<VoteResponseDto>> getVotes() async {
     return await DartApiRemoteDataSource.getVotes();
   }
 
-  Future<VoteResponse> getVote(int voteId) async {
+  Future<VoteResponseDto> getVote(int voteId) async {
     return await DartApiRemoteDataSource.getVote(voteId);
   }
 

@@ -1,16 +1,16 @@
-import 'package:dart_flutter/src/data/model/university.dart';
-import 'package:dart_flutter/src/data/model/user.dart';
+import 'package:dart_flutter/src/data/model/university_dto.dart';
+import 'package:dart_flutter/src/data/model/user_dto.dart';
 
-class UserResponse {
-  User? user;
-  University? university;
+class UserResponseDto {
+  UserDto? user;
+  UniversityDto? university;
 
-  UserResponse({this.user, this.university});
+  UserResponseDto({this.user, this.university});
 
-  UserResponse.fromJson(Map<String, dynamic> json) {
-    user = json['user'] != null ? User.fromJson(json['user']) : null;
+  UserResponseDto.fromJson(Map<String, dynamic> json) {
+    user = json['user'] != null ? UserDto.fromJson(json['user']) : null;
     university = json['university'] != null
-        ? University.fromJson(json['university'])
+        ? UniversityDto.fromJson(json['university'])
         : null;
   }
 

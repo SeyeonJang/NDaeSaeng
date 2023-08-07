@@ -1,10 +1,10 @@
 
 import 'package:dart_flutter/src/datasource/kakao_login_remote_datasource.dart';
 
-import '../model/kakao_user.dart';
+import '../model/kakao_user_dto.dart';
 
 class KakaoLoginRepository {
-  Future<KakaoUser> loginWithKakaoTalk() {
+  Future<KakaoUserDto> loginWithKakaoTalk() {
     return KakaoLoginRemoteDatasource.loginWithKakaoTalk();
   }
 

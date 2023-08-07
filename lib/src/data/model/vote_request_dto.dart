@@ -1,10 +1,10 @@
 import 'dart:core';
 
-class VoteRequest {
+class VoteRequestDto {
   late int questionId;
   late int pickedUserId, firstUserId, secondUserId, thirdUserId, fourthUserId;
 
-  VoteRequest(
+  VoteRequestDto(
       {required this.pickedUserId,
       required this.firstUserId,
       required this.secondUserId,
@@ -12,7 +12,7 @@ class VoteRequest {
       required this.fourthUserId,
       required this.questionId});
 
-  VoteRequest.from(Map<String, dynamic> json)
+  VoteRequestDto.from(Map<String, dynamic> json)
       : pickedUserId = json['pickedUserId'],
         firstUserId = json['firstUserId'],
         secondUserId = json['secondUserId'],
@@ -20,7 +20,7 @@ class VoteRequest {
         fourthUserId = json['FourthUserId'],
         questionId = json['questionId'];
 
-  VoteRequest.fromJson(Map<String, dynamic> json) {
+  VoteRequestDto.fromJson(Map<String, dynamic> json) {
     questionId = json['questionId'];
     pickedUserId = json['pickedUserId'];
     firstUserId = json['firstUserId'];

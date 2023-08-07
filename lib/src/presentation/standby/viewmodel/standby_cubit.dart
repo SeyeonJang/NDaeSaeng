@@ -1,7 +1,7 @@
 import 'package:dart_flutter/src/presentation/standby/viewmodel/state/standby_state.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 
-import '../../../data/model/friend.dart';
+import '../../../data/model/friend_dto.dart';
 import '../../../data/repository/dart_friend_repository.dart';
 import '../../../data/repository/dart_user_repository.dart';
 
@@ -15,9 +15,9 @@ class StandbyCubit extends Cubit<StandbyState> {
     state.isLoading = true;
     emit(state.copy());
 
-    List<Friend> friends = await _dartFriendRepository.getMyFriends();
+    List<FriendDto> friends = await _dartFriendRepository.getMyFriends();
     state.setAddedFriends(friends);
-    List<Friend> newFriends = await _dartFriendRepository.getRecommendedFriends();
+    List<FriendDto> newFriends = await _dartFriendRepository.getRecommendedFriends();
     state.setRecommendedFriends(newFriends);
     _dartUserRepository.cleanUpUserResponseCache();
     state.userResponse = await _dartUserRepository.myInfo();
@@ -37,7 +37,7 @@ class StandbyCubit extends Cubit<StandbyState> {
     emit(state.copy());
 
     try {
-      Friend friend = await _dartFriendRepository.addFriendBy(inviteCode);
+      FriendDto friend = await _dartFriendRepository.addFriendBy(inviteCode);
       state.addFriend(friend);
       state.newFriends = await _dartFriendRepository.getRecommendedFriends(put: true);
       } catch (e, trace) {
@@ -49,7 +49,7 @@ class StandbyCubit extends Cubit<StandbyState> {
     }
   }
 
-  void pressedFriendAddButton(Friend friend) {
+  void pressedFriendAddButton(FriendDto friend) {
     state.isLoading = true;
     emit(state.copy());
 
@@ -66,7 +66,7 @@ class StandbyCubit extends Cubit<StandbyState> {
   }
 
   Future<int> getFriendsCount() async {
-    List<Friend> friends = await _dartFriendRepository.getMyFriends();
+    List<FriendDto> friends = await _dartFriendRepository.getMyFriends();
     return friends.length;
   }
 }

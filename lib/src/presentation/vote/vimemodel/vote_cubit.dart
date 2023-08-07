@@ -1,6 +1,6 @@
-import 'package:dart_flutter/src/data/model/friend.dart';
-import 'package:dart_flutter/src/data/model/question.dart';
-import 'package:dart_flutter/src/data/model/vote_request.dart';
+import 'package:dart_flutter/src/data/model/friend_dto.dart';
+import 'package:dart_flutter/src/data/model/question_dto.dart';
+import 'package:dart_flutter/src/data/model/vote_request_dto.dart';
 import 'package:dart_flutter/src/data/repository/dart_friend_repository.dart';
 import 'package:dart_flutter/src/data/repository/dart_user_repository.dart';
 import 'package:dart_flutter/src/data/repository/dart_vote_repository.dart';
@@ -28,7 +28,7 @@ class VoteCubit extends HydratedCubit<VoteState> {
     emit(state.copy());
 
     // 친구 목록 설정
-    List<Friend> friends = await _dartFriendRepository.getMyFriends();
+    List<FriendDto> friends = await _dartFriendRepository.getMyFriends();
     state.setFriends(friends);
 
     // 투표중이지 않았던 경우, 다음 투표 가능 시간을 기록
@@ -52,11 +52,11 @@ class VoteCubit extends HydratedCubit<VoteState> {
 
     if (state.step.isStart) {
       // 친구 목록 설정
-      List<Friend> friends = await _dartFriendRepository.getMyFriends();
+      List<FriendDto> friends = await _dartFriendRepository.getMyFriends();
       state.setFriends(friends);
 
       // 새로 투표할 목록들을 가져오기
-      List<Question> questions = await _dartVoteRepository.getNewQuestions();
+      List<QuestionDto> questions = await _dartVoteRepository.getNewQuestions();
       state.setQuestions(questions);
 
       // 투표 화면으로 전환
@@ -66,7 +66,7 @@ class VoteCubit extends HydratedCubit<VoteState> {
     emit(state.copy());
   }
 
-  void nextVote(VoteRequest voteRequest) async {
+  void nextVote(VoteRequestDto voteRequest) async {
     state.setIsLoading(true);
     emit(state.copy());
     print(state.toString());

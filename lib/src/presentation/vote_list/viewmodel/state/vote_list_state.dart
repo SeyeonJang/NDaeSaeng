@@ -1,12 +1,12 @@
 import 'package:json_annotation/json_annotation.dart';
 
-import '../../../../data/model/vote_response.dart';
+import '../../../../data/model/vote_response_dto.dart';
 part 'vote_list_state.g.dart';
 
 @JsonSerializable()
 class VoteListState {
   late bool isLoading;
-  late List<VoteResponse> votes;
+  late List<VoteResponseDto> votes;
   late Map<int, bool> visited;
   late bool isFirstTime;
   late bool isDetailPage;
@@ -44,7 +44,7 @@ class VoteListState {
     return this;
   }
 
-  VoteListState setVotes(List<VoteResponse> votes) {
+  VoteListState setVotes(List<VoteResponseDto> votes) {
     this.votes = votes;
     return this;
   }
@@ -69,7 +69,7 @@ class VoteListState {
     return this;
   }
 
-  VoteResponse getVoteById(int id) {
+  VoteResponseDto getVoteById(int id) {
     return votes.firstWhere((element) => element.voteId == id);
   }
 

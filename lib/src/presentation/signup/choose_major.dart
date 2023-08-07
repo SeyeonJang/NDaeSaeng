@@ -1,7 +1,7 @@
 import 'package:dart_flutter/res/size_config.dart';
 import 'package:dart_flutter/src/common/util/analytics_util.dart';
 import 'package:dart_flutter/src/common/util/university_finder.dart';
-import 'package:dart_flutter/src/data/model/university.dart';
+import 'package:dart_flutter/src/data/model/university_dto.dart';
 import 'package:dart_flutter/src/presentation/signup/choose_id.dart';
 import 'package:dart_flutter/src/presentation/signup/viewmodel/signup_cubit.dart';
 import 'package:flutter/material.dart';
@@ -37,12 +37,12 @@ class _ScaffoldBodyState extends State<ScaffoldBody> {
   late bool isSelectedOnTypeAhead = false;
   late String universityName;
   String universityDepartment = "";
-  late University university;
+  late UniversityDto university;
 
   @override
   void initState() {
     super.initState();
-    List<University> universities = BlocProvider.of<SignupCubit>(context).getUniversities;
+    List<UniversityDto> universities = BlocProvider.of<SignupCubit>(context).getUniversities;
     universityFinder = UniversityFinder(universities: universities);
     universityName = BlocProvider.of<SignupCubit>(context).state.inputState.tempUnivName!;
     setState(() {
@@ -79,7 +79,7 @@ class _ScaffoldBodyState extends State<ScaffoldBody> {
     });
   }
 
-  void _setUniversity(University university) {
+  void _setUniversity(UniversityDto university) {
     _setUniversityDepartment(university.department);
     this.university = university;
   }
@@ -172,7 +172,7 @@ class _ScaffoldBodyState extends State<ScaffoldBody> {
                       _selectOnTypeAhead();
                     }
 
-                    _setUniversity(University.fromJson(suggestion));
+                    _setUniversity(UniversityDto.fromJson(suggestion));
                   },
                 ),
               )),

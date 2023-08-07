@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
-import '../data/model/kakao_user.dart';
+import '../data/model/kakao_user_dto.dart';
 
 class KakaoShareRemoteDataSource {
   Future<void> share (BuildContext context) async {

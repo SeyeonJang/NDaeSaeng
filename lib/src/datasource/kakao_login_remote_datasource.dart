@@ -1,10 +1,10 @@
 import 'package:flutter/services.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 
-import '../data/model/kakao_user.dart';
+import '../data/model/kakao_user_dto.dart';
 
 class KakaoLoginRemoteDatasource {
-  static Future<KakaoUser> loginWithKakaoTalk() async {
+  static Future<KakaoUserDto> loginWithKakaoTalk() async {
     if (await isKakaoTalkInstalled()) {
       try {
         OAuthToken token = await UserApi.instance.loginWithKakaoTalk();
@@ -28,7 +28,7 @@ class KakaoLoginRemoteDatasource {
     throw Error();
   }
 
-  static Future<KakaoUser> getKakaoUserInform(OAuthToken token) async {
+  static Future<KakaoUserDto> getKakaoUserInform(OAuthToken token) async {
     User user = await UserApi.instance.me();
     print(user.toString());
     print('사용자 정보 요청 성공'
@@ -37,7 +37,7 @@ class KakaoLoginRemoteDatasource {
         '\n프사: ${user.kakaoAccount?.profile?.profileImageUrl}'
         '\n성별: ${user.kakaoAccount?.gender}');
 
-    return KakaoUser(
+    return KakaoUserDto(
       uuid: user.id.toString(),
       accessToken: token.accessToken,
       profileImageUrl: user.kakaoAccount?.profile?.profileImageUrl,

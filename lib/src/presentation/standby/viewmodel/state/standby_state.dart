@@ -1,18 +1,18 @@
-import 'package:dart_flutter/src/data/model/user.dart';
+import 'package:dart_flutter/src/data/model/user_dto.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:dart_flutter/src/data/model/friend.dart';
+import 'package:dart_flutter/src/data/model/friend_dto.dart';
 
-import '../../../../data/model/user_response.dart';
+import '../../../../data/model/user_response_dto.dart';
 
 
 @JsonSerializable()
 class StandbyState {
   late bool isLoading;
   late bool isFirstCommCompleted;
-  late List<Friend> addedFriends;
+  late List<FriendDto> addedFriends;
   late int friendsCount;
-  late UserResponse userResponse;
-  late List<Friend> newFriends;
+  late UserResponseDto userResponse;
+  late List<FriendDto> newFriends;
 
   StandbyState({
     required this.isLoading,
@@ -26,7 +26,7 @@ class StandbyState {
   StandbyState.init() {
     addedFriends = [];
     friendsCount = 0;
-    userResponse = UserResponse(
+    userResponse = UserResponseDto(
       user: null,
       university: null,
     );
@@ -44,17 +44,17 @@ class StandbyState {
     newFriends: newFriends,
   );
 
-  StandbyState setAddedFriends(List<Friend> addedFriends) {
+  StandbyState setAddedFriends(List<FriendDto> addedFriends) {
     this.addedFriends = addedFriends;
     return this;
   }
 
-  StandbyState setRecommendedFriends(List<Friend> friends) {
+  StandbyState setRecommendedFriends(List<FriendDto> friends) {
     newFriends = friends;
     return this;
   }
 
-  void addFriend(Friend friend) {
+  void addFriend(FriendDto friend) {
     addedFriends.add(friend); // List에 추가
     newFriends.remove(friend);
   }

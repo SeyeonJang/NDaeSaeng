@@ -1,18 +1,18 @@
-import 'package:dart_flutter/src/data/model/question.dart';
-import 'package:dart_flutter/src/data/model/university.dart';
-import 'package:dart_flutter/src/data/model/user.dart';
+import 'package:dart_flutter/src/data/model/question_dto.dart';
+import 'package:dart_flutter/src/data/model/university_dto.dart';
+import 'package:dart_flutter/src/data/model/user_dto.dart';
 
-class VoteResponse {
+class VoteResponseDto {
   int? voteId;
-  Question? question;
+  QuestionDto? question;
   _PickedUser? pickedUser;
   DateTime? pickedTime;
 
-  VoteResponse({this.voteId, this.question, this.pickedUser, this.pickedTime});
+  VoteResponseDto({this.voteId, this.question, this.pickedUser, this.pickedTime});
 
-  VoteResponse.fromJson(Map<String, dynamic> json) {
+  VoteResponseDto.fromJson(Map<String, dynamic> json) {
     voteId = json['voteId'];
-    question = json['question'] != null ? Question.fromJson(json['question']) : null;
+    question = json['question'] != null ? QuestionDto.fromJson(json['question']) : null;
     pickedUser = json['pickedUser'] != null ? _PickedUser.fromJson(json['pickedUser']) : null;
     pickedTime = DateTime.parse(json['pickedTime']);
   }
@@ -37,14 +37,14 @@ class VoteResponse {
 }
 
 class _PickedUser {
-  User? user;
-  University? university;
+  UserDto? user;
+  UniversityDto? university;
 
   _PickedUser({this.user, this.university});
 
   _PickedUser.fromJson(Map<String, dynamic> json) {
-    user = json['user'] != null ? User.fromJson(json['user']) : null;
-    university = json['university'] != null ? University.fromJson(json['university']) : null;
+    user = json['user'] != null ? UserDto.fromJson(json['user']) : null;
+    university = json['university'] != null ? UniversityDto.fromJson(json['university']) : null;
   }
 
   Map<String, dynamic> toJson() {

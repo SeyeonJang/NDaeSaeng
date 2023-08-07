@@ -1,4 +1,4 @@
-class User {
+class UserDto {
   int? id;
   String? name;
   String? phone;
@@ -7,14 +7,14 @@ class User {
   int? birthYear;
   String? recommendationCode;
 
-  User({this.id,
+  UserDto({this.id,
         this.name,
         this.phone,
         this.gender,
         this.admissionYear,
         this.recommendationCode});
 
-  User.fromJson(Map<String, dynamic> json) {
+  UserDto.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];
     phone = json['phone'];

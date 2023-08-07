@@ -1,4 +1,4 @@
-import 'package:dart_flutter/src/data/model/friend.dart';
+import 'package:dart_flutter/src/data/model/friend_dto.dart';
 import 'package:dart_flutter/src/datasource/dart_api_remote_datasource.dart';
 
 class DartFriendRepository {
@@ -6,33 +6,33 @@ class DartFriendRepository {
   static final FriendCache myFriendCache = FriendCache();
   static final FriendCache recommendedFriendCache = FriendCache();
 
-  Future<List<Friend>> getMyFriends() async {
+  Future<List<FriendDto>> getMyFriends() async {
     if (myFriendCache.isUpdateBefore(DateTime.now().subtract(cachingInterval))) {
       myFriendCache.setFriends(await DartApiRemoteDataSource.getMyFriends());
     }
     return myFriendCache.friends;
   }
 
-  Future<List<Friend>> getRecommendedFriends({bool put = false}) async {
+  Future<List<FriendDto>> getRecommendedFriends({bool put = false}) async {
     if (put || recommendedFriendCache.isUpdateBefore(DateTime.now().subtract(cachingInterval))) {
       recommendedFriendCache.setFriends(await DartApiRemoteDataSource.getMyFriends(suggested: true));
     }
     return recommendedFriendCache.friends;
   }
 
-  Future<String> addFriend(Friend friend) async {
+  Future<String> addFriend(FriendDto friend) async {
     myFriendCache.addFriend(friend);
     recommendedFriendCache.deleteFriend(friend);
     return await DartApiRemoteDataSource.postFriend(friend.userId!);
   }
 
-  Future<Friend> addFriendBy(String inviteCode) async {
-    Friend friend = await DartApiRemoteDataSource.postFriendBy(inviteCode);
+  Future<FriendDto> addFriendBy(String inviteCode) async {
+    FriendDto friend = await DartApiRemoteDataSource.postFriendBy(inviteCode);
     myFriendCache.addFriend(friend);
     return friend;
   }
 
-  Future<String> deleteFriend(Friend friend) async {
+  Future<String> deleteFriend(FriendDto friend) async {
     myFriendCache.deleteFriend(friend);
     recommendedFriendCache.addFriend(friend);
     return await DartApiRemoteDataSource.deleteFriend(friend.userId!);
@@ -44,22 +44,22 @@ class DartFriendRepository {
 }
 
 class FriendCache {
-  Set<Friend> _friends = {};
+  Set<FriendDto> _friends = {};
   DateTime _updateTime = DateTime.now().subtract(const Duration(days: 365));
 
   void clean() {
     _friends = {};
   }
 
-  void addFriend(Friend friend) {
+  void addFriend(FriendDto friend) {
     _friends.add(friend);
   }
 
-  void deleteFriend(Friend friend) {
+  void deleteFriend(FriendDto friend) {
     _friends.remove(friend);
   }
 
-  void setFriends(List<Friend> friends) {
+  void setFriends(List<FriendDto> friends) {
     _friends = friends.toSet();
     _updateTime = DateTime.now();
   }
@@ -68,6 +68,6 @@ class FriendCache {
     return _updateTime.isBefore(dateTime);
   }
 
-  List<Friend> get friends => List<Friend>.from(_friends);
+  List<FriendDto> get friends => List<FriendDto>.from(_friends);
   DateTime get updateTime => _updateTime;
 }

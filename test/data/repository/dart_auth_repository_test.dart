@@ -1,6 +1,6 @@
-import 'package:dart_flutter/src/data/model/dart_auth.dart';
-import 'package:dart_flutter/src/data/model/friend.dart';
-import 'package:dart_flutter/src/data/model/user.dart';
+import 'package:dart_flutter/src/data/model/dart_auth_dto.dart';
+import 'package:dart_flutter/src/data/model/friend_dto.dart';
+import 'package:dart_flutter/src/data/model/user_dto.dart';
 import 'package:dart_flutter/src/datasource/dart_api_remote_datasource.dart';
 
 void main() async {

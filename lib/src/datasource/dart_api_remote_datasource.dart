@@ -1,19 +1,19 @@
 import 'dart:convert';
 
 import 'package:dart_flutter/res/environment/app_environment.dart';
-import 'package:dart_flutter/src/data/model/friend.dart';
-import 'package:dart_flutter/src/data/model/question.dart';
-import 'package:dart_flutter/src/data/model/university.dart';
+import 'package:dart_flutter/src/data/model/friend_dto.dart';
+import 'package:dart_flutter/src/data/model/question_dto.dart';
+import 'package:dart_flutter/src/data/model/university_dto.dart';
 
 import '../common/util/HttpUtil.dart';
-import '../data/model/dart_auth.dart';
-import '../data/model/user_request.dart';
-import '../data/model/user_response.dart';
-import '../data/model/vote_request.dart';
+import '../data/model/dart_auth_dto.dart';
+import '../data/model/user_request_dto.dart';
+import '../data/model/user_response_dto.dart';
+import '../data/model/vote_request_dto.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
 
-import '../data/model/vote_response.dart';
+import '../data/model/vote_response_dto.dart';
 
 class DartApiRemoteDataSource {
   static final String baseUrl = AppEnvironment.getEnv.getApiBaseUrl();
@@ -31,43 +31,43 @@ class DartApiRemoteDataSource {
   }
 
   // Auth: 카카오 로그인 요청
-  static Future<DartAuth> postLoginWithKakao(String kakaoAccessToken) async {
+  static Future<DartAuthDto> postLoginWithKakao(String kakaoAccessToken) async {
     const path = '/v1/auth/kakao';
     final body = {"accessToken": kakaoAccessToken};
 
     final response = await _httpUtil.request().post(path, data: body);
 
     final jsonResponse = json.decode(response.toString());
-    final dartAuth = DartAuth.from(jsonResponse);
+    final dartAuth = DartAuthDto.from(jsonResponse);
     addAuthorizationToken(dartAuth.accessToken);
     return dartAuth;
   }
 
-  static Future<DartAuth> postLoginWithApple(String appleIdentifyToken) async {
+  static Future<DartAuthDto> postLoginWithApple(String appleIdentifyToken) async {
     const path = '/v1/auth/apple';
     final body = {"idToken": appleIdentifyToken};
 
     final response = await _httpUtil.request().post(path, data: body);
 
     final jsonResponse = json.decode(response.toString());
-    final dartAuth = DartAuth.from(jsonResponse);
+    final dartAuth = DartAuthDto.from(jsonResponse);
     addAuthorizationToken(dartAuth.accessToken);
     return dartAuth;
   }
 
   /// Univ: 전체 대학 목록 가져오기
-  static Future<List<University>> getUniversities() async {
+  static Future<List<UniversityDto>> getUniversities() async {
     const path = '/v1/universities';
 
     final response = await _httpUtil.request().get(path);
     final List<dynamic> jsonResponse = response.data;
 
-    List<University> universities = jsonResponse.map((university) => University.fromJson(university)).toList();
+    List<UniversityDto> universities = jsonResponse.map((university) => UniversityDto.fromJson(university)).toList();
     return universities;
   }
 
   /// User: 회원가입 요청
-  static Future<UserResponse> postUserSignup(UserRequest user) async {
+  static Future<UserResponseDto> postUserSignup(UserRequestDto user) async {
     const path = '/v1/users/signup';
     final body = user.toJson();
     print(body.toString());
@@ -75,7 +75,7 @@ class DartApiRemoteDataSource {
     final response = await _httpUtil.request().post(path, data: body);
 
     final jsonResponse = json.decode(response.toString());
-    return UserResponse.fromJson(jsonResponse);
+    return UserResponseDto.fromJson(jsonResponse);
   }
 
   /// User: 회원 탈퇴 요청
@@ -86,30 +86,30 @@ class DartApiRemoteDataSource {
   }
 
   /// User: 내 정보 가져오기
-  static Future<UserResponse> getMyInformation() async {
+  static Future<UserResponseDto> getMyInformation() async {
     const path = '/v1/users/me';
     final response = await _httpUtil.request().get(path);
     print("내정보: $response");
 
     final jsonResponse = json.decode(response.toString());
-    return UserResponse.fromJson(jsonResponse);
+    return UserResponseDto.fromJson(jsonResponse);
   }
 
   // User: 내 정보 업데이트하기
-  static Future<void> putUser(String accessToken, UserRequest user) async {
+  static Future<void> putUser(String accessToken, UserRequestDto user) async {
     final response =
         await http.put(Uri.https(baseUrl, '/v1/user/me', {'accessToken': "Bearer $accessToken", 'user': user}));
     return;
   }
 
   // Friend: 친구목록 가져오기 (realFriend를 통해 '내가 추가한 친구'와 '추천 친구'를 구분함)
-  static Future<List<Friend>> getMyFriends({bool suggested=false}) async {
+  static Future<List<FriendDto>> getMyFriends({bool suggested=false}) async {
     const path = '/v1/friends';
     final pathFull = "$path?suggested=$suggested";
     final response = await _httpUtil.request().get(pathFull);
 
     final List<dynamic> jsonResponse = response.data;
-    List<Friend> friends = jsonResponse.map((friend) => Friend.fromJson(friend)).toList();
+    List<FriendDto> friends = jsonResponse.map((friend) => FriendDto.fromJson(friend)).toList();
     return friends;
   }
 
@@ -122,12 +122,12 @@ class DartApiRemoteDataSource {
     return response.data;
   }
 
-  static Future<Friend> postFriendBy(String inviteCode) async {
+  static Future<FriendDto> postFriendBy(String inviteCode) async {
     const path = '/v1/friends/invite';
     final body = {"recommendationCode": inviteCode};
 
     final response = await _httpUtil.request().post(path, data: body);
-    return Friend.fromJson(response.data);
+    return FriendDto.fromJson(response.data);
   }
 
   // Friend: 친구 삭제하기 (연결끊기)
@@ -140,17 +140,17 @@ class DartApiRemoteDataSource {
   }
 
   // vote: 새로운 투표들을 받기
-  static Future<List<Question>> getNewQuestions() async {
+  static Future<List<QuestionDto>> getNewQuestions() async {
     const path = '/v1/questions';
     final response = await _httpUtil.request().get(path);
 
     final List<dynamic> jsonResponse = response.data;
-    List<Question> questions = jsonResponse.map((question) => Question.fromJson(question)).toList();
+    List<QuestionDto> questions = jsonResponse.map((question) => QuestionDto.fromJson(question)).toList();
     return questions;
   }
 
   // vote: 투표한 내용들 전달하기
-  static Future<void> postVotes(List<VoteRequest> votes) async {
+  static Future<void> postVotes(List<VoteRequestDto> votes) async {
     const path = '/v1/votes';
     final body = [];
     votes.forEach((vote) => body.add(vote.toJson()));
@@ -159,7 +159,7 @@ class DartApiRemoteDataSource {
   }
 
   // vote: 투표한 내용 전달하기
-  static Future<void> postVote(VoteRequest vote) async {
+  static Future<void> postVote(VoteRequestDto vote) async {
     const path = '/v1/votes';
     final body = vote.toJson();
 
@@ -167,21 +167,21 @@ class DartApiRemoteDataSource {
   }
 
   // vote: 받은 투표 리스트 확인하기
-  static Future<List<VoteResponse>> getVotes() async {
+  static Future<List<VoteResponseDto>> getVotes() async {
     const path = '/v1/votes';
 
     final response = await _httpUtil.request().get(path);
     final List<dynamic> jsonResponse = response.data;
-    List<VoteResponse> voteResponse = jsonResponse.map((vote) => VoteResponse.fromJson(vote)).toList();
+    List<VoteResponseDto> voteResponse = jsonResponse.map((vote) => VoteResponseDto.fromJson(vote)).toList();
     return voteResponse;
   }
 
-  static Future<VoteResponse> getVote(int voteId) async {
+  static Future<VoteResponseDto> getVote(int voteId) async {
     const path = '/v1/votes';
     final fullPath = '$path/$voteId';
 
     final response = await _httpUtil.request().get(fullPath);
-    return VoteResponse.fromJson(response.data);
+    return VoteResponseDto.fromJson(response.data);
   }
 
   // vote: 투표 가능한지 확인하기 (남은 시간 확인)

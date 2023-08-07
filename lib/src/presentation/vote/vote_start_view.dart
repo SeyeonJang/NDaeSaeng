@@ -1,6 +1,6 @@
 import 'package:dart_flutter/res/size_config.dart';
 import 'package:dart_flutter/src/common/util/analytics_util.dart';
-import 'package:dart_flutter/src/data/model/friend.dart';
+import 'package:dart_flutter/src/data/model/friend_dto.dart';
 import 'package:dart_flutter/src/presentation/mypage/friends_mock.dart';
 import 'package:dart_flutter/src/presentation/vote/vimemodel/state/vote_state.dart';
 import 'package:dart_flutter/src/presentation/vote/vimemodel/vote_cubit.dart';
@@ -100,7 +100,7 @@ class _VoteStartViewState extends State<VoteStartView> with SingleTickerProvider
                     return ElevatedButton(
                       onPressed: () {
                         AnalyticsUtil.logEvent("투표_시작_다음");
-                        List<Friend> friendList = state.friends;
+                        List<FriendDto> friendList = state.friends;
                         int friendCount = friendList.length;
                         if (friendCount >= 4) {
                           // 시작
@@ -116,7 +116,7 @@ class _VoteStartViewState extends State<VoteStartView> with SingleTickerProvider
                       ),
                       child: BlocBuilder<VoteCubit, VoteState>(
                         builder: (context, state) {
-                          List<Friend> friendList = state.friends;
+                          List<FriendDto> friendList = state.friends;
                           int friendCount = friendList.length;
                           print(friendList);
                           return Text(

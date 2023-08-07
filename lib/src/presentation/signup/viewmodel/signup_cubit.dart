@@ -1,13 +1,13 @@
 import 'dart:io';
 
-import 'package:dart_flutter/src/data/model/university.dart';
+import 'package:dart_flutter/src/data/model/university_dto.dart';
 import 'package:dart_flutter/src/data/repository/dart_auth_repository.dart';
 import 'package:dart_flutter/src/data/repository/dart_univ_repository.dart';
 import 'package:dart_flutter/src/data/repository/dart_user_repository.dart';
 import 'package:dart_flutter/src/presentation/signup/viewmodel/state/signup_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../data/model/user_request.dart';
+import '../../../data/model/user_request_dto.dart';
 
 
 class SignupCubit extends Cubit<SignupState> {
@@ -21,7 +21,7 @@ class SignupCubit extends Cubit<SignupState> {
     state.isLoading = true;
     emit(state.copy());
 
-    List<University> universities = await _dartUniversityRepository.getUniversitys();
+    List<UniversityDto> universities = await _dartUniversityRepository.getUniversitys();
     state.universities = universities;
 
     state.memo = memo;
@@ -30,7 +30,7 @@ class SignupCubit extends Cubit<SignupState> {
     emit(state.copy());
   }
 
-  List<University> get getUniversities => state.universities;
+  List<UniversityDto> get getUniversities => state.universities;
 
   void stepSchool(String univName) {
     state.inputState.tempUnivName = univName;
@@ -38,7 +38,7 @@ class SignupCubit extends Cubit<SignupState> {
     emit(state.copy());
   }
 
-  void stepDepartment(University university) {
+  void stepDepartment(UniversityDto university) {
     // state.inputState.tempUnivDepartment = univDepartment;
     // state.inputState.univId = _findUniversityId(state.universities, state.inputState.tempUnivName!, state.inputState.tempUnivDepartment!);
     state.inputState.univId = university.id;
@@ -47,8 +47,8 @@ class SignupCubit extends Cubit<SignupState> {
     emit(state.copy());
   }
 
-  int _findUniversityId(List<University> universities, String name, String department) {
-    for (University university in universities) {
+  int _findUniversityId(List<UniversityDto> universities, String name, String department) {
+    for (UniversityDto university in universities) {
       if (university.name == name && university.department == department) {
         return university.id;
       }
@@ -108,14 +108,14 @@ class SignupCubit extends Cubit<SignupState> {
     state.inputState.gender = gender;
     print(state.inputState.toString());
 
-    UserRequest userRequest = state.inputState.toUserRequest();
+    UserRequestDto userRequest = state.inputState.toUserRequest();
     print(userRequest.toString());
     _signupRequest(userRequest);
 
     emit(state.copy());
   }
 
-  void _signupRequest(UserRequest userRequest) async {
+  void _signupRequest(UserRequestDto userRequest) async {
     await _dartUserRepository.signup(userRequest);
   }
 

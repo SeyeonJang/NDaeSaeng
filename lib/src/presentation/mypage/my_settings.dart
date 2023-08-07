@@ -8,7 +8,7 @@ import 'package:dart_flutter/src/presentation/mypage/my_ask.dart';
 import 'package:dart_flutter/src/presentation/mypage/my_opinion.dart';
 import 'package:dart_flutter/src/presentation/mypage/viewmodel/mypages_cubit.dart';
 import 'package:dart_flutter/src/presentation/mypage/viewmodel/state/mypages_state.dart';
-import 'package:dart_flutter/src/data/model/user.dart';
+import 'package:dart_flutter/src/data/model/user_dto.dart';
 import 'package:dart_flutter/src/presentation/mypage/my_tos1.dart';
 import 'package:dart_flutter/src/presentation/mypage/my_tos2.dart';
 import 'package:dart_flutter/src/presentation/signup/land_pages.dart';
@@ -20,10 +20,10 @@ import 'package:restart_app/restart_app.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../res/size_config.dart';
-import '../../data/model/user_response.dart';
+import '../../data/model/user_response_dto.dart';
 
 class MySettings extends StatelessWidget {
-  final UserResponse userResponse;
+  final UserResponseDto userResponse;
 
   MySettings({super.key, required this.userResponse});
 
@@ -40,7 +40,7 @@ class MySettings extends StatelessWidget {
 }
 
 class MyPageView extends StatefulWidget {
-  final UserResponse userResponse;
+  final UserResponseDto userResponse;
   MyPageView({super.key, required this.userResponse});
 
   static final _defaultPadding = EdgeInsets.all(getFlexibleSize(target: 20));

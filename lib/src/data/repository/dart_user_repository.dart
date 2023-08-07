@@ -1,15 +1,15 @@
 import 'package:dart_flutter/src/data/my_cache.dart';
 
 import '../../datasource/dart_api_remote_datasource.dart';
-import '../model/user.dart';
-import '../model/user_request.dart';
-import '../model/user_response.dart';
+import '../model/user_dto.dart';
+import '../model/user_request_dto.dart';
+import '../model/user_response_dto.dart';
 
 class DartUserRepository {
   static const Duration cachingInterval = Duration(minutes: 10);
   static final UserResponseCache userResponseCache = UserResponseCache();
 
-  Future<UserResponse> signup(UserRequest user) async {
+  Future<UserResponseDto> signup(UserRequestDto user) async {
     return await DartApiRemoteDataSource.postUserSignup(user);
   }
 
@@ -22,14 +22,14 @@ class DartUserRepository {
     return await DartApiRemoteDataSource.deleteMyAccount();
   }
 
-  Future<UserResponse> myInfo() async {
+  Future<UserResponseDto> myInfo() async {
     if (userResponseCache.isUpdateBefore(DateTime.now().subtract(cachingInterval))) {
       userResponseCache.setObject(await DartApiRemoteDataSource.getMyInformation());
     }
     return userResponseCache.userResponse;
   }
 
-  Future<void> updateMyInfo(String accessToken, UserRequest userRequest) async {
+  Future<void> updateMyInfo(String accessToken, UserRequestDto userRequest) async {
     return await DartApiRemoteDataSource.putUser(accessToken, userRequest);
   }
 
@@ -39,7 +39,7 @@ class DartUserRepository {
 }
 
 class UserResponseCache extends MyCache {
-  UserResponse? _userResponse = null;
+  UserResponseDto? _userResponse = null;
 
   @override
   void setObject(dynamic userResponse) {

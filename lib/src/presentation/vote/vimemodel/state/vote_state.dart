@@ -1,6 +1,6 @@
-import 'package:dart_flutter/src/data/model/friend.dart';
-import 'package:dart_flutter/src/data/model/question.dart';
-import 'package:dart_flutter/src/data/model/vote_request.dart';
+import 'package:dart_flutter/src/data/model/friend_dto.dart';
+import 'package:dart_flutter/src/data/model/question_dto.dart';
+import 'package:dart_flutter/src/data/model/vote_request_dto.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'vote_state.g.dart';
@@ -13,11 +13,11 @@ class VoteState {
   late VoteStep step;
   late int voteIterator;
 
-  late List<VoteRequest> votes;
-  late List<Question> questions;
+  late List<VoteRequestDto> votes;
+  late List<QuestionDto> questions;
 
   late DateTime nextVoteDateTime;
-  late List<Friend> friends;
+  late List<FriendDto> friends;
 
   VoteState({
     required this.isLoading,
@@ -64,27 +64,27 @@ class VoteState {
     return this;
   }
 
-  VoteState setFriends(List<Friend> friends) {
+  VoteState setFriends(List<FriendDto> friends) {
     this.friends = friends;
     return this;
   }
 
-  void setQuestions(List<Question> questions) {
+  void setQuestions(List<QuestionDto> questions) {
     this.questions = questions;
   }
 
-  List<Friend> getShuffleFriends() {
+  List<FriendDto> getShuffleFriends() {
     if (friends.length < 4) {
       print("친구수가 4명보다 적습니다. 투표할 수 없음");
     }
     return friends..shuffle();
   }
 
-  void addVote(VoteRequest vote) {
+  void addVote(VoteRequestDto vote) {
     votes.add(vote);
   }
 
-  void pickUserInVote(VoteRequest voteRequest) {
+  void pickUserInVote(VoteRequestDto voteRequest) {
     votes.add(voteRequest);
   }
 

@@ -1,9 +1,9 @@
-class UserRequest {
+class UserRequestDto {
   final int univId;
   final int admissionYear, birthYear;
   final String name, phone, gender;
 
-  UserRequest({
+  UserRequestDto({
     required this.univId,
     required this.admissionYear,
     required this.birthYear,
@@ -12,7 +12,7 @@ class UserRequest {
     required this.gender
   });
 
-  UserRequest.from(Map<String, dynamic> json)
+  UserRequestDto.from(Map<String, dynamic> json)
       : univId = json['univId'],
         admissionYear = json['admissionYear'],
         birthYear = json['birthYear'],

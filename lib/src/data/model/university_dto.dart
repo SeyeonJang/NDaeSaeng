@@ -1,15 +1,15 @@
-class University {
+class UniversityDto {
   late int id;
   late String name;
   late String department;
 
-  University({
+  UniversityDto({
     required this.id,
     required this.name,
     required this.department,
   });
 
-  University.fromJson(Map<String, dynamic> json) {
+  UniversityDto.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];
     department = json['department'];

@@ -1,8 +1,8 @@
-class KakaoUser {
+class KakaoUserDto {
   final String uuid, accessToken;
   final String? profileImageUrl, gender;
 
-  KakaoUser({
+  KakaoUserDto({
     required this.uuid,
     required this.profileImageUrl,
     required this.gender,

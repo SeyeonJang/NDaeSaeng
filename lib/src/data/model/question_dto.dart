@@ -1,11 +1,11 @@
-class Question {
+class QuestionDto {
   int? questionId;
   String? content;
   String? icon;
 
-  Question({this.questionId, this.content, this.icon});
+  QuestionDto({this.questionId, this.content, this.icon});
 
-  Question.fromJson(Map<String, dynamic> json) {
+  QuestionDto.fromJson(Map<String, dynamic> json) {
     questionId = json['questionId'];
     content = json['content'];
     icon = json['icon'];

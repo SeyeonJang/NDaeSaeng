@@ -1,7 +1,7 @@
-import 'package:dart_flutter/src/data/model/user.dart';
+import 'package:dart_flutter/src/data/model/user_dto.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-import '../../../../data/model/user_request.dart';
+import '../../../../data/model/user_request_dto.dart';
 part 'signup_input.g.dart';
 
 @JsonSerializable()
@@ -18,7 +18,7 @@ class SignupInput {
 
   Map<String, dynamic> toJson() => _$SignupInputToJson(this);
   static SignupInput fromJson(Map<String, dynamic> json) => _$SignupInputFromJson(json);
-  UserRequest toUserRequest() => UserRequest(
+  UserRequestDto toUserRequest() => UserRequestDto(
     name: name!,
     phone: phone!,
     admissionYear: admissionNumber!,

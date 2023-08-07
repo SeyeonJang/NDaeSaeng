@@ -13,7 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:flutter/services.dart';
 
-import '../../data/model/friend.dart';
+import '../../data/model/friend_dto.dart';
 import '../mypage/friends_mock.dart';
 import '../mypage/viewmodel/mypages_cubit.dart';
 import '../mypage/viewmodel/state/mypages_state.dart';
@@ -202,7 +202,7 @@ class _StandbyLandingPageState extends State<StandbyLandingPage> with TickerProv
                           if (state.isLoading) {
                             return CircularProgressIndicator();
                           } else {
-                            List<Friend> friends = state.addedFriends;
+                            List<FriendDto> friends = state.addedFriends;
                             int count = friends.length;
                             if (count >= 4) {
                               WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -216,7 +216,7 @@ class _StandbyLandingPageState extends State<StandbyLandingPage> with TickerProv
                         }),
 
                         BlocBuilder<StandbyCubit, StandbyState>(builder: (context, state) {
-                          List<Friend> friends = state.addedFriends;
+                          List<FriendDto> friends = state.addedFriends;
                           int count = friends.length;
 
                           return Column(
@@ -324,7 +324,7 @@ class _StandbyLandingPageState extends State<StandbyLandingPage> with TickerProv
 
                         BlocBuilder<StandbyCubit, StandbyState>(
                           builder: (context, state) {
-                            List<Friend> friends = state.addedFriends;
+                            List<FriendDto> friends = state.addedFriends;
                             int count = friends.length;
                             return openAddFriends(
                               myCode: state.userResponse.user?.recommendationCode ?? '내 코드가 없어요!',
@@ -1813,7 +1813,7 @@ void shareContent(BuildContext context, String myCode) {
 }
 
 class NewFriends extends StatelessWidget {
-  final List<Friend> friends;
+  final List<FriendDto> friends;
   final int count;
 
   const NewFriends({
@@ -1834,9 +1834,9 @@ class NewFriends extends StatelessWidget {
 }
 class NotFriendComponent extends StatelessWidget {
   late bool isAdd;
-  late Friend friend;
+  late FriendDto friend;
 
-  NotFriendComponent(bool isAdd, Friend friend, {super.key}) {
+  NotFriendComponent(bool isAdd, FriendDto friend, {super.key}) {
     this.isAdd = isAdd;
     this.friend = friend;
   }

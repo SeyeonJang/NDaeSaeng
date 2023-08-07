@@ -1,11 +1,11 @@
-import 'package:dart_flutter/src/data/model/friend.dart';
-import 'package:dart_flutter/src/data/model/user.dart';
+import 'package:dart_flutter/src/data/model/friend_dto.dart';
+import 'package:dart_flutter/src/data/model/user_dto.dart';
 import 'package:dart_flutter/src/data/repository/dart_friend_repository.dart';
 import 'package:dart_flutter/src/data/repository/dart_user_repository.dart';
 import 'package:dart_flutter/src/presentation/mypage/viewmodel/state/mypages_state.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 
-import '../../../data/model/user_response.dart';
+import '../../../data/model/user_response_dto.dart';
 
 class MyPagesCubit extends Cubit<MyPagesState> {
   static final DartUserRepository _dartUserRepository = DartUserRepository();
@@ -19,12 +19,12 @@ class MyPagesCubit extends Cubit<MyPagesState> {
     emit(state.copy());
 
     // 초기값 설정
-    UserResponse userResponse = await _dartUserRepository.myInfo();
+    UserResponseDto userResponse = await _dartUserRepository.myInfo();
     state.setUserResponse(userResponse);
 
-    List<Friend> friends = await _dartFriendRepository.getMyFriends();
+    List<FriendDto> friends = await _dartFriendRepository.getMyFriends();
     state.setMyFriends(friends);
-    List<Friend> newFriends = await _dartFriendRepository.getRecommendedFriends();
+    List<FriendDto> newFriends = await _dartFriendRepository.getRecommendedFriends();
     state.setRecommendedFriends(newFriends);
 
     state.setIsLoading(false);
@@ -32,13 +32,13 @@ class MyPagesCubit extends Cubit<MyPagesState> {
     print("mypage init 끝");
   }
 
-  void pressedFriendAddButton(Friend friend) {
+  void pressedFriendAddButton(FriendDto friend) {
     _dartFriendRepository.addFriend(friend);
     state.addFriend(friend);
     emit(state.copy());
   }
 
-  void pressedFriendDeleteButton(Friend friend) {
+  void pressedFriendDeleteButton(FriendDto friend) {
     _dartFriendRepository.deleteFriend(friend);
     state.deleteFriend(friend);
     emit(state.copy());
@@ -49,7 +49,7 @@ class MyPagesCubit extends Cubit<MyPagesState> {
     emit(state.copy());
 
     try {
-      Friend friend = await _dartFriendRepository.addFriendBy(inviteCode);
+      FriendDto friend = await _dartFriendRepository.addFriendBy(inviteCode);
       state.addFriend(friend);
       state.newFriends = (await _dartFriendRepository.getRecommendedFriends(put: true)).toSet();
     } catch (e, trace) {

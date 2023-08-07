@@ -1,14 +1,14 @@
 import 'package:dart_flutter/res/size_config.dart';
 import 'package:dart_flutter/src/common/util/analytics_util.dart';
-import 'package:dart_flutter/src/data/model/friend.dart';
-import 'package:dart_flutter/src/data/model/vote_request.dart';
+import 'package:dart_flutter/src/data/model/friend_dto.dart';
+import 'package:dart_flutter/src/data/model/vote_request_dto.dart';
 import 'package:dart_flutter/src/presentation/vote/vimemodel/state/vote_state.dart';
 import 'package:dart_flutter/src/presentation/vote/vimemodel/vote_cubit.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../data/model/question.dart';
+import '../../data/model/question_dto.dart';
 
 class VoteView extends StatefulWidget {
   const VoteView({Key? key}) : super(key: key);
@@ -83,12 +83,12 @@ class _VoteViewState extends State<VoteView> with SingleTickerProviderStateMixin
         body: Center(
           child: BlocBuilder<VoteCubit, VoteState>(
             builder: (context, state) {
-              Question question = state.questions[state.voteIterator];
-              List<Friend> shuffledFriends = state.getShuffleFriends();
-              Friend friend1 = shuffledFriends[0];
-              Friend friend2 = shuffledFriends[1];
-              Friend friend3 = shuffledFriends[2];
-              Friend friend4 = shuffledFriends[3];
+              QuestionDto question = state.questions[state.voteIterator];
+              List<FriendDto> shuffledFriends = state.getShuffleFriends();
+              FriendDto friend1 = shuffledFriends[0];
+              FriendDto friend2 = shuffledFriends[1];
+              FriendDto friend3 = shuffledFriends[2];
+              FriendDto friend4 = shuffledFriends[3];
 
               // print(state.votes.toString());
 
@@ -343,7 +343,7 @@ class _ChoiceFriendButtonState extends State<ChoiceFriendButton> {
         textColor = Color(0xff7C83FD);
       });
       // 투표 요청 로직
-      VoteRequest voteRequest = VoteRequest(
+      VoteRequestDto voteRequest = VoteRequestDto(
         questionId: widget.questionId,
         pickedUserId: widget.userId,
         firstUserId: widget.firstUserId,

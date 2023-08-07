@@ -8,7 +8,7 @@ import 'package:dart_flutter/src/presentation/vote_list/viewmodel/vote_list_cubi
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../data/model/vote_response.dart';
+import '../../data/model/vote_response_dto.dart';
 
 class VoteListView extends StatefulWidget {
   const VoteListView({Key? key}) : super(key: key);
@@ -123,7 +123,7 @@ class _VoteListViewState extends State<VoteListView> with SingleTickerProviderSt
     );
   }
 
-  ListView makeList(List<VoteResponse> snapshot) {
+  ListView makeList(List<VoteResponseDto> snapshot) {
     return ListView.builder(
       reverse: true,
       shrinkWrap: true,
