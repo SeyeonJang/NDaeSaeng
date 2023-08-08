@@ -62,139 +62,126 @@ class MyPageLandingView extends StatelessWidget {
               //   ),
               // ],
             ),
-            height: SizeConfig.defaultSize * 10,
+            height: SizeConfig.defaultSize * 15,
             child: Padding(
                 padding: EdgeInsets.symmetric(
                     vertical: SizeConfig.defaultSize,
                     horizontal: SizeConfig.defaultSize * 1.5),
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Row( // 1층
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    Row( // 프사 ~ 설정 부분 (위층)
                       children: [
-                        BlocBuilder<MyPagesCubit,MyPagesState>(
-                            builder: (context, state) {
-                              String name = state.userResponse.user?.name ?? "###";
-                              String admissionNumber = "${state.userResponse.user?.admissionYear.toString().substring(2,4)??"##"}학번";
+                        SizedBox(width: SizeConfig.defaultSize * 0.3),
+                        ClipOval(
+                            child: Image.asset('assets/images/profile_mockup.png', width: SizeConfig.defaultSize * 5.3, fit: BoxFit.cover,),
+                        ),
+                        SizedBox(width: SizeConfig.defaultSize * 0.9),
+                        Expanded(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Row( // 1층
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  BlocBuilder<MyPagesCubit,MyPagesState>(
+                                      builder: (context, state) {
+                                        String name = state.userResponse.user?.name ?? "###";
+                                        String admissionNumber = "${state.userResponse.user?.admissionYear.toString().substring(2,4)??"##"}학번";
 
-                              return Row(
-                                children: [
-                                  SizedBox(width: SizeConfig.defaultSize * 0.5,),
-                                  Text(name,
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w700,
-                                      fontSize: SizeConfig.defaultSize * 2,
-                                      color: Colors.white,
-                                    ),),
-                                  SizedBox(width: SizeConfig.defaultSize * 0.5),
-                                  Text(admissionNumber,
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: SizeConfig.defaultSize * 1.6,
-                                      color: Colors.white,
-                                    ),),
-                                ]
-                              );
-                            }
-                        ),
-                        IconButton(
-                          icon: const Icon(Icons.settings, color: Colors.white,),
-                          onPressed: () {
-                            AnalyticsUtil.logEvent("내정보_마이_설정버튼");
-                            Navigator.push(context, MaterialPageRoute(builder: (_) => MySettings(
-                              userResponse: BlocProvider.of<MyPagesCubit>(context).state.userResponse,
-                            )));
-                          },
-                          iconSize: SizeConfig.defaultSize * 2.4,
-                        ),
-                      ],
-                    ),
-                    Row( // 2층
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        BlocBuilder<MyPagesCubit,MyPagesState>(
-                            builder: (context, state) {
-                              String university = state.userResponse.university?.name??'#####학교';
-                              String department = state.userResponse.university?.department??'######학과';
-                              return Row(
-                                children: [
-                                  SizedBox(width: SizeConfig.defaultSize * 0.5,),
-                                  Text(
-                                    university,
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: SizeConfig.defaultSize * 1.3,
-                                        color: Colors.white
-                                    ),
+                                        return Row(
+                                          children: [
+                                            SizedBox(width: SizeConfig.defaultSize * 0.5,),
+                                            Text(name,
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.w700,
+                                                fontSize: SizeConfig.defaultSize * 2,
+                                                color: Colors.white,
+                                              ),),
+                                            SizedBox(width: SizeConfig.defaultSize * 0.5),
+                                            Text(admissionNumber,
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.w500,
+                                                fontSize: SizeConfig.defaultSize * 1.5,
+                                                color: Colors.white,
+                                              ),),
+                                          ]
+                                        );
+                                      }
                                   ),
-                                  SizedBox(width: SizeConfig.defaultSize * 0.5,),
-                                  Text(
-                                    department,
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: SizeConfig.defaultSize * 1.3,
-                                        color: Colors.white
-                                    ),
+                                  IconButton(
+                                    icon: const Icon(Icons.settings, color: Colors.white,),
+                                    onPressed: () {
+                                      AnalyticsUtil.logEvent("내정보_마이_설정버튼");
+                                      Navigator.push(context, MaterialPageRoute(builder: (_) => MySettings(
+                                        userResponse: BlocProvider.of<MyPagesCubit>(context).state.userResponse,
+                                      )));
+                                    },
+                                    iconSize: SizeConfig.defaultSize * 2.4,
                                   ),
                                 ],
-                              );
-                            }
+                              ),
+                              Row( // 2층
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  BlocBuilder<MyPagesCubit,MyPagesState>(
+                                      builder: (context, state) {
+                                        String university = state.userResponse.university?.name??'#####학교';
+                                        String department = state.userResponse.university?.department??'######학과';
+                                        return Row(
+                                          children: [
+                                            SizedBox(width: SizeConfig.defaultSize * 0.5,),
+                                            Text(
+                                              university,
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.w500,
+                                                  fontSize: SizeConfig.defaultSize * 1.3,
+                                                  color: Colors.white
+                                              ),
+                                            ),
+                                            SizedBox(width: SizeConfig.defaultSize * 0.5,),
+                                            Text(
+                                              department,
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.w500,
+                                                  fontSize: SizeConfig.defaultSize * 1.3,
+                                                  color: Colors.white
+                                              ),
+                                            ),
+                                          ],
+                                        );
+                                      }
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: SizeConfig.defaultSize,),
+                            ],
+                          ),
                         ),
                       ],
                     ),
-                    SizedBox(height: SizeConfig.defaultSize,),
-
-
-                    // TODO MVP 이후 '나의 포인트 0원' 복구
-                    // Container(
-                    //   height: SizeConfig.defaultSize * 4.5,
-                    //   decoration: ShapeDecoration(
-                    //     color: Color(0xffeeeeeee),
-                    //     shape: RoundedRectangleBorder(
-                    //       borderRadius: BorderRadius.circular(7.0),
-                    //     ),
-                    //   ),
-                    //
-                    //   child: Row(
-                    //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    //     children: [
-                    //       Row(
-                    //         children: [
-                    //           Text("   나의 Points",
-                    //             style: TextStyle(
-                    //               fontWeight: FontWeight.w500,
-                    //               fontSize: SizeConfig.defaultSize * 1.6,
-                    //             ),),
-                    //
-                    //           BlocBuilder<MyPagesCubit,MyPagesState>(
-                    //               builder: (context, state) {
-                    //                 int point = state.userResponse.point ?? 0;
-                    //
-                    //                 return Text("  $point",
-                    //                   style: TextStyle(
-                    //                     fontWeight: FontWeight.w700,
-                    //                     fontSize: SizeConfig.defaultSize * 1.6,
-                    //                   ),
-                    //                 );
-                    //               }
-                    //           ),
-                    //         ],
-                    //       ),
-                    //       TextButton(
-                    //         onPressed: () {
-                    //           // 사용 내역 페이지로 연결
-                    //         },
-                    //         child: Text("사용 내역 ", style: TextStyle(
-                    //           fontSize: SizeConfig.defaultSize * 1.6,
-                    //           fontWeight: FontWeight.w500,
-                    //           decoration: TextDecoration.underline,
-                    //         )),
-                    //       ),
-                    //     ],
-                    //   ),
-                    // ),
+                    SizedBox(height: SizeConfig.defaultSize * 0.7,),
+                    Container( // 포인트 ~ (아래층)
+                      padding: EdgeInsets.only(left: SizeConfig.defaultSize * 1.4, right: SizeConfig.defaultSize * 1.4, top: SizeConfig.defaultSize * 1.1, bottom: SizeConfig.defaultSize * 1.1),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.all(Radius.circular(5)),
+                      ),
+                      alignment: Alignment.center,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text("나의 Points", style: TextStyle(
+                            fontSize: SizeConfig.defaultSize * 1.4
+                          ),),
+                          Text("3333", style: TextStyle(
+                              fontSize: SizeConfig.defaultSize * 1.4
+                          ))
+                          // TODO : Point 사용 내역
+                        ],
+                      )
+                    ),
                   ],
                 )
             ),
