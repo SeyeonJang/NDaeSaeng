@@ -164,6 +164,13 @@ class AuthCubit extends HydratedCubit<AuthState> {
     print(state.copy());
   }
 
+  void setAnalyticsUserInformation() async {
+    UserResponse userResponse = await _userUseCase.myInfo();
+    if (userResponse.user == null) return;
+    AnalyticsUtil.setUserId(userResponse.user!.id!.toString());
+    AnalyticsUtil.setUserInformation(userResponse.toAnalytics());
+  }
+
   @override
   AuthState fromJson(Map<String, dynamic> json) => state.fromJson(json);
 

@@ -56,6 +56,7 @@ class _LandPagesState extends State<LandPages> {
             );
           }
           if (state.step == AuthStep.login) {
+            BlocProvider.of<AuthCubit>(context).setAnalyticsUserInformation();
             return BlocProvider<StandbyCubit>(
               create: (BuildContext context) => StandbyCubit()..initPages(),
               child: const StandbyLoading(),
