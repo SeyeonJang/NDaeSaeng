@@ -102,6 +102,21 @@ class _VoteViewState extends State<VoteView> with SingleTickerProviderStateMixin
                     onTap: () {
                       AnalyticsUtil.logEvent("투표_세부_아이콘터치");
                     },
+                    // child: FutureBuilder( // TODO : delay 주면서 포인트 나타날 때 return Text() 부분이랑 딜레이 몇초인지 바꾸면 됨. Stack() 으로 해도 될듯?
+                    //     future: Future.delayed(Duration(milliseconds: 1000), () => true),
+                    //     builder: (context, snapshot) {
+                    //       if (snapshot.connectionState == ConnectionState.waiting) {
+                    //         return Text("쌓인 포인트 : 100"); // You can adjust the height as needed
+                    //       }
+                    //     return SlideTransition(
+                    //       position: _animation,
+                    //       child: Image.asset(
+                    //         'assets/images/contacts.png',
+                    //         width: SizeConfig.defaultSize * 22,
+                    //       ),
+                    //     );
+                    //   }
+                    // ),
                     child: SlideTransition(
                       position: _animation,
                       child: Image.asset(
@@ -385,16 +400,43 @@ class _ChoiceFriendButtonState extends State<ChoiceFriendButton> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(15), // 모서리 둥글기 설정
           ),
+            surfaceTintColor: Color(0xff7C83FD).withOpacity(0.1),
+            // surfaceTintColor: Color(0xff7C83FD).withOpacity(0.1),
         ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(
-                widget.name,
-                style: TextStyle(
-                  fontSize: SizeConfig.defaultSize * 2.3,
-                  fontWeight: FontWeight.w600,
-                ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ClipOval(
+                    clipBehavior: Clip.antiAlias,
+                    child: Container(
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                              colors: [Color(0xff7C83FD), Color(0xff7C83FD)]),
+                          // border: Border.all(
+                          //   color: Colors.amber, //kHintColor, so this should be changed?
+                          // ),
+                          borderRadius: BorderRadius.circular(32),
+                        ),
+                        child: Padding(
+                          padding: EdgeInsets.all(SizeConfig.defaultSize * 0.1),
+                          child: ClipOval(
+                              child: Image.asset('assets/images/profile_mockup.png', width: SizeConfig.defaultSize * 2.3, fit: BoxFit.cover,)
+                          ),
+                        )),
+                  ),
+                  SizedBox(width: SizeConfig.defaultSize * 0.5,),
+                  Text(
+                    widget.name,
+                    style: TextStyle(
+                      fontSize: SizeConfig.defaultSize * 2.3,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  SizedBox(width: SizeConfig.defaultSize * 1,),
+                ],
               ),
               SizedBox(height: SizeConfig.defaultSize * 1,),
               Text(
