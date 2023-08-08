@@ -14,6 +14,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:restart_app/restart_app.dart';
+import 'package:share_plus/share_plus.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../res/config/size_config.dart';
 
@@ -325,6 +327,11 @@ class _MyPageViewState extends State<MyPageView> {
           ]),
               ));
 
+  void shareContent(BuildContext context, String myCode) {
+    Share.share('엔대생에서 내가 널 칭찬 대상으로 투표하고 싶어! 앱에 들어와줘!\n내 코드는 $myCode 야. 나를 친구 추가하고 같이하자!\nhttps://dart.page.link/TG78\n\n내 코드 : $myCode');
+    print("셰어");
+  }
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -333,7 +340,42 @@ class _MyPageViewState extends State<MyPageView> {
           _infoSection(context),
           const DtFlexSpacer(20),
 
-          /// 구분선
+          const DtDivider(),
+          Container(
+              alignment: Alignment.centerLeft,
+              padding: EdgeInsets.only(left: SizeConfig.defaultSize * 2),
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(height: SizeConfig.defaultSize * 1.5,),
+                    TextButton(
+                      onPressed: () {
+                        AnalyticsUtil.logEvent("내정보_설정_스토어리뷰작성");
+                        launchUrl(
+                          Uri(
+                            scheme: 'https',
+                            host: 'dart.page.link',
+                            path:
+                            'TG78',
+                          ),
+                          mode: LaunchMode.inAppWebView,
+                        );
+                      },
+                      child: Text("스토어에서 엔대생 리뷰 작성하기",
+                          style: TextStyle(fontSize: SizeConfig.defaultSize * 1.4, color: Color(0xff7C83FD))),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        AnalyticsUtil.logEvent("내정보_설정_앱공유");
+                        shareContent(context, inviteCode);
+                      },
+                      child: Text("엔대생 링크 공유하기",
+                          style: TextStyle(fontSize: SizeConfig.defaultSize * 1.4, color: Color(0xff7C83FD))),
+                    ),
+                    SizedBox(height: SizeConfig.defaultSize * 1.5,),
+                  ])),
+
           const DtDivider(),
           Padding(
             // padding: MyPageView._defaultPadding,
