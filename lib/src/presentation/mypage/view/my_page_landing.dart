@@ -387,19 +387,61 @@ class FriendComponent extends StatelessWidget {
                 width: SizeConfig.screenWidth * 0.7,
                 child: Row(
                   children: [
-                    Text(friend.name ?? "XXX", style: TextStyle(
-                  fontSize: SizeConfig.defaultSize * 1.9,
-                      fontWeight: FontWeight.w600,
-                    )),
-                    Flexible(
-                        child: Container(
-                          child: Text("  ${friend.admissionYear.toString().substring(2,4)}학번∙${friend.university?.department}", style: TextStyle(
-                            fontSize: SizeConfig.defaultSize * 1.3,
-                            fontWeight: FontWeight.w500,
-                            overflow: TextOverflow.ellipsis,
+                    ClipOval(
+                      clipBehavior: Clip.antiAlias,
+                      child: Container(
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                                colors: [Color(0xff7C83FD), Color(0xff7C83FD)]),
+                            // border: Border.all(
+                            //   color: Colors.amber, //kHintColor, so this should be changed?
+                            // ),
+                            borderRadius: BorderRadius.circular(32),
+                          ),
+                          child: Padding(
+                            padding: EdgeInsets.all(SizeConfig.defaultSize * 0.1),
+                            child: ClipOval(
+                                child: Image.asset('assets/images/profile_mockup.png', width: SizeConfig.defaultSize * 4.4, fit: BoxFit.cover,)
+                            ),
                           )),
-                        ),
                     ),
+                  //   Text(friend.name ?? "XXX", style: TextStyle(
+                  // fontSize: SizeConfig.defaultSize * 1.9,
+                  //     fontWeight: FontWeight.w600,
+                  //   )),
+                    SizedBox(width: SizeConfig.defaultSize * 0.1,),
+                    Flexible(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text("  ${friend.name} ", style: TextStyle(
+                                fontSize: SizeConfig.defaultSize * 1.6,
+                                fontWeight: FontWeight.w800,
+                                overflow: TextOverflow.ellipsis,
+                              )),
+                              Text("${friend.admissionYear.toString().substring(2,4)}학번", style: TextStyle(
+                                fontSize: SizeConfig.defaultSize * 1.3,
+                                fontWeight: FontWeight.w500,
+                                overflow: TextOverflow.ellipsis,
+                              )),
+                              // SizedBox(width: SizeConfig.defaultSize * 0.35),
+                              // Image.asset("assets/images/check.png", width: SizeConfig.defaultSize * 1.2), // TODO : 학생증 인증했을 때 인증배지 구현
+                            ],
+                          ),
+                          SizedBox(height: SizeConfig.defaultSize * 0.4,),
+                          Container(
+                            child: Text("  ${friend.university!.name} ${friend.university?.department}", style: TextStyle(
+                              fontSize: SizeConfig.defaultSize * 1.3,
+                              fontWeight: FontWeight.w500,
+                              overflow: TextOverflow.ellipsis,
+                            )),
+                          ),
+                        ],
+                      ),
+                    )
                   ],
                 ),
               ),
@@ -545,17 +587,55 @@ class NotFriendComponent extends StatelessWidget {
                 width: SizeConfig.screenWidth * 0.54,
                 child: Row(
                   children: [
-                    Text(friend.name ?? "XXX", style: TextStyle(
-                      fontSize: SizeConfig.defaultSize * 1.9,
-                      fontWeight: FontWeight.w600,
-                    )),
-                    Flexible(
+                    ClipOval(
+                      clipBehavior: Clip.antiAlias,
                       child: Container(
-                          child: Text("  ${friend.admissionYear.toString().substring(2,4)}학번∙${friend.university?.department}", style: TextStyle(
-                          fontSize: SizeConfig.defaultSize * 1.3,
-                          fontWeight: FontWeight.w500,
-                          overflow: TextOverflow.ellipsis,
-                        )),
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                                colors: [Color(0xff7C83FD), Color(0xff7C83FD)]),
+                            // border: Border.all(
+                            //   color: Colors.amber, //kHintColor, so this should be changed?
+                            // ),
+                            borderRadius: BorderRadius.circular(32),
+                          ),
+                          child: Padding(
+                            padding: EdgeInsets.all(SizeConfig.defaultSize * 0.1),
+                            child: ClipOval(
+                                child: Image.asset('assets/images/profile_mockup.png', width: SizeConfig.defaultSize * 4.4, fit: BoxFit.cover,)
+                            ),
+                      )),
+                    ),
+                    SizedBox(width: SizeConfig.defaultSize * 0.1,),
+                    Flexible(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text("  ${friend.name} ", style: TextStyle(
+                                fontSize: SizeConfig.defaultSize * 1.6,
+                                fontWeight: FontWeight.w800,
+                                overflow: TextOverflow.ellipsis,
+                              )),
+                              Text("${friend.admissionYear.toString().substring(2,4)}학번", style: TextStyle(
+                                fontSize: SizeConfig.defaultSize * 1.3,
+                                fontWeight: FontWeight.w500,
+                                overflow: TextOverflow.ellipsis,
+                              )),
+                              // SizedBox(width: SizeConfig.defaultSize * 0.35),
+                              // Image.asset("assets/images/check.png", width: SizeConfig.defaultSize * 1.2), // TODO : 학생증 인증했을 떄 인증배지 구현
+                            ],
+                          ),
+                          SizedBox(height: SizeConfig.defaultSize * 0.4,),
+                          Container(
+                              child: Text("  ${friend.university!.name} ${friend.university?.department}", style: TextStyle(
+                              fontSize: SizeConfig.defaultSize * 1.3,
+                              fontWeight: FontWeight.w500,
+                              overflow: TextOverflow.ellipsis,
+                            )),
+                          ),
+                        ],
                       ),
                     )
                   ],
