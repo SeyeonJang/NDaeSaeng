@@ -1,9 +1,7 @@
-import 'dart:math';
-
-import 'package:dart_flutter/res/size_config.dart';
+import 'package:dart_flutter/res/config/size_config.dart';
 import 'package:dart_flutter/src/common/util/analytics_util.dart';
 import 'package:dart_flutter/src/common/util/timeago_util.dart';
-import 'package:dart_flutter/src/data/model/vote.dart';
+import 'package:dart_flutter/src/domain/entity/vote_response.dart';
 import 'package:dart_flutter/src/presentation/vote_list/viewmodel/state/vote_list_state.dart';
 import 'package:dart_flutter/src/presentation/vote_list/viewmodel/vote_list_cubit.dart';
 import 'package:flutter/material.dart';
@@ -134,7 +132,7 @@ class _VoteListViewState extends State<VoteListView> with SingleTickerProviderSt
           children: [
             dart(
               voteId: vote.voteId!,
-              admissionYear: vote.pickedUser!.user!.admissionYear.toString() ?? "",
+              admissionYear: vote.pickedUser!.user?.admissionYear.toString() ?? "",
               gender: vote.pickedUser!.user!.gender ?? "",
               question: vote.question!.content ?? "(알수없음)",
               datetime: timeago,

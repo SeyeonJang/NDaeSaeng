@@ -1,10 +1,7 @@
-// import 'package:dart_flutter/src/data/model/vote.dart';
-import 'package:dart_flutter/src/data/model/friend.dart';
-import 'package:dart_flutter/src/data/model/user.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:dart_flutter/src/domain/entity/friend.dart';
+import 'package:dart_flutter/src/domain/entity/user_response.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-@JsonSerializable()
 class MyPagesState {
   late bool isLoading;
   late UserResponse userResponse;

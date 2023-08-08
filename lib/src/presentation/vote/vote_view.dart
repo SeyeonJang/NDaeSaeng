@@ -1,14 +1,13 @@
-import 'package:dart_flutter/res/size_config.dart';
+import 'package:dart_flutter/res/config/size_config.dart';
 import 'package:dart_flutter/src/common/util/analytics_util.dart';
-import 'package:dart_flutter/src/data/model/friend.dart';
-import 'package:dart_flutter/src/data/model/vote.dart';
+import 'package:dart_flutter/src/domain/entity/friend.dart';
+import 'package:dart_flutter/src/domain/entity/question.dart';
+import 'package:dart_flutter/src/domain/entity/vote_request.dart';
 import 'package:dart_flutter/src/presentation/vote/vimemodel/state/vote_state.dart';
 import 'package:dart_flutter/src/presentation/vote/vimemodel/vote_cubit.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-import '../../data/model/question.dart';
 
 class VoteView extends StatefulWidget {
   const VoteView({Key? key}) : super(key: key);
@@ -333,14 +332,14 @@ class _ChoiceFriendButtonState extends State<ChoiceFriendButton> {
     void _onVoteButtonPressed() {
       // 버튼이 눌린 상태일 때 색상 변경
       setState(() {
-        backgroundColor = Color(0xff7C83FD);
-        textColor = Colors.white;
+        backgroundColor = backgroundColor;
+        textColor = textColor;
       });
 
       // 버튼이 떼어진 상태일 때 색상 변경
       setState(() {
-        backgroundColor = Colors.white;
-        textColor = Color(0xff7C83FD);
+        backgroundColor = textColor;
+        textColor = backgroundColor;
       });
       // 투표 요청 로직
       VoteRequest voteRequest = VoteRequest(

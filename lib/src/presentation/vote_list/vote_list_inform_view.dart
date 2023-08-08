@@ -3,7 +3,7 @@ import 'package:dart_flutter/src/presentation/vote_list/viewmodel/vote_list_cubi
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../res/size_config.dart';
+import '../../../res/config/size_config.dart';
 
 class VoteListInformView extends StatelessWidget {
   const VoteListInformView({Key? key}) : super(key: key);

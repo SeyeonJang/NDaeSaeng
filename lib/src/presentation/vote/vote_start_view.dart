@@ -1,10 +1,8 @@
-import 'package:dart_flutter/res/size_config.dart';
+import 'package:dart_flutter/res/config/size_config.dart';
 import 'package:dart_flutter/src/common/util/analytics_util.dart';
-import 'package:dart_flutter/src/data/model/friend.dart';
-import 'package:dart_flutter/src/presentation/mypage/friends_mock.dart';
+import 'package:dart_flutter/src/domain/entity/friend.dart';
 import 'package:dart_flutter/src/presentation/vote/vimemodel/state/vote_state.dart';
 import 'package:dart_flutter/src/presentation/vote/vimemodel/vote_cubit.dart';
-import 'package:dart_flutter/src/presentation/vote/vote_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -117,7 +115,6 @@ class _VoteStartViewState extends State<VoteStartView> with SingleTickerProvider
                       child: BlocBuilder<VoteCubit, VoteState>(
                         builder: (context, state) {
                           List<Friend> friendList = state.friends;
-                          int friendCount = friendList.length;
                           print(friendList);
                           return Text(
                             "시작하기",
