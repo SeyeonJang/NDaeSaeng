@@ -540,7 +540,7 @@ class VoteFriend extends StatelessWidget {
                 Icon(Icons.person_pin_rounded, size: SizeConfig.defaultSize * 4.5, color: Color(0xff7C83FD),),
                 SizedBox(width: SizeConfig.defaultSize * 0.7),
                 Container(
-                  width: SizeConfig.screenWidth * 0.63,
+                  width: SizeConfig.screenWidth * 0.55,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
