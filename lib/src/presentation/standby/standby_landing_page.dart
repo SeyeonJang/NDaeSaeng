@@ -1865,13 +1865,14 @@ class NotFriendComponent extends StatelessWidget {
                       fontSize: SizeConfig.defaultSize * 1.9,
                       fontWeight: FontWeight.w600,
                     )),
-                    Container(
-                      width: SizeConfig.screenWidth * 0.36,
-                      child: Text("  ${friend.admissionYear.toString().substring(2,4)}학번∙${friend.university?.department}", style: TextStyle(
-                        fontSize: SizeConfig.defaultSize * 1.3,
-                        fontWeight: FontWeight.w500,
-                        overflow: TextOverflow.ellipsis,
-                      )),
+                    Flexible(
+                      child: Container(
+                        child: Text("  ${friend.admissionYear.toString().substring(2,4)}학번∙${friend.university?.department}", style: TextStyle(
+                          fontSize: SizeConfig.defaultSize * 1.3,
+                          fontWeight: FontWeight.w500,
+                          overflow: TextOverflow.ellipsis,
+                        )),
+                      ),
                     ),
                   ],
                 ),
