@@ -6,4 +6,9 @@ class AppPlatformRepositoryImpl implements AppPlatformRepository {
   Future<(String, String)> getAppVersion() async {
     return await FirebaseRemoteConfigRemoteDatasource.getAppVersion();
   }
+
+  @override
+  Future<String> getUpdateComment() async {
+    return await FirebaseRemoteConfigRemoteDatasource.getUpdateComment();
+  }
 }
