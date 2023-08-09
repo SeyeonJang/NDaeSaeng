@@ -13,7 +13,12 @@ class SupabaseRemoteDatasource {
     return _supabase.storage.from(dbName).getPublicUrl(filePath);
   }
 
-  static Future<List<FileObject>> removeFile(String dbName, String filePath) {
-    return _supabase.storage.from(dbName).remove([filePath]);
+  static Future<List<FileObject>> removeFile(String dbName, String filePath) async {
+     List<FileObject> ssadf = await _supabase.storage.from(dbName).remove([filePath]);
+     for (var s in ssadf) {
+       print(s.toString());
+       print(s.name);
+     }
+     return ssadf;
   }
 }

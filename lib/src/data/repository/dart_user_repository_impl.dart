@@ -67,8 +67,8 @@ class DartUserRepositoryImpl implements UserRepository {
   }
 
   @override
-  removeProfileImage(String userId) {
-    SupabaseRemoteDatasource.removeFile(PROFILE_STORAGE_NAME, "/${userId}");
+  removeProfileImage(String userId) async {
+    await SupabaseRemoteDatasource.removeFile(PROFILE_STORAGE_NAME, "${userId}");
   }
 }
 

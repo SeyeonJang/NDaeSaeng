@@ -214,28 +214,33 @@ class _MyPageLandingViewState extends State<MyPageLandingView> {
 
         // =================================================================
 
-        // Padding( // TODO : 학생증
-        //   padding: EdgeInsets.symmetric(
-        //       // vertical: SizeConfig.defaultSize,
-        //       horizontal: SizeConfig.defaultSize * 0.5),
-        //   child: Container(
-        //     width: SizeConfig.screenWidth,
-        //     height: SizeConfig.defaultSize * 5,
-        //     decoration: BoxDecoration(
-        //       color: Colors.white,
-        //       borderRadius: BorderRadius.circular(10),
-        //       border: Border.all(width: 1.5, color: Color(0xff7C83FD))
-        //     ),
-        //     child: Padding(
-        //       padding: EdgeInsets.only(left: SizeConfig.defaultSize),
-        //       child: Row(
-        //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        //         children: [
-        //           Text("지금 학생증 인증하면 프로필배지를 붙여준다고?", style: TextStyle(
-        //             fontSize: SizeConfig.defaultSize * 1.3
-        //           ),),
-        //           IconButton(onPressed: () {}, icon: Icon(Icons.arrow_right_alt_rounded))
-        //         ],
+        // InkWell(
+        //   onTap: () {
+        //
+        //   },
+        //   child: Padding( // TODO : 학생증
+        //     padding: EdgeInsets.symmetric(
+        //         // vertical: SizeConfig.defaultSize,
+        //         horizontal: SizeConfig.defaultSize * 0.5),
+        //     child: Container(
+        //       width: SizeConfig.screenWidth,
+        //       height: SizeConfig.defaultSize * 4.5,
+        //       decoration: BoxDecoration(
+        //         color: Colors.white,
+        //         borderRadius: BorderRadius.circular(10),
+        //         border: Border.all(width: 1.5, color: Color(0xff7C83FD))
+        //       ),
+        //       child: Padding(
+        //         padding: EdgeInsets.only(left: SizeConfig.defaultSize * 1.5, right: SizeConfig.defaultSize * 1.5),
+        //         child: Row(
+        //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        //           children: [
+        //             Text("지금 학생증 인증하면 프로필배지를 붙여드려요!", style: TextStyle(
+        //               fontSize: SizeConfig.defaultSize * 1.4
+        //             ),),
+        //             Icon(Icons.arrow_right_alt_rounded)
+        //           ],
+        //         ),
         //       ),
         //     ),
         //   ),

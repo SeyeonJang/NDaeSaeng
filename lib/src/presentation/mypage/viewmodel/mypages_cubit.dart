@@ -68,7 +68,9 @@ class MyPagesCubit extends Cubit<MyPagesState> {
   }
 
   String getProfileImageUrl(String userId) {
-    return _userUseCase.getProfileImageUrl(userId);
+    // return _userUseCase.getProfileImageUrl(userId);
+    String profileImageUrl = state.userResponse.user!.profileImageUrl ?? "DEFAULT";
+    return profileImageUrl;
   }
 
   void setMyLandPage() {

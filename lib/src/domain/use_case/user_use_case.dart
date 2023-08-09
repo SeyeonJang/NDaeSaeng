@@ -32,15 +32,24 @@ class UserUseCase {
   }
 
   String getProfileImageUrl(String userId) {
-    return _dartUserRepository.getProfileImageUrl(userId);
+    // return _dartUserRepository.getProfileImageUrl(userId);
+    String url = _dartUserRepository.getProfileImageUrl(userId);
+    print("a-------------------3-31-14-214-213-12-214- ::::: $url");
+    return url;
   }
 
   Future<String> uploadProfileImage(File file, String userId) async {
     try {
       _dartUserRepository.removeProfileImage(userId);
-    } catch(e) {
+    } catch(e, trace) {
+      print(e);
+      print(trace);
     }
-    return _dartUserRepository.uploadProfileImage(file, userId);
+    // return _dartUserRepository.uploadProfileImage(file, userId);
+    await _dartUserRepository.uploadProfileImage(file, userId);
+    String url = await _dartUserRepository.getProfileImageUrl(userId);
+    print("à--------------------------------------------- $url");
+    return url;
   }
 
   void cleanUpUserResponseCache() {
