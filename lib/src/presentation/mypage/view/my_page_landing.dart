@@ -105,6 +105,8 @@ class MyPageLandingView extends StatelessWidget {
                                                 fontSize: SizeConfig.defaultSize * 1.5,
                                                 color: Colors.white,
                                               ),),
+                                            // SizedBox(width: SizeConfig.defaultSize * 0.6),
+                                            // Image.asset("assets/images/check_me.png", width: SizeConfig.defaultSize * 1.2), // TODO : 학생증 인증했을 떄 인증배지 구현
                                           ]
                                         );
                                       }
@@ -197,23 +199,26 @@ class MyPageLandingView extends StatelessWidget {
           child: Padding(
               padding: EdgeInsets.symmetric(
                   vertical: SizeConfig.defaultSize,
-                  horizontal: SizeConfig.defaultSize * 1.5),
+                  horizontal: SizeConfig.defaultSize * 1.1),
               child: Column(
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text("내 친구",
-                        style: TextStyle(
-                          fontWeight: FontWeight.w700,
-                          fontSize: SizeConfig.defaultSize * 1.7,
-                          color: Color(0xff7C83FD)
-                        ),),
-                      BlocBuilder<MyPagesCubit, MyPagesState>(
-                          builder: (context, state) {
-                            return openAddFriends(myCode: state.userResponse.user?.recommendationCode ?? '내 코드가 없어요!');
-                          }),
-                    ],
+                  Padding(
+                    padding: EdgeInsets.only(left: SizeConfig.defaultSize * 0.2, right: SizeConfig.defaultSize * 0.2),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text("내 친구",
+                          style: TextStyle(
+                            fontWeight: FontWeight.w700,
+                            fontSize: SizeConfig.defaultSize * 1.7,
+                            color: Color(0xff7C83FD)
+                          ),),
+                        BlocBuilder<MyPagesCubit, MyPagesState>(
+                            builder: (context, state) {
+                              return openAddFriends(myCode: state.userResponse.user?.recommendationCode ?? '내 코드가 없어요!');
+                            }),
+                      ],
+                    ),
                   ),
                   SizedBox(height: SizeConfig.defaultSize * 1.5,),
                   BlocBuilder<MyPagesCubit,MyPagesState>(
@@ -239,19 +244,22 @@ class MyPageLandingView extends StatelessWidget {
           child: Padding(
             padding: EdgeInsets.symmetric(
                 vertical: SizeConfig.defaultSize,
-                horizontal: SizeConfig.defaultSize * 1.5),
+                horizontal: SizeConfig.defaultSize * 1.1),
             child: Column(
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text("알 수도 있는 친구",
-                        style: TextStyle(
-                          fontWeight: FontWeight.w700,
-                          fontSize: SizeConfig.defaultSize * 1.7,
-                          color: Color(0xff7C83FD)
-                        ),),
-                    ],
+                  Padding(
+                    padding: EdgeInsets.only(left: SizeConfig.defaultSize * 0.2, right: SizeConfig.defaultSize * 0.2),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text("알 수도 있는 친구",
+                          style: TextStyle(
+                            fontWeight: FontWeight.w700,
+                            fontSize: SizeConfig.defaultSize * 1.7,
+                            color: Color(0xff7C83FD)
+                          ),),
+                      ],
+                    ),
                   ),
                   SizedBox(height: SizeConfig.defaultSize * 2 ,),
                   BlocBuilder<MyPagesCubit,MyPagesState>(
@@ -624,7 +632,7 @@ class NotFriendComponent extends StatelessWidget {
                                 overflow: TextOverflow.ellipsis,
                               )),
                               // SizedBox(width: SizeConfig.defaultSize * 0.35),
-                              // Image.asset("assets/images/check.png", width: SizeConfig.defaultSize * 1.2), // TODO : 학생증 인증했을 떄 인증배지 구현
+                              // Image.asset("assets/images/check_me.png", width: SizeConfig.defaultSize * 1.2), // TODO : 학생증 인증했을 떄 인증배지 구현
                             ],
                           ),
                           SizedBox(height: SizeConfig.defaultSize * 0.4,),
