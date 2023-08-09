@@ -65,6 +65,11 @@ class DartUserRepositoryImpl implements UserRepository {
         UserRequestDto.fromUserResponse(user)
     )).newUserResponse();
   }
+
+  @override
+  removeProfileImage(String userId) {
+    SupabaseRemoteDatasource.removeFile(PROFILE_STORAGE_NAME, "/${userId}");
+  }
 }
 
 class UserResponseCache extends MyCache {

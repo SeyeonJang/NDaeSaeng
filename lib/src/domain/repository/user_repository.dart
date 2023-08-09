@@ -11,5 +11,6 @@ abstract class UserRepository {
   Future<UserResponse> myInfo();
   void cleanUpUserResponseCache();
   Future<String> uploadProfileImage(File file, String userId);
+  removeProfileImage(String userId);
   String getProfileImageUrl(String userId);
 }
