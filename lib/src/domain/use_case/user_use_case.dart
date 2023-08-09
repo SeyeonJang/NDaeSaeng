@@ -27,8 +27,8 @@ class UserUseCase {
     _dartUserRepository.logout();
   }
 
-  Future<UserResponse> putMyInfo(UserResponse user) {
-    return _dartUserRepository.putMyInfo(user);
+  Future<UserResponse> patchMyInfo(UserResponse user) {
+    return _dartUserRepository.patchMyInfo(user);
   }
 
   String getProfileImageUrl(String userId) {

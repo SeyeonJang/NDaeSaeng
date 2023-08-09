@@ -4,10 +4,11 @@ import 'package:dart_flutter/res/environment/app_environment.dart';
 import 'package:dart_flutter/src/data/model/friend_dto.dart';
 import 'package:dart_flutter/src/data/model/question_dto.dart';
 import 'package:dart_flutter/src/data/model/university_dto.dart';
+import 'package:dart_flutter/src/data/model/user_request_dto.dart';
 
 import '../../common/util/HttpUtil.dart';
 import '../../data/model/dart_auth_dto.dart';
-import '../../data/model/user_request_dto.dart';
+import '../../data/model/user_signup_request_dto.dart';
 import '../../data/model/user_response_dto.dart';
 import '../../data/model/vote_request_dto.dart';
 
@@ -65,7 +66,7 @@ class DartApiRemoteDataSource {
   }
 
   /// User: 회원가입 요청
-  static Future<UserResponseDto> postUserSignup(UserRequestDto user) async {
+  static Future<UserResponseDto> postUserSignup(UserSignupRequestDto user) async {
     const path = '/v1/users/signup';
     final body = user.toJson();
     print(body.toString());
@@ -92,10 +93,10 @@ class DartApiRemoteDataSource {
     return UserResponseDto.fromJson(jsonResponse);
   }
 
-  // User: 내 정보 갱신하기
-  static Future<UserResponseDto> putMyInformation(UserResponseDto userResponseDto) async {
+  // User: 내 정보 수정하기
+  static Future<UserResponseDto> patchMyInformation(UserRequestDto user) async {
     const path = '/v1/users/me';
-    final body = userResponseDto.toJson();
+    final body = user.toBody();
     final response = await _httpUtil.request().put(path, data: body);
 
     final jsonResponse = json.decode(response.toString());

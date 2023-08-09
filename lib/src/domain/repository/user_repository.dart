@@ -5,7 +5,7 @@ import 'package:dart_flutter/src/domain/entity/user_response.dart';
 
 abstract class UserRepository {
   Future<UserResponse> signup(UserRequest user);
-  Future<UserResponse> putMyInfo(UserResponse user);
+  Future<UserResponse> patchMyInfo(UserResponse user);
   void logout();
   Future<void> withdrawal();
   Future<UserResponse> myInfo();
