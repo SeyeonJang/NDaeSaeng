@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dart_flutter/src/domain/entity/friend.dart';
 import 'package:dart_flutter/src/domain/entity/user_response.dart';
 import 'package:dart_flutter/src/domain/use_case/friend_use_case.dart';
@@ -57,6 +59,16 @@ class MyPagesCubit extends Cubit<MyPagesState> {
         state.isLoading = false;
         emit(state.copy());
     }
+  }
+
+  void uploadProfileImage(File file, String userId) async {
+    print(state.userResponse.toString());
+    // String userId = state.userResponse.user!.id.toString();
+    _userUseCase.uploadProfileImage(file, userId);
+  }
+
+  String getProfileImageUrl(String userId) {
+    return _userUseCase.getProfileImageUrl(userId);
   }
 
   void setMyLandPage() {

@@ -160,6 +160,7 @@ class _VoteViewState extends State<VoteView> with SingleTickerProviderStateMixin
                                 gender: friend1.gender!,
                                 school: friend1.university!.name,
                                 disabledFunction: state.isLoading,
+                                profileImageUrl: friend1.profileImageUrl ?? "DEFAULT",
                             ),
                             ChoiceFriendButton(userId: friend2.userId!, name: friend2.name ?? "XXX", enterYear: friend2.admissionYear.toString().substring(2,4) ?? "00", department: friend2.university?.department ?? "XXXX학과",
                                 questionId: question.questionId!,
@@ -172,6 +173,7 @@ class _VoteViewState extends State<VoteView> with SingleTickerProviderStateMixin
                                 gender: friend2.gender!,
                                 school: friend2.university!.name,
                                 disabledFunction: state.isLoading,
+                                profileImageUrl: friend2.profileImageUrl ?? "DEFAULT",
                             ),
                           ],
                         ),
@@ -190,6 +192,7 @@ class _VoteViewState extends State<VoteView> with SingleTickerProviderStateMixin
                                 gender: friend3.gender!,
                                 school: friend3.university!.name,
                                 disabledFunction: state.isLoading,
+                                profileImageUrl: friend3.profileImageUrl ?? "DEFAULT",
                             ),
                             ChoiceFriendButton(userId: friend4.userId!, name: friend4.name ?? "XXX", enterYear: friend4.admissionYear.toString().substring(2,4) ?? "00", department: friend4.university?.department ?? "XXXX학과",
                                 questionId: question.questionId!,
@@ -202,6 +205,7 @@ class _VoteViewState extends State<VoteView> with SingleTickerProviderStateMixin
                                 gender: friend4.gender!,
                                 school: friend4.university!.name,
                                 disabledFunction: state.isLoading,
+                                profileImageUrl: friend4.profileImageUrl ?? "DEFAULT",
                             ),
                           ],
                         ),
@@ -312,6 +316,7 @@ class ChoiceFriendButton extends StatefulWidget {
   final String question;
   final String gender;
   final String school;
+  final String profileImageUrl;
 
   const ChoiceFriendButton({
     super.key,
@@ -331,7 +336,8 @@ class ChoiceFriendButton extends StatefulWidget {
     required this.voteIndex,
     required this.question,
     required this.gender,
-    required this.school
+    required this.school,
+    required this.profileImageUrl
   });
 
   @override
@@ -402,6 +408,7 @@ class _ChoiceFriendButtonState extends State<ChoiceFriendButton> {
           ),
             surfaceTintColor: Color(0xff7C83FD).withOpacity(0.1),
             // surfaceTintColor: Color(0xff7C83FD).withOpacity(0.1),
+          padding: EdgeInsets.all(SizeConfig.defaultSize * 1)
         ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -412,22 +419,18 @@ class _ChoiceFriendButtonState extends State<ChoiceFriendButton> {
                   ClipOval(
                     clipBehavior: Clip.antiAlias,
                     child: Container(
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                              colors: [Color(0xff7C83FD), Color(0xff7C83FD)]),
-                          // border: Border.all(
-                          //   color: Colors.amber, //kHintColor, so this should be changed?
-                          // ),
-                          borderRadius: BorderRadius.circular(32),
-                        ),
-                        child: Padding(
-                          padding: EdgeInsets.all(SizeConfig.defaultSize * 0.1),
-                          child: ClipOval(
-                              child: Image.asset('assets/images/profile_mockup.png', width: SizeConfig.defaultSize * 2.3, fit: BoxFit.cover,)
-                          ),
-                        )),
+                      child: widget.profileImageUrl == "DEFAULT"
+                          ? ClipOval(
+                          child: Image.asset('assets/images/profile-mockup2.png', width: SizeConfig.defaultSize * 2.5, fit: BoxFit.cover,)
+                      )
+                          : ClipOval(
+                          child: Image.network(widget.profileImageUrl,
+                            width: SizeConfig.defaultSize * 12,
+                            height: SizeConfig.defaultSize * 12,)
+                      ),
+                    ),
                   ),
-                  SizedBox(width: SizeConfig.defaultSize * 0.5,),
+                  SizedBox(width: SizeConfig.defaultSize * 1,),
                   Text(
                     widget.name,
                     style: TextStyle(

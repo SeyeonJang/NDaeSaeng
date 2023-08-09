@@ -97,7 +97,7 @@ class DartApiRemoteDataSource {
   static Future<UserResponseDto> patchMyInformation(UserRequestDto user) async {
     const path = '/v1/users/me';
     final body = user.toBody();
-    final response = await _httpUtil.request().put(path, data: body);
+    final response = await _httpUtil.request().patch(path, data: body);
 
     final jsonResponse = json.decode(response.toString());
     return UserResponseDto.fromJson(jsonResponse);

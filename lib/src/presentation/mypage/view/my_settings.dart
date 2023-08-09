@@ -10,6 +10,7 @@ import 'package:dart_flutter/src/presentation/mypage/view/my_tos1.dart';
 import 'package:dart_flutter/src/presentation/mypage/view/my_tos2.dart';
 import 'package:dart_flutter/src/presentation/landing/land_pages.dart';
 import 'package:dart_flutter/src/presentation/mypage/viewmodel/mypages_cubit.dart';
+import 'package:dart_flutter/src/presentation/mypage/viewmodel/state/mypages_state.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -31,8 +32,11 @@ class MySettings extends StatelessWidget {
     AnalyticsUtil.logEvent("내정보_설정_접속");
     return Scaffold(
         backgroundColor: Colors.white,
-        body: SafeArea(
-            child: MyPageView(userResponse: userResponse),
+        body: BlocProvider<MyPagesCubit>(
+          create: (context) => MyPagesCubit(),
+            child: SafeArea(
+                child: MyPageView(userResponse: userResponse),
+            )
         ),
     );
   }
@@ -58,6 +62,8 @@ class _MyPageViewState extends State<MyPageView> {
   String get gender => widget.userResponse.user?.gender ?? 'XX';
   String get newGender => getGender(gender);
   String get inviteCode => widget.userResponse.user?.recommendationCode ?? 'XXXXXXXX';
+  String get userId => widget.userResponse.user?.id.toString() ?? '0';
+  String get profileImageUrl => widget.userResponse.user?.profileImageUrl ?? 'www';
 
   void onLogoutButtonPressed(BuildContext context) async {
     // 로그아웃 버튼 연결
@@ -102,10 +108,12 @@ class _MyPageViewState extends State<MyPageView> {
 
   Future<void> _pickImage() async {
     final pickedFile = await ImagePicker().pickImage(source: ImageSource.gallery);
+    AnalyticsUtil.logEvent("내정보_설정_프로필사진터치");
     if (pickedFile != null) {
       setState(() {
         _selectedImage = File(pickedFile.path);
-        print("dd");
+        BlocProvider.of<MyPagesCubit>(context).uploadProfileImage(_selectedImage!, userId);
+        AnalyticsUtil.logEvent("내정보_설정_프로필사진변경");
       });
     }
   }
@@ -139,28 +147,29 @@ class _MyPageViewState extends State<MyPageView> {
             child: ClipOval(
               clipBehavior: Clip.antiAlias,
               child: Container(
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                        colors: [Color(0xff7C83FD), Color(0xff7C83FD)]),
-                    borderRadius: BorderRadius.circular(32),
-                  ),
+                  // decoration: BoxDecoration( // 이미지 겉에 테두리 효과주는 코드
+                  //   gradient: LinearGradient(
+                  //       colors: [Color(0xff7C83FD), Color(0xff7C83FD)]),
+                  //   borderRadius: BorderRadius.circular(32),
+                  // ),
                   child: _selectedImage != null
                       ? Padding(
                         padding: EdgeInsets.all(SizeConfig.defaultSize * 0.1),
                         child: ClipOval(
-                            child: Image.file(
-                            _selectedImage!,
-                            fit: BoxFit.cover,
+                          //   child: Image.file( // 이미지 파일에서 고르는 코드
+                          //   _selectedImage!,
+                          //   fit: BoxFit.cover,
+                          //     width: SizeConfig.defaultSize * 12,
+                          //     height: SizeConfig.defaultSize * 12,
+                          // )
+                            child: Image.network(profileImageUrl,
                               width: SizeConfig.defaultSize * 12,
-                              height: SizeConfig.defaultSize * 12,
-                          )),
+                              height: SizeConfig.defaultSize * 12,)
+                        ),
                       )
-                      : Padding( // 디폴트 프로필사진
-                          padding: EdgeInsets.all(SizeConfig.defaultSize * 0.1),
-                          child: ClipOval(
-                            child: Image.asset('assets/images/profile_mockup.png', width: SizeConfig.defaultSize * 12, fit: BoxFit.cover,)
-                          ),
-                        )
+                      : ClipOval(
+                        child: Image.asset('assets/images/profile-mockup2.png', width: SizeConfig.defaultSize * 12, fit: BoxFit.cover,)
+                      )
               ),
             ),
           ),

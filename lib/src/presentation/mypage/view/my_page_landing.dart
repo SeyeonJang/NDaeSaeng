@@ -1,7 +1,9 @@
+import 'dart:io';
 import 'package:dart_flutter/res/config/size_config.dart';
 import 'package:dart_flutter/src/common/util/analytics_util.dart';
 import 'package:dart_flutter/src/common/util/toast_util.dart';
 import 'package:dart_flutter/src/domain/entity/friend.dart';
+import 'package:dart_flutter/src/domain/entity/user_response.dart';
 import 'package:dart_flutter/src/presentation/mypage/viewmodel/mypages_cubit.dart';
 import 'package:dart_flutter/src/presentation/mypage/viewmodel/state/mypages_state.dart';
 import 'package:flutter/cupertino.dart';
@@ -9,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:share_plus/share_plus.dart';
 
 import 'my_settings.dart';
@@ -29,17 +32,31 @@ class _MyPageLandingState extends State<MyPageLanding> {
         padding: EdgeInsets.symmetric(
             vertical: SizeConfig.defaultSize * 2,
             horizontal: SizeConfig.defaultSize),
-        child: const MyPageLandingView(),
+        child: BlocBuilder<MyPagesCubit, MyPagesState>(
+          builder: (context, state) {
+            final user = state.userResponse;
+            return MyPageLandingView(userResponse: user);
+          }
+        ),
       ),
     );
   }
 }
 
-class MyPageLandingView extends StatelessWidget {
+class MyPageLandingView extends StatefulWidget {
+  final UserResponse userResponse;
 
   const MyPageLandingView({
     super.key,
+    required this.userResponse,
   });
+
+  @override
+  State<MyPageLandingView> createState() => _MyPageLandingViewState();
+}
+
+class _MyPageLandingViewState extends State<MyPageLandingView> {
+  String get profileImageUrl => widget.userResponse.user!.profileImageUrl ?? 'DEFAULT';
 
   @override
   Widget build(BuildContext context) {
@@ -72,10 +89,16 @@ class MyPageLandingView extends StatelessWidget {
                     Row( // 프사 ~ 설정 부분 (위층)
                       children: [
                         SizedBox(width: SizeConfig.defaultSize * 0.3),
-                        ClipOval(
-                            child: Image.asset('assets/images/profile_mockup.png', width: SizeConfig.defaultSize * 5.3, fit: BoxFit.cover,),
+                        profileImageUrl == "DEFAULT"
+                            ? ClipOval(
+                          child: Image.asset('assets/images/profile-mockup3.png', width: SizeConfig.defaultSize * 5.7, fit: BoxFit.cover,),
+                        )
+                            : ClipOval(
+                            child: Image.network(profileImageUrl,
+                              width: SizeConfig.defaultSize * 12,
+                              height: SizeConfig.defaultSize * 12,)
                         ),
-                        SizedBox(width: SizeConfig.defaultSize * 0.9),
+                        SizedBox(width: SizeConfig.defaultSize * 0.6),
                         Expanded(
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -88,7 +111,6 @@ class MyPageLandingView extends StatelessWidget {
                                       builder: (context, state) {
                                         String name = state.userResponse.user?.name ?? "###";
                                         String admissionNumber = "${state.userResponse.user?.admissionYear.toString().substring(2,4)??"##"}학번";
-
                                         return Row(
                                           children: [
                                             SizedBox(width: SizeConfig.defaultSize * 0.5,),
@@ -192,6 +214,33 @@ class MyPageLandingView extends StatelessWidget {
 
         // =================================================================
 
+        // Padding( // TODO : 학생증
+        //   padding: EdgeInsets.symmetric(
+        //       // vertical: SizeConfig.defaultSize,
+        //       horizontal: SizeConfig.defaultSize * 0.5),
+        //   child: Container(
+        //     width: SizeConfig.screenWidth,
+        //     height: SizeConfig.defaultSize * 5,
+        //     decoration: BoxDecoration(
+        //       color: Colors.white,
+        //       borderRadius: BorderRadius.circular(10),
+        //       border: Border.all(width: 1.5, color: Color(0xff7C83FD))
+        //     ),
+        //     child: Padding(
+        //       padding: EdgeInsets.only(left: SizeConfig.defaultSize),
+        //       child: Row(
+        //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        //         children: [
+        //           Text("지금 학생증 인증하면 프로필배지를 붙여준다고?", style: TextStyle(
+        //             fontSize: SizeConfig.defaultSize * 1.3
+        //           ),),
+        //           IconButton(onPressed: () {}, icon: Icon(Icons.arrow_right_alt_rounded))
+        //         ],
+        //       ),
+        //     ),
+        //   ),
+        // ),
+
         SizedBox(height: SizeConfig.defaultSize),
 
         Container(
@@ -224,7 +273,8 @@ class MyPageLandingView extends StatelessWidget {
                   BlocBuilder<MyPagesCubit,MyPagesState>(
                       builder: (context, state) {
                         final friends = state.friends;
-                        return MyFriends(friends: friends, count: friends.length);
+                        final user = state.userResponse;
+                        return MyFriends(friends: friends, count: friends.length, userResponse: user);
                       }
                   ),
                 ],
@@ -265,7 +315,8 @@ class MyPageLandingView extends StatelessWidget {
                   BlocBuilder<MyPagesCubit,MyPagesState>(
                       builder: (context, state) {
                         final friends = state.newFriends;
-                        return NewFriends(friends: friends, count: friends.length);
+                        final user = state.userResponse;
+                        return NewFriends(friends: friends, count: friends.length, userResponse: user,);
                       }
                   ),
                 ],
@@ -281,11 +332,13 @@ class MyPageLandingView extends StatelessWidget {
 class MyFriends extends StatelessWidget {
   final Set<Friend> friends;
   final int count;
+  final UserResponse userResponse;
 
   const MyFriends({
     super.key,
     required this.friends,
     required this.count,
+    required this.userResponse
   });
 
   @override
@@ -304,7 +357,7 @@ class MyFriends extends StatelessWidget {
             // for (var i = friends.iterator ; ; i.moveNext() )
             //     FriendComponent(false, i.current, count),
             for (int i = 0; i < this.count; i++)
-              FriendComponent(false, friendsList[i], count),
+              FriendComponent(false, friendsList[i], count, userResponse),
           ],
         );
       }
@@ -315,11 +368,13 @@ class MyFriends extends StatelessWidget {
 class NewFriends extends StatelessWidget {
   final Set<Friend> friends;
   final int count;
+  final UserResponse userResponse;
 
   const NewFriends({
     super.key,
     required this.friends,
     required this.count,
+    required this.userResponse,
   });
 
   @override
@@ -336,29 +391,37 @@ class NewFriends extends StatelessWidget {
         // for (var i = friends.iterator ; ; i.moveNext() )
         //   FriendComponent(false, i.current, count),
         for (int i = 0; i < count; i++)
-          NotFriendComponent(true, friendsList[i]),
+          NotFriendComponent(true, friendsList[i], userResponse),
       ],
     );
   }
 }
 
-class FriendComponent extends StatelessWidget {
+class FriendComponent extends StatefulWidget {
   late bool isAdd;
   late Friend friend;
   late int count;
+  late UserResponse userResponse;
 
-  FriendComponent(bool isAdd, Friend friend, int count, {super.key}) {
+  FriendComponent(bool isAdd, Friend friend, int count, UserResponse userResponse, {super.key}) {
     this.isAdd = isAdd;
     this.friend = friend;
     this.count = count;
+    this.userResponse = userResponse;
   }
 
+  @override
+  State<FriendComponent> createState() => _FriendComponentState();
+}
+
+class _FriendComponentState extends State<FriendComponent> {
+
   void pressedDeleteButton(BuildContext context, int userId) {
-    BlocProvider.of<MyPagesCubit>(context).pressedFriendDeleteButton(friend);
+    BlocProvider.of<MyPagesCubit>(context).pressedFriendDeleteButton(widget.friend);
   }
 
   void pressedAddButton(BuildContext context, int userId) {
-    BlocProvider.of<MyPagesCubit>(context).pressedFriendAddButton(friend);
+    BlocProvider.of<MyPagesCubit>(context).pressedFriendAddButton(widget.friend);
   }
 
   void showCannotAddFriendToast() {
@@ -373,6 +436,8 @@ class FriendComponent extends StatelessWidget {
     );
   }
 
+  String get profileImageUrl => widget.friend.profileImageUrl ?? 'DEFAULT';
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -384,11 +449,11 @@ class FriendComponent extends StatelessWidget {
             GestureDetector(
               onTap: () {
                 AnalyticsUtil.logEvent("내정보_마이_친구터치", properties: {
-                  "친구 성별": friend.gender=="FEMALE" ? "여자" : "남자",
-                  "친구 학번": friend.admissionYear.toString().substring(2,4),
-                  "친구 학교": friend.university!.name,
-                  "친구 학교코드": friend.university!.id,
-                  "친구 학과": friend.university!.department
+                  "친구 성별": widget.friend.gender=="FEMALE" ? "여자" : "남자",
+                  "친구 학번": widget.friend.admissionYear.toString().substring(2,4),
+                  "친구 학교": widget.friend.university!.name,
+                  "친구 학교코드": widget.friend.university!.id,
+                  "친구 학과": widget.friend.university!.department
                 });
               },
               child: Container(
@@ -398,25 +463,22 @@ class FriendComponent extends StatelessWidget {
                     ClipOval(
                       clipBehavior: Clip.antiAlias,
                       child: Container(
-                          decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                                colors: [Color(0xff7C83FD), Color(0xff7C83FD)]),
-                            // border: Border.all(
-                            //   color: Colors.amber, //kHintColor, so this should be changed?
-                            // ),
-                            borderRadius: BorderRadius.circular(32),
+                          // decoration: BoxDecoration(
+                          //   gradient: LinearGradient(
+                          //       colors: [Color(0xff7C83FD), Color(0xff7C83FD)]),
+                          //   borderRadius: BorderRadius.circular(32),
+                          // ),
+                          child: profileImageUrl == "DEFAULT"
+                              ? ClipOval(
+                            child: Image.asset('assets/images/profile-mockup3.png', width: SizeConfig.defaultSize * 4.5, fit: BoxFit.cover,),
+                          )
+                              : ClipOval(
+                              child: Image.network(profileImageUrl,
+                                width: SizeConfig.defaultSize * 12,
+                                height: SizeConfig.defaultSize * 12,)
                           ),
-                          child: Padding(
-                            padding: EdgeInsets.all(SizeConfig.defaultSize * 0.1),
-                            child: ClipOval(
-                                child: Image.asset('assets/images/profile_mockup.png', width: SizeConfig.defaultSize * 4.4, fit: BoxFit.cover,)
-                            ),
-                          )),
+                      ),
                     ),
-                  //   Text(friend.name ?? "XXX", style: TextStyle(
-                  // fontSize: SizeConfig.defaultSize * 1.9,
-                  //     fontWeight: FontWeight.w600,
-                  //   )),
                     SizedBox(width: SizeConfig.defaultSize * 0.1,),
                     Flexible(
                       child: Column(
@@ -425,12 +487,12 @@ class FriendComponent extends StatelessWidget {
                           Row(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              Text("  ${friend.name} ", style: TextStyle(
+                              Text("  ${widget.friend.name} ", style: TextStyle(
                                 fontSize: SizeConfig.defaultSize * 1.6,
                                 fontWeight: FontWeight.w800,
                                 overflow: TextOverflow.ellipsis,
                               )),
-                              Text("${friend.admissionYear.toString().substring(2,4)}학번", style: TextStyle(
+                              Text("${widget.friend.admissionYear.toString().substring(2,4)}학번", style: TextStyle(
                                 fontSize: SizeConfig.defaultSize * 1.3,
                                 fontWeight: FontWeight.w500,
                                 overflow: TextOverflow.ellipsis,
@@ -441,7 +503,7 @@ class FriendComponent extends StatelessWidget {
                           ),
                           SizedBox(height: SizeConfig.defaultSize * 0.4,),
                           Container(
-                            child: Text("  ${friend.university!.name} ${friend.university?.department}", style: TextStyle(
+                            child: Text("  ${widget.friend.university!.name} ${widget.friend.university?.department}", style: TextStyle(
                               fontSize: SizeConfig.defaultSize * 1.3,
                               fontWeight: FontWeight.w500,
                               overflow: TextOverflow.ellipsis,
@@ -494,15 +556,15 @@ class FriendComponent extends StatelessWidget {
                 }
                 else if (value == 'delete') {
                   AnalyticsUtil.logEvent("내정보_마이_내친구더보기_친구삭제");
-                  if (count >= 5) {
-                    if (isAdd) {
-                      pressedAddButton(context, friend.userId!);
+                  if (widget.count >= 5) {
+                    if (widget.isAdd) {
+                      pressedAddButton(context, widget.friend.userId!);
                     } else {
                       // pressedDeleteButton(context, friend.userId!); // 원래 코드
                       showDialog<String>(
                         context: context,
                         builder: (BuildContext dialogContext) => AlertDialog(
-                          title: Text('\'${friend.name}\' 친구를 삭제하시겠어요?', style: TextStyle(fontSize: SizeConfig.defaultSize * 2),),
+                          title: Text('\'${widget.friend.name}\' 친구를 삭제하시겠어요?', style: TextStyle(fontSize: SizeConfig.defaultSize * 2),),
                           // content: const Text('사용자를 신고하면 Dart에서 빠르게 신고 처리를 해드려요!'),
                           backgroundColor: Colors.white,
                           surfaceTintColor: Colors.white,
@@ -517,7 +579,7 @@ class FriendComponent extends StatelessWidget {
                             TextButton(
                               onPressed: () {
                                 AnalyticsUtil.logEvent("내정보_마이_내친구삭제_삭제확정");
-                                pressedDeleteButton(context, friend.userId!);
+                                pressedDeleteButton(context, widget.friend.userId!);
                                 // BlocProvider.of<MyPagesCubit>(context).pressedFriendDeleteButton(friend);
                                 Navigator.pop(dialogContext); // 팝업 창을 닫는 로직 추가
                               },
@@ -556,22 +618,31 @@ class FriendComponent extends StatelessWidget {
   }
 }
 
-class NotFriendComponent extends StatelessWidget {
+class NotFriendComponent extends StatefulWidget {
   late bool isAdd;
   late Friend friend;
+  late UserResponse userResponse;
 
-  NotFriendComponent(bool isAdd, Friend friend, {super.key}) {
+  NotFriendComponent(bool isAdd, Friend friend, UserResponse userResponse, {super.key}) {
     this.isAdd = isAdd;
     this.friend = friend;
+    this.userResponse = userResponse;
   }
 
+  @override
+  State<NotFriendComponent> createState() => _NotFriendComponentState();
+}
+
+class _NotFriendComponentState extends State<NotFriendComponent> {
   void pressedDeleteButton(BuildContext context, int userId) {
-    BlocProvider.of<MyPagesCubit>(context).pressedFriendDeleteButton(friend);
+    BlocProvider.of<MyPagesCubit>(context).pressedFriendDeleteButton(widget.friend);
   }
 
   void pressedAddButton(BuildContext context, int userId) {
-    BlocProvider.of<MyPagesCubit>(context).pressedFriendAddButton(friend);
+    BlocProvider.of<MyPagesCubit>(context).pressedFriendAddButton(widget.friend);
   }
+
+  String get profileImageUrl => widget.friend.profileImageUrl ?? 'DEFAULT';
 
   @override
   Widget build(BuildContext context) {
@@ -584,11 +655,11 @@ class NotFriendComponent extends StatelessWidget {
             GestureDetector(
               onTap: () {
                 AnalyticsUtil.logEvent("내정보_마이_친구터치", properties: {
-                  "친구 성별": friend.gender=="FEMALE" ? "여자" : "남자",
-                  "친구 학번": friend.admissionYear.toString().substring(2,4),
-                  "친구 학교": friend.university!.name,
-                  "친구 학교코드": friend.university!.id,
-                  "친구 학과": friend.university!.department
+                  "친구 성별": widget.friend.gender=="FEMALE" ? "여자" : "남자",
+                  "친구 학번": widget.friend.admissionYear.toString().substring(2,4),
+                  "친구 학교": widget.friend.university!.name,
+                  "친구 학교코드": widget.friend.university!.id,
+                  "친구 학과": widget.friend.university!.department
                 });
               },
               child: Container(
@@ -598,20 +669,21 @@ class NotFriendComponent extends StatelessWidget {
                     ClipOval(
                       clipBehavior: Clip.antiAlias,
                       child: Container(
-                          decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                                colors: [Color(0xff7C83FD), Color(0xff7C83FD)]),
-                            // border: Border.all(
-                            //   color: Colors.amber, //kHintColor, so this should be changed?
-                            // ),
-                            borderRadius: BorderRadius.circular(32),
+                          // decoration: BoxDecoration(
+                          //   gradient: LinearGradient(
+                          //       colors: [Color(0xff7C83FD), Color(0xff7C83FD)]),
+                          //   borderRadius: BorderRadius.circular(32),
+                          // ),
+                          child: profileImageUrl == "DEFAULT"
+                              ? ClipOval(
+                            child: Image.asset('assets/images/profile-mockup3.png', width: SizeConfig.defaultSize * 4.5, fit: BoxFit.cover,),
+                          )
+                              : ClipOval(
+                              child: Image.network(profileImageUrl,
+                                width: SizeConfig.defaultSize * 12,
+                                height: SizeConfig.defaultSize * 12,)
                           ),
-                          child: Padding(
-                            padding: EdgeInsets.all(SizeConfig.defaultSize * 0.1),
-                            child: ClipOval(
-                                child: Image.asset('assets/images/profile_mockup.png', width: SizeConfig.defaultSize * 4.4, fit: BoxFit.cover,)
-                            ),
-                      )),
+                      ),
                     ),
                     SizedBox(width: SizeConfig.defaultSize * 0.1,),
                     Flexible(
@@ -621,12 +693,12 @@ class NotFriendComponent extends StatelessWidget {
                           Row(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              Text("  ${friend.name} ", style: TextStyle(
+                              Text("  ${widget.friend.name} ", style: TextStyle(
                                 fontSize: SizeConfig.defaultSize * 1.6,
                                 fontWeight: FontWeight.w800,
                                 overflow: TextOverflow.ellipsis,
                               )),
-                              Text("${friend.admissionYear.toString().substring(2,4)}학번", style: TextStyle(
+                              Text("${widget.friend.admissionYear.toString().substring(2,4)}학번", style: TextStyle(
                                 fontSize: SizeConfig.defaultSize * 1.3,
                                 fontWeight: FontWeight.w500,
                                 overflow: TextOverflow.ellipsis,
@@ -637,7 +709,7 @@ class NotFriendComponent extends StatelessWidget {
                           ),
                           SizedBox(height: SizeConfig.defaultSize * 0.4,),
                           Container(
-                              child: Text("  ${friend.university!.name} ${friend.university?.department}", style: TextStyle(
+                              child: Text("  ${widget.friend.university!.name} ${widget.friend.university?.department}", style: TextStyle(
                               fontSize: SizeConfig.defaultSize * 1.3,
                               fontWeight: FontWeight.w500,
                               overflow: TextOverflow.ellipsis,
@@ -702,10 +774,10 @@ class NotFriendComponent extends StatelessWidget {
             ElevatedButton(
               onPressed: () {
                 AnalyticsUtil.logEvent("내정보_마이_알수도있는친구_친구추가");
-                if (isAdd) {
-                  pressedAddButton(context, friend.userId!);
+                if (widget.isAdd) {
+                  pressedAddButton(context, widget.friend.userId!);
                 } else {
-                  pressedDeleteButton(context, friend.userId!);
+                  pressedDeleteButton(context, widget.friend.userId!);
                 }
               },
               style: ElevatedButton.styleFrom(
@@ -714,7 +786,7 @@ class NotFriendComponent extends StatelessWidget {
                   borderRadius: BorderRadius.circular(15), // 모서리 둥글기 설정
                 ),
               ),
-              child: Text(isAdd?"추가":"삭제", style: TextStyle(
+              child: Text(widget.isAdd?"추가":"삭제", style: TextStyle(
                 fontSize: SizeConfig.defaultSize * 1.5,
                 fontWeight: FontWeight.w500,
                 color: Colors.white,

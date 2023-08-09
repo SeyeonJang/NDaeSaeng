@@ -50,8 +50,8 @@ class DartUserRepositoryImpl implements UserRepository {
   }
 
   @override
-  Future<String> uploadProfileImage(File file) async {
-    String url = await SupabaseRemoteDatasource.uploadFileToStorage(PROFILE_STORAGE_NAME, "", file);
+  Future<String> uploadProfileImage(File file, String userId) async {
+    String url = await SupabaseRemoteDatasource.uploadFileToStorage(PROFILE_STORAGE_NAME, "/${userId}", file);
     UserRequestDto userRequestDto = UserRequestDto(
       profileImageUrl: url,
     );

@@ -6,6 +6,8 @@ class Friend {
   int? admissionYear;
   String? gender;
   University? university;
+  String? profileImageUrl;
+  String? nickname;
 
   Friend({this.userId, this.name, this.admissionYear, this.gender, this.university});
 
