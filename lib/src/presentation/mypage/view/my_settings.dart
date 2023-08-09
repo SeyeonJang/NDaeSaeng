@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:dart_flutter/src/common/auth/auth_cubit.dart';
+import 'package:dart_flutter/src/common/auth/dart_auth_cubit.dart';
 import 'package:dart_flutter/src/common/util/analytics_util.dart';
 import 'package:dart_flutter/src/common/util/toast_util.dart';
 import 'package:dart_flutter/src/domain/entity/user_response.dart';
@@ -59,7 +59,7 @@ class _MyPageViewState extends State<MyPageView> {
 
   void onLogoutButtonPressed(BuildContext context) async {
     // 로그아웃 버튼 연결
-    await BlocProvider.of<AuthCubit>(context).kakaoLogout();
+    await BlocProvider.of<DartAuthCubit>(context).kakaoLogout();
     Navigator.push(context, MaterialPageRoute(builder: (context) => const LandPages()));
   }
 
@@ -427,7 +427,7 @@ class _MyPageViewState extends State<MyPageView> {
                                             onPressed: textController.text == '회원탈퇴를 원해요' ? () async {
                                               AnalyticsUtil.logEvent("내정보_설정_회원탈퇴_탈퇴확정");
                                               Navigator.pop(dialogContext);
-                                              await BlocProvider.of<AuthCubit>(context).kakaoWithdrawal();
+                                              await BlocProvider.of<DartAuthCubit>(context).kakaoWithdrawal();
                                               ToastUtil.showToast("회원탈퇴가 완료되었습니다.\n잠시후 앱이 종료됩니다.");
                                               await Future.delayed(const Duration(seconds: 2));
                                               restart();
@@ -475,7 +475,7 @@ class _MyPageViewState extends State<MyPageView> {
                                       AnalyticsUtil.logEvent("내정보_설정_로그아웃_로그아웃확정");
                                       Navigator.pop(dialogContext);
                                       ToastUtil.showToast("로그아웃이 완료되었습니다.\n잠시후 앱이 종료됩니다.");
-                                      BlocProvider.of<AuthCubit>(context).kakaoLogout();
+                                      BlocProvider.of<DartAuthCubit>(context).kakaoLogout();
                                       await Future.delayed(const Duration(seconds: 2));
                                       restart();
                                     },
