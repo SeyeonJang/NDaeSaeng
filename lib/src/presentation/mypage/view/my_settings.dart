@@ -314,6 +314,12 @@ class _MyPageViewState extends State<MyPageView> {
                       "회원 정보 타입": title, "회원 정보 내용" : "이름"
                     });
                   }
+                  if (title == "초대코드") {
+                    String myCodeCopy = value;
+                    Clipboard.setData(ClipboardData(text: value));
+                    ToastUtil.showToast("내 코드가 복사되었어요!");
+                    AnalyticsUtil.logEvent("내정보_설정_내코드터치");
+                  }
                 },
                 child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
             Text(title,
