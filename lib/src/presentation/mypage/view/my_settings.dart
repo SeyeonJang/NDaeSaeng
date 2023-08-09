@@ -63,7 +63,8 @@ class _MyPageViewState extends State<MyPageView> {
   String get newGender => getGender(gender);
   String get inviteCode => widget.userResponse.user?.recommendationCode ?? 'XXXXXXXX';
   String get userId => widget.userResponse.user?.id.toString() ?? '0';
-  String get profileImageUrl => widget.userResponse.user?.profileImageUrl ?? 'www';
+  String get profileImageUrl => widget.userResponse.user?.profileImageUrl ?? 'DEFAULT';
+  String get nickname => widget.userResponse.user?.nickname ?? 'DEFAULT';
 
   void onLogoutButtonPressed(BuildContext context) async {
     // 로그아웃 버튼 연결
@@ -152,7 +153,7 @@ class _MyPageViewState extends State<MyPageView> {
                   //       colors: [Color(0xff7C83FD), Color(0xff7C83FD)]),
                   //   borderRadius: BorderRadius.circular(32),
                   // ),
-                  child: _selectedImage != null
+                  child: profileImageUrl != "DEFAULT"
                       ? Padding(
                         padding: EdgeInsets.all(SizeConfig.defaultSize * 0.1),
                         child: ClipOval(
@@ -183,6 +184,7 @@ class _MyPageViewState extends State<MyPageView> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               _infoSectionItem(title: "이름", value: name),
+              _infoSectionItem(title: "닉네임", value: nickname),
               _infoSectionItem(title: "학교", value: universityName),
               _infoSectionItem(title: "학과", value: department),
               _infoSectionItem(title: "학번", value: newAdmissionNumber),
