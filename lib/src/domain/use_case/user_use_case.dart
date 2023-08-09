@@ -35,7 +35,11 @@ class UserUseCase {
     return _dartUserRepository.getProfileImageUrl(userId);
   }
 
-  Future<String> uploadProfileImage(File file) async {
+  Future<String> uploadProfileImage(File file, String userId) async {
+    try {
+      _dartUserRepository.removeProfileImage(userId);
+    } catch(e) {
+    }
     return _dartUserRepository.uploadProfileImage(file);
   }
 
