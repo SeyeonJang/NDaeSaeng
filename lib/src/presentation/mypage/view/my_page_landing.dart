@@ -199,7 +199,7 @@ class _MyPageLandingViewState extends State<MyPageLandingView> {
                           Text("나의 Points", style: TextStyle(
                             fontSize: SizeConfig.defaultSize * 1.4
                           ),),
-                          Text(widget.userResponse.user!.point.toString(), style: TextStyle(
+                          Text(widget.userResponse.user!.point.toString() ?? "불러오는중", style: TextStyle(
                               fontSize: SizeConfig.defaultSize * 1.4
                           ))
                           // TODO : Point 사용 내역
