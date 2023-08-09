@@ -9,10 +9,12 @@ import 'package:dart_flutter/src/presentation/mypage/view/my_opinion.dart';
 import 'package:dart_flutter/src/presentation/mypage/view/my_tos1.dart';
 import 'package:dart_flutter/src/presentation/mypage/view/my_tos2.dart';
 import 'package:dart_flutter/src/presentation/landing/land_pages.dart';
+import 'package:dart_flutter/src/presentation/mypage/viewmodel/mypages_cubit.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:restart_app/restart_app.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -96,6 +98,18 @@ class _MyPageViewState extends State<MyPageView> {
   int mbtiIndex3 = 0;
   int mbtiIndex4 = 0;
 
+  File? _selectedImage;
+
+  Future<void> _pickImage() async {
+    final pickedFile = await ImagePicker().pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      setState(() {
+        _selectedImage = File(pickedFile.path);
+        print("dd");
+      });
+    }
+  }
+
   Widget _topBarSection(BuildContext context) => Row(children: [
         IconButton(
             onPressed: () {
@@ -116,6 +130,41 @@ class _MyPageViewState extends State<MyPageView> {
     child: Column(
       children: [
         _topBarSection(context),
+        const DtFlexSpacer(30),
+        Center(
+          child: GestureDetector(
+            onTap: () {
+              _pickImage();
+            },
+            child: ClipOval(
+              clipBehavior: Clip.antiAlias,
+              child: Container(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                        colors: [Color(0xff7C83FD), Color(0xff7C83FD)]),
+                    borderRadius: BorderRadius.circular(32),
+                  ),
+                  child: _selectedImage != null
+                      ? Padding(
+                        padding: EdgeInsets.all(SizeConfig.defaultSize * 0.1),
+                        child: ClipOval(
+                            child: Image.file(
+                            _selectedImage!,
+                            fit: BoxFit.cover,
+                              width: SizeConfig.defaultSize * 12,
+                              height: SizeConfig.defaultSize * 12,
+                          )),
+                      )
+                      : Padding( // 디폴트 프로필사진
+                          padding: EdgeInsets.all(SizeConfig.defaultSize * 0.1),
+                          child: ClipOval(
+                            child: Image.asset('assets/images/profile_mockup.png', width: SizeConfig.defaultSize * 12, fit: BoxFit.cover,)
+                          ),
+                        )
+              ),
+            ),
+          ),
+        ),
         const DtFlexSpacer(30),
         Padding(
           padding: EdgeInsets.symmetric(
