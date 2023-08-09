@@ -1,55 +1,38 @@
-import 'package:dart_flutter/src/domain/entity/user_request.dart';
+import 'package:dart_flutter/src/domain/entity/user_response.dart';
 
 class UserRequestDto {
-  final int univId;
-  final int admissionYear, birthYear;
-  final String name, phone, gender;
+  String? nickname;
+  String? profileImageUrl;
 
-  UserRequestDto({
-    required this.univId,
-    required this.admissionYear,
-    required this.birthYear,
-    required this.name,
-    required this.phone,
-    required this.gender
-  });
+  UserRequestDto({this.nickname, this.profileImageUrl});
 
-  UserRequestDto.from(Map<String, dynamic> json)
-      : univId = json['univId'],
-        admissionYear = json['admissionYear'],
-        birthYear = json['birthYear'],
-        name = json['name'],
-        phone = json['phone'],
-        gender = json['gender'];
+  UserRequestDto.fromJson(Map<String, dynamic> json) {
+    nickname = json['nickname'];
+    profileImageUrl = json['profileImageUrl'];
+  }
 
   Map<String, dynamic> toJson() {
-    return {
-      'universityId': univId,
-      'admissionYear': admissionYear,
-      'birthYear': birthYear,
-      'name': name,
-      'phone': phone,
-      'gender': gender
-    };
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['nickname'] = nickname;
+    data['profileImageUrl'] = profileImageUrl;
+    return data;
   }
 
-  UserRequest newUserRequest() {
-    return UserRequest(univId: univId, admissionYear: admissionYear, birthYear: birthYear, name: name, phone: phone, gender: gender);
+  Map<String, dynamic> toBody() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    if (nickname != null || nickname == "") {
+      data['nickname'] = nickname;
+    }
+    if (profileImageUrl != null || profileImageUrl == "") {
+      data['profileImageUrl'] = profileImageUrl;
+    }
+    return data;
   }
 
-  static UserRequestDto fromUserRequest(UserRequest userRequest) {
+  static UserRequestDto fromUserResponse(UserResponse userResponse) {
     return UserRequestDto(
-      univId: userRequest.univId,
-      admissionYear: userRequest.admissionYear,
-      birthYear: userRequest.birthYear,
-      name: userRequest.name,
-      phone: userRequest.phone,
-      gender: userRequest.gender
+      nickname: userResponse.user!.nickname,
+      profileImageUrl: userResponse.user!.profileImageUrl
     );
-  }
-
-  @override
-  String toString() {
-    return 'UserRequest{univId: $univId, admissionYear: $admissionYear, birthYear: $birthYear, name: $name, phone: $phone, gender: $gender}';
   }
 }

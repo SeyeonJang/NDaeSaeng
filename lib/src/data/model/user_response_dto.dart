@@ -48,6 +48,13 @@ class UserResponseDto {
     );
   }
 
+  static UserResponseDto fromUserResponse(UserResponse userResponse) {
+    return UserResponseDto(
+      user: UserDto.fromUser(userResponse.user!),
+      university: UniversityDto.fromUniversity(userResponse.university!),
+    );
+  }
+
   @override
   String toString() {
     return 'UserResponse{user: $user, university: $university}';

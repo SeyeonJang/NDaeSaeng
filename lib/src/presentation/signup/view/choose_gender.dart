@@ -1,7 +1,7 @@
 import 'package:dart_flutter/src/common/util/analytics_util.dart';
 
 import '../../../../res/config/size_config.dart';
-import 'package:dart_flutter/src/common/auth/auth_cubit.dart';
+import 'package:dart_flutter/src/common/auth/dart_auth_cubit.dart';
 import 'package:dart_flutter/src/presentation/signup/view/tos1.dart';
 import 'package:dart_flutter/src/presentation/signup/view/tos2.dart';
 import 'package:dart_flutter/src/presentation/signup/viewmodel/signup_cubit.dart';
@@ -131,7 +131,7 @@ class _ChooseGenderState extends State<ChooseGender> {
                     onPressed: () {
                       AnalyticsUtil.logEvent("회원가입_성별_다음");
                       BlocProvider.of<SignupCubit>(context).stepGender(selectedGender);  // TODO 성별선택 controller 를 통해 사용자 입력을 받아오기
-                      BlocProvider.of<AuthCubit>(context).doneSignup();
+                      BlocProvider.of<DartAuthCubit>(context).doneSignup();
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Color(0xff7C83FD),

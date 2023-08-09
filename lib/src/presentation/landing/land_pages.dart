@@ -1,7 +1,7 @@
 import 'dart:io';
 
-import 'package:dart_flutter/src/common/auth/auth_cubit.dart';
-import 'package:dart_flutter/src/common/auth/state/auth_state.dart';
+import 'package:dart_flutter/src/common/auth/dart_auth_cubit.dart';
+import 'package:dart_flutter/src/common/auth/state/dart_auth_state.dart';
 import 'package:dart_flutter/src/common/util/analytics_util.dart';
 import 'package:dart_flutter/src/presentation/landing/view/land_page.dart';
 import 'package:dart_flutter/src/presentation/signup/signup_pages.dart';
@@ -31,14 +31,14 @@ class _LandPagesState extends State<LandPages> {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        BlocBuilder<AuthCubit, AuthState>(builder: (context, state) {
+        BlocBuilder<DartAuthCubit, DartAuthState>(builder: (context, state) {
           if (state.step == AuthStep.land) {
             if (state.tutorialStatus == TutorialStatus.notShown) {
               AnalyticsUtil.logEvent("온보딩슬라이드_접속");
               return TutorialSlide(
                 onTutorialFinished: () {
                   // 튜토리얼이 완료되면 AuthCubit을 사용하여 상태 변경
-                  BlocProvider.of<AuthCubit>(context).markTutorialShown();
+                  BlocProvider.of<DartAuthCubit>(context).markTutorialShown();
                 },
               );
             }
@@ -49,13 +49,14 @@ class _LandPagesState extends State<LandPages> {
             // 소셜 로그인을 했지만, 아직 우리 회원가입은 안햇을 때
             return BlocProvider<SignupCubit>(
               create: (BuildContext context) => SignupCubit()..initState(
-                BlocProvider.of<AuthCubit>(context).state.memo,
-                BlocProvider.of<AuthCubit>(context).state.loginType.toString(),
+                BlocProvider.of<DartAuthCubit>(context).state.memo,
+                BlocProvider.of<DartAuthCubit>(context).state.loginType.toString(),
               ),
               child: const SignupPages(),
             );
           }
           if (state.step == AuthStep.login) {
+            BlocProvider.of<DartAuthCubit>(context).setAnalyticsUserInformation();
             return BlocProvider<StandbyCubit>(
               create: (BuildContext context) => StandbyCubit()..initPages(),
               child: const StandbyLoading(),
@@ -65,7 +66,7 @@ class _LandPagesState extends State<LandPages> {
         }),
 
         // update 여부 확인
-        BlocBuilder<AuthCubit, AuthState> (
+        BlocBuilder<DartAuthCubit, DartAuthState> (
           builder: (context, state) {
             if (state.appVersionStatus.isUpdate) {
               return Container(
@@ -139,7 +140,7 @@ class _LandPagesState extends State<LandPages> {
           }
         ),
 
-        BlocBuilder<AuthCubit, AuthState>(
+        BlocBuilder<DartAuthCubit, DartAuthState>(
           builder: (context, state) {
             if (!state.isLoading) {
               return const SizedBox.shrink();

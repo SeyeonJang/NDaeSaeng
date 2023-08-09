@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dart_flutter/src/data/repository/dart_user_repository_impl.dart';
 import 'package:dart_flutter/src/domain/entity/user_request.dart';
 import 'package:dart_flutter/src/domain/entity/user_response.dart';
@@ -6,8 +8,11 @@ import 'package:dart_flutter/src/domain/repository/user_repository.dart';
 class UserUseCase {
   final UserRepository _dartUserRepository = DartUserRepositoryImpl();
 
-  Future<UserResponse> myInfo() {
-    return _dartUserRepository.myInfo();
+  Future<UserResponse> myInfo() async {
+    // return _dartUserRepository.myInfo();
+    var userResponse = await _dartUserRepository.myInfo();
+    print(userResponse.toString());
+    return userResponse;
   }
 
   Future<UserResponse> signup(UserRequest user) {
@@ -20,6 +25,18 @@ class UserUseCase {
 
   void logout() {
     _dartUserRepository.logout();
+  }
+
+  Future<UserResponse> patchMyInfo(UserResponse user) {
+    return _dartUserRepository.patchMyInfo(user);
+  }
+
+  String getProfileImageUrl(String userId) {
+    return _dartUserRepository.getProfileImageUrl(userId);
+  }
+
+  Future<String> uploadProfileImage(File file) async {
+    return _dartUserRepository.uploadProfileImage(file);
   }
 
   void cleanUpUserResponseCache() {

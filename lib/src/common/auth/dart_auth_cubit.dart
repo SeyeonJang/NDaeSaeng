@@ -1,4 +1,4 @@
-import 'package:dart_flutter/src/common/auth/state/auth_state.dart';
+import 'package:dart_flutter/src/common/auth/state/dart_auth_state.dart';
 import 'package:dart_flutter/src/common/util/analytics_util.dart';
 import 'package:dart_flutter/src/common/util/push_notification_util.dart';
 import 'package:dart_flutter/src/common/util/version_comparator.dart';
@@ -13,13 +13,13 @@ import 'package:package_info_plus/package_info_plus.dart';
 import '../../data/datasource/dart_api_remote_datasource.dart';
 import '../../domain/entity/dart_auth.dart';
 
-class AuthCubit extends HydratedCubit<AuthState> {
+class DartAuthCubit extends HydratedCubit<DartAuthState> {
   static final AppPlatformUseCase _appPlatformUseCase = AppPlatformUseCase();
   static final AuthUseCase _authUseCase = AuthUseCase();
   static final UserUseCase _userUseCase = UserUseCase();
 
-  AuthCubit()
-      : super(AuthState(
+  DartAuthCubit()
+      : super(DartAuthState(
           isLoading: false,
           step: AuthStep.land,
           dartAccessToken: '',
@@ -53,7 +53,7 @@ class AuthCubit extends HydratedCubit<AuthState> {
     DartApiRemoteDataSource.addAuthorizationToken(accessToken);
   }
 
-  Future<AuthState> kakaoLogout() async {
+  Future<DartAuthState> kakaoLogout() async {
     try {
       _authUseCase.logoutWithKakaoTalk();
       _userUseCase.logout();
@@ -164,10 +164,17 @@ class AuthCubit extends HydratedCubit<AuthState> {
     print(state.copy());
   }
 
-  @override
-  AuthState fromJson(Map<String, dynamic> json) => state.fromJson(json);
+  void setAnalyticsUserInformation() async {
+    UserResponse userResponse = await _userUseCase.myInfo();
+    if (userResponse.user == null) return;
+    AnalyticsUtil.setUserId(userResponse.user!.id!.toString());
+    AnalyticsUtil.setUserInformation(userResponse.toAnalytics());
+  }
 
   @override
-  Map<String, dynamic> toJson(AuthState state) => state.toJson();
+  DartAuthState fromJson(Map<String, dynamic> json) => state.fromJson(json);
+
+  @override
+  Map<String, dynamic> toJson(DartAuthState state) => state.toJson();
 }
 
