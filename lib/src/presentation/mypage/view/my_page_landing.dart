@@ -98,7 +98,8 @@ class _MyPageLandingViewState extends State<MyPageLandingView> {
                             : ClipOval(
                             child: Image.network(profileImageUrl,
                               width: SizeConfig.defaultSize * 5.7,
-                              height: SizeConfig.defaultSize * 5.7,)
+                              height: SizeConfig.defaultSize * 5.7,
+                                fit: BoxFit.cover)
                         ),
                         SizedBox(width: SizeConfig.defaultSize * 0.6),
                         Expanded(
@@ -219,7 +220,6 @@ class _MyPageLandingViewState extends State<MyPageLandingView> {
         // TODO : '인증 완료'면 안 띄우는 로직 만들기
         InkWell(
           onTap: () {
-            // TODO : vertification 인증전일때 StudentVerification 보내고 인증중/인증후일때 StudentVertificationIng 보내기
             Navigator.push(context, MaterialPageRoute(builder: (_) => StudentVertification(
               userResponse: BlocProvider.of<MyPagesCubit>(context).state.userResponse,
             )));
@@ -488,7 +488,8 @@ class _FriendComponentState extends State<FriendComponent> {
                               : ClipOval(
                               child: Image.network(profileImageUrl,
                                 width: SizeConfig.defaultSize * 4.5,
-                                height: SizeConfig.defaultSize * 4.5,)
+                                height: SizeConfig.defaultSize * 4.5,
+                                fit: BoxFit.cover,)
                           ),
                       ),
                     ),
@@ -689,12 +690,13 @@ class _NotFriendComponentState extends State<NotFriendComponent> {
                           // ),
                           child: profileImageUrl == "DEFAULT"
                               ? ClipOval(
-                            child: Image.asset('assets/images/profile-mockup3.png', width: SizeConfig.defaultSize * 4.5, fit: BoxFit.cover,),
+                            child: Image.asset('assets/images/profile-mockup3.png', width: SizeConfig.defaultSize * 4.5, fit: BoxFit.fill,),
                           )
                               : ClipOval(
                               child: Image.network(profileImageUrl,
                                 width: SizeConfig.defaultSize * 4.5,
-                                height: SizeConfig.defaultSize * 4.5,)
+                                height: SizeConfig.defaultSize * 4.5,
+                                fit: BoxFit.cover,)
                           ),
                       ),
                     ),

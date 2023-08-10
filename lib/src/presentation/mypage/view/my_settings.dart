@@ -106,6 +106,7 @@ class _MyPageViewState extends State<MyPageView> {
   int mbtiIndex4 = 0;
 
   File? _selectedImage;
+  bool isSelectImage = false;
 
   Future<void> _pickImage() async {
     final pickedFile = await ImagePicker().pickImage(source: ImageSource.gallery);
@@ -115,6 +116,7 @@ class _MyPageViewState extends State<MyPageView> {
         _selectedImage = File(pickedFile.path);
         BlocProvider.of<MyPagesCubit>(context).uploadProfileImage(_selectedImage!, widget.userResponse);
         AnalyticsUtil.logEvent("내정보_설정_프로필사진변경");
+        isSelectImage = true;
       });
     }
   }
@@ -157,15 +159,16 @@ class _MyPageViewState extends State<MyPageView> {
                       ? Padding(
                         padding: EdgeInsets.all(SizeConfig.defaultSize * 0.1),
                         child: ClipOval(
-                          //   child: Image.file( // 이미지 파일에서 고르는 코드
-                          //   _selectedImage!,
-                          //   fit: BoxFit.cover,
-                          //     width: SizeConfig.defaultSize * 12,
-                          //     height: SizeConfig.defaultSize * 12,
-                          // )
-                            child: Image.network(profileImageUrl,
-                              width: SizeConfig.defaultSize * 12,
-                              height: SizeConfig.defaultSize * 12,)
+                          child: isSelectImage
+                              ? Image.file( // 이미지 파일에서 고르는 코드
+                            _selectedImage!,
+                            fit: BoxFit.cover,
+                            width: SizeConfig.defaultSize * 12,
+                            height: SizeConfig.defaultSize * 12,
+                          )
+                              : Image.network(profileImageUrl,
+                          width: SizeConfig.defaultSize * 12,
+                          height: SizeConfig.defaultSize * 12,)
                         ),
                       )
                       : ClipOval(
@@ -410,7 +413,8 @@ class _MyPageViewState extends State<MyPageView> {
                               onPressed: () {
                                 value = _textController.text;
                                 BlocProvider.of<MyPagesCubit>(context).patchMyInfo;
-                                },
+                                Navigator.pop(dialogContext);
+                              },
                                 child: Text('완료', style: TextStyle(color: Color(0xff7C83FD)))
                             ),
                           ],

@@ -426,8 +426,9 @@ class _ChoiceFriendButtonState extends State<ChoiceFriendButton> {
                       )
                           : ClipOval(
                           child: Image.network(widget.profileImageUrl,
-                            width: SizeConfig.defaultSize * 12,
-                            height: SizeConfig.defaultSize * 12,)
+                            width: SizeConfig.defaultSize * 2.5,
+                            height: SizeConfig.defaultSize * 2.5,
+                            fit: BoxFit.cover)
                       ),
                     ),
                   ),

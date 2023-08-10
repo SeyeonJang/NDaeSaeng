@@ -1,8 +1,7 @@
 import 'dart:io';
 import 'package:dart_flutter/res/config/size_config.dart';
 import 'package:dart_flutter/src/common/util/analytics_util.dart';
-import 'package:dart_flutter/src/domain/entity/user_response.dart';
-import 'package:dart_flutter/src/presentation/mypage/view/student_vertification_ing.dart';
+import 'package:dart_flutter/src/domain/entity/user.dart';
 import 'package:dart_flutter/src/presentation/mypage/viewmodel/mypages_cubit.dart';
 import 'package:dart_flutter/src/presentation/mypage/viewmodel/state/mypages_state.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +9,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 
 class StudentVertification extends StatelessWidget { // 인증전
-  final UserResponse userResponse;
+  final User userResponse;
 
   const StudentVertification({super.key, required this.userResponse});
 
@@ -29,7 +28,7 @@ class StudentVertification extends StatelessWidget { // 인증전
 }
 
 class VertificationView extends StatefulWidget {
-  final UserResponse userResponse;
+  final User userResponse;
 
   const VertificationView({
     super.key,
@@ -130,7 +129,19 @@ class _VertificationViewState extends State<VertificationView> with SingleTicker
                           SizedBox(height: SizeConfig.defaultSize * 0.3,),
                           Text("내 프로필에 인증배지가!", style: TextStyle(
                               fontSize: SizeConfig.defaultSize * 2.2
-                          ))
+                          )),
+
+                          if (widget.userResponse.personalInfo?.verification.isVerificationFailed ?? false)
+                            Column(
+                              children: [
+                                SizedBox(height: SizeConfig.defaultSize * 2,),
+                                Text("또렷한 학생증 사진을 업로드해주세요!", style: TextStyle(
+                                    fontSize: SizeConfig.defaultSize * 1.8,
+                                  color: Colors.red
+                                )),
+                              ],
+                            )
+
                         ]
                       )
                       : Container()

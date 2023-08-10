@@ -62,7 +62,7 @@ class MyPagesCubit extends Cubit<MyPagesState> {
     }
   }
 
-  void patchMyInfo(UserResponse userResponse) {
+  void patchMyInfo(User userResponse) {
     _userUseCase.patchMyInfo(userResponse);
   }
 
