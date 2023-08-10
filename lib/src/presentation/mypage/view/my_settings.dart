@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:dart_flutter/src/common/auth/dart_auth_cubit.dart';
 import 'package:dart_flutter/src/common/util/analytics_util.dart';
 import 'package:dart_flutter/src/common/util/toast_util.dart';
+import 'package:dart_flutter/src/domain/entity/personal_info.dart';
 import 'package:dart_flutter/src/domain/entity/user.dart';
 import 'package:dart_flutter/src/presentation/mypage/view/my_ask.dart';
 import 'package:dart_flutter/src/presentation/mypage/view/my_opinion.dart';
@@ -21,6 +22,8 @@ import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../res/config/size_config.dart';
+
+String newNickname = '';
 
 class MySettings extends StatelessWidget {
   final User userResponse;
@@ -64,7 +67,7 @@ class _MyPageViewState extends State<MyPageView> {
   String get inviteCode => widget.userResponse.personalInfo?.recommendationCode ?? 'XXXXXXXX';
   String get userId => widget.userResponse.personalInfo?.id.toString() ?? '0';
   String get profileImageUrl => widget.userResponse.personalInfo?.profileImageUrl ?? 'DEFAULT';
-  String get nickname => widget.userResponse.personalInfo?.nickname ?? 'DEFAULT';
+  String get nickname => widget.userResponse.personalInfo?.nickname ?? '닉네임';
 
   void onLogoutButtonPressed(BuildContext context) async {
     // 로그아웃 버튼 연결
@@ -187,7 +190,7 @@ class _MyPageViewState extends State<MyPageView> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               _infoSectionItem(title: "이름", value: name),
-              _infoSectionItem(title: "닉네임", value: nickname),
+              _infoSectionItem(title: "닉네임", value: nickname=='DEFAULT'||nickname==''? '닉네임' : nickname),
               _infoSectionItem(title: "학교", value: universityName),
               _infoSectionItem(title: "학과", value: department),
               _infoSectionItem(title: "학번", value: newAdmissionNumber),
@@ -363,7 +366,6 @@ class _MyPageViewState extends State<MyPageView> {
   }
 
   Widget _infoSectionItem({required String title, required String value}) {
-
     if (title == "닉네임") {
       return Padding(
         padding: EdgeInsets.symmetric(vertical: getFlexibleSize(target: 12)),
@@ -411,8 +413,16 @@ class _MyPageViewState extends State<MyPageView> {
                             ),
                             TextButton(
                               onPressed: () {
-                                value = _textController.text;
-                                BlocProvider.of<MyPagesCubit>(context).patchMyInfo;
+                                setState(() {
+                                  PersonalInfo updatedInfo = widget.userResponse.personalInfo!.copyWith(nickname: _textController.text);
+                                  value = _textController.text; // 닉네임을 새 값으로 업데이트
+                                  // newNickname = _textController.text;
+                                  widget.userResponse.personalInfo = updatedInfo; // 상위 위젯 상태 업데이트
+                                });
+                                print(value);
+
+                                // 서버에 업데이트 요청
+                                BlocProvider.of<MyPagesCubit>(context).patchMyInfo(widget.userResponse);
                                 Navigator.pop(dialogContext);
                               },
                                 child: Text('완료', style: TextStyle(color: Color(0xff7C83FD)))
@@ -434,6 +444,7 @@ class _MyPageViewState extends State<MyPageView> {
               ),
               Text(
                 value,
+                // newNickname=='' || newNickname==value ? value : newNickname,
                 style: TextStyle(
                   fontWeight: FontWeight.w500,
                   fontSize: getFlexibleSize(target: 16),

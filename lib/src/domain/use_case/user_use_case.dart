@@ -47,9 +47,12 @@ class UserUseCase {
     return url;
   }
 
-  Future<String> uploadIdCardImage(File file, User user) async {
+  Future<String> uploadIdCardImage(File file, User user, String name) async {
     await _dartUserRepository.removeIdCardImage(user.personalInfo!.id.toString());
     String url = await _dartUserRepository.uploadIdCardImage(file, user.personalInfo!.id.toString());
+
+    _dartUserRepository.verifyStudentIdCard(name, url);
+
     return url;
   }
 

@@ -7,7 +7,7 @@ class PersonalInfoDto {
   String? name;
   String? nickname;
   String? profileImageUrl;
-  String? verification;
+  String? studentIdCardVerificationStatus;
   String? phone;
   String? gender;
   int? admissionYear;
@@ -19,7 +19,7 @@ class PersonalInfoDto {
         this.name,
         this.nickname,
         this.profileImageUrl,
-        this.verification,
+        this.studentIdCardVerificationStatus,
         this.phone,
         this.gender,
         this.birthYear,
@@ -32,7 +32,7 @@ class PersonalInfoDto {
     name = json['name'];
     nickname = json['nickname'];
     profileImageUrl = json['profileImageUrl'];
-    verification = json['verification'];
+    studentIdCardVerificationStatus = json['studentIdCardVerificationStatus'];
     phone = json['phone'];
     gender = json['gender'];
     admissionYear = json['admissionYear'];
@@ -47,7 +47,7 @@ class PersonalInfoDto {
     data['name'] = name;
     data['nickname'] = nickname;
     data['profileImageUrl'] = profileImageUrl;
-    data['verification'] = verification;
+    data['studentIdCardVerificationStatus'] = studentIdCardVerificationStatus;
     data['phone'] = phone;
     data['gender'] = gender;
     data['admissionYear'] = admissionYear;
@@ -63,7 +63,7 @@ class PersonalInfoDto {
         name: name ?? "(알수없음)",
         nickname: nickname ?? "",
         profileImageUrl: profileImageUrl ?? "DEFAULT",
-        verification: IdCardVerificationStatus.fromValue(verification),
+        verification: IdCardVerificationStatus.fromValue(studentIdCardVerificationStatus),
         phone: phone ?? "01000000000",
         gender: gender ?? "UNKNOWN",
         admissionYear: admissionYear ?? 0000,
@@ -79,7 +79,7 @@ class PersonalInfoDto {
       name: user.name,
       nickname: user.nickname,
       profileImageUrl: user.profileImageUrl,
-      verification: user.verification.toValue(),
+      studentIdCardVerificationStatus: user.verification.toValue(),
       phone: user.phone,
       gender: user.gender,
       admissionYear: user.admissionYear,
@@ -91,6 +91,6 @@ class PersonalInfoDto {
 
   @override
   String toString() {
-    return 'User{id: $id, name: $name, nickname: $nickname, profileImageUrl: $profileImageUrl, verification: $verification, phone: $phone, gender: $gender, admissionYear: $admissionYear, birthYear: $birthYear, recommendationCode: $recommendationCode, point: $point}';
+    return 'User{id: $id, name: $name, nickname: $nickname, profileImageUrl: $profileImageUrl, verification: $studentIdCardVerificationStatus, phone: $phone, gender: $gender, admissionYear: $admissionYear, birthYear: $birthYear, recommendationCode: $recommendationCode, point: $point}';
   }
 }

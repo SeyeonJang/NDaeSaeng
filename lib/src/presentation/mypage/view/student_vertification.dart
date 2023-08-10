@@ -1,6 +1,8 @@
 import 'dart:io';
 import 'package:dart_flutter/res/config/size_config.dart';
 import 'package:dart_flutter/src/common/util/analytics_util.dart';
+import 'package:dart_flutter/src/domain/entity/personal_info.dart';
+import 'package:dart_flutter/src/domain/entity/type/IdCardVerificationStatus.dart';
 import 'package:dart_flutter/src/domain/entity/user.dart';
 import 'package:dart_flutter/src/presentation/mypage/viewmodel/mypages_cubit.dart';
 import 'package:dart_flutter/src/presentation/mypage/viewmodel/state/mypages_state.dart';
@@ -115,12 +117,13 @@ class _VertificationViewState extends State<VertificationView> with SingleTicker
                           onPressed: () {
                             // AnalyticsUtil.logEvent("내정보_설정_뒤로가기버튼");
                             Navigator.pop(context);
+                            print(widget.userResponse.personalInfo!.verification.isNotVerifiedYet ?? false);
                           },
                           icon: Icon(Icons.arrow_back_ios_new_rounded,
                               size: SizeConfig.defaultSize * 2)),
                     ]), SizedBox(height: SizeConfig.defaultSize * 2,),
 
-                    state.isVertificateUploaded == false // TODO : userResponse.vertificate가 인증전인지 판단
+                    widget.userResponse.personalInfo!.verification.isNotVerifiedYet ?? false
                       ? Column(
                         children: [
                           Text("지금 학생증 인증하면", style: TextStyle(
@@ -148,8 +151,8 @@ class _VertificationViewState extends State<VertificationView> with SingleTicker
                   ],
                 ),
 
-                state.isVertificateUploaded == false // TODO : userResponse.vertificate가 인증전인지 판단
-                  ? (isUploaded == false
+                widget.userResponse.personalInfo!.verification.isNotVerifiedYet ?? false // 사진이 서버에 올라갔는가
+                  ? (isUploaded == false // 사진업로드를 했는가
                   ? Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -279,9 +282,12 @@ class _VertificationViewState extends State<VertificationView> with SingleTicker
                               ? ElevatedButton(
                               onPressed: () {
                                 // AnalyticsUtil.logEvent("회원가입_이름_다음");
-                                // TODO : userResponse.vertificate를 인증중으로 바꾸기
-                                state.isVertificateUploaded = true;
-                                BlocProvider.of<MyPagesCubit>(context).uploadIdCardImage(_image!, widget.userResponse);
+                                // TODO : 이름 보내기
+                                print("변경 전 ${widget.userResponse.personalInfo?.verification}");
+                                PersonalInfo updatedInfo = widget.userResponse.personalInfo!.copyWith(verification: IdCardVerificationStatus.VERIFICATION_IN_PROGRESS);
+                                BlocProvider.of<MyPagesCubit>(context).uploadIdCardImage(_image!, widget.userResponse, _nameController.text);
+                                widget.userResponse.personalInfo = updatedInfo; // 상위 위젯 상태 업데이트
+                                print("변경 후 ${widget.userResponse.personalInfo?.verification}");
                               },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Color(0xff7C83FD),
