@@ -67,7 +67,7 @@ class _MyPageViewState extends State<MyPageView> {
   String get inviteCode => widget.userResponse.personalInfo?.recommendationCode ?? 'XXXXXXXX';
   String get userId => widget.userResponse.personalInfo?.id.toString() ?? '0';
   String get profileImageUrl => widget.userResponse.personalInfo?.profileImageUrl ?? 'DEFAULT';
-  String get nickname => widget.userResponse.personalInfo?.nickname ?? '닉네임';
+  // String get nickname => widget.userResponse.personalInfo?.nickname ?? '닉네임';
 
   void onLogoutButtonPressed(BuildContext context) async {
     // 로그아웃 버튼 연결
@@ -97,6 +97,21 @@ class _MyPageViewState extends State<MyPageView> {
     if (gender == "FEMALE") return "여자";
     if (gender == "MALE") return "남자";
     return "";
+  }
+
+  String nickname = "";
+  @override
+  void initState() {
+    super.initState();
+    nickname = widget.userResponse.personalInfo?.nickname ?? '닉네임';
+  }
+
+  void setNickname(String nickname) {
+    setState(() {
+      this.nickname = nickname;
+      PersonalInfo updatedInfo = widget.userResponse.personalInfo!.copyWith(nickname: nickname);
+      widget.userResponse.personalInfo = updatedInfo;
+    });
   }
 
   final mbti1 = ['-','E','I'];
@@ -413,15 +428,9 @@ class _MyPageViewState extends State<MyPageView> {
                             ),
                             TextButton(
                               onPressed: () {
-                                setState(() {
-                                  PersonalInfo updatedInfo = widget.userResponse.personalInfo!.copyWith(nickname: _textController.text);
-                                  value = _textController.text; // 닉네임을 새 값으로 업데이트
-                                  // newNickname = _textController.text;
-                                  widget.userResponse.personalInfo = updatedInfo; // 상위 위젯 상태 업데이트
-                                });
-                                print(value);
+                                var nick = _textController.text;
+                                setNickname(nick);
 
-                                // 서버에 업데이트 요청
                                 BlocProvider.of<MyPagesCubit>(context).patchMyInfo(widget.userResponse);
                                 Navigator.pop(dialogContext);
                               },
