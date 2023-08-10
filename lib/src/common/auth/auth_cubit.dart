@@ -28,7 +28,8 @@ class AuthCubit extends HydratedCubit<AuthState> {
           loginType: LoginType.email,
           memo: '',
           tutorialStatus: TutorialStatus.notShown,
-          appVersionStatus: AppVersionStatus.latest
+          appVersionStatus: AppVersionStatus.latest,
+          appUpdateComment: '',
         ));
 
   void setLandPage() {
@@ -46,6 +47,9 @@ class AuthCubit extends HydratedCubit<AuthState> {
     final (minVer, latestVer) = await _appPlatformUseCase.getRemoteConfigAppVersion();
 
     state.setAppVersionStatus(VersionComparator.compareVersions(version, minVer, latestVer));
+    if (!state.appVersionStatus.isLatest) {
+      state.appUpdateComment = await _appPlatformUseCase.getUpdateComment();
+    }
     emit(state.copy());
   }
 

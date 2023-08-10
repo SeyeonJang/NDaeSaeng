@@ -7,4 +7,8 @@ class AppPlatformUseCase {
   Future<(String, String)> getRemoteConfigAppVersion() {
     return _appPlatformRepository.getAppVersion();
   }
+
+  Future<String> getUpdateComment() {
+    return _appPlatformRepository.getUpdateComment();
+  }
 }

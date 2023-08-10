@@ -16,6 +16,7 @@ AuthState _$AuthStateFromJson(Map<String, dynamic> json) => AuthState(
       memo: json['memo'] as String,
       tutorialStatus: $enumDecode(_$TutorialStateEnumMap, json['tutorialStatus']),
       appVersionStatus: $enumDecode(_$AppVersionStateEnumMap, json['appVersionStatus']),
+      appUpdateComment: json['appUpdateComment'] as String,
 );
 
 Map<String, dynamic> _$AuthStateToJson(AuthState instance) => <String, dynamic>{
@@ -28,6 +29,7 @@ Map<String, dynamic> _$AuthStateToJson(AuthState instance) => <String, dynamic>{
       'memo': instance.memo,
       'tutorialStatus':  _$TutorialStateEnumMap[instance.tutorialStatus]!,
       'appVersionStatus':  _$AppVersionStateEnumMap[instance.appVersionStatus]!,
+      'appUpdateComment': instance.appUpdateComment
     };
 
 const _$AuthStepEnumMap = {

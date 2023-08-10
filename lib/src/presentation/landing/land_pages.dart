@@ -32,6 +32,44 @@ class _LandPagesState extends State<LandPages> {
     return Stack(
       children: [
         BlocBuilder<AuthCubit, AuthState>(builder: (context, state) {
+          // 업데이트 여부 판단
+          if (state.appVersionStatus.isUpdate || state.appVersionStatus.isMustUpdate) {
+            return Container(
+              color: Colors.black.withOpacity(0.4),
+              child: AlertDialog(
+                surfaceTintColor: Colors.white,
+                title: const Text('새로운 버전이 나왔어요!'),
+                content: SingleChildScrollView(
+                  child: ListBody(
+                    children: <Widget>[
+                      Text(state.appUpdateComment),
+                    ],
+                  ),
+                ),
+                actions: <Widget>[
+                  // TextButton(
+                  //   child: const Text('다음에하기'),
+                  //   onPressed: () {
+                  //     Navigator.pop(context);
+                  //   },
+                  // ),
+                  TextButton(
+                    child: const Text('업데이트'),
+                    onPressed: () {
+                      bool isAppleUser = Platform.isIOS;
+                      if (isAppleUser) {
+                        launchUrl(Uri.parse("https://apps.apple.com/us/app/dart/id6451335598"));
+                      } else {
+                        launchUrl(Uri.parse("https://play.google.com/store/apps/details?id=com.sshdart.dart_flutter"));
+                      }
+                    },
+                  ),
+                ],
+              ),
+            );
+          }
+
+          // 화면 그리기
           if (state.step == AuthStep.land) {
             if (state.tutorialStatus == TutorialStatus.notShown) {
               AnalyticsUtil.logEvent("온보딩슬라이드_접속");
@@ -65,81 +103,6 @@ class _LandPagesState extends State<LandPages> {
           return const SizedBox();
         }),
 
-        // update 여부 확인
-        BlocBuilder<AuthCubit, AuthState> (
-          builder: (context, state) {
-            if (state.appVersionStatus.isUpdate) {
-              return Container(
-                color: Colors.black.withOpacity(0.4),
-                child: AlertDialog(
-                  surfaceTintColor: Colors.white,
-                  title: const Text('새로운 버전이 나왔어요!'),
-                  content: const SingleChildScrollView(
-                    child: ListBody(
-                      children: <Widget>[
-                        Text('새로운 버전이 출시되었어요!'),
-                        Text('더 재밌는 기능과 함께 친구들과 즐겨봐요!'),
-                      ],
-                    ),
-                  ),
-                  actions: <Widget>[
-                    // TextButton(
-                    //   child: const Text('다음에하기'),
-                    //   onPressed: () {
-                    //     Navigator.pop(context);
-                    //   },
-                    // ),
-                    TextButton(
-                      child: const Text('업데이트'),
-                      onPressed: () {
-                        bool isAppleUser = Platform.isIOS;
-                        if (isAppleUser) {
-                          launchUrl(Uri.parse("https://apps.apple.com/us/app/dart/id6451335598"));
-                        } else {
-                          launchUrl(Uri.parse("https://play.google.com/store/apps/details?id=com.sshdart.dart_flutter"));
-                        }
-                      },
-                    ),
-                  ],
-                ),
-              );
-            }
-
-            if (state.appVersionStatus.isMustUpdate) {
-              return Container(
-                color: Colors.black.withOpacity(0.4),
-                child: AlertDialog(
-                  surfaceTintColor: Colors.white,
-                  title: const Text('업데이트가 필요해요!'),
-                  content: const SingleChildScrollView(
-                    child: ListBody(
-                      children: <Widget>[
-                        Text('더 이상 지원되지 않는 버전이에요.'),
-                        Text('업데이트하고 친구들을 만나봐요!'),
-                      ],
-                    ),
-                  ),
-                  actions: <Widget>[
-                    TextButton(
-                      child: const Text('업데이트'),
-                      onPressed: () {
-                        bool isAppleUser = Platform.isIOS;
-                        if (isAppleUser) {
-                          launchUrl(Uri.parse("https://apps.apple.com/us/app/dart/id6451335598"));
-                        } else {
-                          launchUrl(Uri.parse("https://play.google.com/store/apps/details?id=com.sshdart.dart_flutter"));
-                        }
-                      },
-                    ),
-                  ],
-                ),
-              );
-
-            }
-            return const SizedBox.shrink();
-          }
-        ),
-
         BlocBuilder<AuthCubit, AuthState>(
           builder: (context, state) {
             if (!state.isLoading) {
@@ -148,33 +111,6 @@ class _LandPagesState extends State<LandPages> {
             return const SafeArea(child: Center(child: CircularProgressIndicator()));
           },
         ),
-
-        // Andorid Key Hash 확인 로직
-        // FutureBuilder<String>(
-        //   future: getAndroidKeyHash(),
-        //   builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
-        //     if (snapshot.connectionState == ConnectionState.waiting) {
-        //       // 데이터 로딩 중인 경우 로딩 표시를 보여줍니다.
-        //       return Center(
-        //         child: CircularProgressIndicator(),
-        //       );
-        //     } else if (snapshot.hasError) {
-        //       // 에러 발생 시 에러 메시지를 보여줍니다.
-        //       return Center(
-        //         child: Text('데이터를 불러오는 동안 오류가 발생했습니다.'),
-        //       );
-        //     } else {
-        //       // 데이터가 성공적으로 로드된 경우 값을 표시합니다.
-        //       return SizedBox(
-        //         width: 200,
-        //         height: 200,
-        //         child: Center(
-        //           child: Text(snapshot.data!),
-        //         ),
-        //       );
-        //     }
-        //   },
-        // ),
       ],
       // 화면 분배
     );
