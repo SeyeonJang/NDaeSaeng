@@ -138,11 +138,16 @@ class _MyPageLandingViewState extends State<MyPageLandingView> {
                                   ),
                                   IconButton(
                                     icon: const Icon(Icons.settings, color: Colors.white,),
-                                    onPressed: () {
+                                    onPressed: () async {
                                       AnalyticsUtil.logEvent("내정보_마이_설정버튼");
-                                      Navigator.push(context, MaterialPageRoute(builder: (_) => MySettings(
+                                      await Navigator.push(context, MaterialPageRoute(builder: (_) => MySettings(
                                         userResponse: BlocProvider.of<MyPagesCubit>(context).state.userResponse,
                                       )));
+
+                                      PaintingBinding.instance.imageCache.clear();
+                                      BlocProvider.of<MyPagesCubit>(context).refreshMyInfo();
+                                      setState(() {
+                                      });
                                     },
                                     iconSize: SizeConfig.defaultSize * 2.4,
                                   ),
@@ -219,10 +224,15 @@ class _MyPageLandingViewState extends State<MyPageLandingView> {
 
         // TODO : '인증 완료'면 안 띄우는 로직 만들기
         InkWell(
-          onTap: () {
-            Navigator.push(context, MaterialPageRoute(builder: (_) => StudentVertification(
+          onTap: () async {
+            await Navigator.push(context, MaterialPageRoute(builder: (_) => StudentVertification(
               userResponse: BlocProvider.of<MyPagesCubit>(context).state.userResponse,
             )));
+
+            PaintingBinding.instance.imageCache.clear();
+            BlocProvider.of<MyPagesCubit>(context).refreshMyInfo();
+            setState(() {
+            });
           },
           child: Padding( // TODO : 학생증
             padding: EdgeInsets.symmetric(

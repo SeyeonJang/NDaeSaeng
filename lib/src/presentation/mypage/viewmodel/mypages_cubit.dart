@@ -1,7 +1,5 @@
 import 'dart:io';
 
-import 'package:dart_flutter/src/domain/entity/friend.dart';
-import 'package:dart_flutter/src/domain/entity/personal_info.dart';
 import 'package:dart_flutter/src/domain/entity/user.dart';
 import 'package:dart_flutter/src/domain/use_case/friend_use_case.dart';
 import 'package:dart_flutter/src/domain/use_case/user_use_case.dart';
@@ -66,9 +64,14 @@ class MyPagesCubit extends Cubit<MyPagesState> {
     _userUseCase.patchMyInfo(userResponse);
   }
 
+  void refreshMyInfo() async {
+    _userUseCase.cleanUpUserResponseCache();
+     User user = await _userUseCase.myInfo();
+     state.setUserResponse(user);
+     emit(state.copy());
+  }
+
   void uploadProfileImage(File file, User userResponse) async {
-    print(state.userResponse.toString());
-    // String userId = state.userResponse.user!.id.toString();
     _userUseCase.uploadProfileImage(file, userResponse);
   }
 
