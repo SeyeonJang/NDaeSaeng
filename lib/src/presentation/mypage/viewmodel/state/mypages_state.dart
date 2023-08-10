@@ -9,6 +9,7 @@ class MyPagesState {
   late Set<Friend> newFriends;
   late int newFriendId;
   late bool isMyLandPage;
+  late bool isVertificateUploaded;
 
   MyPagesState({
     required this.isLoading,
@@ -17,6 +18,7 @@ class MyPagesState {
     required this.friends,
     required this.newFriends,
     required this.newFriendId,
+    required this.isVertificateUploaded,
   });
 
   MyPagesState.init() {
@@ -29,6 +31,7 @@ class MyPagesState {
     newFriends = {};
     newFriendId = 0;
     isMyLandPage = true;
+    isVertificateUploaded = false;
   }
 
   MyPagesState copy() => MyPagesState(
@@ -38,6 +41,7 @@ class MyPagesState {
         friends: friends,
         newFriends: newFriends,
         newFriendId: newFriendId,
+        isVertificateUploaded: isVertificateUploaded
       );
 
   void setIsLoading(bool isLoading) {

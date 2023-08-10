@@ -359,39 +359,131 @@ class _MyPageViewState extends State<MyPageView> {
     );
   }
 
-  Widget _infoSectionItem({required String title, required String value}) =>
-      Padding(
-          padding: EdgeInsets.symmetric(vertical: getFlexibleSize(target: 12)),
-          child:
-              GestureDetector(
-                onTap: () {
-                  if (title != '이름') {
-                    AnalyticsUtil.logEvent("내정보_설정_내정보", properties: {
-                      "회원 정보 타입": title, "회원 정보 내용" : "이름"
-                    });
-                  } else {
-                    AnalyticsUtil.logEvent("내정보_설정_내정보", properties: {
-                      "회원 정보 타입": title, "회원 정보 내용" : "이름"
-                    });
-                  }
-                  if (title == "초대코드") {
-                    String myCodeCopy = value;
-                    Clipboard.setData(ClipboardData(text: value));
-                    ToastUtil.showToast("내 코드가 복사되었어요!");
-                    AnalyticsUtil.logEvent("내정보_설정_내코드터치");
-                  }
-                },
-                child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-            Text(title,
+  Widget _infoSectionItem({required String title, required String value}) {
+
+    if (title == "닉네임") {
+      return Padding(
+        padding: EdgeInsets.symmetric(vertical: getFlexibleSize(target: 12)),
+        child: GestureDetector(
+          onTap: () {
+            AnalyticsUtil.logEvent("내정보_설정_내정보", properties: {
+              "회원 정보 타입": title, "회원 정보 내용": value
+            });
+            TextEditingController _textController = TextEditingController();
+            showDialog<String>(
+                context: context,
+                builder: (BuildContext dialogContext) {
+                  return StatefulBuilder(
+                    builder: (statefulContext, setState) =>
+                        AlertDialog(
+                          title: Text('닉네임을 변경하시겠어요?',
+                            style: TextStyle(fontSize: SizeConfig.defaultSize *
+                                2), textAlign: TextAlign.center,),
+                          content: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text('바꾸고 싶은 닉네임을 입력해주세요!', style: TextStyle(
+                                  fontSize: SizeConfig.defaultSize * 1.4),
+                                textAlign: TextAlign.start,),
+                              const Text('닉네임은 최대 10글자예요!'),
+                              TextField(
+                                controller: _textController,
+                                onChanged: (text) {
+                                  setState(() {}); // Rebuild the AlertDialog when text changes
+                                },
+                              ),
+                            ],
+                          ),
+                          backgroundColor: Colors.white,
+                          surfaceTintColor: Colors.white,
+                          actions: <Widget>[
+                            TextButton(
+                              onPressed: () {
+                                AnalyticsUtil.logEvent("내정보_설정_닉네임변경_취소");
+                                Navigator.pop(dialogContext, '취소');
+                              },
+                              child: const Text('취소',
+                                style: TextStyle(color: Color(0xff7C83FD)),),
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                value = _textController.text;
+                                BlocProvider.of<MyPagesCubit>(context).patchMyInfo;
+                                },
+                                child: Text('완료', style: TextStyle(color: Color(0xff7C83FD)))
+                            ),
+                          ],
+                        ),
+                  );
+                });
+          },
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                title,
                 style: TextStyle(
-                    fontWeight: FontWeight.w500,
-                    fontSize: getFlexibleSize(target: 16))),
-            Text(value,
+                  fontWeight: FontWeight.w500,
+                  fontSize: getFlexibleSize(target: 16),
+                ),
+              ),
+              Text(
+                value,
                 style: TextStyle(
-                    fontWeight: FontWeight.w500,
-                    fontSize: getFlexibleSize(target: 16))),
-          ]),
-              ));
+                  fontWeight: FontWeight.w500,
+                  fontSize: getFlexibleSize(target: 16),
+                  color: Color(0xff7C83FD)
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    } else {
+      return Padding(
+        padding: EdgeInsets.symmetric(vertical: getFlexibleSize(target: 12)),
+        child: GestureDetector(
+          onTap: () {
+            if (title != '이름') {
+              AnalyticsUtil.logEvent("내정보_설정_내정보", properties: {
+                "회원 정보 타입": title, "회원 정보 내용": value
+              });
+            } else {
+              AnalyticsUtil.logEvent("내정보_설정_내정보", properties: {
+                "회원 정보 타입": title, "회원 정보 내용": "이름"
+              });
+            }
+            if (title == "초대코드") {
+              String myCodeCopy = value;
+              Clipboard.setData(ClipboardData(text: value));
+              ToastUtil.showToast("내 코드가 복사되었어요!");
+              AnalyticsUtil.logEvent("내정보_설정_내코드터치");
+            }
+          },
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                title,
+                style: TextStyle(
+                  fontWeight: FontWeight.w500,
+                  fontSize: getFlexibleSize(target: 16),
+                ),
+              ),
+              Text(
+                value,
+                style: TextStyle(
+                  fontWeight: FontWeight.w500,
+                  fontSize: getFlexibleSize(target: 16),
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+  }
 
   void shareContent(BuildContext context, String myCode) {
     Share.share('엔대생에서 내가 널 칭찬 대상으로 투표하고 싶어! 앱에 들어와줘!\n내 코드는 $myCode 야. 나를 친구 추가하고 같이하자!\nhttps://dart.page.link/TG78\n\n내 코드 : $myCode');

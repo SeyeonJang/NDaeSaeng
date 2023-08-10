@@ -61,6 +61,10 @@ class MyPagesCubit extends Cubit<MyPagesState> {
     }
   }
 
+  void patchMyInfo(UserResponse userResponse) {
+    _userUseCase.patchMyInfo(userResponse);
+  }
+
   void uploadProfileImage(File file, UserResponse userResponse) async {
     print(state.userResponse.toString());
     // String userId = state.userResponse.user!.id.toString();
@@ -75,6 +79,8 @@ class MyPagesCubit extends Cubit<MyPagesState> {
 
   void uploadIdCardImage(File file, UserResponse userResponse) async {
     _userUseCase.uploadIdCardImage(file, userResponse);
+    state.isVertificateUploaded = true;
+    emit(state.copy());
   }
 
   void setMyLandPage() {

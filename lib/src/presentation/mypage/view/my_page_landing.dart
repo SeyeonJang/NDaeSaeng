@@ -486,8 +486,8 @@ class _FriendComponentState extends State<FriendComponent> {
                           )
                               : ClipOval(
                               child: Image.network(profileImageUrl,
-                                width: SizeConfig.defaultSize * 12,
-                                height: SizeConfig.defaultSize * 12,)
+                                width: SizeConfig.defaultSize * 4.5,
+                                height: SizeConfig.defaultSize * 4.5,)
                           ),
                       ),
                     ),
@@ -692,8 +692,8 @@ class _NotFriendComponentState extends State<NotFriendComponent> {
                           )
                               : ClipOval(
                               child: Image.network(profileImageUrl,
-                                width: SizeConfig.defaultSize * 12,
-                                height: SizeConfig.defaultSize * 12,)
+                                width: SizeConfig.defaultSize * 4.5,
+                                height: SizeConfig.defaultSize * 4.5,)
                           ),
                       ),
                     ),

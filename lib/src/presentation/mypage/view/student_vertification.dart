@@ -84,7 +84,7 @@ class _VertificationViewState extends State<VertificationView> with SingleTicker
     });
   }
   bool isUploaded = false;
-  String get vertification => widget.userResponse.user?.verification ?? 'DEFAULT';
+  // String get vertification => widget.userResponse.user?.verification ?? 'DEFAULT';
 
   // 이름 텍스트 입력
   TextEditingController _nameController = TextEditingController();
@@ -101,194 +101,232 @@ class _VertificationViewState extends State<VertificationView> with SingleTicker
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Padding(
-        padding: EdgeInsets.all(SizeConfig.defaultSize * 2),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Column( // 애니메이션 위까지 위층
-              children: [
-                Row(children: [
-                  IconButton(
-                      onPressed: () {
-                        // AnalyticsUtil.logEvent("내정보_설정_뒤로가기버튼");
-                        Navigator.pop(context);
-                      },
-                      icon: Icon(Icons.arrow_back_ios_new_rounded,
-                          size: SizeConfig.defaultSize * 2)),
-                ]), SizedBox(height: SizeConfig.defaultSize * 2,),
-
-                Text("지금 학생증 인증하면", style: TextStyle(
-                  fontSize: SizeConfig.defaultSize * 2.2,
-                )),
-                SizedBox(height: SizeConfig.defaultSize * 0.3,),
-                Text("내 프로필에 인증배지가!", style: TextStyle(
-                    fontSize: SizeConfig.defaultSize * 2.2
-                )),
-              ],
-            ),
-
-            isUploaded == false
-            ? Column(
+    return BlocBuilder<MyPagesCubit, MyPagesState>(
+      builder: (context, state) {
+        return Center(
+          child: Padding(
+            padding: EdgeInsets.all(SizeConfig.defaultSize * 2),
+            child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Column( // 애니메이션 가운데층
+                Column( // 애니메이션 위까지 위층
                   children: [
-                    SlideTransition(
-                      position: _animation,
-                      child: Image.asset(
-                        'assets/images/camera.png',
-                        width: SizeConfig.defaultSize * 33,
-                      ),
-                    ),
-                    SizedBox(height: SizeConfig.defaultSize * 4),
+                    Row(children: [
+                      IconButton(
+                          onPressed: () {
+                            // AnalyticsUtil.logEvent("내정보_설정_뒤로가기버튼");
+                            Navigator.pop(context);
+                          },
+                          icon: Icon(Icons.arrow_back_ios_new_rounded,
+                              size: SizeConfig.defaultSize * 2)),
+                    ]), SizedBox(height: SizeConfig.defaultSize * 2,),
+
+                    state.isVertificateUploaded == false // TODO : userResponse.vertificate가 인증전인지 판단
+                      ? Column(
+                        children: [
+                          Text("지금 학생증 인증하면", style: TextStyle(
+                            fontSize: SizeConfig.defaultSize * 2.2,
+                          )),
+                          SizedBox(height: SizeConfig.defaultSize * 0.3,),
+                          Text("내 프로필에 인증배지가!", style: TextStyle(
+                              fontSize: SizeConfig.defaultSize * 2.2
+                          ))
+                        ]
+                      )
+                      : Container()
                   ],
                 ),
-                Column( // 애니메이션 밑으로 아래층
+
+                state.isVertificateUploaded == false // TODO : userResponse.vertificate가 인증전인지 판단
+                  ? (isUploaded == false
+                  ? Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    TextButton(
-                        onPressed: () {
-                          showDialog<String>(
-                              context: context,
-                              builder: (BuildContext dialogContext) => AlertDialog(
-                                surfaceTintColor: Colors.white,
-                                title: Center(child: Text('엔대생은 학생증 인증을 하고 있어요!', style: TextStyle(fontSize: SizeConfig.defaultSize * 1.5, fontWeight: FontWeight.w500),)),
-                                content: SingleChildScrollView(
-                                  child: ListBody(
-                                    children: <Widget>[
-                                      SizedBox(height: SizeConfig.defaultSize,),
-                                      Center(child: Text('엔대생 앱 안에서의 원활한 활동을 위해',)),
-                                      Center(child: Text('학생증 인증으로 본인인증을 하고 있어요!')),
-                                      Center(child: Text('지금 바로 학생증으로 본인인증 해보세요!')),
-                                      SizedBox(height: SizeConfig.defaultSize * 2.2,),
-                                      Center(child: Text('학생증 인증은 최대 2~3일 소요될 수 있으며', style: TextStyle(
-                                          fontSize: SizeConfig.defaultSize * 1.2
-                                      ),)),
-                                      Center(child: Text('인증 과정 중에도 앱을 이용할 수 있어요!', style: TextStyle(
-                                          fontSize: SizeConfig.defaultSize * 1.2
-                                      ),)),
-                                    ],
-                                  ),
+                    Column( // 애니메이션 가운데층
+                      children: [
+                        SlideTransition(
+                          position: _animation,
+                          child: Image.asset(
+                            'assets/images/camera.png',
+                            width: SizeConfig.defaultSize * 33,
+                          ),
+                        ),
+                        SizedBox(height: SizeConfig.defaultSize * 4),
+                      ],
+                    ),
+                    Column( // 애니메이션 밑으로 아래층
+                      children: [
+                        TextButton(
+                            onPressed: () {
+                              showDialog<String>(
+                                  context: context,
+                                  builder: (BuildContext dialogContext) => AlertDialog(
+                                    surfaceTintColor: Colors.white,
+                                    title: Center(child: Text('엔대생은 학생증 인증을 하고 있어요!', style: TextStyle(fontSize: SizeConfig.defaultSize * 1.5, fontWeight: FontWeight.w500),)),
+                                    content: SingleChildScrollView(
+                                      child: ListBody(
+                                        children: <Widget>[
+                                          SizedBox(height: SizeConfig.defaultSize,),
+                                          Center(child: Text('엔대생 앱 안에서의 원활한 활동을 위해',)),
+                                          Center(child: Text('학생증 인증으로 본인인증을 하고 있어요!')),
+                                          Center(child: Text('지금 바로 학생증으로 본인인증 해보세요!')),
+                                          SizedBox(height: SizeConfig.defaultSize * 2.2,),
+                                          Center(child: Text('학생증 인증은 최대 2~3일 소요될 수 있으며', style: TextStyle(
+                                              fontSize: SizeConfig.defaultSize * 1.2
+                                          ),)),
+                                          Center(child: Text('인증 과정 중에도 앱을 이용할 수 있어요!', style: TextStyle(
+                                              fontSize: SizeConfig.defaultSize * 1.2
+                                          ),)),
+                                        ],
+                                      ),
+                                    ),
+                                  ));
+                            },
+                            style: TextButton.styleFrom(
+                                backgroundColor: Colors.white,
+                                surfaceTintColor: Colors.white
+                            ),
+                            child: Text("학생증 인증은 왜 필요한가요?", style: TextStyle(color: Colors.grey, fontSize: SizeConfig.defaultSize * 1.4),)
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            getImage(ImageSource.camera);
+                            isUploaded = true;
+                          },
+                          child: Container(
+                            width: SizeConfig.screenWidth,
+                            height: SizeConfig.defaultSize * 6,
+                            decoration: BoxDecoration(
+                              color: Color(0xff7C83FD),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Center(child: Text("사진 촬영하기", style: TextStyle(fontWeight: FontWeight.w600, fontSize: SizeConfig.defaultSize * 2, color: Colors.white),)),
+                          ),
+                        ), SizedBox(height: SizeConfig.defaultSize * 0.5,),
+                        GestureDetector(
+                          onTap: () {
+                            getImage(ImageSource.gallery);
+                            isUploaded = true;
+                          },
+                          child: Container(
+                            width: SizeConfig.screenWidth,
+                            height: SizeConfig.defaultSize * 6,
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(10),
+                                border: Border.all(width: 1.5, color: Color(0xff7C83FD))
+                            ),
+                            child: Center(child: Text("갤러리에서 사진 업로드", style: TextStyle(fontWeight: FontWeight.w500, fontSize: SizeConfig.defaultSize * 2, color: Colors.black))),
+                          ),
+                        ), SizedBox(height: SizeConfig.screenHeight * 0.03,),
+                      ],
+                    ),
+                  ],
+                )
+                    : Column( // 업로드 이후
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      ClipRRect(
+                          borderRadius: BorderRadius.circular(16),
+                          child: Container(
+                              width: SizeConfig.screenWidth * 0.9,
+                              height: SizeConfig.screenWidth * 0.9,
+                              // child: Image.asset('/assets/images/profile-mockup3.png', fit: BoxFit.fill,)
+                              child: Image.file( // 이미지 파일에서 고르는 코드
+                                _image!,
+                                fit: BoxFit.contain,
+                              )
+                          )
+                      ),
+                      SizedBox(height: SizeConfig.defaultSize * 2,),
+                      TextFormField(
+                          controller: _nameController,
+                          onChanged: (_) => _checkNameValidity(),
+                          decoration: InputDecoration(
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Colors.grey.shade200, // 테두리 색상
+                                  width: 2.0,
                                 ),
-                              ));
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Color(0xff7C83FD), // 테두리 색상
+                                  width: 2.0,
+                                ),
+                              ),
+                              prefixIcon: Icon(Icons.person_rounded, color: Color(0xff7C83FD),),
+                              hintText: "본인확인을 위한 실명을 입력해주세요!")),
+                      SizedBox(height: SizeConfig.defaultSize * 6,),
+                      GestureDetector(
+                        onTap: () {
                         },
-                        style: TextButton.styleFrom(
-                            backgroundColor: Colors.white,
-                            surfaceTintColor: Colors.white
+                        child: Container(
+                          width: SizeConfig.screenWidth,
+                          height: SizeConfig.defaultSize * 6,
+                          child: isNameValid
+                              ? ElevatedButton(
+                              onPressed: () {
+                                // AnalyticsUtil.logEvent("회원가입_이름_다음");
+                                // TODO : userResponse.vertificate를 인증중으로 바꾸기
+                                state.isVertificateUploaded = true;
+                                BlocProvider.of<MyPagesCubit>(context).uploadIdCardImage(_image!, widget.userResponse);
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Color(0xff7C83FD),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(15), // 모서리 둥글기 설정
+                                ),
+                              ),
+                              child: Text("제출하기", style: TextStyle(fontSize: SizeConfig.defaultSize * 2, fontWeight: FontWeight.w600, color: Colors.white),)
+                          )
+                              : ElevatedButton(
+                              onPressed: () {},
+                              style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.grey[20]
+                              ),
+                              child: Text("이름을 입력해주세요", style: TextStyle(fontSize: SizeConfig.defaultSize * 2, fontWeight: FontWeight.w500, color: Colors.black38),)
+                          ),
                         ),
-                        child: Text("학생증 인증은 왜 필요한가요?", style: TextStyle(color: Colors.grey, fontSize: SizeConfig.defaultSize * 1.4),)
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        getImage(ImageSource.camera);
-                        // TODO : 상태를 인증 중으로 바꾸기
-                        isUploaded = true;
-                      },
-                      child: Container(
-                        width: SizeConfig.screenWidth,
-                        height: SizeConfig.defaultSize * 6,
-                        decoration: BoxDecoration(
-                          color: Color(0xff7C83FD),
-                          borderRadius: BorderRadius.circular(10),
+                      ), SizedBox(height: SizeConfig.screenHeight * 0.03,),
+                    ])
+                    )
+                    : Flexible( // 인증 후
+                      child: Center(
+                        child: Container(
+                          child: Column( // 애니메이션 가운데층
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              SlideTransition(
+                                position: _animation,
+                                child: Image.asset(
+                                  'assets/images/magnifier.png',
+                                  width: SizeConfig.defaultSize * 33,
+                                ),
+                              ),
+                              SizedBox(height: SizeConfig.screenHeight * 0.15),
+                              Column(
+                                  children: [
+                                    Text("학생증을 확인중이에요!", style: TextStyle(
+                                      fontSize: SizeConfig.defaultSize * 2.2,
+                                    )),
+                                    SizedBox(height: SizeConfig.defaultSize * 1,),
+                                    Text("인증이 되면 알려드릴게요!", style: TextStyle(
+                                        fontSize: SizeConfig.defaultSize * 2.2
+                                    ))
+                                  ]
+                              ),
+                              SizedBox(height: SizeConfig.screenHeight * 0.03),
+                            ],
+                          ),
                         ),
-                        child: Center(child: Text("사진 촬영하기", style: TextStyle(fontWeight: FontWeight.w600, fontSize: SizeConfig.defaultSize * 2, color: Colors.white),)),
-                      ),
-                    ), SizedBox(height: SizeConfig.defaultSize * 0.5,),
-                    GestureDetector(
-                      onTap: () {
-                        getImage(ImageSource.gallery);
-                        isUploaded = true;
-                      },
-                      child: Container(
-                        width: SizeConfig.screenWidth,
-                        height: SizeConfig.defaultSize * 6,
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(10),
-                            border: Border.all(width: 1.5, color: Color(0xff7C83FD))
-                        ),
-                        child: Center(child: Text("갤러리에서 사진 업로드", style: TextStyle(fontWeight: FontWeight.w500, fontSize: SizeConfig.defaultSize * 2, color: Colors.black))),
-                      ),
-                    ), SizedBox(height: SizeConfig.screenHeight * 0.03,),
-                  ],
-                ),
-              ],
-            )
-            : Column( // 업로드 이후
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(16),
-                    child: Container(
-                        width: SizeConfig.screenWidth * 0.9,
-                        height: SizeConfig.screenWidth * 0.9,
-                        // child: Image.asset('/assets/images/profile-mockup3.png', fit: BoxFit.fill,)
-                      child: Image.file( // 이미지 파일에서 고르는 코드
-                      _image!,
-                      fit: BoxFit.contain,
                       )
                     )
-                  ),
-                  SizedBox(height: SizeConfig.defaultSize * 2,),
-                  TextFormField(
-                      controller: _nameController,
-                      onChanged: (_) => _checkNameValidity(),
-                      decoration: InputDecoration(
-                          enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Colors.grey.shade200, // 테두리 색상
-                              width: 2.0,
-                            ),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Color(0xff7C83FD), // 테두리 색상
-                              width: 2.0,
-                            ),
-                          ),
-                          prefixIcon: Icon(Icons.person_rounded, color: Color(0xff7C83FD),),
-                          hintText: "본인확인을 위한 실명을 입력해주세요!")),
-                  SizedBox(height: SizeConfig.defaultSize * 6,),
-                  GestureDetector(
-                    onTap: () {
-                    },
-                    child: Container(
-                      width: SizeConfig.screenWidth,
-                      height: SizeConfig.defaultSize * 6,
-                      child: isNameValid
-                          ? ElevatedButton(
-                          onPressed: () {
-                            // AnalyticsUtil.logEvent("회원가입_이름_다음");
-                            // TODO : 상태를 인증 중으로 바꾸기
-                            // TODO : 서버에 이미지(Supabase) ok, 이름 넘기기
-                            BlocProvider.of<MyPagesCubit>(context).uploadIdCardImage(_image!, widget.userResponse);
-                            // 인증중 뷰로 Navigator.push
-                            Navigator.push(context, MaterialPageRoute(builder: (_) => StudentVertificationIng(
-                              userResponse: BlocProvider.of<MyPagesCubit>(context).state.userResponse,
-                            )));
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Color(0xff7C83FD),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(15), // 모서리 둥글기 설정
-                            ),
-                          ),
-                          child: Text("제출하기", style: TextStyle(fontSize: SizeConfig.defaultSize * 2, fontWeight: FontWeight.w600, color: Colors.white),)
-                      )
-                          : ElevatedButton(
-                          onPressed: () {},
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.grey[20]
-                          ),
-                          child: Text("이름을 입력해주세요", style: TextStyle(fontSize: SizeConfig.defaultSize * 2, fontWeight: FontWeight.w500, color: Colors.black38),)
-                      ),
-                    ),
-                  ), SizedBox(height: SizeConfig.screenHeight * 0.03,),
-                ])
-          ],
-        ),
-      )
+              ],
+            ),
+          )
+        );
+      }
     );
   }
 }
