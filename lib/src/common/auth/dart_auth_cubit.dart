@@ -1,9 +1,9 @@
-import 'package:dart_flutter/src/common/auth/state/auth_state.dart';
+import 'package:dart_flutter/src/common/auth/state/dart_auth_state.dart';
 import 'package:dart_flutter/src/common/util/analytics_util.dart';
 import 'package:dart_flutter/src/common/util/push_notification_util.dart';
 import 'package:dart_flutter/src/common/util/version_comparator.dart';
 import 'package:dart_flutter/src/domain/entity/kakao_user.dart';
-import 'package:dart_flutter/src/domain/entity/user_response.dart';
+import 'package:dart_flutter/src/domain/entity/user.dart';
 import 'package:dart_flutter/src/domain/use_case/app_platform_use_case.dart';
 import 'package:dart_flutter/src/domain/use_case/auth_use_case.dart';
 import 'package:dart_flutter/src/domain/use_case/user_use_case.dart';
@@ -13,13 +13,13 @@ import 'package:package_info_plus/package_info_plus.dart';
 import '../../data/datasource/dart_api_remote_datasource.dart';
 import '../../domain/entity/dart_auth.dart';
 
-class AuthCubit extends HydratedCubit<AuthState> {
+class DartAuthCubit extends HydratedCubit<DartAuthState> {
   static final AppPlatformUseCase _appPlatformUseCase = AppPlatformUseCase();
   static final AuthUseCase _authUseCase = AuthUseCase();
   static final UserUseCase _userUseCase = UserUseCase();
 
-  AuthCubit()
-      : super(AuthState(
+  DartAuthCubit()
+      : super(DartAuthState(
           isLoading: false,
           step: AuthStep.land,
           dartAccessToken: '',
@@ -57,7 +57,7 @@ class AuthCubit extends HydratedCubit<AuthState> {
     DartApiRemoteDataSource.addAuthorizationToken(accessToken);
   }
 
-  Future<AuthState> kakaoLogout() async {
+  Future<DartAuthState> kakaoLogout() async {
     try {
       _authUseCase.logoutWithKakaoTalk();
       _userUseCase.logout();
@@ -101,11 +101,11 @@ class AuthCubit extends HydratedCubit<AuthState> {
           .setDartAuth(dartAccessToken: dartAuth.accessToken, expiredAt: DateTime.now().add(const Duration(days: 10)))
           .setSocialAuth(loginType: LoginType.kakao, socialAccessToken: kakaoUser.accessToken);
 
-      UserResponse userResponse = await _userUseCase.myInfo();
+      User userResponse = await _userUseCase.myInfo();
 
-      String userId = userResponse.user!.id!.toString();
+      String userId = userResponse.personalInfo!.id!.toString();
       AnalyticsUtil.setUserId(userId);
-      if (userResponse.user?.name == null) {
+      if (userResponse.personalInfo?.name == null) {
         PushNotificationUtil.setUserId(userId);
         state.setStep(AuthStep.signup);
       } else {
@@ -134,11 +134,11 @@ class AuthCubit extends HydratedCubit<AuthState> {
           .setSocialAuth(loginType: LoginType.apple, socialAccessToken: appleUser.authorizationCode)
           .setMemo('${appleUser.familyName ?? "오"}${appleUser.givenName ?? "늘"}');
 
-      UserResponse userResponse = await _userUseCase.myInfo();
+      User userResponse = await _userUseCase.myInfo();
 
-      String userId = userResponse.user!.id!.toString();
+      String userId = userResponse.personalInfo!.id!.toString();
       AnalyticsUtil.setUserId(userId);
-      if (userResponse.user?.name == null) {
+      if (userResponse.personalInfo?.name == null) {
         PushNotificationUtil.setUserId(userId);
         state.setStep(AuthStep.signup);
       } else {
@@ -169,16 +169,23 @@ class AuthCubit extends HydratedCubit<AuthState> {
   }
 
   void setAnalyticsUserInformation() async {
-    UserResponse userResponse = await _userUseCase.myInfo();
-    if (userResponse.user == null) return;
-    AnalyticsUtil.setUserId(userResponse.user!.id!.toString());
+    User userResponse = await _userUseCase.myInfo();
+    if (userResponse.personalInfo == null) return;
+    AnalyticsUtil.setUserId(userResponse.personalInfo!.id.toString());
     AnalyticsUtil.setUserInformation(userResponse.toAnalytics());
+    print("onesignal id ${userResponse.personalInfo!.id}");
+  }
+
+  void setPushNotificationUserId() async {
+    User userResponse = await _userUseCase.myInfo();
+    if (userResponse.personalInfo == null) return;
+    PushNotificationUtil.setUserId(userResponse.personalInfo!.id.toString());
   }
 
   @override
-  AuthState fromJson(Map<String, dynamic> json) => state.fromJson(json);
+  DartAuthState fromJson(Map<String, dynamic> json) => state.fromJson(json);
 
   @override
-  Map<String, dynamic> toJson(AuthState state) => state.toJson();
+  Map<String, dynamic> toJson(DartAuthState state) => state.toJson();
 }
 

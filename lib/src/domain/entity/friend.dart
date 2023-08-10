@@ -1,11 +1,14 @@
 import 'package:dart_flutter/src/domain/entity/university.dart';
 
+@Deprecated("UserResponse로 대체됨")
 class Friend {
   int? userId;
   String? name;
   int? admissionYear;
   String? gender;
   University? university;
+  String? profileImageUrl;
+  String? nickname;
 
   Friend({this.userId, this.name, this.admissionYear, this.gender, this.university});
 

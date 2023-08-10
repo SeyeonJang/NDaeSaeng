@@ -1,5 +1,6 @@
 import 'package:dart_flutter/src/domain/entity/friend.dart';
 import 'package:dart_flutter/src/domain/entity/question.dart';
+import 'package:dart_flutter/src/domain/entity/user.dart';
 import 'package:dart_flutter/src/domain/entity/vote_request.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -17,7 +18,7 @@ class VoteState {
   late List<Question> questions;
 
   late DateTime nextVoteDateTime;
-  late List<Friend> friends;
+  late List<User> friends;
 
   VoteState({
     required this.isLoading,
@@ -64,7 +65,7 @@ class VoteState {
     return this;
   }
 
-  VoteState setFriends(List<Friend> friends) {
+  VoteState setFriends(List<User> friends) {
     this.friends = friends;
     return this;
   }
@@ -73,7 +74,7 @@ class VoteState {
     this.questions = questions;
   }
 
-  List<Friend> getShuffleFriends() {
+  List<User> getShuffleFriends() {
     if (friends.length < 4) {
       print("친구수가 4명보다 적습니다. 투표할 수 없음");
     }

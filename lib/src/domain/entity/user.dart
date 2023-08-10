@@ -1,44 +1,47 @@
-class User {
-  int? id;
-  String? name;
-  String? phone;
-  String? gender;
-  int? admissionYear;
-  int? birthYear;
-  String? recommendationCode;
+import 'package:dart_flutter/src/domain/entity/university.dart';
+import 'package:dart_flutter/src/domain/entity/personal_info.dart';
 
-  User({this.id,
-        this.name,
-        this.phone,
-        this.gender,
-        this.birthYear,
-        this.admissionYear,
-        this.recommendationCode});
+class User {
+  PersonalInfo? personalInfo;
+  University? university;
+
+  User({this.personalInfo, this.university});
 
   User.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    name = json['name'];
-    phone = json['phone'];
-    gender = json['gender'];
-    admissionYear = json['admissionYear'];
-    birthYear = json['birthYear'];
-    recommendationCode = json['recommendationCode'];
+    personalInfo = json['user'] != null ? PersonalInfo.fromJson(json['user']) : null;
+    university = json['university'] != null
+        ? University.fromJson(json['university'])
+        : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
-    data['id'] = id;
-    data['name'] = name;
-    data['phone'] = phone;
-    data['gender'] = gender;
-    data['admissionYear'] = admissionYear;
-    data['birthYear'] = birthYear;
-    data['recommendationCode'] = recommendationCode;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    if (personalInfo != null) {
+      data['user'] = personalInfo!.toJson();
+    }
+    if (university != null) {
+      data['university'] = university!.toJson();
+    }
+    return data;
+  }
+
+  // 분석툴에 넘길 사용자 정보 (전화번호 등 민감정보 제외)
+  Map<String, dynamic> toAnalytics() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    if (personalInfo != null) {
+      data['gender'] = personalInfo!.gender;
+      data['admissionYear'] = personalInfo!.admissionYear;
+      data['birthYear'] = personalInfo!.birthYear;
+    }
+    if (university != null) {
+      data['university'] = university!.name;
+      data['department'] = university!.department;
+    }
     return data;
   }
 
   @override
   String toString() {
-    return 'User{id: $id, name: $name, phone: $phone, gender: $gender, admissionYear: $admissionYear, birthYear: $birthYear, recommendationCode: $recommendationCode}';
+    return 'UserResponse{user: $personalInfo, university: $university}';
   }
 }

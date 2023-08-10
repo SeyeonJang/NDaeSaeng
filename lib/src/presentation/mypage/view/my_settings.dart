@@ -1,26 +1,30 @@
+import 'dart:convert';
 import 'dart:io';
-
-import 'package:dart_flutter/src/common/auth/auth_cubit.dart';
+import 'package:dart_flutter/src/common/auth/dart_auth_cubit.dart';
 import 'package:dart_flutter/src/common/util/analytics_util.dart';
 import 'package:dart_flutter/src/common/util/toast_util.dart';
-import 'package:dart_flutter/src/domain/entity/user_response.dart';
+import 'package:dart_flutter/src/domain/entity/personal_info.dart';
+import 'package:dart_flutter/src/domain/entity/user.dart';
 import 'package:dart_flutter/src/presentation/mypage/view/my_ask.dart';
 import 'package:dart_flutter/src/presentation/mypage/view/my_opinion.dart';
 import 'package:dart_flutter/src/presentation/mypage/view/my_tos1.dart';
 import 'package:dart_flutter/src/presentation/mypage/view/my_tos2.dart';
 import 'package:dart_flutter/src/presentation/landing/land_pages.dart';
+import 'package:dart_flutter/src/presentation/mypage/viewmodel/mypages_cubit.dart';
+import 'package:dart_flutter/src/presentation/mypage/viewmodel/state/mypages_state.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:restart_app/restart_app.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
-
 import '../../../../res/config/size_config.dart';
 
 class MySettings extends StatelessWidget {
-  final UserResponse userResponse;
+  final User userResponse;
 
   MySettings({super.key, required this.userResponse});
 
@@ -29,15 +33,18 @@ class MySettings extends StatelessWidget {
     AnalyticsUtil.logEvent("내정보_설정_접속");
     return Scaffold(
         backgroundColor: Colors.white,
-        body: SafeArea(
-            child: MyPageView(userResponse: userResponse),
+        body: BlocProvider<MyPagesCubit>(
+          create: (context) => MyPagesCubit(),
+            child: SafeArea(
+                child: MyPageView(userResponse: userResponse),
+            )
         ),
     );
   }
 }
 
 class MyPageView extends StatefulWidget {
-  final UserResponse userResponse;
+  final User userResponse;
   MyPageView({super.key, required this.userResponse});
 
   static final _defaultPadding = EdgeInsets.all(getFlexibleSize(target: 20));
@@ -47,19 +54,21 @@ class MyPageView extends StatefulWidget {
 }
 
 class _MyPageViewState extends State<MyPageView> {
-  String get name => widget.userResponse.user?.name ?? "XXX";
+  String get name => widget.userResponse.personalInfo?.name ?? "XXX";
   String get universityName => widget.userResponse.university?.name ?? "XX대학교";
   String get department => widget.userResponse.university?.department ?? "XXX학과";
   String get admissionNumber =>
-      "${widget.userResponse.user?.admissionYear ?? 'XX'}학번";
+      "${widget.userResponse.personalInfo?.admissionYear ?? 'XX'}학번";
   String get newAdmissionNumber => getId(admissionNumber);
-  String get gender => widget.userResponse.user?.gender ?? 'XX';
+  String get gender => widget.userResponse.personalInfo?.gender ?? 'XX';
   String get newGender => getGender(gender);
-  String get inviteCode => widget.userResponse.user?.recommendationCode ?? 'XXXXXXXX';
+  String get inviteCode => widget.userResponse.personalInfo?.recommendationCode ?? 'XXXXXXXX';
+  String get userId => widget.userResponse.personalInfo?.id.toString() ?? '0';
+  String get profileImageUrl => widget.userResponse.personalInfo?.profileImageUrl ?? 'DEFAULT';
 
   void onLogoutButtonPressed(BuildContext context) async {
     // 로그아웃 버튼 연결
-    await BlocProvider.of<AuthCubit>(context).kakaoLogout();
+    await BlocProvider.of<DartAuthCubit>(context).kakaoLogout();
     Navigator.push(context, MaterialPageRoute(builder: (context) => const LandPages()));
   }
 
@@ -87,6 +96,21 @@ class _MyPageViewState extends State<MyPageView> {
     return "";
   }
 
+  String nickname = "";
+  @override
+  void initState() {
+    super.initState();
+    nickname = widget.userResponse.personalInfo?.nickname ?? '닉네임';
+  }
+
+  void setNickname(String nickname) {
+    setState(() {
+      this.nickname = nickname;
+      PersonalInfo updatedInfo = widget.userResponse.personalInfo!.copyWith(nickname: nickname);
+      widget.userResponse.personalInfo = updatedInfo;
+    });
+  }
+
   final mbti1 = ['-','E','I'];
   final mbti2 = ['-','N','S'];
   final mbti3 = ['-','F','T'];
@@ -96,11 +120,27 @@ class _MyPageViewState extends State<MyPageView> {
   int mbtiIndex3 = 0;
   int mbtiIndex4 = 0;
 
+  File? _selectedImage;
+  bool isSelectImage = false;
+
+  Future<void> _pickImage() async {
+    final pickedFile = await ImagePicker().pickImage(source: ImageSource.gallery);
+    AnalyticsUtil.logEvent("내정보_설정_프로필사진터치");
+    if (pickedFile != null) {
+      setState(() {
+        _selectedImage = File(pickedFile.path);
+        BlocProvider.of<MyPagesCubit>(context).uploadProfileImage(_selectedImage!, widget.userResponse);
+        AnalyticsUtil.logEvent("내정보_설정_프로필사진변경");
+        isSelectImage = true;
+      });
+    }
+  }
+
   Widget _topBarSection(BuildContext context) => Row(children: [
         IconButton(
             onPressed: () {
               AnalyticsUtil.logEvent("내정보_설정_뒤로가기버튼");
-              Navigator.pop(context);
+              Navigator.pop(context, _selectedImage);
             },
             icon: Icon(Icons.arrow_back_ios_new_rounded,
                 size: SizeConfig.defaultSize * 2)),
@@ -117,6 +157,45 @@ class _MyPageViewState extends State<MyPageView> {
       children: [
         _topBarSection(context),
         const DtFlexSpacer(30),
+        Center(
+          child: GestureDetector(
+            onTap: () {
+              _pickImage();
+            },
+            child: ClipOval(
+              clipBehavior: Clip.antiAlias,
+              child: Container(
+                  // decoration: BoxDecoration( // 이미지 겉에 테두리 효과주는 코드
+                  //   gradient: LinearGradient(
+                  //       colors: [Color(0xff7C83FD), Color(0xff7C83FD)]),
+                  //   borderRadius: BorderRadius.circular(32),
+                  // ),
+                  child: profileImageUrl != "DEFAULT"
+                      ? Padding(
+                        padding: EdgeInsets.all(SizeConfig.defaultSize * 0.1),
+                        child: ClipOval(
+                          child: isSelectImage
+                              ? Image.file( // 이미지 파일에서 고르는 코드
+                            _selectedImage!,
+                            fit: BoxFit.fill,
+                            width: SizeConfig.defaultSize * 12,
+                            height: SizeConfig.defaultSize * 12,
+                          )
+                              : Image.network(profileImageUrl,
+                          width: SizeConfig.defaultSize * 12,
+                          height: SizeConfig.defaultSize * 12,
+                            fit: BoxFit.fill,
+                          )
+                        ),
+                      )
+                      : ClipOval(
+                        child: Image.asset('assets/images/profile-mockup2.png', width: SizeConfig.defaultSize * 12, fit: BoxFit.cover,)
+                      )
+              ),
+            ),
+          ),
+        ),
+        const DtFlexSpacer(30),
         Padding(
           padding: EdgeInsets.symmetric(
               vertical: getFlexibleSize(),
@@ -125,6 +204,7 @@ class _MyPageViewState extends State<MyPageView> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               _infoSectionItem(title: "이름", value: name),
+              _infoSectionItem(title: "닉네임", value: nickname=='DEFAULT'||nickname==''? '닉네임' : nickname),
               _infoSectionItem(title: "학교", value: universityName),
               _infoSectionItem(title: "학과", value: department),
               _infoSectionItem(title: "학번", value: newAdmissionNumber),
@@ -299,33 +379,134 @@ class _MyPageViewState extends State<MyPageView> {
     );
   }
 
-  Widget _infoSectionItem({required String title, required String value}) =>
-      Padding(
-          padding: EdgeInsets.symmetric(vertical: getFlexibleSize(target: 12)),
-          child:
-              GestureDetector(
-                onTap: () {
-                  if (title != '이름') {
-                    AnalyticsUtil.logEvent("내정보_설정_내정보", properties: {
-                      "회원 정보 타입": title, "회원 정보 내용" : "이름"
-                    });
-                  } else {
-                    AnalyticsUtil.logEvent("내정보_설정_내정보", properties: {
-                      "회원 정보 타입": title, "회원 정보 내용" : "이름"
-                    });
-                  }
-                },
-                child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-            Text(title,
+  Widget _infoSectionItem({required String title, required String value}) {
+    if (title == "닉네임") {
+      return Padding(
+        padding: EdgeInsets.symmetric(vertical: getFlexibleSize(target: 12)),
+        child: GestureDetector(
+          onTap: () {
+            AnalyticsUtil.logEvent("내정보_설정_내정보", properties: {
+              "회원 정보 타입": title, "회원 정보 내용": value
+            });
+            TextEditingController _textController = TextEditingController();
+            showDialog<String>(
+                context: context,
+                builder: (BuildContext dialogContext) {
+                  return StatefulBuilder(
+                    builder: (statefulContext, setState) =>
+                        AlertDialog(
+                          title: Text('닉네임을 변경하시겠어요?',
+                            style: TextStyle(fontSize: SizeConfig.defaultSize *
+                                2), textAlign: TextAlign.center,),
+                          content: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text('바꾸고 싶은 닉네임을 입력해주세요!', style: TextStyle(
+                                  fontSize: SizeConfig.defaultSize * 1.4),
+                                textAlign: TextAlign.start,),
+                              const Text('닉네임은 최대 10글자예요!'),
+                              TextField(
+                                controller: _textController,
+                                onChanged: (text) {
+                                  setState(() {}); // Rebuild the AlertDialog when text changes
+                                },
+                              ),
+                            ],
+                          ),
+                          backgroundColor: Colors.white,
+                          surfaceTintColor: Colors.white,
+                          actions: <Widget>[
+                            TextButton(
+                              onPressed: () {
+                                AnalyticsUtil.logEvent("내정보_설정_닉네임변경_취소");
+                                Navigator.pop(dialogContext, '취소');
+                              },
+                              child: const Text('취소',
+                                style: TextStyle(color: Color(0xff7C83FD)),),
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                var nick = _textController.text;
+                                setNickname(nick);
+
+                                BlocProvider.of<MyPagesCubit>(context).patchMyInfo(widget.userResponse);
+                                Navigator.pop(dialogContext);
+                              },
+                                child: Text('완료', style: TextStyle(color: Color(0xff7C83FD)))
+                            ),
+                          ],
+                        ),
+                  );
+                });
+          },
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                title,
                 style: TextStyle(
-                    fontWeight: FontWeight.w500,
-                    fontSize: getFlexibleSize(target: 16))),
-            Text(value,
+                  fontWeight: FontWeight.w500,
+                  fontSize: getFlexibleSize(target: 16),
+                ),
+              ),
+              Text(
+                value,
+                // newNickname=='' || newNickname==value ? value : newNickname,
                 style: TextStyle(
-                    fontWeight: FontWeight.w500,
-                    fontSize: getFlexibleSize(target: 16))),
-          ]),
-              ));
+                  fontWeight: FontWeight.w500,
+                  fontSize: getFlexibleSize(target: 16),
+                  color: Color(0xff7C83FD)
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    } else {
+      return Padding(
+        padding: EdgeInsets.symmetric(vertical: getFlexibleSize(target: 12)),
+        child: GestureDetector(
+          onTap: () {
+            if (title != '이름') {
+              AnalyticsUtil.logEvent("내정보_설정_내정보", properties: {
+                "회원 정보 타입": title, "회원 정보 내용": value
+              });
+            } else {
+              AnalyticsUtil.logEvent("내정보_설정_내정보", properties: {
+                "회원 정보 타입": title, "회원 정보 내용": "이름"
+              });
+            }
+            if (title == "초대코드") {
+              String myCodeCopy = value;
+              Clipboard.setData(ClipboardData(text: value));
+              ToastUtil.showToast("내 코드가 복사되었어요!");
+              AnalyticsUtil.logEvent("내정보_설정_내코드터치");
+            }
+          },
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                title,
+                style: TextStyle(
+                  fontWeight: FontWeight.w500,
+                  fontSize: getFlexibleSize(target: 16),
+                ),
+              ),
+              Text(
+                value,
+                style: TextStyle(
+                  fontWeight: FontWeight.w500,
+                  fontSize: getFlexibleSize(target: 16),
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+  }
 
   void shareContent(BuildContext context, String myCode) {
     Share.share('엔대생에서 내가 널 칭찬 대상으로 투표하고 싶어! 앱에 들어와줘!\n내 코드는 $myCode 야. 나를 친구 추가하고 같이하자!\nhttps://dart.page.link/TG78\n\n내 코드 : $myCode');
@@ -427,7 +608,7 @@ class _MyPageViewState extends State<MyPageView> {
                                             onPressed: textController.text == '회원탈퇴를 원해요' ? () async {
                                               AnalyticsUtil.logEvent("내정보_설정_회원탈퇴_탈퇴확정");
                                               Navigator.pop(dialogContext);
-                                              await BlocProvider.of<AuthCubit>(context).kakaoWithdrawal();
+                                              await BlocProvider.of<DartAuthCubit>(context).kakaoWithdrawal();
                                               ToastUtil.showToast("회원탈퇴가 완료되었습니다.\n잠시후 앱이 종료됩니다.");
                                               await Future.delayed(const Duration(seconds: 2));
                                               restart();
@@ -475,7 +656,7 @@ class _MyPageViewState extends State<MyPageView> {
                                       AnalyticsUtil.logEvent("내정보_설정_로그아웃_로그아웃확정");
                                       Navigator.pop(dialogContext);
                                       ToastUtil.showToast("로그아웃이 완료되었습니다.\n잠시후 앱이 종료됩니다.");
-                                      BlocProvider.of<AuthCubit>(context).kakaoLogout();
+                                      BlocProvider.of<DartAuthCubit>(context).kakaoLogout();
                                       await Future.delayed(const Duration(seconds: 2));
                                       restart();
                                     },

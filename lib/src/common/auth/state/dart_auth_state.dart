@@ -23,7 +23,7 @@ enum TutorialStatus {
 }
 
 @JsonSerializable()
-class AuthState {
+class DartAuthState {
   bool isLoading;
   AuthStep step;
   String dartAccessToken;
@@ -35,7 +35,7 @@ class AuthState {
   AppVersionStatus appVersionStatus;
   String appUpdateComment;
 
-  AuthState({
+  DartAuthState({
     required this.isLoading,
     required this.step,
     required this.dartAccessToken,
@@ -48,7 +48,7 @@ class AuthState {
     required this.appUpdateComment,
   });
 
-  AuthState setDartAuth({
+  DartAuthState setDartAuth({
     required String dartAccessToken,
     required DateTime expiredAt,
   }) {
@@ -57,7 +57,7 @@ class AuthState {
     return this;
   }
 
-  AuthState setSocialAuth({
+  DartAuthState setSocialAuth({
     required LoginType loginType,
     required String socialAccessToken,
   }) {
@@ -66,32 +66,32 @@ class AuthState {
     return this;
   }
 
-  AuthState setStep(AuthStep step) {
+  DartAuthState setStep(AuthStep step) {
     this.step = step;
     return this;
   }
 
-  AuthState setMemo(String memo) {
+  DartAuthState setMemo(String memo) {
     this.memo = memo;
     return this;
   }
 
-  AuthState setLoading(bool boolean) {
+  DartAuthState setLoading(bool boolean) {
     isLoading = boolean;
     return this;
   }
 
-  AuthState setTutorialStatus(TutorialStatus status) {
+  DartAuthState setTutorialStatus(TutorialStatus status) {
     tutorialStatus = status;
     return this;
   }
 
-  AuthState setAppVersionStatus(AppVersionStatus status) {
+  DartAuthState setAppVersionStatus(AppVersionStatus status) {
     appVersionStatus = status;
     return this;
   }
 
-  AuthState copy() => AuthState(
+  DartAuthState copy() => DartAuthState(
     isLoading: isLoading,
     step: step,
     dartAccessToken: dartAccessToken,
@@ -105,7 +105,7 @@ class AuthState {
   );
 
   Map<String, dynamic> toJson() => _$AuthStateToJson(this);
-  AuthState fromJson(Map<String, dynamic> json) => _$AuthStateFromJson(json);
+  DartAuthState fromJson(Map<String, dynamic> json) => _$AuthStateFromJson(json);
 
   @override
   String toString() {

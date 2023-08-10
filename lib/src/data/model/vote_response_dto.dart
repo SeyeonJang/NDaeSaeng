@@ -1,6 +1,6 @@
 import 'package:dart_flutter/src/data/model/question_dto.dart';
 import 'package:dart_flutter/src/data/model/university_dto.dart';
-import 'package:dart_flutter/src/data/model/user_dto.dart';
+import 'package:dart_flutter/src/data/model/personal_info_dto.dart';
 import 'package:dart_flutter/src/domain/entity/vote_response.dart';
 
 class VoteResponseDto {
@@ -47,13 +47,13 @@ class VoteResponseDto {
 }
 
 class _PickedUserDto {
-  UserDto? user;
+  PersonalInfoDto? user;
   UniversityDto? university;
 
   _PickedUserDto({this.user, this.university});
 
   _PickedUserDto.fromJson(Map<String, dynamic> json) {
-    user = json['user'] != null ? UserDto.fromJson(json['user']) : null;
+    user = json['user'] != null ? PersonalInfoDto.fromJson(json['user']) : null;
     university = json['university'] != null ? UniversityDto.fromJson(json['university']) : null;
   }
 

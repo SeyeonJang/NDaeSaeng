@@ -1,7 +1,12 @@
+import 'dart:convert';
+import 'dart:io';
 import 'package:dart_flutter/res/config/size_config.dart';
 import 'package:dart_flutter/src/common/util/analytics_util.dart';
 import 'package:dart_flutter/src/common/util/toast_util.dart';
 import 'package:dart_flutter/src/domain/entity/friend.dart';
+import 'package:dart_flutter/src/domain/entity/personal_info.dart';
+import 'package:dart_flutter/src/domain/entity/user.dart';
+import 'package:dart_flutter/src/presentation/mypage/view/student_vertification.dart';
 import 'package:dart_flutter/src/presentation/mypage/viewmodel/mypages_cubit.dart';
 import 'package:dart_flutter/src/presentation/mypage/viewmodel/state/mypages_state.dart';
 import 'package:flutter/cupertino.dart';
@@ -9,7 +14,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'my_settings.dart';
 
@@ -27,19 +34,33 @@ class _MyPageLandingState extends State<MyPageLanding> {
     return SingleChildScrollView(
       child: Padding(
         padding: EdgeInsets.symmetric(
-            vertical: SizeConfig.defaultSize * 2,
+            vertical: SizeConfig.defaultSize * 0,
             horizontal: SizeConfig.defaultSize),
-        child: const MyPageLandingView(),
+        child: BlocBuilder<MyPagesCubit, MyPagesState>(
+          builder: (context, state) {
+            final user = state.userResponse;
+            return MyPageLandingView(userResponse: user);
+          }
+        ),
       ),
     );
   }
 }
 
-class MyPageLandingView extends StatelessWidget {
+class MyPageLandingView extends StatefulWidget {
+  final User userResponse;
 
   const MyPageLandingView({
     super.key,
+    required this.userResponse,
   });
+
+  @override
+  State<MyPageLandingView> createState() => _MyPageLandingViewState();
+}
+
+class _MyPageLandingViewState extends State<MyPageLandingView> {
+  String get profileImageUrl => widget.userResponse.personalInfo!.profileImageUrl ?? 'DEFAULT';
 
   @override
   Widget build(BuildContext context) {
@@ -62,139 +83,165 @@ class MyPageLandingView extends StatelessWidget {
               //   ),
               // ],
             ),
-            height: SizeConfig.defaultSize * 10,
+            height: SizeConfig.defaultSize * 15,
             child: Padding(
                 padding: EdgeInsets.symmetric(
                     vertical: SizeConfig.defaultSize,
                     horizontal: SizeConfig.defaultSize * 1.5),
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Row( // 1층
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    Row( // 프사 ~ 설정 부분 (위층)
                       children: [
-                        BlocBuilder<MyPagesCubit,MyPagesState>(
-                            builder: (context, state) {
-                              String name = state.userResponse.user?.name ?? "###";
-                              String admissionNumber = "${state.userResponse.user?.admissionYear.toString().substring(2,4)??"##"}학번";
+                        SizedBox(width: SizeConfig.defaultSize * 0.3),
 
-                              return Row(
-                                children: [
-                                  SizedBox(width: SizeConfig.defaultSize * 0.5,),
-                                  Text(name,
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w700,
-                                      fontSize: SizeConfig.defaultSize * 2,
-                                      color: Colors.white,
-                                    ),),
-                                  SizedBox(width: SizeConfig.defaultSize * 0.5),
-                                  Text(admissionNumber,
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: SizeConfig.defaultSize * 1.6,
-                                      color: Colors.white,
-                                    ),),
-                                ]
-                              );
-                            }
-                        ),
-                        IconButton(
-                          icon: const Icon(Icons.settings, color: Colors.white,),
-                          onPressed: () {
-                            AnalyticsUtil.logEvent("내정보_마이_설정버튼");
-                            Navigator.push(context, MaterialPageRoute(builder: (_) => MySettings(
-                              userResponse: BlocProvider.of<MyPagesCubit>(context).state.userResponse,
-                            )));
-                          },
-                          iconSize: SizeConfig.defaultSize * 2.4,
-                        ),
-                      ],
-                    ),
-                    Row( // 2층
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        BlocBuilder<MyPagesCubit,MyPagesState>(
+                        ClipOval(
+                          child: BlocBuilder<MyPagesCubit, MyPagesState>(
                             builder: (context, state) {
-                              String university = state.userResponse.university?.name??'#####학교';
-                              String department = state.userResponse.university?.department??'######학과';
-                              return Row(
+                              if (profileImageUrl == "DEFAULT")
+                                return Image.asset('assets/images/profile-mockup3.png', width: SizeConfig.defaultSize * 5.7, fit: BoxFit.cover,);
+                              else {
+                                return state.profileImageFile.path==''
+                                    ? Image.network(profileImageUrl,
+                                    width: SizeConfig.defaultSize * 5.7,
+                                    height: SizeConfig.defaultSize * 5.7,
+                                    fit: BoxFit.cover)
+                                    : Image.file(state.profileImageFile,
+                                    width: SizeConfig.defaultSize * 5.7,
+                                    height: SizeConfig.defaultSize * 5.7,
+                                    fit: BoxFit.cover);
+                              }
+                            }
+                          )
+                        ),
+                        // profileImageUrl == "DEFAULT"
+                        //     ? ClipOval(
+                        //       child: Image.asset('assets/images/profile-mockup3.png', width: SizeConfig.defaultSize * 5.7, fit: BoxFit.cover,),
+                        //       )
+                        //     : ClipOval(
+                        //     child: Image.network(profileImageUrl,
+                        //       width: SizeConfig.defaultSize * 5.7,
+                        //       height: SizeConfig.defaultSize * 5.7,
+                        //         fit: BoxFit.cover)
+                        // )),
+                        SizedBox(width: SizeConfig.defaultSize * 0.6),
+                        Expanded(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Row( // 1층
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
-                                  SizedBox(width: SizeConfig.defaultSize * 0.5,),
-                                  Text(
-                                    university,
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: SizeConfig.defaultSize * 1.3,
-                                        color: Colors.white
-                                    ),
+                                  BlocBuilder<MyPagesCubit,MyPagesState>(
+                                      builder: (context, state) {
+                                        String name = state.userResponse.personalInfo?.name ?? "###";
+                                        String admissionNumber = "${state.userResponse.personalInfo?.admissionYear.toString().substring(2,4)??"##"}학번";
+                                        return Row(
+                                          children: [
+                                            SizedBox(width: SizeConfig.defaultSize * 0.5,),
+                                            Text(name,
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.w700,
+                                                fontSize: SizeConfig.defaultSize * 2,
+                                                color: Colors.white,
+                                              ),),
+                                            SizedBox(width: SizeConfig.defaultSize * 0.5),
+                                            Text(admissionNumber,
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.w500,
+                                                fontSize: SizeConfig.defaultSize * 1.5,
+                                                color: Colors.white,
+                                              ),),
+                                            if (widget.userResponse.personalInfo!.verification.isVerificationSuccess)
+                                              Row(
+                                                children: [
+                                                  SizedBox(width: SizeConfig.defaultSize * 0.6),
+                                                  Image.asset("assets/images/check_me.png", width: SizeConfig.defaultSize * 1.2),
+                                                ],
+                                              )
+                                          ]
+                                        );
+                                      }
                                   ),
-                                  SizedBox(width: SizeConfig.defaultSize * 0.5,),
-                                  Text(
-                                    department,
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: SizeConfig.defaultSize * 1.3,
-                                        color: Colors.white
-                                    ),
+                                  IconButton(
+                                    icon: const Icon(Icons.settings, color: Colors.white,),
+                                    onPressed: () async {
+                                      AnalyticsUtil.logEvent("내정보_마이_설정버튼");
+                                      final _profileImage = await Navigator.push(context, MaterialPageRoute(builder: (_) => MySettings(
+                                        userResponse: BlocProvider.of<MyPagesCubit>(context).state.userResponse,
+                                      )));
+                                      BlocProvider.of<MyPagesCubit>(context).setProfileImage(_profileImage);
+
+                                      PaintingBinding.instance.imageCache.clear();
+                                      BlocProvider.of<MyPagesCubit>(context).refreshMyInfo();
+                                      setState(() {
+                                      });
+                                    },
+                                    iconSize: SizeConfig.defaultSize * 2.4,
                                   ),
                                 ],
-                              );
-                            }
+                              ),
+                              Row( // 2층
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  BlocBuilder<MyPagesCubit,MyPagesState>(
+                                      builder: (context, state) {
+                                        String university = state.userResponse.university?.name??'#####학교';
+                                        String department = state.userResponse.university?.department??'######학과';
+                                        return Row(
+                                          children: [
+                                            SizedBox(width: SizeConfig.defaultSize * 0.5,),
+                                            Text(
+                                              university,
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.w500,
+                                                  fontSize: SizeConfig.defaultSize * 1.3,
+                                                  color: Colors.white
+                                              ),
+                                            ),
+                                            SizedBox(width: SizeConfig.defaultSize * 0.5,),
+                                            Text(
+                                              department,
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.w500,
+                                                  fontSize: SizeConfig.defaultSize * 1.3,
+                                                  color: Colors.white
+                                              ),
+                                            ),
+                                          ],
+                                        );
+                                      }
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: SizeConfig.defaultSize,),
+                            ],
+                          ),
                         ),
                       ],
                     ),
-                    SizedBox(height: SizeConfig.defaultSize,),
-
-
-                    // TODO MVP 이후 '나의 포인트 0원' 복구
-                    // Container(
-                    //   height: SizeConfig.defaultSize * 4.5,
-                    //   decoration: ShapeDecoration(
-                    //     color: Color(0xffeeeeeee),
-                    //     shape: RoundedRectangleBorder(
-                    //       borderRadius: BorderRadius.circular(7.0),
-                    //     ),
-                    //   ),
-                    //
-                    //   child: Row(
-                    //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    //     children: [
-                    //       Row(
-                    //         children: [
-                    //           Text("   나의 Points",
-                    //             style: TextStyle(
-                    //               fontWeight: FontWeight.w500,
-                    //               fontSize: SizeConfig.defaultSize * 1.6,
-                    //             ),),
-                    //
-                    //           BlocBuilder<MyPagesCubit,MyPagesState>(
-                    //               builder: (context, state) {
-                    //                 int point = state.userResponse.point ?? 0;
-                    //
-                    //                 return Text("  $point",
-                    //                   style: TextStyle(
-                    //                     fontWeight: FontWeight.w700,
-                    //                     fontSize: SizeConfig.defaultSize * 1.6,
-                    //                   ),
-                    //                 );
-                    //               }
-                    //           ),
-                    //         ],
-                    //       ),
-                    //       TextButton(
-                    //         onPressed: () {
-                    //           // 사용 내역 페이지로 연결
-                    //         },
-                    //         child: Text("사용 내역 ", style: TextStyle(
-                    //           fontSize: SizeConfig.defaultSize * 1.6,
-                    //           fontWeight: FontWeight.w500,
-                    //           decoration: TextDecoration.underline,
-                    //         )),
-                    //       ),
-                    //     ],
-                    //   ),
-                    // ),
+                    SizedBox(height: SizeConfig.defaultSize * 0.7,),
+                    Container( // 포인트 ~ (아래층)
+                      padding: EdgeInsets.only(left: SizeConfig.defaultSize * 1.4, right: SizeConfig.defaultSize * 1.4, top: SizeConfig.defaultSize * 1.1, bottom: SizeConfig.defaultSize * 1.1),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.all(Radius.circular(5)),
+                      ),
+                      alignment: Alignment.center,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text("나의 Points", style: TextStyle(
+                            fontSize: SizeConfig.defaultSize * 1.4
+                          ),),
+                          Text(widget.userResponse.personalInfo!.point.toString() ?? "불러오는중", style: TextStyle(
+                              fontSize: SizeConfig.defaultSize * 1.4
+                          ))
+                          // TODO 나중에 : Point 사용 내역
+                        ],
+                      )
+                    ),
                   ],
                 )
             ),
@@ -203,6 +250,48 @@ class MyPageLandingView extends StatelessWidget {
 
         // =================================================================
 
+        // TODO : '인증 완료'면 안 띄우는 로직 만들기
+        InkWell(
+          onTap: () async {
+            await Navigator.push(context, MaterialPageRoute(builder: (_) => StudentVertification(
+              userResponse: BlocProvider.of<MyPagesCubit>(context).state.userResponse,
+            )));
+
+            PaintingBinding.instance.imageCache.clear();
+            BlocProvider.of<MyPagesCubit>(context).refreshMyInfo();
+            setState(() {
+            });
+          },
+          child: Padding( // TODO : 학생증
+            padding: EdgeInsets.symmetric(
+              // vertical: SizeConfig.defaultSize,
+                horizontal: SizeConfig.defaultSize * 0.5),
+            child: Container(
+              width: SizeConfig.screenWidth,
+              height: SizeConfig.defaultSize * 4.8,
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(width: 1.3, color: Color(0xff7C83FD))
+              ),
+              child: Padding(
+                padding: EdgeInsets.only(left: SizeConfig.defaultSize * 1.5, right: SizeConfig.defaultSize * 1.5),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text("지금 학생증 인증하면 프로필배지를 추가해드려요!", style: TextStyle(
+                        fontSize: SizeConfig.defaultSize * 1.4
+                    ),),
+                    Icon(
+                      Icons.arrow_right_alt_rounded, color: Color(0xff7C83FD)
+                    )
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+
         SizedBox(height: SizeConfig.defaultSize),
 
         Container(
@@ -210,29 +299,33 @@ class MyPageLandingView extends StatelessWidget {
           child: Padding(
               padding: EdgeInsets.symmetric(
                   vertical: SizeConfig.defaultSize,
-                  horizontal: SizeConfig.defaultSize * 1.5),
+                  horizontal: SizeConfig.defaultSize * 1.1),
               child: Column(
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text("내 친구",
-                        style: TextStyle(
-                          fontWeight: FontWeight.w700,
-                          fontSize: SizeConfig.defaultSize * 1.7,
-                          color: Color(0xff7C83FD)
-                        ),),
-                      BlocBuilder<MyPagesCubit, MyPagesState>(
-                          builder: (context, state) {
-                            return openAddFriends(myCode: state.userResponse.user?.recommendationCode ?? '내 코드가 없어요!');
-                          }),
-                    ],
+                  Padding(
+                    padding: EdgeInsets.only(left: SizeConfig.defaultSize * 0.2, right: SizeConfig.defaultSize * 0.2),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text("내 친구",
+                          style: TextStyle(
+                            fontWeight: FontWeight.w700,
+                            fontSize: SizeConfig.defaultSize * 1.7,
+                            color: Color(0xff7C83FD)
+                          ),),
+                        BlocBuilder<MyPagesCubit, MyPagesState>(
+                            builder: (context, state) {
+                              return openAddFriends(myCode: state.userResponse.personalInfo?.recommendationCode ?? '내 코드가 없어요!');
+                            }),
+                      ],
+                    ),
                   ),
                   SizedBox(height: SizeConfig.defaultSize * 1.5,),
                   BlocBuilder<MyPagesCubit,MyPagesState>(
                       builder: (context, state) {
                         final friends = state.friends;
-                        return MyFriends(friends: friends, count: friends.length);
+                        final user = state.userResponse;
+                        return MyFriends(friends: friends, count: friends.length, userResponse: user);
                       }
                   ),
                 ],
@@ -252,25 +345,29 @@ class MyPageLandingView extends StatelessWidget {
           child: Padding(
             padding: EdgeInsets.symmetric(
                 vertical: SizeConfig.defaultSize,
-                horizontal: SizeConfig.defaultSize * 1.5),
+                horizontal: SizeConfig.defaultSize * 1.1),
             child: Column(
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text("알 수도 있는 친구",
-                        style: TextStyle(
-                          fontWeight: FontWeight.w700,
-                          fontSize: SizeConfig.defaultSize * 1.7,
-                          color: Color(0xff7C83FD)
-                        ),),
-                    ],
+                  Padding(
+                    padding: EdgeInsets.only(left: SizeConfig.defaultSize * 0.2, right: SizeConfig.defaultSize * 0.2),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text("알 수도 있는 친구",
+                          style: TextStyle(
+                            fontWeight: FontWeight.w700,
+                            fontSize: SizeConfig.defaultSize * 1.7,
+                            color: Color(0xff7C83FD)
+                          ),),
+                      ],
+                    ),
                   ),
                   SizedBox(height: SizeConfig.defaultSize * 2 ,),
                   BlocBuilder<MyPagesCubit,MyPagesState>(
                       builder: (context, state) {
                         final friends = state.newFriends;
-                        return NewFriends(friends: friends, count: friends.length);
+                        final user = state.userResponse;
+                        return NewFriends(friends: friends, count: friends.length, userResponse: user,);
                       }
                   ),
                 ],
@@ -284,13 +381,15 @@ class MyPageLandingView extends StatelessWidget {
 }
 
 class MyFriends extends StatelessWidget {
-  final Set<Friend> friends;
+  final Set<User> friends;
   final int count;
+  final User userResponse;
 
   const MyFriends({
     super.key,
     required this.friends,
     required this.count,
+    required this.userResponse
   });
 
   @override
@@ -309,7 +408,7 @@ class MyFriends extends StatelessWidget {
             // for (var i = friends.iterator ; ; i.moveNext() )
             //     FriendComponent(false, i.current, count),
             for (int i = 0; i < this.count; i++)
-              FriendComponent(false, friendsList[i], count),
+              FriendComponent(false, friendsList[i], count, userResponse),
           ],
         );
       }
@@ -318,13 +417,15 @@ class MyFriends extends StatelessWidget {
 }
 
 class NewFriends extends StatelessWidget {
-  final Set<Friend> friends;
+  final Set<User> friends;
   final int count;
+  final User userResponse;
 
   const NewFriends({
     super.key,
     required this.friends,
     required this.count,
+    required this.userResponse,
   });
 
   @override
@@ -341,29 +442,37 @@ class NewFriends extends StatelessWidget {
         // for (var i = friends.iterator ; ; i.moveNext() )
         //   FriendComponent(false, i.current, count),
         for (int i = 0; i < count; i++)
-          NotFriendComponent(true, friendsList[i]),
+          NotFriendComponent(true, friendsList[i], userResponse),
       ],
     );
   }
 }
 
-class FriendComponent extends StatelessWidget {
+class FriendComponent extends StatefulWidget {
   late bool isAdd;
-  late Friend friend;
+  late User friend;
   late int count;
+  late User userResponse;
 
-  FriendComponent(bool isAdd, Friend friend, int count, {super.key}) {
+  FriendComponent(bool isAdd, User friend, int count, User userResponse, {super.key}) {
     this.isAdd = isAdd;
     this.friend = friend;
     this.count = count;
+    this.userResponse = userResponse;
   }
 
+  @override
+  State<FriendComponent> createState() => _FriendComponentState();
+}
+
+class _FriendComponentState extends State<FriendComponent> {
+
   void pressedDeleteButton(BuildContext context, int userId) {
-    BlocProvider.of<MyPagesCubit>(context).pressedFriendDeleteButton(friend);
+    BlocProvider.of<MyPagesCubit>(context).pressedFriendDeleteButton(widget.friend);
   }
 
   void pressedAddButton(BuildContext context, int userId) {
-    BlocProvider.of<MyPagesCubit>(context).pressedFriendAddButton(friend);
+    BlocProvider.of<MyPagesCubit>(context).pressedFriendAddButton(widget.friend);
   }
 
   void showCannotAddFriendToast() {
@@ -378,6 +487,8 @@ class FriendComponent extends StatelessWidget {
     );
   }
 
+  String get profileImageUrl => widget.friend.personalInfo?.profileImageUrl ?? 'DEFAULT';
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -389,30 +500,75 @@ class FriendComponent extends StatelessWidget {
             GestureDetector(
               onTap: () {
                 AnalyticsUtil.logEvent("내정보_마이_친구터치", properties: {
-                  "친구 성별": friend.gender=="FEMALE" ? "여자" : "남자",
-                  "친구 학번": friend.admissionYear.toString().substring(2,4),
-                  "친구 학교": friend.university!.name,
-                  "친구 학교코드": friend.university!.id,
-                  "친구 학과": friend.university!.department
+                  "친구 성별": widget.friend.personalInfo?.gender=="FEMALE" ? "여자" : "남자",
+                  "친구 학번": widget.friend.personalInfo?.admissionYear.toString().substring(2,4),
+                  "친구 학교": widget.friend.university!.name,
+                  "친구 학교코드": widget.friend.university!.id,
+                  "친구 학과": widget.friend.university!.department
                 });
               },
               child: Container(
                 width: SizeConfig.screenWidth * 0.7,
                 child: Row(
                   children: [
-                    Text(friend.name ?? "XXX", style: TextStyle(
-                  fontSize: SizeConfig.defaultSize * 1.9,
-                      fontWeight: FontWeight.w600,
-                    )),
-                    Flexible(
-                        child: Container(
-                          child: Text("  ${friend.admissionYear.toString().substring(2,4)}학번∙${friend.university?.department}", style: TextStyle(
-                            fontSize: SizeConfig.defaultSize * 1.3,
-                            fontWeight: FontWeight.w500,
-                            overflow: TextOverflow.ellipsis,
-                          )),
-                        ),
+                    ClipOval(
+                      clipBehavior: Clip.antiAlias,
+                      child: Container(
+                          // decoration: BoxDecoration(
+                          //   gradient: LinearGradient(
+                          //       colors: [Color(0xff7C83FD), Color(0xff7C83FD)]),
+                          //   borderRadius: BorderRadius.circular(32),
+                          // ),
+                          child: profileImageUrl == "DEFAULT"
+                              ? ClipOval(
+                            child: Image.asset('assets/images/profile-mockup3.png', width: SizeConfig.defaultSize * 4.5, fit: BoxFit.cover,),
+                          )
+                              : ClipOval(
+                              child: Image.network(profileImageUrl,
+                                width: SizeConfig.defaultSize * 4.5,
+                                height: SizeConfig.defaultSize * 4.5,
+                                fit: BoxFit.cover,)
+                          ),
+                      ),
                     ),
+                    SizedBox(width: SizeConfig.defaultSize * 0.1,),
+                    Flexible(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text("  ${widget.friend.personalInfo?.name} ", style: TextStyle(
+                                fontSize: SizeConfig.defaultSize * 1.6,
+                                fontWeight: FontWeight.w800,
+                                overflow: TextOverflow.ellipsis,
+                              )),
+                              Text("${widget.friend.personalInfo?.admissionYear.toString().substring(2,4)}학번", style: TextStyle(
+                                fontSize: SizeConfig.defaultSize * 1.3,
+                                fontWeight: FontWeight.w500,
+                                overflow: TextOverflow.ellipsis,
+                              )),
+                              if (widget.friend.personalInfo!.verification.isVerificationSuccess)
+                                Row(
+                                  children: [
+                                    SizedBox(width: SizeConfig.defaultSize * 0.35),
+                                    Image.asset("assets/images/check.png", width: SizeConfig.defaultSize * 1.2),
+                                  ],
+                                ),
+                            ],
+                          ),
+                          SizedBox(height: SizeConfig.defaultSize * 0.4,),
+                          Container(
+                            child: Text("  ${widget.friend.university!.name} ${widget.friend.university?.department}", style: TextStyle(
+                              fontSize: SizeConfig.defaultSize * 1.3,
+                              fontWeight: FontWeight.w500,
+                              overflow: TextOverflow.ellipsis,
+                            )),
+                          ),
+                        ],
+                      ),
+                    )
                   ],
                 ),
               ),
@@ -457,15 +613,15 @@ class FriendComponent extends StatelessWidget {
                 }
                 else if (value == 'delete') {
                   AnalyticsUtil.logEvent("내정보_마이_내친구더보기_친구삭제");
-                  if (count >= 5) {
-                    if (isAdd) {
-                      pressedAddButton(context, friend.userId!);
+                  if (widget.count >= 5) {
+                    if (widget.isAdd) {
+                      pressedAddButton(context, widget.friend.personalInfo!.id);
                     } else {
                       // pressedDeleteButton(context, friend.userId!); // 원래 코드
                       showDialog<String>(
                         context: context,
                         builder: (BuildContext dialogContext) => AlertDialog(
-                          title: Text('\'${friend.name}\' 친구를 삭제하시겠어요?', style: TextStyle(fontSize: SizeConfig.defaultSize * 2),),
+                          title: Text('\'${widget.friend.personalInfo?.name}\' 친구를 삭제하시겠어요?', style: TextStyle(fontSize: SizeConfig.defaultSize * 2),),
                           // content: const Text('사용자를 신고하면 Dart에서 빠르게 신고 처리를 해드려요!'),
                           backgroundColor: Colors.white,
                           surfaceTintColor: Colors.white,
@@ -480,7 +636,7 @@ class FriendComponent extends StatelessWidget {
                             TextButton(
                               onPressed: () {
                                 AnalyticsUtil.logEvent("내정보_마이_내친구삭제_삭제확정");
-                                pressedDeleteButton(context, friend.userId!);
+                                pressedDeleteButton(context, widget.friend.personalInfo!.id);
                                 // BlocProvider.of<MyPagesCubit>(context).pressedFriendDeleteButton(friend);
                                 Navigator.pop(dialogContext); // 팝업 창을 닫는 로직 추가
                               },
@@ -519,22 +675,31 @@ class FriendComponent extends StatelessWidget {
   }
 }
 
-class NotFriendComponent extends StatelessWidget {
+class NotFriendComponent extends StatefulWidget {
   late bool isAdd;
-  late Friend friend;
+  late User friend;
+  late User userResponse;
 
-  NotFriendComponent(bool isAdd, Friend friend, {super.key}) {
+  NotFriendComponent(bool isAdd, User friend, User userResponse, {super.key}) {
     this.isAdd = isAdd;
     this.friend = friend;
+    this.userResponse = userResponse;
   }
 
+  @override
+  State<NotFriendComponent> createState() => _NotFriendComponentState();
+}
+
+class _NotFriendComponentState extends State<NotFriendComponent> {
   void pressedDeleteButton(BuildContext context, int userId) {
-    BlocProvider.of<MyPagesCubit>(context).pressedFriendDeleteButton(friend);
+    BlocProvider.of<MyPagesCubit>(context).pressedFriendDeleteButton(widget.friend);
   }
 
   void pressedAddButton(BuildContext context, int userId) {
-    BlocProvider.of<MyPagesCubit>(context).pressedFriendAddButton(friend);
+    BlocProvider.of<MyPagesCubit>(context).pressedFriendAddButton(widget.friend);
   }
+
+  String get profileImageUrl => widget.friend.personalInfo?.profileImageUrl ?? 'DEFAULT';
 
   @override
   Widget build(BuildContext context) {
@@ -547,28 +712,73 @@ class NotFriendComponent extends StatelessWidget {
             GestureDetector(
               onTap: () {
                 AnalyticsUtil.logEvent("내정보_마이_친구터치", properties: {
-                  "친구 성별": friend.gender=="FEMALE" ? "여자" : "남자",
-                  "친구 학번": friend.admissionYear.toString().substring(2,4),
-                  "친구 학교": friend.university!.name,
-                  "친구 학교코드": friend.university!.id,
-                  "친구 학과": friend.university!.department
+                  "친구 성별": widget.friend.personalInfo?.gender=="FEMALE" ? "여자" : "남자",
+                  "친구 학번": widget.friend.personalInfo?.admissionYear.toString().substring(2,4),
+                  "친구 학교": widget.friend.university!.name,
+                  "친구 학교코드": widget.friend.university!.id,
+                  "친구 학과": widget.friend.university!.department
                 });
               },
               child: Container(
                 width: SizeConfig.screenWidth * 0.54,
                 child: Row(
                   children: [
-                    Text(friend.name ?? "XXX", style: TextStyle(
-                      fontSize: SizeConfig.defaultSize * 1.9,
-                      fontWeight: FontWeight.w600,
-                    )),
-                    Flexible(
+                    ClipOval(
+                      clipBehavior: Clip.antiAlias,
                       child: Container(
-                          child: Text("  ${friend.admissionYear.toString().substring(2,4)}학번∙${friend.university?.department}", style: TextStyle(
-                          fontSize: SizeConfig.defaultSize * 1.3,
-                          fontWeight: FontWeight.w500,
-                          overflow: TextOverflow.ellipsis,
-                        )),
+                          // decoration: BoxDecoration(
+                          //   gradient: LinearGradient(
+                          //       colors: [Color(0xff7C83FD), Color(0xff7C83FD)]),
+                          //   borderRadius: BorderRadius.circular(32),
+                          // ),
+                          child: profileImageUrl == "DEFAULT"
+                              ? ClipOval(
+                            child: Image.asset('assets/images/profile-mockup3.png', width: SizeConfig.defaultSize * 4.5, fit: BoxFit.fill,),
+                          )
+                              : ClipOval(
+                              child: Image.network(profileImageUrl,
+                                width: SizeConfig.defaultSize * 4.5,
+                                height: SizeConfig.defaultSize * 4.5,
+                                fit: BoxFit.cover,)
+                          ),
+                      ),
+                    ),
+                    SizedBox(width: SizeConfig.defaultSize * 0.1,),
+                    Flexible(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text("  ${widget.friend.personalInfo?.name} ", style: TextStyle(
+                                fontSize: SizeConfig.defaultSize * 1.6,
+                                fontWeight: FontWeight.w800,
+                                overflow: TextOverflow.ellipsis,
+                              )),
+                              Text("${widget.friend.personalInfo?.admissionYear.toString().substring(2,4)}학번", style: TextStyle(
+                                fontSize: SizeConfig.defaultSize * 1.3,
+                                fontWeight: FontWeight.w500,
+                                overflow: TextOverflow.ellipsis,
+                              )),
+                              if (widget.friend.personalInfo!.verification.isVerificationSuccess)
+                                Row(
+                                  children: [
+                                    SizedBox(width: SizeConfig.defaultSize * 0.35),
+                                    Image.asset("assets/images/check.png", width: SizeConfig.defaultSize * 1.2),
+                                  ],
+                                ),
+                            ],
+                          ),
+                          SizedBox(height: SizeConfig.defaultSize * 0.4,),
+                          Container(
+                              child: Text("  ${widget.friend.university!.name} ${widget.friend.university?.department}", style: TextStyle(
+                              fontSize: SizeConfig.defaultSize * 1.3,
+                              fontWeight: FontWeight.w500,
+                              overflow: TextOverflow.ellipsis,
+                            )),
+                          ),
+                        ],
                       ),
                     )
                   ],
@@ -627,10 +837,10 @@ class NotFriendComponent extends StatelessWidget {
             ElevatedButton(
               onPressed: () {
                 AnalyticsUtil.logEvent("내정보_마이_알수도있는친구_친구추가");
-                if (isAdd) {
-                  pressedAddButton(context, friend.userId!);
+                if (widget.isAdd) {
+                  pressedAddButton(context, widget.friend.personalInfo!.id);
                 } else {
-                  pressedDeleteButton(context, friend.userId!);
+                  pressedDeleteButton(context, widget.friend.personalInfo!.id);
                 }
               },
               style: ElevatedButton.styleFrom(
@@ -639,7 +849,7 @@ class NotFriendComponent extends StatelessWidget {
                   borderRadius: BorderRadius.circular(15), // 모서리 둥글기 설정
                 ),
               ),
-              child: Text(isAdd?"추가":"삭제", style: TextStyle(
+              child: Text(widget.isAdd?"추가":"삭제", style: TextStyle(
                 fontSize: SizeConfig.defaultSize * 1.5,
                 fontWeight: FontWeight.w500,
                 color: Colors.white,
@@ -1036,7 +1246,7 @@ class _openAddFriendsState extends State<openAddFriends> {
           height: SizeConfig.defaultSize * 3.5,
           alignment: Alignment.center,
           decoration: BoxDecoration(
-              color: Colors.white,
+              color: Color(0xff7C83FD),
               border: Border.all(
                 color: Color(0xff7C83FD),
               ),
@@ -1047,8 +1257,8 @@ class _openAddFriendsState extends State<openAddFriends> {
               "코드로 추가",
               style: TextStyle(
                 fontSize: SizeConfig.defaultSize * 1.8,
-                fontWeight: FontWeight.w600,
-                color: Color(0xff7C83FD),
+                fontWeight: FontWeight.w500,
+                color: Colors.white,
               ),
             ),
           ),

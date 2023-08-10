@@ -1,5 +1,5 @@
 import 'package:dart_flutter/src/data/model/friend_dto.dart';
-import 'package:dart_flutter/src/data/model/user_dto.dart';
+import 'package:dart_flutter/src/data/model/personal_info_dto.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 @JsonSerializable()

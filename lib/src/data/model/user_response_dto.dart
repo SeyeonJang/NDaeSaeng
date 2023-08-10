@@ -1,15 +1,15 @@
 import 'package:dart_flutter/src/data/model/university_dto.dart';
-import 'package:dart_flutter/src/data/model/user_dto.dart';
-import 'package:dart_flutter/src/domain/entity/user_response.dart';
+import 'package:dart_flutter/src/data/model/personal_info_dto.dart';
+import 'package:dart_flutter/src/domain/entity/user.dart';
 
-class UserResponseDto {
-  UserDto? user;
+class UserDto {
+  PersonalInfoDto? personalInfo;
   UniversityDto? university;
 
-  UserResponseDto({this.user, this.university});
+  UserDto({this.personalInfo, this.university});
 
-  UserResponseDto.fromJson(Map<String, dynamic> json) {
-    user = json['user'] != null ? UserDto.fromJson(json['user']) : null;
+  UserDto.fromJson(Map<String, dynamic> json) {
+    personalInfo = json['user'] != null ? PersonalInfoDto.fromJson(json['user']) : null;
     university = json['university'] != null
         ? UniversityDto.fromJson(json['university'])
         : null;
@@ -17,8 +17,8 @@ class UserResponseDto {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    if (user != null) {
-      data['user'] = user!.toJson();
+    if (personalInfo != null) {
+      data['user'] = personalInfo!.toJson();
     }
     if (university != null) {
       data['university'] = university!.toJson();
@@ -29,10 +29,10 @@ class UserResponseDto {
   // 분석툴에 넘길 사용자 정보 (전화번호 등 민감정보 제외)
   Map<String, dynamic> toAnalytics() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    if (user != null) {
-      data['gender'] = user!.gender;
-      data['admissionYear'] = user!.admissionYear;
-      data['birthYear'] = user!.birthYear;
+    if (personalInfo != null) {
+      data['gender'] = personalInfo!.gender;
+      data['admissionYear'] = personalInfo!.admissionYear;
+      data['birthYear'] = personalInfo!.birthYear;
     }
     if (university != null) {
       data['university'] = university!.name;
@@ -41,15 +41,22 @@ class UserResponseDto {
     return data;
   }
 
-  UserResponse newUserResponse() {
-    return UserResponse(
-      user: user?.newUser(),
+  User newUserResponse() {
+    return User(
+      personalInfo: personalInfo?.newUser(),
       university: university?.newUniversity(),
+    );
+  }
+
+  static UserDto fromUserResponse(User userResponse) {
+    return UserDto(
+      personalInfo: PersonalInfoDto.fromUser(userResponse.personalInfo!),
+      university: UniversityDto.fromUniversity(userResponse.university!),
     );
   }
 
   @override
   String toString() {
-    return 'UserResponse{user: $user, university: $university}';
+    return 'UserResponse{user: $personalInfo, university: $university}';
   }
 }

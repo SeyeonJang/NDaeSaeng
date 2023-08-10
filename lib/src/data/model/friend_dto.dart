@@ -1,6 +1,7 @@
 import 'package:dart_flutter/src/data/model/university_dto.dart';
 import 'package:dart_flutter/src/domain/entity/friend.dart';
 
+@Deprecated("UserResponseDto로 대체됨")
 class FriendDto {
   int? userId;
   String? name;

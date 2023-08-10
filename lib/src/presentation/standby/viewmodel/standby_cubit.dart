@@ -1,4 +1,5 @@
 import 'package:dart_flutter/src/domain/entity/friend.dart';
+import 'package:dart_flutter/src/domain/entity/user.dart';
 import 'package:dart_flutter/src/domain/use_case/friend_use_case.dart';
 import 'package:dart_flutter/src/domain/use_case/user_use_case.dart';
 import 'package:dart_flutter/src/presentation/standby/viewmodel/state/standby_state.dart';
@@ -14,14 +15,14 @@ class StandbyCubit extends Cubit<StandbyState> {
     state.isLoading = true;
     emit(state.copy());
 
-    List<Friend> friends = await _friendUseCase.getMyFriends();
+    List<User> friends = await _friendUseCase.getMyFriends();
     state.setAddedFriends(friends);
-    List<Friend> newFriends = await _friendUseCase.getRecommendedFriends();
+    List<User> newFriends = await _friendUseCase.getRecommendedFriends();
     state.setRecommendedFriends(newFriends);
     _userUseCase.cleanUpUserResponseCache();
     state.userResponse = await _userUseCase.myInfo();
 
-    state.userResponse.user!.recommendationCode;
+    state.userResponse.personalInfo!.recommendationCode;
     state.isLoading = false;
     state.isFirstCommCompleted = true;
     emit(state.copy());
@@ -36,7 +37,7 @@ class StandbyCubit extends Cubit<StandbyState> {
     emit(state.copy());
 
     try {
-      Friend friend = await _friendUseCase.addFriendBy(inviteCode);
+      User friend = await _friendUseCase.addFriendBy(inviteCode);
       state.addFriend(friend);
       state.newFriends = await _friendUseCase.getRecommendedFriends(put: true);
       } catch (e, trace) {
@@ -48,7 +49,7 @@ class StandbyCubit extends Cubit<StandbyState> {
     }
   }
 
-  void pressedFriendAddButton(Friend friend) {
+  void pressedFriendAddButton(User friend) {
     state.isLoading = true;
     emit(state.copy());
 
@@ -65,7 +66,7 @@ class StandbyCubit extends Cubit<StandbyState> {
   }
 
   Future<int> getFriendsCount() async {
-    List<Friend> friends = await _friendUseCase.getMyFriends();
+    List<User> friends = await _friendUseCase.getMyFriends();
     return friends.length;
   }
 }

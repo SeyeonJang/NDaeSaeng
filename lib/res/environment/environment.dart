@@ -4,4 +4,6 @@ abstract class Environment {
   String getApiBaseUrl();
   String getKakaoSdkKey();
   String getAmplitudeKey();
+  String getSupabaseUrl();
+  String getSupabaseApiKey();
 }

@@ -29,6 +29,14 @@ class UniversityDto {
     return University(id: id ?? 0, name: name ?? 'ㅇㅇ대학교', department: department ?? 'ㅇㅇ학과');
   }
 
+  static UniversityDto fromUniversity(University university) {
+    return UniversityDto(
+      id: university.id,
+      name: university.name,
+      department: university.department
+    );
+  }
+
   @override
   String toString() {
     return 'University{id: $id, name: $name, department: $department}';
