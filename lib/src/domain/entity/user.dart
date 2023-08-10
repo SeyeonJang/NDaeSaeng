@@ -1,3 +1,4 @@
+import 'package:dart_flutter/src/domain/entity/type/IdCardVerificationStatus.dart';
 import 'package:flutter/foundation.dart';
 
 @immutable
@@ -6,7 +7,7 @@ class User {
   final String name;
   final String nickname;
   final String profileImageUrl;
-  final String verification;
+  final IdCardVerificationStatus verification;
   final String phone;
   final String gender;
   final int admissionYear;
@@ -27,7 +28,7 @@ class User {
       required this.point});
 
   User copyWith({
-    int? id, String? name, String? nickname, String? profileImageUrl, String? verification, String? phone, String? gender, int? admissionYear, int? birthYear, String? recommendationCode, int? point
+    int? id, String? name, String? nickname, String? profileImageUrl, IdCardVerificationStatus? verification, String? phone, String? gender, int? admissionYear, int? birthYear, String? recommendationCode, int? point
   }) {
     return User(
       id: id ?? this.id,

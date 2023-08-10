@@ -1,3 +1,5 @@
+import 'package:dart_flutter/src/domain/entity/type/IdCardVerificationStatus.dart';
+
 import '../../domain/entity/user.dart';
 
 class UserDto {
@@ -61,7 +63,7 @@ class UserDto {
         name: name ?? "(알수없음)",
         nickname: nickname ?? "",
         profileImageUrl: profileImageUrl ?? "DEFAULT",
-        verification: verification ?? "인증전",
+        verification: IdCardVerificationStatus.fromValue(verification),
         phone: phone ?? "01000000000",
         gender: gender ?? "UNKNOWN",
         admissionYear: admissionYear ?? 0000,
@@ -77,7 +79,7 @@ class UserDto {
       name: user.name,
       nickname: user.nickname,
       profileImageUrl: user.profileImageUrl,
-      verification: user.verification,
+      verification: user.verification.toValue(),
       phone: user.phone,
       gender: user.gender,
       admissionYear: user.admissionYear,
