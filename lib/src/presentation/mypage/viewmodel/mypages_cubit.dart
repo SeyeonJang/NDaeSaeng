@@ -61,10 +61,10 @@ class MyPagesCubit extends Cubit<MyPagesState> {
     }
   }
 
-  void uploadProfileImage(File file, String userId) async {
+  void uploadProfileImage(File file, UserResponse userResponse) async {
     print(state.userResponse.toString());
     // String userId = state.userResponse.user!.id.toString();
-    _userUseCase.uploadProfileImage(file, userId);
+    _userUseCase.uploadProfileImage(file, userResponse);
   }
 
   String getProfileImageUrl(String userId) {

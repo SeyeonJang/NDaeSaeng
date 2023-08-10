@@ -113,7 +113,7 @@ class _MyPageViewState extends State<MyPageView> {
     if (pickedFile != null) {
       setState(() {
         _selectedImage = File(pickedFile.path);
-        BlocProvider.of<MyPagesCubit>(context).uploadProfileImage(_selectedImage!, userId);
+        BlocProvider.of<MyPagesCubit>(context).uploadProfileImage(_selectedImage!, widget.userResponse);
         AnalyticsUtil.logEvent("내정보_설정_프로필사진변경");
       });
     }

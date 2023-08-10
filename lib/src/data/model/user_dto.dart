@@ -59,7 +59,7 @@ class UserDto {
     return User(
         id: id ?? 0,
         name: name ?? "(알수없음)",
-        nickname: nickname ?? "DEFAULT",
+        nickname: nickname ?? "",
         profileImageUrl: profileImageUrl ?? "DEFAULT",
         verification: verification ?? "인증전",
         phone: phone ?? "01000000000",

@@ -1,3 +1,6 @@
+import 'package:flutter/foundation.dart';
+
+@immutable
 class User {
   final int id;
   final String name;
@@ -11,7 +14,7 @@ class User {
   final String recommendationCode;
   final int point;
 
-  User({required this.id,
+  const User({required this.id,
       required this.name,
       required this.nickname,
       required this.profileImageUrl,
@@ -22,6 +25,24 @@ class User {
       required this.admissionYear,
       required this.recommendationCode,
       required this.point});
+
+  User copyWith({
+    int? id, String? name, String? nickname, String? profileImageUrl, String? verification, String? phone, String? gender, int? admissionYear, int? birthYear, String? recommendationCode, int? point
+  }) {
+    return User(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      nickname: nickname ?? this.nickname,
+      profileImageUrl: profileImageUrl ?? this.profileImageUrl,
+      verification: verification ?? this.verification,
+      phone: phone ?? this.phone,
+      gender: gender ?? this.gender,
+      admissionYear: admissionYear ?? this.admissionYear,
+      birthYear: birthYear ?? this.birthYear,
+      recommendationCode: recommendationCode ?? this.recommendationCode,
+      point: point ?? this.point
+    );
+  }
 
   factory User.fromJson(Map<String, dynamic> json) {
     return User(

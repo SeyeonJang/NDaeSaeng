@@ -5,8 +5,8 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 class SupabaseRemoteDatasource {
   static final _supabase = Supabase.instance.client;
 
-  static Future<String> uploadFileToStorage(String dbName, String path, File file) {
-    return _supabase.storage.from(dbName).upload(path, file);
+  static Future<String> uploadFileToStorage(String dbName, String path, File file) async {
+    return await _supabase.storage.from(dbName).upload(path, file);
   }
 
   static String getFileUrl(String dbName, String filePath) {

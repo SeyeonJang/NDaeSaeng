@@ -2,9 +2,7 @@ import 'dart:io';
 
 import 'package:dart_flutter/src/data/model/user_request_dto.dart';
 import 'package:dart_flutter/src/data/model/user_signup_request_dto.dart';
-import 'package:dart_flutter/src/data/model/user_response_dto.dart';
 import 'package:dart_flutter/src/data/my_cache.dart';
-import 'package:dart_flutter/src/domain/entity/user.dart';
 import 'package:dart_flutter/src/domain/entity/user_request.dart';
 import 'package:dart_flutter/src/domain/entity/user_response.dart';
 import 'package:dart_flutter/src/domain/repository/user_repository.dart';
@@ -51,11 +49,14 @@ class DartUserRepositoryImpl implements UserRepository {
 
   @override
   Future<String> uploadProfileImage(File file, String userId) async {
-    String url = await SupabaseRemoteDatasource.uploadFileToStorage(PROFILE_STORAGE_NAME, "/${userId}", file);
+    await SupabaseRemoteDatasource.uploadFileToStorage(PROFILE_STORAGE_NAME, userId, file);
+    await Future.delayed(const Duration(seconds: 1));
+
+    String url = getProfileImageUrl(userId);
     UserRequestDto userRequestDto = UserRequestDto(
       profileImageUrl: url,
     );
-    DartApiRemoteDataSource.patchMyInformation(userRequestDto);
+
     return url;
   }
 

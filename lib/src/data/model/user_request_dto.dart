@@ -1,6 +1,8 @@
 import 'package:dart_flutter/src/domain/entity/user_response.dart';
 
 class UserRequestDto {
+  static const String DEFAULT_VALUE = "DEFAULT";
+
   String? nickname;
   String? profileImageUrl;
 
@@ -19,14 +21,16 @@ class UserRequestDto {
   }
 
   Map<String, dynamic> toBody() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    if (nickname != null || nickname == "") {
-      data['nickname'] = nickname;
-    }
-    if (profileImageUrl != null || profileImageUrl == "") {
-      data['profileImageUrl'] = profileImageUrl;
-    }
-    return data;
+    nickname = checkAndSetDefault(nickname);
+    profileImageUrl = checkAndSetDefault(profileImageUrl);
+    return toJson();
+  }
+
+  dynamic checkAndSetDefault(dynamic value) {
+      if (value == null || value == "") {
+        value = DEFAULT_VALUE;
+      }
+      return value;
   }
 
   static UserRequestDto fromUserResponse(UserResponse userResponse) {
@@ -34,5 +38,10 @@ class UserRequestDto {
       nickname: userResponse.user!.nickname,
       profileImageUrl: userResponse.user!.profileImageUrl
     );
+  }
+
+  @override
+  String toString() {
+    return 'UserRequestDto{nickname: $nickname, profileImageUrl: $profileImageUrl}';
   }
 }

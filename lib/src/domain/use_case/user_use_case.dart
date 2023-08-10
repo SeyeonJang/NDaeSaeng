@@ -34,21 +34,16 @@ class UserUseCase {
   String getProfileImageUrl(String userId) {
     // return _dartUserRepository.getProfileImageUrl(userId);
     String url = _dartUserRepository.getProfileImageUrl(userId);
-    print("a-------------------3-31-14-214-213-12-214- ::::: $url");
     return url;
   }
 
-  Future<String> uploadProfileImage(File file, String userId) async {
-    try {
-      _dartUserRepository.removeProfileImage(userId);
-    } catch(e, trace) {
-      print(e);
-      print(trace);
-    }
-    // return _dartUserRepository.uploadProfileImage(file, userId);
-    await _dartUserRepository.uploadProfileImage(file, userId);
-    String url = await _dartUserRepository.getProfileImageUrl(userId);
-    print("à--------------------------------------------- $url");
+  Future<String> uploadProfileImage(File file, UserResponse user) async {
+    await _dartUserRepository.removeProfileImage(user.user!.id.toString());
+    String url = await _dartUserRepository.uploadProfileImage(file, user.user!.id.toString());
+
+    user.user = user.user!.copyWith(profileImageUrl: url);
+
+    _dartUserRepository.patchMyInfo(user);
     return url;
   }
 
