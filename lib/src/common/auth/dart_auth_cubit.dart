@@ -167,8 +167,15 @@ class DartAuthCubit extends HydratedCubit<DartAuthState> {
   void setAnalyticsUserInformation() async {
     User userResponse = await _userUseCase.myInfo();
     if (userResponse.personalInfo == null) return;
-    AnalyticsUtil.setUserId(userResponse.personalInfo!.id!.toString());
+    AnalyticsUtil.setUserId(userResponse.personalInfo!.id.toString());
     AnalyticsUtil.setUserInformation(userResponse.toAnalytics());
+    print("onesignal id ${userResponse.personalInfo!.id}");
+  }
+
+  void setPushNotificationUserId() async {
+    User userResponse = await _userUseCase.myInfo();
+    if (userResponse.personalInfo == null) return;
+    PushNotificationUtil.setUserId(userResponse.personalInfo!.id.toString());
   }
 
   @override

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:dart_flutter/src/common/auth/dart_auth_cubit.dart';
 import 'package:dart_flutter/src/common/auth/state/dart_auth_state.dart';
 import 'package:dart_flutter/src/common/util/analytics_util.dart';
+import 'package:dart_flutter/src/common/util/push_notification_util.dart';
 import 'package:dart_flutter/src/presentation/landing/view/land_page.dart';
 import 'package:dart_flutter/src/presentation/signup/signup_pages.dart';
 import 'package:dart_flutter/src/presentation/landing/view/tutorial_slide.dart';
@@ -57,6 +58,7 @@ class _LandPagesState extends State<LandPages> {
           }
           if (state.step == AuthStep.login) {
             BlocProvider.of<DartAuthCubit>(context).setAnalyticsUserInformation();
+            BlocProvider.of<DartAuthCubit>(context).setPushNotificationUserId();
             return BlocProvider<StandbyCubit>(
               create: (BuildContext context) => StandbyCubit()..initPages(),
               child: const StandbyLoading(),
