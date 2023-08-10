@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:dart_flutter/src/common/auth/dart_auth_cubit.dart';
 import 'package:dart_flutter/src/common/util/analytics_util.dart';
 import 'package:dart_flutter/src/common/util/toast_util.dart';
-import 'package:dart_flutter/src/domain/entity/user_response.dart';
+import 'package:dart_flutter/src/domain/entity/user.dart';
 import 'package:dart_flutter/src/presentation/mypage/view/my_ask.dart';
 import 'package:dart_flutter/src/presentation/mypage/view/my_opinion.dart';
 import 'package:dart_flutter/src/presentation/mypage/view/my_tos1.dart';
@@ -23,7 +23,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../../../res/config/size_config.dart';
 
 class MySettings extends StatelessWidget {
-  final UserResponse userResponse;
+  final User userResponse;
 
   MySettings({super.key, required this.userResponse});
 
@@ -43,7 +43,7 @@ class MySettings extends StatelessWidget {
 }
 
 class MyPageView extends StatefulWidget {
-  final UserResponse userResponse;
+  final User userResponse;
   MyPageView({super.key, required this.userResponse});
 
   static final _defaultPadding = EdgeInsets.all(getFlexibleSize(target: 20));
@@ -53,18 +53,18 @@ class MyPageView extends StatefulWidget {
 }
 
 class _MyPageViewState extends State<MyPageView> {
-  String get name => widget.userResponse.user?.name ?? "XXX";
+  String get name => widget.userResponse.personalInfo?.name ?? "XXX";
   String get universityName => widget.userResponse.university?.name ?? "XX대학교";
   String get department => widget.userResponse.university?.department ?? "XXX학과";
   String get admissionNumber =>
-      "${widget.userResponse.user?.admissionYear ?? 'XX'}학번";
+      "${widget.userResponse.personalInfo?.admissionYear ?? 'XX'}학번";
   String get newAdmissionNumber => getId(admissionNumber);
-  String get gender => widget.userResponse.user?.gender ?? 'XX';
+  String get gender => widget.userResponse.personalInfo?.gender ?? 'XX';
   String get newGender => getGender(gender);
-  String get inviteCode => widget.userResponse.user?.recommendationCode ?? 'XXXXXXXX';
-  String get userId => widget.userResponse.user?.id.toString() ?? '0';
-  String get profileImageUrl => widget.userResponse.user?.profileImageUrl ?? 'DEFAULT';
-  String get nickname => widget.userResponse.user?.nickname ?? 'DEFAULT';
+  String get inviteCode => widget.userResponse.personalInfo?.recommendationCode ?? 'XXXXXXXX';
+  String get userId => widget.userResponse.personalInfo?.id.toString() ?? '0';
+  String get profileImageUrl => widget.userResponse.personalInfo?.profileImageUrl ?? 'DEFAULT';
+  String get nickname => widget.userResponse.personalInfo?.nickname ?? 'DEFAULT';
 
   void onLogoutButtonPressed(BuildContext context) async {
     // 로그아웃 버튼 연결

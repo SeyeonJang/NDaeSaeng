@@ -1,4 +1,4 @@
-import 'package:dart_flutter/src/domain/entity/user_response.dart';
+import 'package:dart_flutter/src/domain/entity/user.dart';
 
 class UserRequestDto {
   static const String DEFAULT_VALUE = "DEFAULT";
@@ -33,10 +33,10 @@ class UserRequestDto {
       return value;
   }
 
-  static UserRequestDto fromUserResponse(UserResponse userResponse) {
+  static UserRequestDto fromUserResponse(User userResponse) {
     return UserRequestDto(
-      nickname: userResponse.user!.nickname,
-      profileImageUrl: userResponse.user!.profileImageUrl
+      nickname: userResponse.personalInfo!.nickname,
+      profileImageUrl: userResponse.personalInfo!.profileImageUrl
     );
   }
 

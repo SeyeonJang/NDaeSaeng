@@ -66,7 +66,7 @@ class DartApiRemoteDataSource {
   }
 
   /// User: 회원가입 요청
-  static Future<UserResponseDto> postUserSignup(UserSignupRequestDto user) async {
+  static Future<UserDto> postUserSignup(UserSignupRequestDto user) async {
     const path = '/v1/users/signup';
     final body = user.toJson();
     print(body.toString());
@@ -74,7 +74,7 @@ class DartApiRemoteDataSource {
     final response = await _httpUtil.request().post(path, data: body);
 
     final jsonResponse = json.decode(response.toString());
-    return UserResponseDto.fromJson(jsonResponse);
+    return UserDto.fromJson(jsonResponse);
   }
 
   /// User: 회원 탈퇴 요청
@@ -85,32 +85,32 @@ class DartApiRemoteDataSource {
   }
 
   /// User: 내 정보 가져오기
-  static Future<UserResponseDto> getMyInformation() async {
+  static Future<UserDto> getMyInformation() async {
     const path = '/v1/users/me';
     final response = await _httpUtil.request().get(path);
 
     final jsonResponse = json.decode(response.toString());
-    return UserResponseDto.fromJson(jsonResponse);
+    return UserDto.fromJson(jsonResponse);
   }
 
   // User: 내 정보 수정하기
-  static Future<UserResponseDto> patchMyInformation(UserRequestDto user) async {
+  static Future<UserDto> patchMyInformation(UserRequestDto user) async {
     const path = '/v1/users/me';
     final body = user.toBody();
     final response = await _httpUtil.request().patch(path, data: body);
 
     final jsonResponse = json.decode(response.toString());
-    return UserResponseDto.fromJson(jsonResponse);
+    return UserDto.fromJson(jsonResponse);
   }
 
   // Friend: 친구목록 가져오기 (realFriend를 통해 '내가 추가한 친구'와 '추천 친구'를 구분함)
-  static Future<List<FriendDto>> getMyFriends({bool suggested=false}) async {
+  static Future<List<UserDto>> getMyFriends({bool suggested=false}) async {
     const path = '/v1/friends';
     final pathFull = "$path?suggested=$suggested";
     final response = await _httpUtil.request().get(pathFull);
 
     final List<dynamic> jsonResponse = response.data;
-    List<FriendDto> friends = jsonResponse.map((friend) => FriendDto.fromJson(friend)).toList();
+    List<UserDto> friends = jsonResponse.map((user) => UserDto.fromJson(user)).toList();
     return friends;
   }
 
@@ -123,12 +123,12 @@ class DartApiRemoteDataSource {
     return response.data;
   }
 
-  static Future<FriendDto> postFriendBy(String inviteCode) async {
+  static Future<UserDto> postFriendBy(String inviteCode) async {
     const path = '/v1/friends/invite';
     final body = {"recommendationCode": inviteCode};
 
     final response = await _httpUtil.request().post(path, data: body);
-    return FriendDto.fromJson(response.data);
+    return UserDto.fromJson(response.data);
   }
 
   // Friend: 친구 삭제하기 (연결끊기)

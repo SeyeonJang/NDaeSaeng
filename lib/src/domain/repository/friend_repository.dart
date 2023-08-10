@@ -1,10 +1,10 @@
-import 'package:dart_flutter/src/domain/entity/friend.dart';
+import 'package:dart_flutter/src/domain/entity/user.dart';
 
 abstract class FriendRepository {
-  Future<List<Friend>> getMyFriends();
-  Future<List<Friend>> getRecommendedFriends({bool put});
-  Future<String> addFriend(Friend friend);
-  Future<Friend> addFriendBy(String inviteCode);
-  Future<String> deleteFriend(Friend friend);
+  Future<List<User>> getMyFriends();
+  Future<List<User>> getRecommendedFriends({bool put});
+  Future<String> addFriend(User friend);
+  Future<User> addFriendBy(String inviteCode);
+  Future<String> deleteFriend(User friend);
   void cleanUpCache();
 }

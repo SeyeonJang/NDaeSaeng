@@ -4,7 +4,7 @@ import 'package:dart_flutter/src/data/model/user_request_dto.dart';
 import 'package:dart_flutter/src/data/model/user_signup_request_dto.dart';
 import 'package:dart_flutter/src/data/my_cache.dart';
 import 'package:dart_flutter/src/domain/entity/user_request.dart';
-import 'package:dart_flutter/src/domain/entity/user_response.dart';
+import 'package:dart_flutter/src/domain/entity/user.dart';
 import 'package:dart_flutter/src/domain/repository/user_repository.dart';
 
 import '../../data/datasource/dart_api_remote_datasource.dart';
@@ -17,7 +17,7 @@ class DartUserRepositoryImpl implements UserRepository {
   static const String PROFILE_STORAGE_NAME = "profile";
   static const String IDCARD_STORAGE_NAME = "idcard";
 
-  Future<UserResponse> signup(UserRequest user) async {
+  Future<User> signup(UserRequest user) async {
     var userRequestDto = UserSignupRequestDto.fromUserRequest(user);
     return (await DartApiRemoteDataSource.postUserSignup(userRequestDto)).newUserResponse();
   }
@@ -31,7 +31,7 @@ class DartUserRepositoryImpl implements UserRepository {
     return await DartApiRemoteDataSource.deleteMyAccount();
   }
 
-  Future<UserResponse> myInfo() async {
+  Future<User> myInfo() async {
     if (userResponseCache.isUpdateBefore(DateTime.now().subtract(cachingInterval))) {
       userResponseCache.setObject((await DartApiRemoteDataSource.getMyInformation()).newUserResponse());
     }
@@ -43,7 +43,7 @@ class DartUserRepositoryImpl implements UserRepository {
   }
 
   @override
-  Future<UserResponse> patchMyInfo(UserResponse user) async {
+  Future<User> patchMyInfo(User user) async {
     userResponseCache.setObject(user);
 
     return (await DartApiRemoteDataSource.patchMyInformation(
@@ -98,7 +98,7 @@ class DartUserRepositoryImpl implements UserRepository {
 }
 
 class UserResponseCache extends MyCache {
-  UserResponse? _userResponse;
+  User? _userResponse;
 
   @override
   void setObject(dynamic userResponse) {

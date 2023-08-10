@@ -1,6 +1,8 @@
-import '../../domain/entity/user.dart';
+import 'package:dart_flutter/src/domain/entity/type/IdCardVerificationStatus.dart';
 
-class UserDto {
+import '../../domain/entity/personal_info.dart';
+
+class PersonalInfoDto {
   int? id;
   String? name;
   String? nickname;
@@ -13,7 +15,7 @@ class UserDto {
   String? recommendationCode;
   int? point;
 
-  UserDto({this.id,
+  PersonalInfoDto({this.id,
         this.name,
         this.nickname,
         this.profileImageUrl,
@@ -25,7 +27,7 @@ class UserDto {
         this.recommendationCode,
         this.point});
 
-  UserDto.fromJson(Map<String, dynamic> json) {
+  PersonalInfoDto.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];
     nickname = json['nickname'];
@@ -55,13 +57,13 @@ class UserDto {
     return data;
   }
 
-  User newUser() {
-    return User(
+  PersonalInfo newUser() {
+    return PersonalInfo(
         id: id ?? 0,
         name: name ?? "(알수없음)",
         nickname: nickname ?? "",
         profileImageUrl: profileImageUrl ?? "DEFAULT",
-        verification: verification ?? "인증전",
+        verification: IdCardVerificationStatus.fromValue(verification),
         phone: phone ?? "01000000000",
         gender: gender ?? "UNKNOWN",
         admissionYear: admissionYear ?? 0000,
@@ -71,13 +73,13 @@ class UserDto {
     );
   }
 
-  static UserDto fromUser(User user) {
-    return UserDto(
+  static PersonalInfoDto fromUser(PersonalInfo user) {
+    return PersonalInfoDto(
       id: user.id,
       name: user.name,
       nickname: user.nickname,
       profileImageUrl: user.profileImageUrl,
-      verification: user.verification,
+      verification: user.verification.toValue(),
       phone: user.phone,
       gender: user.gender,
       admissionYear: user.admissionYear,

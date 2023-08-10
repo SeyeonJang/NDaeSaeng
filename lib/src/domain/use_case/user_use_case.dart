@@ -2,20 +2,20 @@ import 'dart:io';
 
 import 'package:dart_flutter/src/data/repository/dart_user_repository_impl.dart';
 import 'package:dart_flutter/src/domain/entity/user_request.dart';
-import 'package:dart_flutter/src/domain/entity/user_response.dart';
+import 'package:dart_flutter/src/domain/entity/user.dart';
 import 'package:dart_flutter/src/domain/repository/user_repository.dart';
 
 class UserUseCase {
   final UserRepository _dartUserRepository = DartUserRepositoryImpl();
 
-  Future<UserResponse> myInfo() async {
+  Future<User> myInfo() async {
     // return _dartUserRepository.myInfo();
     var userResponse = await _dartUserRepository.myInfo();
     print(userResponse.toString());
     return userResponse;
   }
 
-  Future<UserResponse> signup(UserRequest user) {
+  Future<User> signup(UserRequest user) {
     return _dartUserRepository.signup(user);
   }
 
@@ -27,7 +27,7 @@ class UserUseCase {
     _dartUserRepository.logout();
   }
 
-  Future<UserResponse> patchMyInfo(UserResponse user) {
+  Future<User> patchMyInfo(User user) {
     return _dartUserRepository.patchMyInfo(user);
   }
 
@@ -37,19 +37,19 @@ class UserUseCase {
     return url;
   }
 
-  Future<String> uploadProfileImage(File file, UserResponse user) async {
-    await _dartUserRepository.removeProfileImage(user.user!.id.toString());
-    String url = await _dartUserRepository.uploadProfileImage(file, user.user!.id.toString());
+  Future<String> uploadProfileImage(File file, User user) async {
+    await _dartUserRepository.removeProfileImage(user.personalInfo!.id.toString());
+    String url = await _dartUserRepository.uploadProfileImage(file, user.personalInfo!.id.toString());
 
-    user.user = user.user!.copyWith(profileImageUrl: url);
+    user.personalInfo = user.personalInfo!.copyWith(profileImageUrl: url);
 
     _dartUserRepository.patchMyInfo(user);
     return url;
   }
 
-  Future<String> uploadIdCardImage(File file, UserResponse user) async {
-    await _dartUserRepository.removeIdCardImage(user.user!.id.toString());
-    String url = await _dartUserRepository.uploadIdCardImage(file, user.user!.id.toString());
+  Future<String> uploadIdCardImage(File file, User user) async {
+    await _dartUserRepository.removeIdCardImage(user.personalInfo!.id.toString());
+    String url = await _dartUserRepository.uploadIdCardImage(file, user.personalInfo!.id.toString());
     return url;
   }
 

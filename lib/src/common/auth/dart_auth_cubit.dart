@@ -3,7 +3,7 @@ import 'package:dart_flutter/src/common/util/analytics_util.dart';
 import 'package:dart_flutter/src/common/util/push_notification_util.dart';
 import 'package:dart_flutter/src/common/util/version_comparator.dart';
 import 'package:dart_flutter/src/domain/entity/kakao_user.dart';
-import 'package:dart_flutter/src/domain/entity/user_response.dart';
+import 'package:dart_flutter/src/domain/entity/user.dart';
 import 'package:dart_flutter/src/domain/use_case/app_platform_use_case.dart';
 import 'package:dart_flutter/src/domain/use_case/auth_use_case.dart';
 import 'package:dart_flutter/src/domain/use_case/user_use_case.dart';
@@ -97,11 +97,11 @@ class DartAuthCubit extends HydratedCubit<DartAuthState> {
           .setDartAuth(dartAccessToken: dartAuth.accessToken, expiredAt: DateTime.now().add(const Duration(days: 10)))
           .setSocialAuth(loginType: LoginType.kakao, socialAccessToken: kakaoUser.accessToken);
 
-      UserResponse userResponse = await _userUseCase.myInfo();
+      User userResponse = await _userUseCase.myInfo();
 
-      String userId = userResponse.user!.id!.toString();
+      String userId = userResponse.personalInfo!.id!.toString();
       AnalyticsUtil.setUserId(userId);
-      if (userResponse.user?.name == null) {
+      if (userResponse.personalInfo?.name == null) {
         PushNotificationUtil.setUserId(userId);
         state.setStep(AuthStep.signup);
       } else {
@@ -130,11 +130,11 @@ class DartAuthCubit extends HydratedCubit<DartAuthState> {
           .setSocialAuth(loginType: LoginType.apple, socialAccessToken: appleUser.authorizationCode)
           .setMemo('${appleUser.familyName ?? "오"}${appleUser.givenName ?? "늘"}');
 
-      UserResponse userResponse = await _userUseCase.myInfo();
+      User userResponse = await _userUseCase.myInfo();
 
-      String userId = userResponse.user!.id!.toString();
+      String userId = userResponse.personalInfo!.id!.toString();
       AnalyticsUtil.setUserId(userId);
-      if (userResponse.user?.name == null) {
+      if (userResponse.personalInfo?.name == null) {
         PushNotificationUtil.setUserId(userId);
         state.setStep(AuthStep.signup);
       } else {
@@ -165,9 +165,9 @@ class DartAuthCubit extends HydratedCubit<DartAuthState> {
   }
 
   void setAnalyticsUserInformation() async {
-    UserResponse userResponse = await _userUseCase.myInfo();
-    if (userResponse.user == null) return;
-    AnalyticsUtil.setUserId(userResponse.user!.id!.toString());
+    User userResponse = await _userUseCase.myInfo();
+    if (userResponse.personalInfo == null) return;
+    AnalyticsUtil.setUserId(userResponse.personalInfo!.id!.toString());
     AnalyticsUtil.setUserInformation(userResponse.toAnalytics());
   }
 
