@@ -1,8 +1,8 @@
 import 'package:dart_flutter/src/domain/entity/type/IdCardVerificationStatus.dart';
 
-import '../../domain/entity/user.dart';
+import '../../domain/entity/personal_info.dart';
 
-class UserDto {
+class PersonalInfoDto {
   int? id;
   String? name;
   String? nickname;
@@ -15,7 +15,7 @@ class UserDto {
   String? recommendationCode;
   int? point;
 
-  UserDto({this.id,
+  PersonalInfoDto({this.id,
         this.name,
         this.nickname,
         this.profileImageUrl,
@@ -27,7 +27,7 @@ class UserDto {
         this.recommendationCode,
         this.point});
 
-  UserDto.fromJson(Map<String, dynamic> json) {
+  PersonalInfoDto.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];
     nickname = json['nickname'];
@@ -57,8 +57,8 @@ class UserDto {
     return data;
   }
 
-  User newUser() {
-    return User(
+  PersonalInfo newUser() {
+    return PersonalInfo(
         id: id ?? 0,
         name: name ?? "(알수없음)",
         nickname: nickname ?? "",
@@ -73,8 +73,8 @@ class UserDto {
     );
   }
 
-  static UserDto fromUser(User user) {
-    return UserDto(
+  static PersonalInfoDto fromUser(PersonalInfo user) {
+    return PersonalInfoDto(
       id: user.id,
       name: user.name,
       nickname: user.nickname,

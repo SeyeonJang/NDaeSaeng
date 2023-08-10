@@ -1,7 +1,8 @@
 import 'dart:io';
 
 import 'package:dart_flutter/src/domain/entity/friend.dart';
-import 'package:dart_flutter/src/domain/entity/user_response.dart';
+import 'package:dart_flutter/src/domain/entity/personal_info.dart';
+import 'package:dart_flutter/src/domain/entity/user.dart';
 import 'package:dart_flutter/src/domain/use_case/friend_use_case.dart';
 import 'package:dart_flutter/src/domain/use_case/user_use_case.dart';
 import 'package:dart_flutter/src/presentation/mypage/viewmodel/state/mypages_state.dart';
@@ -19,12 +20,12 @@ class MyPagesCubit extends Cubit<MyPagesState> {
     emit(state.copy());
 
     // 초기값 설정
-    UserResponse userResponse = await _userUseCase.myInfo();
+    User userResponse = await _userUseCase.myInfo();
     state.setUserResponse(userResponse);
 
-    List<Friend> friends = await _friendUseCase.getMyFriends();
+    List<User> friends = await _friendUseCase.getMyFriends();
     state.setMyFriends(friends);
-    List<Friend> newFriends = await _friendUseCase.getRecommendedFriends();
+    List<User> newFriends = await _friendUseCase.getRecommendedFriends();
     state.setRecommendedFriends(newFriends);
 
     state.setIsLoading(false);
@@ -32,13 +33,13 @@ class MyPagesCubit extends Cubit<MyPagesState> {
     print("mypage init 끝");
   }
 
-  void pressedFriendAddButton(Friend friend) {
+  void pressedFriendAddButton(User friend) {
     _friendUseCase.addFriend(friend);
     state.addFriend(friend);
     emit(state.copy());
   }
 
-  void pressedFriendDeleteButton(Friend friend) {
+  void pressedFriendDeleteButton(User friend) {
     _friendUseCase.removeFriend(friend);
     state.deleteFriend(friend);
     emit(state.copy());
@@ -49,7 +50,7 @@ class MyPagesCubit extends Cubit<MyPagesState> {
     emit(state.copy());
 
     try {
-      Friend friend = await _friendUseCase.addFriendBy(inviteCode);
+      User friend = await _friendUseCase.addFriendBy(inviteCode);
       state.addFriend(friend);
       state.newFriends = (await _friendUseCase.getRecommendedFriends(put: true)).toSet();
     } catch (e, trace) {
@@ -61,7 +62,7 @@ class MyPagesCubit extends Cubit<MyPagesState> {
     }
   }
 
-  void uploadProfileImage(File file, UserResponse userResponse) async {
+  void uploadProfileImage(File file, User userResponse) async {
     print(state.userResponse.toString());
     // String userId = state.userResponse.user!.id.toString();
     _userUseCase.uploadProfileImage(file, userResponse);
@@ -69,7 +70,7 @@ class MyPagesCubit extends Cubit<MyPagesState> {
 
   String getProfileImageUrl(String userId) {
     // return _userUseCase.getProfileImageUrl(userId);
-    String profileImageUrl = state.userResponse.user!.profileImageUrl ?? "DEFAULT";
+    String profileImageUrl = state.userResponse.personalInfo!.profileImageUrl ?? "DEFAULT";
     return profileImageUrl;
   }
 

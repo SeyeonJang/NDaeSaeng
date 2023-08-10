@@ -1,5 +1,6 @@
 import 'package:dart_flutter/src/domain/entity/friend.dart';
 import 'package:dart_flutter/src/domain/entity/question.dart';
+import 'package:dart_flutter/src/domain/entity/user.dart';
 import 'package:dart_flutter/src/domain/entity/vote_request.dart';
 import 'package:dart_flutter/src/domain/use_case/friend_use_case.dart';
 import 'package:dart_flutter/src/domain/use_case/vote_use_case.dart';
@@ -26,7 +27,7 @@ class VoteCubit extends HydratedCubit<VoteState> {
     emit(state.copy());
 
     // 친구 목록 설정
-    List<Friend> friends = await _friendUseCase.getMyFriends();
+    List<User> friends = await _friendUseCase.getMyFriends();
     state.setFriends(friends);
 
     // 투표중이지 않았던 경우, 다음 투표 가능 시간을 기록
@@ -50,7 +51,7 @@ class VoteCubit extends HydratedCubit<VoteState> {
 
     if (state.step.isStart) {
       // 친구 목록 설정
-      List<Friend> friends = await _friendUseCase.getMyFriends();
+      List<User> friends = await _friendUseCase.getMyFriends();
       state.setFriends(friends);
 
       // 새로 투표할 목록들을 가져오기

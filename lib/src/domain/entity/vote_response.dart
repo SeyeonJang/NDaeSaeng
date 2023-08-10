@@ -1,7 +1,7 @@
 
 import 'package:dart_flutter/src/domain/entity/question.dart';
 import 'package:dart_flutter/src/domain/entity/university.dart';
-import 'package:dart_flutter/src/domain/entity/user.dart';
+import 'package:dart_flutter/src/domain/entity/personal_info.dart';
 
 class VoteResponse {
   int? voteId;
@@ -38,13 +38,13 @@ class VoteResponse {
 }
 
 class PickedUser {
-  User? user;
+  PersonalInfo? user;
   University? university;
 
   PickedUser({this.user, this.university});
 
   PickedUser.fromJson(Map<String, dynamic> json) {
-    user = json['user'] != null ? User.fromJson(json['user']) : null;
+    user = json['user'] != null ? PersonalInfo.fromJson(json['user']) : null;
     university = json['university'] != null ? University.fromJson(json['university']) : null;
   }
 

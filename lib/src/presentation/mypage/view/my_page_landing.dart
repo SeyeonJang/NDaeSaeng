@@ -3,7 +3,8 @@ import 'package:dart_flutter/res/config/size_config.dart';
 import 'package:dart_flutter/src/common/util/analytics_util.dart';
 import 'package:dart_flutter/src/common/util/toast_util.dart';
 import 'package:dart_flutter/src/domain/entity/friend.dart';
-import 'package:dart_flutter/src/domain/entity/user_response.dart';
+import 'package:dart_flutter/src/domain/entity/personal_info.dart';
+import 'package:dart_flutter/src/domain/entity/user.dart';
 import 'package:dart_flutter/src/presentation/mypage/viewmodel/mypages_cubit.dart';
 import 'package:dart_flutter/src/presentation/mypage/viewmodel/state/mypages_state.dart';
 import 'package:flutter/cupertino.dart';
@@ -44,7 +45,7 @@ class _MyPageLandingState extends State<MyPageLanding> {
 }
 
 class MyPageLandingView extends StatefulWidget {
-  final UserResponse userResponse;
+  final User userResponse;
 
   const MyPageLandingView({
     super.key,
@@ -56,7 +57,7 @@ class MyPageLandingView extends StatefulWidget {
 }
 
 class _MyPageLandingViewState extends State<MyPageLandingView> {
-  String get profileImageUrl => widget.userResponse.user!.profileImageUrl ?? 'DEFAULT';
+  String get profileImageUrl => widget.userResponse.personalInfo!.profileImageUrl ?? 'DEFAULT';
 
   @override
   Widget build(BuildContext context) {
@@ -109,8 +110,8 @@ class _MyPageLandingViewState extends State<MyPageLandingView> {
                                 children: [
                                   BlocBuilder<MyPagesCubit,MyPagesState>(
                                       builder: (context, state) {
-                                        String name = state.userResponse.user?.name ?? "###";
-                                        String admissionNumber = "${state.userResponse.user?.admissionYear.toString().substring(2,4)??"##"}학번";
+                                        String name = state.userResponse.personalInfo?.name ?? "###";
+                                        String admissionNumber = "${state.userResponse.personalInfo?.admissionYear.toString().substring(2,4)??"##"}학번";
                                         return Row(
                                           children: [
                                             SizedBox(width: SizeConfig.defaultSize * 0.5,),
@@ -199,7 +200,7 @@ class _MyPageLandingViewState extends State<MyPageLandingView> {
                           Text("나의 Points", style: TextStyle(
                             fontSize: SizeConfig.defaultSize * 1.4
                           ),),
-                          Text(widget.userResponse.user!.point.toString() ?? "불러오는중", style: TextStyle(
+                          Text(widget.userResponse.personalInfo!.point.toString() ?? "불러오는중", style: TextStyle(
                               fontSize: SizeConfig.defaultSize * 1.4
                           ))
                           // TODO : Point 사용 내역
@@ -269,7 +270,7 @@ class _MyPageLandingViewState extends State<MyPageLandingView> {
                           ),),
                         BlocBuilder<MyPagesCubit, MyPagesState>(
                             builder: (context, state) {
-                              return openAddFriends(myCode: state.userResponse.user?.recommendationCode ?? '내 코드가 없어요!');
+                              return openAddFriends(myCode: state.userResponse.personalInfo?.recommendationCode ?? '내 코드가 없어요!');
                             }),
                       ],
                     ),
@@ -335,9 +336,9 @@ class _MyPageLandingViewState extends State<MyPageLandingView> {
 }
 
 class MyFriends extends StatelessWidget {
-  final Set<Friend> friends;
+  final Set<User> friends;
   final int count;
-  final UserResponse userResponse;
+  final User userResponse;
 
   const MyFriends({
     super.key,
@@ -371,9 +372,9 @@ class MyFriends extends StatelessWidget {
 }
 
 class NewFriends extends StatelessWidget {
-  final Set<Friend> friends;
+  final Set<User> friends;
   final int count;
-  final UserResponse userResponse;
+  final User userResponse;
 
   const NewFriends({
     super.key,
@@ -404,11 +405,11 @@ class NewFriends extends StatelessWidget {
 
 class FriendComponent extends StatefulWidget {
   late bool isAdd;
-  late Friend friend;
+  late User friend;
   late int count;
-  late UserResponse userResponse;
+  late User userResponse;
 
-  FriendComponent(bool isAdd, Friend friend, int count, UserResponse userResponse, {super.key}) {
+  FriendComponent(bool isAdd, User friend, int count, User userResponse, {super.key}) {
     this.isAdd = isAdd;
     this.friend = friend;
     this.count = count;
@@ -441,7 +442,7 @@ class _FriendComponentState extends State<FriendComponent> {
     );
   }
 
-  String get profileImageUrl => widget.friend.profileImageUrl ?? 'DEFAULT';
+  String get profileImageUrl => widget.friend.personalInfo?.profileImageUrl ?? 'DEFAULT';
 
   @override
   Widget build(BuildContext context) {
@@ -454,8 +455,8 @@ class _FriendComponentState extends State<FriendComponent> {
             GestureDetector(
               onTap: () {
                 AnalyticsUtil.logEvent("내정보_마이_친구터치", properties: {
-                  "친구 성별": widget.friend.gender=="FEMALE" ? "여자" : "남자",
-                  "친구 학번": widget.friend.admissionYear.toString().substring(2,4),
+                  "친구 성별": widget.friend.personalInfo?.gender=="FEMALE" ? "여자" : "남자",
+                  "친구 학번": widget.friend.personalInfo?.admissionYear.toString().substring(2,4),
                   "친구 학교": widget.friend.university!.name,
                   "친구 학교코드": widget.friend.university!.id,
                   "친구 학과": widget.friend.university!.department
@@ -492,12 +493,12 @@ class _FriendComponentState extends State<FriendComponent> {
                           Row(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              Text("  ${widget.friend.name} ", style: TextStyle(
+                              Text("  ${widget.friend.personalInfo?.name} ", style: TextStyle(
                                 fontSize: SizeConfig.defaultSize * 1.6,
                                 fontWeight: FontWeight.w800,
                                 overflow: TextOverflow.ellipsis,
                               )),
-                              Text("${widget.friend.admissionYear.toString().substring(2,4)}학번", style: TextStyle(
+                              Text("${widget.friend.personalInfo?.admissionYear.toString().substring(2,4)}학번", style: TextStyle(
                                 fontSize: SizeConfig.defaultSize * 1.3,
                                 fontWeight: FontWeight.w500,
                                 overflow: TextOverflow.ellipsis,
@@ -563,13 +564,13 @@ class _FriendComponentState extends State<FriendComponent> {
                   AnalyticsUtil.logEvent("내정보_마이_내친구더보기_친구삭제");
                   if (widget.count >= 5) {
                     if (widget.isAdd) {
-                      pressedAddButton(context, widget.friend.userId!);
+                      pressedAddButton(context, widget.friend.personalInfo!.id);
                     } else {
                       // pressedDeleteButton(context, friend.userId!); // 원래 코드
                       showDialog<String>(
                         context: context,
                         builder: (BuildContext dialogContext) => AlertDialog(
-                          title: Text('\'${widget.friend.name}\' 친구를 삭제하시겠어요?', style: TextStyle(fontSize: SizeConfig.defaultSize * 2),),
+                          title: Text('\'${widget.friend.personalInfo?.name}\' 친구를 삭제하시겠어요?', style: TextStyle(fontSize: SizeConfig.defaultSize * 2),),
                           // content: const Text('사용자를 신고하면 Dart에서 빠르게 신고 처리를 해드려요!'),
                           backgroundColor: Colors.white,
                           surfaceTintColor: Colors.white,
@@ -584,7 +585,7 @@ class _FriendComponentState extends State<FriendComponent> {
                             TextButton(
                               onPressed: () {
                                 AnalyticsUtil.logEvent("내정보_마이_내친구삭제_삭제확정");
-                                pressedDeleteButton(context, widget.friend.userId!);
+                                pressedDeleteButton(context, widget.friend.personalInfo!.id);
                                 // BlocProvider.of<MyPagesCubit>(context).pressedFriendDeleteButton(friend);
                                 Navigator.pop(dialogContext); // 팝업 창을 닫는 로직 추가
                               },
@@ -625,10 +626,10 @@ class _FriendComponentState extends State<FriendComponent> {
 
 class NotFriendComponent extends StatefulWidget {
   late bool isAdd;
-  late Friend friend;
-  late UserResponse userResponse;
+  late User friend;
+  late User userResponse;
 
-  NotFriendComponent(bool isAdd, Friend friend, UserResponse userResponse, {super.key}) {
+  NotFriendComponent(bool isAdd, User friend, User userResponse, {super.key}) {
     this.isAdd = isAdd;
     this.friend = friend;
     this.userResponse = userResponse;
@@ -647,7 +648,7 @@ class _NotFriendComponentState extends State<NotFriendComponent> {
     BlocProvider.of<MyPagesCubit>(context).pressedFriendAddButton(widget.friend);
   }
 
-  String get profileImageUrl => widget.friend.profileImageUrl ?? 'DEFAULT';
+  String get profileImageUrl => widget.friend.personalInfo?.profileImageUrl ?? 'DEFAULT';
 
   @override
   Widget build(BuildContext context) {
@@ -660,8 +661,8 @@ class _NotFriendComponentState extends State<NotFriendComponent> {
             GestureDetector(
               onTap: () {
                 AnalyticsUtil.logEvent("내정보_마이_친구터치", properties: {
-                  "친구 성별": widget.friend.gender=="FEMALE" ? "여자" : "남자",
-                  "친구 학번": widget.friend.admissionYear.toString().substring(2,4),
+                  "친구 성별": widget.friend.personalInfo?.gender=="FEMALE" ? "여자" : "남자",
+                  "친구 학번": widget.friend.personalInfo?.admissionYear.toString().substring(2,4),
                   "친구 학교": widget.friend.university!.name,
                   "친구 학교코드": widget.friend.university!.id,
                   "친구 학과": widget.friend.university!.department
@@ -698,12 +699,12 @@ class _NotFriendComponentState extends State<NotFriendComponent> {
                           Row(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              Text("  ${widget.friend.name} ", style: TextStyle(
+                              Text("  ${widget.friend.personalInfo?.name} ", style: TextStyle(
                                 fontSize: SizeConfig.defaultSize * 1.6,
                                 fontWeight: FontWeight.w800,
                                 overflow: TextOverflow.ellipsis,
                               )),
-                              Text("${widget.friend.admissionYear.toString().substring(2,4)}학번", style: TextStyle(
+                              Text("${widget.friend.personalInfo?.admissionYear.toString().substring(2,4)}학번", style: TextStyle(
                                 fontSize: SizeConfig.defaultSize * 1.3,
                                 fontWeight: FontWeight.w500,
                                 overflow: TextOverflow.ellipsis,
@@ -780,9 +781,9 @@ class _NotFriendComponentState extends State<NotFriendComponent> {
               onPressed: () {
                 AnalyticsUtil.logEvent("내정보_마이_알수도있는친구_친구추가");
                 if (widget.isAdd) {
-                  pressedAddButton(context, widget.friend.userId!);
+                  pressedAddButton(context, widget.friend.personalInfo!.id);
                 } else {
-                  pressedDeleteButton(context, widget.friend.userId!);
+                  pressedDeleteButton(context, widget.friend.personalInfo!.id);
                 }
               },
               style: ElevatedButton.styleFrom(
