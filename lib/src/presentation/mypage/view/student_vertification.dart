@@ -240,19 +240,6 @@ class _VertificationViewState extends State<VertificationView> with SingleTicker
                     : Column( // 업로드 이후
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      ClipRRect(
-                          borderRadius: BorderRadius.circular(16),
-                          child: Container(
-                              width: SizeConfig.screenWidth * 0.9,
-                              height: SizeConfig.screenWidth * 0.9,
-                              // child: Image.asset('/assets/images/profile-mockup3.png', fit: BoxFit.fill,)
-                              child: Image.file( // 이미지 파일에서 고르는 코드
-                                _image!,
-                                fit: BoxFit.contain,
-                              )
-                          )
-                      ),
-                      SizedBox(height: SizeConfig.defaultSize * 2,),
                       TextFormField(
                           controller: _nameController,
                           onChanged: (_) => _checkNameValidity(),
@@ -271,6 +258,19 @@ class _VertificationViewState extends State<VertificationView> with SingleTicker
                               ),
                               prefixIcon: Icon(Icons.person_rounded, color: Color(0xff7C83FD),),
                               hintText: "본인확인을 위한 실명을 입력해주세요!")),
+                      SizedBox(height: SizeConfig.defaultSize * 2,),
+                      ClipRRect(
+                          borderRadius: BorderRadius.circular(16),
+                          child: Container(
+                              width: SizeConfig.screenWidth * 0.9,
+                              height: SizeConfig.screenWidth * 0.9,
+                              // child: Image.asset('/assets/images/profile-mockup3.png', fit: BoxFit.fill,)
+                              child: Image.file( // 이미지 파일에서 고르는 코드
+                                _image!,
+                                fit: BoxFit.contain,
+                              )
+                          )
+                      ),
                       SizedBox(height: SizeConfig.defaultSize * 6,),
                       GestureDetector(
                         onTap: () {
