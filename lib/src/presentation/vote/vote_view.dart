@@ -443,7 +443,7 @@ class _ChoiceFriendButtonState extends State<ChoiceFriendButton> {
                   SizedBox(width: SizeConfig.defaultSize * 1,),
                 ],
               ),
-              SizedBox(height: SizeConfig.defaultSize * 1,),
+              SizedBox(height: SizeConfig.defaultSize * 0.5,),
               Text(
                 "${widget.enterYear}학번 ${widget.department}",
                 style: TextStyle(
