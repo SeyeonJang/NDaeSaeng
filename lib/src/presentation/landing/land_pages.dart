@@ -1,7 +1,7 @@
 import 'dart:io';
 
-import 'package:dart_flutter/src/common/auth/auth_cubit.dart';
-import 'package:dart_flutter/src/common/auth/state/auth_state.dart';
+import 'package:dart_flutter/src/common/auth/dart_auth_cubit.dart';
+import 'package:dart_flutter/src/common/auth/state/dart_auth_state.dart';
 import 'package:dart_flutter/src/common/util/analytics_util.dart';
 import 'package:dart_flutter/src/presentation/landing/view/land_page.dart';
 import 'package:dart_flutter/src/presentation/signup/signup_pages.dart';
