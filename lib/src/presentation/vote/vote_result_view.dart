@@ -53,7 +53,7 @@ class _VoteResultViewState extends State<VoteResultView> with SingleTickerProvid
     return Scaffold(
       backgroundColor: Colors.white,
       body: Padding(
-        padding: EdgeInsets.all(SizeConfig.defaultSize * 5),
+        padding: EdgeInsets.only(left: SizeConfig.defaultSize , right: SizeConfig.defaultSize, top: SizeConfig.defaultSize * 5, bottom: SizeConfig.defaultSize * 5),
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -62,12 +62,24 @@ class _VoteResultViewState extends State<VoteResultView> with SingleTickerProvid
                 flex: 1,
                 child: Container(
                   alignment: Alignment.bottomCenter,
-                  child: Text(
-                    "축하해요!",
-                    style: TextStyle(
-                      fontWeight: FontWeight.w800,
-                      fontSize: SizeConfig.defaultSize * 5,
-                    ),
+                  child: Column(
+                    children: [
+                      Text(
+                        "축하해요!",
+                        style: TextStyle(
+                          fontWeight: FontWeight.w700,
+                          fontSize: SizeConfig.defaultSize * 5,
+                        ),
+                      ),
+                      SizedBox(height: SizeConfig.defaultSize * 2,),
+                      Text(
+                        "투표를 통해 160 포인트를 획득했어요!",
+                        style: TextStyle(
+                          fontWeight: FontWeight.w500,
+                          fontSize: SizeConfig.defaultSize * 2,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),
@@ -125,10 +137,10 @@ class _VoteResultViewState extends State<VoteResultView> with SingleTickerProvid
                   ],
                 ),
               ),
-              const Flexible(
-                flex: 1,
-                child: SizedBox(),
-              ),
+              // const Flexible(
+              //   flex: 1,
+              //   child: SizedBox(),
+              // ),
             ],
           ),
         ),

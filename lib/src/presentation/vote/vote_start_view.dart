@@ -68,7 +68,7 @@ class _VoteStartViewState extends State<VoteStartView> with SingleTickerProvider
                   child: Text(
                     "새로운 질문 도착!",
                     style: TextStyle(
-                      fontWeight: FontWeight.w900,
+                      fontWeight: FontWeight.w700,
                       fontSize: SizeConfig.defaultSize * 3.8,
                     ),
                   ),
