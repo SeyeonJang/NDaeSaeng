@@ -130,8 +130,13 @@ class _MyPageLandingViewState extends State<MyPageLandingView> {
                                                 fontSize: SizeConfig.defaultSize * 1.5,
                                                 color: Colors.white,
                                               ),),
-                                            // SizedBox(width: SizeConfig.defaultSize * 0.6),
-                                            // Image.asset("assets/images/check_me.png", width: SizeConfig.defaultSize * 1.2), // TODO : 학생증 인증했을 떄 인증배지 구현
+                                            if (widget.userResponse.personalInfo!.verification.isVerificationSuccess)
+                                              Row(
+                                                children: [
+                                                  SizedBox(width: SizeConfig.defaultSize * 0.6),
+                                                  Image.asset("assets/images/check_me.png", width: SizeConfig.defaultSize * 1.2),
+                                                ],
+                                              )
                                           ]
                                         );
                                       }
@@ -251,7 +256,7 @@ class _MyPageLandingViewState extends State<MyPageLandingView> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text("지금 학생증 인증하면 프로필배지를 붙여드려요!", style: TextStyle(
+                    Text("지금 학생증 인증하면 프로필배지를 추가해드려요!", style: TextStyle(
                         fontSize: SizeConfig.defaultSize * 1.4
                     ),),
                     Icon(
@@ -521,8 +526,13 @@ class _FriendComponentState extends State<FriendComponent> {
                                 fontWeight: FontWeight.w500,
                                 overflow: TextOverflow.ellipsis,
                               )),
-                              // SizedBox(width: SizeConfig.defaultSize * 0.35),
-                              // Image.asset("assets/images/check.png", width: SizeConfig.defaultSize * 1.2), // TODO : 학생증 인증했을 때 인증배지 구현
+                              if (widget.friend.personalInfo!.verification.isVerificationSuccess)
+                                Row(
+                                  children: [
+                                    SizedBox(width: SizeConfig.defaultSize * 0.35),
+                                    Image.asset("assets/images/check.png", width: SizeConfig.defaultSize * 1.2),
+                                  ],
+                                ),
                             ],
                           ),
                           SizedBox(height: SizeConfig.defaultSize * 0.4,),
@@ -728,8 +738,13 @@ class _NotFriendComponentState extends State<NotFriendComponent> {
                                 fontWeight: FontWeight.w500,
                                 overflow: TextOverflow.ellipsis,
                               )),
-                              // SizedBox(width: SizeConfig.defaultSize * 0.35),
-                              // Image.asset("assets/images/check_me.png", width: SizeConfig.defaultSize * 1.2), // TODO : 학생증 인증했을 떄 인증배지 구현
+                              if (widget.friend.personalInfo!.verification.isVerificationSuccess)
+                                Row(
+                                  children: [
+                                    SizedBox(width: SizeConfig.defaultSize * 0.35),
+                                    Image.asset("assets/images/check.png", width: SizeConfig.defaultSize * 1.2),
+                                  ],
+                                ),
                             ],
                           ),
                           SizedBox(height: SizeConfig.defaultSize * 0.4,),
