@@ -73,7 +73,7 @@ class _DartPageViewState extends State<DartPageView> {
             child: Column(
               children: [
                 Padding(
-                  padding: EdgeInsets.all(SizeConfig.defaultSize * 2),
+                  padding: EdgeInsets.only(left: SizeConfig.defaultSize * 2, right: SizeConfig.defaultSize * 2),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
@@ -134,7 +134,7 @@ class _TapBarButton extends StatelessWidget {
             color: Colors.white,
             width: SizeConfig.screenWidth * 0.3,
             //width: MediaQuery.of(context).size.width * 0.22, // 원하는 넓이로 설정합니다.
-            height: SizeConfig.defaultSize * 4,
+            height: SizeConfig.defaultSize * 6,
             alignment: Alignment.center,
             child: Padding(
               padding: const EdgeInsets.all(0),

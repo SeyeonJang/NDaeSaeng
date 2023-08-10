@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:dart_flutter/res/config/size_config.dart';
 import 'package:dart_flutter/src/common/util/analytics_util.dart';
@@ -15,6 +16,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'my_settings.dart';
 
@@ -32,7 +34,7 @@ class _MyPageLandingState extends State<MyPageLanding> {
     return SingleChildScrollView(
       child: Padding(
         padding: EdgeInsets.symmetric(
-            vertical: SizeConfig.defaultSize * 2,
+            vertical: SizeConfig.defaultSize * 0,
             horizontal: SizeConfig.defaultSize),
         child: BlocBuilder<MyPagesCubit, MyPagesState>(
           builder: (context, state) {
@@ -91,16 +93,36 @@ class _MyPageLandingViewState extends State<MyPageLandingView> {
                     Row( // 프사 ~ 설정 부분 (위층)
                       children: [
                         SizedBox(width: SizeConfig.defaultSize * 0.3),
-                        profileImageUrl == "DEFAULT"
-                            ? ClipOval(
-                              child: Image.asset('assets/images/profile-mockup3.png', width: SizeConfig.defaultSize * 5.7, fit: BoxFit.cover,),
-                              )
-                            : ClipOval(
-                            child: Image.network(profileImageUrl,
-                              width: SizeConfig.defaultSize * 5.7,
-                              height: SizeConfig.defaultSize * 5.7,
-                                fit: BoxFit.cover)
+
+                        ClipOval(
+                          child: BlocBuilder<MyPagesCubit, MyPagesState>(
+                            builder: (context, state) {
+                              if (profileImageUrl == "DEFAULT")
+                                return Image.asset('assets/images/profile-mockup3.png', width: SizeConfig.defaultSize * 5.7, fit: BoxFit.cover,);
+                              else {
+                                return state.profileImageFile.path==''
+                                    ? Image.network(profileImageUrl,
+                                    width: SizeConfig.defaultSize * 5.7,
+                                    height: SizeConfig.defaultSize * 5.7,
+                                    fit: BoxFit.cover)
+                                    : Image.file(state.profileImageFile,
+                                    width: SizeConfig.defaultSize * 5.7,
+                                    height: SizeConfig.defaultSize * 5.7,
+                                    fit: BoxFit.cover);
+                              }
+                            }
+                          )
                         ),
+                        // profileImageUrl == "DEFAULT"
+                        //     ? ClipOval(
+                        //       child: Image.asset('assets/images/profile-mockup3.png', width: SizeConfig.defaultSize * 5.7, fit: BoxFit.cover,),
+                        //       )
+                        //     : ClipOval(
+                        //     child: Image.network(profileImageUrl,
+                        //       width: SizeConfig.defaultSize * 5.7,
+                        //       height: SizeConfig.defaultSize * 5.7,
+                        //         fit: BoxFit.cover)
+                        // )),
                         SizedBox(width: SizeConfig.defaultSize * 0.6),
                         Expanded(
                           child: Column(
@@ -145,9 +167,10 @@ class _MyPageLandingViewState extends State<MyPageLandingView> {
                                     icon: const Icon(Icons.settings, color: Colors.white,),
                                     onPressed: () async {
                                       AnalyticsUtil.logEvent("내정보_마이_설정버튼");
-                                      await Navigator.push(context, MaterialPageRoute(builder: (_) => MySettings(
+                                      final _profileImage = await Navigator.push(context, MaterialPageRoute(builder: (_) => MySettings(
                                         userResponse: BlocProvider.of<MyPagesCubit>(context).state.userResponse,
                                       )));
+                                      BlocProvider.of<MyPagesCubit>(context).setProfileImage(_profileImage);
 
                                       PaintingBinding.instance.imageCache.clear();
                                       BlocProvider.of<MyPagesCubit>(context).refreshMyInfo();
@@ -245,11 +268,11 @@ class _MyPageLandingViewState extends State<MyPageLandingView> {
                 horizontal: SizeConfig.defaultSize * 0.5),
             child: Container(
               width: SizeConfig.screenWidth,
-              height: SizeConfig.defaultSize * 4.5,
+              height: SizeConfig.defaultSize * 4.8,
               decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(10),
-                  border: Border.all(width: 1.5, color: Color(0xff7C83FD))
+                  border: Border.all(width: 1.3, color: Color(0xff7C83FD))
               ),
               child: Padding(
                 padding: EdgeInsets.only(left: SizeConfig.defaultSize * 1.5, right: SizeConfig.defaultSize * 1.5),
@@ -1223,7 +1246,7 @@ class _openAddFriendsState extends State<openAddFriends> {
           height: SizeConfig.defaultSize * 3.5,
           alignment: Alignment.center,
           decoration: BoxDecoration(
-              color: Colors.white,
+              color: Color(0xff7C83FD),
               border: Border.all(
                 color: Color(0xff7C83FD),
               ),
@@ -1234,8 +1257,8 @@ class _openAddFriendsState extends State<openAddFriends> {
               "코드로 추가",
               style: TextStyle(
                 fontSize: SizeConfig.defaultSize * 1.8,
-                fontWeight: FontWeight.w600,
-                color: Color(0xff7C83FD),
+                fontWeight: FontWeight.w500,
+                color: Colors.white,
               ),
             ),
           ),

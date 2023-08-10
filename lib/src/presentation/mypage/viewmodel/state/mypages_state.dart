@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dart_flutter/src/domain/entity/friend.dart';
 import 'package:dart_flutter/src/domain/entity/user.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -10,7 +12,7 @@ class MyPagesState {
   late int newFriendId;
   late bool isMyLandPage;
   late bool isVertificateUploaded;
-  late String newNickName;
+  late File profileImageFile;
 
   MyPagesState({
     required this.isLoading,
@@ -20,7 +22,7 @@ class MyPagesState {
     required this.newFriends,
     required this.newFriendId,
     required this.isVertificateUploaded,
-    required this.newNickName,
+    required this.profileImageFile,
   });
 
   MyPagesState.init() {
@@ -34,7 +36,7 @@ class MyPagesState {
     newFriendId = 0;
     isMyLandPage = true;
     isVertificateUploaded = false;
-    newNickName = '';
+    profileImageFile = File('');
   }
 
   MyPagesState copy() => MyPagesState(
@@ -45,15 +47,11 @@ class MyPagesState {
         newFriends: newFriends,
         newFriendId: newFriendId,
         isVertificateUploaded: isVertificateUploaded,
-        newNickName: newNickName
+        profileImageFile: profileImageFile
       );
 
   void setIsLoading(bool isLoading) {
     this.isLoading = isLoading;
-  }
-
-  void setNickName(String name) {
-
   }
 
   MyPagesState setUserResponse(User userResponse) {

@@ -87,6 +87,11 @@ class MyPagesCubit extends Cubit<MyPagesState> {
     emit(state.copy());
   }
 
+  void setProfileImage(File file) {
+    state.profileImageFile = file;
+    emit(state.copy());
+  }
+
   void setMyLandPage() {
     state.setMyLandPage(true);
     final newState = state.copy();

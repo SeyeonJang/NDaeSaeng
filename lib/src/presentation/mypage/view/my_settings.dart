@@ -1,5 +1,5 @@
+import 'dart:convert';
 import 'dart:io';
-
 import 'package:dart_flutter/src/common/auth/dart_auth_cubit.dart';
 import 'package:dart_flutter/src/common/util/analytics_util.dart';
 import 'package:dart_flutter/src/common/util/toast_util.dart';
@@ -19,11 +19,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:restart_app/restart_app.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
-
 import '../../../../res/config/size_config.dart';
-
-String newNickname = '';
 
 class MySettings extends StatelessWidget {
   final User userResponse;
@@ -67,7 +65,6 @@ class _MyPageViewState extends State<MyPageView> {
   String get inviteCode => widget.userResponse.personalInfo?.recommendationCode ?? 'XXXXXXXX';
   String get userId => widget.userResponse.personalInfo?.id.toString() ?? '0';
   String get profileImageUrl => widget.userResponse.personalInfo?.profileImageUrl ?? 'DEFAULT';
-  // String get nickname => widget.userResponse.personalInfo?.nickname ?? '닉네임';
 
   void onLogoutButtonPressed(BuildContext context) async {
     // 로그아웃 버튼 연결
@@ -143,7 +140,7 @@ class _MyPageViewState extends State<MyPageView> {
         IconButton(
             onPressed: () {
               AnalyticsUtil.logEvent("내정보_설정_뒤로가기버튼");
-              Navigator.pop(context);
+              Navigator.pop(context, _selectedImage);
             },
             icon: Icon(Icons.arrow_back_ios_new_rounded,
                 size: SizeConfig.defaultSize * 2)),
@@ -180,13 +177,15 @@ class _MyPageViewState extends State<MyPageView> {
                           child: isSelectImage
                               ? Image.file( // 이미지 파일에서 고르는 코드
                             _selectedImage!,
-                            fit: BoxFit.cover,
+                            fit: BoxFit.fill,
                             width: SizeConfig.defaultSize * 12,
                             height: SizeConfig.defaultSize * 12,
                           )
                               : Image.network(profileImageUrl,
                           width: SizeConfig.defaultSize * 12,
-                          height: SizeConfig.defaultSize * 12,)
+                          height: SizeConfig.defaultSize * 12,
+                            fit: BoxFit.fill,
+                          )
                         ),
                       )
                       : ClipOval(
