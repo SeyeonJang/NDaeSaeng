@@ -94,24 +94,29 @@ class _MyPageLandingViewState extends State<MyPageLandingView> {
                       children: [
                         SizedBox(width: SizeConfig.defaultSize * 0.3),
 
-                        ClipOval(
-                          child: BlocBuilder<MyPagesCubit, MyPagesState>(
-                            builder: (context, state) {
-                              if (profileImageUrl == "DEFAULT")
-                                return Image.asset('assets/images/profile-mockup3.png', width: SizeConfig.defaultSize * 5.7, fit: BoxFit.cover,);
-                              else {
-                                return state.profileImageFile.path==''
-                                    ? Image.network(profileImageUrl,
-                                    width: SizeConfig.defaultSize * 5.7,
-                                    height: SizeConfig.defaultSize * 5.7,
-                                    fit: BoxFit.cover)
-                                    : Image.file(state.profileImageFile,
-                                    width: SizeConfig.defaultSize * 5.7,
-                                    height: SizeConfig.defaultSize * 5.7,
-                                    fit: BoxFit.cover);
+                        GestureDetector(
+                          onTap: () {
+                            AnalyticsUtil.logEvent("내정보_마이_내사진터치");
+                          },
+                          child: ClipOval(
+                            child: BlocBuilder<MyPagesCubit, MyPagesState>(
+                              builder: (context, state) {
+                                if (profileImageUrl == "DEFAULT")
+                                  return Image.asset('assets/images/profile-mockup3.png', width: SizeConfig.defaultSize * 5.7, fit: BoxFit.cover,);
+                                else {
+                                  return state.profileImageFile.path==''
+                                      ? Image.network(profileImageUrl,
+                                      width: SizeConfig.defaultSize * 5.7,
+                                      height: SizeConfig.defaultSize * 5.7,
+                                      fit: BoxFit.cover)
+                                      : Image.file(state.profileImageFile,
+                                      width: SizeConfig.defaultSize * 5.7,
+                                      height: SizeConfig.defaultSize * 5.7,
+                                      fit: BoxFit.cover);
+                                }
                               }
-                            }
-                          )
+                            )
+                          ),
                         ),
                         // profileImageUrl == "DEFAULT"
                         //     ? ClipOval(
@@ -235,9 +240,14 @@ class _MyPageLandingViewState extends State<MyPageLandingView> {
                           Text("나의 Points", style: TextStyle(
                             fontSize: SizeConfig.defaultSize * 1.4
                           ),),
-                          Text(widget.userResponse.personalInfo!.point.toString() ?? "불러오는중", style: TextStyle(
-                              fontSize: SizeConfig.defaultSize * 1.4
-                          ))
+                          GestureDetector(
+                            onTap: () {
+                              AnalyticsUtil.logEvent("내정보_마이_포인트터치");
+                            },
+                            child: Text(widget.userResponse.personalInfo!.point.toString() ?? "불러오는중", style: TextStyle(
+                                fontSize: SizeConfig.defaultSize * 1.4
+                            )),
+                          )
                           // TODO 나중에 : Point 사용 내역
                         ],
                       )
@@ -253,6 +263,7 @@ class _MyPageLandingViewState extends State<MyPageLandingView> {
         // TODO : '인증 완료'면 안 띄우는 로직 만들기
         InkWell(
           onTap: () async {
+            AnalyticsUtil.logEvent("내정보_마이_학생증인증배너터치");
             await Navigator.push(context, MaterialPageRoute(builder: (_) => StudentVertification(
               userResponse: BlocProvider.of<MyPagesCubit>(context).state.userResponse,
             )));
@@ -511,24 +522,35 @@ class _FriendComponentState extends State<FriendComponent> {
                 width: SizeConfig.screenWidth * 0.7,
                 child: Row(
                   children: [
-                    ClipOval(
-                      clipBehavior: Clip.antiAlias,
-                      child: Container(
-                          // decoration: BoxDecoration(
-                          //   gradient: LinearGradient(
-                          //       colors: [Color(0xff7C83FD), Color(0xff7C83FD)]),
-                          //   borderRadius: BorderRadius.circular(32),
-                          // ),
-                          child: profileImageUrl == "DEFAULT"
-                              ? ClipOval(
-                            child: Image.asset('assets/images/profile-mockup3.png', width: SizeConfig.defaultSize * 4.5, fit: BoxFit.cover,),
-                          )
-                              : ClipOval(
-                              child: Image.network(profileImageUrl,
-                                width: SizeConfig.defaultSize * 4.5,
-                                height: SizeConfig.defaultSize * 4.5,
-                                fit: BoxFit.cover,)
-                          ),
+                    GestureDetector(
+                      onTap: () {
+                        AnalyticsUtil.logEvent("내정보_마이_친구프로필사진터치", properties: {
+                        "친구 성별": widget.friend.personalInfo?.gender=="FEMALE" ? "여자" : "남자",
+                        "친구 학번": widget.friend.personalInfo?.admissionYear.toString().substring(2,4),
+                        "친구 학교": widget.friend.university!.name,
+                        "친구 학교코드": widget.friend.university!.id,
+                        "친구 학과": widget.friend.university!.department
+                        });
+                      },
+                      child: ClipOval(
+                        clipBehavior: Clip.antiAlias,
+                        child: Container(
+                            // decoration: BoxDecoration(
+                            //   gradient: LinearGradient(
+                            //       colors: [Color(0xff7C83FD), Color(0xff7C83FD)]),
+                            //   borderRadius: BorderRadius.circular(32),
+                            // ),
+                            child: profileImageUrl == "DEFAULT"
+                                ? ClipOval(
+                              child: Image.asset('assets/images/profile-mockup3.png', width: SizeConfig.defaultSize * 4.5, fit: BoxFit.cover,),
+                            )
+                                : ClipOval(
+                                child: Image.network(profileImageUrl,
+                                  width: SizeConfig.defaultSize * 4.5,
+                                  height: SizeConfig.defaultSize * 4.5,
+                                  fit: BoxFit.cover,)
+                            ),
+                        ),
                       ),
                     ),
                     SizedBox(width: SizeConfig.defaultSize * 0.1,),
@@ -723,24 +745,35 @@ class _NotFriendComponentState extends State<NotFriendComponent> {
                 width: SizeConfig.screenWidth * 0.54,
                 child: Row(
                   children: [
-                    ClipOval(
-                      clipBehavior: Clip.antiAlias,
-                      child: Container(
-                          // decoration: BoxDecoration(
-                          //   gradient: LinearGradient(
-                          //       colors: [Color(0xff7C83FD), Color(0xff7C83FD)]),
-                          //   borderRadius: BorderRadius.circular(32),
-                          // ),
-                          child: profileImageUrl == "DEFAULT"
-                              ? ClipOval(
-                            child: Image.asset('assets/images/profile-mockup3.png', width: SizeConfig.defaultSize * 4.5, fit: BoxFit.fill,),
-                          )
-                              : ClipOval(
-                              child: Image.network(profileImageUrl,
-                                width: SizeConfig.defaultSize * 4.5,
-                                height: SizeConfig.defaultSize * 4.5,
-                                fit: BoxFit.cover,)
-                          ),
+                    GestureDetector(
+                      onTap: () {
+                        AnalyticsUtil.logEvent("내정보_마이_친구프로필사진터치", properties: {
+                          "친구 성별": widget.friend.personalInfo?.gender=="FEMALE" ? "여자" : "남자",
+                          "친구 학번": widget.friend.personalInfo?.admissionYear.toString().substring(2,4),
+                          "친구 학교": widget.friend.university!.name,
+                          "친구 학교코드": widget.friend.university!.id,
+                          "친구 학과": widget.friend.university!.department
+                        });
+                      },
+                      child: ClipOval(
+                        clipBehavior: Clip.antiAlias,
+                        child: Container(
+                            // decoration: BoxDecoration(
+                            //   gradient: LinearGradient(
+                            //       colors: [Color(0xff7C83FD), Color(0xff7C83FD)]),
+                            //   borderRadius: BorderRadius.circular(32),
+                            // ),
+                            child: profileImageUrl == "DEFAULT"
+                                ? ClipOval(
+                              child: Image.asset('assets/images/profile-mockup3.png', width: SizeConfig.defaultSize * 4.5, fit: BoxFit.fill,),
+                            )
+                                : ClipOval(
+                                child: Image.network(profileImageUrl,
+                                  width: SizeConfig.defaultSize * 4.5,
+                                  height: SizeConfig.defaultSize * 4.5,
+                                  fit: BoxFit.cover,)
+                            ),
+                        ),
                       ),
                     ),
                     SizedBox(width: SizeConfig.defaultSize * 0.1,),

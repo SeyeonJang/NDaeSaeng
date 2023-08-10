@@ -118,6 +118,7 @@ class _VertificationViewState extends State<VertificationView> with SingleTicker
                             // AnalyticsUtil.logEvent("내정보_설정_뒤로가기버튼");
                             Navigator.pop(context);
                             print(widget.userResponse.personalInfo!.verification.isNotVerifiedYet ?? false);
+                            AnalyticsUtil.logEvent("학생증인증_뒤로가기");
                           },
                           icon: Icon(Icons.arrow_back_ios_new_rounded,
                               size: SizeConfig.defaultSize * 2)),
@@ -160,9 +161,14 @@ class _VertificationViewState extends State<VertificationView> with SingleTicker
                       children: [
                         SlideTransition(
                           position: _animation,
-                          child: Image.asset(
-                            'assets/images/camera.png',
-                            width: SizeConfig.defaultSize * 33,
+                          child: GestureDetector(
+                            onTap: () {
+                              AnalyticsUtil.logEvent("학생증인증_첫번째화면_아이콘터치");
+                            },
+                            child: Image.asset(
+                              'assets/images/camera.png',
+                              width: SizeConfig.defaultSize * 33,
+                            ),
                           ),
                         ),
                         SizedBox(height: SizeConfig.defaultSize * 4),
@@ -172,6 +178,7 @@ class _VertificationViewState extends State<VertificationView> with SingleTicker
                       children: [
                         TextButton(
                             onPressed: () {
+                              AnalyticsUtil.logEvent("학생증인증_첫번째화면_설명터치");
                               showDialog<String>(
                                   context: context,
                                   builder: (BuildContext dialogContext) => AlertDialog(
@@ -206,6 +213,7 @@ class _VertificationViewState extends State<VertificationView> with SingleTicker
                           onTap: () {
                             getImage(ImageSource.camera);
                             isUploaded = true;
+                            AnalyticsUtil.logEvent("학생증인증_카메라업로드");
                           },
                           child: Container(
                             width: SizeConfig.screenWidth,
@@ -221,6 +229,7 @@ class _VertificationViewState extends State<VertificationView> with SingleTicker
                           onTap: () {
                             getImage(ImageSource.gallery);
                             isUploaded = true;
+                            AnalyticsUtil.logEvent("학생증인증_갤러리업로드");
                           },
                           child: Container(
                             width: SizeConfig.screenWidth,
@@ -281,8 +290,7 @@ class _VertificationViewState extends State<VertificationView> with SingleTicker
                           child: isNameValid
                               ? ElevatedButton(
                               onPressed: () {
-                                // AnalyticsUtil.logEvent("회원가입_이름_다음");
-                                // TODO : 이름 보내기
+                                AnalyticsUtil.logEvent("학생증인증_제출");
                                 print("변경 전 ${widget.userResponse.personalInfo?.verification}");
                                 PersonalInfo updatedInfo = widget.userResponse.personalInfo!.copyWith(verification: IdCardVerificationStatus.VERIFICATION_IN_PROGRESS);
                                 BlocProvider.of<MyPagesCubit>(context).uploadIdCardImage(_image!, widget.userResponse, _nameController.text);
@@ -316,9 +324,14 @@ class _VertificationViewState extends State<VertificationView> with SingleTicker
                             children: [
                               SlideTransition(
                                 position: _animation,
-                                child: Image.asset(
-                                  'assets/images/magnifier.png',
-                                  width: SizeConfig.defaultSize * 33,
+                                child: GestureDetector(
+                                  onTap: () {
+                                    AnalyticsUtil.logEvent("학생증인증_세번째화면_아이콘터치");
+                                  },
+                                  child: Image.asset(
+                                    'assets/images/magnifier.png',
+                                    width: SizeConfig.defaultSize * 33,
+                                  ),
                                 ),
                               ),
                               SizedBox(height: SizeConfig.screenHeight * 0.15),
