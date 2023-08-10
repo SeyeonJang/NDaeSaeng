@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:dart_flutter/src/data/model/user_request_dto.dart';
+import 'package:dart_flutter/src/data/model/user_response_dto.dart';
 import 'package:dart_flutter/src/data/model/user_signup_request_dto.dart';
 import 'package:dart_flutter/src/data/my_cache.dart';
 import 'package:dart_flutter/src/domain/entity/user_request.dart';
@@ -17,20 +18,24 @@ class DartUserRepositoryImpl implements UserRepository {
   static const String PROFILE_STORAGE_NAME = "profile";
   static const String IDCARD_STORAGE_NAME = "idcard";
 
+  @override
   Future<User> signup(UserRequest user) async {
     var userRequestDto = UserSignupRequestDto.fromUserRequest(user);
     return (await DartApiRemoteDataSource.postUserSignup(userRequestDto)).newUserResponse();
   }
 
+  @override
   void logout() {  // auth?
     userResponseCache.clean();
   }
 
+  @override
   Future<void> withdrawal() async {
     userResponseCache.clean();
     return await DartApiRemoteDataSource.deleteMyAccount();
   }
 
+  @override
   Future<User> myInfo() async {
     if (userResponseCache.isUpdateBefore(DateTime.now().subtract(cachingInterval))) {
       userResponseCache.setObject((await DartApiRemoteDataSource.getMyInformation()).newUserResponse());
@@ -38,12 +43,14 @@ class DartUserRepositoryImpl implements UserRepository {
     return userResponseCache.userResponse;
   }
 
+  @override
   void cleanUpUserResponseCache() {
     userResponseCache.clean();
   }
 
-  void verifyStudentIdCard(String name, String idCardImageUrl) {
-    DartApiRemoteDataSource.verifyStudentIdCard(name, idCardImageUrl);
+  @override
+  Future<User> verifyStudentIdCard(String name, String idCardImageUrl) async {
+    return (await DartApiRemoteDataSource.verifyStudentIdCard(name, idCardImageUrl)).newUserResponse();
   }
 
   @override

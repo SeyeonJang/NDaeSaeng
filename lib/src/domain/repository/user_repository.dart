@@ -16,4 +16,5 @@ abstract class UserRepository {
   String getIdCardImageUrl(String userId);
   Future<String> uploadIdCardImage(File file, String userId);
   removeIdCardImage(String userId);
+  Future<User> verifyStudentIdCard(String name, String idCardImageUrl);
 }
