@@ -42,6 +42,10 @@ class DartUserRepositoryImpl implements UserRepository {
     userResponseCache.clean();
   }
 
+  void verifyStudentIdCard(String name, String idCardImageUrl) {
+    DartApiRemoteDataSource.verifyStudentIdCard(name, idCardImageUrl);
+  }
+
   @override
   Future<User> patchMyInfo(User user) async {
     userResponseCache.setObject(user);
@@ -85,8 +89,6 @@ class DartUserRepositoryImpl implements UserRepository {
     await Future.delayed(const Duration(seconds: 1));
 
     String url = getProfileImageUrl(userId);
-    //TODO 학생증 인증 요청 API
-
     return url;
   }
 
