@@ -1,14 +1,14 @@
-import 'package:dart_flutter/res/size_config.dart';
+import 'package:dart_flutter/res/config/size_config.dart';
 import 'package:dart_flutter/src/common/util/analytics_util.dart';
-import 'package:dart_flutter/src/data/model/friend.dart';
-import 'package:dart_flutter/src/data/model/vote.dart';
+import 'package:dart_flutter/src/domain/entity/friend.dart';
+import 'package:dart_flutter/src/domain/entity/question.dart';
+import 'package:dart_flutter/src/domain/entity/user.dart';
+import 'package:dart_flutter/src/domain/entity/vote_request.dart';
 import 'package:dart_flutter/src/presentation/vote/vimemodel/state/vote_state.dart';
 import 'package:dart_flutter/src/presentation/vote/vimemodel/vote_cubit.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-import '../../data/model/question.dart';
 
 class VoteView extends StatefulWidget {
   const VoteView({Key? key}) : super(key: key);
@@ -84,11 +84,11 @@ class _VoteViewState extends State<VoteView> with SingleTickerProviderStateMixin
           child: BlocBuilder<VoteCubit, VoteState>(
             builder: (context, state) {
               Question question = state.questions[state.voteIterator];
-              List<Friend> shuffledFriends = state.getShuffleFriends();
-              Friend friend1 = shuffledFriends[0];
-              Friend friend2 = shuffledFriends[1];
-              Friend friend3 = shuffledFriends[2];
-              Friend friend4 = shuffledFriends[3];
+              List<User> shuffledFriends = state.getShuffleFriends();
+              User friend1 = shuffledFriends[0];
+              User friend2 = shuffledFriends[1];
+              User friend3 = shuffledFriends[2];
+              User friend4 = shuffledFriends[3];
 
               // print(state.votes.toString());
 
@@ -103,6 +103,21 @@ class _VoteViewState extends State<VoteView> with SingleTickerProviderStateMixin
                     onTap: () {
                       AnalyticsUtil.logEvent("투표_세부_아이콘터치");
                     },
+                    // child: FutureBuilder( // TODO : delay 주면서 포인트 나타날 때 return Text() 부분이랑 딜레이 몇초인지 바꾸면 됨. Stack() 으로 해도 될듯?
+                    //     future: Future.delayed(Duration(milliseconds: 1000), () => true),
+                    //     builder: (context, snapshot) {
+                    //       if (snapshot.connectionState == ConnectionState.waiting) {
+                    //         return Text("쌓인 포인트 : 100"); // You can adjust the height as needed
+                    //       }
+                    //     return SlideTransition(
+                    //       position: _animation,
+                    //       child: Image.asset(
+                    //         'assets/images/contacts.png',
+                    //         width: SizeConfig.defaultSize * 22,
+                    //       ),
+                    //     );
+                    //   }
+                    // ),
                     child: SlideTransition(
                       position: _animation,
                       child: Image.asset(
@@ -135,29 +150,31 @@ class _VoteViewState extends State<VoteView> with SingleTickerProviderStateMixin
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             ChoiceFriendButton(
-                                userId: friend1.userId!, name: friend1.name ?? "XXX", enterYear: friend1.admissionYear.toString().substring(2,4) ?? "00", department: friend1.university?.department ?? "XXXX학과",
+                                userId: friend1.personalInfo!.id, name: friend1.personalInfo!.name ?? "XXX", enterYear: friend1.personalInfo!.admissionYear.toString().substring(2,4) ?? "00", department: friend1.university?.department ?? "XXXX학과",
                                 questionId: question.questionId!,
-                                firstUserId: friend1.userId!,
-                                secondUserId: friend2.userId!,
-                                thirdUserId: friend3.userId!,
-                                fourthUserId: friend4.userId!,
+                                firstUserId: friend1.personalInfo!.id,
+                                secondUserId: friend2.personalInfo!.id,
+                                thirdUserId: friend3.personalInfo!.id,
+                                fourthUserId: friend4.personalInfo!.id,
                                 voteIndex: state.voteIterator,
                                 question: question.content!,
-                                gender: friend1.gender!,
+                                gender: friend1.personalInfo!.gender!,
                                 school: friend1.university!.name,
                                 disabledFunction: state.isLoading,
+                                profileImageUrl: friend1.personalInfo!.profileImageUrl ?? "DEFAULT",
                             ),
-                            ChoiceFriendButton(userId: friend2.userId!, name: friend2.name ?? "XXX", enterYear: friend2.admissionYear.toString().substring(2,4) ?? "00", department: friend2.university?.department ?? "XXXX학과",
+                            ChoiceFriendButton(userId: friend2.personalInfo!.id, name: friend2.personalInfo!.name ?? "XXX", enterYear: friend2.personalInfo!.admissionYear.toString().substring(2,4) ?? "00", department: friend2.university?.department ?? "XXXX학과",
                                 questionId: question.questionId!,
-                                firstUserId: friend1.userId!,
-                                secondUserId: friend2.userId!,
-                                thirdUserId: friend3.userId!,
-                                fourthUserId: friend4.userId!,
+                                firstUserId: friend1.personalInfo!.id,
+                                secondUserId: friend2.personalInfo!.id,
+                                thirdUserId: friend3.personalInfo!.id,
+                                fourthUserId: friend4.personalInfo!.id,
                                 voteIndex: state.voteIterator,
                                 question: question.content!,
-                                gender: friend2.gender!,
+                                gender: friend2.personalInfo!.gender!,
                                 school: friend2.university!.name,
                                 disabledFunction: state.isLoading,
+                                profileImageUrl: friend2.personalInfo!.profileImageUrl ?? "DEFAULT",
                             ),
                           ],
                         ),
@@ -165,29 +182,31 @@ class _VoteViewState extends State<VoteView> with SingleTickerProviderStateMixin
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            ChoiceFriendButton(userId: friend3.userId!, name: friend3.name ?? "XXX", enterYear: friend3.admissionYear.toString().substring(2,4) ?? "00", department: friend3.university?.department ?? "XXXX학과",
+                            ChoiceFriendButton(userId: friend3.personalInfo!.id, name: friend3.personalInfo!.name ?? "XXX", enterYear: friend3.personalInfo!.admissionYear.toString().substring(2,4) ?? "00", department: friend3.university?.department ?? "XXXX학과",
                                 questionId: question.questionId!,
-                                firstUserId: friend1.userId!,
-                                secondUserId: friend2.userId!,
-                                thirdUserId: friend3.userId!,
-                                fourthUserId: friend4.userId!,
+                                firstUserId: friend1.personalInfo!.id,
+                                secondUserId: friend2.personalInfo!.id,
+                                thirdUserId: friend3.personalInfo!.id,
+                                fourthUserId: friend4.personalInfo!.id,
                                 voteIndex: state.voteIterator,
                                 question: question.content!,
-                                gender: friend3.gender!,
+                                gender: friend3.personalInfo!.gender!,
                                 school: friend3.university!.name,
                                 disabledFunction: state.isLoading,
+                                profileImageUrl: friend3.personalInfo!.profileImageUrl ?? "DEFAULT",
                             ),
-                            ChoiceFriendButton(userId: friend4.userId!, name: friend4.name ?? "XXX", enterYear: friend4.admissionYear.toString().substring(2,4) ?? "00", department: friend4.university?.department ?? "XXXX학과",
+                            ChoiceFriendButton(userId: friend4.personalInfo!.id, name: friend4.personalInfo!.name ?? "XXX", enterYear: friend4.personalInfo!.admissionYear.toString().substring(2,4) ?? "00", department: friend4.university?.department ?? "XXXX학과",
                                 questionId: question.questionId!,
-                                firstUserId: friend1.userId!,
-                                secondUserId: friend2.userId!,
-                                thirdUserId: friend3.userId!,
-                                fourthUserId: friend4.userId!,
+                                firstUserId: friend1.personalInfo!.id,
+                                secondUserId: friend2.personalInfo!.id,
+                                thirdUserId: friend3.personalInfo!.id,
+                                fourthUserId: friend4.personalInfo!.id,
                                 voteIndex: state.voteIterator,
                                 question: question.content!,
-                                gender: friend4.gender!,
+                                gender: friend4.personalInfo!.gender!,
                                 school: friend4.university!.name,
                                 disabledFunction: state.isLoading,
+                                profileImageUrl: friend4.personalInfo!.profileImageUrl ?? "DEFAULT",
                             ),
                           ],
                         ),
@@ -298,6 +317,7 @@ class ChoiceFriendButton extends StatefulWidget {
   final String question;
   final String gender;
   final String school;
+  final String profileImageUrl;
 
   const ChoiceFriendButton({
     super.key,
@@ -317,7 +337,8 @@ class ChoiceFriendButton extends StatefulWidget {
     required this.voteIndex,
     required this.question,
     required this.gender,
-    required this.school
+    required this.school,
+    required this.profileImageUrl
   });
 
   @override
@@ -333,14 +354,14 @@ class _ChoiceFriendButtonState extends State<ChoiceFriendButton> {
     void _onVoteButtonPressed() {
       // 버튼이 눌린 상태일 때 색상 변경
       setState(() {
-        backgroundColor = Color(0xff7C83FD);
-        textColor = Colors.white;
+        backgroundColor = backgroundColor;
+        textColor = textColor;
       });
 
       // 버튼이 떼어진 상태일 때 색상 변경
       setState(() {
-        backgroundColor = Colors.white;
-        textColor = Color(0xff7C83FD);
+        backgroundColor = textColor;
+        textColor = backgroundColor;
       });
       // 투표 요청 로직
       VoteRequest voteRequest = VoteRequest(
@@ -386,16 +407,41 @@ class _ChoiceFriendButtonState extends State<ChoiceFriendButton> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(15), // 모서리 둥글기 설정
           ),
+            surfaceTintColor: Color(0xff7C83FD).withOpacity(0.1),
+            // surfaceTintColor: Color(0xff7C83FD).withOpacity(0.1),
+          padding: EdgeInsets.all(SizeConfig.defaultSize * 1)
         ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(
-                widget.name,
-                style: TextStyle(
-                  fontSize: SizeConfig.defaultSize * 2.3,
-                  fontWeight: FontWeight.w600,
-                ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ClipOval(
+                    clipBehavior: Clip.antiAlias,
+                    child: Container(
+                      child: widget.profileImageUrl == "DEFAULT"
+                          ? ClipOval(
+                          child: Image.asset('assets/images/profile-mockup2.png', width: SizeConfig.defaultSize * 2.5, fit: BoxFit.cover,)
+                      )
+                          : ClipOval(
+                          child: Image.network(widget.profileImageUrl,
+                            width: SizeConfig.defaultSize * 2.5,
+                            height: SizeConfig.defaultSize * 2.5,
+                            fit: BoxFit.cover)
+                      ),
+                    ),
+                  ),
+                  SizedBox(width: SizeConfig.defaultSize * 1,),
+                  Text(
+                    widget.name,
+                    style: TextStyle(
+                      fontSize: SizeConfig.defaultSize * 2.3,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  SizedBox(width: SizeConfig.defaultSize * 1,),
+                ],
               ),
               SizedBox(height: SizeConfig.defaultSize * 1,),
               Text(

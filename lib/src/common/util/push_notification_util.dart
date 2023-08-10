@@ -1,4 +1,5 @@
 import 'package:dart_flutter/res/environment/app_environment.dart';
+import 'package:dart_flutter/src/common/util/analytics_util.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 
 class PushNotificationUtil {
@@ -9,6 +10,16 @@ class PushNotificationUtil {
     OneSignal.shared.setAppId(appId);
     OneSignal.shared.promptUserForPushNotificationPermission().then((accepted) {
       print("Accepted permission: $accepted");
+    });
+    _whenOpenedPushNotification();
+  }
+
+  static void _whenOpenedPushNotification() {
+    OneSignal.shared.setNotificationOpenedHandler((OSNotificationOpenedResult result) {
+      print("OneSignal: notification opened: ${result.notification.notificationId}");
+      AnalyticsUtil.logEvent("푸시알림_접속", properties: {
+        "notificationId": result.notification.notificationId
+      });
     });
   }
 

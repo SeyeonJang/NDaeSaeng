@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../res/size_config.dart';
+import '../../../res/config/size_config.dart';
 import 'package:like_button/like_button.dart';
 
 class MeetPage extends StatefulWidget {

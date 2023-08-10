@@ -1,13 +1,14 @@
-import 'package:dart_flutter/src/data/model/friend.dart';
-import 'package:dart_flutter/src/data/model/user.dart';
-import 'package:dart_flutter/src/data/repository/dart_friend_repository.dart';
-import 'package:dart_flutter/src/data/repository/dart_user_repository.dart';
+import 'dart:io';
+
+import 'package:dart_flutter/src/domain/entity/user.dart';
+import 'package:dart_flutter/src/domain/use_case/friend_use_case.dart';
+import 'package:dart_flutter/src/domain/use_case/user_use_case.dart';
 import 'package:dart_flutter/src/presentation/mypage/viewmodel/state/mypages_state.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 
 class MyPagesCubit extends Cubit<MyPagesState> {
-  static final DartUserRepository _dartUserRepository = DartUserRepository();
-  static final DartFriendRepository _dartFriendRepository = DartFriendRepository();
+  static final UserUseCase _userUseCase = UserUseCase();
+  static final FriendUseCase _friendUseCase = FriendUseCase();
 
   MyPagesCubit() : super(MyPagesState.init());
 
@@ -17,12 +18,12 @@ class MyPagesCubit extends Cubit<MyPagesState> {
     emit(state.copy());
 
     // 초기값 설정
-    UserResponse userResponse = await _dartUserRepository.myInfo();
+    User userResponse = await _userUseCase.myInfo();
     state.setUserResponse(userResponse);
 
-    List<Friend> friends = await _dartFriendRepository.getMyFriends();
+    List<User> friends = await _friendUseCase.getMyFriends();
     state.setMyFriends(friends);
-    List<Friend> newFriends = await _dartFriendRepository.getRecommendedFriends();
+    List<User> newFriends = await _friendUseCase.getRecommendedFriends();
     state.setRecommendedFriends(newFriends);
 
     state.setIsLoading(false);
@@ -30,14 +31,14 @@ class MyPagesCubit extends Cubit<MyPagesState> {
     print("mypage init 끝");
   }
 
-  void pressedFriendAddButton(Friend friend) {
-    _dartFriendRepository.addFriend(friend);
+  void pressedFriendAddButton(User friend) {
+    _friendUseCase.addFriend(friend);
     state.addFriend(friend);
     emit(state.copy());
   }
 
-  void pressedFriendDeleteButton(Friend friend) {
-    _dartFriendRepository.deleteFriend(friend);
+  void pressedFriendDeleteButton(User friend) {
+    _friendUseCase.removeFriend(friend);
     state.deleteFriend(friend);
     emit(state.copy());
   }
@@ -47,9 +48,9 @@ class MyPagesCubit extends Cubit<MyPagesState> {
     emit(state.copy());
 
     try {
-      Friend friend = await _dartFriendRepository.addFriendBy(inviteCode);
+      User friend = await _friendUseCase.addFriendBy(inviteCode);
       state.addFriend(friend);
-      state.newFriends = (await _dartFriendRepository.getRecommendedFriends(put: true)).toSet();
+      state.newFriends = (await _friendUseCase.getRecommendedFriends(put: true)).toSet();
     } catch (e, trace) {
         print("친구추가 실패! $e $trace");
         throw Error();
@@ -57,6 +58,38 @@ class MyPagesCubit extends Cubit<MyPagesState> {
         state.isLoading = false;
         emit(state.copy());
     }
+  }
+
+  void patchMyInfo(User userResponse) {
+    _userUseCase.patchMyInfo(userResponse);
+  }
+
+  void refreshMyInfo() async {
+    _userUseCase.cleanUpUserResponseCache();
+     User user = await _userUseCase.myInfo();
+     state.setUserResponse(user);
+     emit(state.copy());
+  }
+
+  void uploadProfileImage(File file, User userResponse) async {
+    _userUseCase.uploadProfileImage(file, userResponse);
+  }
+
+  String getProfileImageUrl(String userId) {
+    // return _userUseCase.getProfileImageUrl(userId);
+    String profileImageUrl = state.userResponse.personalInfo!.profileImageUrl ?? "DEFAULT";
+    return profileImageUrl;
+  }
+
+  void uploadIdCardImage(File file, User userResponse, String name) async {
+    _userUseCase.uploadIdCardImage(file, userResponse, name);
+    state.isVertificateUploaded = true;
+    emit(state.copy());
+  }
+
+  void setProfileImage(File file) {
+    state.profileImageFile = file;
+    emit(state.copy());
   }
 
   void setMyLandPage() {

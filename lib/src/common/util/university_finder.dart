@@ -1,4 +1,4 @@
-import '../../data/model/university.dart';
+import 'package:dart_flutter/src/domain/entity/university.dart';
 
 class UniversityFinder {
   final List<University> universities;

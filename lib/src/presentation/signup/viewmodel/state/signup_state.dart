@@ -1,4 +1,5 @@
-import 'package:dart_flutter/src/data/model/university.dart';
+import 'package:dart_flutter/src/data/model/university_dto.dart';
+import 'package:dart_flutter/src/domain/entity/university.dart';
 import 'package:dart_flutter/src/presentation/signup/viewmodel/state/signup_input.dart';
 import 'package:json_annotation/json_annotation.dart';
 part 'signup_state.g.dart';

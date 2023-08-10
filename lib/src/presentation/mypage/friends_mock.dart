@@ -1,23 +1,23 @@
-import 'package:dart_flutter/src/data/model/friend.dart';
-import 'package:dart_flutter/src/data/model/university.dart';
+import 'package:dart_flutter/src/data/model/friend_dto.dart';
+import 'package:dart_flutter/src/data/model/university_dto.dart';
 
 class FriendsMock {
-  List<Friend> friends = [
-    Friend(
+  List<FriendDto> friends = [
+    FriendDto(
       userId: 2,
       admissionYear: 2023,
       name: '최현식',
       // phone: '010-1234-5678',
       // signUp: true,
-      university: University(id: 1, name: '서울대학교', department: "화학과"),
+      university: UniversityDto(id: 1, name: '서울대학교', department: "화학과"),
     ),
-    Friend(
+    FriendDto(
       userId: 2,
       admissionYear: 2011,
       name: '최현일',
       // phone: '010-1234-5678',
       // signUp: true,
-      university: University(id: 1, name: '서울대학교', department: "화학과"),
+      university: UniversityDto(id: 1, name: '서울대학교', department: "화학과"),
     ),
     // Friend(
     //   userId: 2,
@@ -69,7 +69,7 @@ class FriendsMock {
     // ),
   ];
 
-  List<Friend> getFriends() {
+  List<FriendDto> getFriends() {
     return friends;
   }
 }

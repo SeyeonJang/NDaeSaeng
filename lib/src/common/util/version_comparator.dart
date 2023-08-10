@@ -1,4 +1,4 @@
-import 'package:dart_flutter/src/common/auth/state/auth_state.dart';
+import 'package:dart_flutter/src/common/auth/state/dart_auth_state.dart';
 
 class VersionComparator {
   static AppVersionStatus compareVersions(String version, String minVer, String latestVer) {

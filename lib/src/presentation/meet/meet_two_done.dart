@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../res/size_config.dart';
+import '../../../res/config/size_config.dart';
 
 class MeetTwoDone extends StatelessWidget {
   const MeetTwoDone({super.key});

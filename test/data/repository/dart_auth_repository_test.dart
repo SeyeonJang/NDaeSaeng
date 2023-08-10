@@ -1,32 +1,19 @@
-import 'package:dart_flutter/src/data/model/dart_auth.dart';
-import 'package:dart_flutter/src/data/model/friend.dart';
-import 'package:dart_flutter/src/data/model/user.dart';
-import 'package:dart_flutter/src/datasource/dart_api_remote_datasource.dart';
+
+import 'package:dart_flutter/res/environment/app_environment.dart';
+import 'package:dart_flutter/src/data/datasource/dart_api_remote_datasource.dart';
+import 'package:dart_flutter/src/data/repository/dart_user_repository_impl.dart';
 
 void main() async {
-  DartApiRemoteDataSource dataSource = DartApiRemoteDataSource();
-
-  // final String kakaoAccessToken = "4i-emZzCCzxksWy1XxwIXY-2Z4sxZJTr2UsrpojqCisM0gAAAYkBwzFt";
-  // DartAuth dartAuth = await DartApiRemoteDataSource.postLoginWithKakao(kakaoAccessToken);
-  // print(dartAuth);
-
-  // var user = UserRequest(univId: 45, admissionNumber: 20, name: "가나다", phone: "010-1234-5678");
-  // await DartApiRemoteDataSource.postUserSignup(user);
-
-  // UserResponse userResponse = await DartApiRemoteDataSource.getMyInformation();
-  // print(userResponse.toString());
-
-  // await DartApiRemoteDataSource.getUniversities();
-
-  // DartApiRemoteDataSource.addAuthorizationToken("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJrYWthb18yODE3MDU0MDM1IiwiaWQiOjQzLCJleHAiOjE2ODk0MjQzOTQsInVzZXJuYW1lIjoia2FrYW9fMjgxNzA1NDAzNSJ9.fU4FAbioW8u5KyVIhQ9vLsuVoEuSDtN0ScSUlaHh2doGMIgeBZR3ri8KDNiVY9Y4F1_Hap3Uu79WH0gPaLkc6AA");
-  // DartApiRemoteDataSource.addAuthorizationToken("");
-  // DartApiRemoteDataSource.addAuthorizationToken("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJrYWthb18yODE3MDU0MDM1IiwiaWQiOjQzLCJleHAiOjE2ODk0MjQzOTQsInVzZXJuYW1lIjoia2FrYW9fMjgxNzA1NDAzNSJ9.fU4FAbioW8u5KyVIhQ9vLsuVoEuSDtN0ScSUlaHh2doGMIgeBZR3ri8KDNiVY9Y4F1_Hap3Uu79WH0gPaLkc6A");
-  DartApiRemoteDataSource.addAuthorizationToken("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJrYWthb18yODE3MDU0MDM1IiwiaWQiOjEwMjgsImV4cCI6MTY5MDcwMzg4NCwidXNlcm5hbWUiOiJrYWthb18yODE3MDU0MDM1In0.ogBCznUadK-Z0l0CA1GoXl5CkotAEdXsKrQ7s1a7-uanLJuDA_cywuWJHF3T-zxuyCvnG54q9bZTYQNpVJ9g3Q");
-  // var questions = await DartApiRemoteDataSource.getNewQuestions();
+ AppEnvironment.setupEnv(BuildType.dev);
+ DartApiRemoteDataSource.addAuthorizationToken("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJrYWthb18yODE3MDU0MDM1IiwiaWQiOjIsImV4cCI6MTY5MTkwODg5NywidXNlcm5hbWUiOiJrYWthb18yODE3MDU0MDM1In0.BZBAXd3FpI7RU328GNN7e5jGiwgHHfDoBMsV4TTy50h_RhtGScPQipX5MhlRI8bh9VlfocsOmgplQ9VOdPYDrA");
   // print(questions.toString());
 
-  final response = await DartApiRemoteDataSource.getNextVoteTime();
-  print(response.toString());
+ // await DartApiRemoteDataSource.verifyStudentIdCard("최현식", "https://khzdhqlbzmnzibbfrrgc.supabase.co/storage/v1/object/public/idcard/280");
+ final response = await DartUserRepositoryImpl().verifyStudentIdCard("최현식", "https://khzdhqlbzmnzibbfrrgc.supabase.co/storage/v1/object/public/idcard/280");
+ print(response.toString());
+
+  // final response = await DartApiRemoteDataSource.getNextVoteTime();
+  // print(response.toString());
 
   // dynamic response = await DartApiRemoteDataSource.getVotes();
   // print(response);

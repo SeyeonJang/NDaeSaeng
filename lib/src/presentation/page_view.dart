@@ -1,11 +1,6 @@
-import 'package:dart_flutter/res/size_config.dart';
-import 'package:dart_flutter/src/common/auth/auth_cubit.dart';
+import 'package:dart_flutter/res/config/size_config.dart';
 import 'package:dart_flutter/src/common/util/analytics_util.dart';
-import 'package:dart_flutter/src/presentation/meet/meet_page.dart';
 import 'package:dart_flutter/src/common/util/toast_util.dart';
-import 'package:dart_flutter/src/presentation/meet/meetpages.dart';
-import 'package:dart_flutter/src/presentation/meet/viewmodel/meet_cubit.dart';
-import 'package:dart_flutter/src/presentation/mypage/my_page_landing.dart';
 import 'package:dart_flutter/src/presentation/mypage/mypages.dart';
 import 'package:dart_flutter/src/presentation/mypage/viewmodel/mypages_cubit.dart';
 import 'package:dart_flutter/src/presentation/vote/vimemodel/vote_cubit.dart';
@@ -78,7 +73,7 @@ class _DartPageViewState extends State<DartPageView> {
             child: Column(
               children: [
                 Padding(
-                  padding: EdgeInsets.all(SizeConfig.defaultSize * 2),
+                  padding: EdgeInsets.only(left: SizeConfig.defaultSize * 2, right: SizeConfig.defaultSize * 2),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
@@ -139,7 +134,7 @@ class _TapBarButton extends StatelessWidget {
             color: Colors.white,
             width: SizeConfig.screenWidth * 0.3,
             //width: MediaQuery.of(context).size.width * 0.22, // 원하는 넓이로 설정합니다.
-            height: SizeConfig.defaultSize * 4,
+            height: SizeConfig.defaultSize * 6,
             alignment: Alignment.center,
             child: Padding(
               padding: const EdgeInsets.all(0),

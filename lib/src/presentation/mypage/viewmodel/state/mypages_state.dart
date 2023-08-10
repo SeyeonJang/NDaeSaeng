@@ -1,17 +1,18 @@
-// import 'package:dart_flutter/src/data/model/vote.dart';
-import 'package:dart_flutter/src/data/model/friend.dart';
-import 'package:dart_flutter/src/data/model/user.dart';
-import 'package:flutter/cupertino.dart';
+import 'dart:io';
+
+import 'package:dart_flutter/src/domain/entity/friend.dart';
+import 'package:dart_flutter/src/domain/entity/user.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-@JsonSerializable()
 class MyPagesState {
   late bool isLoading;
-  late UserResponse userResponse;
-  late Set<Friend> friends;
-  late Set<Friend> newFriends;
+  late User userResponse;
+  late Set<User> friends;
+  late Set<User> newFriends;
   late int newFriendId;
   late bool isMyLandPage;
+  late bool isVertificateUploaded;
+  late File profileImageFile;
 
   MyPagesState({
     required this.isLoading,
@@ -20,18 +21,22 @@ class MyPagesState {
     required this.friends,
     required this.newFriends,
     required this.newFriendId,
+    required this.isVertificateUploaded,
+    required this.profileImageFile,
   });
 
   MyPagesState.init() {
     isLoading = false;
-    userResponse = UserResponse(
-      user: null,
+    userResponse = User(
+      personalInfo: null,
       university: null,
     );
     friends = {};
     newFriends = {};
     newFriendId = 0;
     isMyLandPage = true;
+    isVertificateUploaded = false;
+    profileImageFile = File('');
   }
 
   MyPagesState copy() => MyPagesState(
@@ -41,13 +46,15 @@ class MyPagesState {
         friends: friends,
         newFriends: newFriends,
         newFriendId: newFriendId,
+        isVertificateUploaded: isVertificateUploaded,
+        profileImageFile: profileImageFile
       );
 
   void setIsLoading(bool isLoading) {
     this.isLoading = isLoading;
   }
 
-  MyPagesState setUserResponse(UserResponse userResponse) {
+  MyPagesState setUserResponse(User userResponse) {
     this.userResponse = userResponse;
     return this;
   }
@@ -57,12 +64,12 @@ class MyPagesState {
     return this;
   }
 
-  MyPagesState setMyFriends(List<Friend> friends) {
+  MyPagesState setMyFriends(List<User> friends) {
     this.friends = friends.toSet();
     return this;
   }
 
-  MyPagesState setRecommendedFriends(List<Friend> friends) {
+  MyPagesState setRecommendedFriends(List<User> friends) {
     newFriends = friends.toSet();
     return this;
   }
@@ -72,12 +79,12 @@ class MyPagesState {
     return this;
   }
 
-  void addFriend(Friend friend) {
+  void addFriend(User friend) {
     friends.add(friend);
     newFriends.remove(friend);
   }
 
-  void deleteFriend(Friend friend) {
+  void deleteFriend(User friend) {
     friends.remove(friend);
     newFriends.add(friend);
   }

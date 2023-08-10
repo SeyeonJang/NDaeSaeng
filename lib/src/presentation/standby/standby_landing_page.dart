@@ -1,22 +1,18 @@
 import 'package:dart_flutter/src/common/util/analytics_util.dart';
 import 'package:dart_flutter/src/common/util/toast_util.dart';
+import 'package:dart_flutter/src/domain/entity/friend.dart';
+import 'package:dart_flutter/src/domain/entity/user.dart';
 import 'package:dart_flutter/src/presentation/page_view.dart';
-import 'package:dart_flutter/src/presentation/signup/tutorial_slide.dart';
+import 'package:dart_flutter/src/presentation/landing/view/tutorial_slide.dart';
 import 'package:dart_flutter/src/presentation/standby/viewmodel/standby_cubit.dart';
 import 'package:dart_flutter/src/presentation/standby/viewmodel/state/standby_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
-import '../../../res/size_config.dart';
+import '../../../res/config/size_config.dart';
 import 'package:flutter/material.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:flutter/services.dart';
-
-import '../../data/model/friend.dart';
-import '../mypage/friends_mock.dart';
-import '../mypage/viewmodel/mypages_cubit.dart';
-import '../mypage/viewmodel/state/mypages_state.dart';
 
 class StandbyLandingPage extends StatefulWidget {
   const StandbyLandingPage({
@@ -28,7 +24,6 @@ class StandbyLandingPage extends StatefulWidget {
 }
 
 class _StandbyLandingPageState extends State<StandbyLandingPage> with TickerProviderStateMixin {
-  final StandbyCubit _standbyCubit = StandbyCubit();
   bool _isUp = true;
   late AnimationController _controller;
   late Animation<Offset> _animation;
@@ -202,7 +197,7 @@ class _StandbyLandingPageState extends State<StandbyLandingPage> with TickerProv
                           if (state.isLoading) {
                             return CircularProgressIndicator();
                           } else {
-                            List<Friend> friends = state.addedFriends;
+                            List<User> friends = state.addedFriends;
                             int count = friends.length;
                             if (count >= 4) {
                               WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -216,7 +211,7 @@ class _StandbyLandingPageState extends State<StandbyLandingPage> with TickerProv
                         }),
 
                         BlocBuilder<StandbyCubit, StandbyState>(builder: (context, state) {
-                          List<Friend> friends = state.addedFriends;
+                          List<User> friends = state.addedFriends;
                           int count = friends.length;
 
                           return Column(
@@ -230,13 +225,13 @@ class _StandbyLandingPageState extends State<StandbyLandingPage> with TickerProv
                                   children: [
                                     count >= 1
                                         ? FriendExistsView(
-                                            userName: friends[0].name,
-                                            admissionYear: friends[0].admissionYear.toString().substring(2, 4),
+                                            userName: friends[0].personalInfo!.name,
+                                            admissionYear: friends[0].personalInfo!.admissionYear.toString().substring(2, 4),
                                             friendIndex: 0,
                                           )
                                         : BlocBuilder<StandbyCubit, StandbyState>(builder: (context, state) {
                                             return FriendNotExistsView(
-                                              myCode: state.userResponse.user?.recommendationCode ?? '내 코드가 없어요!',
+                                              myCode: state.userResponse.personalInfo?.recommendationCode ?? '내 코드가 없어요!',
                                               index: 0,
                                               friendCount: count,
                                               disabledFunctions: state.isLoading,
@@ -244,13 +239,13 @@ class _StandbyLandingPageState extends State<StandbyLandingPage> with TickerProv
                                           }),
                                     count >= 2
                                         ? FriendExistsView(
-                                            userName: friends[1].name,
-                                            admissionYear: friends[1].admissionYear.toString().substring(2, 4),
+                                            userName: friends[1].personalInfo!.name,
+                                            admissionYear: friends[1].personalInfo!.admissionYear.toString().substring(2, 4),
                                             friendIndex: 1,
                                           )
                                         : BlocBuilder<StandbyCubit, StandbyState>(builder: (context, state) {
                                             return FriendNotExistsView(
-                                              myCode: state.userResponse.user?.recommendationCode ?? '내 코드가 없어요!',
+                                              myCode: state.userResponse.personalInfo?.recommendationCode ?? '내 코드가 없어요!',
                                               index: 1,
                                               friendCount: count,
                                               disabledFunctions: state.isLoading,
@@ -269,13 +264,13 @@ class _StandbyLandingPageState extends State<StandbyLandingPage> with TickerProv
                                   children: [
                                     count >= 3
                                         ? FriendExistsView(
-                                            userName: friends[2].name,
-                                            admissionYear: friends[2].admissionYear.toString().substring(2, 4),
+                                            userName: friends[2].personalInfo!.name,
+                                            admissionYear: friends[2].personalInfo!.admissionYear.toString().substring(2, 4),
                                             friendIndex: 2,
                                           )
                                         : BlocBuilder<StandbyCubit, StandbyState>(builder: (context, state) {
                                             return FriendNotExistsView(
-                                              myCode: state.userResponse.user?.recommendationCode ?? '내 코드가 없어요!',
+                                              myCode: state.userResponse.personalInfo?.recommendationCode ?? '내 코드가 없어요!',
                                               index: 2,
                                               friendCount: count,
                                               disabledFunctions: state.isLoading,
@@ -283,13 +278,13 @@ class _StandbyLandingPageState extends State<StandbyLandingPage> with TickerProv
                                           }),
                                     count >= 4
                                         ? FriendExistsView(
-                                            userName: friends[3].name,
-                                            admissionYear: friends[3].admissionYear.toString().substring(2, 4),
+                                            userName: friends[3].personalInfo!.name,
+                                            admissionYear: friends[3].personalInfo!.admissionYear.toString().substring(2, 4),
                                             friendIndex: 3,
                                           )
                                         : BlocBuilder<StandbyCubit, StandbyState>(builder: (context, state) {
                                             return FriendNotExistsView(
-                                              myCode: state.userResponse.user?.recommendationCode ?? '내 코드가 없어요!',
+                                              myCode: state.userResponse.personalInfo?.recommendationCode ?? '내 코드가 없어요!',
                                               index: 3,
                                               friendCount: count,
                                               disabledFunctions: state.isLoading,
@@ -324,10 +319,10 @@ class _StandbyLandingPageState extends State<StandbyLandingPage> with TickerProv
 
                         BlocBuilder<StandbyCubit, StandbyState>(
                           builder: (context, state) {
-                            List<Friend> friends = state.addedFriends;
+                            List<User> friends = state.addedFriends;
                             int count = friends.length;
                             return openAddFriends(
-                              myCode: state.userResponse.user?.recommendationCode ?? '내 코드가 없어요!',
+                              myCode: state.userResponse.personalInfo?.recommendationCode ?? '내 코드가 없어요!',
                               disabledFunctions: state.isLoading,
                               friendCount: count,
                             );
@@ -1259,7 +1254,7 @@ class _FriendNotExistsViewState extends State<FriendNotExistsView> {
                                     value: BlocProvider.of<StandbyCubit>(context),
                                     child: BlocBuilder<StandbyCubit, StandbyState>(
                                       builder: (friendContext, state) {
-                                        final friends = state.newFriends ?? [];
+                                        final friends = state.newFriends;
                                         return NewFriends(friends: friends, count: friends.length);
                                       },
                                     ),
@@ -1269,7 +1264,7 @@ class _FriendNotExistsViewState extends State<FriendNotExistsView> {
                                   value: BlocProvider.of<StandbyCubit>(context),
                                   child: BlocBuilder<StandbyCubit, StandbyState>(
                                     builder: (friendContext, state) {
-                                      final friends = state.newFriends ?? [];
+                                      final friends = state.newFriends;
                                       return friends.length <= 2
                                           ? SizedBox(height: SizeConfig.screenHeight * 0.4,)
                                           : SizedBox(height: SizeConfig.defaultSize * 2,);
@@ -1753,7 +1748,7 @@ class _openAddFriendsState extends State<openAddFriends> {
                                   value: BlocProvider.of<StandbyCubit>(context),
                                   child: BlocBuilder<StandbyCubit, StandbyState>(
                                     builder: (friendContext, state) {
-                                      final friends = state.newFriends ?? [];
+                                      final friends = state.newFriends;
                                       return NewFriends(friends: friends, count: friends.length);
                                     },
                                   ),
@@ -1762,7 +1757,7 @@ class _openAddFriendsState extends State<openAddFriends> {
                                   value: BlocProvider.of<StandbyCubit>(context),
                                   child: BlocBuilder<StandbyCubit, StandbyState>(
                                     builder: (friendContext, state) {
-                                      final friends = state.newFriends ?? [];
+                                      final friends = state.newFriends;
                                       return friends.length <= 2
                                           ? SizedBox(height: SizeConfig.screenHeight * 0.4,)
                                           : SizedBox(height: SizeConfig.defaultSize * 2,);
@@ -1813,7 +1808,7 @@ void shareContent(BuildContext context, String myCode) {
 }
 
 class NewFriends extends StatelessWidget {
-  final List<Friend> friends;
+  final List<User> friends;
   final int count;
 
   const NewFriends({
@@ -1834,9 +1829,9 @@ class NewFriends extends StatelessWidget {
 }
 class NotFriendComponent extends StatelessWidget {
   late bool isAdd;
-  late Friend friend;
+  late User friend;
 
-  NotFriendComponent(bool isAdd, Friend friend, {super.key}) {
+  NotFriendComponent(bool isAdd, User friend, {super.key}) {
     this.isAdd = isAdd;
     this.friend = friend;
   }
@@ -1856,8 +1851,8 @@ class NotFriendComponent extends StatelessWidget {
             GestureDetector(
               onTap: () {
                 AnalyticsUtil.logEvent("대기_친추_알수도있는친구_목록터치", properties: {
-                  "친구 성별": friend.gender=="FEMALE" ? "여자" : "남자",
-                  "친구 학번": friend.admissionYear.toString().substring(2,4),
+                  "친구 성별": friend.personalInfo!.gender=="FEMALE" ? "여자" : "남자",
+                  "친구 학번": friend.personalInfo!.admissionYear.toString().substring(2,4),
                   "친구 학교": friend.university!.name,
                   "친구 학교코드": friend.university!.id,
                   "친구 학과": friend.university!.department
@@ -1867,17 +1862,18 @@ class NotFriendComponent extends StatelessWidget {
                 width: SizeConfig.screenWidth * 0.52,
                 child: Row(
                   children: [
-                    Text(friend.name ?? "XXX", style: TextStyle(
+                    Text(friend.personalInfo?.name ?? "XXX", style: TextStyle(
                       fontSize: SizeConfig.defaultSize * 1.9,
                       fontWeight: FontWeight.w600,
                     )),
-                    Container(
-                      width: SizeConfig.screenWidth * 0.36,
-                      child: Text("  ${friend.admissionYear.toString().substring(2,4)}학번∙${friend.university?.department}", style: TextStyle(
-                        fontSize: SizeConfig.defaultSize * 1.3,
-                        fontWeight: FontWeight.w500,
-                        overflow: TextOverflow.ellipsis,
-                      )),
+                    Flexible(
+                      child: Container(
+                        child: Text("  ${friend.personalInfo!.admissionYear.toString().substring(2,4)}학번∙${friend.university?.department}", style: TextStyle(
+                          fontSize: SizeConfig.defaultSize * 1.3,
+                          fontWeight: FontWeight.w500,
+                          overflow: TextOverflow.ellipsis,
+                        )),
+                      ),
                     ),
                   ],
                 ),
@@ -1936,7 +1932,7 @@ class NotFriendComponent extends StatelessWidget {
               onPressed: () {
                 AnalyticsUtil.logEvent("대기_친추_알수도있는친구_친구추가");
                 if (isAdd) {
-                  pressedAddButton(context, friend.userId!);
+                  pressedAddButton(context, friend.personalInfo!.id);
                   // Navigator.pop(context);
                 }
                 // else {
