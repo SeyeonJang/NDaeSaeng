@@ -10,7 +10,10 @@ abstract class UserRepository {
   Future<void> withdrawal();
   Future<UserResponse> myInfo();
   void cleanUpUserResponseCache();
+  String getProfileImageUrl(String userId);
   Future<String> uploadProfileImage(File file, String userId);
   removeProfileImage(String userId);
-  String getProfileImageUrl(String userId);
+  String getIdCardImageUrl(String userId);
+  Future<String> uploadIdCardImage(File file, String userId);
+  removeIdCardImage(String userId);
 }

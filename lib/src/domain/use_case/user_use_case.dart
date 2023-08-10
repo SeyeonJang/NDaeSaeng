@@ -47,6 +47,12 @@ class UserUseCase {
     return url;
   }
 
+  Future<String> uploadIdCardImage(File file, UserResponse user) async {
+    await _dartUserRepository.removeIdCardImage(user.user!.id.toString());
+    String url = await _dartUserRepository.uploadIdCardImage(file, user.user!.id.toString());
+    return url;
+  }
+
   void cleanUpUserResponseCache() {
     _dartUserRepository.cleanUpUserResponseCache();
   }

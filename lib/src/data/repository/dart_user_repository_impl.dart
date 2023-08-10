@@ -43,6 +43,15 @@ class DartUserRepositoryImpl implements UserRepository {
   }
 
   @override
+  Future<UserResponse> patchMyInfo(UserResponse user) async {
+    userResponseCache.setObject(user);
+
+    return (await DartApiRemoteDataSource.patchMyInformation(
+        UserRequestDto.fromUserResponse(user)
+    )).newUserResponse();
+  }
+
+  @override
   String getProfileImageUrl(String userId) {
     return SupabaseRemoteDatasource.getFileUrl(PROFILE_STORAGE_NAME, userId);
   }
@@ -61,16 +70,31 @@ class DartUserRepositoryImpl implements UserRepository {
   }
 
   @override
-  Future<UserResponse> patchMyInfo(UserResponse user) async {
-    return (await DartApiRemoteDataSource.patchMyInformation(
-        UserRequestDto.fromUserResponse(user)
-    )).newUserResponse();
+  removeProfileImage(String userId) async {
+    await SupabaseRemoteDatasource.removeFile(PROFILE_STORAGE_NAME, userId);
   }
 
   @override
-  removeProfileImage(String userId) async {
-    await SupabaseRemoteDatasource.removeFile(PROFILE_STORAGE_NAME, "${userId}");
+  String getIdCardImageUrl(String userId) {
+    return SupabaseRemoteDatasource.getFileUrl(IDCARD_STORAGE_NAME, userId);
   }
+
+  @override
+  Future<String> uploadIdCardImage(File file, String userId) async {
+    await SupabaseRemoteDatasource.uploadFileToStorage(IDCARD_STORAGE_NAME, userId, file);
+    await Future.delayed(const Duration(seconds: 1));
+
+    String url = getProfileImageUrl(userId);
+    //TODO 학생증 인증 요청 API
+
+    return url;
+  }
+
+  @override
+  removeIdCardImage(String userId) async {
+    await SupabaseRemoteDatasource.removeFile(IDCARD_STORAGE_NAME, userId);
+  }
+
 }
 
 class UserResponseCache extends MyCache {
