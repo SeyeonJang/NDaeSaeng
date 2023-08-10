@@ -85,11 +85,12 @@ class DartApiRemoteDataSource {
   }
 
   /// User: 학생증 인증 요청
-  static Future<void> verifyStudentIdCard(String name, String idCardImageUrl) async {
+  static Future<UserDto> verifyStudentIdCard(String name, String idCardImageUrl) async {
     const path = '/v1/users/me/verify-student-id-card';
-    final body = {"name": name, "idCardImageUrl": idCardImageUrl};
+    final body = {"name": name, "studentIdCardImageUrl": idCardImageUrl};
     final response = await _httpUtil.request().post(path, data: body);
-    print(response.toString());
+    final jsonResponse = json.decode(response.toString());
+    return UserDto.fromJson(jsonResponse);
   }
 
   /// User: 내 정보 가져오기
