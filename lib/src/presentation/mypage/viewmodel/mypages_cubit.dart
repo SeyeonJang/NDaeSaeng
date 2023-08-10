@@ -73,6 +73,10 @@ class MyPagesCubit extends Cubit<MyPagesState> {
     return profileImageUrl;
   }
 
+  void uploadIdCardImage(File file, UserResponse userResponse) async {
+    _userUseCase.uploadIdCardImage(file, userResponse);
+  }
+
   void setMyLandPage() {
     state.setMyLandPage(true);
     final newState = state.copy();

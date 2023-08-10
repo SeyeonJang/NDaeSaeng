@@ -4,6 +4,7 @@ import 'package:dart_flutter/src/common/util/analytics_util.dart';
 import 'package:dart_flutter/src/common/util/toast_util.dart';
 import 'package:dart_flutter/src/domain/entity/friend.dart';
 import 'package:dart_flutter/src/domain/entity/user_response.dart';
+import 'package:dart_flutter/src/presentation/mypage/view/student_vertification.dart';
 import 'package:dart_flutter/src/presentation/mypage/viewmodel/mypages_cubit.dart';
 import 'package:dart_flutter/src/presentation/mypage/viewmodel/state/mypages_state.dart';
 import 'package:flutter/cupertino.dart';
@@ -91,12 +92,12 @@ class _MyPageLandingViewState extends State<MyPageLandingView> {
                         SizedBox(width: SizeConfig.defaultSize * 0.3),
                         profileImageUrl == "DEFAULT"
                             ? ClipOval(
-                          child: Image.asset('assets/images/profile-mockup3.png', width: SizeConfig.defaultSize * 5.7, fit: BoxFit.cover,),
-                        )
+                              child: Image.asset('assets/images/profile-mockup3.png', width: SizeConfig.defaultSize * 5.7, fit: BoxFit.cover,),
+                              )
                             : ClipOval(
                             child: Image.network(profileImageUrl,
-                              width: SizeConfig.defaultSize * 12,
-                              height: SizeConfig.defaultSize * 12,)
+                              width: SizeConfig.defaultSize * 5.7,
+                              height: SizeConfig.defaultSize * 5.7,)
                         ),
                         SizedBox(width: SizeConfig.defaultSize * 0.6),
                         Expanded(
@@ -202,7 +203,7 @@ class _MyPageLandingViewState extends State<MyPageLandingView> {
                           Text(widget.userResponse.user!.point.toString() ?? "불러오는중", style: TextStyle(
                               fontSize: SizeConfig.defaultSize * 1.4
                           ))
-                          // TODO : Point 사용 내역
+                          // TODO 나중에 : Point 사용 내역
                         ],
                       )
                     ),
@@ -214,37 +215,43 @@ class _MyPageLandingViewState extends State<MyPageLandingView> {
 
         // =================================================================
 
-        // InkWell(
-        //   onTap: () {
-        //
-        //   },
-        //   child: Padding( // TODO : 학생증
-        //     padding: EdgeInsets.symmetric(
-        //         // vertical: SizeConfig.defaultSize,
-        //         horizontal: SizeConfig.defaultSize * 0.5),
-        //     child: Container(
-        //       width: SizeConfig.screenWidth,
-        //       height: SizeConfig.defaultSize * 4.5,
-        //       decoration: BoxDecoration(
-        //         color: Colors.white,
-        //         borderRadius: BorderRadius.circular(10),
-        //         border: Border.all(width: 1.5, color: Color(0xff7C83FD))
-        //       ),
-        //       child: Padding(
-        //         padding: EdgeInsets.only(left: SizeConfig.defaultSize * 1.5, right: SizeConfig.defaultSize * 1.5),
-        //         child: Row(
-        //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        //           children: [
-        //             Text("지금 학생증 인증하면 프로필배지를 붙여드려요!", style: TextStyle(
-        //               fontSize: SizeConfig.defaultSize * 1.4
-        //             ),),
-        //             Icon(Icons.arrow_right_alt_rounded)
-        //           ],
-        //         ),
-        //       ),
-        //     ),
-        //   ),
-        // ),
+        // TODO : '인증 완료'면 안 띄우는 로직 만들기
+        InkWell(
+          onTap: () {
+            // TODO : vertification 인증전일때 StudentVerification 보내고 인증중/인증후일때 StudentVertificationIng 보내기
+            Navigator.push(context, MaterialPageRoute(builder: (_) => StudentVertification(
+              userResponse: BlocProvider.of<MyPagesCubit>(context).state.userResponse,
+            )));
+          },
+          child: Padding( // TODO : 학생증
+            padding: EdgeInsets.symmetric(
+              // vertical: SizeConfig.defaultSize,
+                horizontal: SizeConfig.defaultSize * 0.5),
+            child: Container(
+              width: SizeConfig.screenWidth,
+              height: SizeConfig.defaultSize * 4.5,
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(width: 1.5, color: Color(0xff7C83FD))
+              ),
+              child: Padding(
+                padding: EdgeInsets.only(left: SizeConfig.defaultSize * 1.5, right: SizeConfig.defaultSize * 1.5),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text("지금 학생증 인증하면 프로필배지를 붙여드려요!", style: TextStyle(
+                        fontSize: SizeConfig.defaultSize * 1.4
+                    ),),
+                    Icon(
+                      Icons.arrow_right_alt_rounded, color: Color(0xff7C83FD)
+                    )
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
 
         SizedBox(height: SizeConfig.defaultSize),
 
