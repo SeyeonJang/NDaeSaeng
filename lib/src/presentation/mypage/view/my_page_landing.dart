@@ -244,7 +244,7 @@ class _MyPageLandingViewState extends State<MyPageLandingView> {
                             onTap: () {
                               AnalyticsUtil.logEvent("내정보_마이_포인트터치");
                             },
-                            child: Text(widget.userResponse.personalInfo!.point.toString() ?? "불러오는중", style: TextStyle(
+                            child: Text(widget.userResponse.personalInfo?.point.toString() ?? "불러오는중", style: TextStyle(
                                 fontSize: SizeConfig.defaultSize * 1.4
                             )),
                           )

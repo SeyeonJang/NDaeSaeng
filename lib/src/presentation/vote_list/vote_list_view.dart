@@ -144,8 +144,8 @@ class _VoteListViewState extends State<VoteListView> with SingleTickerProviderSt
           children: [
             dart(
               voteId: vote.voteId!,
-              admissionYear: vote.pickedUser!.user?.admissionYear.toString() ?? "",
-              gender: vote.pickedUser!.user!.gender ?? "",
+              admissionYear: vote.pickedUser?.user?.admissionYear.toString() ?? "XXXX",
+              gender: vote.pickedUser?.user?.gender ?? "",
               question: vote.question!.content ?? "(알수없음)",
               datetime: timeago,
               isVisited: visited,
