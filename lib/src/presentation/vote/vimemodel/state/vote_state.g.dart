@@ -18,7 +18,7 @@ VoteState _$VoteStateFromJson(Map<String, dynamic> json) => VoteState(
           .toList(),
       nextVoteDateTime: DateTime.parse(json['nextVoteDateTime'] as String),
       friends: (json['friends'] as List<dynamic>)
-          .map((e) => Friend.fromJson(e as Map<String, dynamic>))
+          .map((e) => User.fromJson(e as Map<String, dynamic>))
           .toList(),
     );
 

@@ -1,5 +1,6 @@
-import 'package:dart_flutter/src/data/model/vote.dart';
+import 'package:dart_flutter/src/domain/entity/vote_response.dart';
 import 'package:json_annotation/json_annotation.dart';
+
 part 'vote_list_state.g.dart';
 
 @JsonSerializable()

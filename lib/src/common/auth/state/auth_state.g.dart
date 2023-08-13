@@ -1,12 +1,12 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'auth_state.dart';
+part of 'dart_auth_state.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-AuthState _$AuthStateFromJson(Map<String, dynamic> json) => AuthState(
+DartAuthState _$AuthStateFromJson(Map<String, dynamic> json) => DartAuthState(
       isLoading: json['isLoading'] as bool,
       step: $enumDecode(_$AuthStepEnumMap, json['step']),
       dartAccessToken: json['dartAccessToken'] as String,
@@ -16,9 +16,10 @@ AuthState _$AuthStateFromJson(Map<String, dynamic> json) => AuthState(
       memo: json['memo'] as String,
       tutorialStatus: $enumDecode(_$TutorialStateEnumMap, json['tutorialStatus']),
       appVersionStatus: $enumDecode(_$AppVersionStateEnumMap, json['appVersionStatus']),
+      appUpdateComment: json['appUpdateComment'] as String,
 );
 
-Map<String, dynamic> _$AuthStateToJson(AuthState instance) => <String, dynamic>{
+Map<String, dynamic> _$AuthStateToJson(DartAuthState instance) => <String, dynamic>{
       'isLoading': instance.isLoading,
       'step': _$AuthStepEnumMap[instance.step]!,
       'dartAccessToken': instance.dartAccessToken,
@@ -28,6 +29,7 @@ Map<String, dynamic> _$AuthStateToJson(AuthState instance) => <String, dynamic>{
       'memo': instance.memo,
       'tutorialStatus':  _$TutorialStateEnumMap[instance.tutorialStatus]!,
       'appVersionStatus':  _$AppVersionStateEnumMap[instance.appVersionStatus]!,
+      'appUpdateComment': instance.appUpdateComment
     };
 
 const _$AuthStepEnumMap = {

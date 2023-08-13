@@ -46,10 +46,34 @@
 	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string></string>
+	<key>UTTypeIdentifier</key>
+    <string>public.jpeg</string>
+    <key>UTTypeTagSpecification</key>
+    <dict>
+        <key>public.filename-extension</key>
+        <string>jpg</string>
+        <key>public.mime-type</key>
+        <string>image/jpeg</string>
+    </dict>
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>We need access to your photo library to select PNG images.</string>
+    <key>UTTypeIdentifier</key>
+    <string>public.png</string>
+    <key>UTTypeTagSpecification</key>
+    <dict>
+        <key>public.filename-extension</key>
+        <string>png</string>
+        <key>public.mime-type</key>
+        <string>image/png</string>
+    </dict>
 	<key>NSHumanReadableCopyright</key>
 	<string></string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Our app needs access to your location to provide real-time weather forecasts for your current area.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string></string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Our app needs access to your photo library to allow you to upload photos and create photo albums.</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>

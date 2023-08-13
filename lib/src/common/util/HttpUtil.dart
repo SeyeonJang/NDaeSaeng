@@ -4,7 +4,7 @@ class HttpUtil {
   final _dio = Dio();
 
   HttpUtil({required String baseUrl, Map<String, String>? headers}) {
-    _dio.options.baseUrl = 'https://dart-server-aiasblaoxa-du.a.run.app';
+    _dio.options.baseUrl = baseUrl;
     if (headers != null) {
       for (var key in headers.keys) {
         _dio.options.headers[key] = headers[key];

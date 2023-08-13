@@ -1,12 +1,11 @@
-import 'dart:math';
-
-import 'package:dart_flutter/res/size_config.dart';
+import 'package:dart_flutter/res/config/size_config.dart';
 import 'package:dart_flutter/src/common/util/analytics_util.dart';
 import 'package:dart_flutter/src/common/util/timeago_util.dart';
-import 'package:dart_flutter/src/data/model/vote.dart';
+import 'package:dart_flutter/src/domain/entity/vote_response.dart';
 import 'package:dart_flutter/src/presentation/vote_list/viewmodel/state/vote_list_state.dart';
 import 'package:dart_flutter/src/presentation/vote_list/viewmodel/vote_list_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class VoteListView extends StatefulWidget {
@@ -19,6 +18,7 @@ class VoteListView extends StatefulWidget {
 class _VoteListViewState extends State<VoteListView> with SingleTickerProviderStateMixin {
   late AnimationController _animationController;
   late Animation<double> _animation;
+  late ScrollController _scrollController;
 
   @override
   void initState() {
@@ -37,11 +37,15 @@ class _VoteListViewState extends State<VoteListView> with SingleTickerProviderSt
     );
     // 애니메이션을 반복 실행하도록 설정
     _animationController.repeat(reverse: true);
+    // _scrollController
+    //     .jumpTo(_scrollController.position.minScrollExtent);
+    _scrollController = ScrollController();
   }
 
   @override
   void dispose() {
     _animationController.dispose();
+    _scrollController.dispose();
     super.dispose();
   }
 
@@ -123,7 +127,13 @@ class _VoteListViewState extends State<VoteListView> with SingleTickerProviderSt
   }
 
   ListView makeList(List<VoteResponse> snapshot) {
+    SchedulerBinding.instance!.addPostFrameCallback((_) {
+      _scrollController
+          .jumpTo(_scrollController.position.maxScrollExtent);
+    });
+
     return ListView.builder(
+      controller: _scrollController,
       reverse: true,
       shrinkWrap: true,
       itemBuilder: (context, index) {
@@ -134,8 +144,8 @@ class _VoteListViewState extends State<VoteListView> with SingleTickerProviderSt
           children: [
             dart(
               voteId: vote.voteId!,
-              admissionYear: vote.pickedUser!.user!.admissionYear.toString() ?? "",
-              gender: vote.pickedUser!.user!.gender ?? "",
+              admissionYear: vote.pickedUser?.user?.admissionYear.toString() ?? "XXXX",
+              gender: vote.pickedUser?.user?.gender ?? "",
               question: vote.question!.content ?? "(알수없음)",
               datetime: timeago,
               isVisited: visited,
@@ -207,7 +217,7 @@ class dart extends StatelessWidget {
                 Icon(Icons.person_pin_rounded, size: SizeConfig.defaultSize * 4.5, color: Color(0xff7C83FD),),
                 SizedBox(width: SizeConfig.defaultSize * 0.7),
                 Container(
-                  width: SizeConfig.screenWidth * 0.63,
+                  width: SizeConfig.screenWidth * 0.61,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [

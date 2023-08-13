@@ -1,15 +1,20 @@
-import 'package:dart_flutter/src/data/model/user.dart';
+import 'package:dart_flutter/src/data/model/personal_info_dto.dart';
+import 'package:dart_flutter/src/domain/entity/friend.dart';
+import 'package:dart_flutter/src/domain/entity/user.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:dart_flutter/src/data/model/friend.dart';
+import 'package:dart_flutter/src/data/model/friend_dto.dart';
+
+import '../../../../data/model/user_response_dto.dart';
 
 
 @JsonSerializable()
 class StandbyState {
   late bool isLoading;
   late bool isFirstCommCompleted;
-  late List<Friend> addedFriends;
+  late List<User> addedFriends;
   late int friendsCount;
-  late UserResponse userResponse;
+  late User userResponse;
+  late List<User> newFriends;
 
   StandbyState({
     required this.isLoading,
@@ -17,17 +22,19 @@ class StandbyState {
     required this.addedFriends,
     required this.friendsCount,
     required this.userResponse,
+    required this.newFriends,
   });
 
   StandbyState.init() {
     addedFriends = [];
     friendsCount = 0;
-    userResponse = UserResponse( // TODO : 초대코드를 받아와야함!!!!!!!!!
-      user: null,
+    userResponse = User(
+      personalInfo: null,
       university: null,
     );
     isLoading = false;
     isFirstCommCompleted = false;
+    newFriends = [];
   }
 
   StandbyState copy() => StandbyState(
@@ -36,15 +43,22 @@ class StandbyState {
     addedFriends: addedFriends,
     friendsCount: friendsCount,
     userResponse: userResponse,
+    newFriends: newFriends,
   );
 
-  StandbyState setAddedFriends(List<Friend> addedFriends) {
+  StandbyState setAddedFriends(List<User> addedFriends) {
     this.addedFriends = addedFriends;
     return this;
   }
 
-  void addFriend(Friend friend) {
+  StandbyState setRecommendedFriends(List<User> friends) {
+    newFriends = friends;
+    return this;
+  }
+
+  void addFriend(User friend) {
     addedFriends.add(friend); // List에 추가
+    newFriends.remove(friend);
   }
 
   @override

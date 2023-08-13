@@ -1,13 +1,13 @@
+import 'package:dart_flutter/src/domain/entity/friend.dart';
+import 'package:dart_flutter/src/domain/entity/user.dart';
+import 'package:dart_flutter/src/domain/use_case/friend_use_case.dart';
+import 'package:dart_flutter/src/domain/use_case/user_use_case.dart';
 import 'package:dart_flutter/src/presentation/standby/viewmodel/state/standby_state.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 
-import '../../../data/model/friend.dart';
-import '../../../data/repository/dart_friend_repository.dart';
-import '../../../data/repository/dart_user_repository.dart';
-
 class StandbyCubit extends Cubit<StandbyState> {
-  static final DartUserRepository _dartUserRepository = DartUserRepository();
-  static final DartFriendRepository _dartFriendRepository = DartFriendRepository();
+  static final UserUseCase _userUseCase = UserUseCase();
+  static final FriendUseCase _friendUseCase = FriendUseCase();
 
   StandbyCubit() : super(StandbyState.init());
 
@@ -15,12 +15,14 @@ class StandbyCubit extends Cubit<StandbyState> {
     state.isLoading = true;
     emit(state.copy());
 
-    List<Friend> friends = await _dartFriendRepository.getMyFriends();
+    List<User> friends = await _friendUseCase.getMyFriends();
     state.setAddedFriends(friends);
-    _dartUserRepository.cleanUpUserResponseCache();
-    state.userResponse = await _dartUserRepository.myInfo();
+    List<User> newFriends = await _friendUseCase.getRecommendedFriends();
+    state.setRecommendedFriends(newFriends);
+    _userUseCase.cleanUpUserResponseCache();
+    state.userResponse = await _userUseCase.myInfo();
 
-    state.userResponse.user!.recommendationCode;
+    state.userResponse.personalInfo!.recommendationCode;
     state.isLoading = false;
     state.isFirstCommCompleted = true;
     emit(state.copy());
@@ -35,7 +37,24 @@ class StandbyCubit extends Cubit<StandbyState> {
     emit(state.copy());
 
     try {
-      Friend friend = await _dartFriendRepository.addFriendBy(inviteCode);
+      User friend = await _friendUseCase.addFriendBy(inviteCode);
+      state.addFriend(friend);
+      state.newFriends = await _friendUseCase.getRecommendedFriends(put: true);
+      } catch (e, trace) {
+        print("친구추가 실패! $e $trace");
+        throw Error();
+      } finally {
+      state.isLoading = false;
+      emit(state.copy());
+    }
+  }
+
+  void pressedFriendAddButton(User friend) {
+    state.isLoading = true;
+    emit(state.copy());
+
+    try {
+      _friendUseCase.addFriend(friend);
       state.addFriend(friend);
     } catch (e, trace) {
       print("친구추가 실패! $e $trace");
@@ -47,7 +66,7 @@ class StandbyCubit extends Cubit<StandbyState> {
   }
 
   Future<int> getFriendsCount() async {
-    List<Friend> friends = await _dartFriendRepository.getMyFriends();
+    List<User> friends = await _friendUseCase.getMyFriends();
     return friends.length;
   }
 }

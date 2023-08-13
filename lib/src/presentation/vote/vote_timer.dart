@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:dart_flutter/res/size_config.dart';
+import 'package:dart_flutter/res/config/size_config.dart';
 import 'package:dart_flutter/src/common/util/analytics_util.dart';
 import 'package:dart_flutter/src/presentation/vote/vimemodel/vote_cubit.dart';
 import 'package:flutter/material.dart';
@@ -18,14 +18,18 @@ class _VoteTimerState extends State<VoteTimer> {
   late Timer timer;
 
   void onTick(Timer timer) {
+    setState(() {
+      totalSeconds = BlocProvider
+          .of<VoteCubit>(context)
+          .state
+          .leftNextVoteTime();
+      print(totalSeconds);
+    });
+
     if (totalSeconds <= 0) {
       setState(() {
         timer.cancel();
         BlocProvider.of<VoteCubit>(context).stepWait();
-      });
-    } else {
-      setState(() {
-        totalSeconds = BlocProvider.of<VoteCubit>(context).state.leftNextVoteTime();
       });
     }
   }
@@ -43,8 +47,8 @@ class _VoteTimerState extends State<VoteTimer> {
   @override
   void initState() {
     super.initState();
-    timer = Timer.periodic(const Duration(seconds: 1), onTick);
     totalSeconds = BlocProvider.of<VoteCubit>(context).state.leftNextVoteTime();
+    timer = Timer.periodic(const Duration(seconds: 1), onTick);
   }
 
   @override
