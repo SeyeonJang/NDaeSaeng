@@ -6,6 +6,7 @@ import 'package:dart_flutter/src/presentation/page_view.dart';
 import 'package:dart_flutter/src/presentation/landing/view/tutorial_slide.dart';
 import 'package:dart_flutter/src/presentation/standby/viewmodel/standby_cubit.dart';
 import 'package:dart_flutter/src/presentation/standby/viewmodel/state/standby_state.dart';
+import 'package:dart_flutter/src/presentation/vote/vimemodel/vote_cubit.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
@@ -200,11 +201,7 @@ class _StandbyLandingPageState extends State<StandbyLandingPage> with TickerProv
                             List<User> friends = state.addedFriends;
                             int count = friends.length;
                             if (count >= 4) {
-                              WidgetsBinding.instance.addPostFrameCallback((_) {
-                                Navigator.pushAndRemoveUntil(context,
-                                    MaterialPageRoute(builder: (context) => const DartPageView()), (route) => false);
-                              }
-                              );
+                              context.read<VoteCubit>().refreshFriends();
                             }
                           }
                           return SizedBox.shrink();

@@ -41,6 +41,12 @@ class VoteCubit extends HydratedCubit<VoteState> {
     emit(state.copy());
   }
 
+  void refreshFriends() async {
+    List<User> friends = await _friendUseCase.getMyFriends();
+    state.setFriends(friends);
+    emit(state.copy());
+  }
+
   void refresh() {
     emit(state.copy());
   }
