@@ -72,11 +72,16 @@ class _VoteResultViewState extends State<VoteResultView> with SingleTickerProvid
                         ),
                       ),
                       SizedBox(height: SizeConfig.defaultSize * 2,),
-                      Text(
-                        "투표를 통해 160 포인트를 획득했어요!",
-                        style: TextStyle(
-                          fontWeight: FontWeight.w500,
-                          fontSize: SizeConfig.defaultSize * 2,
+                      GestureDetector(
+                        onTap: () {
+                          AnalyticsUtil.logEvent("투표_끝_포인트터치");
+                        },
+                        child: Text(
+                          "투표를 통해 160 포인트를 획득했어요!",
+                          style: TextStyle(
+                            fontWeight: FontWeight.w500,
+                            fontSize: SizeConfig.defaultSize * 2,
+                          ),
                         ),
                       ),
                     ],

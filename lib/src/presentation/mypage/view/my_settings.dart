@@ -432,6 +432,7 @@ class _MyPageViewState extends State<MyPageView> {
 
                                 BlocProvider.of<MyPagesCubit>(context).patchMyInfo(widget.userResponse);
                                 Navigator.pop(dialogContext);
+                                AnalyticsUtil.logEvent("내정보_설정_닉네임변경_완료");
                               },
                                 child: Text('완료', style: TextStyle(color: Color(0xff7C83FD)))
                             ),
