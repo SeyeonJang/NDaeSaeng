@@ -1,10 +1,6 @@
-import 'dart:convert';
-import 'dart:io';
 import 'package:dart_flutter/res/config/size_config.dart';
 import 'package:dart_flutter/src/common/util/analytics_util.dart';
 import 'package:dart_flutter/src/common/util/toast_util.dart';
-import 'package:dart_flutter/src/domain/entity/friend.dart';
-import 'package:dart_flutter/src/domain/entity/personal_info.dart';
 import 'package:dart_flutter/src/domain/entity/user.dart';
 import 'package:dart_flutter/src/presentation/mypage/view/student_vertification.dart';
 import 'package:dart_flutter/src/presentation/mypage/viewmodel/mypages_cubit.dart';
@@ -14,9 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import 'my_settings.dart';
 
@@ -60,7 +54,7 @@ class MyPageLandingView extends StatefulWidget {
 }
 
 class _MyPageLandingViewState extends State<MyPageLandingView> {
-  String get profileImageUrl => widget.userResponse.personalInfo!.profileImageUrl ?? 'DEFAULT';
+  String get profileImageUrl => widget.userResponse.personalInfo?.profileImageUrl ?? 'DEFAULT';
 
   @override
   Widget build(BuildContext context) {
@@ -157,7 +151,7 @@ class _MyPageLandingViewState extends State<MyPageLandingView> {
                                                 fontSize: SizeConfig.defaultSize * 1.5,
                                                 color: Colors.white,
                                               ),),
-                                            if (widget.userResponse.personalInfo!.verification.isVerificationSuccess)
+                                            if (widget.userResponse.personalInfo?.verification.isVerificationSuccess ?? false)
                                               Row(
                                                 children: [
                                                   SizedBox(width: SizeConfig.defaultSize * 0.6),
