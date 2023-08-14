@@ -1,6 +1,7 @@
 import 'package:dart_flutter/res/config/size_config.dart';
 import 'package:dart_flutter/src/common/util/analytics_util.dart';
 import 'package:dart_flutter/src/common/util/toast_util.dart';
+import 'package:dart_flutter/src/presentation/meet/view/meet_standby.dart';
 import 'package:dart_flutter/src/presentation/mypage/mypages.dart';
 import 'package:dart_flutter/src/presentation/mypage/viewmodel/mypages_cubit.dart';
 import 'package:dart_flutter/src/presentation/vote/vimemodel/vote_cubit.dart';
@@ -55,7 +56,7 @@ class _DartPageViewState extends State<DartPageView> {
           return Future.value(false);
         }
         return Future.value(true);
-      case 1 || 2:  // VoteList, MyPage
+      case 1 || 2 || 3:  // VoteList, MyPage
         _onTapNavigation(0);
         return Future.value(false);
       default:
@@ -73,14 +74,14 @@ class _DartPageViewState extends State<DartPageView> {
             child: Column(
               children: [
                 Padding(
-                  padding: EdgeInsets.only(left: SizeConfig.defaultSize * 2, right: SizeConfig.defaultSize * 2),
+                  padding: EdgeInsets.only(left: SizeConfig.defaultSize * 1, right: SizeConfig.defaultSize * 1),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      //_TapBarButton(name: "Meet", targetPage: 0, nowPage: _page, onTapNavigation: _onTapNavigation), // TODO : Meet 만들 때 복구
                       _TapBarButton(name: "투표", targetPage: 0, nowPage: _page, onTapNavigation: _onTapNavigation),
                       _TapBarButton(name: "받은 투표", targetPage: 1, nowPage: _page, onTapNavigation: _onTapNavigation),
-                      _TapBarButton(name: "내정보", targetPage: 2, nowPage: _page, onTapNavigation: _onTapNavigation),
+                      _TapBarButton(name: "과팅", targetPage: 2, nowPage: _page, onTapNavigation: _onTapNavigation), // TODO : Meet 만들 때 복구
+                      _TapBarButton(name: "내정보", targetPage: 3, nowPage: _page, onTapNavigation: _onTapNavigation),
                     ],
                   ),
                 ),
@@ -89,10 +90,6 @@ class _DartPageViewState extends State<DartPageView> {
                     onPageChanged: _onPageChanged,
                     controller: _pageController,
                     children: [
-                      // BlocProvider<MeetCubit>( // TODO : Meet 만들 때 복구
-                      //     create: (context) =>  MeetCubit()..initState(),
-                      //     child: const MeetPages(),
-                      // ),
                       BlocProvider<VoteCubit>(
                           create: (context) => VoteCubit()..initVotes(),
                           child: const VotePages(),
@@ -101,6 +98,7 @@ class _DartPageViewState extends State<DartPageView> {
                         create: (context) => VoteListCubit(),
                         child: const VoteListPages(),
                       ),
+                      MeetStandby(),
                       BlocProvider<MyPagesCubit>(
                         create: (BuildContext context) => MyPagesCubit()..initPages(),
                         child: const MyPages(),
@@ -132,13 +130,12 @@ class _TapBarButton extends StatelessWidget {
         },
         child: Container(
             color: Colors.white,
-            width: SizeConfig.screenWidth * 0.3,
-            //width: MediaQuery.of(context).size.width * 0.22, // 원하는 넓이로 설정합니다.
-            height: SizeConfig.defaultSize * 6,
+            width: SizeConfig.screenWidth * 0.22,
+            height: SizeConfig.defaultSize * 7,
             alignment: Alignment.center,
             child: Padding(
               padding: const EdgeInsets.all(0),
-              child: Text(name, style: TextStyle(fontSize: SizeConfig.defaultSize * 1.8, fontWeight: FontWeight.w600, color: (targetPage == nowPage) ? Color(0xff7C83FD) : Colors.grey)),
+              child: Text(name, style: TextStyle(fontSize: SizeConfig.defaultSize * 1.6, fontWeight: (targetPage == nowPage) ? FontWeight.w600 : FontWeight.w500, color: (targetPage == nowPage) ? (targetPage == 2 ? Color(0xffFF5C58) : Color(0xff7C83FD)) : Colors.grey)),
             )
         )
     );
