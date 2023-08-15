@@ -1,5 +1,7 @@
 import 'package:dart_flutter/res/config/size_config.dart';
+import 'package:dart_flutter/src/presentation/meet/view/meet_create_team.dart';
 import 'package:flutter/material.dart';
+import 'package:page_transition/page_transition.dart';
 
 class MeetStandby extends StatelessWidget {
   const MeetStandby({super.key});
@@ -41,18 +43,23 @@ class MeetStandby extends StatelessWidget {
                 ),
                 child: Text("내 팀 보기", style: TextStyle(color: Color(0xffFE6059), fontSize: SizeConfig.defaultSize * 2, fontWeight: FontWeight.w600)),
               ),
-              Container(
-                width: SizeConfig.screenWidth * 0.43,
-                height: SizeConfig.defaultSize * 6,
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    color: Colors.white,
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(context, PageTransition(type: PageTransitionType.rightToLeftJoined, child: MeetCreateTeam(), childCurrent: this));
+                },
+                child: Container(
+                  width: SizeConfig.screenWidth * 0.43,
+                  height: SizeConfig.defaultSize * 6,
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: Colors.white,
+                    ),
+                    color: Color(0xffFE6059),
+                    borderRadius: BorderRadius.circular(13),
                   ),
-                  color: Color(0xffFE6059),
-                  borderRadius: BorderRadius.circular(13),
+                  child: Text("팀 만들기", style: TextStyle(color: Colors.white, fontSize: SizeConfig.defaultSize * 2, fontWeight: FontWeight.w600)),
                 ),
-                child: Text("팀 만들기", style: TextStyle(color: Colors.white, fontSize: SizeConfig.defaultSize * 2, fontWeight: FontWeight.w600)),
               )
             ],
           ),
