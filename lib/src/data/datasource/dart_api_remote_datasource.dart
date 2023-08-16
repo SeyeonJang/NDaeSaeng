@@ -6,7 +6,7 @@ import 'package:dart_flutter/src/data/model/question_dto.dart';
 import 'package:dart_flutter/src/data/model/university_dto.dart';
 import 'package:dart_flutter/src/data/model/user_request_dto.dart';
 
-import '../../common/util/HttpUtil.dart';
+import '../../common/util/http_util.dart';
 import '../../data/model/dart_auth_dto.dart';
 import '../../data/model/user_signup_request_dto.dart';
 import '../../data/model/user_response_dto.dart';
