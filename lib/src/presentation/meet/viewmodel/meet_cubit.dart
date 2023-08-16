@@ -1,3 +1,4 @@
+import 'package:dart_flutter/src/domain/entity/meet_team.dart';
 import 'package:dart_flutter/src/presentation/meet/viewmodel/state/meet_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:dart_flutter/src/domain/entity/user.dart';
@@ -22,6 +23,7 @@ class MeetCubit extends Cubit<MeetState> {
     state.setMyInfo(userResponse);
     List<User> friends = await _friendUseCase.getMyFriends();
     state.setMyFriends(friends);
+
     emit(state.copy());
     print("meet init 끝");
     // state.meetPageState = MeetStateEnum.landing;
@@ -29,12 +31,16 @@ class MeetCubit extends Cubit<MeetState> {
 
   // Meet - CreateTeam
 
-  // 친구를 팀 멤버로 추가했을 때
   void pressedMemberAddButton(User friend) { // TODO : User friend 파라미터로 친구 정보 받아와서 teamMembers 친구 목록에 넣기
     state.isMemberOneAdded
         ? state.setIsMemberTwoAdded(true)
         : state.setIsMemberOneAdded(true);
     state.addTeamMember(friend);
+    emit(state.copy());
+  }
+
+  void pressedCitiesAddButton(List<String> cities) {
+    state.setCities(cities.toList());
     emit(state.copy());
   }
 

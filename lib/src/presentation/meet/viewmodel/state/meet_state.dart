@@ -13,6 +13,7 @@ class MeetState {
   late bool isMemberTwoAdded;
   late Set<User> friends;
   late Set<User> teamMembers;
+  late Set<String> cities;
 
   MeetState ({
     required this.meetPageState,
@@ -21,6 +22,7 @@ class MeetState {
     required this.isMemberTwoAdded,
     required this.friends,
     required this.teamMembers,
+    required this.cities,
   });
 
   MeetState.init() { // 초기값 설정
@@ -33,6 +35,7 @@ class MeetState {
     isMemberTwoAdded = false;
     friends = {};
     teamMembers = {};
+    cities = {};
   }
 
   MeetState copy() => MeetState(
@@ -42,6 +45,7 @@ class MeetState {
     isMemberTwoAdded: isMemberTwoAdded,
     friends: friends,
     teamMembers: teamMembers,
+    cities: cities
   );
 
   // 추가된 친구가 한 명인지 판단
@@ -54,31 +58,36 @@ class MeetState {
     this.isMemberTwoAdded = isMemberTwoAdded;
   }
 
-  // 내정보 set
   MeetState setMyInfo(User userResponse) {
     this.userResponse = userResponse;
     return this;
   }
 
-  // 친구목록 set
   MeetState setMyFriends(List<User> friends) {
     this.friends = friends.toSet();
     return this;
   }
 
-  // 팀원목록 set
   MeetState setTeamMembers(List<User> friends) {
     teamMembers = friends.toSet();
     return this;
   }
 
-  // 팀원에 친구 추가
+  List<String> getCities() {
+    List<String> newCities = cities.toList();
+    return newCities;
+  }
+
+  MeetState setCities(List<String> cities) {
+    this.cities = cities.toSet();
+    return this;
+  }
+
   void addTeamMember(User friend) {
     teamMembers.add(friend);
     friends.remove(friend);
   }
 
-  // 팀원 삭제
   void deleteTeamMember(User friend) {
     friends.add(friend);
     teamMembers.remove(friend);

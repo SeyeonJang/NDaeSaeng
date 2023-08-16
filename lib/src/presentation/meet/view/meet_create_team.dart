@@ -94,7 +94,11 @@ class MeetCreateTeam extends StatelessWidget {
       ),
         bottomNavigationBar: BlocProvider<MeetCubit>(
           create: (context) => MeetCubit(),
-          child: _CreateTeamBottomSection()
+          child: BlocBuilder<MeetCubit, MeetState>(
+            builder: (buildContext, state) {
+              return _CreateTeamBottomSection(state: state);
+            }
+          )
         )
       );
   }
@@ -118,8 +122,8 @@ class MeetCreateTeam extends StatelessWidget {
                       alignment: Alignment.center,
                       child: Container(
                         width: SizeConfig.screenWidth * 0.15,
-                        height: SizeConfig.defaultSize * 0.2,
-                        color: Colors.black,
+                        height: SizeConfig.defaultSize * 0.3,
+                        color: Colors.grey,
                       )
                   ),
                   Flexible(
@@ -422,12 +426,17 @@ class _MemberCardView extends StatelessWidget {
                             Row(
                               children: [
                                   SizedBox(width: SizeConfig.defaultSize * 0.5,),
-                                Text(
-                                  userResponse.university?.department ?? "??학부", // TODO : 학과 길면 ... 처리
-                                  style: TextStyle(
+                                Container(
+                                  width: SizeConfig.screenWidth * 0.56,
+                                  child: Text(
+                                    userResponse.university?.department ?? "??학부", // TODO : 학과 길면 ... 처리
+                                    style: TextStyle(
                                       fontWeight: FontWeight.w500,
                                       fontSize: SizeConfig.defaultSize * 1.6,
-                                      color: Colors.black
+                                      color: Colors.black,
+                                      overflow: TextOverflow.ellipsis,
+
+                                    ),
                                   ),
                                 ),
                               ],
@@ -518,8 +527,11 @@ class _NoVoteView extends StatelessWidget { // 받은 투표 없을 때
 }
 
 class _CreateTeamBottomSection extends StatefulWidget {
-  const _CreateTeamBottomSection({
+  MeetState state;
+
+  _CreateTeamBottomSection({
     super.key,
+    required this.state,
   });
 
   @override
@@ -546,13 +558,24 @@ class _CreateTeamBottomSectionState extends State<_CreateTeamBottomSection> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: SizeConfig.defaultSize * 0.2),
+                padding: EdgeInsets.symmetric(
+                    horizontal: SizeConfig.defaultSize * 0.2),
                 child: Row( // 만나고싶은지역 Row ********
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text("만나고 싶은 지역", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.6),),
+                    Text("만나고 싶은 지역", style: TextStyle(
+                        fontSize: SizeConfig.defaultSize * 1.6),),
                     TextButton(
                         onPressed: () {
+                          List<Map> cities = [ // TODO : 서버 연결
+                            {"name": "서울", "isChecked": false},
+                            {"name": "인천", "isChecked": false},
+                            {"name": "경기", "isChecked": false},
+                            {"name": "대구", "isChecked": false},
+                            {"name": "제주도", "isChecked": false},
+                          ];
+                          List<String> newCities = [];
+
                           showDialog<String>
                             (context: context,
                               builder: (BuildContext dialogContext) {
@@ -560,8 +583,10 @@ class _CreateTeamBottomSectionState extends State<_CreateTeamBottomSection> {
                                   builder: (statefulContext, setState) =>
                                       AlertDialog(
                                         title: Text('',
-                                          style: TextStyle(fontSize: SizeConfig.defaultSize *
-                                              2), textAlign: TextAlign.center,),
+                                          style: TextStyle(
+                                              fontSize: SizeConfig.defaultSize *
+                                                  2),
+                                          textAlign: TextAlign.center,),
                                         content: Container(
                                           width: SizeConfig.screenWidth * 0.9,
                                           height: SizeConfig.screenHeight * 0.4,
@@ -570,14 +595,31 @@ class _CreateTeamBottomSectionState extends State<_CreateTeamBottomSection> {
                                             mainAxisAlignment: MainAxisAlignment.start,
                                             crossAxisAlignment: CrossAxisAlignment.center,
                                             children: [
-                                              Text('이성과 만나고 싶은 지역을 선택해주세요!', style: TextStyle(
-                                                  fontSize: SizeConfig.defaultSize * 1.4),
+                                              Text('이성과 만나고 싶은 지역을 선택해주세요!',
+                                                style: TextStyle(
+                                                    fontSize: SizeConfig.defaultSize * 1.4),
                                                 textAlign: TextAlign.start,),
-                                              SingleChildScrollView(
-                                                child: Column(
-                                                  children: [
-                                                    Text("전지역")
-                                                  ],
+                                              Flexible(
+                                                child: SingleChildScrollView(
+                                                  child: Column(
+                                                    children: cities.map((favorite) {
+                                                      return CheckboxListTile(
+                                                          activeColor: Color(0xffFE6059),
+                                                          title: Text(favorite['name']),
+                                                          value: favorite['isChecked'],
+                                                          onChanged: (val) {
+                                                            setState(() {
+                                                              favorite['isChecked'] = val;
+                                                            });
+                                                            if (favorite['isChecked']) {
+                                                              newCities.add(favorite['name']);
+                                                            } else {
+                                                              newCities.remove(favorite['name']);
+                                                            }
+                                                          }
+                                                      );
+                                                    }).toList(),
+                                                  ),
                                                 ),
                                               )
                                             ],
@@ -588,27 +630,38 @@ class _CreateTeamBottomSectionState extends State<_CreateTeamBottomSection> {
                                         actions: <Widget>[
                                           TextButton(
                                             onPressed: () {
-                                              Navigator.pop(dialogContext, '취소');
+                                              Navigator.pop(
+                                                  dialogContext, '취소');
                                             },
                                             child: const Text('취소',
-                                              style: TextStyle(color: Color(0xff7C83FD)),),
+                                              style: TextStyle(
+                                                  color: Colors.grey),),
                                           ),
                                           TextButton(
                                               onPressed: () {
+                                                context.read<MeetCubit>().pressedCitiesAddButton(newCities);
                                                 Navigator.pop(dialogContext);
                                               },
-                                              child: Text('완료', style: TextStyle(color: Color(0xff7C83FD)))
+                                              child: Text('완료',
+                                                  style: TextStyle(
+                                                      color: Color(0xffFE6059)))
                                           ),
                                         ],
                                       ),
                                 );
                               }
-                            );
+                          );
                         },
                         style: TextButton.styleFrom(
-                          padding: EdgeInsets.zero
+                            padding: EdgeInsets.zero
                         ),
-                        child: Text("선택해주세요", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.6, color: Colors.grey.shade400),))
+                        child: Text(
+                          widget.state.getCities().isEmpty
+                            ? "선택해주세요"
+                            : widget.state.getCities().map((city) => city).join(', '),
+                          style: TextStyle(
+                            fontSize: SizeConfig.defaultSize * 1.6,
+                            color: Colors.grey.shade400),))
                   ],
                 ),
               ),
@@ -617,14 +670,17 @@ class _CreateTeamBottomSectionState extends State<_CreateTeamBottomSection> {
                 child: Row( // 학교 사람들에게 보이지 않기 Row ********
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text("우리 학교 사람들에게 보이지 않기", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.6),),
+                    Text("우리 학교 사람들에게 보이지 않기", style: TextStyle(
+                        fontSize: SizeConfig.defaultSize * 1.6),),
                     Switch(
                       value: light,
                       activeColor: Color(0xffFE6059),
                       activeTrackColor: Color(0xffFE6059).withOpacity(0.2),
                       inactiveTrackColor: Colors.grey.shade200,
                       onChanged: (bool value) {
-                        setState(() { light = value; });
+                        setState(() {
+                          light = value;
+                        });
                       },
                     ),
                   ],
@@ -635,14 +691,14 @@ class _CreateTeamBottomSectionState extends State<_CreateTeamBottomSection> {
                 height: SizeConfig.defaultSize * 6,
                 width: SizeConfig.screenHeight,
                 decoration: BoxDecoration(
-                    color: Color(0xffFF5C58) ,
-                    borderRadius: BorderRadius.circular(10),
+                  color: Color(0xffFF5C58),
+                  borderRadius: BorderRadius.circular(10),
                 ),
                 alignment: Alignment.center,
                 child: Text("팀 만들기", style: TextStyle(
-                  color: Colors.white,
-                  fontSize: SizeConfig.defaultSize * 2,
-                  fontWeight: FontWeight.w600
+                    color: Colors.white,
+                    fontSize: SizeConfig.defaultSize * 2,
+                    fontWeight: FontWeight.w600
                 )),
               )
             ],
