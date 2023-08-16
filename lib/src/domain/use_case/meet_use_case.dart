@@ -13,7 +13,7 @@ class MeetUseCase {
     return _meetRepository.getTeam(teamId);
   }
 
-  Future<List<MeetTeam>> getMyTeams() {
+  Future<List<MeetTeam>> getMyTeams() async {
     return _meetRepository.getMyTeams();
   }
 

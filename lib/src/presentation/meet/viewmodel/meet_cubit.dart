@@ -25,6 +25,7 @@ class MeetCubit extends Cubit<MeetState> {
     state.setMyInfo(userResponse);
     List<User> friends = await _friendUseCase.getMyFriends();
     state.setMyFriends(friends);
+    getMyTeams();
 
     emit(state.copy());
     print("meet init 끝");
@@ -51,11 +52,13 @@ class MeetCubit extends Cubit<MeetState> {
   }
 
   Future<MeetTeam> getTeam(String teamId) async {
-    return _meetUseCase.getTeam(teamId);
+    return await _meetUseCase.getTeam(teamId);
   }
 
-  Future<List<MeetTeam>> getMyTeams() {
-    return _meetUseCase.getMyTeams();
+  Future<void> getMyTeams() async {
+    List<MeetTeam> myTeams = await _meetUseCase.getMyTeams();
+    state.setMyTeams(myTeams);
+    emit(state.copy());
   }
 
   void removeTeam(String teamId) {

@@ -1,6 +1,10 @@
 import 'package:dart_flutter/res/config/size_config.dart';
 import 'package:dart_flutter/src/presentation/meet/view/meet_create_team.dart';
+import 'package:dart_flutter/src/presentation/meet/view/meet_update_team.dart';
+import 'package:dart_flutter/src/presentation/meet/viewmodel/meet_cubit.dart';
+import 'package:dart_flutter/src/presentation/meet/viewmodel/state/meet_state.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:page_transition/page_transition.dart';
 
 class MeetStandby extends StatelessWidget {
@@ -21,16 +25,186 @@ class MeetStandby extends StatelessWidget {
           ],
         ),
       ),
-      bottomNavigationBar: Container(
-        width: SizeConfig.screenWidth,
-        height: SizeConfig.defaultSize * 8.5,
-        color: Colors.grey.shade50,
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: SizeConfig.defaultSize * 2, vertical: SizeConfig.defaultSize),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Container(
+      bottomNavigationBar: BlocBuilder<MeetCubit, MeetState>(
+        builder: (context, state) {
+          return _BottomSection(state: state, ancestorContext: context);
+        }
+      ),
+    );
+  }
+}
+
+class _BottomSection extends StatelessWidget {
+  MeetState state;
+  BuildContext ancestorContext;
+
+  _BottomSection({
+    super.key,
+    required this.state,
+    required this.ancestorContext
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    MeetCubit cubit = BlocProvider.of<MeetCubit>(ancestorContext);
+
+    return Container(
+      width: SizeConfig.screenWidth,
+      height: SizeConfig.defaultSize * 8.5,
+      color: Colors.grey.shade50,
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: SizeConfig.defaultSize * 2, vertical: SizeConfig.defaultSize),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            GestureDetector( // 내 팀 보기 버튼 *******
+              onTap: () {
+                showModalBottomSheet(
+                  context: context,
+                  builder: (BuildContext _) {
+                    return Container(
+                      width: SizeConfig.screenWidth,
+                      height: SizeConfig.screenHeight,
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10))),
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(horizontal: SizeConfig.defaultSize * 2.5),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Container(
+                                width: SizeConfig.screenWidth,
+                                height: SizeConfig.screenHeight * 0.05,
+                                alignment: Alignment.center,
+                                child: Container(
+                                  width: SizeConfig.screenWidth * 0.17,
+                                  height: SizeConfig.defaultSize * 0.3,
+                                  color: Colors.grey,
+                                )
+                            ),
+                              SizedBox(height: SizeConfig.defaultSize * 2,),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Text("내 과팅 팀", style: TextStyle(
+                                  fontSize: SizeConfig.defaultSize * 2,
+                                  fontWeight: FontWeight.w600
+                                ),)
+                              ],
+                            ),
+                              SizedBox(height: SizeConfig.defaultSize * 2,),
+                            Expanded(
+                              child: SingleChildScrollView(
+                                  child: Column(
+                                      children: [
+                                      state.myTeams.isEmpty
+                                            ? Text("아직 생성한 팀이 없어요!", style: TextStyle(
+                                                fontSize: SizeConfig.defaultSize * 1.8,
+                                                fontWeight: FontWeight.w400
+                                              ))
+                                            : Row(
+                                                children: [
+                                                  for (int i=0; i<state.myTeams.length; i++)
+                                                    Row(
+                                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                      children: [
+                                                        Text("${state.myTeams[i].name}"), // TODO : 서버 연결 후 재확인
+                                                        Row(
+                                                          children: [
+                                                            Text("${state.myTeams[i].members}"),
+                                                            PopupMenuButton<String>(
+                                                              icon: Icon(Icons.more_horiz_rounded, color: Colors.grey.shade300,),
+                                                              color: Colors.white,
+                                                              surfaceTintColor: Colors.white,
+                                                              onSelected: (value) {
+                                                                if (value == 'edit') {
+                                                                  // Navigator.push(state.myTeams[i]);
+                                                                  Navigator.push(context, PageTransition(type: PageTransitionType.rightToLeftJoined, child: MeetUpdateTeam(), childCurrent: this));
+                                                                }
+                                                                else if (value == 'delete') {
+                                                                  showDialog<String>(
+                                                                    context: context,
+                                                                    builder: (BuildContext dialogContext) => AlertDialog(
+                                                                      title: Text('\'${state.myTeams[i].name}\' 팀을 삭제하시겠어요?', style: TextStyle(fontSize: SizeConfig.defaultSize * 2),),
+                                                                      // content: const Text('사용자를 신고하면 Dart에서 빠르게 신고 처리를 해드려요!'),
+                                                                      backgroundColor: Colors.white,
+                                                                      surfaceTintColor: Colors.white,
+                                                                      actions: <Widget>[
+                                                                        TextButton(
+                                                                          onPressed: () {
+                                                                            Navigator.pop(dialogContext, '취소');
+                                                                          },
+                                                                          child: const Text('취소', style: TextStyle(color: Color(0xffFF5C58)),),
+                                                                        ),
+                                                                        TextButton(
+                                                                          onPressed: () {
+                                                                            context.read<MeetCubit>().removeTeam(state.myTeams[i].id.toString());
+                                                                            Navigator.pop(dialogContext); // 팝업 창을 닫는 로직 추가
+                                                                          },
+                                                                          child: const Text('삭제', style: TextStyle(color: Color(0xffFF5C58)),),
+                                                                        ),
+                                                                      ],
+                                                                    ),
+                                                                  );
+                                                                }
+                                                              },
+                                                              itemBuilder: (BuildContext context) {
+                                                                return [
+                                                                  PopupMenuItem<String>(
+                                                                    value: 'delete',
+                                                                    child: Text("삭제하기", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.5)),
+                                                                  ),
+                                                                  PopupMenuItem<String>(
+                                                                    value: 'edit',
+                                                                    child: Text("수정하기", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.5)),
+                                                                  ),
+                                                                ];
+                                                              },
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ],
+                                                    )
+                                              ]),
+                                      ],
+                                  )
+                              ),
+                            ),
+                            Text("팀 개수는 제한이 없어요!", style: TextStyle(
+                              fontSize: SizeConfig.defaultSize * 1.5,
+                              fontWeight: FontWeight.w400,
+                              color: Colors.grey.shade400
+                            ),),
+                            Text("다양한 친구들과 팀을 만들어보세요!", style: TextStyle(
+                                fontSize: SizeConfig.defaultSize * 1.5,
+                                fontWeight: FontWeight.w400,
+                                color: Colors.grey.shade400
+                            ),),
+                              SizedBox(height: SizeConfig.defaultSize,),
+                            Container(
+                              height: SizeConfig.defaultSize * 6,
+                              width: SizeConfig.screenHeight,
+                              decoration: BoxDecoration(
+                                color: Color(0xffFF5C58),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              alignment: Alignment.center,
+                              child: Text("팀 만들기", style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: SizeConfig.defaultSize * 2,
+                                  fontWeight: FontWeight.w600
+                              )),
+                            ),
+                              SizedBox(height: SizeConfig.defaultSize * 2,)
+                          ],
+                        ),
+                      )
+                    );
+                });
+              },
+              child: Container(
                 width: SizeConfig.screenWidth * 0.43,
                 height: SizeConfig.defaultSize * 6,
                 alignment: Alignment.center,
@@ -43,26 +217,26 @@ class MeetStandby extends StatelessWidget {
                 ),
                 child: Text("내 팀 보기", style: TextStyle(color: Color(0xffFE6059), fontSize: SizeConfig.defaultSize * 2, fontWeight: FontWeight.w600)),
               ),
-              GestureDetector(
-                onTap: () {
-                  Navigator.push(context, PageTransition(type: PageTransitionType.rightToLeftJoined, child: MeetCreateTeam(), childCurrent: this));
-                },
-                child: Container(
-                  width: SizeConfig.screenWidth * 0.43,
-                  height: SizeConfig.defaultSize * 6,
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: Colors.white,
-                    ),
-                    color: Color(0xffFE6059),
-                    borderRadius: BorderRadius.circular(13),
+            ),
+            GestureDetector( // 팀 만들기 버튼 ********
+              onTap: () {
+                Navigator.push(context, PageTransition(type: PageTransitionType.rightToLeftJoined, child: MeetCreateTeam(), childCurrent: this));
+              },
+              child: Container(
+                width: SizeConfig.screenWidth * 0.43,
+                height: SizeConfig.defaultSize * 6,
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: Colors.white,
                   ),
-                  child: Text("팀 만들기", style: TextStyle(color: Colors.white, fontSize: SizeConfig.defaultSize * 2, fontWeight: FontWeight.w600)),
+                  color: Color(0xffFE6059),
+                  borderRadius: BorderRadius.circular(13),
                 ),
-              )
-            ],
-          ),
+                child: Text("팀 만들기", style: TextStyle(color: Colors.white, fontSize: SizeConfig.defaultSize * 2, fontWeight: FontWeight.w600)),
+              ),
+            )
+          ],
         ),
       ),
     );
