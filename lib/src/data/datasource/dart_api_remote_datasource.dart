@@ -3,16 +3,18 @@ import 'dart:convert';
 import 'package:dart_flutter/res/environment/app_environment.dart';
 import 'package:dart_flutter/src/data/model/friend_dto.dart';
 import 'package:dart_flutter/src/data/model/question_dto.dart';
+import 'package:dart_flutter/src/data/model/meet_team_request_dto.dart';
 import 'package:dart_flutter/src/data/model/university_dto.dart';
 import 'package:dart_flutter/src/data/model/user_request_dto.dart';
 
 import '../../common/util/HttpUtil.dart';
 import '../../data/model/dart_auth_dto.dart';
 import '../../data/model/user_signup_request_dto.dart';
-import '../../data/model/user_response_dto.dart';
+import '../../data/model/user_dto.dart';
 import '../../data/model/vote_request_dto.dart';
 
 import '../../data/model/vote_response_dto.dart';
+import '../model/meet_team_response_dto.dart';
 
 class DartApiRemoteDataSource {
   static final String baseUrl = AppEnvironment.getEnv.getApiBaseUrl();
@@ -208,5 +210,49 @@ class DartApiRemoteDataSource {
 
     final response = await _httpUtil.request().post(path);
     return DateTime.parse(response.data['nextVoteAvailableDateTime']);
+  }
+
+  // meet: 내 팀 목록 조회
+  static Future<List<MeetTeamResponseDto>> getMyTeams() async {
+    const path = '/v1/users/me/teams';
+    final response = await _httpUtil.request().get(path);
+    final List<dynamic> jsonResponse = response.data;
+    List<MeetTeamResponseDto> teamResponses = jsonResponse.map((team) => MeetTeamResponseDto.fromJson(team)).toList();
+    return teamResponses;
+  }
+
+  // meet: 팀 상세 조회
+  static Future<MeetTeamResponseDto> getTeam(String teamId) async {
+    const path = '/v1/users/me/teams';
+    final pathUrl = "$path/$teamId";
+
+    final response = await _httpUtil.request().get(pathUrl);
+    return MeetTeamResponseDto.fromJson(response.data);
+  }
+
+  // meet: 팀 생성하기
+  static Future<MeetTeamResponseDto> postTeam(MeetTeamRequestDto teamRequestDto) async {
+    const path = '/v1/users/me/teams';
+    final body = teamRequestDto.toJson();
+
+    final response = await _httpUtil.request().post(path, data: body);
+    return MeetTeamResponseDto.fromJson(response.data);
+  }
+
+  // meet: 팀 삭제하기
+  static Future<void> deleteTeam(String teamId) async {
+    const path = '/v1/users/me/teams';
+    final pathUrl = "$path/$teamId";
+
+    final response = await _httpUtil.request().delete(pathUrl);
+  }
+
+  // meet: 팀 정보 업데이트
+  static Future<MeetTeamResponseDto> putTeam(MeetTeamRequestDto teamRequestDto) async {
+    const path = '/v1/users/me/teams';
+    final body = teamRequestDto.toJson();
+
+    final response = await _httpUtil.request().put(path, data: body);
+    return MeetTeamResponseDto.fromJson(response.data);
   }
 }

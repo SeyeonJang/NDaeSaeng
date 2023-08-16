@@ -1,11 +1,5 @@
-import 'package:dart_flutter/src/data/model/personal_info_dto.dart';
-import 'package:dart_flutter/src/domain/entity/friend.dart';
 import 'package:dart_flutter/src/domain/entity/user.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:dart_flutter/src/data/model/friend_dto.dart';
-
-import '../../../../data/model/user_response_dto.dart';
-
 
 @JsonSerializable()
 class StandbyState {

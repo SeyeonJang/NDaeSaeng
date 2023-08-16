@@ -1,5 +1,5 @@
 class Location {
-  final String id;
+  final int id;
   final String name;
 
   Location({

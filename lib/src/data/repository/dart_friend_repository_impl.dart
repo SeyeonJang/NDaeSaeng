@@ -1,7 +1,5 @@
-import 'package:dart_flutter/src/data/model/friend_dto.dart';
 import 'package:dart_flutter/src/data/datasource/dart_api_remote_datasource.dart';
-import 'package:dart_flutter/src/data/model/user_response_dto.dart';
-import 'package:dart_flutter/src/domain/entity/friend.dart';
+import 'package:dart_flutter/src/data/model/user_dto.dart';
 import 'package:dart_flutter/src/domain/entity/user.dart';
 import 'package:dart_flutter/src/domain/repository/friend_repository.dart';
 
@@ -13,7 +11,7 @@ class DartFriendRepositoryImpl implements FriendRepository {
   Future<List<User>> getMyFriends() async {
     if (myFriendCache.isUpdateBefore(DateTime.now().subtract(cachingInterval))) {
       myFriendCache.setFriends(
-          (await DartApiRemoteDataSource.getMyFriends()).map((userResponseDto) => userResponseDto.newUserResponse()).toList()
+          (await DartApiRemoteDataSource.getMyFriends()).map((userResponseDto) => userResponseDto.newUser()).toList()
       );
     }
     print(myFriendCache.friends.toString());
@@ -23,7 +21,7 @@ class DartFriendRepositoryImpl implements FriendRepository {
   Future<List<User>> getRecommendedFriends({bool put = false}) async {
     if (put || recommendedFriendCache.isUpdateBefore(DateTime.now().subtract(cachingInterval))) {
       recommendedFriendCache.setFriends((
-          await DartApiRemoteDataSource.getMyFriends(suggested: true)).map((userResponseDto) => userResponseDto.newUserResponse()).toList()
+          await DartApiRemoteDataSource.getMyFriends(suggested: true)).map((userResponseDto) => userResponseDto.newUser()).toList()
       );
     }
     return recommendedFriendCache.friends;
@@ -37,8 +35,8 @@ class DartFriendRepositoryImpl implements FriendRepository {
 
   Future<User> addFriendBy(String inviteCode) async {
     UserDto friend = await DartApiRemoteDataSource.postFriendBy(inviteCode);
-    myFriendCache.addFriend(friend.newUserResponse());
-    return friend.newUserResponse();
+    myFriendCache.addFriend(friend.newUser());
+    return friend.newUser();
   }
 
   Future<String> deleteFriend(User friend) async {

@@ -3,10 +3,10 @@ import 'package:dart_flutter/src/domain/entity/location.dart';
 import 'package:dart_flutter/src/domain/entity/user.dart';
 
 class MeetTeam {
-  final String id;
+  final int id;
   final String name;
   final University university;
-  final Location location;
+  final List<Location> locations;
   final bool canMatchWithSameUniversity;
   final List<User> members;
 
@@ -14,7 +14,7 @@ class MeetTeam {
     required this.id,
     required this.name,
     required this.university,
-    required this.location,
+    required this.locations,
     required this.canMatchWithSameUniversity,
     required this.members,
   });

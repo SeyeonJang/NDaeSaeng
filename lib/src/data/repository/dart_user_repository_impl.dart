@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:dart_flutter/src/data/model/user_request_dto.dart';
-import 'package:dart_flutter/src/data/model/user_response_dto.dart';
 import 'package:dart_flutter/src/data/model/user_signup_request_dto.dart';
 import 'package:dart_flutter/src/data/my_cache.dart';
 import 'package:dart_flutter/src/domain/entity/user_request.dart';
@@ -21,7 +20,7 @@ class DartUserRepositoryImpl implements UserRepository {
   @override
   Future<User> signup(UserRequest user) async {
     var userRequestDto = UserSignupRequestDto.fromUserRequest(user);
-    return (await DartApiRemoteDataSource.postUserSignup(userRequestDto)).newUserResponse();
+    return (await DartApiRemoteDataSource.postUserSignup(userRequestDto)).newUser();
   }
 
   @override
@@ -38,7 +37,7 @@ class DartUserRepositoryImpl implements UserRepository {
   @override
   Future<User> myInfo() async {
     if (userResponseCache.isUpdateBefore(DateTime.now().subtract(cachingInterval))) {
-      userResponseCache.setObject((await DartApiRemoteDataSource.getMyInformation()).newUserResponse());
+      userResponseCache.setObject((await DartApiRemoteDataSource.getMyInformation()).newUser());
     }
     return userResponseCache.userResponse;
   }
@@ -50,7 +49,7 @@ class DartUserRepositoryImpl implements UserRepository {
 
   @override
   Future<User> verifyStudentIdCard(String name, String idCardImageUrl) async {
-    return (await DartApiRemoteDataSource.verifyStudentIdCard(name, idCardImageUrl)).newUserResponse();
+    return (await DartApiRemoteDataSource.verifyStudentIdCard(name, idCardImageUrl)).newUser();
   }
 
   @override
@@ -59,7 +58,7 @@ class DartUserRepositoryImpl implements UserRepository {
 
     return (await DartApiRemoteDataSource.patchMyInformation(
         UserRequestDto.fromUserResponse(user)
-    )).newUserResponse();
+    )).newUser();
   }
 
   @override

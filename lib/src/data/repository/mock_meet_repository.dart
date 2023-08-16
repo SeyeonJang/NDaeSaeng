@@ -5,18 +5,18 @@ class MockMeetRepository implements MeetRepository {
   final List<MeetTeam> mockTeams = [];
 
   @override
-  MeetTeam createNewTeam(MeetTeam meetTeam) {
+  Future<MeetTeam> createNewTeam(MeetTeam meetTeam) async {
     mockTeams.add(meetTeam);
     return meetTeam;
   }
 
   @override
-  MeetTeam getTeam(String teamId) {
+  Future<MeetTeam> getTeam(String teamId) async {
     return mockTeams.map((mockTeam) => mockTeam.id == teamId ? mockTeam : throw Error()).first;
   }
 
   @override
-  List<MeetTeam> getMyTeams() {
+  Future<List<MeetTeam>> getMyTeams() async {
     return mockTeams;
   }
 
@@ -26,7 +26,7 @@ class MockMeetRepository implements MeetRepository {
   }
 
   @override
-  MeetTeam updateMyTeam(MeetTeam meetTeam) {
+  Future<MeetTeam> updateMyTeam(MeetTeam meetTeam) async {
     mockTeams.removeWhere((mockTeam) => mockTeam.id == meetTeam.id);
     mockTeams.add(meetTeam);
     return meetTeam;

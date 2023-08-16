@@ -41,14 +41,14 @@ class UserDto {
     return data;
   }
 
-  User newUserResponse() {
+  User newUser() {
     return User(
       personalInfo: personalInfo?.newUser(),
       university: university?.newUniversity(),
     );
   }
 
-  static UserDto fromUserResponse(User userResponse) {
+  static UserDto fromUser(User userResponse) {
     return UserDto(
       personalInfo: PersonalInfoDto.fromUser(userResponse.personalInfo!),
       university: UniversityDto.fromUniversity(userResponse.university!),
