@@ -8,10 +8,19 @@ class MeetState {
   late MeetStateEnum meetPageState;
   // meet - standby
   late User userResponse;
+  // meet - createTeam
+  late bool isMemberOneAdded;
+  late bool isMemberTwoAdded;
+  late Set<User> friends;
+  late Set<User> teamMembers;
 
   MeetState ({
     required this.meetPageState,
     required this.userResponse,
+    required this.isMemberOneAdded,
+    required this.isMemberTwoAdded,
+    required this.friends,
+    required this.teamMembers,
   });
 
   MeetState.init() { // 초기값 설정
@@ -20,15 +29,56 @@ class MeetState {
       personalInfo: null,
       university: null,
     );
+    isMemberOneAdded = false;
+    isMemberTwoAdded = false;
+    friends = {};
+    teamMembers = {};
   }
 
   MeetState copy() => MeetState(
     meetPageState: meetPageState,
     userResponse: userResponse,
+    isMemberOneAdded: isMemberOneAdded,
+    isMemberTwoAdded: isMemberTwoAdded,
+    friends: friends,
+    teamMembers: teamMembers,
   );
 
+  // 추가된 친구가 한 명인지 판단
+  void setIsMemberOneAdded(bool isMemberOneAdded) {
+    this.isMemberOneAdded = isMemberOneAdded;
+  }
+
+  // 추가된 친구가 두 명인지 판단
+  void setIsMemberTwoAdded(bool isMemberTwoAdded) {
+    this.isMemberTwoAdded = isMemberTwoAdded;
+  }
+
+  // 친구목록 set
+  MeetState setMyFriends(List<User> friends) {
+    this.friends = friends.toSet();
+    return this;
+  }
+
+  // 팀원목록 set
+  MeetState setTeamMembers(List<User> friends) {
+    teamMembers = friends.toSet();
+    return this;
+  }
+
+  // 팀원에 친구 추가
+  void addTeamMember(User friend) {
+    teamMembers.add(friend);
+    friends.remove(friend);
+  }
+
+  void deleteTeamMember(User friend) {
+    friends.add(friend);
+    teamMembers.remove(friend);
+  }
+
   @override
-  String toString() { // toString은 디버깅(개발)에만 사용
+  String toString() {
     return 'MeetState{meetPageState: $meetPageState}';
   }
 }
