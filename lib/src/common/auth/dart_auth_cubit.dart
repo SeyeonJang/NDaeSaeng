@@ -103,9 +103,9 @@ class DartAuthCubit extends HydratedCubit<DartAuthState> {
 
       User userResponse = await _userUseCase.myInfo();
 
-      String userId = userResponse.personalInfo!.id!.toString();
+      String userId = userResponse.personalInfo!.id.toString();
       AnalyticsUtil.setUserId(userId);
-      if (userResponse.personalInfo?.name == null) {
+      if (userResponse.personalInfo?.name == null || userResponse.personalInfo?.name == "(알수없음)") {
         PushNotificationUtil.setUserId(userId);
         state.setStep(AuthStep.signup);
       } else {
@@ -138,7 +138,7 @@ class DartAuthCubit extends HydratedCubit<DartAuthState> {
 
       String userId = userResponse.personalInfo!.id!.toString();
       AnalyticsUtil.setUserId(userId);
-      if (userResponse.personalInfo?.name == null) {
+      if (userResponse.personalInfo?.name == null || userResponse.personalInfo?.name == "(알수없음)") {
         PushNotificationUtil.setUserId(userId);
         state.setStep(AuthStep.signup);
       } else {

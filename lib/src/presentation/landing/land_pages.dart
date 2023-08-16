@@ -112,33 +112,6 @@ class _LandPagesState extends State<LandPages> {
             return const SafeArea(child: Center(child: CircularProgressIndicator()));
           },
         ),
-
-        // Andorid Key Hash 확인 로직
-        // FutureBuilder<String>(
-        //   future: getAndroidKeyHash(),
-        //   builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
-        //     if (snapshot.connectionState == ConnectionState.waiting) {
-        //       // 데이터 로딩 중인 경우 로딩 표시를 보여줍니다.
-        //       return Center(
-        //         child: CircularProgressIndicator(),
-        //       );
-        //     } else if (snapshot.hasError) {
-        //       // 에러 발생 시 에러 메시지를 보여줍니다.
-        //       return Center(
-        //         child: Text('데이터를 불러오는 동안 오류가 발생했습니다.'),
-        //       );
-        //     } else {
-        //       // 데이터가 성공적으로 로드된 경우 값을 표시합니다.
-        //       return SizedBox(
-        //         width: 200,
-        //         height: 200,
-        //         child: Center(
-        //           child: Text(snapshot.data!),
-        //         ),
-        //       );
-        //     }
-        //   },
-        // ),
       ],
       // 화면 분배
     );

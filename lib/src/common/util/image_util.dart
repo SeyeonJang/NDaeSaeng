@@ -3,7 +3,7 @@ import 'package:image/image.dart' as img;
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 
 class ImageUtil {
-  static Future<File> compressImage(File imageFile, {int quality = 90, int maxSize = 1024, fileSizeKb = 100}) async {
+  static Future<File> compressImage(File imageFile, {int quality = 30, int maxSize = 1024, fileSizeKb = 100}) async {
     try {
       // 원본 이미지 높이, 너비 가져오기
       final originalImage = img.decodeImage(imageFile.readAsBytesSync());
@@ -41,6 +41,7 @@ class ImageUtil {
 
         // 품질을 낮추며 크기가 100KB 이하가 될 때까지 반복
         currentQuality -= 5;
+        print("compressedImage Size: ${getImageSize(compressedImageFile)}");
       } while (getImageSize(compressedImageFile) > fileSizeKb * 1024 && currentQuality > 0);
 
       return compressedImageFile;
