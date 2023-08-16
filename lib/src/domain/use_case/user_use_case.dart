@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:dart_flutter/src/common/util/image_util.dart';
 import 'package:dart_flutter/src/data/repository/dart_user_repository_impl.dart';
 import 'package:dart_flutter/src/domain/entity/user_request.dart';
 import 'package:dart_flutter/src/domain/entity/user.dart';
@@ -38,6 +39,8 @@ class UserUseCase {
   }
 
   Future<String> uploadProfileImage(File file, User user) async {
+    file = await ImageUtil.compressImage(file);
+
     await _dartUserRepository.removeProfileImage(user.personalInfo!.id.toString());
     String url = await _dartUserRepository.uploadProfileImage(file, user.personalInfo!.id.toString());
 
@@ -48,6 +51,8 @@ class UserUseCase {
   }
 
   Future<String> uploadIdCardImage(File file, User user, String name) async {
+    file = await ImageUtil.compressImage(file);
+
     await _dartUserRepository.removeIdCardImage(user.personalInfo!.id.toString());
     String url = await _dartUserRepository.uploadIdCardImage(file, user.personalInfo!.id.toString());
 
