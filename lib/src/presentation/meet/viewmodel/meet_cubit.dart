@@ -1,4 +1,5 @@
 import 'package:dart_flutter/src/domain/entity/meet_team.dart';
+import 'package:dart_flutter/src/domain/use_case/meet_use_case.dart';
 import 'package:dart_flutter/src/presentation/meet/viewmodel/state/meet_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:dart_flutter/src/domain/entity/user.dart';
@@ -9,6 +10,7 @@ class MeetCubit extends Cubit<MeetState> {
   MeetCubit() : super(MeetState.init());
   static final UserUseCase _userUseCase = UserUseCase();
   static final FriendUseCase _friendUseCase = FriendUseCase();
+  static final MeetUseCase _meetUseCase = MeetUseCase();
   bool _initialized = false;
 
   void initState() async {
@@ -43,6 +45,27 @@ class MeetCubit extends Cubit<MeetState> {
     state.setCities(cities.toList());
     emit(state.copy());
   }
+
+  void createNewTeam(MeetTeam meetTeam) {
+    _meetUseCase.createNewTeam(meetTeam);
+  }
+
+  Future<MeetTeam> getTeam(String teamId) async {
+    return _meetUseCase.getTeam(teamId);
+  }
+
+  Future<List<MeetTeam>> getMyTeams() {
+    return _meetUseCase.getMyTeams();
+  }
+
+  void removeTeam(String teamId) {
+    _meetUseCase.removeTeam(teamId);
+  }
+
+  void updateMyTeam(MeetTeam meetTeam) {
+    _meetUseCase.updateMyTeam(meetTeam);
+  }
+
 
   // **************************************************************
 
