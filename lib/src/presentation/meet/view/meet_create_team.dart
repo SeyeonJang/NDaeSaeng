@@ -17,6 +17,9 @@ class MeetCreateTeam extends StatelessWidget {
           child: SafeArea(
             child: BlocBuilder<MeetCubit, MeetState>(
                 builder: (context, state) {
+                  context.read<MeetCubit>().initState();
+                  var friendsList = state.friends.toList();
+                  var teamMemberList = state.teamMembers.toList();
                   return Center(
                     child: Padding(
                       padding: EdgeInsets.all(SizeConfig.defaultSize * 1.3),
@@ -49,30 +52,19 @@ class MeetCreateTeam extends StatelessWidget {
                                     _MemberCardView(userResponse: state.userResponse,),
                                     // 친구1
                                     state.isMemberOneAdded
-                                        ? _MemberCardView(userResponse: state.userResponse,)
+                                        ? _MemberCardView(userResponse: teamMemberList[0],)
                                         : Container(),
                                     // 친구2
                                     state.isMemberTwoAdded
-                                        ? _MemberCardView(userResponse: state.userResponse,)
+                                        ? _MemberCardView(userResponse: teamMemberList[1],)
                                         : Container(),
                                     // 버튼
                                     state.isMemberTwoAdded
                                         ? Container()
-                                        : InkWell( // TODO : 친구 두 명이면 안보이기
+                                        : InkWell( // 팀원 추가하기 버튼 *******
                                             onTap: () {
-                                              showModalBottomSheet(
-                                                context: context,
-                                                builder: (BuildContext _) {
-                                                  return Container(
-                                                    width: SizeConfig.screenWidth,
-                                                    height: SizeConfig.screenHeight,
-                                                    decoration: BoxDecoration(
-                                                        color: Colors.white,
-                                                        borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10))),
-                                                  );
-                                                }
-                                              );
-                                              context.read<MeetCubit>().pressedMemberAddButton();
+                                              _ShowModalBottomSheet(context, state, friendsList);
+                                              // context.read<MeetCubit>().pressedMemberAddButton();
                                             },
                                             child: Container(
                                               width: SizeConfig.screenWidth,
@@ -106,16 +98,168 @@ class MeetCreateTeam extends StatelessWidget {
         )
       );
   }
+
+  Future<dynamic> _ShowModalBottomSheet(BuildContext context, MeetState state, List<User> friendsList) {
+    return showModalBottomSheet( // 친구 목록 ********
+        context: context,
+        builder: (BuildContext _) {
+          return Container(
+              width: SizeConfig.screenWidth,
+              height: SizeConfig.screenHeight,
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10))),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Container(
+                      width: SizeConfig.screenWidth,
+                      height: SizeConfig.screenHeight * 0.05,
+                      alignment: Alignment.center,
+                      child: Container(
+                        width: SizeConfig.screenWidth * 0.15,
+                        height: SizeConfig.defaultSize * 0.2,
+                        color: Colors.black,
+                      )
+                  ),
+                  Flexible(
+                      child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Text("우리 학교 친구 ${state.friends.length}명", style: TextStyle(
+                                fontSize: SizeConfig.defaultSize * 1.6,
+                                fontWeight: FontWeight.w600
+                            ),),
+                            SizedBox(height: SizeConfig.defaultSize * 0.5,),
+                            Text("같은 학교 친구 \'최대 2명\'과 과팅에 참여할 수 있어요!", style: TextStyle(
+                                fontSize: SizeConfig.defaultSize * 1.3
+                            ),),
+                            SizedBox(height: SizeConfig.defaultSize,),
+                            Flexible(
+                              child: SingleChildScrollView(
+                                  child: Column(
+                                    children: [
+                                      for (int i=0; i<state.friends.length; i++)
+                                        _OneFriendComponent(friend: friendsList[i], count: state.friends.length, nowNum: i, sheetContext: context,),
+                                    ],
+                                  )
+                              ),
+                            ),
+                          ]
+                      )
+                  )
+                ],
+              )
+          );
+        }
+    );
+  }
+}
+
+class _OneFriendComponent extends StatefulWidget {
+  BuildContext sheetContext;
+  late User friend;
+  late int count;
+  late int nowNum;
+
+  _OneFriendComponent({
+    super.key,
+    required this.friend,
+    required this.count,
+    required this.nowNum,
+    required this.sheetContext,
+  });
+
+  @override
+  State<_OneFriendComponent> createState() => _OneFriendComponentState();
+}
+
+class _OneFriendComponentState extends State<_OneFriendComponent> {
+  String get profileImageUrl => widget.friend.personalInfo?.profileImageUrl ?? 'DEFAULT';
+  // RadioButton 설정
+  late int selectedRadio;
+  late int selectedRadioTile;
+  @override
+  void initState() {
+    super.initState();
+    selectedRadio = 0;
+    selectedRadioTile = 0;
+  }
+  setSelectedRadio(int val) {
+    setState(() {
+      selectedRadio = val;
+    });
+  }
+  setSelectedRadioTile(int val) {
+    setState(() {
+      selectedRadioTile = val;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) { // 친구 한 명 View *******
+    return Padding(
+      padding: EdgeInsets.only(left: SizeConfig.defaultSize * 1.9, right: SizeConfig.defaultSize * 1),
+      child: Column(
+        children: [
+            SizedBox(height: SizeConfig.defaultSize * 0.6),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Container(
+                width: SizeConfig.screenWidth * 0.75,
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    ClipOval(
+                        child: Image.asset('assets/images/profile1.jpeg', width: SizeConfig.defaultSize * 4.5, fit: BoxFit.cover,) // TODO : null값이면 이거
+                    ),
+                    SizedBox(width: SizeConfig.defaultSize,),
+                    Text(widget.friend.personalInfo?.name ?? "XXX", style: TextStyle(
+                        fontSize: SizeConfig.defaultSize * 2,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.black
+                    )),
+                    SizedBox(width: SizeConfig.defaultSize * 0.5,),
+                    Flexible(
+                      child: Container(
+                        child: Text("${widget.friend.university?.department}", style: TextStyle(
+                            fontSize: SizeConfig.defaultSize * 1.4,
+                            fontWeight: FontWeight.w500,
+                            overflow: TextOverflow.ellipsis,
+                            color: Colors.black
+                        )),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              TextButton(
+                child: Text("추가", style: TextStyle(color: Color(0xffFF5C58)),),
+                style: OutlinedButton.styleFrom(
+                    padding: EdgeInsets.all(0)
+                ),
+                onPressed: () {
+                  widget.sheetContext.read<MeetCubit>().pressedMemberAddButton(widget.friend);
+                  Navigator.pop(widget.sheetContext);
+                  print(widget.nowNum+1);
+                },
+              ),
+            ],
+          ),
+            SizedBox(height: SizeConfig.defaultSize * 0.6,),
+        ],
+      ),
+    );
+  }
 }
 
 class _CreateTeamTopSection extends StatefulWidget {
   User userResponse;
-
   _CreateTeamTopSection({
     super.key,
     required this.userResponse
   });
-
   @override
   State<_CreateTeamTopSection> createState() => _CreateTeamTopSectionState();
 }
@@ -148,7 +292,7 @@ class _CreateTeamTopSectionState extends State<_CreateTeamTopSection> {
                       color: Colors.grey
                   )),
               SizedBox(width: SizeConfig.defaultSize,),
-              Text("${widget.userResponse.university}",
+              Text("${widget.userResponse.university?.name ?? '학교를 불러오지 못 했어요'}",
                   style: TextStyle(
                       fontWeight: FontWeight.w400,
                       fontSize: SizeConfig.defaultSize * 1.6,
@@ -198,7 +342,7 @@ class _MemberCardView extends StatelessWidget {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
           border: Border.all(
-            color: Color(0xffFF5C58),
+            color: Color(0xffFF5C58).withOpacity(0.5),
             width: 1.5
           )
         ),
@@ -249,7 +393,9 @@ class _MemberCardView extends StatelessWidget {
                                 children: [
                                     SizedBox(width: SizeConfig.defaultSize * 0.5,),
                                   Text(
-                                    userResponse.personalInfo?.nickname ?? "닉네임", // TODO : 닉네임 null값 '닉네임'으로 변경
+                                    userResponse.personalInfo?.nickname == 'DEFAULT'
+                                        ? (userResponse.personalInfo?.name ?? '친구 이름')
+                                        : (userResponse.personalInfo?.nickname ?? '친구 닉네임'), // TODO : 닉네임 null값 '닉네임'으로 변경
                                     style: TextStyle(
                                       fontWeight: FontWeight.w500,
                                       fontSize: SizeConfig.defaultSize * 1.6,
@@ -277,7 +423,7 @@ class _MemberCardView extends StatelessWidget {
                               children: [
                                   SizedBox(width: SizeConfig.defaultSize * 0.5,),
                                 Text(
-                                  userResponse.university?.department ?? "컴퓨터정보공학부", // TODO : 학과 길면 ... 처리
+                                  userResponse.university?.department ?? "??학부", // TODO : 학과 길면 ... 처리
                                   style: TextStyle(
                                       fontWeight: FontWeight.w500,
                                       fontSize: SizeConfig.defaultSize * 1.6,
@@ -299,7 +445,7 @@ class _MemberCardView extends StatelessWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    _NoVoteView(),
+                    _VoteView(),
                     _NoVoteView(),
                     _NoVoteView(),
                   ],
@@ -327,6 +473,23 @@ class _VoteView extends StatelessWidget { // 받은 투표 있을 때
           borderRadius: BorderRadius.circular(8),
           color: Color(0xffFF5C58)
       ),
+        alignment: Alignment.center,
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: SizeConfig.defaultSize * 2),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text("첫인상이 좋은", style: TextStyle(
+                  color: Colors.white,
+                  fontSize: SizeConfig.defaultSize * 1.3
+              ),),
+              Text("5+",  style: TextStyle(
+                  color: Colors.white,
+                  fontSize: SizeConfig.defaultSize * 1.3
+              ),)
+            ],
+          ),
+        )
     );
   }
 }
@@ -354,15 +517,22 @@ class _NoVoteView extends StatelessWidget { // 받은 투표 없을 때
   }
 }
 
-class _CreateTeamBottomSection extends StatelessWidget {
+class _CreateTeamBottomSection extends StatefulWidget {
   const _CreateTeamBottomSection({
     super.key,
   });
 
   @override
+  State<_CreateTeamBottomSection> createState() => _CreateTeamBottomSectionState();
+}
+
+class _CreateTeamBottomSectionState extends State<_CreateTeamBottomSection> {
+  bool light = true; // 스위치에 쓰임 TODO : 서버 연결
+
+  @override
   Widget build(BuildContext context) {
     return Container(
-        height: SizeConfig.defaultSize * 19,
+        height: SizeConfig.defaultSize * 21,
         decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(0),
@@ -381,20 +551,86 @@ class _CreateTeamBottomSection extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text("만나고 싶은 지역", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.6),),
-                    Text("선택해주세요", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.6),)
+                    TextButton(
+                        onPressed: () {
+                          showDialog<String>
+                            (context: context,
+                              builder: (BuildContext dialogContext) {
+                                return StatefulBuilder(
+                                  builder: (statefulContext, setState) =>
+                                      AlertDialog(
+                                        title: Text('',
+                                          style: TextStyle(fontSize: SizeConfig.defaultSize *
+                                              2), textAlign: TextAlign.center,),
+                                        content: Container(
+                                          width: SizeConfig.screenWidth * 0.9,
+                                          height: SizeConfig.screenHeight * 0.4,
+                                          child: Column(
+                                            mainAxisSize: MainAxisSize.min,
+                                            mainAxisAlignment: MainAxisAlignment.start,
+                                            crossAxisAlignment: CrossAxisAlignment.center,
+                                            children: [
+                                              Text('이성과 만나고 싶은 지역을 선택해주세요!', style: TextStyle(
+                                                  fontSize: SizeConfig.defaultSize * 1.4),
+                                                textAlign: TextAlign.start,),
+                                              SingleChildScrollView(
+                                                child: Column(
+                                                  children: [
+                                                    Text("전지역")
+                                                  ],
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                        backgroundColor: Colors.white,
+                                        surfaceTintColor: Colors.white,
+                                        actions: <Widget>[
+                                          TextButton(
+                                            onPressed: () {
+                                              Navigator.pop(dialogContext, '취소');
+                                            },
+                                            child: const Text('취소',
+                                              style: TextStyle(color: Color(0xff7C83FD)),),
+                                          ),
+                                          TextButton(
+                                              onPressed: () {
+                                                Navigator.pop(dialogContext);
+                                              },
+                                              child: Text('완료', style: TextStyle(color: Color(0xff7C83FD)))
+                                          ),
+                                        ],
+                                      ),
+                                );
+                              }
+                            );
+                        },
+                        style: TextButton.styleFrom(
+                          padding: EdgeInsets.zero
+                        ),
+                        child: Text("선택해주세요", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.6, color: Colors.grey.shade400),))
                   ],
                 ),
               ),
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: SizeConfig.defaultSize * 0.2),
+                padding: EdgeInsets.only(left: SizeConfig.defaultSize * 0.2),
                 child: Row( // 학교 사람들에게 보이지 않기 Row ********
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text("우리 학교 사람들에게 보이지 않기", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.6),),
-                    Text("스위치", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.6),)
+                    Switch(
+                      value: light,
+                      activeColor: Color(0xffFE6059),
+                      activeTrackColor: Color(0xffFE6059).withOpacity(0.2),
+                      inactiveTrackColor: Colors.grey.shade200,
+                      onChanged: (bool value) {
+                        setState(() { light = value; });
+                      },
+                    ),
                   ],
                 ),
               ),
+              SizedBox(height: SizeConfig.defaultSize * 0.3,),
               Container( // TODO : 위에꺼 다 선택해야 활성화되도록 만들기 (팀명 && 팀원 추가)
                 height: SizeConfig.defaultSize * 6,
                 width: SizeConfig.screenHeight,

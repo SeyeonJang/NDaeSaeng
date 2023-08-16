@@ -54,6 +54,12 @@ class MeetState {
     this.isMemberTwoAdded = isMemberTwoAdded;
   }
 
+  // 내정보 set
+  MeetState setMyInfo(User userResponse) {
+    this.userResponse = userResponse;
+    return this;
+  }
+
   // 친구목록 set
   MeetState setMyFriends(List<User> friends) {
     this.friends = friends.toSet();
@@ -72,6 +78,7 @@ class MeetState {
     friends.remove(friend);
   }
 
+  // 팀원 삭제
   void deleteTeamMember(User friend) {
     friends.add(friend);
     teamMembers.remove(friend);
