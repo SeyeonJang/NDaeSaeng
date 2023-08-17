@@ -55,8 +55,10 @@ class MeetCubit extends Cubit<MeetState> {
     print("cubit - 팀 추가 완료");
   }
 
-  Future<MeetTeam> getTeam(String teamId) async {
-    return await _meetUseCase.getTeam(teamId);
+  Future<MeetTeam> setTeam(String teamId) async {
+    MeetTeam newMeetTeam = await _meetUseCase.getTeam(teamId);
+    state.setMyTeam(newMeetTeam);
+    return newMeetTeam;
   }
 
   Future<void> getMyTeams() async {

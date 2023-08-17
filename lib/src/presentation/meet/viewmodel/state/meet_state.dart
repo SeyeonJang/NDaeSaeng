@@ -95,6 +95,11 @@ class MeetState {
     return this;
   }
 
+  MeetState setMyTeam(MeetTeam team) {
+    this.newTeam = team;
+    return this;
+  }
+
   MeetState setTeamMembers(List<User> friends) {
     teamMembers = friends.toSet();
     return this;
