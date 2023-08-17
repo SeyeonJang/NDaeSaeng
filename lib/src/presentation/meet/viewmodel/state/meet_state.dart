@@ -19,6 +19,7 @@ class MeetState {
   late Set<Location> cities;
   late List<MeetTeam> myTeams;
   late MeetTeam newTeam;
+  late String teamName;
 
   MeetState ({
     required this.meetPageState,
@@ -29,7 +30,8 @@ class MeetState {
     required this.friends,
     required this.teamMembers,
     required this.cities,
-    required this.myTeams
+    required this.myTeams,
+    required this.teamName
   });
 
   MeetState.init() { // 초기값 설정
@@ -45,6 +47,7 @@ class MeetState {
     teamMembers = {};
     cities = {};
     myTeams = [];
+    teamName = '';
   }
 
   MeetState copy() => MeetState(
@@ -56,7 +59,8 @@ class MeetState {
     friends: friends,
     teamMembers: teamMembers,
     cities: cities,
-    myTeams: myTeams
+    myTeams: myTeams,
+    teamName: teamName
   );
 
   void setIsLoading(bool isLoading) {

@@ -7,7 +7,7 @@ class MockMeetRepository implements MeetRepository {
   @override
   Future<MeetTeam> createNewTeam(MeetTeam meetTeam) async {
     mockTeams.add(meetTeam);
-    print("repo - 찐으로 생성된 팀 ${mockTeams}");
+    print("repo - 생성된 팀 ${mockTeams}");
     return meetTeam;
   }
 
@@ -24,6 +24,8 @@ class MockMeetRepository implements MeetRepository {
   @override
   void removeMyTeam(String teamId) {
     mockTeams.removeWhere((mockTeam) => mockTeam.id == teamId);
+    print("repo - 삭제된 팀 ID $teamId");
+    print("repo - 팀 목록 ${mockTeams}");
   }
 
   @override

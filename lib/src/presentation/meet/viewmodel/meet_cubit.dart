@@ -67,6 +67,7 @@ class MeetCubit extends Cubit<MeetState> {
 
   void removeTeam(String teamId) {
     _meetUseCase.removeTeam(teamId);
+    print("cubit - 팀 삭제 완료");
   }
 
   void updateMyTeam(MeetTeam meetTeam) {

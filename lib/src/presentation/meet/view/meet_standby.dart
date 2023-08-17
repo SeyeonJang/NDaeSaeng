@@ -63,6 +63,8 @@ class _BottomSection extends StatelessWidget {
                 showModalBottomSheet(
                   context: context,
                   builder: (BuildContext _) {
+                    // List<String> membersName = state.teamMembers.map((member) => member.personalInfo!.name).toList();
+                    // String membersName = state.myTeams[i].members.map((member) => member.personalInfo!.name).join(', ');
                     return Container(
                       width: SizeConfig.screenWidth,
                       height: SizeConfig.screenHeight,
@@ -85,7 +87,7 @@ class _BottomSection extends StatelessWidget {
                                   color: Colors.grey,
                                 )
                             ),
-                              SizedBox(height: SizeConfig.defaultSize * 2,),
+                              SizedBox(height: SizeConfig.defaultSize * 1.5,),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
@@ -105,16 +107,16 @@ class _BottomSection extends StatelessWidget {
                                                 fontSize: SizeConfig.defaultSize * 1.8,
                                                 fontWeight: FontWeight.w400
                                               ))
-                                            : Row(
+                                            : Column(
                                                 children: [
                                                   for (int i=0; i<state.myTeams.length; i++)
                                                     Row(
                                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                       children: [
-                                                        Text("${state.myTeams[i].name}"), // TODO : 서버 연결 후 재확인
+                                                        Text("${state.myTeams[i].name=='' ? '아직 팀명이 없어요!' : state.myTeams[i].name}"), // TODO : 서버 연결 후 재확인
                                                         Row(
                                                           children: [
-                                                            Text("${state.myTeams[i].members}"),
+                                                            Text("나, ${state.myTeams[i].members.map((member) => member.personalInfo!.name).join(', ')}"),
                                                             PopupMenuButton<String>(
                                                               icon: Icon(Icons.more_horiz_rounded, color: Colors.grey.shade300,),
                                                               color: Colors.white,
@@ -128,7 +130,7 @@ class _BottomSection extends StatelessWidget {
                                                                   showDialog<String>(
                                                                     context: context,
                                                                     builder: (BuildContext dialogContext) => AlertDialog(
-                                                                      title: Text('\'${state.myTeams[i].name}\' 팀을 삭제하시겠어요?', style: TextStyle(fontSize: SizeConfig.defaultSize * 2),),
+                                                                      title: Text('\'${state.myTeams[i].name=='' ? '(팀명 없음)' : state.myTeams[i].name}\' 팀을 삭제하시겠어요?', style: TextStyle(fontSize: SizeConfig.defaultSize * 2),),
                                                                       // content: const Text('사용자를 신고하면 Dart에서 빠르게 신고 처리를 해드려요!'),
                                                                       backgroundColor: Colors.white,
                                                                       surfaceTintColor: Colors.white,
@@ -142,7 +144,8 @@ class _BottomSection extends StatelessWidget {
                                                                         TextButton(
                                                                           onPressed: () {
                                                                             context.read<MeetCubit>().removeTeam(state.myTeams[i].id.toString());
-                                                                            Navigator.pop(dialogContext); // 팝업 창을 닫는 로직 추가
+                                                                            Navigator.pop(dialogContext);
+                                                                            Navigator.pop(context);
                                                                           },
                                                                           child: const Text('삭제', style: TextStyle(color: Color(0xffFF5C58)),),
                                                                         ),
@@ -191,9 +194,6 @@ class _BottomSection extends StatelessWidget {
                                     cubit.refreshMeetPage();
                                   }
                                 ), childCurrent: this));
-                                print("돌아옴");
-                                cubit.refreshMeetPage();
-                                print("리프레시 실행 완료");
                               },
                               child: Container(
                                 height: SizeConfig.defaultSize * 6,
@@ -215,6 +215,9 @@ class _BottomSection extends StatelessWidget {
                         ),
                       )
                     );
+                    onFinish: () {
+                      cubit.refreshMeetPage();
+                    };
                 });
               },
               child: Container(

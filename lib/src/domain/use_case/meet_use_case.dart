@@ -19,6 +19,7 @@ class MeetUseCase {
 
   void removeTeam(String teamId) {
     _meetRepository.removeMyTeam(teamId);
+    print("usecase - 팀 삭제 완료");
   }
 
   void updateMyTeam(MeetTeam meetTeam) {
