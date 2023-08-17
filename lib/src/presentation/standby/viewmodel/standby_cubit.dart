@@ -39,7 +39,7 @@ class StandbyCubit extends Cubit<StandbyState> {
     try {
       User friend = await _friendUseCase.addFriendBy(inviteCode);
       state.addFriend(friend);
-      state.newFriends = await _friendUseCase.getRecommendedFriends(put: true);
+      state.setRecommendedFriends(await _friendUseCase.getRecommendedFriends(put: true));
       } catch (e, trace) {
         print("친구추가 실패! $e $trace");
         throw Error();
@@ -54,9 +54,9 @@ class StandbyCubit extends Cubit<StandbyState> {
     emit(state.copy());
 
     try {
-      _friendUseCase.addFriend(friend);
+      await _friendUseCase.addFriend(friend);
       state.addFriend(friend);
-      state.newFriends = await _friendUseCase.getRecommendedFriends(put: true);
+      state.setRecommendedFriends(await _friendUseCase.getRecommendedFriends(put: true));
     } catch (e, trace) {
       print("친구추가 실패! $e $trace");
       throw Error();
