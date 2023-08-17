@@ -262,8 +262,15 @@ class _OneFriendComponentState extends State<_OneFriendComponent> {
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    ClipOval(
-                        child: Image.asset('assets/images/profile1.jpeg', width: SizeConfig.defaultSize * 4.5, fit: BoxFit.cover,) // TODO : null값이면 이거
+                    profileImageUrl == "DEFAULT"
+                        ? ClipOval(
+                      child: Image.asset('assets/images/profile-mockup3.png', width: SizeConfig.defaultSize * 4.3, fit: BoxFit.cover,),
+                    )
+                        : ClipOval(
+                        child: Image.network(profileImageUrl,
+                          width: SizeConfig.defaultSize * 4.3,
+                          height: SizeConfig.defaultSize * 4.3,
+                          fit: BoxFit.cover,)
                     ),
                       SizedBox(width: SizeConfig.defaultSize,),
                     Text(widget.friend.personalInfo?.name ?? "XXX", style: TextStyle(
@@ -424,25 +431,15 @@ class _MemberCardView extends StatelessWidget {
                     onTap: () {
                       // AnalyticsUtil.logEvent("내정보_마이_내사진터치");
                     },
-                    child: ClipOval(
-                        child: Image.asset('assets/images/profile1.jpeg', width: SizeConfig.defaultSize * 6.4, fit: BoxFit.cover,) // TODO : null값이면 이거
-                        // child: BlocBuilder<MyPagesCubit, MyPagesState>(
-                        //     builder: (context, state) {
-                        //       if (profileImageUrl == "DEFAULT")
-                        //         return Image.asset('assets/images/profile-mockup3.png', width: SizeConfig.defaultSize * 5.7, fit: BoxFit.cover,);
-                        //       else {
-                        //         return state.profileImageFile.path==''
-                        //             ? Image.network(profileImageUrl,
-                        //             width: SizeConfig.defaultSize * 5.7,
-                        //             height: SizeConfig.defaultSize * 5.7,
-                        //             fit: BoxFit.cover)
-                        //             : Image.file(state.profileImageFile,
-                        //             width: SizeConfig.defaultSize * 5.7,
-                        //             height: SizeConfig.defaultSize * 5.7,
-                        //             fit: BoxFit.cover);
-                        //       }
-                        //     }
-                        // )
+                    child: userResponse.personalInfo!.profileImageUrl == "DEFAULT"
+                        ? ClipOval(
+                          child: Image.asset('assets/images/profile-mockup3.png', width: SizeConfig.defaultSize * 6.2, fit: BoxFit.cover,),
+                          )
+                        : ClipOval(
+                          child: Image.network(userResponse.personalInfo!.profileImageUrl,
+                          width: SizeConfig.defaultSize * 6.2,
+                          height: SizeConfig.defaultSize * 6.2,
+                          fit: BoxFit.cover,)
                     ),
                   ),
                   SizedBox(width: SizeConfig.defaultSize * 0.8),
@@ -460,7 +457,7 @@ class _MemberCardView extends StatelessWidget {
                                     SizedBox(width: SizeConfig.defaultSize * 0.5,),
                                   Text(
                                     userResponse.personalInfo?.nickname == 'DEFAULT'
-                                        ? (userResponse.personalInfo?.name ?? '친구 이름')
+                                        ? ('${userResponse.personalInfo?.name}' ?? '친구 이름')
                                         : (userResponse.personalInfo?.nickname ?? '친구 닉네임'), // TODO : 닉네임 null값 '닉네임'으로 변경
                                     style: TextStyle(
                                       fontWeight: FontWeight.w500,

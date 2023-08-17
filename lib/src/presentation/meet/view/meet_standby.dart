@@ -1,5 +1,6 @@
 import 'package:dart_flutter/res/config/size_config.dart';
 import 'package:dart_flutter/src/presentation/meet/view/meet_create_team.dart';
+import 'package:dart_flutter/src/presentation/meet/view/meet_edit_team.dart';
 import 'package:dart_flutter/src/presentation/meet/view/meet_update_team.dart';
 import 'package:dart_flutter/src/presentation/meet/viewmodel/meet_cubit.dart';
 import 'package:dart_flutter/src/presentation/meet/viewmodel/state/meet_state.dart';
@@ -124,7 +125,12 @@ class _BottomSection extends StatelessWidget {
                                                               onSelected: (value) {
                                                                 if (value == 'edit') {
                                                                   // Navigator.push(state.myTeams[i]);
-                                                                  Navigator.push(context, PageTransition(type: PageTransitionType.rightToLeftJoined, child: MeetUpdateTeam(), childCurrent: this));
+                                                                  Navigator.push(context, PageTransition(type: PageTransitionType.rightToLeftJoined, child: MeetEditTeam(
+                                                                      onFinish: () {
+                                                                        cubit.refreshMeetPage();
+                                                                      },
+                                                                    myTeam: state.myTeams[i]
+                                                                  ), childCurrent: this));
                                                                 }
                                                                 else if (value == 'delete') {
                                                                   showDialog<String>(
@@ -239,7 +245,7 @@ class _BottomSection extends StatelessWidget {
                 Navigator.push(context, PageTransition(type: PageTransitionType.rightToLeftJoined, child: MeetCreateTeam(
                     onFinish: () {
                       cubit.refreshMeetPage();
-                    }
+                    },
                 ), childCurrent: this));
               },
               child: Container(

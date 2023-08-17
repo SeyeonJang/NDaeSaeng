@@ -7,16 +7,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:dart_flutter/src/domain/entity/user.dart';
 
-class MeetCreateTeam extends StatefulWidget {
+class MeetEditTeam extends StatefulWidget {
   final VoidCallback onFinish;
+  final MeetTeam myTeam;
 
-  MeetCreateTeam({super.key, required this.onFinish});
+  MeetEditTeam({super.key, required this.onFinish, required this.myTeam});
 
   @override
-  State<MeetCreateTeam> createState() => _MeetCreateTeamState();
+  State<MeetEditTeam> createState() => _MeetEditTeamState();
 }
 
-class _MeetCreateTeamState extends State<MeetCreateTeam> {
+class _MeetEditTeamState extends State<MeetEditTeam> {
   // 수정일 때 late int id;
   String name = '';
 
@@ -73,23 +74,34 @@ class _MeetCreateTeamState extends State<MeetCreateTeam> {
                         padding: EdgeInsets.all(SizeConfig.defaultSize * 1.3),
                         child: Column(
                           children: [
-                            SizedBox(height: SizeConfig.defaultSize),
-                            Row(mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  IconButton(
-                                      onPressed: () async {
-                                        await _onBackKey();
-                                        Navigator.pop(context);
-                                      },
-                                      icon: Icon(Icons.arrow_back_ios_new_rounded,
-                                          size: SizeConfig.defaultSize * 2)),
-                                  Text("과팅 팀 만들기",
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.w800,
-                                        fontSize: SizeConfig.defaultSize * 2,
-                                      )),
-                                ]),
-                            SizedBox(height: SizeConfig.defaultSize * 2.5),
+                              SizedBox(height: SizeConfig.defaultSize),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Row(mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      IconButton(
+                                          onPressed: () async {
+                                            await _onBackKey();
+                                            Navigator.pop(context);
+                                          },
+                                          icon: Icon(Icons.arrow_back_ios_new_rounded,
+                                              size: SizeConfig.defaultSize * 2)),
+                                      Text("우리 팀 수정하기",
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.w800,
+                                            fontSize: SizeConfig.defaultSize * 2,
+                                          )),
+                                    ]),
+                                TextButton(
+                                  onPressed: () {},
+                                  child: Text("완료", style: TextStyle(
+                                    color: Color(0xffFF5C58)
+                                  ))
+                                )
+                              ],
+                            ),
+                              SizedBox(height: SizeConfig.defaultSize * 2.5),
                             Flexible(
                               child: SingleChildScrollView(
                                 child: Padding(
@@ -262,8 +274,15 @@ class _OneFriendComponentState extends State<_OneFriendComponent> {
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    ClipOval(
-                        child: Image.asset('assets/images/profile1.jpeg', width: SizeConfig.defaultSize * 4.5, fit: BoxFit.cover,) // TODO : null값이면 이거
+                    profileImageUrl == "DEFAULT"
+                        ? ClipOval(
+                      child: Image.asset('assets/images/profile-mockup3.png', width: SizeConfig.defaultSize * 4.3, fit: BoxFit.cover,),
+                    )
+                        : ClipOval(
+                        child: Image.network(profileImageUrl,
+                          width: SizeConfig.defaultSize * 4.3,
+                          height: SizeConfig.defaultSize * 4.3,
+                          fit: BoxFit.cover,)
                     ),
                       SizedBox(width: SizeConfig.defaultSize,),
                     Text(widget.friend.personalInfo?.name ?? "XXX", style: TextStyle(
@@ -424,25 +443,15 @@ class _MemberCardView extends StatelessWidget {
                     onTap: () {
                       // AnalyticsUtil.logEvent("내정보_마이_내사진터치");
                     },
-                    child: ClipOval(
-                        child: Image.asset('assets/images/profile1.jpeg', width: SizeConfig.defaultSize * 6.4, fit: BoxFit.cover,) // TODO : null값이면 이거
-                        // child: BlocBuilder<MyPagesCubit, MyPagesState>(
-                        //     builder: (context, state) {
-                        //       if (profileImageUrl == "DEFAULT")
-                        //         return Image.asset('assets/images/profile-mockup3.png', width: SizeConfig.defaultSize * 5.7, fit: BoxFit.cover,);
-                        //       else {
-                        //         return state.profileImageFile.path==''
-                        //             ? Image.network(profileImageUrl,
-                        //             width: SizeConfig.defaultSize * 5.7,
-                        //             height: SizeConfig.defaultSize * 5.7,
-                        //             fit: BoxFit.cover)
-                        //             : Image.file(state.profileImageFile,
-                        //             width: SizeConfig.defaultSize * 5.7,
-                        //             height: SizeConfig.defaultSize * 5.7,
-                        //             fit: BoxFit.cover);
-                        //       }
-                        //     }
-                        // )
+                    child: (userResponse.personalInfo!.profileImageUrl == "DEFAULT" || userResponse.personalInfo!.profileImageUrl == null)
+                        ? ClipOval(
+                      child: Image.asset('assets/images/profile-mockup3.png', width: SizeConfig.defaultSize * 6.2, fit: BoxFit.cover,),
+                    )
+                        : ClipOval(
+                        child: Image.network(userResponse.personalInfo!.profileImageUrl,
+                          width: SizeConfig.defaultSize * 6.2,
+                          height: SizeConfig.defaultSize * 6.2,
+                          fit: BoxFit.cover,)
                     ),
                   ),
                   SizedBox(width: SizeConfig.defaultSize * 0.8),
@@ -610,7 +619,7 @@ class _CreateTeamBottomSectionState extends State<_CreateTeamBottomSection> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        height: SizeConfig.defaultSize * 21,
+        height: SizeConfig.defaultSize * 14,
         decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(0),
@@ -755,31 +764,6 @@ class _CreateTeamBottomSectionState extends State<_CreateTeamBottomSection> {
                 ),
               ),
               SizedBox(height: SizeConfig.defaultSize * 0.3,),
-              GestureDetector(
-                onTap: () {
-                  // TODO : 위에꺼 다 선택해야 활성화되도록 만들기 (팀명 && 팀원 추가)
-                  MeetTeam myNewTeam = MeetTeam(id: 0, name: widget.name, university: widget.state.userResponse!.university, locations: widget.state.cities.toList(), canMatchWithSameUniversity: true, members: widget.state.teamMembers.toList());
-                  print("${widget.state.userResponse!.university}");
-                  print("${myNewTeam.toString()}");
-                  if (widget.state.isMemberOneAdded || widget.state.isMemberTwoAdded)
-                    context.read<MeetCubit>().createNewTeam(myNewTeam);
-                  Navigator.pop(widget.ancestorContext);
-                },
-                child: Container(
-                  height: SizeConfig.defaultSize * 6,
-                  width: SizeConfig.screenHeight,
-                  decoration: BoxDecoration(
-                    color: Color(0xffFF5C58),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  alignment: Alignment.center,
-                  child: Text("팀 만들기", style: TextStyle(
-                      color: Colors.white,
-                      fontSize: SizeConfig.defaultSize * 2,
-                      fontWeight: FontWeight.w600
-                  )),
-                ),
-              )
             ],
           ),
         )
