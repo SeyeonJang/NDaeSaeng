@@ -49,13 +49,14 @@ class StandbyCubit extends Cubit<StandbyState> {
     }
   }
 
-  void pressedFriendAddButton(User friend) {
+  Future<void> pressedFriendAddButton(User friend) async {
     state.isLoading = true;
     emit(state.copy());
 
     try {
       _friendUseCase.addFriend(friend);
       state.addFriend(friend);
+      state.newFriends = await _friendUseCase.getRecommendedFriends(put: true);
     } catch (e, trace) {
       print("친구추가 실패! $e $trace");
       throw Error();

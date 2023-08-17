@@ -1836,8 +1836,8 @@ class NotFriendComponent extends StatelessWidget {
     this.friend = friend;
   }
 
-  void pressedAddButton(BuildContext context, int userId) {
-    BlocProvider.of<StandbyCubit>(context).pressedFriendAddButton(friend);
+  void pressedAddButton(BuildContext context, int userId) async {
+    await BlocProvider.of<StandbyCubit>(context).pressedFriendAddButton(friend);
   }
 
   @override
