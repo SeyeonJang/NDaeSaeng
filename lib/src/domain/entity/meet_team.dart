@@ -21,6 +21,6 @@ class MeetTeam {
 
   @override
   String toString() {
-    return 'MeetTeam{id: $id, name: $name, university: $university, locations: $locations, canMatchWithSameUniversity: $canMatchWithSameUniversity, members: $members}';
+    return 'MeetTeam{id: $id, name: $name, university: $university, locations: $locations}, canMatchWithSameUniversity: $canMatchWithSameUniversity, members: $members}';
   }
 }

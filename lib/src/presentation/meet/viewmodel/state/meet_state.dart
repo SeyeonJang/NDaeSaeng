@@ -20,6 +20,7 @@ class MeetState {
   late List<MeetTeam> myTeams;
   late MeetTeam newTeam;
   late String teamName;
+  late bool isChecked;
 
   MeetState ({
     required this.meetPageState,
@@ -31,7 +32,8 @@ class MeetState {
     required this.teamMembers,
     required this.cities,
     required this.myTeams,
-    required this.teamName
+    required this.teamName,
+    required this.isChecked
   });
 
   MeetState.init() { // 초기값 설정
@@ -48,6 +50,7 @@ class MeetState {
     cities = {};
     myTeams = [];
     teamName = '';
+    isChecked = false;
   }
 
   MeetState copy() => MeetState(
@@ -60,11 +63,16 @@ class MeetState {
     teamMembers: teamMembers,
     cities: cities,
     myTeams: myTeams,
-    teamName: teamName
+    teamName: teamName,
+    isChecked: isChecked
   );
 
   void setIsLoading(bool isLoading) {
     this.isLoading = isLoading;
+  }
+
+  void setIsChecked(bool isChecked) {
+    this.isChecked = isChecked;
   }
 
   // 추가된 친구가 한 명인지 판단

@@ -89,7 +89,7 @@ class _MeetCreateTeamState extends State<MeetCreateTeam> {
                                         fontSize: SizeConfig.defaultSize * 2,
                                       )),
                                 ]),
-                            SizedBox(height: SizeConfig.defaultSize * 2.5),
+                            SizedBox(height: SizeConfig.defaultSize * 1.5),
                             Flexible(
                               child: SingleChildScrollView(
                                 child: Padding(
@@ -387,10 +387,14 @@ class _CreateTeamTopSectionState extends State<_CreateTeamTopSection> {
                     },
                     decoration: InputDecoration(
                       hintText: "이성에게 보여질 팀명을 입력해주세요!",
+                      contentPadding: EdgeInsets.zero,
+                      enabledBorder: UnderlineInputBorder(borderSide: BorderSide(width: 0.6)),
                     ),
+
                   )
               )
             ]),
+              SizedBox(height: SizeConfig.defaultSize),
           ],
         )
       ],
@@ -603,7 +607,7 @@ class _CreateTeamBottomSection extends StatefulWidget {
 }
 
 class _CreateTeamBottomSectionState extends State<_CreateTeamBottomSection> {
-  bool light = true; // 스위치에 쓰임 TODO : 서버 연결
+  bool light = false;
 
   @override
   Widget build(BuildContext context) {
@@ -631,14 +635,13 @@ class _CreateTeamBottomSectionState extends State<_CreateTeamBottomSection> {
                         fontSize: SizeConfig.defaultSize * 1.6),),
                     TextButton(
                         onPressed: () {
-                          List<Map<String, dynamic>> citiesData = [ // TODO : 서버 on("id": 0, "name": "서울"), "isChecked": false},
-                            {"id": 0, "name": "서울", "isChecked": false},
-                            {"id": 1, "name": "인천", "isChecked": false},
-                            {"id": 2, "name": "경기", "isChecked": false},
-                            {"id": 3, "name": "대구", "isChecked": false},
-                            {"id": 4, "name": "제주도", "isChecked": false},
+                          List<Map<String, dynamic>> citiesData = [
+                            {"id": 1, "name": "서울", "isChecked": false},
+                            {"id": 2, "name": "대구", "isChecked": false},
+                            {"id": 3, "name": "부산", "isChecked": false},
+                            // {"id": 3, "name": "대구", "isChecked": false},
+                            // {"id": 4, "name": "제주도", "isChecked": false},
                           ];
-                          // List<Location> cities = citiesData.map((cityData) => Location(id: cityData["id"], name: cityData["name"])).toList();
                           List<Map<String, dynamic>> newCitiesData = [];
 
                           showDialog<String>
@@ -746,6 +749,7 @@ class _CreateTeamBottomSectionState extends State<_CreateTeamBottomSection> {
                       onChanged: (bool value) {
                         setState(() {
                           light = value;
+                          widget.state.setIsChecked(value);
                         });
                       },
                     ),
@@ -756,7 +760,7 @@ class _CreateTeamBottomSectionState extends State<_CreateTeamBottomSection> {
               GestureDetector(
                 onTap: () {
                   // TODO : 위에꺼 다 선택해야 활성화되도록 만들기 (팀명 && 팀원 && 만나고 싶은 지역 추가)
-                  MeetTeam myNewTeam = MeetTeam(id: 0, name: widget.state.teamName, university: widget.state.userResponse!.university, locations: widget.state.cities.toList(), canMatchWithSameUniversity: true, members: widget.state.teamMembers.toList());
+                  MeetTeam myNewTeam = MeetTeam(id: 0, name: widget.state.teamName, university: widget.state.userResponse!.university, locations: widget.state.getCities(), canMatchWithSameUniversity: widget.state.isChecked, members: widget.state.teamMembers.toList());
                   print("${widget.state.teamName} 이름 전달합니다");
                   print("${widget.state.userResponse!.university}");
                   print("${myNewTeam.toString()}");
