@@ -29,6 +29,13 @@ class DartApiRemoteDataSource {
     return _httpUtil;
   }
 
+  // health
+  static Future<String> healthCheck() async {
+    const path = '/v1/health';
+    final response = await _httpUtil.request().get(path);
+    return response.data;
+  }
+
   // Auth: 카카오 로그인 요청
   static Future<DartAuthDto> postLoginWithKakao(String kakaoAccessToken) async {
     const path = '/v1/auth/kakao';

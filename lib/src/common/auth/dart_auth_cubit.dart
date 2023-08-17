@@ -1,12 +1,15 @@
 import 'package:dart_flutter/src/common/auth/state/dart_auth_state.dart';
+import 'package:dart_flutter/src/common/exception/custom_exception.dart';
 import 'package:dart_flutter/src/common/util/analytics_util.dart';
 import 'package:dart_flutter/src/common/util/push_notification_util.dart';
+import 'package:dart_flutter/src/common/util/toast_util.dart';
 import 'package:dart_flutter/src/common/util/version_comparator.dart';
 import 'package:dart_flutter/src/domain/entity/kakao_user.dart';
 import 'package:dart_flutter/src/domain/entity/user.dart';
 import 'package:dart_flutter/src/domain/use_case/app_platform_use_case.dart';
 import 'package:dart_flutter/src/domain/use_case/auth_use_case.dart';
 import 'package:dart_flutter/src/domain/use_case/user_use_case.dart';
+import 'package:dio/dio.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
@@ -53,8 +56,25 @@ class DartAuthCubit extends HydratedCubit<DartAuthState> {
     emit(state.copy());
   }
 
+  Future<bool> healthCheck() async {
+    try {
+      print(await DartApiRemoteDataSource.healthCheck());
+      return true;
+    } on DioException catch(e) {
+      if (e.error is CustomException) {  // TODO 추후 서버에서 나오는 Error에 맞는 Exception으로 수정
+        emit(cleanUpAuthInformation());
+      }
+    }
+    ToastUtil.showToast("로그인 요청 실패");
+    return false;
+  }
+
   void setAccessToken(String accessToken) {
     DartApiRemoteDataSource.addAuthorizationToken(accessToken);
+  }
+
+  DartAuthState cleanUpAuthInformation() {
+    return state.setStep(AuthStep.land).setSocialAuth(loginType: LoginType.email, socialAccessToken: "").copy();
   }
 
   Future<DartAuthState> kakaoLogout() async {
@@ -68,7 +88,7 @@ class DartAuthCubit extends HydratedCubit<DartAuthState> {
       print('로그아웃 실패: $error');
     }
 
-    final newState = state.setStep(AuthStep.land).setSocialAuth(loginType: LoginType.email, socialAccessToken: "").copy();
+    var newState = cleanUpAuthInformation();
     emit(newState);
     return newState;
   }
@@ -84,7 +104,7 @@ class DartAuthCubit extends HydratedCubit<DartAuthState> {
       print('회원탈퇴 실패: $error');
     }
 
-    final newState = state.setStep(AuthStep.land).setSocialAuth(loginType: LoginType.email, socialAccessToken: "").copy();
+    var newState = cleanUpAuthInformation();
     emit(newState);
   }
 

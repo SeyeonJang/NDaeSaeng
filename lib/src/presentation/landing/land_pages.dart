@@ -83,6 +83,9 @@ class _LandPagesState extends State<LandPages> {
             AnalyticsUtil.logEvent("로그인_접속");
             return const LoginPage();
           }
+          if (state.step == AuthStep.signup || state.step == AuthStep.login) {
+            BlocProvider.of<DartAuthCubit>(context).healthCheck();
+          }
           if (state.step == AuthStep.signup) {
             // 소셜 로그인을 했지만, 아직 우리 회원가입은 안햇을 때
             return BlocProvider<SignupCubit>(

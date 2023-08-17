@@ -1,3 +1,5 @@
+import 'package:dart_flutter/src/common/exception/custom_exception.dart';
+import 'package:dart_flutter/src/common/exception/token_expired_exception.dart';
 import 'package:dio/dio.dart';
 
 class HttpUtil {
@@ -13,32 +15,28 @@ class HttpUtil {
 
     _dio.interceptors.add(InterceptorsWrapper(
         onRequest:(options, handler){
-          print(
-              "[HttpRequest][${DateTime.now()}]---------------------------------------------------------------\n"
-                  "baseUri: ${options.baseUrl}\n"
-                  "path: ${options.path}\n"
-                  "data: ${options.data}\n"
-                  "queryParameters: ${options.queryParameters}\n"
-          );
+          _printHttpRequest(options);
           return handler.next(options); //continue
         },
-        onResponse:(response,handler) {
-          print(
-              "[HttpRequest][${DateTime.now()}]---------------------------------------------------------------\n"
-                  "statusCode: ${response.statusCode} ${response.statusMessage}\n"
-                  "headers: ${response.headers}\n"
-                  "data: ${response.data}\n"
-          );
+        onResponse:(response, handler) {
+          _printHttpResponse(response);
           return handler.next(response); // continue
         },
         onError: (DioError e, handler) {
-          print(
-              "[HttpError][${DateTime.now()}]----------------------------------------------------------------\n"
-                  "message: ${e.message}\n"
-                  "response: ${e.response}\n"
-                  "stackTrace: ${e.stackTrace}\n"
-          );
-          return  handler.next(e);//continue
+          _printHttpError(e);
+          if (e.response == null)
+            return handler.next(e);//continue
+
+          int? statusCode = e.response?.statusCode;
+          switch(statusCode) {
+            case 401:
+              throw TokenExpiredException("토큰이 만료되었습니다.");
+            case 500:
+              throw CustomException("InternalServerError");
+            default:
+              break;
+          }
+          return handler.next(e);//continue
         }
     ));
   }
@@ -49,5 +47,33 @@ class HttpUtil {
 
   Dio request() {
     return _dio;
+  }
+
+  void _printHttpError(DioError e) {
+    return print(
+          "[HttpError][${DateTime.now()}]----------------------------------------------------------------\n"
+              "message: ${e.message}\n"
+              "response: ${e.response}\n"
+              "stackTrace: ${e.stackTrace}\n"
+        );
+  }
+
+  void _printHttpResponse(Response<dynamic> response) {
+    print(
+        "[HttpResponse][${DateTime.now()}]--------------------------------------------------------------\n"
+            "statusCode: ${response.statusCode} ${response.statusMessage}\n"
+            "headers: ${response.headers}\n"
+            "data: ${response.data}\n"
+    );
+  }
+
+  void _printHttpRequest(RequestOptions options) {
+    print(
+        "[HttpRequest][${DateTime.now()}]---------------------------------------------------------------\n"
+            "baseUri: ${options.baseUrl}\n"
+            "path: ${options.path}\n"
+            "data: ${options.data}\n"
+            "queryParameters: ${options.queryParameters}\n"
+    );
   }
 }
