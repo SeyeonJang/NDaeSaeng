@@ -2,7 +2,7 @@ import 'package:dart_flutter/src/domain/entity/meet_team.dart';
 import 'package:dart_flutter/src/domain/repository/meet_repository.dart';
 
 class MockMeetRepository implements MeetRepository {
-  final List<MeetTeam> mockTeams = [];
+  static final List<MeetTeam> mockTeams = [];
 
   @override
   Future<MeetTeam> createNewTeam(MeetTeam meetTeam) async {
@@ -23,7 +23,11 @@ class MockMeetRepository implements MeetRepository {
 
   @override
   void removeMyTeam(String teamId) {
-    mockTeams.removeWhere((mockTeam) => mockTeam.id == teamId);
+    print("============================1");
+    mockTeams.map((mockTeam) => print(mockTeam.id.toString()));
+    print("============================2");
+    mockTeams.removeWhere((mockTeam) => mockTeam.id.toString() == teamId);
+    print("============================3");
     print("repo - 삭제된 팀 ID $teamId");
     print("repo - 팀 목록 ${mockTeams}");
   }

@@ -1,7 +1,6 @@
 import 'package:dart_flutter/res/config/size_config.dart';
 import 'package:dart_flutter/src/presentation/meet/view/meet_create_team.dart';
 import 'package:dart_flutter/src/presentation/meet/view/meet_edit_team.dart';
-import 'package:dart_flutter/src/presentation/meet/view/meet_update_team.dart';
 import 'package:dart_flutter/src/presentation/meet/viewmodel/meet_cubit.dart';
 import 'package:dart_flutter/src/presentation/meet/viewmodel/state/meet_state.dart';
 import 'package:flutter/material.dart';
@@ -136,8 +135,7 @@ class _BottomSection extends StatelessWidget {
                                                                   showDialog<String>(
                                                                     context: context,
                                                                     builder: (BuildContext dialogContext) => AlertDialog(
-                                                                      title: Text('\'${state.myTeams[i].name=='' ? '(팀명 없음)' : state.myTeams[i].name}\' 팀을 삭제하시겠어요?', style: TextStyle(fontSize: SizeConfig.defaultSize * 2),),
-                                                                      // content: const Text('사용자를 신고하면 Dart에서 빠르게 신고 처리를 해드려요!'),
+                                                                      content: Text('\'${state.myTeams[i].name=='' ? '(팀명 없음)' : state.myTeams[i].name}\' 팀을 삭제하시겠어요?', style: TextStyle(fontSize: SizeConfig.defaultSize * 1.8),),
                                                                       backgroundColor: Colors.white,
                                                                       surfaceTintColor: Colors.white,
                                                                       actions: <Widget>[
@@ -200,6 +198,7 @@ class _BottomSection extends StatelessWidget {
                                     cubit.refreshMeetPage();
                                   }
                                 ), childCurrent: this));
+                                Navigator.pop(context);
                               },
                               child: Container(
                                 height: SizeConfig.defaultSize * 6,
