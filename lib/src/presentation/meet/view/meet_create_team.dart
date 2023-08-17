@@ -330,10 +330,10 @@ class _CreateTeamTopSection extends StatefulWidget {
 class _CreateTeamTopSectionState extends State<_CreateTeamTopSection> {
   // textfield
   late TextEditingController _controller;
-  String teamName = '';
+
   void onTeamNameChanged(String value) {
     (value); // Callback to parent widget
-    teamName = value;
+    widget.state.teamName = value;
   }
 
   @override
@@ -381,8 +381,9 @@ class _CreateTeamTopSectionState extends State<_CreateTeamTopSection> {
                   child: TextField(
                     controller: _controller,
                     onChanged: (value) {
-                      // onTeamNameChanged(value); // Callback to parent widget
-                      widget.handleTeamNameChanged(value);
+                      setState(() {
+                        widget.state.teamName = value;
+                      });
                     },
                     decoration: InputDecoration(
                       hintText: "이성에게 보여질 팀명을 입력해주세요!",
@@ -754,8 +755,9 @@ class _CreateTeamBottomSectionState extends State<_CreateTeamBottomSection> {
               SizedBox(height: SizeConfig.defaultSize * 0.3,),
               GestureDetector(
                 onTap: () {
-                  // TODO : 위에꺼 다 선택해야 활성화되도록 만들기 (팀명 && 팀원 추가)
-                  MeetTeam myNewTeam = MeetTeam(id: 0, name: widget.name, university: widget.state.userResponse!.university, locations: widget.state.cities.toList(), canMatchWithSameUniversity: true, members: widget.state.teamMembers.toList());
+                  // TODO : 위에꺼 다 선택해야 활성화되도록 만들기 (팀명 && 팀원 && 만나고 싶은 지역 추가)
+                  MeetTeam myNewTeam = MeetTeam(id: 0, name: widget.state.teamName, university: widget.state.userResponse!.university, locations: widget.state.cities.toList(), canMatchWithSameUniversity: true, members: widget.state.teamMembers.toList());
+                  print("${widget.state.teamName} 이름 전달합니다");
                   print("${widget.state.userResponse!.university}");
                   print("${myNewTeam.toString()}");
                   if (widget.state.isMemberOneAdded || widget.state.isMemberTwoAdded)

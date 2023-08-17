@@ -96,7 +96,9 @@ class _MeetEditTeamState extends State<MeetEditTeam> {
                                 TextButton(
                                   onPressed: () {},
                                   child: Text("완료", style: TextStyle(
-                                    color: Color(0xffFF5C58)
+                                    color: Color(0xffFF5C58),
+                                    fontSize: SizeConfig.defaultSize * 1.9,
+                                    fontWeight: FontWeight.w500
                                   ))
                                 )
                               ],
@@ -274,7 +276,7 @@ class _OneFriendComponentState extends State<_OneFriendComponent> {
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    profileImageUrl == "DEFAULT"
+                    (profileImageUrl == "DEFAULT" || profileImageUrl == null)
                         ? ClipOval(
                       child: Image.asset('assets/images/profile-mockup3.png', width: SizeConfig.defaultSize * 4.3, fit: BoxFit.cover,),
                     )
