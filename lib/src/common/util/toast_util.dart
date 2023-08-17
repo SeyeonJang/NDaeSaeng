@@ -34,7 +34,7 @@ class ToastUtil {
       toastLength: Toast.LENGTH_SHORT,
       gravity: ToastGravity.TOP,
       timeInSecForIosWeb: 1,
-      backgroundColor: Colors.indigoAccent,
+      backgroundColor: Color(0xff7C83FD),
       textColor: Colors.white,
       fontSize: SizeConfig.defaultSize * 1.6,
     );
@@ -46,7 +46,7 @@ class ToastUtil {
       toastLength: Toast.LENGTH_SHORT,
       gravity: ToastGravity.TOP,
       timeInSecForIosWeb: 1,
-      backgroundColor: Colors.indigoAccent,
+      backgroundColor: Color(0xff7C83FD),
       textColor: Colors.white,
       fontSize: SizeConfig.defaultSize * 1.6,
     );

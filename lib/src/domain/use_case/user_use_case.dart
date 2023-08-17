@@ -2,12 +2,16 @@ import 'dart:io';
 
 import 'package:dart_flutter/src/common/util/image_util.dart';
 import 'package:dart_flutter/src/data/repository/dart_user_repository_impl.dart';
+import 'package:dart_flutter/src/data/repository/mock_title_vote_repository.dart';
+import 'package:dart_flutter/src/domain/entity/title_vote.dart';
 import 'package:dart_flutter/src/domain/entity/user_request.dart';
 import 'package:dart_flutter/src/domain/entity/user.dart';
+import 'package:dart_flutter/src/domain/repository/title_vote_repository.dart';
 import 'package:dart_flutter/src/domain/repository/user_repository.dart';
 
 class UserUseCase {
   final UserRepository _dartUserRepository = DartUserRepositoryImpl();
+  final TitleVoteRepository _dartTitleVoteRepository = DartTitleVoteRepository();
 
   Future<User> myInfo() async {
     // return _dartUserRepository.myInfo();
@@ -63,5 +67,17 @@ class UserUseCase {
 
   void cleanUpUserResponseCache() {
     _dartUserRepository.cleanUpUserResponseCache();
+  }
+
+  void addTitleVote(TitleVote titleVote) {
+    _dartTitleVoteRepository.addTitleVote(titleVote);
+  }
+
+  Future<List<TitleVote>> getMyTitleVote() async {
+    return await _dartTitleVoteRepository.getMyTitleVote();
+  }
+
+  void removeTitleVote(int questionId) {
+    _dartTitleVoteRepository.removeTitleVote(questionId);
   }
 }

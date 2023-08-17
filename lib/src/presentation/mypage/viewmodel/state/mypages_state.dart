@@ -16,6 +16,7 @@ class MyPagesState {
   late bool isMyLandPage;
   late bool isVertificateUploaded;
   late File profileImageFile;
+  late Set<TitleVote> titleVotes;
 
   MyPagesState({
     required this.isLoading,
@@ -26,6 +27,7 @@ class MyPagesState {
     required this.newFriendId,
     required this.isVertificateUploaded,
     required this.profileImageFile,
+    required this.titleVotes,
   });
 
   MyPagesState.init() {
@@ -41,6 +43,7 @@ class MyPagesState {
     isMyLandPage = true;
     isVertificateUploaded = false;
     profileImageFile = File('');
+    titleVotes = {};
   }
 
   MyPagesState copy() => MyPagesState(
@@ -51,7 +54,8 @@ class MyPagesState {
         newFriends: newFriends,
         newFriendId: newFriendId,
         isVertificateUploaded: isVertificateUploaded,
-        profileImageFile: profileImageFile
+        profileImageFile: profileImageFile,
+        titleVotes: titleVotes
       );
 
   void setIsLoading(bool isLoading) {
@@ -91,5 +95,10 @@ class MyPagesState {
   void deleteFriend(User friend) {
     friends.remove(friend);
     newFriends.add(friend);
+  }
+
+  MyPagesState setTitleVotes(List<TitleVote> titleVotes) {
+    this.titleVotes = titleVotes.toSet();
+    return this;
   }
 }

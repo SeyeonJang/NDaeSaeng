@@ -1,5 +1,5 @@
 import 'dart:io';
-
+import 'package:dart_flutter/src/domain/entity/title_vote.dart';
 import 'package:dart_flutter/src/domain/entity/user.dart';
 import 'package:dart_flutter/src/domain/use_case/friend_use_case.dart';
 import 'package:dart_flutter/src/domain/use_case/user_use_case.dart';
@@ -25,6 +25,7 @@ class MyPagesCubit extends Cubit<MyPagesState> {
     state.setMyFriends(friends);
     List<User> newFriends = await _friendUseCase.getRecommendedFriends();
     state.setRecommendedFriends(newFriends);
+    getMyTitleVote();
 
     state.setIsLoading(false);
     emit(state.copy());
@@ -69,6 +70,7 @@ class MyPagesCubit extends Cubit<MyPagesState> {
     _userUseCase.cleanUpUserResponseCache();
      User user = await _userUseCase.myInfo();
      state.setUserResponse(user);
+     getMyTitleVote();
      emit(state.copy());
   }
 
@@ -98,5 +100,18 @@ class MyPagesCubit extends Cubit<MyPagesState> {
     final newState = state.copy();
     print(newState);
     emit(newState);
+  }
+
+  void addTtitleVote(TitleVote titleVote) {
+    _userUseCase.addTitleVote(titleVote);
+  }
+
+  Future<void> getMyTitleVote() async {
+    List<TitleVote> myTitleVotes = await _userUseCase.getMyTitleVote();
+    state.setTitleVotes(myTitleVotes);
+  }
+  
+  void removeTitleVote(int questionId) {
+    _userUseCase.removeTitleVote(questionId);
   }
 }
