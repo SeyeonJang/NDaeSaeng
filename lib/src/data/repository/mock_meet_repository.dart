@@ -7,6 +7,7 @@ class MockMeetRepository implements MeetRepository {
   @override
   Future<MeetTeam> createNewTeam(MeetTeam meetTeam) async {
     mockTeams.add(meetTeam);
+    print("repo - 찐으로 생성된 팀 ${mockTeams}");
     return meetTeam;
   }
 

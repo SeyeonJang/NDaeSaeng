@@ -1,4 +1,6 @@
 import 'package:dart_flutter/res/config/size_config.dart';
+import 'package:dart_flutter/src/domain/entity/location.dart';
+import 'package:dart_flutter/src/domain/entity/meet_team.dart';
 import 'package:dart_flutter/src/presentation/meet/viewmodel/meet_cubit.dart';
 import 'package:dart_flutter/src/presentation/meet/viewmodel/state/meet_state.dart';
 import 'package:flutter/material.dart';
@@ -6,101 +8,141 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:dart_flutter/src/domain/entity/user.dart';
 
 class MeetCreateTeam extends StatelessWidget {
-  const MeetCreateTeam({super.key});
+  // 수정일 때 late int id;
+  String name = '';
+  final VoidCallback onFinish;
+
+  void handleTeamNameChanged(String newName) {
+    name = newName;
+  }
+
+  MeetCreateTeam({super.key, required this.onFinish});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: BlocProvider<MeetCubit>(
-          create: (context) => MeetCubit(),
-          child: SafeArea(
-            child: BlocBuilder<MeetCubit, MeetState>(
-                builder: (context, state) {
-                  context.read<MeetCubit>().initState();
-                  var friendsList = state.friends.toList();
-                  var teamMemberList = state.teamMembers.toList();
-                  return Center(
-                    child: Padding(
-                      padding: EdgeInsets.all(SizeConfig.defaultSize * 1.3),
-                      child: Column(
-                        children: [
-                            SizedBox(height: SizeConfig.defaultSize),
-                          Row(mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                IconButton(
-                                    onPressed: () {
-                                      Navigator.pop(context);
-                                    },
-                                    icon: Icon(Icons.arrow_back_ios_new_rounded,
-                                        size: SizeConfig.defaultSize * 2)),
-                                Text("과팅 팀 만들기",
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w800,
-                                      fontSize: SizeConfig.defaultSize * 2,
-                                    )),
-                              ]),
-                            SizedBox(height: SizeConfig.defaultSize * 2.5),
-                          Flexible(
-                            child: SingleChildScrollView(
-                              child: Padding(
-                                padding: EdgeInsets.symmetric(horizontal: SizeConfig.defaultSize * 1.3),
-                                child: Column(
-                                  children: [
-                                    _CreateTeamTopSection(userResponse: state.userResponse),
-                                    // 나
-                                    _MemberCardView(userResponse: state.userResponse,),
-                                    // 친구1
-                                    state.isMemberOneAdded
-                                        ? _MemberCardView(userResponse: teamMemberList[0],)
-                                        : Container(),
-                                    // 친구2
-                                    state.isMemberTwoAdded
-                                        ? _MemberCardView(userResponse: teamMemberList[1],)
-                                        : Container(),
-                                    // 버튼
-                                    state.isMemberTwoAdded
-                                        ? Container()
-                                        : InkWell( // 팀원 추가하기 버튼 *******
-                                            onTap: () {
-                                              _ShowModalBottomSheet(context, state, friendsList);
-                                              // context.read<MeetCubit>().pressedMemberAddButton();
-                                            },
-                                            child: Container(
-                                              width: SizeConfig.screenWidth,
-                                              height: SizeConfig.defaultSize * 6,
-                                              decoration: BoxDecoration(
-                                                color: Colors.grey.shade100,
-                                                borderRadius: BorderRadius.circular(8),
-                                              ),
-                                              alignment: Alignment.center,
-                                              child: Text("+   팀원 추가하기", style: TextStyle(
-                                                  fontSize: SizeConfig.defaultSize * 1.6
-                                              ),)
-                                      ),
-                                    )
-                                  ],
+    Future<bool> _onBackKey() async {
+      return await showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              backgroundColor: Colors.white,
+              title: Text("팀 만들기를 종료하시겠어요?"),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context, false);
+                  },
+                  child: Text('취소'),
+                ),
+                TextButton(
+                  onPressed: () {
+                    onFinish();
+                    Navigator.pop(context, true);
+                  },
+                  child: Text('끝내기'),
+                )
+              ],
+            );
+          });
+    };
+
+    return WillPopScope(
+      onWillPop: () {
+        return _onBackKey();
+      },
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        body: BlocProvider<MeetCubit>(
+            create: (context) => MeetCubit(),
+            child: SafeArea(
+              child: BlocBuilder<MeetCubit, MeetState>(
+                  builder: (context, state) {
+                    context.read<MeetCubit>().initState();
+                    var friendsList = state.friends.toList();
+                    var teamMemberList = state.teamMembers.toList();
+                    return Center(
+                      child: Padding(
+                        padding: EdgeInsets.all(SizeConfig.defaultSize * 1.3),
+                        child: Column(
+                          children: [
+                              SizedBox(height: SizeConfig.defaultSize),
+                            Row(mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  IconButton(
+                                      onPressed: () async {
+                                        await _onBackKey();
+                                        Navigator.pop(context);
+                                      },
+                                      icon: Icon(Icons.arrow_back_ios_new_rounded,
+                                          size: SizeConfig.defaultSize * 2)),
+                                  Text("과팅 팀 만들기",
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.w800,
+                                        fontSize: SizeConfig.defaultSize * 2,
+                                      )),
+                                ]),
+                              SizedBox(height: SizeConfig.defaultSize * 2.5),
+                            Flexible(
+                              child: SingleChildScrollView(
+                                child: Padding(
+                                  padding: EdgeInsets.symmetric(horizontal: SizeConfig.defaultSize * 1.3),
+                                  child: Column(
+                                    children: [
+                                      _CreateTeamTopSection(userResponse: state.userResponse, handleTeamNameChanged: handleTeamNameChanged,),
+                                      // 나
+                                      _MemberCardView(userResponse: state.userResponse,),
+                                      // 친구1
+                                      state.isMemberOneAdded
+                                          ? _MemberCardView(userResponse: teamMemberList[0],)
+                                          : Container(),
+                                      // 친구2
+                                      state.isMemberTwoAdded
+                                          ? _MemberCardView(userResponse: teamMemberList[1],)
+                                          : Container(),
+                                      // 버튼
+                                      state.isMemberTwoAdded
+                                          ? Container()
+                                          : InkWell( // 팀원 추가하기 버튼 *******
+                                              onTap: () {
+                                                _ShowModalBottomSheet(context, state, friendsList);
+                                                // context.read<MeetCubit>().pressedMemberAddButton();
+                                              },
+                                              child: Container(
+                                                width: SizeConfig.screenWidth,
+                                                height: SizeConfig.defaultSize * 6,
+                                                decoration: BoxDecoration(
+                                                  color: Colors.grey.shade100,
+                                                  borderRadius: BorderRadius.circular(8),
+                                                ),
+                                                alignment: Alignment.center,
+                                                child: Text("+   팀원 추가하기", style: TextStyle(
+                                                    fontSize: SizeConfig.defaultSize * 1.6
+                                                ),)
+                                        ),
+                                      )
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
-                  );
-                }
-            ),
+                    );
+                  }
+              ),
+            )
+        ),
+          bottomNavigationBar: BlocProvider<MeetCubit>(
+            create: (context) => MeetCubit(),
+            child: BlocBuilder<MeetCubit, MeetState>(
+              builder: (buildContext, state) {
+                return _CreateTeamBottomSection(state: state, name: name, ancestorContext: context);
+              }
+            )
           )
-      ),
-        bottomNavigationBar: BlocProvider<MeetCubit>(
-          create: (context) => MeetCubit(),
-          child: BlocBuilder<MeetCubit, MeetState>(
-            builder: (buildContext, state) {
-              return _CreateTeamBottomSection(state: state);
-            }
-          )
-        )
-      );
+        ),
+    );
   }
 
   Future<dynamic> _ShowModalBottomSheet(BuildContext context, MeetState state, List<User> friendsList) {
@@ -260,9 +302,12 @@ class _OneFriendComponentState extends State<_OneFriendComponent> {
 
 class _CreateTeamTopSection extends StatefulWidget {
   User userResponse;
+  final handleTeamNameChanged;
+
   _CreateTeamTopSection({
     super.key,
-    required this.userResponse
+    required this.userResponse,
+    this.handleTeamNameChanged
   });
   @override
   State<_CreateTeamTopSection> createState() => _CreateTeamTopSectionState();
@@ -271,6 +316,11 @@ class _CreateTeamTopSection extends StatefulWidget {
 class _CreateTeamTopSectionState extends State<_CreateTeamTopSection> {
   // textfield
   late TextEditingController _controller;
+  String teamName = '';
+  void onTeamNameChanged(String value) {
+    (value); // Callback to parent widget
+  }
+
   @override
   void initState() {
     super.initState();
@@ -315,6 +365,10 @@ class _CreateTeamTopSectionState extends State<_CreateTeamTopSection> {
               Flexible(
                   child: TextField(
                     controller: _controller,
+                    onChanged: (value) {
+                      // onTeamNameChanged(value); // Callback to parent widget
+                      widget.handleTeamNameChanged(value);
+                    },
                     decoration: InputDecoration(
                       hintText: "이성에게 보여질 팀명을 입력해주세요!",
                     ),
@@ -528,10 +582,14 @@ class _NoVoteView extends StatelessWidget { // 받은 투표 없을 때
 
 class _CreateTeamBottomSection extends StatefulWidget {
   MeetState state;
+  String name;
+  BuildContext ancestorContext;
 
   _CreateTeamBottomSection({
     super.key,
     required this.state,
+    required this.name,
+    required this.ancestorContext,
   });
 
   @override
@@ -567,14 +625,15 @@ class _CreateTeamBottomSectionState extends State<_CreateTeamBottomSection> {
                         fontSize: SizeConfig.defaultSize * 1.6),),
                     TextButton(
                         onPressed: () {
-                          List<Map> cities = [ // TODO : 서버 연결
-                            {"name": "서울", "isChecked": false},
-                            {"name": "인천", "isChecked": false},
-                            {"name": "경기", "isChecked": false},
-                            {"name": "대구", "isChecked": false},
-                            {"name": "제주도", "isChecked": false},
+                          List<Map<String, dynamic>> citiesData = [ // TODO : 서버 on("id": 0, "name": "서울"), "isChecked": false},
+                            {"id": 0, "name": "서울", "isChecked": false},
+                            {"id": 1, "name": "인천", "isChecked": false},
+                            {"id": 2, "name": "경기", "isChecked": false},
+                            {"id": 3, "name": "대구", "isChecked": false},
+                            {"id": 4, "name": "제주도", "isChecked": false},
                           ];
-                          List<String> newCities = [];
+                          // List<Location> cities = citiesData.map((cityData) => Location(id: cityData["id"], name: cityData["name"])).toList();
+                          List<Map<String, dynamic>> newCitiesData = [];
 
                           showDialog<String>
                             (context: context,
@@ -602,7 +661,7 @@ class _CreateTeamBottomSectionState extends State<_CreateTeamBottomSection> {
                                               Flexible(
                                                 child: SingleChildScrollView(
                                                   child: Column(
-                                                    children: cities.map((favorite) {
+                                                    children: citiesData.map((favorite) {
                                                       return CheckboxListTile(
                                                           activeColor: Color(0xffFE6059),
                                                           title: Text(favorite['name']),
@@ -612,9 +671,9 @@ class _CreateTeamBottomSectionState extends State<_CreateTeamBottomSection> {
                                                               favorite['isChecked'] = val;
                                                             });
                                                             if (favorite['isChecked']) {
-                                                              newCities.add(favorite['name']);
+                                                              newCitiesData.add({'id': favorite['id'], 'name': favorite['name']});
                                                             } else {
-                                                              newCities.remove(favorite['name']);
+                                                              newCitiesData.removeWhere((item) => item['id'] == favorite['id']);
                                                             }
                                                           }
                                                       );
@@ -639,6 +698,7 @@ class _CreateTeamBottomSectionState extends State<_CreateTeamBottomSection> {
                                           ),
                                           TextButton(
                                               onPressed: () {
+                                                List<Location> newCities = newCitiesData.map((cityData) => Location(id: cityData["id"], name: cityData["name"])).toList();
                                                 context.read<MeetCubit>().pressedCitiesAddButton(newCities);
                                                 Navigator.pop(dialogContext);
                                               },
@@ -658,7 +718,7 @@ class _CreateTeamBottomSectionState extends State<_CreateTeamBottomSection> {
                         child: Text(
                           widget.state.getCities().isEmpty
                             ? "선택해주세요"
-                            : widget.state.getCities().map((city) => city).join(', '),
+                            : widget.state.getCities().map((city) => city.name).join(', '),
                           style: TextStyle(
                             fontSize: SizeConfig.defaultSize * 1.6,
                             color: Colors.grey.shade400),))
@@ -687,19 +747,29 @@ class _CreateTeamBottomSectionState extends State<_CreateTeamBottomSection> {
                 ),
               ),
               SizedBox(height: SizeConfig.defaultSize * 0.3,),
-              Container( // TODO : 위에꺼 다 선택해야 활성화되도록 만들기 (팀명 && 팀원 추가)
-                height: SizeConfig.defaultSize * 6,
-                width: SizeConfig.screenHeight,
-                decoration: BoxDecoration(
-                  color: Color(0xffFF5C58),
-                  borderRadius: BorderRadius.circular(10),
+              GestureDetector(
+                onTap: () {
+                  // TODO : 위에꺼 다 선택해야 활성화되도록 만들기 (팀명 && 팀원 추가)
+                  MeetTeam myNewTeam = MeetTeam(id: 0, name: widget.name, university: widget.state.userResponse!.university, locations: widget.state.cities.toList(), canMatchWithSameUniversity: true, members: widget.state.teamMembers.toList());
+                  print(myNewTeam.toString());
+                  if (widget.state.isMemberOneAdded || widget.state.isMemberTwoAdded)
+                    context.read<MeetCubit>().createNewTeam(myNewTeam);
+                  Navigator.pop(widget.ancestorContext);
+                },
+                child: Container(
+                  height: SizeConfig.defaultSize * 6,
+                  width: SizeConfig.screenHeight,
+                  decoration: BoxDecoration(
+                    color: Color(0xffFF5C58),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  alignment: Alignment.center,
+                  child: Text("팀 만들기", style: TextStyle(
+                      color: Colors.white,
+                      fontSize: SizeConfig.defaultSize * 2,
+                      fontWeight: FontWeight.w600
+                  )),
                 ),
-                alignment: Alignment.center,
-                child: Text("팀 만들기", style: TextStyle(
-                    color: Colors.white,
-                    fontSize: SizeConfig.defaultSize * 2,
-                    fontWeight: FontWeight.w600
-                )),
               )
             ],
           ),

@@ -1,3 +1,4 @@
+import 'package:dart_flutter/src/domain/entity/location.dart';
 import 'package:dart_flutter/src/domain/entity/meet_team.dart';
 import 'package:dart_flutter/src/domain/use_case/meet_use_case.dart';
 import 'package:dart_flutter/src/presentation/meet/viewmodel/state/meet_state.dart';
@@ -18,8 +19,9 @@ class MeetCubit extends Cubit<MeetState> {
     if (_initialized) return;
     _initialized = true;
 
-    print(state);
+    state.setIsLoading(true);
     emit(state.copy());
+    print(state);
 
     User userResponse = await _userUseCase.myInfo();
     state.setMyInfo(userResponse);
@@ -27,6 +29,7 @@ class MeetCubit extends Cubit<MeetState> {
     state.setMyFriends(friends);
     getMyTeams();
 
+    state.setIsLoading(false);
     emit(state.copy());
     print("meet init 끝");
     // state.meetPageState = MeetStateEnum.landing;
@@ -42,13 +45,14 @@ class MeetCubit extends Cubit<MeetState> {
     emit(state.copy());
   }
 
-  void pressedCitiesAddButton(List<String> cities) {
+  void pressedCitiesAddButton(List<Location> cities) {
     state.setCities(cities.toList());
     emit(state.copy());
   }
 
   void createNewTeam(MeetTeam meetTeam) {
     _meetUseCase.createNewTeam(meetTeam);
+    print("cubit - 팀 추가 완료");
   }
 
   Future<MeetTeam> getTeam(String teamId) async {
@@ -58,7 +62,7 @@ class MeetCubit extends Cubit<MeetState> {
   Future<void> getMyTeams() async {
     List<MeetTeam> myTeams = await _meetUseCase.getMyTeams();
     state.setMyTeams(myTeams);
-    emit(state.copy());
+    print("팀 목록 ${state.myTeams}");
   }
 
   void removeTeam(String teamId) {
@@ -67,6 +71,12 @@ class MeetCubit extends Cubit<MeetState> {
 
   void updateMyTeam(MeetTeam meetTeam) {
     _meetUseCase.updateMyTeam(meetTeam);
+  }
+
+  void refreshMeetPage() async {
+    await getMyTeams();
+    print("refreshing");
+    emit(state.copy());
   }
 
 

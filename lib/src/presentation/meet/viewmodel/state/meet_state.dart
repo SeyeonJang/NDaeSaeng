@@ -1,5 +1,6 @@
 import 'package:dart_flutter/src/data/model/friend_dto.dart';
 import 'package:dart_flutter/src/data/model/personal_info_dto.dart';
+import 'package:dart_flutter/src/domain/entity/location.dart';
 import 'package:dart_flutter/src/domain/entity/meet_team.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:dart_flutter/src/domain/entity/user.dart';
@@ -10,16 +11,19 @@ class MeetState {
   // meet - standby
   late User userResponse;
   // meet - createTeam
+  late bool isLoading;
   late bool isMemberOneAdded;
   late bool isMemberTwoAdded;
   late Set<User> friends;
   late Set<User> teamMembers;
-  late Set<String> cities;
+  late Set<Location> cities;
   late List<MeetTeam> myTeams;
+  late MeetTeam newTeam;
 
   MeetState ({
     required this.meetPageState,
     required this.userResponse,
+    required this.isLoading,
     required this.isMemberOneAdded,
     required this.isMemberTwoAdded,
     required this.friends,
@@ -34,6 +38,7 @@ class MeetState {
       personalInfo: null,
       university: null,
     );
+    isLoading = false;
     isMemberOneAdded = false;
     isMemberTwoAdded = false;
     friends = {};
@@ -45,6 +50,7 @@ class MeetState {
   MeetState copy() => MeetState(
     meetPageState: meetPageState,
     userResponse: userResponse,
+    isLoading: isLoading,
     isMemberOneAdded: isMemberOneAdded,
     isMemberTwoAdded: isMemberTwoAdded,
     friends: friends,
@@ -52,6 +58,10 @@ class MeetState {
     cities: cities,
     myTeams: myTeams
   );
+
+  void setIsLoading(bool isLoading) {
+    this.isLoading = isLoading;
+  }
 
   // 추가된 친구가 한 명인지 판단
   void setIsMemberOneAdded(bool isMemberOneAdded) {
@@ -83,12 +93,12 @@ class MeetState {
     return this.myTeams;
   }
 
-  List<String> getCities() {
-    List<String> newCities = cities.toList();
+  List<Location> getCities() {
+    List<Location> newCities = cities.toList();
     return newCities;
   }
 
-  MeetState setCities(List<String> cities) {
+  MeetState setCities(List<Location> cities) {
     this.cities = cities.toSet();
     return this;
   }

@@ -100,7 +100,7 @@ class _DartPageViewState extends State<DartPageView> {
                         child: const VoteListPages(),
                       ),
                       BlocProvider<MeetCubit>(
-                          create: (context) => MeetCubit(),
+                          create: (context) => MeetCubit()..initState(),
                         child: const MeetStandby(),
                       ),
                       BlocProvider<MyPagesCubit>(

@@ -27,6 +27,7 @@ class MeetStandby extends StatelessWidget {
       ),
       bottomNavigationBar: BlocBuilder<MeetCubit, MeetState>(
         builder: (context, state) {
+          MeetState.init();
           return _BottomSection(state: state, ancestorContext: context);
         }
       ),
@@ -183,19 +184,31 @@ class _BottomSection extends StatelessWidget {
                                 color: Colors.grey.shade400
                             ),),
                               SizedBox(height: SizeConfig.defaultSize,),
-                            Container(
-                              height: SizeConfig.defaultSize * 6,
-                              width: SizeConfig.screenHeight,
-                              decoration: BoxDecoration(
-                                color: Color(0xffFF5C58),
-                                borderRadius: BorderRadius.circular(10),
+                            GestureDetector(
+                              onTap: () async {
+                                await Navigator.push(context, PageTransition(type: PageTransitionType.rightToLeftJoined, child: MeetCreateTeam(
+                                  onFinish: () {
+                                    cubit.refreshMeetPage();
+                                  }
+                                ), childCurrent: this));
+                                print("돌아옴");
+                                cubit.refreshMeetPage();
+                                print("리프레시 실행 완료");
+                              },
+                              child: Container(
+                                height: SizeConfig.defaultSize * 6,
+                                width: SizeConfig.screenHeight,
+                                decoration: BoxDecoration(
+                                  color: Color(0xffFF5C58),
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                alignment: Alignment.center,
+                                child: Text("팀 만들기", style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: SizeConfig.defaultSize * 2,
+                                    fontWeight: FontWeight.w600
+                                )),
                               ),
-                              alignment: Alignment.center,
-                              child: Text("팀 만들기", style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: SizeConfig.defaultSize * 2,
-                                  fontWeight: FontWeight.w600
-                              )),
                             ),
                               SizedBox(height: SizeConfig.defaultSize * 2,)
                           ],
@@ -220,7 +233,11 @@ class _BottomSection extends StatelessWidget {
             ),
             GestureDetector( // 팀 만들기 버튼 ********
               onTap: () {
-                Navigator.push(context, PageTransition(type: PageTransitionType.rightToLeftJoined, child: MeetCreateTeam(), childCurrent: this));
+                Navigator.push(context, PageTransition(type: PageTransitionType.rightToLeftJoined, child: MeetCreateTeam(
+                    onFinish: () {
+                      cubit.refreshMeetPage();
+                    }
+                ), childCurrent: this));
               },
               child: Container(
                 width: SizeConfig.screenWidth * 0.43,

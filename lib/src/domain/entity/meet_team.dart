@@ -5,7 +5,7 @@ import 'package:dart_flutter/src/domain/entity/user.dart';
 class MeetTeam {
   final int id;
   final String name;
-  final University university;
+  final University? university;
   final List<Location> locations;
   final bool canMatchWithSameUniversity;
   final List<User> members;
@@ -18,4 +18,9 @@ class MeetTeam {
     required this.canMatchWithSameUniversity,
     required this.members,
   });
+
+  @override
+  String toString() {
+    return 'MeetTeam{id: $id, name: $name, university: $university, locations: $locations, canMatchWithSameUniversity: $canMatchWithSameUniversity, members: $members}';
+  }
 }
