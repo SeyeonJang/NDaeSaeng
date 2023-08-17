@@ -2,6 +2,9 @@ import 'package:dart_flutter/src/data/model/university_dto.dart';
 import 'package:dart_flutter/src/data/model/personal_info_dto.dart';
 import 'package:dart_flutter/src/domain/entity/user.dart';
 
+import '../../domain/entity/question.dart';
+import '../../domain/entity/title_vote.dart';
+
 class UserDto {
   PersonalInfoDto? personalInfo;
   UniversityDto? university;
@@ -45,6 +48,7 @@ class UserDto {
     return User(
       personalInfo: personalInfo?.newUser(),
       university: university?.newUniversity(),
+      titleVotes: [],
     );
   }
 
