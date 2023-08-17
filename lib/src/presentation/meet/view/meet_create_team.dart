@@ -34,20 +34,21 @@ class _MeetCreateTeamState extends State<MeetCreateTeam> {
           builder: (BuildContext context) {
             return AlertDialog(
               backgroundColor: Colors.white,
+              surfaceTintColor: Colors.white,
               title: Text("팀 만들기를 종료하시겠어요?"),
               actions: [
                 TextButton(
                   onPressed: () {
                     Navigator.pop(context, false);
                   },
-                  child: Text('취소'),
+                  child: Text('취소', style: TextStyle(color: Color(0xffFF5C58))),
                 ),
                 TextButton(
                   onPressed: () {
                     widget.onFinish();
                     Navigator.pop(context, true);
                   },
-                  child: Text('끝내기'),
+                  child: Text('끝내기', style: TextStyle(color: Color(0xffFF5C58))),
                 )
               ],
             );
@@ -650,6 +651,8 @@ class _CreateTeamBottomSectionState extends State<_CreateTeamBottomSection> {
                                 return StatefulBuilder(
                                   builder: (statefulContext, setState) =>
                                       AlertDialog(
+                                        backgroundColor: Colors.white,
+                                        surfaceTintColor: Colors.white,
                                         title: Text('',
                                           style: TextStyle(
                                               fontSize: SizeConfig.defaultSize *
@@ -693,8 +696,6 @@ class _CreateTeamBottomSectionState extends State<_CreateTeamBottomSection> {
                                             ],
                                           ),
                                         ),
-                                        backgroundColor: Colors.white,
-                                        surfaceTintColor: Colors.white,
                                         actions: <Widget>[
                                           TextButton(
                                             onPressed: () {
@@ -761,18 +762,20 @@ class _CreateTeamBottomSectionState extends State<_CreateTeamBottomSection> {
                 onTap: () {
                   // TODO : 위에꺼 다 선택해야 활성화되도록 만들기 (팀명 && 팀원 && 만나고 싶은 지역 추가)
                   MeetTeam myNewTeam = MeetTeam(id: 0, name: widget.state.teamName, university: widget.state.userResponse!.university, locations: widget.state.getCities(), canMatchWithSameUniversity: widget.state.isChecked, members: widget.state.teamMembers.toList());
-                  print("${widget.state.teamName} 이름 전달합니다");
-                  print("${widget.state.userResponse!.university}");
-                  print("${myNewTeam.toString()}");
-                  if (widget.state.isMemberOneAdded || widget.state.isMemberTwoAdded)
+                  if ((widget.state.isMemberOneAdded || widget.state.isMemberTwoAdded) && widget.state.teamName!='' && widget.state.getCities().isNotEmpty) {
                     context.read<MeetCubit>().createNewTeam(myNewTeam);
-                  Navigator.pop(widget.ancestorContext);
+                    print("${widget.state.teamName} 이름 전달합니다");
+                    print("${widget.state.userResponse!.university}");
+                    print("${myNewTeam.toString()}");
+                    Navigator.pop(widget.ancestorContext);
+                  }
                 },
                 child: Container(
                   height: SizeConfig.defaultSize * 6,
                   width: SizeConfig.screenHeight,
                   decoration: BoxDecoration(
-                    color: Color(0xffFF5C58),
+                    color:((widget.state.isMemberOneAdded || widget.state.isMemberTwoAdded) && widget.state.teamName!='' && widget.state.getCities().isNotEmpty)
+                  ? Color(0xffFF5C58) : Color(0xffddddddd),
                     borderRadius: BorderRadius.circular(10),
                   ),
                   alignment: Alignment.center,
