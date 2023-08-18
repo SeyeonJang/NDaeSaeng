@@ -1,4 +1,5 @@
 import 'package:dart_flutter/src/common/exception/custom_exception.dart';
+import 'package:dart_flutter/src/common/exception/service_not_ready_exception.dart';
 import 'package:dart_flutter/src/common/exception/token_expired_exception.dart';
 import 'package:dio/dio.dart';
 
@@ -33,6 +34,8 @@ class HttpUtil {
               throw TokenExpiredException("토큰이 만료되었습니다.");
             case 500:
               throw CustomException("InternalServerError");
+            case 503:
+              throw ServiceNotReadyException("해당 서비스는 서버에서 준비중입니다.");
             default:
               break;
           }

@@ -1,5 +1,5 @@
 import 'package:dart_flutter/src/common/auth/state/dart_auth_state.dart';
-import 'package:dart_flutter/src/common/exception/custom_exception.dart';
+import 'package:dart_flutter/src/common/exception/authroization_exception.dart';
 import 'package:dart_flutter/src/common/util/analytics_util.dart';
 import 'package:dart_flutter/src/common/util/push_notification_util.dart';
 import 'package:dart_flutter/src/common/util/toast_util.dart';
@@ -61,7 +61,7 @@ class DartAuthCubit extends HydratedCubit<DartAuthState> {
       print(await DartApiRemoteDataSource.healthCheck());
       return true;
     } on DioException catch(e) {
-      if (e.error is CustomException) {  // TODO 추후 서버에서 나오는 Error에 맞는 Exception으로 수정
+      if (e.error is AuthorizationException) {
         emit(cleanUpAuthInformation());
       }
     }
