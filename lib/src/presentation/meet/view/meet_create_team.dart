@@ -39,7 +39,7 @@ class _MeetCreateTeamState extends State<MeetCreateTeam> {
               actions: [
                 TextButton(
                   onPressed: () {
-                    Navigator.pop(sheetContext, false);
+                    Navigator.pop(sheetContext);
                   },
                   child: Text('취소', style: TextStyle(color: Color(0xffFF5C58))),
                 ),
@@ -67,6 +67,7 @@ class _MeetCreateTeamState extends State<MeetCreateTeam> {
               child: BlocBuilder<MeetCubit, MeetState>(
                   builder: (context, state) {
                     context.read<MeetCubit>().initState();
+                    print(state.userResponse);
                     var friendsList = state.friends.toList();
                     var teamMemberList = state.teamMembers.toList();
                     return Center(
@@ -265,8 +266,8 @@ class _OneFriendComponentState extends State<_OneFriendComponent> {
                   children: [
                     profileImageUrl == "DEFAULT"
                         ? ClipOval(
-                      child: Image.asset('assets/images/profile-mockup3.png', width: SizeConfig.defaultSize * 4.3, fit: BoxFit.cover,),
-                    )
+                          child: Image.asset('assets/images/profile-mockup3.png', width: SizeConfig.defaultSize * 4.3, fit: BoxFit.cover,),
+                          )
                         : ClipOval(
                         child: Image.network(profileImageUrl,
                           width: SizeConfig.defaultSize * 4.3,
@@ -442,7 +443,7 @@ class _MemberCardView extends StatelessWidget {
                         onTap: () {
                           // AnalyticsUtil.logEvent("내정보_마이_내사진터치");
                         },
-                        child: userResponse.personalInfo!.profileImageUrl == "DEFAULT"
+                        child: userResponse.personalInfo?.profileImageUrl == "DEFAULT"
                             ? ClipOval(
                               child: Image.asset('assets/images/profile-mockup3.png', width: SizeConfig.defaultSize * 6.2, fit: BoxFit.cover,),
                               )
@@ -464,31 +465,56 @@ class _MemberCardView extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 Row(
-                                    children: [
-                                        SizedBox(width: SizeConfig.defaultSize * 0.5,),
-                                      Text(
-                                        userResponse.personalInfo?.nickname == 'DEFAULT'
-                                            ? ('${userResponse.personalInfo?.name}' ?? '친구 이름')
-                                            : (userResponse.personalInfo?.nickname ?? '친구 닉네임'),
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.w500,
-                                          fontSize: SizeConfig.defaultSize * 1.6,
-                                          color: Colors.black,
-                                        ),),
-                                        SizedBox(width: SizeConfig.defaultSize * 0.3),
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Row(
+                                        children: [
+                                            SizedBox(width: SizeConfig.defaultSize * 0.5,),
+                                          Text(
+                                            userResponse.personalInfo?.nickname == 'DEFAULT'
+                                                ? ('${userResponse.personalInfo?.name}' ?? '친구 이름')
+                                                : (userResponse.personalInfo?.nickname ?? '친구 닉네임'),
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: SizeConfig.defaultSize * 1.6,
+                                              color: Colors.black,
+                                            ),),
+                                            SizedBox(width: SizeConfig.defaultSize * 0.3),
 
-                                      if (userResponse.personalInfo!.verification.isVerificationSuccess)
-                                        Image.asset("assets/images/check.png", width: SizeConfig.defaultSize * 1.3),
+                                          if (userResponse.personalInfo!.verification.isVerificationSuccess)
+                                            Image.asset("assets/images/check.png", width: SizeConfig.defaultSize * 1.3),
 
-                                        SizedBox(width: SizeConfig.defaultSize * 0.5),
-                                      Text(
-                                        "∙ ${userResponse.personalInfo?.birthYear.toString().substring(2,4)??"??"}년생",
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.w500,
-                                          fontSize: SizeConfig.defaultSize * 1.6,
-                                          color: Colors.black,
-                                        ),),
-                                    ]
+                                            SizedBox(width: SizeConfig.defaultSize * 0.5),
+                                          Text(
+                                            "∙ ${userResponse.personalInfo?.birthYear.toString().substring(2,4)??"??"}년생",
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: SizeConfig.defaultSize * 1.6,
+                                              color: Colors.black,
+                                            ),),
+                                        ]
+                                    ),
+                                    PopupMenuButton<String>(
+                                      icon: Icon(Icons.more_horiz_rounded, color: Colors.grey.shade300,),
+                                      color: Colors.white,
+                                      surfaceTintColor: Colors.white,
+                                      onSelected: (value) {
+                                        // 팝업 메뉴에서 선택된 값 처리
+                                        if (value == 'remove') {
+                                          Navigator.pop(context, 'remove');
+                                          state.deleteTeamMember(userResponse);
+                                        }
+                                      },
+                                      itemBuilder: (BuildContext context) {
+                                        return [
+                                          PopupMenuItem<String>(
+                                            value: 'remove',
+                                            child: Text("삭제하기", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.5)),
+                                          ),
+                                        ];
+                                      },
+                                    ),
+                                  ],
                                 ),
                               ],
                             ),
@@ -519,26 +545,6 @@ class _MemberCardView extends StatelessWidget {
                         ),
                       ),
                     ],
-                  ),
-                  PopupMenuButton<String>(
-                    icon: Icon(Icons.more_horiz_rounded, color: Colors.grey.shade300,),
-                    color: Colors.white,
-                    surfaceTintColor: Colors.white,
-                    onSelected: (value) {
-                      // 팝업 메뉴에서 선택된 값 처리
-                      if (value == 'remove') {
-                        Navigator.pop(context, 'remove');
-                        state.deleteTeamMember(userResponse);
-                      }
-                    },
-                    itemBuilder: (BuildContext context) {
-                      return [
-                        PopupMenuItem<String>(
-                          value: 'remove',
-                          child: Text("삭제하기", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.5)),
-                        ),
-                      ];
-                    },
                   ),
                 ],
               ),
