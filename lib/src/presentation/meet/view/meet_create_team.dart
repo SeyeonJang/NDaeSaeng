@@ -153,6 +153,13 @@ class _MeetCreateTeamState extends State<MeetCreateTeam> {
   }
 
   Future<dynamic> _ShowModalBottomSheet(BuildContext context, MeetState state, List<User> friendsList) {
+    Set<User> friends = state.friends;
+    Set<User> filteredFriends = state.friends.where((friend) =>
+    friend.university?.id == state.userResponse.university?.id &&
+        friend.personalInfo?.gender == state.userResponse.personalInfo?.gender
+    ).toSet();
+    context.read<MeetCubit>().setMyFilteredFriends(filteredFriends.toList());
+
     return showModalBottomSheet( // 친구 목록 ********
         context: context,
         builder: (BuildContext _) {
@@ -179,7 +186,7 @@ class _MeetCreateTeamState extends State<MeetCreateTeam> {
                       child: Column(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            Text("우리 학교 친구 ${state.friends.length}명", style: TextStyle(
+                            Text("우리 학교 친구 ${state.filteredFriends.length}명", style: TextStyle(
                                 fontSize: SizeConfig.defaultSize * 1.6,
                                 fontWeight: FontWeight.w600
                             ),),
@@ -193,7 +200,7 @@ class _MeetCreateTeamState extends State<MeetCreateTeam> {
                                   child: Column(
                                     children: [
                                       for (int i=0; i<state.friends.length; i++)
-                                        _OneFriendComponent(friend: friendsList[i], count: state.friends.length, nowNum: i, sheetContext: context,),
+                                        _OneFriendComponent(friend: state.filteredFriends[i], count: state.filteredFriends.length, nowNum: i, sheetContext: context,),
                                     ],
                                   )
                               ),
@@ -414,6 +421,8 @@ class _MemberCardView extends StatelessWidget {
     required this.state,
   });
 
+  String get profileImageUrl => userResponse.personalInfo?.profileImageUrl ?? 'DEFAULT';
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -443,12 +452,12 @@ class _MemberCardView extends StatelessWidget {
                         onTap: () {
                           // AnalyticsUtil.logEvent("내정보_마이_내사진터치");
                         },
-                        child: userResponse.personalInfo?.profileImageUrl == "DEFAULT"
+                        child: profileImageUrl == "DEFAULT"
                             ? ClipOval(
                               child: Image.asset('assets/images/profile-mockup3.png', width: SizeConfig.defaultSize * 6.2, fit: BoxFit.cover,),
                               )
                             : ClipOval(
-                              child: Image.network(userResponse.personalInfo!.profileImageUrl,
+                              child: Image.network(profileImageUrl,
                               width: SizeConfig.defaultSize * 6.2,
                               height: SizeConfig.defaultSize * 6.2,
                               fit: BoxFit.cover,)

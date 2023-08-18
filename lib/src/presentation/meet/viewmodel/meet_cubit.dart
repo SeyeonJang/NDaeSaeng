@@ -29,6 +29,10 @@ class MeetCubit extends Cubit<MeetState> {
     state.setMyFriends(friends);
     getMyTeams();
 
+    state.setIsMemberOneAdded(false);
+    state.setIsMemberTwoAdded(false);
+    print("${state.isMemberOneAdded} 랑 ${state.isMemberTwoAdded}");
+
     state.setIsLoading(false);
     emit(state.copy());
     print("meet init 끝");
@@ -82,6 +86,10 @@ class MeetCubit extends Cubit<MeetState> {
     emit(state.copy());
   }
 
+  void setMyFilteredFriends(List<User> filteredFriends) {
+    state.setMyFilteredFriends(filteredFriends);
+    emit(state.copy());
+  }
 
   // **************************************************************
 

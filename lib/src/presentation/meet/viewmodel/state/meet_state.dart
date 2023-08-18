@@ -15,6 +15,7 @@ class MeetState {
   late bool isMemberOneAdded;
   late bool isMemberTwoAdded;
   late Set<User> friends;
+  late List<User> filteredFriends;
   late Set<User> teamMembers;
   late Set<Location> cities;
   late List<MeetTeam> myTeams;
@@ -29,6 +30,7 @@ class MeetState {
     required this.isMemberOneAdded,
     required this.isMemberTwoAdded,
     required this.friends,
+    required this.filteredFriends,
     required this.teamMembers,
     required this.cities,
     required this.myTeams,
@@ -46,6 +48,7 @@ class MeetState {
     isMemberOneAdded = false;
     isMemberTwoAdded = false;
     friends = {};
+    filteredFriends = [];
     teamMembers = {};
     cities = {};
     myTeams = [];
@@ -60,6 +63,7 @@ class MeetState {
     isMemberOneAdded: isMemberOneAdded,
     isMemberTwoAdded: isMemberTwoAdded,
     friends: friends,
+    filteredFriends: filteredFriends,
     teamMembers: teamMembers,
     cities: cities,
     myTeams: myTeams,
@@ -95,13 +99,18 @@ class MeetState {
     return this;
   }
 
+  MeetState setMyFilteredFriends(List<User> friends) {
+    this.friends = friends.toSet();
+    return this;
+  }
+
   MeetState setMyTeam(MeetTeam team) {
     this.newTeam = team;
     return this;
   }
 
-  MeetState setTeamMembers(List<User> friends) {
-    teamMembers = friends.toSet();
+  MeetState setTeamMembers(List<User> filteredFriends) {
+    teamMembers = filteredFriends.toSet();
     return this;
   }
 
@@ -122,11 +131,11 @@ class MeetState {
 
   void addTeamMember(User friend) {
     teamMembers.add(friend);
-    friends.remove(friend);
+    filteredFriends.remove(friend);
   }
 
   void deleteTeamMember(User friend) {
-    friends.add(friend);
+    filteredFriends.add(friend);
     teamMembers.remove(friend);
   }
 
