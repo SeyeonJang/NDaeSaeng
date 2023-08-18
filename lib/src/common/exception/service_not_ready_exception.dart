@@ -1,5 +1,5 @@
-import 'package:dart_flutter/src/common/exception/server_error.dart';
+import 'package:dart_flutter/src/common/exception/server_error_exception.dart';
 
-class ServiceNotReadyException extends ServerError {
+class ServiceNotReadyException extends ServerErrorException {
   ServiceNotReadyException(super.cause);
 }
