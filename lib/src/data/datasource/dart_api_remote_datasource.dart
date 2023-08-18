@@ -181,7 +181,7 @@ class DartApiRemoteDataSource {
 
   // vote: 받은 투표 리스트 확인하기
   static Future<List<VoteResponseDto>> getVotes() async {
-    const path = '/v1/votes';
+    const path = '/v1/users/me/votes';
 
     final response = await _httpUtil.request().get(path);
     final List<dynamic> jsonResponse = response.data;
@@ -249,7 +249,7 @@ class DartApiRemoteDataSource {
 
   // meet: 팀 생성하기
   static Future<MeetTeamResponseDto> postTeam(MeetTeamRequestDto teamRequestDto) async {
-    const path = '/v1/users/me/teams';
+    const path = '/v1/teams';
     final body = teamRequestDto.toJson();
 
     final response = await _httpUtil.request().post(path, data: body);
