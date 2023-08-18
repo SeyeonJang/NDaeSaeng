@@ -16,7 +16,7 @@ class MyPagesState {
   late bool isMyLandPage;
   late bool isVertificateUploaded;
   late File profileImageFile;
-  late Set<TitleVote> titleVotes;
+  late List<TitleVote> titleVotes;
 
   MyPagesState({
     required this.isLoading,
@@ -43,7 +43,7 @@ class MyPagesState {
     isMyLandPage = true;
     isVertificateUploaded = false;
     profileImageFile = File('');
-    titleVotes = {};
+    titleVotes = [];
   }
 
   MyPagesState copy() => MyPagesState(
@@ -98,7 +98,7 @@ class MyPagesState {
   }
 
   MyPagesState setTitleVotes(List<TitleVote> titleVotes) {
-    this.titleVotes = titleVotes.toSet();
+    this.titleVotes = titleVotes;
     return this;
   }
 }

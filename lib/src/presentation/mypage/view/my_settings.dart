@@ -4,6 +4,7 @@ import 'package:dart_flutter/src/common/auth/dart_auth_cubit.dart';
 import 'package:dart_flutter/src/common/util/analytics_util.dart';
 import 'package:dart_flutter/src/common/util/toast_util.dart';
 import 'package:dart_flutter/src/domain/entity/personal_info.dart';
+import 'package:dart_flutter/src/domain/entity/title_vote.dart';
 import 'package:dart_flutter/src/domain/entity/user.dart';
 import 'package:dart_flutter/src/presentation/mypage/view/my_ask.dart';
 import 'package:dart_flutter/src/presentation/mypage/view/my_opinion.dart';
@@ -35,8 +36,12 @@ class MySettings extends StatelessWidget {
         backgroundColor: Colors.white,
         body: BlocProvider<MyPagesCubit>(
           create: (context) => MyPagesCubit(),
-            child: SafeArea(
-                child: MyPageView(userResponse: userResponse),
+            child: BlocBuilder<MyPagesCubit, MyPagesState>(
+              builder: (context, state) {
+                return SafeArea(
+                    child: MyPageView(userResponse: userResponse, state: state),
+                );
+              }
             )
         ),
     );
@@ -45,7 +50,9 @@ class MySettings extends StatelessWidget {
 
 class MyPageView extends StatefulWidget {
   final User userResponse;
-  MyPageView({super.key, required this.userResponse});
+  final MyPagesState state;
+
+  MyPageView({super.key, required this.userResponse, required this.state});
 
   static final _defaultPadding = EdgeInsets.all(getFlexibleSize(target: 20));
 
@@ -54,6 +61,7 @@ class MyPageView extends StatefulWidget {
 }
 
 class _MyPageViewState extends State<MyPageView> {
+  int get length => widget.state.titleVotes.length; // TODO : titleVotes.length가 아니라 전체 질문들 받아와야됨
   String get name => widget.userResponse.personalInfo?.name ?? "XXX";
   String get universityName => widget.userResponse.university?.name ?? "XX대학교";
   String get department => widget.userResponse.university?.department ?? "XXX학과";
@@ -177,14 +185,14 @@ class _MyPageViewState extends State<MyPageView> {
                           child: isSelectImage
                               ? Image.file( // 이미지 파일에서 고르는 코드
                             _selectedImage!,
-                            fit: BoxFit.fill,
+                            fit: BoxFit.cover,
                             width: SizeConfig.defaultSize * 12,
                             height: SizeConfig.defaultSize * 12,
                           )
                               : Image.network(profileImageUrl,
                           width: SizeConfig.defaultSize * 12,
                           height: SizeConfig.defaultSize * 12,
-                            fit: BoxFit.fill,
+                            fit: BoxFit.cover,
                           )
                         ),
                       )
@@ -195,7 +203,137 @@ class _MyPageViewState extends State<MyPageView> {
             ),
           ),
         ),
-        const DtFlexSpacer(30),
+        const DtFlexSpacer(15),
+
+        Padding( // 받은 투표 프로필 (TitleVotes)
+          padding: EdgeInsets.symmetric(horizontal: SizeConfig.defaultSize * 1.3),
+          child: Container(
+            width: SizeConfig.screenWidth,
+            height: SizeConfig.defaultSize * 15.5,
+            decoration: BoxDecoration(
+              color: Color(0xff7C83FD),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Padding(
+              padding: EdgeInsets.all(SizeConfig.defaultSize * 0.9),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  for (int i=0; i<length; i++) // TitleVote 있을 때
+                    GestureDetector(
+                      onLongPress: () {
+                        showDialog<String>(
+                          context: context,
+                          builder: (BuildContext context) => AlertDialog(
+                            title: const Text('내 투표를 삭제하시겠어요?'),
+                            content: Text('삭제할 투표 : ${widget.state.titleVotes[i].question}'),
+                            backgroundColor: Colors.white,
+                            surfaceTintColor: Colors.white,
+                            actions: <Widget>[
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context, '취소');
+                                },
+                                child: const Text('취소', style: TextStyle(color: Color(0xff7C83FD)),),
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  // TODO : 삭제 remove Vote
+                                  // context.read<MyPagesCubit>().removeTitleVote(widget.state.titleVotes[i].id); // ID가 없음
+                                  Navigator.pop(context, '삭제');
+                                },
+                                child: const Text('삭제', style: TextStyle(color: Color(0xff7C83FD)),),
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                      child: Container(
+                          width: SizeConfig.screenWidth,
+                          height: SizeConfig.defaultSize * 4,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          alignment: Alignment.center,
+                          child: Row(
+                            children: [
+                              Container(
+                                  width: SizeConfig.screenWidth * 0.75,
+                                  child: Text(
+                                    "${widget.state.titleVotes[i].question}", style: TextStyle(
+                                      fontSize: SizeConfig.defaultSize * 1.4,
+                                      color: Colors.black,
+                                      overflow: TextOverflow.ellipsis
+                                  ),)
+                              ),
+                              Text("${((widget.state.titleVotes[i].count~/5)*5).toString()}+")
+                            ],
+                          )
+                      ),
+                    ),
+                  for (int i=0; i<3-length; i++) // TitleVote 없을 때
+                    GestureDetector(
+                      onTap: () {
+                        showModalBottomSheet(
+                            context: context,
+                            builder: (BuildContext modalContext) {
+                              return Container(
+                                width: SizeConfig.screenWidth,
+                                height: SizeConfig.screenHeight,
+                                decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10))),
+                                child: Column(
+                                  children: [
+                                    for (int i=0; i<length; i++)
+                                      GestureDetector(
+                                        onTap: () {
+                                          // TODO : add Vote
+                                          // context.read<MyPagesCubit>().addTitleVote(widget.state.titleVotes);
+                                          context.read<MyPagesCubit>().refreshMyInfo();
+                                          Navigator.pop(modalContext);
+                                        },
+                                        child: Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Container(
+                                              width: SizeConfig.screenWidth * 0.75,
+                                              child: Text(
+                                                "${widget.state.titleVotes.map((vote)=>vote.question)}", style: TextStyle(
+                                                fontSize: SizeConfig.defaultSize * 1.4,
+                                                color: Colors.black,
+                                                overflow: TextOverflow.ellipsis
+                                              ),)
+                                            ),
+                                            Text("${widget.state.titleVotes.map((vote)=>vote.count)}")
+                                          ],
+                                        ),
+                                      )
+                                  ],
+                                )
+                              );
+                            }
+                        );
+                      },
+                      child: Container(
+                        width: SizeConfig.screenWidth,
+                        height: SizeConfig.defaultSize * 4,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        alignment: Alignment.center,
+                        child: Text("눌러서 프로필 채우기", style: TextStyle(color: Color(0xff7C83FD), fontWeight: FontWeight.w500, fontSize: SizeConfig.defaultSize * 1.4),)
+                      ),
+                    )
+                ],
+              ),
+            ),
+          ),
+        ),
+
+        const DtFlexSpacer(15),
         Padding(
           padding: EdgeInsets.symmetric(
               vertical: getFlexibleSize(),

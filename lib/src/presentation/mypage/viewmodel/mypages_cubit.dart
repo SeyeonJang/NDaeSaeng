@@ -102,7 +102,7 @@ class MyPagesCubit extends Cubit<MyPagesState> {
     emit(newState);
   }
 
-  void addTtitleVote(TitleVote titleVote) {
+  void addTitleVote(TitleVote titleVote) {
     _userUseCase.addTitleVote(titleVote);
   }
 
