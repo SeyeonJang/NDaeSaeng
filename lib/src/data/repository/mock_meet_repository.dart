@@ -38,4 +38,9 @@ class MockMeetRepository implements MeetRepository {
     mockTeams.add(meetTeam);
     return meetTeam;
   }
+
+  @override
+  Future<int> getTeamCount() async {
+    return 369;
+  }
 }

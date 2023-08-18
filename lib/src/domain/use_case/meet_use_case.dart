@@ -27,4 +27,7 @@ class MeetUseCase {
     _meetRepository.updateMyTeam(meetTeam);
   }
 
+  Future<int> getTeamCount() async {
+    return _meetRepository.getTeamCount();
+  }
 }

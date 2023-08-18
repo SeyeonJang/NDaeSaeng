@@ -15,6 +15,7 @@ import '../../data/model/vote_request_dto.dart';
 
 import '../../data/model/vote_response_dto.dart';
 import '../model/meet_team_response_dto.dart';
+import '../model/type/team_region.dart';
 
 class DartApiRemoteDataSource {
   static final String baseUrl = AppEnvironment.getEnv.getApiBaseUrl();
@@ -180,7 +181,7 @@ class DartApiRemoteDataSource {
 
   // vote: 받은 투표 리스트 확인하기
   static Future<List<VoteResponseDto>> getVotes() async {
-    const path = '/v1/votes';
+    const path = '/v1/users/me/votes';
 
     final response = await _httpUtil.request().get(path);
     final List<dynamic> jsonResponse = response.data;
@@ -212,6 +213,22 @@ class DartApiRemoteDataSource {
     return DateTime.parse(response.data['nextVoteAvailableDateTime']);
   }
 
+  // region/location: 전체 지역 정보 조회
+  static Future<List<TeamRegion>> getLocations() async {
+    const path = '/v1/regions';
+    final response = await _httpUtil.request().get(path);
+    final List<dynamic> jsonResponse = response.data;
+    List<TeamRegion> regions = jsonResponse.map((region) => TeamRegion.fromJson(region)).toList();
+    return regions;
+  }
+
+  // meet: 전체 신청 팀 수 조회
+  static Future<int> getTeamCount() async {
+    const path = '/v1/teams/count';
+    final response = await _httpUtil.request().get(path);
+    return response.data;
+  }
+
   // meet: 내 팀 목록 조회
   static Future<List<MeetTeamResponseDto>> getMyTeams() async {
     const path = '/v1/users/me/teams';
@@ -232,7 +249,7 @@ class DartApiRemoteDataSource {
 
   // meet: 팀 생성하기
   static Future<MeetTeamResponseDto> postTeam(MeetTeamRequestDto teamRequestDto) async {
-    const path = '/v1/users/me/teams';
+    const path = '/v1/teams';
     final body = teamRequestDto.toJson();
 
     final response = await _httpUtil.request().post(path, data: body);

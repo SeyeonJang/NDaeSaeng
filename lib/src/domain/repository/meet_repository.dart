@@ -6,4 +6,5 @@ abstract class MeetRepository {
   Future<List<MeetTeam>> getMyTeams();
   void removeMyTeam(String teamId);
   Future<MeetTeam> updateMyTeam(MeetTeam meetTeam);
+  Future<int> getTeamCount();
 }
