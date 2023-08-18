@@ -15,6 +15,7 @@ import '../../data/model/vote_request_dto.dart';
 
 import '../../data/model/vote_response_dto.dart';
 import '../model/meet_team_response_dto.dart';
+import '../model/type/team_region.dart';
 
 class DartApiRemoteDataSource {
   static final String baseUrl = AppEnvironment.getEnv.getApiBaseUrl();
@@ -210,6 +211,15 @@ class DartApiRemoteDataSource {
 
     final response = await _httpUtil.request().post(path);
     return DateTime.parse(response.data['nextVoteAvailableDateTime']);
+  }
+
+  // region/location: 전체 지역 정보 조회
+  static Future<List<TeamRegion>> getLocations() async {
+    const path = '/v1/regions';
+    final response = await _httpUtil.request().get(path);
+    final List<dynamic> jsonResponse = response.data;
+    List<TeamRegion> regions = jsonResponse.map((region) => TeamRegion.fromJson(region)).toList();
+    return regions;
   }
 
   // meet: 내 팀 목록 조회
