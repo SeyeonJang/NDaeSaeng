@@ -26,6 +26,7 @@ class MyPagesCubit extends Cubit<MyPagesState> {
     List<User> newFriends = await _friendUseCase.getRecommendedFriends();
     state.setRecommendedFriends(newFriends);
     getMyTitleVote();
+    getAllVotes();
 
     state.setIsLoading(false);
     emit(state.copy());
@@ -104,6 +105,7 @@ class MyPagesCubit extends Cubit<MyPagesState> {
 
   void addTitleVote(TitleVote titleVote) {
     _userUseCase.addTitleVote(titleVote);
+    state.removeMyAllVotes(titleVote);
   }
 
   Future<void> getMyTitleVote() async {
@@ -113,5 +115,12 @@ class MyPagesCubit extends Cubit<MyPagesState> {
   
   void removeTitleVote(int questionId) {
     _userUseCase.removeTitleVote(questionId);
+    // state.addMyAllVotes(titleVote);
+  }
+
+  Future<void> getAllVotes() async {
+    List<TitleVote> myVotes = await _userUseCase.getAllVotes();
+    state.setMyAllVotes(myVotes);
+    print("${myVotes}ddd");
   }
 }

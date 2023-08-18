@@ -54,6 +54,13 @@ class DartVoteRepositoryImpl implements VoteRepository {
     mockData.add(TitleVote(question: Question(questionId: 2, content: "다트부셔버려", icon: ""), count: 1));
     mockData.add(TitleVote(question: Question(questionId: 3, content: "잠을자고싶다", icon: ""), count: 6));
     mockData.add(TitleVote(question: Question(questionId: 4, content: "101개입니다A", icon: ""), count: 101));
+    mockData.add(TitleVote(question: Question(questionId: 4, content: "101개입니다A", icon: ""), count: 101));
+    mockData.add(TitleVote(question: Question(questionId: 4, content: "101개입니다A", icon: ""), count: 101));
+    mockData.add(TitleVote(question: Question(questionId: 4, content: "101개입니다A", icon: ""), count: 101));
+    mockData.add(TitleVote(question: Question(questionId: 4, content: "101개입니다A", icon: ""), count: 101));
+    mockData.add(TitleVote(question: Question(questionId: 4, content: "101개입니다A", icon: ""), count: 101));
+    mockData.add(TitleVote(question: Question(questionId: 4, content: "101개입니다A", icon: ""), count: 101));
+    mockData.add(TitleVote(question: Question(questionId: 4, content: "101개입니다A", icon: ""), count: 101));
     return mockData;
   }
 

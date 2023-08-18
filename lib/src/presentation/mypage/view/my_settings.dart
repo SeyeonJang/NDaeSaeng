@@ -61,7 +61,7 @@ class MyPageView extends StatefulWidget {
 }
 
 class _MyPageViewState extends State<MyPageView> {
-  int get length => widget.state.titleVotes.length; // TODO : titleVotes.length가 아니라 전체 질문들 받아와야됨
+  int get length => widget.state.myAllVotes.length; // TODO : titleVotes.length가 아니라 전체 질문들 받아와야됨
   String get name => widget.userResponse.personalInfo?.name ?? "XXX";
   String get universityName => widget.userResponse.university?.name ?? "XX대학교";
   String get department => widget.userResponse.university?.department ?? "XXX학과";
@@ -219,7 +219,7 @@ class _MyPageViewState extends State<MyPageView> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  for (int i=0; i<length; i++) // TitleVote 있을 때
+                  for (int i=0; i<widget.state.titleVotes.length; i++) // TitleVote 있을 때
                     GestureDetector(
                       onLongPress: () {
                         showDialog<String>(
@@ -256,25 +256,42 @@ class _MyPageViewState extends State<MyPageView> {
                             borderRadius: BorderRadius.circular(8),
                           ),
                           alignment: Alignment.center,
-                          child: Row(
-                            children: [
-                              Container(
-                                  width: SizeConfig.screenWidth * 0.75,
-                                  child: Text(
-                                    "${widget.state.titleVotes[i].question}", style: TextStyle(
-                                      fontSize: SizeConfig.defaultSize * 1.4,
-                                      color: Colors.black,
-                                      overflow: TextOverflow.ellipsis
-                                  ),)
-                              ),
-                              Text("${((widget.state.titleVotes[i].count~/5)*5).toString()}+")
-                            ],
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(horizontal: SizeConfig.defaultSize * 2),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Container(
+                                    width: SizeConfig.screenWidth * 0.53,
+                                    child: Text(
+                                      "${widget.state.titleVotes[i].question.content}", style: TextStyle(
+                                        fontSize: SizeConfig.defaultSize * 1.6,
+                                        color: Colors.black,
+                                        overflow: TextOverflow.ellipsis
+                                    ),)
+                                ),
+                                widget.state.titleVotes[i].count < 5
+                                    ? Text(" ", style: TextStyle(
+                                    fontSize: SizeConfig.defaultSize * 1.6,
+                                    color: Colors.black,
+                                    overflow: TextOverflow.ellipsis
+                                ),)
+                                    : Text("${(widget.state.titleVotes[i].count~/5)*5}+", style: TextStyle(
+                                    fontSize: SizeConfig.defaultSize * 1.6,
+                                    color: Colors.black,
+                                    overflow: TextOverflow.ellipsis
+                                ),)
+                              ],
+                            ),
                           )
                       ),
                     ),
-                  for (int i=0; i<3-length; i++) // TitleVote 없을 때
+                  for (int i=0; i<3-widget.state.titleVotes.length; i++) // TitleVote 없을 때
                     GestureDetector(
                       onTap: () {
+                        context.read<MyPagesCubit>().getAllVotes();
+                        print("UI get - ${widget.state.myAllVotes}");
+
                         showModalBottomSheet(
                             context: context,
                             builder: (BuildContext modalContext) {
@@ -286,28 +303,94 @@ class _MyPageViewState extends State<MyPageView> {
                                     borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10))),
                                 child: Column(
                                   children: [
-                                    for (int i=0; i<length; i++)
-                                      GestureDetector(
-                                        onTap: () {
-                                          // TODO : add Vote
-                                          // context.read<MyPagesCubit>().addTitleVote(widget.state.titleVotes);
-                                          context.read<MyPagesCubit>().refreshMyInfo();
-                                          Navigator.pop(modalContext);
-                                        },
-                                        child: Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Container(
-                                              width: SizeConfig.screenWidth * 0.75,
+                                    Container(
+                                        width: SizeConfig.screenWidth,
+                                        height: SizeConfig.defaultSize * 5,
+                                        alignment: Alignment.center,
+                                        child: Container(
+                                          width: SizeConfig.screenWidth * 0.2,
+                                          height: SizeConfig.defaultSize * 0.4,
+                                          color: Colors.black,
+                                        )
+                                    ),
+                                      SizedBox(height: SizeConfig.defaultSize,),
+                                    Text("투표를 눌러서 내 프로필에 넣어보세요!", style: TextStyle(
+                                      fontSize: SizeConfig.defaultSize * 1.6
+                                    ),),
+                                      SizedBox(height: SizeConfig.defaultSize * 2,),
+                                    Padding(
+                                      padding: EdgeInsets.symmetric(vertical: SizeConfig.defaultSize * 0.8, horizontal: SizeConfig.defaultSize * 3),
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Container(
+                                              width: SizeConfig.screenWidth * 0.6,
                                               child: Text(
-                                                "${widget.state.titleVotes.map((vote)=>vote.question)}", style: TextStyle(
-                                                fontSize: SizeConfig.defaultSize * 1.4,
-                                                color: Colors.black,
-                                                overflow: TextOverflow.ellipsis
+                                                "투표명", style: TextStyle(
+                                                  fontSize: SizeConfig.defaultSize * 1.8,
+                                                  color: Colors.black,
+                                                  overflow: TextOverflow.ellipsis,
+                                                  fontWeight: FontWeight.w600
                                               ),)
-                                            ),
-                                            Text("${widget.state.titleVotes.map((vote)=>vote.count)}")
-                                          ],
+                                          ),
+                                          Text("받은 개수", style: TextStyle(
+                                              fontSize: SizeConfig.defaultSize * 1.8,
+                                              color: Colors.black,
+                                              overflow: TextOverflow.ellipsis,
+                                              fontWeight: FontWeight.w600
+                                          ),)
+                                        ],
+                                      ),
+                                    ),
+                                      SizedBox(height: SizeConfig.defaultSize),
+                                      Container(
+                                        width: SizeConfig.screenWidth,
+                                        height: SizeConfig.defaultSize * 0.2,
+                                        color: Colors.grey.shade300,
+                                      ),
+
+                                      Flexible(
+                                        child: SingleChildScrollView(
+                                          child: Column(
+                                            children: [
+                                              for (int j=0; j<widget.state.myAllVotes.length; j++) // (MyAllVotes의 개수만큼 반복)
+                                                GestureDetector(
+                                                onTap: () {
+                                                  context.read<MyPagesCubit>().addTitleVote(widget.state.myAllVotes[j]); // add
+                                                  context.read<MyPagesCubit>().refreshMyInfo();
+                                                  Navigator.pop(modalContext);
+                                                },
+                                                child: Padding(
+                                                  padding: EdgeInsets.symmetric(vertical: SizeConfig.defaultSize * 1.2, horizontal: SizeConfig.defaultSize * 3),
+                                                  child: Row(
+                                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                    children: [
+                                                      Container(
+                                                        width: SizeConfig.screenWidth * 0.66,
+                                                        child: Text(
+                                                          "${widget.state.myAllVotes[j].question.content}", style: TextStyle(
+                                                          fontSize: SizeConfig.defaultSize * 1.8,
+                                                          color: Colors.black,
+                                                          overflow: TextOverflow.ellipsis
+                                                        ),)
+                                                      ),
+                                                      widget.state.myAllVotes[j].count < 5
+                                                          ? Text("${widget.state.myAllVotes[j].count}", style: TextStyle(
+                                                          fontSize: SizeConfig.defaultSize * 1.8,
+                                                          color: Colors.black,
+                                                          overflow: TextOverflow.ellipsis
+                                                          ),)
+                                                          : Text("${(widget.state.myAllVotes[j].count~/5)*5}+", style: TextStyle(
+                                                          fontSize: SizeConfig.defaultSize * 1.8,
+                                                          color: Colors.black,
+                                                          overflow: TextOverflow.ellipsis
+                                                          ),)
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
                                         ),
                                       )
                                   ],
