@@ -222,6 +222,13 @@ class DartApiRemoteDataSource {
     return regions;
   }
 
+  // meet: 전체 신청 팀 수 조회
+  static Future<int> getTeamCount() async {
+    const path = '/v1/teams/count';
+    final response = await _httpUtil.request().get(path);
+    return response.data;
+  }
+
   // meet: 내 팀 목록 조회
   static Future<List<MeetTeamResponseDto>> getMyTeams() async {
     const path = '/v1/users/me/teams';

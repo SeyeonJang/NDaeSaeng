@@ -30,4 +30,9 @@ class DartMeetRepository implements MeetRepository {
   Future<MeetTeam> updateMyTeam(MeetTeam meetTeam) async {
     return (await DartApiRemoteDataSource.putTeam(MeetTeamRequestDto.fromMeetTeam(meetTeam))).newMeetTeam();
   }
+
+  @override
+  Future<int> getTeamCount() async {
+    return await DartApiRemoteDataSource.getTeamCount();
+  }
 }

@@ -1,6 +1,5 @@
 import 'package:dart_flutter/res/config/size_config.dart';
 import 'package:dart_flutter/src/presentation/meet/view/meet_create_team.dart';
-import 'package:dart_flutter/src/presentation/meet/view/meet_edit_team.dart';
 import 'package:dart_flutter/src/presentation/meet/view/meet_update_team.dart';
 import 'package:dart_flutter/src/presentation/meet/viewmodel/meet_cubit.dart';
 import 'package:dart_flutter/src/presentation/meet/viewmodel/state/meet_state.dart';
