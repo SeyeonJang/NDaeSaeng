@@ -99,8 +99,8 @@ class MeetState {
     return this;
   }
 
-  MeetState setMyFilteredFriends(List<User> friends) {
-    this.friends = friends.toSet();
+  MeetState setMyFilteredFriends(List<User> filteredFriends) {
+    this.filteredFriends = filteredFriends;
     return this;
   }
 

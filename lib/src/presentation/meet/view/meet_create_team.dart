@@ -93,21 +93,21 @@ class _MeetCreateTeamState extends State<MeetCreateTeam> {
                                 ]),
                             SizedBox(height: SizeConfig.defaultSize * 1.5),
                             Flexible(
-                              child: SingleChildScrollView(
-                                child: Padding(
-                                  padding: EdgeInsets.symmetric(horizontal: SizeConfig.defaultSize * 1.3),
+                              child: Padding(
+                                padding: EdgeInsets.symmetric(horizontal: SizeConfig.defaultSize * 1.3),
+                                child: SingleChildScrollView(
                                   child: Column(
                                     children: [
                                       _CreateTeamTopSection(userResponse: state.userResponse, handleTeamNameChanged: handleTeamNameChanged, state: state),
                                       // 나
-                                      _MemberCardView(userResponse: state.userResponse, state: state),
+                                      _MemberCardView(userResponse: state.userResponse, state: state, isMyself: true),
                                       // 친구1
                                       state.isMemberOneAdded
-                                          ? _MemberCardView(userResponse: teamMemberList[0], state: state)
+                                          ? _MemberCardView(userResponse: teamMemberList[0], state: state, isMyself: false)
                                           : Container(),
                                       // 친구2
                                       state.isMemberTwoAdded
-                                          ? _MemberCardView(userResponse: teamMemberList[1], state: state)
+                                          ? _MemberCardView(userResponse: teamMemberList[1], state: state, isMyself: false)
                                           : Container(),
                                       // 버튼
                                       state.isMemberTwoAdded
@@ -154,11 +154,14 @@ class _MeetCreateTeamState extends State<MeetCreateTeam> {
 
   Future<dynamic> _ShowModalBottomSheet(BuildContext context, MeetState state, List<User> friendsList) {
     Set<User> friends = state.friends;
+    print("받아온 내 친구목록 ${state.friends}");
     Set<User> filteredFriends = state.friends.where((friend) =>
-    friend.university?.id == state.userResponse.university?.id &&
-        friend.personalInfo?.gender == state.userResponse.personalInfo?.gender
+      friend.university?.id == state.userResponse.university?.id &&
+      friend.personalInfo?.gender == state.userResponse.personalInfo?.gender
     ).toSet();
+    print("UI에서 필터링한 친구목록 ${filteredFriends}");
     context.read<MeetCubit>().setMyFilteredFriends(filteredFriends.toList());
+    print("필터링 된 내 친구목록 ${state.filteredFriends}");
 
     return showModalBottomSheet( // 친구 목록 ********
         context: context,
@@ -195,11 +198,11 @@ class _MeetCreateTeamState extends State<MeetCreateTeam> {
                                 fontSize: SizeConfig.defaultSize * 1.3
                             ),),
                               SizedBox(height: SizeConfig.defaultSize,),
-                            Flexible(
+                            Expanded(
                               child: SingleChildScrollView(
                                   child: Column(
                                     children: [
-                                      for (int i=0; i<state.friends.length; i++)
+                                      for (int i=0; i<state.filteredFriends.length; i++)
                                         _OneFriendComponent(friend: state.filteredFriends[i], count: state.filteredFriends.length, nowNum: i, sheetContext: context,),
                                     ],
                                   )
@@ -414,11 +417,13 @@ class _CreateTeamTopSectionState extends State<_CreateTeamTopSection> {
 class _MemberCardView extends StatelessWidget {
   late User userResponse;
   late MeetState state;
+  late bool isMyself;
 
   _MemberCardView({
     super.key,
     required this.userResponse,
     required this.state,
+    required this.isMyself,
   });
 
   String get profileImageUrl => userResponse.personalInfo?.profileImageUrl ?? 'DEFAULT';
@@ -445,7 +450,7 @@ class _MemberCardView extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Row( // 위층 (받은 투표 위까지)
+                  Row( // 위층 (받은 투표 윗 부분 Row)
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       GestureDetector(
@@ -463,95 +468,100 @@ class _MemberCardView extends StatelessWidget {
                               fit: BoxFit.cover,)
                         ),
                       ),
-                      SizedBox(width: SizeConfig.defaultSize * 0.8),
-                      Expanded(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Row( // 1층
+                        SizedBox(width: SizeConfig.defaultSize * 0.8),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            height: SizeConfig.defaultSize * 3.3,
+                            child: Row( // 위층 (이름 ~ 년생)
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Row(
-                                        children: [
-                                            SizedBox(width: SizeConfig.defaultSize * 0.5,),
-                                          Text(
-                                            userResponse.personalInfo?.nickname == 'DEFAULT'
-                                                ? ('${userResponse.personalInfo?.name}' ?? '친구 이름')
-                                                : (userResponse.personalInfo?.nickname ?? '친구 닉네임'),
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.w500,
-                                              fontSize: SizeConfig.defaultSize * 1.6,
-                                              color: Colors.black,
-                                            ),),
-                                            SizedBox(width: SizeConfig.defaultSize * 0.3),
+                                Container(
+                                  width: SizeConfig.defaultSize * 26,
+                                  height: SizeConfig.defaultSize * 3.3,
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Row(
+                                          children: [
+                                              SizedBox(width: SizeConfig.defaultSize * 0.5,),
+                                            Text(
+                                              userResponse.personalInfo?.nickname == 'DEFAULT'
+                                                  ? ('${userResponse.personalInfo?.name}' ?? '친구 이름')
+                                                  : (userResponse.personalInfo?.nickname ?? '친구 닉네임'),
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.w500,
+                                                fontSize: SizeConfig.defaultSize * 1.6,
+                                                color: Colors.black,
+                                              ),),
+                                              SizedBox(width: SizeConfig.defaultSize * 0.3),
 
-                                          if (userResponse.personalInfo!.verification.isVerificationSuccess)
-                                            Image.asset("assets/images/check.png", width: SizeConfig.defaultSize * 1.3),
+                                            if (userResponse.personalInfo?.verification.isVerificationSuccess ?? false)
+                                              Image.asset("assets/images/check.png", width: SizeConfig.defaultSize * 1.3),
 
-                                            SizedBox(width: SizeConfig.defaultSize * 0.5),
-                                          Text(
-                                            "∙ ${userResponse.personalInfo?.birthYear.toString().substring(2,4)??"??"}년생",
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.w500,
-                                              fontSize: SizeConfig.defaultSize * 1.6,
-                                              color: Colors.black,
-                                            ),),
-                                        ]
-                                    ),
-                                    PopupMenuButton<String>(
-                                      icon: Icon(Icons.more_horiz_rounded, color: Colors.grey.shade300,),
-                                      color: Colors.white,
-                                      surfaceTintColor: Colors.white,
-                                      onSelected: (value) {
-                                        // 팝업 메뉴에서 선택된 값 처리
-                                        if (value == 'remove') {
-                                          Navigator.pop(context, 'remove');
-                                          state.deleteTeamMember(userResponse);
-                                        }
-                                      },
-                                      itemBuilder: (BuildContext context) {
-                                        return [
-                                          PopupMenuItem<String>(
-                                            value: 'remove',
-                                            child: Text("삭제하기", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.5)),
-                                          ),
-                                        ];
-                                      },
-                                    ),
-                                  ],
+                                              SizedBox(width: SizeConfig.defaultSize * 0.5),
+                                            Text(
+                                              "∙ ${userResponse.personalInfo?.birthYear.toString().substring(2,4)??"??"}년생",
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.w500,
+                                                fontSize: SizeConfig.defaultSize * 1.6,
+                                                color: Colors.black,
+                                              ),),
+                                          ]
+                                      ),
+                                      if (!isMyself)
+                                        PopupMenuButton<String>(
+                                          icon: Icon(Icons.more_horiz_rounded, color: Colors.grey.shade300,),
+                                          color: Colors.white,
+                                          surfaceTintColor: Colors.white,
+                                          padding: EdgeInsets.zero,
+                                          onSelected: (value) {
+                                            // 팝업 메뉴에서 선택된 값 처리
+                                            if (value == 'remove') {
+                                              Navigator.pop(context, 'remove');
+                                              state.deleteTeamMember(userResponse);
+                                            }
+                                          },
+                                          itemBuilder: (BuildContext context) {
+                                            return [
+                                              PopupMenuItem<String>(
+                                                value: 'remove',
+                                                child: Text("삭제하기", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.5)),
+                                              ),
+                                            ];
+                                          },
+                                        ),
+                                    ],
+                                  ),
                                 ),
                               ],
                             ),
-                            Row( // 2층
+                          ),
+                          Container(
+                            child: Row( // 2층
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
-                                Row(
-                                  children: [
-                                      SizedBox(width: SizeConfig.defaultSize * 0.5,),
+                                SizedBox(width: SizeConfig.defaultSize * 0.5,),
                                     Container(
-                                      width: SizeConfig.screenWidth * 0.56,
-                                      child: Text(
-                                        userResponse.university?.department ?? "??학부", // TODO : 학과 길면 ... 처리
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.w500,
-                                          fontSize: SizeConfig.defaultSize * 1.6,
-                                          color: Colors.black,
-                                          overflow: TextOverflow.ellipsis,
+                                width: SizeConfig.screenWidth * 0.56,
+                                child: Text(
+                                  userResponse.university?.department ?? "??학부", // TODO : 학과 길면 ... 처리
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: SizeConfig.defaultSize * 1.6,
+                                    color: Colors.black,
+                                    overflow: TextOverflow.ellipsis,
 
-                                        ),
-                                      ),
-                                    ),
-                                  ],
+                                  ),
                                 ),
+                                    ),
                               ],
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                     ],
                   ),

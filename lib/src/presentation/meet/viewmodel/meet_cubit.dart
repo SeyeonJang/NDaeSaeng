@@ -89,6 +89,7 @@ class MeetCubit extends Cubit<MeetState> {
   void setMyFilteredFriends(List<User> filteredFriends) {
     state.setMyFilteredFriends(filteredFriends);
     emit(state.copy());
+    print("cubit - set Filtered Friends 끝 ${filteredFriends}");
   }
 
   // **************************************************************
