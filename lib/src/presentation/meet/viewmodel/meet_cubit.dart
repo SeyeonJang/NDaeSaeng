@@ -49,6 +49,20 @@ class MeetCubit extends Cubit<MeetState> {
     emit(state.copy());
   }
 
+  void pressedMemberDeleteButton(User friend) {
+    if (state.isMemberOneAdded) {
+      state.setIsMemberOneAdded(false);
+      state.setIsMemberTwoAdded(false);
+    }
+    else if (state.isMemberTwoAdded) {
+      state.setIsMemberOneAdded(true);
+      state.setIsMemberTwoAdded(false);
+    }
+    state.deleteTeamMember(friend);
+    print("cubit - friend 삭제 {$friend}");
+    emit(state.copy());
+  }
+
   void pressedCitiesAddButton(List<Location> cities) {
     state.setCities(cities.toList());
     emit(state.copy());

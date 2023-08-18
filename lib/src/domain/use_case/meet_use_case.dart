@@ -1,9 +1,10 @@
+import 'package:dart_flutter/src/data/repository/dart_meet_repository.dart';
 import 'package:dart_flutter/src/data/repository/mock_meet_repository.dart';
 import 'package:dart_flutter/src/domain/entity/meet_team.dart';
 import 'package:dart_flutter/src/domain/repository/meet_repository.dart';
 
 class MeetUseCase {
-  final MeetRepository _meetRepository = MockMeetRepository();
+  final MeetRepository _meetRepository = DartMeetRepository();
 
   void createNewTeam(MeetTeam meetTeam) {
     _meetRepository.createNewTeam(meetTeam);

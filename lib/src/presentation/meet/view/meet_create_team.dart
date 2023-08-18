@@ -69,7 +69,7 @@ class _MeetCreateTeamState extends State<MeetCreateTeam> {
                     context.read<MeetCubit>().initState();
                     print(state.userResponse);
                     var friendsList = state.friends.toList();
-                    var teamMemberList = state.teamMembers.toList();
+                    var teamMemberList = state.teamMembers;
                     return Center(
                       child: Padding(
                         padding: EdgeInsets.all(SizeConfig.defaultSize * 1.3),
@@ -103,11 +103,11 @@ class _MeetCreateTeamState extends State<MeetCreateTeam> {
                                       _MemberCardView(userResponse: state.userResponse, state: state, isMyself: true),
                                       // 친구1
                                       state.isMemberOneAdded
-                                          ? _MemberCardView(userResponse: teamMemberList[0], state: state, isMyself: false)
+                                          ? _MemberCardView(userResponse: teamMemberList.first, state: state, isMyself: false)
                                           : Container(),
                                       // 친구2
                                       state.isMemberTwoAdded
-                                          ? _MemberCardView(userResponse: teamMemberList[1], state: state, isMyself: false)
+                                          ? _MemberCardView(userResponse: teamMemberList.last, state: state, isMyself: false)
                                           : Container(),
                                       // 버튼
                                       state.isMemberTwoAdded
@@ -155,13 +155,13 @@ class _MeetCreateTeamState extends State<MeetCreateTeam> {
   Future<dynamic> _ShowModalBottomSheet(BuildContext context, MeetState state, List<User> friendsList) {
     Set<User> friends = state.friends;
     print("받아온 내 친구목록 ${state.friends}");
-    Set<User> filteredFriends = state.friends.where((friend) =>
+    List<User> filteredFriends = state.friends.where((friend) =>
       friend.university?.id == state.userResponse.university?.id &&
       friend.personalInfo?.gender == state.userResponse.personalInfo?.gender
-    ).toSet();
+    ).toList();
     print("UI에서 필터링한 친구목록 ${filteredFriends}");
-    context.read<MeetCubit>().setMyFilteredFriends(filteredFriends.toList());
-    print("필터링 된 내 친구목록 ${state.filteredFriends}");
+    // context.read<MeetCubit>().setMyFilteredFriends(filteredFriends.toList());
+    // print("필터링 된 내 친구목록 ${state.filteredFriends}");
 
     return showModalBottomSheet( // 친구 목록 ********
         context: context,
@@ -189,7 +189,7 @@ class _MeetCreateTeamState extends State<MeetCreateTeam> {
                       child: Column(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            Text("우리 학교 친구 ${state.filteredFriends.length}명", style: TextStyle(
+                            Text("우리 학교 친구 ${filteredFriends.length}명", style: TextStyle(
                                 fontSize: SizeConfig.defaultSize * 1.6,
                                 fontWeight: FontWeight.w600
                             ),),
@@ -202,8 +202,8 @@ class _MeetCreateTeamState extends State<MeetCreateTeam> {
                               child: SingleChildScrollView(
                                   child: Column(
                                     children: [
-                                      for (int i=0; i<state.filteredFriends.length; i++)
-                                        _OneFriendComponent(friend: state.filteredFriends[i], count: state.filteredFriends.length, nowNum: i, sheetContext: context,),
+                                      for (int i=0; i<filteredFriends.length; i++)
+                                        _OneFriendComponent(friend: filteredFriends[i], state: state, count: state.filteredFriends.length, nowNum: i, sheetContext: context, filteredFriends: filteredFriends,),
                                     ],
                                   )
                               ),
@@ -221,16 +221,20 @@ class _MeetCreateTeamState extends State<MeetCreateTeam> {
 
 class _OneFriendComponent extends StatefulWidget {
   BuildContext sheetContext;
+  MeetState state;
   late User friend;
   late int count;
   late int nowNum;
+  List<User> filteredFriends;
 
   _OneFriendComponent({
     super.key,
     required this.friend,
+    required this.state,
     required this.count,
     required this.nowNum,
     required this.sheetContext,
+    required this.filteredFriends
   });
 
   @override
@@ -311,6 +315,11 @@ class _OneFriendComponentState extends State<_OneFriendComponent> {
                 ),
                 onPressed: () {
                   widget.sheetContext.read<MeetCubit>().pressedMemberAddButton(widget.friend);
+                  // TODO : filteredFriend에서 remove
+                  widget.filteredFriends.remove(widget.friend);
+                  print('aaaaa ${widget.filteredFriends}');
+
+                  // widget.state.teamMembers.add(widget.friend);
                   Navigator.pop(widget.sheetContext);
                   print(widget.nowNum+1);
                 },
@@ -521,8 +530,8 @@ class _MemberCardView extends StatelessWidget {
                                           onSelected: (value) {
                                             // 팝업 메뉴에서 선택된 값 처리
                                             if (value == 'remove') {
-                                              Navigator.pop(context, 'remove');
-                                              state.deleteTeamMember(userResponse);
+                                              context.read<MeetCubit>().pressedMemberDeleteButton(userResponse);
+
                                             }
                                           },
                                           itemBuilder: (BuildContext context) {
@@ -815,7 +824,6 @@ class _CreateTeamBottomSectionState extends State<_CreateTeamBottomSection> {
               SizedBox(height: SizeConfig.defaultSize * 0.3,),
               GestureDetector(
                 onTap: () {
-                  // TODO : 위에꺼 다 선택해야 활성화되도록 만들기 (팀명 && 팀원 && 만나고 싶은 지역 추가)
                   MeetTeam myNewTeam = MeetTeam(id: 0, name: widget.state.teamName, university: widget.state.userResponse!.university, locations: widget.state.getCities(), canMatchWithSameUniversity: widget.state.isChecked, members: widget.state.teamMembers.toList());
                   if ((widget.state.isMemberOneAdded || widget.state.isMemberTwoAdded) && widget.state.teamName!='' && widget.state.getCities().isNotEmpty) {
                     context.read<MeetCubit>().createNewTeam(myNewTeam);

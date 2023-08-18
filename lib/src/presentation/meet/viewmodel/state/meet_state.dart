@@ -131,12 +131,22 @@ class MeetState {
 
   void addTeamMember(User friend) {
     teamMembers.add(friend);
-    filteredFriends.remove(friend);
+    // int friendIndex = filteredFriends.indexWhere((f) => f == friend);
+    //     if (friendIndex != -1) {
+    //   filteredFriends.removeAt(friendIndex);
+    // }
+
+    print("state - friend 추가 {$friend}");
+    print("state - 팀 멤버에는 친구 추가 ${teamMembers}");
+    print("state - 필터링 친구에는 친구 삭제 ${filteredFriends}");
   }
 
   void deleteTeamMember(User friend) {
-    filteredFriends.add(friend);
+    // filteredFriends.add(friend);
     teamMembers.remove(friend);
+    print("state - friend 삭제 {$friend}");
+    print("state - 필터링 친구에는 친구 추가 ${filteredFriends}");
+    print("state - 팀 멤버에는 친구 삭제 ${teamMembers}");
   }
 
   @override
