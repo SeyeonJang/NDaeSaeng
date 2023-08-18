@@ -8,24 +8,24 @@ class MeetTeamResponseDto {
   int? teamId;
   String? name;
   bool? isVisibleToSameUniversity;
-  List<UserDto>? teamUser;
-  List<TeamRegion>? teamRegion;
+  List<UserDto>? teamUsers;
+  List<TeamRegion>? teamRegions;
 
   MeetTeamResponseDto(
       {this.teamId,
         this.name,
         this.isVisibleToSameUniversity,
-        this.teamUser,
-        this.teamRegion});
+        this.teamUsers,
+        this.teamRegions});
 
   MeetTeam newMeetTeam() {
     return MeetTeam(
       id: teamId ?? 0,
       name: name ?? "(알수없음)",
-      university: teamUser?[0].university?.newUniversity() ?? University(id: 0, name: "(알수없음)", department: "(알수없음)"),
-      locations: teamRegion?.map((e) => e.newLocation()).toList() ?? [],
+      university: teamUsers?[0].university?.newUniversity() ?? University(id: 0, name: "(알수없음)", department: "(알수없음)"),
+      locations: teamRegions?.map((e) => e.newLocation()).toList() ?? [],
       canMatchWithSameUniversity: isVisibleToSameUniversity ?? false,
-      members: teamUser?.map((e) => e.newUser()).toList() ?? [],
+      members: teamUsers?.map((e) => e.newUser()).toList() ?? [],
     );
   }
 
@@ -33,16 +33,16 @@ class MeetTeamResponseDto {
     teamId = json['teamId'];
     name = json['name'];
     isVisibleToSameUniversity = json['isVisibleToSameUniversity'];
-    if (json['teamUser'] != null) {
-      teamUser = <UserDto>[];
-      json['teamUser'].forEach((v) {
-        teamUser!.add(new UserDto.fromJson(v));
+    if (json['teamUsers'] != null) {
+      teamUsers = <UserDto>[];
+      json['teamUsers'].forEach((v) {
+        teamUsers!.add(new UserDto.fromJson(v));
       });
     }
-    if (json['teamRegion'] != null) {
-      teamRegion = <TeamRegion>[];
-      json['teamRegion'].forEach((v) {
-        teamRegion!.add(new TeamRegion.fromJson(v));
+    if (json['teamRegions'] != null) {
+      teamRegions = <TeamRegion>[];
+      json['teamRegions'].forEach((v) {
+        teamRegions!.add(new TeamRegion.fromJson(v));
       });
     }
   }
@@ -52,12 +52,17 @@ class MeetTeamResponseDto {
     data['teamId'] = this.teamId;
     data['name'] = this.name;
     data['isVisibleToSameUniversity'] = this.isVisibleToSameUniversity;
-    if (this.teamUser != null) {
-      data['teamUser'] = this.teamUser!.map((v) => v.toJson()).toList();
+    if (this.teamUsers != null) {
+      data['teamUsers'] = this.teamUsers!.map((v) => v.toJson()).toList();
     }
-    if (this.teamRegion != null) {
-      data['teamRegion'] = this.teamRegion!.map((v) => v.toJson()).toList();
+    if (this.teamRegions != null) {
+      data['teamRegions'] = this.teamRegions!.map((v) => v.toJson()).toList();
     }
     return data;
+  }
+
+  @override
+  String toString() {
+    return 'MeetTeamResponseDto{teamId: $teamId, name: $name, isVisibleToSameUniversity: $isVisibleToSameUniversity, teamUsers: $teamUsers, teamRegions: $teamRegions}';
   }
 }

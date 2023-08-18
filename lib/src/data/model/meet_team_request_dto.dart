@@ -15,16 +15,16 @@ class MeetTeamRequestDto {
   MeetTeamRequestDto.fromJson(Map<String, dynamic> json) {
     name = json['name'];
     isVisibleToSameUniversity = json['isVisibleToSameUniversity'];
-    teamRegionIds = json['teamRegionIds'].cast<int>();
-    teamUserIds = json['teamUserIds'].cast<int>();
+    teamRegionIds = json['regionIds'].cast<int>();
+    teamUserIds = json['userIds'].cast<int>();
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['name'] = this.name;
     data['isVisibleToSameUniversity'] = this.isVisibleToSameUniversity;
-    data['teamRegionIds'] = this.teamRegionIds;
-    data['teamUserIds'] = this.teamUserIds;
+    data['regionIds'] = this.teamRegionIds;
+    data['userIds'] = this.teamUserIds;
     return data;
   }
 
