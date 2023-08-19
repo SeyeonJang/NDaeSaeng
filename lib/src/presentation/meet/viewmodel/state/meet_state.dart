@@ -120,7 +120,7 @@ class MeetState {
   }
 
   MeetState addMyTeam(MeetTeam team) {
-    this.myTeams.add(team);
+    myTeams.add(team);
     return this;
   }
 

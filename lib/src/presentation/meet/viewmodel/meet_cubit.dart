@@ -22,7 +22,6 @@ class MeetCubit extends Cubit<MeetState> {
     state.setIsLoading(true);
     emit(state.copy());
     print(state);
-    await Future.delayed(Duration(seconds: 5));
 
     User userResponse = await _userUseCase.myInfo();
     state.setMyInfo(userResponse);
@@ -87,6 +86,7 @@ class MeetCubit extends Cubit<MeetState> {
   Future<void> createNewTeam(MeetTeam meetTeam) async {
     var myTeam = await _meetUseCase.createNewTeam(meetTeam);
     state.addMyTeam(myTeam);
+    emit(state.copy());
     print("cubit - 팀 추가 완료");
   }
 
@@ -99,6 +99,7 @@ class MeetCubit extends Cubit<MeetState> {
   Future<void> getMyTeams() async {
     List<MeetTeam> myTeams = await _meetUseCase.getMyTeams();
     state.setMyTeams(myTeams);
+    emit(state.copy());
     print("팀 목록 ${state.myTeams}");
   }
 

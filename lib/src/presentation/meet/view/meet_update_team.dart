@@ -27,6 +27,7 @@ class _MeetUpdateTeamState extends State<MeetUpdateTeam> {
   late MeetState state;
   late var friendsList;
   late var teamMemberList;
+  late var cities;
 
   @override
   void initState() {
@@ -36,6 +37,7 @@ class _MeetUpdateTeamState extends State<MeetUpdateTeam> {
 
     var friendsList = state.friends.toList();
     var teamMemberList = state.teamMembers.toList();
+    var cities = state.cities;
   }
 
   void addFriendToMyTeam(User friend) {
@@ -49,6 +51,12 @@ class _MeetUpdateTeamState extends State<MeetUpdateTeam> {
     setState(() {
     friendsList.add(friend);
     teamMemberList.remove(friend);
+    });
+  }
+
+  void setCities(List<Location> cities) {
+    setState(() {
+      this.cities = cities;
     });
   }
 
@@ -144,15 +152,15 @@ class _MeetUpdateTeamState extends State<MeetUpdateTeam> {
                                     children: [
                                       _CreateTeamTopSection(userResponse: state.userResponse, handleTeamNameChanged: handleTeamNameChanged, state: state),
                                       // 나
-                                      MemberCardView(userResponse: state.userResponse, state: state, isMyself: true),
+                                      MemberCardView(userResponse: state.userResponse, state: state, isMyself: true, onRemoveFriend: removeFriendFromMyTeam),
                                       // 친구1
                                       // context.read<MeetCubit>().getTeam(widget.myTeam.id.toString())
                                       state.isMemberOneAdded
-                                          ? MemberCardView(userResponse: teamMemberList[0], state: state, isMyself: false)
+                                          ? MemberCardView(userResponse: teamMemberList[0], state: state, isMyself: false, onRemoveFriend: removeFriendFromMyTeam)
                                           : Container(),
                                       // 친구2
                                       state.isMemberTwoAdded
-                                          ? MemberCardView(userResponse: teamMemberList[1], state: state, isMyself: false)
+                                          ? MemberCardView(userResponse: teamMemberList[1], state: state, isMyself: false, onRemoveFriend: removeFriendFromMyTeam)
                                           : Container(),
                                       // 버튼
                                       state.isMemberTwoAdded
@@ -458,6 +466,8 @@ class _CreateTeamBottomSection extends StatefulWidget {
   MeetState state;
   String name;
 
+
+
   _CreateTeamBottomSection({
     super.key,
     required this.state,
@@ -570,7 +580,8 @@ class _CreateTeamBottomSectionState extends State<_CreateTeamBottomSection> {
                                           TextButton(
                                               onPressed: () {
                                                 List<Location> newCities = newCitiesData.map((cityData) => Location(id: cityData["id"], name: cityData["name"])).toList();
-                                                context.read<MeetCubit>().pressedCitiesAddButton(newCities);
+                                                // context.read<MeetCubit>().pressedCitiesAddButton(newCities);
+                                                // widget.onDoneCities(newCities);
                                                 Navigator.pop(dialogContext);
                                               },
                                               child: Text('완료',

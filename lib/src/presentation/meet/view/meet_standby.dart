@@ -62,6 +62,9 @@ class _BottomSection extends StatelessWidget {
           children: [
             GestureDetector( // 내 팀 보기 버튼 *******
               onTap: () {
+                if (context.read<MeetCubit>().state.isLoading) {
+                  return;
+                }
                 showModalBottomSheet(
                   context: context,
                   builder: (BuildContext _) {
@@ -181,10 +184,10 @@ class _BottomSection extends StatelessWidget {
                                                                     value: 'delete',
                                                                     child: Text("삭제하기", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.5)),
                                                                   ),
-                                                                  PopupMenuItem<String>(
-                                                                    value: 'edit',
-                                                                    child: Text("수정하기", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.5)),
-                                                                  ),
+                                                                  // PopupMenuItem<String>(
+                                                                  //   value: 'edit',
+                                                                  //   child: Text("수정하기", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.5)),
+                                                                  // ),
                                                                 ];
                                                               },
                                                             ),
@@ -210,10 +213,14 @@ class _BottomSection extends StatelessWidget {
                               SizedBox(height: SizeConfig.defaultSize,),
                             GestureDetector(
                               onTap: () async {
+                                if (context.read<MeetCubit>().state.isLoading) {
+                                  return;
+                                }
                                 await Navigator.push(context, PageTransition(type: PageTransitionType.rightToLeftJoined, child: MeetCreateTeam(
                                   onFinish: () {
                                     context.read<MeetCubit>().refreshMeetPage();
-                                  }
+                                  },
+                                  state: context.read<MeetCubit>().state,
                                 ), childCurrent: this));
                                 context.read<MeetCubit>().refreshMeetPage();
                                 Navigator.pop(context);
@@ -263,6 +270,7 @@ class _BottomSection extends StatelessWidget {
                     onFinish: () {
                       context.read<MeetCubit>().refreshMeetPage();
                     },
+                  state: context.read<MeetCubit>().state,
                 ), childCurrent: this));
                 context.read<MeetCubit>().refreshMeetPage();
               },

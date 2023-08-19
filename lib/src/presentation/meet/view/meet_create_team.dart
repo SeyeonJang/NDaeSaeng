@@ -1,16 +1,16 @@
 import 'package:dart_flutter/res/config/size_config.dart';
 import 'package:dart_flutter/src/domain/entity/location.dart';
 import 'package:dart_flutter/src/domain/entity/meet_team.dart';
-import 'package:dart_flutter/src/presentation/meet/viewmodel/meet_cubit.dart';
+import 'package:dart_flutter/src/domain/use_case/meet_use_case.dart';
 import 'package:dart_flutter/src/presentation/meet/viewmodel/state/meet_state.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:dart_flutter/src/domain/entity/user.dart';
 
 class MeetCreateTeam extends StatefulWidget {
   final VoidCallback onFinish;
+  final MeetState state;
 
-  MeetCreateTeam({super.key, required this.onFinish});
+  MeetCreateTeam({super.key, required this.onFinish, required this.state});
 
   @override
   State<MeetCreateTeam> createState() => _MeetCreateTeamState();
@@ -19,12 +19,90 @@ class MeetCreateTeam extends StatefulWidget {
 class _MeetCreateTeamState extends State<MeetCreateTeam> {
   // 수정일 때 late int id;
   String name = '';
+  late MeetState state;
 
-  void handleTeamNameChanged(String newName) {
-    name = newName;
+  late List<User> friendsList;
+  late Set<User> teamMemberList;
+  late int teamMemberCount;
+  late List<Location> cities;
+  late bool canMatchWithSameUniversity;
+
+  @override
+  void initState() {
+    super.initState();
+    state = widget.state;
+
+    friendsList = state.friends.toList();
+    // teamMemberList = state.teamMembers;
+    teamMemberList = {};
+
+    teamMemberCount = teamMemberList.length;
+    cities = [];
+    canMatchWithSameUniversity = false;
   }
 
-  late MeetState ancestorState;
+  void addFriendToMyTeam(User friend) {
+    setState(() {
+      print("add======================================");
+      print(friend);
+
+      setState(() {
+        teamMemberList.add(friend);
+        friendsList.remove(friend);
+        teamMemberCount = teamMemberList.length;
+      });
+
+      print(teamMemberCount);
+      print("내팀: ${teamMemberList.toString()}");
+      print("후보: ${friendsList.toString()}");
+    });
+  }
+
+  void removeFriendFromMyTeam(User friend) {
+    setState(() {
+      print("remove======================================");
+      print(friend);
+
+      setState(() {
+        friendsList.add(friend);
+        teamMemberList.remove(friend);
+        teamMemberCount = teamMemberList.length;
+      });
+
+      print(teamMemberCount);
+      print("내팀: ${teamMemberList.toString()}");
+      print("후보: ${friendsList.toString()}");
+    });
+  }
+
+  void setCities(List<Location> cities) {
+    setState(() {
+      this.cities = cities;
+    });
+  }
+
+  void setCanMatchWithSameUniversity(bool canMatchWithSameUniversity) {
+    setState(() {
+      this.canMatchWithSameUniversity = canMatchWithSameUniversity;
+    });
+  }
+
+  MeetTeam createNewTeam() {
+    return MeetTeam(
+      id: 0,
+      name: name,
+      members: teamMemberList.toList(),
+      locations: cities,
+      canMatchWithSameUniversity: canMatchWithSameUniversity,
+      university: state.userResponse.university
+    );
+  }
+
+  void handleTeamNameChanged(String newName) {
+    setState(() {
+      name = newName;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -52,25 +130,18 @@ class _MeetCreateTeamState extends State<MeetCreateTeam> {
                 )
               ],
             );
-          });
+          }
+          );
     };
 
     return WillPopScope(
       onWillPop: () {
         return _onBackKey();
       },
-      child: BlocProvider<MeetCubit>(
-        create: (context) => MeetCubit(),
-        child: Scaffold(
+      child: Scaffold(
             backgroundColor: Colors.white,
             body: SafeArea(
-              child: BlocBuilder<MeetCubit, MeetState>(
-                  builder: (context, state) {
-                    context.read<MeetCubit>().initState();
-                    print(state.userResponse);
-                    var friendsList = state.friends.toList();
-                    var teamMemberList = state.teamMembers;
-                    return Center(
+              child: Center(
                       child: Padding(
                         padding: EdgeInsets.all(SizeConfig.defaultSize * 1.3),
                         child: Column(
@@ -100,21 +171,21 @@ class _MeetCreateTeamState extends State<MeetCreateTeam> {
                                     children: [
                                       _CreateTeamTopSection(userResponse: state.userResponse, handleTeamNameChanged: handleTeamNameChanged, state: state),
                                       // 나
-                                      MemberCardView(userResponse: state.userResponse, state: state, isMyself: true),
+                                      MemberCardView(userResponse: state.userResponse, state: state, isMyself: true, onRemoveFriend: removeFriendFromMyTeam),
                                       // 친구1
-                                      state.isMemberOneAdded
-                                          ? MemberCardView(userResponse: teamMemberList.first, state: state, isMyself: false)
+                                      teamMemberCount >= 1
+                                          ? MemberCardView(userResponse: teamMemberList.first, state: state, isMyself: false, onRemoveFriend: removeFriendFromMyTeam)
                                           : Container(),
                                       // 친구2
-                                      state.isMemberTwoAdded
-                                          ? MemberCardView(userResponse: teamMemberList.last, state: state, isMyself: false)
+                                      teamMemberCount == 2
+                                          ? MemberCardView(userResponse: teamMemberList.last, state: state, isMyself: false, onRemoveFriend: removeFriendFromMyTeam)
                                           : Container(),
                                       // 버튼
-                                      state.isMemberTwoAdded
+                                      teamMemberCount == 2
                                           ? Container()
                                           : InkWell( // 팀원 추가하기 버튼 *******
                                         onTap: () {
-                                          _ShowModalBottomSheet(context, state, friendsList);
+                                          _ShowModalBottomSheet(context, friendsList);
                                           // context.read<MeetCubit>().pressedMemberAddButton();
                                         },
                                         child: Container(
@@ -138,24 +209,15 @@ class _MeetCreateTeamState extends State<MeetCreateTeam> {
                           ],
                         ),
                       ),
-                    );
-                  }
-              ),
+                    )
             ),
-            bottomNavigationBar: BlocBuilder<MeetCubit, MeetState>(
-                builder: (buildContext, state) {
-                  return _CreateTeamBottomSection(state: state, name: name, ancestorContext: context);
-                }
-            )
-        ),
-      ),
-    );
+            bottomNavigationBar:  _CreateTeamBottomSection(locations: cities, state: state, name: name, ancestorContext: context, onSetCities: setCities, onSetMatch: setCanMatchWithSameUniversity, createNewTeam: createNewTeam),
+            ),
+      );
   }
 
-  Future<dynamic> _ShowModalBottomSheet(BuildContext context, MeetState state, List<User> friendsList) {
-    Set<User> friends = state.friends;
-    print("받아온 내 친구목록 ${state.friends}");
-    List<User> filteredFriends = state.friends.where((friend) =>
+  Future<dynamic> _ShowModalBottomSheet(BuildContext context, List<User> friends) {
+    List<User> filteredFriends = friends.where((friend) =>
       friend.university?.id == state.userResponse.university?.id &&
       friend.personalInfo?.gender == state.userResponse.personalInfo?.gender
     ).toList();
@@ -203,7 +265,7 @@ class _MeetCreateTeamState extends State<MeetCreateTeam> {
                                   child: Column(
                                     children: [
                                       for (int i=0; i<filteredFriends.length; i++)
-                                        _OneFriendComponent(friend: filteredFriends[i], state: state, count: state.filteredFriends.length, nowNum: i, sheetContext: context, filteredFriends: filteredFriends,),
+                                        _OneFriendComponent(friend: filteredFriends[i], state: state, count: filteredFriends.length, nowNum: i, sheetContext: context, filteredFriends: filteredFriends, onAddFriend: addFriendToMyTeam),
                                     ],
                                   )
                               ),
@@ -227,6 +289,8 @@ class _OneFriendComponent extends StatefulWidget {
   late int nowNum;
   List<User> filteredFriends;
 
+  final void Function(User friend) onAddFriend;
+
   _OneFriendComponent({
     super.key,
     required this.friend,
@@ -234,7 +298,8 @@ class _OneFriendComponent extends StatefulWidget {
     required this.count,
     required this.nowNum,
     required this.sheetContext,
-    required this.filteredFriends
+    required this.filteredFriends,
+    required this.onAddFriend,
   });
 
   @override
@@ -314,10 +379,8 @@ class _OneFriendComponentState extends State<_OneFriendComponent> {
                     padding: EdgeInsets.all(0)
                 ),
                 onPressed: () {
-                  widget.sheetContext.read<MeetCubit>().pressedMemberAddButton(widget.friend);
-                  // TODO : filteredFriend에서 remove
+                  widget.onAddFriend(widget.friend);
                   widget.filteredFriends.remove(widget.friend);
-                  print('aaaaa ${widget.filteredFriends}');
 
                   // widget.state.teamMembers.add(widget.friend);
                   Navigator.pop(widget.sheetContext);
@@ -404,6 +467,7 @@ class _CreateTeamTopSectionState extends State<_CreateTeamTopSection> {
                     onChanged: (value) {
                       setState(() {
                         widget.state.teamName = value;
+                        widget.handleTeamNameChanged(value);
                       });
                     },
                     decoration: InputDecoration(
@@ -428,11 +492,14 @@ class MemberCardView extends StatelessWidget {
   late MeetState state;
   late bool isMyself;
 
+  final void Function(User friend) onRemoveFriend;
+
   MemberCardView({
     super.key,
     required this.userResponse,
     required this.state,
     required this.isMyself,
+    required this.onRemoveFriend
   });
 
   String get profileImageUrl => userResponse.personalInfo?.profileImageUrl ?? 'DEFAULT';
@@ -530,8 +597,7 @@ class MemberCardView extends StatelessWidget {
                                           onSelected: (value) {
                                             // 팝업 메뉴에서 선택된 값 처리
                                             if (value == 'remove') {
-                                              context.read<MeetCubit>().pressedMemberDeleteButton(userResponse);
-
+                                              onRemoveFriend(userResponse);
                                             }
                                           },
                                           itemBuilder: (BuildContext context) {
@@ -656,15 +722,24 @@ class NoVoteView extends StatelessWidget { // 받은 투표 없을 때
 }
 
 class _CreateTeamBottomSection extends StatefulWidget {
+  List<Location> locations;
   MeetState state;
   String name;
   BuildContext ancestorContext;
 
+  final void Function(List<Location> locations) onSetCities;
+  final void Function(bool match) onSetMatch;
+  final MeetTeam Function() createNewTeam;
+
   _CreateTeamBottomSection({
     super.key,
+    required this.locations,
     required this.state,
     required this.name,
     required this.ancestorContext,
+    required this.onSetCities,
+    required this.onSetMatch,
+    required this.createNewTeam,
   });
 
   @override
@@ -673,6 +748,19 @@ class _CreateTeamBottomSection extends StatefulWidget {
 
 class _CreateTeamBottomSectionState extends State<_CreateTeamBottomSection> {
   bool light = false;
+  late MeetTeam meetTeam;
+
+  @override
+  void initState() {
+    super.initState();
+    meetTeam = widget.createNewTeam();
+  }
+
+  @override
+  void didUpdateWidget(covariant _CreateTeamBottomSection oldWidget) {  // 부모위젯에서 상태변화 신호가 내려오면 실행됨
+    super.didUpdateWidget(oldWidget);
+    meetTeam = widget.createNewTeam();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -701,7 +789,7 @@ class _CreateTeamBottomSectionState extends State<_CreateTeamBottomSection> {
                     TextButton(
                         onPressed: () {
                           List<Map<String, dynamic>> citiesData = [
-                            {"id": 1, "name": "서울", "isChecked": false},
+                            {"id": 1, "name": "서울", "isChecked": false},  // TODO 서버로부터 지역 받아오기
                             {"id": 2, "name": "대구", "isChecked": false},
                             {"id": 3, "name": "부산", "isChecked": false},
                             // {"id": 3, "name": "대구", "isChecked": false},
@@ -773,7 +861,8 @@ class _CreateTeamBottomSectionState extends State<_CreateTeamBottomSection> {
                                           TextButton(
                                               onPressed: () {
                                                 List<Location> newCities = newCitiesData.map((cityData) => Location(id: cityData["id"], name: cityData["name"])).toList();
-                                                context.read<MeetCubit>().pressedCitiesAddButton(newCities);
+                                                // context.read<MeetCubit>().pressedCitiesAddButton(newCities);
+                                                widget.onSetCities(newCities);
                                                 Navigator.pop(dialogContext);
                                               },
                                               child: Text('완료',
@@ -790,9 +879,9 @@ class _CreateTeamBottomSectionState extends State<_CreateTeamBottomSection> {
                             padding: EdgeInsets.zero
                         ),
                         child: Text(
-                          widget.state.getCities().isEmpty
+                          widget.locations.isEmpty
                             ? "선택해주세요"
-                            : widget.state.getCities().map((city) => city.name).join(', '),
+                            : widget.locations.map((city) => city.name).join(', '),
                           style: TextStyle(
                             fontSize: SizeConfig.defaultSize * 1.6,
                             color: Colors.grey.shade400),))
@@ -815,6 +904,7 @@ class _CreateTeamBottomSectionState extends State<_CreateTeamBottomSection> {
                         setState(() {
                           light = value;
                           widget.state.setIsChecked(value);
+                          widget.onSetMatch(light);
                         });
                       },
                     ),
@@ -824,12 +914,14 @@ class _CreateTeamBottomSectionState extends State<_CreateTeamBottomSection> {
               SizedBox(height: SizeConfig.defaultSize * 0.3,),
               GestureDetector(
                 onTap: () async {
-                  MeetTeam myNewTeam = MeetTeam(id: 0, name: widget.state.teamName, university: widget.state.userResponse!.university, locations: widget.state.getCities(), canMatchWithSameUniversity: widget.state.isChecked, members: widget.state.teamMembers.toList());
-                  if ((widget.state.isMemberOneAdded || widget.state.isMemberTwoAdded) && widget.state.teamName!='' && widget.state.getCities().isNotEmpty) {
-                    await context.read<MeetCubit>().createNewTeam(myNewTeam);
-                    print("${widget.state.teamName} 이름 전달합니다");
-                    print("${widget.state.userResponse!.university}");
-                    print("${myNewTeam.toString()}");
+                  if ((meetTeam.members.length == 1 || meetTeam.members.length == 2) && meetTeam.name != '' && meetTeam.locations.isNotEmpty) {
+                    print("${meetTeam.name} 이름 전달합니다");
+                    print("${meetTeam.members[0].university}");
+                    print("${meetTeam.toString()}");
+                    // await context.read<MeetCubit>().createNewTeam(meetTeam);
+
+                    MeetUseCase().createNewTeam(meetTeam);  //TODO: cubit 쪽으로 빼야 됨  BlocProvider.of<MeetCubit>(context).createNewTeam(meetTeam);
+
                     Navigator.pop(widget.ancestorContext);
                   }
                 },
@@ -837,8 +929,8 @@ class _CreateTeamBottomSectionState extends State<_CreateTeamBottomSection> {
                   height: SizeConfig.defaultSize * 6,
                   width: SizeConfig.screenHeight,
                   decoration: BoxDecoration(
-                    color:((widget.state.isMemberOneAdded || widget.state.isMemberTwoAdded) && widget.state.teamName!='' && widget.state.getCities().isNotEmpty)
-                  ? Color(0xffFF5C58) : Color(0xffddddddd),
+                    color:((meetTeam.members.length == 1 || meetTeam.members.length == 2) && meetTeam.name != '' && meetTeam.locations.isNotEmpty)
+                        ? Color(0xffFF5C58) : Color(0xffddddddd),
                     borderRadius: BorderRadius.circular(10),
                   ),
                   alignment: Alignment.center,
