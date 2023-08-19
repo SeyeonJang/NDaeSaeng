@@ -17,7 +17,6 @@ class UserUseCase {
   final VoteRepository _dartVoteRepository = DartVoteRepositoryImpl();
 
   Future<User> myInfo() async {
-    // return _dartUserRepository.myInfo();
     var userResponse = await _dartUserRepository.myInfo();
     print(userResponse.toString());
     return userResponse;

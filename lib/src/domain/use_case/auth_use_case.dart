@@ -44,4 +44,8 @@ class AuthUseCase {
   void withdrawalWithApple() {
     _appleLoginRepository.withdrawal();
   }
+
+  Future<String> healthCheck() async {
+    return await _dartAuthRepository.healthCheck();
+  }
 }
