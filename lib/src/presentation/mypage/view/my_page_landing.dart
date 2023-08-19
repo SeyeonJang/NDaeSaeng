@@ -101,18 +101,19 @@ class _MyPageLandingViewState extends State<MyPageLandingView> {
                           child: ClipOval(
                             child: BlocBuilder<MyPagesCubit, MyPagesState>(
                               builder: (context, state) {
-                                if (profileImageUrl == "DEFAULT")
+                                if (profileImageUrl == "DEFAULT" || !profileImageUrl.startsWith("https://"))
                                   return Image.asset('assets/images/profile-mockup3.png', width: SizeConfig.defaultSize * 5.7, fit: BoxFit.cover,);
                                 else {
-                                  return state.profileImageFile.path==''
-                                      ? Image.network(profileImageUrl,
-                                      width: SizeConfig.defaultSize * 5.7,
-                                      height: SizeConfig.defaultSize * 5.7,
-                                      fit: BoxFit.cover)
-                                      : Image.file(state.profileImageFile,
-                                      width: SizeConfig.defaultSize * 5.7,
-                                      height: SizeConfig.defaultSize * 5.7,
-                                      fit: BoxFit.cover);
+                                  // return state.profileImageFile.path==''
+                                  //     ? Image.network(profileImageUrl,
+                                  //     width: SizeConfig.defaultSize * 5.7,
+                                  //     height: SizeConfig.defaultSize * 5.7,
+                                  //     fit: BoxFit.cover)
+                                  //     : Image.file(state.profileImageFile,
+                                  //     width: SizeConfig.defaultSize * 5.7,
+                                  //     height: SizeConfig.defaultSize * 5.7,
+                                  //     fit: BoxFit.cover);
+                                  return Image.asset('assets/images/profile-mockup3.png', width: SizeConfig.defaultSize * 5.7, fit: BoxFit.cover,);
                                 }
                               }
                             )

@@ -203,7 +203,13 @@ class _MyPageViewState extends State<MyPageView> {
             ),
           ),
         ),
-        const DtFlexSpacer(15),
+        // const DtFlexSpacer(15),
+
+        SizedBox(
+          width: SizeConfig.defaultSize * 3,
+          height: SizeConfig.defaultSize * 3,
+          child: widget.state.isLoading ? const CircularProgressIndicator(color: Color(0xff7C83FD)) : null,
+        ),
 
         Padding( // 받은 투표 프로필 (TitleVotes)
           padding: EdgeInsets.symmetric(horizontal: SizeConfig.defaultSize * 1.3),
@@ -224,23 +230,23 @@ class _MyPageViewState extends State<MyPageView> {
                       onLongPress: () {
                         showDialog<String>(
                           context: context,
-                          builder: (BuildContext context) => AlertDialog(
+                          builder: (BuildContext dialogContext) => AlertDialog(
                             title: const Text('내 투표를 삭제하시겠어요?'),
-                            content: Text('삭제할 투표 : ${widget.state.titleVotes[i].question}'),
+                            content: Text('삭제할 투표 : ${widget.state.titleVotes[i].question.content}'),
                             backgroundColor: Colors.white,
                             surfaceTintColor: Colors.white,
                             actions: <Widget>[
                               TextButton(
                                 onPressed: () {
-                                  Navigator.pop(context, '취소');
+                                  Navigator.pop(dialogContext, '취소');
                                 },
                                 child: const Text('취소', style: TextStyle(color: Color(0xff7C83FD)),),
                               ),
                               TextButton(
                                 onPressed: () {
-                                  // TODO : 삭제 remove Vote
-                                  // context.read<MyPagesCubit>().removeTitleVote(widget.state.titleVotes[i].id); // ID가 없음
-                                  Navigator.pop(context, '삭제');
+                                  context.read<MyPagesCubit>().removeTitleVote(widget.state.titleVotes[i].question.questionId!); // TitleVote 삭제
+                                  context.read<MyPagesCubit>().refreshMyInfo();
+                                  Navigator.pop(dialogContext, '삭제');
                                 },
                                 child: const Text('삭제', style: TextStyle(color: Color(0xff7C83FD)),),
                               ),
@@ -398,6 +404,7 @@ class _MyPageViewState extends State<MyPageView> {
                               );
                             }
                         );
+                        print("내 대표 투표의 개수 ${widget.state.titleVotes.length+1}");
                       },
                       child: Container(
                         width: SizeConfig.screenWidth,

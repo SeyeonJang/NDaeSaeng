@@ -68,10 +68,16 @@ class MyPagesCubit extends Cubit<MyPagesState> {
   }
 
   void refreshMyInfo() async {
+    state.setIsLoading(true);
+    emit(state.copy());
+
     _userUseCase.cleanUpUserResponseCache();
      User user = await _userUseCase.myInfo();
      state.setUserResponse(user);
      getMyTitleVote();
+     state.titleVotes = [];
+
+     state.setIsLoading(false);
      emit(state.copy());
   }
 
@@ -105,7 +111,7 @@ class MyPagesCubit extends Cubit<MyPagesState> {
 
   void addTitleVote(TitleVote titleVote) {
     _userUseCase.addTitleVote(titleVote);
-    state.removeMyAllVotes(titleVote);
+    // state.removeMyAllVotes(titleVote);
   }
 
   Future<void> getMyTitleVote() async {

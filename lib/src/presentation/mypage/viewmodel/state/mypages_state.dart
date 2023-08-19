@@ -92,7 +92,23 @@ class MyPagesState {
   }
 
   MyPagesState setMyAllVotes(List<TitleVote> myAllVotes) {
-    this.myAllVotes = myAllVotes;
+    // this.myAllVotes = myAllVotes.where((vote) => !titleVotes.contains(vote)).toList();
+    // this.myAllVotes = myAllVotes.where((vote) => vote.question.questionId != ( )).toList();
+
+    this.myAllVotes = myAllVotes.where((vote) {
+      for (var titleVote in titleVotes) {
+        if (titleVote.question.questionId == vote.question.questionId) {
+          return false; // 중복된 항목이므로 필터링
+        }
+      }
+      return true; // 중복되지 않은 항목이므로 유지
+    }).toList();
+
+
+    // myAllVotes = myAllVotes.where((vote) {
+    //   return !titleVotes.any((titleVote) => titleVote.question.questionId == vote.question.questionId);
+    // }).toList();
+    print("dsjksjksdjlksdjlsjlks ${myAllVotes}");
     return this;
   }
 
@@ -115,7 +131,7 @@ class MyPagesState {
   }
 
   MyPagesState setTitleVotes(List<TitleVote> titleVotes) {
-    this.titleVotes = titleVotes;
+    this.titleVotes = titleVotes.toSet().toList();
     return this;
   }
 }
