@@ -1,5 +1,3 @@
-import 'package:dart_flutter/src/data/model/friend_dto.dart';
-import 'package:dart_flutter/src/data/model/personal_info_dto.dart';
 import 'package:dart_flutter/src/domain/entity/location.dart';
 import 'package:dart_flutter/src/domain/entity/meet_team.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -22,6 +20,7 @@ class MeetState {
   late MeetTeam newTeam;
   late String teamName;
   late bool isChecked;
+  late int teamCount;
 
   MeetState ({
     required this.meetPageState,
@@ -35,7 +34,8 @@ class MeetState {
     required this.cities,
     required this.myTeams,
     required this.teamName,
-    required this.isChecked
+    required this.isChecked,
+    required this.teamCount
   });
 
   MeetState.init() { // 초기값 설정
@@ -54,6 +54,7 @@ class MeetState {
     myTeams = [];
     teamName = '';
     isChecked = false;
+    teamCount = 0;
   }
 
   MeetState copy() => MeetState(
@@ -68,7 +69,8 @@ class MeetState {
     cities: cities,
     myTeams: myTeams,
     teamName: teamName,
-    isChecked: isChecked
+    isChecked: isChecked,
+    teamCount: teamCount
   );
 
   void setAll(MeetState state) {
@@ -84,6 +86,11 @@ class MeetState {
       myTeams = state.myTeams;
       teamName = state.teamName;
       isChecked = state.isChecked;
+      teamCount = state.teamCount;
+  }
+
+  void setTeamCount(int teamCount) {
+    this.teamCount = teamCount;
   }
 
   void setIsLoading(bool isLoading) {

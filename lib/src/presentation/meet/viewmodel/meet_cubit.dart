@@ -27,7 +27,9 @@ class MeetCubit extends Cubit<MeetState> {
     state.setMyInfo(userResponse);
     List<User> friends = await _friendUseCase.getMyFriends();
     state.setMyFriends(friends);
-    getMyTeams();
+    await getMyTeams();
+    await fetchTeamCount();
+    print("팀수: ${state.teamCount}");
 
     state.setIsMemberOneAdded(false);
     state.setIsMemberTwoAdded(false);
@@ -43,8 +45,6 @@ class MeetCubit extends Cubit<MeetState> {
     state.setAll(meetState);
     emit(state.copy());
   }
-
-  // Meet - CreateTeam
 
   void pressedMemberAddButton(User friend) { // TODO : User friend 파라미터로 친구 정보 받아와서 teamMembers 친구 목록에 넣기
     state.setIsLoading(true);
@@ -127,6 +127,14 @@ class MeetCubit extends Cubit<MeetState> {
     state.setMyFilteredFriends(filteredFriends);
     emit(state.copy());
     print("cubit - set Filtered Friends 끝 ${filteredFriends}");
+  }
+
+  Future<int> fetchTeamCount() async {
+    int teamCount = await _meetUseCase.getTeamCount();
+    print("ddddddddddddd ================================> $teamCount");
+    state.setTeamCount(teamCount);
+    emit(state.copy());
+    return state.teamCount;
   }
 
   // **************************************************************

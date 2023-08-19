@@ -2,10 +2,11 @@ import 'package:dart_flutter/res/config/size_config.dart';
 import 'package:dart_flutter/src/presentation/meet/view/meet_create_team.dart';
 import 'package:dart_flutter/src/presentation/meet/view/meet_update_team.dart';
 import 'package:dart_flutter/src/presentation/meet/viewmodel/meet_cubit.dart';
-import 'package:dart_flutter/src/presentation/meet/viewmodel/state/meet_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:page_transition/page_transition.dart';
+
+import '../viewmodel/state/meet_state.dart';
 
 class MeetStandby extends StatelessWidget {
   const MeetStandby({super.key});
@@ -17,7 +18,11 @@ class MeetStandby extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            _TopSection(teams: 20, notifications: 93), // TODO : 서버 연결
+            BlocBuilder<MeetCubit, MeetState>(
+              builder: (context, state) {
+                return _TopSection(teams: state.teamCount, notifications: 123);
+              }
+            ),
               SizedBox(height: SizeConfig.defaultSize * 2,),
             Container(height: SizeConfig.defaultSize * 2, width: SizeConfig.screenWidth, color: Colors.grey.shade50,),
               SizedBox(height: SizeConfig.defaultSize * 2,),
@@ -362,6 +367,7 @@ class _TopSectionState extends State<_TopSection> with SingleTickerProviderState
           Text("지금까지 신청한 팀", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.6, fontWeight: FontWeight.w600),),
             SizedBox(height: SizeConfig.defaultSize * 2),
 
+          if (false)  // 과팅 오픈 알림받기 기능 숨김
           Padding(
             padding: EdgeInsets.symmetric(horizontal: SizeConfig.defaultSize * 2.6),
             child: Row(

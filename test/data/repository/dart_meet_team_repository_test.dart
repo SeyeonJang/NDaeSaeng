@@ -1,12 +1,14 @@
 import 'package:dart_flutter/src/data/datasource/dart_api_remote_datasource.dart';
 import 'package:dart_flutter/src/data/model/meet_team_request_dto.dart';
 import 'package:dart_flutter/src/data/model/meet_team_response_dto.dart';
+import 'package:dart_flutter/src/data/repository/dart_meet_repository.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../test_information.dart';
 
 void main() {
   String defaultIndex = "3717";
+  DartMeetRepository _meet = DartMeetRepository();
   setUpAll(() => {
     TestInformation.dartInit()
   });
@@ -42,5 +44,11 @@ void main() {
   test('과팅 팀 삭제', () async {
     String teamId = teamResponseDto?.teamId.toString() ?? defaultIndex;
     var response = await DartApiRemoteDataSource.deleteTeam(teamId);
+  });
+
+  test('전체 과팅 팀 갯수조회', () async {
+    var response = await _meet.getTeamCount();
+    expect(response, isNotNull);
+    print(response);
   });
 }
