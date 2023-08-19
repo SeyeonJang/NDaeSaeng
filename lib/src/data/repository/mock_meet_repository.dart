@@ -22,7 +22,7 @@ class MockMeetRepository implements MeetRepository {
   }
 
   @override
-  void removeMyTeam(String teamId) {
+  Future<void> removeMyTeam(String teamId) async {
     print("============================1");
     mockTeams.map((mockTeam) => print(mockTeam.id.toString()));
     print("============================2");

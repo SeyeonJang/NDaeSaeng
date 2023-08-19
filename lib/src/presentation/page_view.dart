@@ -1,6 +1,7 @@
 import 'package:dart_flutter/res/config/size_config.dart';
 import 'package:dart_flutter/src/common/util/analytics_util.dart';
 import 'package:dart_flutter/src/common/util/toast_util.dart';
+import 'package:dart_flutter/src/presentation/meet/meet_pages.dart';
 import 'package:dart_flutter/src/presentation/meet/view/meet_standby.dart';
 import 'package:dart_flutter/src/presentation/meet/viewmodel/meet_cubit.dart';
 import 'package:dart_flutter/src/presentation/mypage/mypages.dart';
@@ -101,7 +102,8 @@ class _DartPageViewState extends State<DartPageView> {
                       ),
                       BlocProvider<MeetCubit>(
                           create: (context) => MeetCubit()..initState(),
-                        child: const MeetStandby(),
+                          // child: const MeetStandby(),
+                          child: const MeetPage2(),
                       ),
                       BlocProvider<MyPagesCubit>(
                         create: (BuildContext context) => MyPagesCubit()..initPages(),

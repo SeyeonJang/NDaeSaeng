@@ -25,29 +25,31 @@ class MeetStandby extends StatelessWidget {
           ],
         ),
       ),
-      bottomNavigationBar: BlocBuilder<MeetCubit, MeetState>(
-        builder: (context, state) {
-          MeetState.init();
-          return _BottomSection(state: state, ancestorContext: context);
-        }
-      ),
+      bottomNavigationBar: _BottomSection(ancestorContext: context),
+      // bottomNavigationBar: BlocBuilder<MeetCubit, MeetState>(
+      //   builder: (context, state) {
+      //     MeetState.init();
+      //     return _BottomSection(state: state, ancestorContext: context);
+      //   }
+      // ),
     );
   }
 }
 
 class _BottomSection extends StatelessWidget {
-  MeetState state;
+  // MeetState state;
   BuildContext ancestorContext;
 
   _BottomSection({
     super.key,
-    required this.state,
+    // required this.state,
     required this.ancestorContext
   });
 
   @override
   Widget build(BuildContext context) {
-    MeetCubit cubit = BlocProvider.of<MeetCubit>(ancestorContext);
+    // MeetState state = context.read<MeetCubit>().state;
+    // MeetCubit cubit = BlocProvider.of<MeetCubit>(ancestorContext);
 
     return Container(
       width: SizeConfig.screenWidth,
@@ -63,6 +65,8 @@ class _BottomSection extends StatelessWidget {
                 showModalBottomSheet(
                   context: context,
                   builder: (BuildContext _) {
+                    print(context.read<MeetCubit>().state.myTeams.toString());
+                    print(context.read<MeetCubit>().state.myTeams.isEmpty);
                     // List<String> membersName = state.teamMembers.map((member) => member.personalInfo!.name).toList();
                     // String membersName = state.myTeams[i].members.map((member) => member.personalInfo!.name).join(', ');
                     return Container(
@@ -102,21 +106,21 @@ class _BottomSection extends StatelessWidget {
                               child: SingleChildScrollView(
                                   child: Column(
                                       children: [
-                                      state.myTeams.isEmpty
+                                        context.read<MeetCubit>().state.myTeams.isEmpty
                                             ? Text("아직 생성한 팀이 없어요!", style: TextStyle(
                                                 fontSize: SizeConfig.defaultSize * 1.8,
                                                 fontWeight: FontWeight.w400
                                               ))
                                             : Column(
                                                 children: [
-                                                  for (int i=0; i<state.myTeams.length; i++)
+                                                  for (int i=0; i<context.read<MeetCubit>().state.myTeams.length; i++)
                                                     Row(
                                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                       children: [
-                                                        Text("${state.myTeams[i].name=='' ? '아직 팀명이 없어요!' : state.myTeams[i].name}"), // TODO : 서버 연결 후 재확인
+                                                        Text(context.read<MeetCubit>().state.myTeams[i].name=='' ? '아직 팀명이 없어요!' : context.read<MeetCubit>().state.myTeams[i].name), // TODO : 서버 연결 후 재확인
                                                         Row(
                                                           children: [
-                                                            Text("나, ${state.myTeams[i].members.map((member) => member.personalInfo!.name).join(', ')}"),
+                                                            Text(context.read<MeetCubit>().state.myTeams[i].members.map((member) => member.personalInfo!.name).join(', ')),
                                                             PopupMenuButton<String>(
                                                               icon: Icon(Icons.more_horiz_rounded, color: Colors.grey.shade300,),
                                                               color: Colors.white,
@@ -124,18 +128,30 @@ class _BottomSection extends StatelessWidget {
                                                               onSelected: (value) {
                                                                 if (value == 'edit') {
                                                                   // Navigator.push(state.myTeams[i]);
-                                                                  Navigator.push(context, PageTransition(type: PageTransitionType.rightToLeftJoined, child: MeetUpdateTeam(
-                                                                      onFinish: () {
-                                                                        cubit.refreshMeetPage();
-                                                                      },
-                                                                    myTeam: state.myTeams[i]
-                                                                  ), childCurrent: this));
+                                                                  Navigator.push(context, PageTransition(
+                                                                      type: PageTransitionType.rightToLeftJoined,
+                                                                      child: MeetUpdateTeam(
+                                                                        onFinish: () {
+                                                                          context.read<MeetCubit>().refreshMeetPage();
+                                                                        },
+                                                                        meetState: context.read<MeetCubit>().state,
+                                                                      ),
+                                                                      childCurrent: this));
                                                                 }
+
+                                                                //   Navigator.push(context, PageTransition(type: PageTransitionType.rightToLeftJoined, child: MeetUpdateTeam(
+                                                                //     onFinish: () {
+                                                                //       cubit.refreshMeetPage();
+                                                                //     },
+                                                                //     myTeam: state.myTeams[i],
+                                                                //     user: state.userResponse,
+                                                                //   ), childCurrent: this));
+                                                                // }
                                                                 else if (value == 'delete') {
                                                                   showDialog<String>(
                                                                     context: context,
                                                                     builder: (BuildContext dialogContext) => AlertDialog(
-                                                                      content: Text('\'${state.myTeams[i].name=='' ? '(팀명 없음)' : state.myTeams[i].name}\' 팀을 삭제하시겠어요?', style: TextStyle(fontSize: SizeConfig.defaultSize * 1.8),),
+                                                                      content: Text('\'${context.read<MeetCubit>().state.myTeams[i].name=='' ? '(팀명 없음)' : context.read<MeetCubit>().state.myTeams[i].name}\' 팀을 삭제하시겠어요?', style: TextStyle(fontSize: SizeConfig.defaultSize * 1.8),),
                                                                       backgroundColor: Colors.white,
                                                                       surfaceTintColor: Colors.white,
                                                                       actions: <Widget>[
@@ -146,10 +162,11 @@ class _BottomSection extends StatelessWidget {
                                                                           child: const Text('취소', style: TextStyle(color: Color(0xffFF5C58)),),
                                                                         ),
                                                                         TextButton(
-                                                                          onPressed: () {
-                                                                            context.read<MeetCubit>().removeTeam(state.myTeams[i].id.toString());
+                                                                          onPressed: () async {
+                                                                            await context.read<MeetCubit>().removeTeam(context.read<MeetCubit>().state.myTeams[i].id.toString());
                                                                             Navigator.pop(dialogContext);
                                                                             Navigator.pop(context);
+                                                                            context.read<MeetCubit>().refreshMeetPage();
                                                                           },
                                                                           child: const Text('삭제', style: TextStyle(color: Color(0xffFF5C58)),),
                                                                         ),
@@ -195,9 +212,10 @@ class _BottomSection extends StatelessWidget {
                               onTap: () async {
                                 await Navigator.push(context, PageTransition(type: PageTransitionType.rightToLeftJoined, child: MeetCreateTeam(
                                   onFinish: () {
-                                    cubit.refreshMeetPage();
+                                    context.read<MeetCubit>().refreshMeetPage();
                                   }
                                 ), childCurrent: this));
+                                context.read<MeetCubit>().refreshMeetPage();
                                 Navigator.pop(context);
                               },
                               child: Container(
@@ -221,7 +239,7 @@ class _BottomSection extends StatelessWidget {
                       )
                     );
                     onFinish: () {
-                      cubit.refreshMeetPage();
+                      context.read<MeetCubit>().refreshMeetPage();
                     };
                 });
               },
@@ -240,12 +258,13 @@ class _BottomSection extends StatelessWidget {
               ),
             ),
             GestureDetector( // 팀 만들기 버튼 ********
-              onTap: () {
-                Navigator.push(context, PageTransition(type: PageTransitionType.rightToLeftJoined, child: MeetCreateTeam(
+              onTap: () async {
+                await Navigator.push(context, PageTransition(type: PageTransitionType.rightToLeftJoined, child: MeetCreateTeam(
                     onFinish: () {
-                      cubit.refreshMeetPage();
+                      context.read<MeetCubit>().refreshMeetPage();
                     },
                 ), childCurrent: this));
+                context.read<MeetCubit>().refreshMeetPage();
               },
               child: Container(
                 width: SizeConfig.screenWidth * 0.43,

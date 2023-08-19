@@ -31,9 +31,10 @@ class MyPagesCubit extends Cubit<MyPagesState> {
     print("mypage init 끝");
   }
 
-  void pressedFriendAddButton(User friend) {
-    _friendUseCase.addFriend(friend);
+  Future<void> pressedFriendAddButton(User friend) async {
+    await _friendUseCase.addFriend(friend);
     state.addFriend(friend);
+    state.newFriends = (await _friendUseCase.getRecommendedFriends(put: true)).toSet();
     emit(state.copy());
   }
 

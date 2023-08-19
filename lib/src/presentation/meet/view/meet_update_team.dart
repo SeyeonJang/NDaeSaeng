@@ -1,18 +1,21 @@
 import 'package:dart_flutter/res/config/size_config.dart';
-import 'package:dart_flutter/src/common/util/toast_util.dart';
 import 'package:dart_flutter/src/domain/entity/location.dart';
 import 'package:dart_flutter/src/domain/entity/meet_team.dart';
+import 'package:dart_flutter/src/presentation/meet/view/meet_create_team.dart';
 import 'package:dart_flutter/src/presentation/meet/viewmodel/meet_cubit.dart';
 import 'package:dart_flutter/src/presentation/meet/viewmodel/state/meet_state.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:dart_flutter/src/domain/entity/user.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class MeetUpdateTeam extends StatefulWidget {
   final VoidCallback onFinish;
-  final MeetTeam myTeam;
+  // final MeetTeam myTeam;
+  // final User user;
+  final MeetState meetState;
 
-  MeetUpdateTeam({super.key, required this.onFinish, required this.myTeam});
+  // MeetUpdateTeam({super.key, required this.onFinish, required this.myTeam, required this.user});
+  MeetUpdateTeam({super.key, required this.onFinish, required this.meetState});
 
   @override
   State<MeetUpdateTeam> createState() => _MeetUpdateTeamState();
@@ -21,12 +24,37 @@ class MeetUpdateTeam extends StatefulWidget {
 class _MeetUpdateTeamState extends State<MeetUpdateTeam> {
   // 수정일 때 late int id;
   String name = '';
+  late MeetState state;
+  late var friendsList;
+  late var teamMemberList;
+
+  @override
+  void initState() {
+    super.initState();
+    state = widget.meetState;
+    print(state.toString());
+
+    var friendsList = state.friends.toList();
+    var teamMemberList = state.teamMembers.toList();
+  }
+
+  void addFriendToMyTeam(User friend) {
+    setState(() {
+    friendsList.remove(friend);
+    teamMemberList.add(friend);
+    });
+  }
+
+  void removeFriendFromMyTeam(User friend) {
+    setState(() {
+    friendsList.add(friend);
+    teamMemberList.remove(friend);
+    });
+  }
 
   void handleTeamNameChanged(String newName) {
     name = newName;
   }
-
-  late MeetState ancestorState;
 
   @override
   Widget build(BuildContext context) {
@@ -61,17 +89,11 @@ class _MeetUpdateTeamState extends State<MeetUpdateTeam> {
       onWillPop: () {
         return _onBackKey();
       },
-      child: BlocProvider<MeetCubit>(
-        create: (context) => MeetCubit(),
-        child: Scaffold(
+      child: Scaffold(
             backgroundColor: Colors.white,
             body: SafeArea(
-              child: BlocBuilder<MeetCubit, MeetState>(
-                  builder: (context, state) {
-                    context.read<MeetCubit>().initState();
-                    var friendsList = state.friends.toList();
-                    var teamMemberList = state.teamMembers.toList();
-                    return Center(
+                    // context.read<MeetCubit>().initState();
+                    child: Center(
                       child: Padding(
                         padding: EdgeInsets.all(SizeConfig.defaultSize * 1.3),
                         child: Column(
@@ -122,15 +144,15 @@ class _MeetUpdateTeamState extends State<MeetUpdateTeam> {
                                     children: [
                                       _CreateTeamTopSection(userResponse: state.userResponse, handleTeamNameChanged: handleTeamNameChanged, state: state),
                                       // 나
-                                      _MemberCardView(userResponse: state.userResponse, state: state),
+                                      MemberCardView(userResponse: state.userResponse, state: state, isMyself: true),
                                       // 친구1
                                       // context.read<MeetCubit>().getTeam(widget.myTeam.id.toString())
                                       state.isMemberOneAdded
-                                          ? _MemberCardView(userResponse: teamMemberList[0], state: state)
+                                          ? MemberCardView(userResponse: teamMemberList[0], state: state, isMyself: false)
                                           : Container(),
                                       // 친구2
                                       state.isMemberTwoAdded
-                                          ? _MemberCardView(userResponse: teamMemberList[1], state: state)
+                                          ? MemberCardView(userResponse: teamMemberList[1], state: state, isMyself: false)
                                           : Container(),
                                       // 버튼
                                       state.isMemberTwoAdded
@@ -161,17 +183,14 @@ class _MeetUpdateTeamState extends State<MeetUpdateTeam> {
                           ],
                         ),
                       ),
-                    );
-                  }
-              ),
+                    ),
             ),
             bottomNavigationBar: BlocBuilder<MeetCubit, MeetState>(
                 builder: (buildContext, state) {
-                  return _CreateTeamBottomSection(state: state, name: name, ancestorContext: context);
+                  return _CreateTeamBottomSection(state: state, name: name);
                 }
             )
         ),
-      ),
     );
   }
 
@@ -324,6 +343,14 @@ class _OneFriendComponentState extends State<_OneFriendComponent> {
                 ),
                 onPressed: () {
                   widget.sheetContext.read<MeetCubit>().pressedMemberAddButton(widget.friend);
+
+
+
+                  ///////////////////// gpt에게. 여기서 addFriendToMyTeam()을 호출하고 싶습니다.
+
+
+
+
                   Navigator.pop(widget.sheetContext);
                   print(widget.nowNum+1);
                 },
@@ -427,237 +454,14 @@ class _CreateTeamTopSectionState extends State<_CreateTeamTopSection> {
   }
 }
 
-class _MemberCardView extends StatelessWidget {
-  late User userResponse;
-  late MeetState state;
-
-  _MemberCardView({
-    super.key,
-    required this.userResponse,
-    required this.state,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.symmetric(vertical: SizeConfig.defaultSize * 0.8),
-      child: Container( // 카드뷰 시작 *****************
-        width: SizeConfig.screenWidth,
-        height: SizeConfig.defaultSize * 21.5,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          border: Border.all(
-            color: Color(0xffFF5C58).withOpacity(0.5),
-            width: 1.5
-          )
-        ),
-        child: Padding(
-          padding: EdgeInsets.symmetric(vertical: SizeConfig.defaultSize * 1.2, horizontal: SizeConfig.defaultSize * 1.5),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row( // 위층 (받은 투표 위까지)
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      GestureDetector(
-                        onTap: () {
-                          // AnalyticsUtil.logEvent("내정보_마이_내사진터치");
-                        },
-                        child: userResponse.personalInfo!.profileImageUrl == "DEFAULT"
-                            ? ClipOval(
-                              child: Image.asset('assets/images/profile-mockup3.png', width: SizeConfig.defaultSize * 6.2, fit: BoxFit.cover,),
-                              )
-                            : ClipOval(
-                              child: Image.network(userResponse.personalInfo!.profileImageUrl,
-                              width: SizeConfig.defaultSize * 6.2,
-                              height: SizeConfig.defaultSize * 6.2,
-                              fit: BoxFit.cover,)
-                        ),
-                      ),
-                      SizedBox(width: SizeConfig.defaultSize * 0.8),
-                      Expanded(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Row( // 1층
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Row(
-                                    children: [
-                                        SizedBox(width: SizeConfig.defaultSize * 0.5,),
-                                      Text(
-                                        userResponse.personalInfo?.nickname == 'DEFAULT'
-                                            ? ('${userResponse.personalInfo?.name}' ?? '친구 이름')
-                                            : (userResponse.personalInfo?.nickname ?? '친구 닉네임'),
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.w500,
-                                          fontSize: SizeConfig.defaultSize * 1.6,
-                                          color: Colors.black,
-                                        ),),
-                                        SizedBox(width: SizeConfig.defaultSize * 0.3),
-
-                                      if (userResponse.personalInfo!.verification.isVerificationSuccess)
-                                        Image.asset("assets/images/check.png", width: SizeConfig.defaultSize * 1.3),
-
-                                        SizedBox(width: SizeConfig.defaultSize * 0.5),
-                                      Text(
-                                        "∙ ${userResponse.personalInfo?.birthYear.toString().substring(2,4)??"??"}년생",
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.w500,
-                                          fontSize: SizeConfig.defaultSize * 1.6,
-                                          color: Colors.black,
-                                        ),),
-                                    ]
-                                ),
-                              ],
-                            ),
-                            Row( // 2층
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Row(
-                                  children: [
-                                      SizedBox(width: SizeConfig.defaultSize * 0.5,),
-                                    Container(
-                                      width: SizeConfig.screenWidth * 0.56,
-                                      child: Text(
-                                        userResponse.university?.department ?? "??학부", // TODO : 학과 길면 ... 처리
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.w500,
-                                          fontSize: SizeConfig.defaultSize * 1.6,
-                                          color: Colors.black,
-                                          overflow: TextOverflow.ellipsis,
-
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                  PopupMenuButton<String>(
-                    icon: Icon(Icons.more_horiz_rounded, color: Colors.grey.shade300,),
-                    color: Colors.white,
-                    surfaceTintColor: Colors.white,
-                    onSelected: (value) {
-                      // 팝업 메뉴에서 선택된 값 처리
-                      if (value == 'remove') {
-                        Navigator.pop(context, 'remove');
-                        if (state.isMemberOneAdded || state.isMemberTwoAdded)
-                          state.deleteTeamMember(userResponse);
-                        else
-                          ToastUtil.showToast("팀원이 2명일 때는 친구를 삭제할 수 없어요!");
-                      }
-                    },
-                    itemBuilder: (BuildContext context) {
-                      return [
-                        PopupMenuItem<String>(
-                          value: 'remove',
-                          child: Text("삭제하기", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.5)),
-                        ),
-                      ];
-                    },
-                  ),
-                ],
-              ),
-
-              // TODO : 받은 투표가 있다면 VoteView, 없으면 NoVoteView
-              Container(
-                height: SizeConfig.defaultSize * 11.5,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    _VoteView(),
-                    _NoVoteView(),
-                    _NoVoteView(),
-                  ],
-                ),
-              )
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _VoteView extends StatelessWidget { // 받은 투표 있을 때
-  const _VoteView({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: SizeConfig.screenWidth,
-      height: SizeConfig.defaultSize * 3.5,
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(8),
-          color: Color(0xffFF5C58)
-      ),
-        alignment: Alignment.center,
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: SizeConfig.defaultSize * 2),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text("첫인상이 좋은", style: TextStyle(
-                  color: Colors.white,
-                  fontSize: SizeConfig.defaultSize * 1.3
-              ),),
-              Text("5+",  style: TextStyle(
-                  color: Colors.white,
-                  fontSize: SizeConfig.defaultSize * 1.3
-              ),)
-            ],
-          ),
-        )
-    );
-  }
-}
-
-class _NoVoteView extends StatelessWidget { // 받은 투표 없을 때
-  const _NoVoteView({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: SizeConfig.screenWidth,
-      height: SizeConfig.defaultSize * 3.5,
-      decoration: BoxDecoration(
-        color: Colors.grey.shade50,
-        borderRadius: BorderRadius.circular(8),
-      ),
-      alignment: Alignment.center,
-      child: Text("내정보 탭에서 받은 투표를 프로필로 넣어보세요!", style: TextStyle(
-        color: Color(0xffFF5C58),
-        fontSize: SizeConfig.defaultSize * 1.3
-      ),)
-    );
-  }
-}
-
 class _CreateTeamBottomSection extends StatefulWidget {
   MeetState state;
   String name;
-  BuildContext ancestorContext;
 
   _CreateTeamBottomSection({
     super.key,
     required this.state,
     required this.name,
-    required this.ancestorContext,
   });
 
   @override

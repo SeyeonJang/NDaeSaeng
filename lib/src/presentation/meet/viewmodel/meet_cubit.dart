@@ -22,6 +22,7 @@ class MeetCubit extends Cubit<MeetState> {
     state.setIsLoading(true);
     emit(state.copy());
     print(state);
+    await Future.delayed(Duration(seconds: 5));
 
     User userResponse = await _userUseCase.myInfo();
     state.setMyInfo(userResponse);
@@ -39,17 +40,31 @@ class MeetCubit extends Cubit<MeetState> {
     // state.meetPageState = MeetStateEnum.landing;
   }
 
+  void initFrom(MeetState meetState) {
+    state.setAll(meetState);
+    emit(state.copy());
+  }
+
   // Meet - CreateTeam
 
   void pressedMemberAddButton(User friend) { // TODO : User friend 파라미터로 친구 정보 받아와서 teamMembers 친구 목록에 넣기
+    state.setIsLoading(true);
+    emit(state.copy());
+
     state.isMemberOneAdded
         ? state.setIsMemberTwoAdded(true)
         : state.setIsMemberOneAdded(true);
+
     state.addTeamMember(friend);
+
+    state.setIsLoading(false);
     emit(state.copy());
   }
 
   void pressedMemberDeleteButton(User friend) {
+    state.setIsLoading(true);
+    emit(state.copy());
+
     if (state.isMemberOneAdded) {
       state.setIsMemberOneAdded(false);
       state.setIsMemberTwoAdded(false);
@@ -60,6 +75,7 @@ class MeetCubit extends Cubit<MeetState> {
     }
     state.deleteTeamMember(friend);
     print("cubit - friend 삭제 {$friend}");
+    state.setIsLoading(false);
     emit(state.copy());
   }
 
@@ -68,8 +84,9 @@ class MeetCubit extends Cubit<MeetState> {
     emit(state.copy());
   }
 
-  void createNewTeam(MeetTeam meetTeam) {
-    _meetUseCase.createNewTeam(meetTeam);
+  Future<void> createNewTeam(MeetTeam meetTeam) async {
+    var myTeam = await _meetUseCase.createNewTeam(meetTeam);
+    state.addMyTeam(myTeam);
     print("cubit - 팀 추가 완료");
   }
 
@@ -85,8 +102,9 @@ class MeetCubit extends Cubit<MeetState> {
     print("팀 목록 ${state.myTeams}");
   }
 
-  void removeTeam(String teamId) {
-    _meetUseCase.removeTeam(teamId);
+  Future<void> removeTeam(String teamId) async {
+    await _meetUseCase.removeTeam(teamId);
+    state.removeMyTeamById(teamId);
     print("cubit - 팀 삭제 완료");
   }
 
@@ -95,8 +113,12 @@ class MeetCubit extends Cubit<MeetState> {
   }
 
   void refreshMeetPage() async {
+    state.setIsLoading(true);
+    emit(state.copy());
+
     await getMyTeams();
-    print("refreshing");
+
+    state.setIsLoading(false);
     emit(state.copy());
   }
 

@@ -100,14 +100,14 @@ class _MeetCreateTeamState extends State<MeetCreateTeam> {
                                     children: [
                                       _CreateTeamTopSection(userResponse: state.userResponse, handleTeamNameChanged: handleTeamNameChanged, state: state),
                                       // 나
-                                      _MemberCardView(userResponse: state.userResponse, state: state, isMyself: true),
+                                      MemberCardView(userResponse: state.userResponse, state: state, isMyself: true),
                                       // 친구1
                                       state.isMemberOneAdded
-                                          ? _MemberCardView(userResponse: teamMemberList.first, state: state, isMyself: false)
+                                          ? MemberCardView(userResponse: teamMemberList.first, state: state, isMyself: false)
                                           : Container(),
                                       // 친구2
                                       state.isMemberTwoAdded
-                                          ? _MemberCardView(userResponse: teamMemberList.last, state: state, isMyself: false)
+                                          ? MemberCardView(userResponse: teamMemberList.last, state: state, isMyself: false)
                                           : Container(),
                                       // 버튼
                                       state.isMemberTwoAdded
@@ -423,12 +423,12 @@ class _CreateTeamTopSectionState extends State<_CreateTeamTopSection> {
   }
 }
 
-class _MemberCardView extends StatelessWidget {
+class MemberCardView extends StatelessWidget {
   late User userResponse;
   late MeetState state;
   late bool isMyself;
 
-  _MemberCardView({
+  MemberCardView({
     super.key,
     required this.userResponse,
     required this.state,
@@ -583,9 +583,9 @@ class _MemberCardView extends StatelessWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    _VoteView(),
-                    _NoVoteView(),
-                    _NoVoteView(),
+                    VoteView(),
+                    NoVoteView(),
+                    NoVoteView(),
                   ],
                 ),
               )
@@ -597,8 +597,8 @@ class _MemberCardView extends StatelessWidget {
   }
 }
 
-class _VoteView extends StatelessWidget { // 받은 투표 있을 때
-  const _VoteView({
+class VoteView extends StatelessWidget { // 받은 투표 있을 때
+  const VoteView({
     super.key,
   });
 
@@ -632,8 +632,8 @@ class _VoteView extends StatelessWidget { // 받은 투표 있을 때
   }
 }
 
-class _NoVoteView extends StatelessWidget { // 받은 투표 없을 때
-  const _NoVoteView({
+class NoVoteView extends StatelessWidget { // 받은 투표 없을 때
+  const NoVoteView({
     super.key,
   });
 
@@ -823,10 +823,10 @@ class _CreateTeamBottomSectionState extends State<_CreateTeamBottomSection> {
               ),
               SizedBox(height: SizeConfig.defaultSize * 0.3,),
               GestureDetector(
-                onTap: () {
+                onTap: () async {
                   MeetTeam myNewTeam = MeetTeam(id: 0, name: widget.state.teamName, university: widget.state.userResponse!.university, locations: widget.state.getCities(), canMatchWithSameUniversity: widget.state.isChecked, members: widget.state.teamMembers.toList());
                   if ((widget.state.isMemberOneAdded || widget.state.isMemberTwoAdded) && widget.state.teamName!='' && widget.state.getCities().isNotEmpty) {
-                    context.read<MeetCubit>().createNewTeam(myNewTeam);
+                    await context.read<MeetCubit>().createNewTeam(myNewTeam);
                     print("${widget.state.teamName} 이름 전달합니다");
                     print("${widget.state.userResponse!.university}");
                     print("${myNewTeam.toString()}");

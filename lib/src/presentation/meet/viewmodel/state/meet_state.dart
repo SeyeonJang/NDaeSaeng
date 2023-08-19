@@ -71,6 +71,21 @@ class MeetState {
     isChecked: isChecked
   );
 
+  void setAll(MeetState state) {
+      meetPageState = state.meetPageState;
+      userResponse = state.userResponse;
+      isLoading = state.isLoading;
+      isMemberOneAdded = state.isMemberOneAdded;
+      isMemberTwoAdded = state.isMemberTwoAdded;
+      friends = state.friends;
+      filteredFriends = state.filteredFriends;
+      teamMembers = state.teamMembers;
+      cities = state.cities;
+      myTeams = state.myTeams;
+      teamName = state.teamName;
+      isChecked = state.isChecked;
+  }
+
   void setIsLoading(bool isLoading) {
     this.isLoading = isLoading;
   }
@@ -101,6 +116,16 @@ class MeetState {
 
   MeetState setMyFilteredFriends(List<User> filteredFriends) {
     this.filteredFriends = filteredFriends;
+    return this;
+  }
+
+  MeetState addMyTeam(MeetTeam team) {
+    this.myTeams.add(team);
+    return this;
+  }
+
+  MeetState removeMyTeamById(String teamId) {
+    myTeams.removeWhere((element) => element.id == teamId);
     return this;
   }
 
@@ -151,7 +176,8 @@ class MeetState {
 
   @override
   String toString() {
-    return 'MeetState{meetPageState: $meetPageState}';
+    // return 'MeetState{meetPageState: $meetPageState, userResponse: $userResponse, isLoading: $isLoading, isMemberOneAdded: $isMemberOneAdded, isMemberTwoAdded: $isMemberTwoAdded, friends: $friends, filteredFriends: $filteredFriends, teamMembers: $teamMembers, cities: $cities, myTeams: $myTeams, teamName: $teamName, isChecked: $isChecked}';
+    return 'MyTeams: ${myTeams}';
   }
 }
 

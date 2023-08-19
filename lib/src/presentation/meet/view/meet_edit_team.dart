@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:dart_flutter/src/domain/entity/user.dart';
 
+@Deprecated("어디에 쓰고잇는거요")
 class MeetEditTeam extends StatefulWidget {
   final VoidCallback onFinish;
   final MeetTeam myTeam;

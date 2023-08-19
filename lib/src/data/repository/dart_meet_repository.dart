@@ -22,7 +22,7 @@ class DartMeetRepository implements MeetRepository {
   }
 
   @override
-  void removeMyTeam(String teamId) async {
+  Future<void> removeMyTeam(String teamId) async {
     await DartApiRemoteDataSource.deleteTeam(teamId);
   }
 

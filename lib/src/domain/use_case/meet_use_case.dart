@@ -1,13 +1,12 @@
 import 'package:dart_flutter/src/data/repository/dart_meet_repository.dart';
-import 'package:dart_flutter/src/data/repository/mock_meet_repository.dart';
 import 'package:dart_flutter/src/domain/entity/meet_team.dart';
 import 'package:dart_flutter/src/domain/repository/meet_repository.dart';
 
 class MeetUseCase {
   final MeetRepository _meetRepository = DartMeetRepository();
 
-  void createNewTeam(MeetTeam meetTeam) {
-    _meetRepository.createNewTeam(meetTeam);
+  Future<MeetTeam> createNewTeam(MeetTeam meetTeam) async {
+    return await _meetRepository.createNewTeam(meetTeam);
   }
 
   Future<MeetTeam> getTeam(String teamId) async {
@@ -18,8 +17,8 @@ class MeetUseCase {
     return _meetRepository.getMyTeams();
   }
 
-  void removeTeam(String teamId) {
-    _meetRepository.removeMyTeam(teamId);
+  Future<void> removeTeam(String teamId) async {
+    await _meetRepository.removeMyTeam(teamId);
     print("usecase - 팀 삭제 완료");
   }
 
