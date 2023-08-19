@@ -35,9 +35,10 @@ class MySettings extends StatelessWidget {
     return Scaffold(
         backgroundColor: Colors.white,
         body: BlocProvider<MyPagesCubit>(
-          create: (context) => MyPagesCubit(),
+          create: (context) => MyPagesCubit()..initPages(),
             child: BlocBuilder<MyPagesCubit, MyPagesState>(
               builder: (context, state) {
+                // context.read<MyPagesCubit>().getMyTitleVote();
                 return SafeArea(
                     child: MyPageView(userResponse: userResponse, state: state),
                 );
