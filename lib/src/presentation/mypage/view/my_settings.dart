@@ -366,9 +366,6 @@ class _MyPageViewState extends State<MyPageView> {
                                               for (int j=0; j<widget.state.myAllVotes.length; j++) // (MyAllVotes의 개수만큼 반복)
                                                 GestureDetector(
                                                 onTap: () {
-                                                  if (context.read<MyPagesCubit>().state.isLoading == true) {
-                                                    return;
-                                                  }
                                                   context.read<MyPagesCubit>().addTitleVote(widget.state.myAllVotes[j], widget.userResponse); // add
                                                   context.read<MyPagesCubit>().refreshMyInfo();
                                                   Navigator.pop(modalContext);

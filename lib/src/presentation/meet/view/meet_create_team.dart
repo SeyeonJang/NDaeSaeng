@@ -649,9 +649,10 @@ class MemberCardView extends StatelessWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    VoteView(),
-                    NoVoteView(),
-                    NoVoteView(),
+                    for (int i = 0; i < 3; i++)
+                      userResponse.titleVotes.length > i ?
+                      VoteView(userResponse.titleVotes[i].question.content ?? "(알수없음)", userResponse.titleVotes[i].count) :
+                      NoVoteView(),
                   ],
                 ),
               )
@@ -664,9 +665,12 @@ class MemberCardView extends StatelessWidget {
 }
 
 class VoteView extends StatelessWidget { // 받은 투표 있을 때
-  const VoteView({
-    super.key,
-  });
+  final String questionName;
+  final int count;
+
+  const VoteView(
+    this.questionName, this.count
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -683,11 +687,11 @@ class VoteView extends StatelessWidget { // 받은 투표 있을 때
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text("첫인상이 좋은", style: TextStyle(
+              Text(questionName, style: TextStyle(
                   color: Colors.white,
                   fontSize: SizeConfig.defaultSize * 1.3
               ),),
-              Text("5+",  style: TextStyle(
+              Text("$count",  style: TextStyle(
                   color: Colors.white,
                   fontSize: SizeConfig.defaultSize * 1.3
               ),)
