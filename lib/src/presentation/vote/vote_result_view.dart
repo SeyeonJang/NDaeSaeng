@@ -77,7 +77,7 @@ class _VoteResultViewState extends State<VoteResultView> with SingleTickerProvid
                           AnalyticsUtil.logEvent("투표_끝_포인트터치");
                         },
                         child: Text(
-                          "투표를 통해 160 포인트를 획득했어요!",
+                          "투표를 통해 16 포인트를 획득했어요!",
                           style: TextStyle(
                             fontWeight: FontWeight.w500,
                             fontSize: SizeConfig.defaultSize * 2,
