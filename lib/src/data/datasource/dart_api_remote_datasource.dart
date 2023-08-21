@@ -1,9 +1,9 @@
 import 'dart:convert';
 
 import 'package:dart_flutter/res/environment/app_environment.dart';
-import 'package:dart_flutter/src/data/model/friend_dto.dart';
 import 'package:dart_flutter/src/data/model/question_dto.dart';
 import 'package:dart_flutter/src/data/model/meet_team_request_dto.dart';
+import 'package:dart_flutter/src/data/model/title_vote_dto.dart';
 import 'package:dart_flutter/src/data/model/university_dto.dart';
 import 'package:dart_flutter/src/data/model/user_request_dto.dart';
 
@@ -14,8 +14,6 @@ import '../../data/model/user_dto.dart';
 import '../../data/model/vote_request_dto.dart';
 
 import '../../data/model/vote_response_dto.dart';
-import '../model/meet_team_response_dto.dart';
-import '../model/type/team_region.dart';
 
 class DartApiRemoteDataSource {
   static final String baseUrl = AppEnvironment.getEnv.getApiBaseUrl();
@@ -186,9 +184,19 @@ class DartApiRemoteDataSource {
     final response = await _httpUtil.request().post(path, data: body);
   }
 
+  // vote: 받은 투표 개요 확인하기
+  static Future<List<TitleVoteDto>> getVotesSummary() async {
+    const path = '/v1/users/me/questions';
+    final response = await _httpUtil.request().get(path);
+
+    final List<dynamic> jsonResponse = response.data;
+    List<TitleVoteDto> titleVote = jsonResponse.map((vote) => TitleVoteDto.fromJson(vote)).toList();
+    return titleVote;
+  }
+
   // vote: 받은 투표 리스트 확인하기
   static Future<List<VoteResponseDto>> getVotes() async {
-    const path = '/v1/users/me/votes';
+    const path = '/v1/votes';
 
     final response = await _httpUtil.request().get(path);
     final List<dynamic> jsonResponse = response.data;

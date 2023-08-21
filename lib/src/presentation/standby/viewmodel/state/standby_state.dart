@@ -1,6 +1,7 @@
-import 'package:dart_flutter/src/data/model/personal_info_dto.dart';
-import 'package:dart_flutter/src/domain/entity/friend.dart';
 import 'package:dart_flutter/src/domain/entity/user.dart';
+
+import '../../../../domain/entity/question.dart';
+import '../../../../domain/entity/title_vote.dart';
 
 class StandbyState {
   late bool isLoading;
@@ -25,6 +26,7 @@ class StandbyState {
     userResponse = User(
       personalInfo: null,
       university: null,
+      titleVotes: [],
     );
     isLoading = false;
     isFirstCommCompleted = false;

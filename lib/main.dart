@@ -7,7 +7,6 @@ import 'package:dart_flutter/src/common/util/analytics_util.dart';
 import 'package:dart_flutter/src/common/util/push_notification_util.dart';
 import 'package:dart_flutter/src/common/util/timeago_util.dart';
 import 'package:dart_flutter/src/common/util/toast_util.dart';
-import 'package:dart_flutter/src/domain/use_case/user_use_case.dart';
 import 'package:dart_flutter/src/presentation/landing/land_pages.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -41,6 +40,7 @@ void main() async {
       child: MaterialApp(
         home: const MyApp(),
         theme: AppTheme.lightThemeData,
+        debugShowCheckedModeBanner: false,
       ),
     ),
   );
