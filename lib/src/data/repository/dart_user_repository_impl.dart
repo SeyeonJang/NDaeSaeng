@@ -9,6 +9,7 @@ import 'package:dart_flutter/src/domain/repository/user_repository.dart';
 
 import '../../data/datasource/dart_api_remote_datasource.dart';
 import '../datasource/supabase_remote_datasource.dart';
+import '../model/user_dto.dart';
 
 class DartUserRepositoryImpl implements UserRepository {
   static const Duration cachingInterval = Duration(minutes: 10);
@@ -55,7 +56,7 @@ class DartUserRepositoryImpl implements UserRepository {
   @override
   Future<User> patchMyInfo(User user) async {
     UserDto userDto = await DartApiRemoteDataSource.patchMyInformation(UserRequestDto.fromUserResponse(user));
-    User patchedUser = userDto.newUserResponse();
+    User patchedUser = userDto.newUser();
     userResponseCache.setObject(patchedUser);
     return patchedUser;
   }

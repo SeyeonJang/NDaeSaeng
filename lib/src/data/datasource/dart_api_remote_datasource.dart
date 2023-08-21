@@ -14,6 +14,8 @@ import '../../data/model/user_dto.dart';
 import '../../data/model/vote_request_dto.dart';
 
 import '../../data/model/vote_response_dto.dart';
+import '../model/meet_team_response_dto.dart';
+import '../model/type/team_region.dart';
 
 class DartApiRemoteDataSource {
   static final String baseUrl = AppEnvironment.getEnv.getApiBaseUrl();
@@ -196,7 +198,7 @@ class DartApiRemoteDataSource {
 
   // vote: 받은 투표 리스트 확인하기
   static Future<List<VoteResponseDto>> getVotes() async {
-    const path = '/v1/votes';
+    const path = '/v1/users/me/votes';
 
     final response = await _httpUtil.request().get(path);
     final List<dynamic> jsonResponse = response.data;

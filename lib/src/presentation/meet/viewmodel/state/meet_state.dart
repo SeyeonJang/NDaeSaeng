@@ -43,6 +43,7 @@ class MeetState {
     userResponse = User(
       personalInfo: null,
       university: null,
+      titleVotes: [],
     );
     isLoading = false;
     isMemberOneAdded = false;
