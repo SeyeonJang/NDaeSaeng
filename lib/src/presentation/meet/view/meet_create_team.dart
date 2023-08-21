@@ -1,4 +1,5 @@
 import 'package:dart_flutter/res/config/size_config.dart';
+import 'package:dart_flutter/src/common/util/analytics_util.dart';
 import 'package:dart_flutter/src/domain/entity/location.dart';
 import 'package:dart_flutter/src/domain/entity/meet_team.dart';
 import 'package:dart_flutter/src/domain/use_case/meet_use_case.dart';
@@ -30,6 +31,8 @@ class _MeetCreateTeamState extends State<MeetCreateTeam> {
   @override
   void initState() {
     super.initState();
+    AnalyticsUtil.logEvent("과팅_팀만들기_접속");
+
     state = widget.state;
 
     friendsList = state.friends.toList();
@@ -110,25 +113,27 @@ class _MeetCreateTeamState extends State<MeetCreateTeam> {
       return await showDialog(
           context: context,
           builder: (BuildContext sheetContext) {
-            return AlertDialog(
-              backgroundColor: Colors.white,
-              surfaceTintColor: Colors.white,
-              title: Text("팀 만들기를 종료하시겠어요?", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.8),),
-              actions: [
-                TextButton(
-                  onPressed: () {
-                    Navigator.pop(sheetContext);
-                  },
-                  child: Text('취소', style: TextStyle(color: Color(0xffFF5C58))),
-                ),
-                TextButton(
-                  onPressed: () {
-                    widget.onFinish();
-                    Navigator.pop(context, true);
-                  },
-                  child: Text('끝내기', style: TextStyle(color: Color(0xffFF5C58))),
-                )
-              ],
+            return GestureDetector(
+              child: AlertDialog(
+                backgroundColor: Colors.white,
+                surfaceTintColor: Colors.white,
+                title: Text("팀 만들기를 종료하시겠어요?", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.8),),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pop(sheetContext);
+                    },
+                    child: Text('취소', style: TextStyle(color: Color(0xffFF5C58))),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      widget.onFinish();
+                      Navigator.pop(context, true);
+                    },
+                    child: Text('끝내기', style: TextStyle(color: Color(0xffFF5C58))),
+                  )
+                ],
+              ),
             );
           }
           );
@@ -136,6 +141,7 @@ class _MeetCreateTeamState extends State<MeetCreateTeam> {
 
     return WillPopScope(
       onWillPop: () {
+        AnalyticsUtil.logEvent("과팅_팀만들기_뒤로가기_윌팝스코프");
         return _onBackKey();
       },
       child: Scaffold(
@@ -151,6 +157,7 @@ class _MeetCreateTeamState extends State<MeetCreateTeam> {
                                 children: [
                                   IconButton(
                                       onPressed: () async {
+                                        AnalyticsUtil.logEvent("과팅_팀만들기_뒤로가기_터치");
                                         await _onBackKey();
                                         Navigator.pop(context);
                                       },
@@ -185,6 +192,7 @@ class _MeetCreateTeamState extends State<MeetCreateTeam> {
                                           ? Container()
                                           : InkWell( // 팀원 추가하기 버튼 *******
                                         onTap: () {
+                                          AnalyticsUtil.logEvent("과팅_팀만들기_팀원추가하기버튼_터치");
                                           _ShowModalBottomSheet(context, friendsList);
                                           // context.read<MeetCubit>().pressedMemberAddButton();
                                         },
@@ -222,6 +230,9 @@ class _MeetCreateTeamState extends State<MeetCreateTeam> {
       friend.personalInfo?.gender == state.userResponse.personalInfo?.gender
     ).toList();
     print("UI에서 필터링한 친구목록 ${filteredFriends}");
+    AnalyticsUtil.logEvent("과팅_팀만들기_팀원추가하기_접속", properties: {
+      'friendsCount': filteredFriends.length
+    });
     // context.read<MeetCubit>().setMyFilteredFriends(filteredFriends.toList());
     // print("필터링 된 내 친구목록 ${state.filteredFriends}");
 
@@ -379,6 +390,7 @@ class _OneFriendComponentState extends State<_OneFriendComponent> {
                     padding: EdgeInsets.all(0)
                 ),
                 onPressed: () {
+                  AnalyticsUtil.logEvent("과팅_팀만들기_팀원추가하기_친구추가_터치");
                   widget.onAddFriend(widget.friend);
                   widget.filteredFriends.remove(widget.friend);
 
@@ -437,49 +449,59 @@ class _CreateTeamTopSectionState extends State<_CreateTeamTopSection> {
       children: [
         Column(
           children: [
-            Row(children: [
-              Text("학교",
-                  style: TextStyle(
-                      fontWeight: FontWeight.w400,
-                      fontSize: SizeConfig.defaultSize * 1.6,
-                      color: Colors.grey
-                  )),
-              SizedBox(width: SizeConfig.defaultSize,),
-              Text("${widget.userResponse.university?.name ?? '학교를 불러오지 못 했어요'}",
-                  style: TextStyle(
-                      fontWeight: FontWeight.w400,
-                      fontSize: SizeConfig.defaultSize * 1.6,
-                      color: Colors.grey
-                  ))
-            ]),
+            GestureDetector(
+              onTap: () {
+                AnalyticsUtil.logEvent("과팅_팀만들기_학교_터치");
+              },
+              child: Row(children: [
+                Text("학교",
+                    style: TextStyle(
+                        fontWeight: FontWeight.w400,
+                        fontSize: SizeConfig.defaultSize * 1.6,
+                        color: Colors.grey
+                    )),
+                SizedBox(width: SizeConfig.defaultSize,),
+                Text("${widget.userResponse.university?.name ?? '학교를 불러오지 못 했어요'}",
+                    style: TextStyle(
+                        fontWeight: FontWeight.w400,
+                        fontSize: SizeConfig.defaultSize * 1.6,
+                        color: Colors.grey
+                    ))
+              ]),
+            ),
               SizedBox(height: SizeConfig.defaultSize * 0.5),
-            Row(children: [
-              Text("팀명",
-                  style: TextStyle(
-                      fontWeight: FontWeight.w400,
-                      fontSize: SizeConfig.defaultSize * 1.6,
-                      color: Colors.black
-                  )),
-              SizedBox(width: SizeConfig.defaultSize,),
-              Flexible(
-                  child: TextField(
-                    controller: _controller,
-                    maxLength: 10,
-                    onChanged: (value) {
-                      setState(() {
-                        widget.state.teamName = value;
-                        widget.handleTeamNameChanged(value);
-                      });
-                    },
-                    decoration: InputDecoration(
-                      hintText: "이성에게 보여질 팀명을 입력해주세요!",
-                      contentPadding: EdgeInsets.zero,
-                      enabledBorder: UnderlineInputBorder(borderSide: BorderSide(width: 0.6)),
-                    ),
+            GestureDetector(
+              onTap: () {
+                AnalyticsUtil.logEvent("과팅_팀만들기_팀명_터치");
+              },
+              child: Row(children: [
+                Text("팀명",
+                    style: TextStyle(
+                        fontWeight: FontWeight.w400,
+                        fontSize: SizeConfig.defaultSize * 1.6,
+                        color: Colors.black
+                    )),
+                SizedBox(width: SizeConfig.defaultSize,),
+                Flexible(
+                    child: TextField(
+                      controller: _controller,
+                      maxLength: 10,
+                      onChanged: (value) {
+                        setState(() {
+                          widget.state.teamName = value;
+                          widget.handleTeamNameChanged(value);
+                        });
+                      },
+                      decoration: InputDecoration(
+                        hintText: "이성에게 보여질 팀명을 입력해주세요!",
+                        contentPadding: EdgeInsets.zero,
+                        enabledBorder: UnderlineInputBorder(borderSide: BorderSide(width: 0.6)),
+                      ),
 
-                  )
-              )
-            ]),
+                    )
+                )
+              ]),
+            ),
               SizedBox(height: SizeConfig.defaultSize),
           ],
         )
@@ -532,7 +554,7 @@ class MemberCardView extends StatelessWidget {
                     children: [
                       GestureDetector(
                         onTap: () {
-                          // AnalyticsUtil.logEvent("내정보_마이_내사진터치");
+                          AnalyticsUtil.logEvent("과팅_팀만들기_카드_프사_터치");
                         },
                         child: profileImageUrl == "DEFAULT"
                             ? ClipOval(
@@ -562,53 +584,77 @@ class MemberCardView extends StatelessWidget {
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Row(
-                                          children: [
-                                              SizedBox(width: SizeConfig.defaultSize * 0.5,),
-                                            Text(
-                                              userResponse.personalInfo?.nickname == 'DEFAULT'
-                                                  ? ('${userResponse.personalInfo?.name}' ?? '친구 이름')
-                                                  : (userResponse.personalInfo?.nickname ?? '친구 닉네임'),
-                                              style: TextStyle(
-                                                fontWeight: FontWeight.w500,
-                                                fontSize: SizeConfig.defaultSize * 1.6,
-                                                color: Colors.black,
-                                              ),),
-                                              SizedBox(width: SizeConfig.defaultSize * 0.3),
+                                      GestureDetector(
+                                        onTap: () {
+                                          AnalyticsUtil.logEvent("과팅_팀만들기_카드_정보_터치", properties: {
+                                            'nickname': userResponse.personalInfo?.nickname ?? "닉네임없음",
+                                            'birthYear': userResponse.personalInfo?.birthYear.toString().substring(2,4)??"??",
+                                            'verification': userResponse.personalInfo?.verification.isVerificationSuccess.toString() ?? "false"
+                                          });
+                                        },
+                                        child: Row(
+                                            children: [
+                                                SizedBox(width: SizeConfig.defaultSize * 0.5,),
+                                              Text(
+                                                userResponse.personalInfo?.nickname == 'DEFAULT'
+                                                    ? ('${userResponse.personalInfo?.name}' ?? '친구 이름')
+                                                    : (userResponse.personalInfo?.nickname ?? '친구 닉네임'),
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.w500,
+                                                  fontSize: SizeConfig.defaultSize * 1.6,
+                                                  color: Colors.black,
+                                                ),),
+                                                SizedBox(width: SizeConfig.defaultSize * 0.3),
 
-                                            if (userResponse.personalInfo?.verification.isVerificationSuccess ?? false)
-                                              Image.asset("assets/images/check.png", width: SizeConfig.defaultSize * 1.3),
+                                              if (userResponse.personalInfo?.verification.isVerificationSuccess ?? false)
+                                                Image.asset("assets/images/check.png", width: SizeConfig.defaultSize * 1.3),
 
-                                              SizedBox(width: SizeConfig.defaultSize * 0.5),
-                                            Text(
-                                              "∙ ${userResponse.personalInfo?.birthYear.toString().substring(2,4)??"??"}년생",
-                                              style: TextStyle(
-                                                fontWeight: FontWeight.w500,
-                                                fontSize: SizeConfig.defaultSize * 1.6,
-                                                color: Colors.black,
-                                              ),),
-                                          ]
+                                                SizedBox(width: SizeConfig.defaultSize * 0.5),
+                                              Text(
+                                                "∙ ${userResponse.personalInfo?.birthYear.toString().substring(2,4)??"??"}년생",
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.w500,
+                                                  fontSize: SizeConfig.defaultSize * 1.6,
+                                                  color: Colors.black,
+                                                ),),
+                                            ]
+                                        ),
                                       ),
                                       if (!isMyself)
-                                        PopupMenuButton<String>(
-                                          icon: Icon(Icons.more_horiz_rounded, color: Colors.grey.shade300,),
-                                          color: Colors.white,
-                                          surfaceTintColor: Colors.white,
-                                          padding: EdgeInsets.zero,
-                                          onSelected: (value) {
-                                            // 팝업 메뉴에서 선택된 값 처리
-                                            if (value == 'remove') {
-                                              onRemoveFriend(userResponse);
-                                            }
+                                        GestureDetector(
+                                          onTap: () {
+                                            AnalyticsUtil.logEvent("과팅_팀만들기_카드_더보기_터치", properties: {
+                                            'nickname': userResponse.personalInfo?.nickname ?? "닉네임없음",
+                                            'birthYear': userResponse.personalInfo?.birthYear.toString().substring(2,4)??"??",
+                                            'verification': userResponse.personalInfo?.verification.isVerificationSuccess.toString() ?? "false"
+                                            });
                                           },
-                                          itemBuilder: (BuildContext context) {
-                                            return [
-                                              PopupMenuItem<String>(
-                                                value: 'remove',
-                                                child: Text("삭제하기", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.5)),
-                                              ),
-                                            ];
-                                          },
+                                          child: PopupMenuButton<String>(
+                                            icon: Icon(Icons.more_horiz_rounded, color: Colors.grey.shade300,),
+                                            color: Colors.white,
+                                            surfaceTintColor: Colors.white,
+                                            padding: EdgeInsets.zero,
+                                            onSelected: (value) {
+                                              // 팝업 메뉴에서 선택된 값 처리
+                                              if (value == 'remove') {
+                                                onRemoveFriend(userResponse);
+                                              }
+
+                                              AnalyticsUtil.logEvent("과팅_팀만들기_카드_더보기_삭제_터치", properties: {
+                                                'nickname': userResponse.personalInfo?.nickname ?? "닉네임없음",
+                                                'birthYear': userResponse.personalInfo?.birthYear.toString().substring(2,4)??"??",
+                                                'verification': userResponse.personalInfo?.verification.isVerificationSuccess.toString() ?? "false"
+                                              });
+                                            },
+                                            itemBuilder: (BuildContext context) {
+                                              return [
+                                                PopupMenuItem<String>(
+                                                  value: 'remove',
+                                                  child: Text("삭제하기", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.5)),
+                                                ),
+                                              ];
+                                            },
+                                          ),
                                         ),
                                     ],
                                   ),
@@ -623,14 +669,21 @@ class MemberCardView extends StatelessWidget {
                                 SizedBox(width: SizeConfig.defaultSize * 0.5,),
                                     Container(
                                 width: SizeConfig.screenWidth * 0.56,
-                                child: Text(
-                                  userResponse.university?.department ?? "??학부", // TODO : 학과 길면 ... 처리
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: SizeConfig.defaultSize * 1.6,
-                                    color: Colors.black,
-                                    overflow: TextOverflow.ellipsis,
+                                child: GestureDetector(
+                                  onTap: () {
+                                    AnalyticsUtil.logEvent("과팅_팀만들기_카드_학부_터치", properties: {
+                                      'department': userResponse.university?.department ?? "알수없음"
+                                    });
+                                  },
+                                  child: Text(
+                                    userResponse.university?.department ?? "??학부",
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: SizeConfig.defaultSize * 1.6,
+                                      color: Colors.black,
+                                      overflow: TextOverflow.ellipsis,
 
+                                    ),
                                   ),
                                 ),
                                     ),
@@ -675,30 +728,38 @@ class VoteView extends StatelessWidget { // 받은 투표 있을 때
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: SizeConfig.screenWidth,
-      height: SizeConfig.defaultSize * 3.5,
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(8),
-          color: Color(0xffFF5C58)
+    return GestureDetector(
+      onTap: () {
+        AnalyticsUtil.logEvent("과팅_팀만들기_카드_투표_터치", properties: {
+          'questionName': questionName,
+          'count': count
+        });
+      },
+      child: Container(
+        width: SizeConfig.screenWidth,
+        height: SizeConfig.defaultSize * 3.5,
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(8),
+            color: Color(0xffFF5C58)
+        ),
+          alignment: Alignment.center,
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: SizeConfig.defaultSize * 2),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(questionName, style: TextStyle(
+                    color: Colors.white,
+                    fontSize: SizeConfig.defaultSize * 1.3
+                ),),
+                Text("$count",  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: SizeConfig.defaultSize * 1.3
+                ),)
+              ],
+            ),
+          )
       ),
-        alignment: Alignment.center,
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: SizeConfig.defaultSize * 2),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(questionName, style: TextStyle(
-                  color: Colors.white,
-                  fontSize: SizeConfig.defaultSize * 1.3
-              ),),
-              Text("$count",  style: TextStyle(
-                  color: Colors.white,
-                  fontSize: SizeConfig.defaultSize * 1.3
-              ),)
-            ],
-          ),
-        )
     );
   }
 }
@@ -710,18 +771,26 @@ class NoVoteView extends StatelessWidget { // 받은 투표 없을 때
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: SizeConfig.screenWidth,
-      height: SizeConfig.defaultSize * 3.5,
-      decoration: BoxDecoration(
-        color: Colors.grey.shade50,
-        borderRadius: BorderRadius.circular(8),
+    return GestureDetector(
+      onTap: () {
+        AnalyticsUtil.logEvent("과팅_팀만들기_카드_투표_터치", properties: {
+          'questionName': "빈칸",
+          'count': 0
+        });
+      },
+      child: Container(
+        width: SizeConfig.screenWidth,
+        height: SizeConfig.defaultSize * 3.5,
+        decoration: BoxDecoration(
+          color: Colors.grey.shade50,
+          borderRadius: BorderRadius.circular(8),
+        ),
+        alignment: Alignment.center,
+        child: Text("내정보 탭에서 받은 투표를 프로필로 넣어보세요!", style: TextStyle(
+          color: Color(0xffFF5C58),
+          fontSize: SizeConfig.defaultSize * 1.3
+        ),)
       ),
-      alignment: Alignment.center,
-      child: Text("내정보 탭에서 받은 투표를 프로필로 넣어보세요!", style: TextStyle(
-        color: Color(0xffFF5C58),
-        fontSize: SizeConfig.defaultSize * 1.3
-      ),)
     );
   }
 }
@@ -795,6 +864,7 @@ class _CreateTeamBottomSectionState extends State<_CreateTeamBottomSection> {
                         fontSize: SizeConfig.defaultSize * 1.6),),
                     TextButton(
                         onPressed: () {
+                          AnalyticsUtil.logEvent("과팅_팀만들기_만나고싶은지역버튼_터치");
                           List<Map<String, dynamic>> citiesData = [];
                           for (int i = 0; i < widget.serverLocations.length; i++) {
                             citiesData.add({"id": widget.serverLocations[i].id, "name": widget.serverLocations[i].name, "isChecked": false});
@@ -839,6 +909,10 @@ class _CreateTeamBottomSectionState extends State<_CreateTeamBottomSection> {
                                                               favorite['isChecked'] = val;
                                                             });
                                                             if (favorite['isChecked']) {
+                                                              AnalyticsUtil.logEvent("과팅_팀만들기_만나고싶은지역_지역선택", properties: {
+                                                                'id': favorite['id'] ?? '알수없음',
+                                                                'regieon': favorite['name'] ?? '알수없음'
+                                                              });
                                                               newCitiesData.add({'id': favorite['id'], 'name': favorite['name']});
                                                             } else {
                                                               newCitiesData.removeWhere((item) => item['id'] == favorite['id']);
@@ -913,6 +987,9 @@ class _CreateTeamBottomSectionState extends State<_CreateTeamBottomSection> {
                       inactiveTrackColor: Colors.grey.shade200,
                       onChanged: (bool value) {
                         setState(() {
+                          AnalyticsUtil.logEvent("과팅_팀만들기_우리학교사람들에게보이지않기_토글", properties: {
+                            "toggle": value
+                          });
                           light = value;
                           widget.state.setIsChecked(value);
                           widget.onSetMatch(light);
@@ -925,6 +1002,14 @@ class _CreateTeamBottomSectionState extends State<_CreateTeamBottomSection> {
               SizedBox(height: SizeConfig.defaultSize * 0.3,),
               GestureDetector(
                 onTap: () async {
+                  AnalyticsUtil.logEvent("과팅_팀만들기_팀만들기버튼_터치", properties: {
+                    "teamId": meetTeam.id,
+                    "teamName": meetTeam.name,
+                    "teamLocationsCount": meetTeam.locations.length,
+                    "teamMembersCount": meetTeam.members.length + 1,
+                    "toggle": meetTeam.canMatchWithSameUniversity,
+                    "university": meetTeam.university?.name ?? "알수없음",
+                  });
                   if ((meetTeam.members.length == 1 || meetTeam.members.length == 2) && meetTeam.name != '' && meetTeam.locations.isNotEmpty) {
                     Navigator.pop(widget.ancestorContext, meetTeam);
                   }

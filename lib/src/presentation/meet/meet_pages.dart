@@ -1,3 +1,4 @@
+import 'package:dart_flutter/src/common/util/analytics_util.dart';
 import 'package:dart_flutter/src/presentation/meet/view/meet_standby.dart';
 import 'package:dart_flutter/src/presentation/meet/viewmodel/meet_cubit.dart';
 import 'package:dart_flutter/src/presentation/meet/viewmodel/state/meet_state.dart';
@@ -14,6 +15,7 @@ class MeetPage2 extends StatelessWidget {
       children: [
         BlocBuilder<MeetCubit, MeetState>(
           builder: (context, state) {
+            AnalyticsUtil.logEvent('과팅_대기_접속');
             return const MeetStandby();
           }
         ),

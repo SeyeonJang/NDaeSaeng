@@ -1,4 +1,5 @@
 import 'package:dart_flutter/res/config/size_config.dart';
+import 'package:dart_flutter/src/common/util/analytics_util.dart';
 import 'package:dart_flutter/src/presentation/meet/view/meet_create_team.dart';
 import 'package:dart_flutter/src/presentation/meet/view/meet_update_team.dart';
 import 'package:dart_flutter/src/presentation/meet/viewmodel/meet_cubit.dart';
@@ -67,12 +68,14 @@ class _BottomSection extends StatelessWidget {
           children: [
             GestureDetector( // 내 팀 보기 버튼 *******
               onTap: () {
+                AnalyticsUtil.logEvent("과팅_대기_내팀보기버튼_터치");
                 if (context.read<MeetCubit>().state.isLoading) {
                   return;
                 }
                 showModalBottomSheet(
                   context: context,
                   builder: (BuildContext _) {
+                    AnalyticsUtil.logEvent("과팅_대기_내팀보기_접속");
                     print(context.read<MeetCubit>().state.myTeams.toString());
                     print(context.read<MeetCubit>().state.myTeams.isEmpty);
                     // List<String> membersName = state.teamMembers.map((member) => member.personalInfo!.name).toList();
@@ -122,83 +125,103 @@ class _BottomSection extends StatelessWidget {
                                             : Column(
                                                 children: [
                                                   for (int i=0; i<context.read<MeetCubit>().state.myTeams.length; i++)
-                                                    Row(
-                                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                      children: [
-                                                        Text(context.read<MeetCubit>().state.myTeams[i].name=='' ? '아직 팀명이 없어요!' : context.read<MeetCubit>().state.myTeams[i].name), // TODO : 서버 연결 후 재확인
-                                                        Row(
-                                                          children: [
-                                                            Text(context.read<MeetCubit>().state.myTeams[i].members.map((member) => member.personalInfo!.name).join(', ')),
-                                                            PopupMenuButton<String>(
-                                                              icon: Icon(Icons.more_horiz_rounded, color: Colors.grey.shade300,),
-                                                              color: Colors.white,
-                                                              surfaceTintColor: Colors.white,
-                                                              onSelected: (value) {
-                                                                if (value == 'edit') {
-                                                                  // Navigator.push(state.myTeams[i]);
-                                                                  Navigator.push(context, PageTransition(
-                                                                      type: PageTransitionType.rightToLeftJoined,
-                                                                      child: MeetUpdateTeam(
-                                                                        onFinish: () {
-                                                                          context.read<MeetCubit>().refreshMeetPage();
-                                                                        },
-                                                                        meetState: context.read<MeetCubit>().state,
-                                                                      ),
-                                                                      childCurrent: this));
-                                                                }
-
-                                                                //   Navigator.push(context, PageTransition(type: PageTransitionType.rightToLeftJoined, child: MeetUpdateTeam(
-                                                                //     onFinish: () {
-                                                                //       cubit.refreshMeetPage();
-                                                                //     },
-                                                                //     myTeam: state.myTeams[i],
-                                                                //     user: state.userResponse,
-                                                                //   ), childCurrent: this));
-                                                                // }
-                                                                else if (value == 'delete') {
-                                                                  showDialog<String>(
-                                                                    context: context,
-                                                                    builder: (BuildContext dialogContext) => AlertDialog(
-                                                                      content: Text('\'${context.read<MeetCubit>().state.myTeams[i].name=='' ? '(팀명 없음)' : context.read<MeetCubit>().state.myTeams[i].name}\' 팀을 삭제하시겠어요?', style: TextStyle(fontSize: SizeConfig.defaultSize * 1.8),),
-                                                                      backgroundColor: Colors.white,
-                                                                      surfaceTintColor: Colors.white,
-                                                                      actions: <Widget>[
-                                                                        TextButton(
-                                                                          onPressed: () {
-                                                                            Navigator.pop(dialogContext, '취소');
-                                                                          },
-                                                                          child: const Text('취소', style: TextStyle(color: Color(0xffFF5C58)),),
-                                                                        ),
-                                                                        TextButton(
-                                                                          onPressed: () async {
-                                                                            await context.read<MeetCubit>().removeTeam(context.read<MeetCubit>().state.myTeams[i].id.toString());
-                                                                            Navigator.pop(dialogContext);
-                                                                            Navigator.pop(context);
+                                                    GestureDetector(
+                                                      onTap: () {
+                                                        AnalyticsUtil.logEvent("과팅_대기_내팀보기_내팀_터치", properties: {
+                                                          "teamName": context.read<MeetCubit>().state.myTeams[i].name,
+                                                          "members": context.read<MeetCubit>().state.myTeams[i].members.length,
+                                                        });
+                                                      },
+                                                      child: Row(
+                                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                        children: [
+                                                          Text(context.read<MeetCubit>().state.myTeams[i].name=='' ? '아직 팀명이 없어요!' : context.read<MeetCubit>().state.myTeams[i].name),
+                                                          Row(
+                                                            children: [
+                                                              Text(context.read<MeetCubit>().state.myTeams[i].members.map((member) => member.personalInfo!.name).join(', ')),
+                                                              PopupMenuButton<String>(
+                                                                icon: Icon(Icons.more_horiz_rounded, color: Colors.grey.shade300,),
+                                                                color: Colors.white,
+                                                                surfaceTintColor: Colors.white,
+                                                                onSelected: (value) {
+                                                                  AnalyticsUtil.logEvent("과팅_대기_내팀보기_내팀_더보기_터치", properties: {
+                                                                    "teamName": context.read<MeetCubit>().state.myTeams[i].name,
+                                                                    "members": context.read<MeetCubit>().state.myTeams[i].members.length,
+                                                                  });
+                                                                  if (value == 'edit') {
+                                                                    AnalyticsUtil.logEvent("과팅_대기_내팀보기_내팀_더보기_수정_터치", properties: {
+                                                                      "teamName": context.read<MeetCubit>().state.myTeams[i].name,
+                                                                      "members": context.read<MeetCubit>().state.myTeams[i].members.length,
+                                                                    });
+                                                                    // Navigator.push(state.myTeams[i]);
+                                                                    Navigator.push(context, PageTransition(
+                                                                        type: PageTransitionType.rightToLeftJoined,
+                                                                        child: MeetUpdateTeam(
+                                                                          onFinish: () {
                                                                             context.read<MeetCubit>().refreshMeetPage();
                                                                           },
-                                                                          child: const Text('삭제', style: TextStyle(color: Color(0xffFF5C58)),),
+                                                                          meetState: context.read<MeetCubit>().state,
                                                                         ),
-                                                                      ],
+                                                                        childCurrent: this));
+                                                                  }
+
+                                                                  //   Navigator.push(context, PageTransition(type: PageTransitionType.rightToLeftJoined, child: MeetUpdateTeam(
+                                                                  //     onFinish: () {
+                                                                  //       cubit.refreshMeetPage();
+                                                                  //     },
+                                                                  //     myTeam: state.myTeams[i],
+                                                                  //     user: state.userResponse,
+                                                                  //   ), childCurrent: this));
+                                                                  // }
+                                                                  else if (value == 'delete') {
+                                                                    AnalyticsUtil.logEvent("과팅_대기_내팀보기_내팀_더보기_삭제_터치", properties: {
+                                                                      "teamName": context.read<MeetCubit>().state.myTeams[i].name,
+                                                                      "members": context.read<MeetCubit>().state.myTeams[i].members.length,
+                                                                    });
+                                                                    showDialog<String>(
+                                                                      context: context,
+                                                                      builder: (BuildContext dialogContext) => AlertDialog(
+                                                                        content: Text('\'${context.read<MeetCubit>().state.myTeams[i].name=='' ? '(팀명 없음)' : context.read<MeetCubit>().state.myTeams[i].name}\' 팀을 삭제하시겠어요?', style: TextStyle(fontSize: SizeConfig.defaultSize * 1.8),),
+                                                                        backgroundColor: Colors.white,
+                                                                        surfaceTintColor: Colors.white,
+                                                                        actions: <Widget>[
+                                                                          TextButton(
+                                                                            onPressed: () {
+                                                                              Navigator.pop(dialogContext, '취소');
+                                                                            },
+                                                                            child: const Text('취소', style: TextStyle(color: Color(0xffFF5C58)),),
+                                                                          ),
+                                                                          TextButton(
+                                                                            onPressed: () async {
+                                                                              await context.read<MeetCubit>().removeTeam(context.read<MeetCubit>().state.myTeams[i].id.toString());
+                                                                              Navigator.pop(dialogContext);
+                                                                              Navigator.pop(context);
+                                                                              context.read<MeetCubit>().refreshMeetPage();
+                                                                            },
+                                                                            child: const Text('삭제', style: TextStyle(color: Color(0xffFF5C58)),),
+                                                                          ),
+                                                                        ],
+                                                                      ),
+                                                                    );
+                                                                  }
+                                                                },
+                                                                itemBuilder: (BuildContext context) {
+                                                                  return [
+                                                                    PopupMenuItem<String>(
+                                                                      value: 'delete',
+                                                                      child: Text("삭제하기", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.5)),
                                                                     ),
-                                                                  );
-                                                                }
-                                                              },
-                                                              itemBuilder: (BuildContext context) {
-                                                                return [
-                                                                  PopupMenuItem<String>(
-                                                                    value: 'delete',
-                                                                    child: Text("삭제하기", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.5)),
-                                                                  ),
-                                                                  // PopupMenuItem<String>(
-                                                                  //   value: 'edit',
-                                                                  //   child: Text("수정하기", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.5)),
-                                                                  // ),
-                                                                ];
-                                                              },
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ],
+                                                                    // PopupMenuItem<String>(
+                                                                    //   value: 'edit',
+                                                                    //   child: Text("수정하기", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.5)),
+                                                                    // ),
+                                                                  ];
+                                                                },
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ],
+                                                      ),
                                                     )
                                               ]),
                                       ],
@@ -218,6 +241,7 @@ class _BottomSection extends StatelessWidget {
                               SizedBox(height: SizeConfig.defaultSize,),
                             GestureDetector(
                               onTap: () async {
+                                AnalyticsUtil.logEvent("과팅_대기_팀만들기버튼_터치");
                                 if (context.read<MeetCubit>().state.isLoading) {
                                   return;
                                 }
@@ -357,16 +381,21 @@ class _TopSectionState extends State<_TopSection> with SingleTickerProviderState
           Text("오픈 전, 미리 팀을 만들어보며 준비할 수 있어요!", style: TextStyle(color: Colors.grey.shade400, fontSize: SizeConfig.defaultSize * 1.4)),
             SizedBox(height: SizeConfig.defaultSize * 2),
 
-          AnimatedBuilder(
-              animation: _animationController,
-              builder: (context, child) {
-                return Transform.scale(
-                  scale: _animation.value,
-                  child: Center(
-                    child: Image.asset('assets/images/heart.png', width: SizeConfig.screenWidth * 0.65, height: SizeConfig.screenWidth * 0.65),
-                  )
-                );
-              }),
+          GestureDetector(
+            onTap: () {
+              AnalyticsUtil.logEvent("과팅_대기_하트_터치");
+            },
+            child: AnimatedBuilder(
+                animation: _animationController,
+                builder: (context, child) {
+                  return Transform.scale(
+                    scale: _animation.value,
+                    child: Center(
+                      child: Image.asset('assets/images/heart.png', width: SizeConfig.screenWidth * 0.65, height: SizeConfig.screenWidth * 0.65),
+                    )
+                  );
+                }),
+          ),
 
           Text("${widget.teams}", style: TextStyle(fontSize: SizeConfig.defaultSize * 2.3, fontWeight: FontWeight.w600, color: Color(0xffFF5C58)),),
             SizedBox(height: SizeConfig.defaultSize * 0.5),
