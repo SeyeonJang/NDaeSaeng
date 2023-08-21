@@ -3,7 +3,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:dart_flutter/src/presentation/meet/viewmodel/meet_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../res/config/size_config.dart';
+import '../../../../res/config/size_config.dart';
 import 'package:quickalert/quickalert.dart';
 
 

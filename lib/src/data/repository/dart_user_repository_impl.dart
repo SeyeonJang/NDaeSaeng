@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:dart_flutter/src/data/model/user_request_dto.dart';
-import 'package:dart_flutter/src/data/model/user_response_dto.dart';
 import 'package:dart_flutter/src/data/model/user_signup_request_dto.dart';
 import 'package:dart_flutter/src/data/my_cache.dart';
 import 'package:dart_flutter/src/domain/entity/user_request.dart';
@@ -10,6 +9,7 @@ import 'package:dart_flutter/src/domain/repository/user_repository.dart';
 
 import '../../data/datasource/dart_api_remote_datasource.dart';
 import '../datasource/supabase_remote_datasource.dart';
+import '../model/user_dto.dart';
 
 class DartUserRepositoryImpl implements UserRepository {
   static const Duration cachingInterval = Duration(minutes: 10);
@@ -21,7 +21,7 @@ class DartUserRepositoryImpl implements UserRepository {
   @override
   Future<User> signup(UserRequest user) async {
     var userRequestDto = UserSignupRequestDto.fromUserRequest(user);
-    return (await DartApiRemoteDataSource.postUserSignup(userRequestDto)).newUserResponse();
+    return (await DartApiRemoteDataSource.postUserSignup(userRequestDto)).newUser();
   }
 
   @override
@@ -38,7 +38,7 @@ class DartUserRepositoryImpl implements UserRepository {
   @override
   Future<User> myInfo() async {
     if (userResponseCache.isUpdateBefore(DateTime.now().subtract(cachingInterval))) {
-      userResponseCache.setObject((await DartApiRemoteDataSource.getMyInformation()).newUserResponse());
+      userResponseCache.setObject((await DartApiRemoteDataSource.getMyInformation()).newUser());
     }
     return userResponseCache.userResponse;
   }
@@ -50,20 +50,14 @@ class DartUserRepositoryImpl implements UserRepository {
 
   @override
   Future<User> verifyStudentIdCard(String name, String idCardImageUrl) async {
-    return (await DartApiRemoteDataSource.verifyStudentIdCard(name, idCardImageUrl)).newUserResponse();
+    return (await DartApiRemoteDataSource.verifyStudentIdCard(name, idCardImageUrl)).newUser();
   }
 
   @override
   Future<User> patchMyInfo(User user) async {
     UserDto userDto = await DartApiRemoteDataSource.patchMyInformation(UserRequestDto.fromUserResponse(user));
-    User patchedUser = userDto.newUserResponse();
+    User patchedUser = userDto.newUser();
     userResponseCache.setObject(patchedUser);
-
-    print("==========================================================");
-    print(user.toString());
-    print(patchedUser.toString());
-    print("==========================================================");
-
     return patchedUser;
   }
 

@@ -46,4 +46,9 @@ void main() async {
  // final response = await DartUserRepositoryImpl().verifyStudentIdCard("최현식", "https://khzdhqlbzmnzibbfrrgc.supabase.co/storage/v1/object/public/idcard/280");
  // print(response.toString());
 
+  // dynamic response = await DartApiRemoteDataSource.getVotes();
+  // print(response);
+  //
+  // response = await DartApiRemoteDataSource.getVote(83);
+  // print(response);
 }

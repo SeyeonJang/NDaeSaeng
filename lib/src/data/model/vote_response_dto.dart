@@ -6,15 +6,15 @@ import 'package:dart_flutter/src/domain/entity/vote_response.dart';
 class VoteResponseDto {
   int? voteId;
   QuestionDto? question;
-  _PickedUserDto? pickedUser;
+  _PickingUserDto? pickingUser;
   DateTime? pickedTime;
 
-  VoteResponseDto({this.voteId, this.question, this.pickedUser, this.pickedTime});
+  VoteResponseDto({this.voteId, this.question, this.pickingUser, this.pickedTime});
 
   VoteResponseDto.fromJson(Map<String, dynamic> json) {
     voteId = json['voteId'];
     question = json['question'] != null ? QuestionDto.fromJson(json['question']) : null;
-    pickedUser = json['pickedUser'] != null ? _PickedUserDto.fromJson(json['pickedUser']) : null;
+    pickingUser = json['pickingUser'] != null ? _PickingUserDto.fromJson(json['pickingUser']) : null;
     pickedTime = DateTime.parse(json['pickedTime']);
   }
 
@@ -24,8 +24,8 @@ class VoteResponseDto {
     if (question != null) {
       data['question'] = question!.toJson();
     }
-    if (pickedUser != null) {
-      data['pickedUser'] = pickedUser!.toJson();
+    if (pickingUser != null) {
+      data['pickingUser'] = pickingUser!.toJson();
     }
     data['pickedTime'] = pickedTime?.toIso8601String();
     return data;
@@ -35,24 +35,24 @@ class VoteResponseDto {
     return VoteResponse(
       voteId: voteId,
       question: question?.newQuestion(),
-      pickedUser: pickedUser?.newPickedUser(),
+      pickingUser: pickingUser?.newPickedUser(),
       pickedTime: pickedTime,
     );
   }
 
   @override
   String toString() {
-    return 'VoteResponse{voteId: $voteId, question: $question, pickedUser: $pickedUser, pickedTime: $pickedTime}';
+    return 'VoteResponse{voteId: $voteId, question: $question, pickingUser: $pickingUser, pickedTime: $pickedTime}';
   }
 }
 
-class _PickedUserDto {
+class _PickingUserDto {
   PersonalInfoDto? user;
   UniversityDto? university;
 
-  _PickedUserDto({this.user, this.university});
+  _PickingUserDto({this.user, this.university});
 
-  _PickedUserDto.fromJson(Map<String, dynamic> json) {
+  _PickingUserDto.fromJson(Map<String, dynamic> json) {
     user = json['user'] != null ? PersonalInfoDto.fromJson(json['user']) : null;
     university = json['university'] != null ? UniversityDto.fromJson(json['university']) : null;
   }
@@ -68,8 +68,8 @@ class _PickedUserDto {
     return data;
   }
 
-  PickedUser newPickedUser() {
-    return PickedUser(
+  PickingUser newPickedUser() {
+    return PickingUser(
       user: user?.newUser(),
       university: university?.newUniversity(),
     );
@@ -77,6 +77,6 @@ class _PickedUserDto {
 
   @override
   String toString() {
-    return 'PickedUser{user: $user, university: $university}';
+    return 'PickingUser{user: $user, university: $university}';
   }
 }

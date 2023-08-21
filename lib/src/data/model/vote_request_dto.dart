@@ -4,41 +4,33 @@ import 'package:dart_flutter/src/domain/entity/vote_request.dart';
 
 class VoteRequestDto {
   late int questionId;
-  late int pickedUserId, firstUserId, secondUserId, thirdUserId, fourthUserId;
+  late int pickedUserId;
+  late List<int> candidateIds;
 
   VoteRequestDto(
       {required this.pickedUserId,
-      required this.firstUserId,
-      required this.secondUserId,
-      required this.thirdUserId,
-      required this.fourthUserId,
+        required this.candidateIds,
       required this.questionId});
 
-  VoteRequestDto.from(Map<String, dynamic> json)
-      : pickedUserId = json['pickedUserId'],
-        firstUserId = json['firstUserId'],
-        secondUserId = json['secondUserId'],
-        thirdUserId = json['ThirdUserId'],
-        fourthUserId = json['FourthUserId'],
-        questionId = json['questionId'];
-
-  VoteRequestDto.fromJson(Map<String, dynamic> json) {
-    questionId = json['questionId'];
-    pickedUserId = json['pickedUserId'];
-    firstUserId = json['firstUserId'];
-    secondUserId = json['secondUserId'];
-    thirdUserId = json['thirdUserId'];
-    fourthUserId = json['fourthUserId'];
-  }
+  // VoteRequestDto.from(Map<String, dynamic> json)
+  //     : pickedUserId = json['pickedUserId'],
+  //       candidateIds = json['candidateIds'],
+  //       questionId = json['questionId'];
+  //
+  // VoteRequestDto.fromJson(Map<String, dynamic> json) {
+  //   questionId = json['questionId'];
+  //   pickedUserId = json['pickedUserId'];
+  //   firstUserId = json['firstUserId'];
+  //   secondUserId = json['secondUserId'];
+  //   thirdUserId = json['thirdUserId'];
+  //   fourthUserId = json['fourthUserId'];
+  // }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['questionId'] = this.questionId;
     data['pickedUserId'] = this.pickedUserId;
-    data['firstUserId'] = this.firstUserId;
-    data['secondUserId'] = this.secondUserId;
-    data['thirdUserId'] = this.thirdUserId;
-    data['fourthUserId'] = this.fourthUserId;
+    data['candidateIds'] = this.candidateIds;
     return data;
   }
 
@@ -46,10 +38,10 @@ class VoteRequestDto {
     return VoteRequest(
       questionId: questionId,
       pickedUserId: pickedUserId,
-      firstUserId: firstUserId,
-      secondUserId: secondUserId,
-      thirdUserId: thirdUserId,
-      fourthUserId: fourthUserId,
+      firstUserId: candidateIds[0],
+      secondUserId: candidateIds[1],
+      thirdUserId: candidateIds[2],
+      fourthUserId: candidateIds[3],
     );
   }
 
@@ -57,15 +49,12 @@ class VoteRequestDto {
     return VoteRequestDto(
         questionId: voteRequest.questionId,
         pickedUserId: voteRequest.pickedUserId,
-        firstUserId: voteRequest.firstUserId,
-        secondUserId: voteRequest.secondUserId,
-        thirdUserId: voteRequest.thirdUserId,
-        fourthUserId: voteRequest.fourthUserId
+        candidateIds: [voteRequest.firstUserId, voteRequest.secondUserId, voteRequest.thirdUserId, voteRequest.fourthUserId]
     );
   }
 
   @override
   String toString() {
-    return 'VoteRequest{questionId: $questionId, pickedUserId: $pickedUserId, firstUserId: $firstUserId, secondUserId: $secondUserId, thirdUserId: $thirdUserId, fourthUserId: $fourthUserId}';
+    return 'VoteRequestDto{questionId: $questionId, pickedUserId: $pickedUserId, candidateIds: $candidateIds}';
   }
 }
