@@ -1,3 +1,4 @@
+import 'package:dart_flutter/src/data/model/title_vote_dto.dart';
 import 'package:dart_flutter/src/data/model/university_dto.dart';
 import 'package:dart_flutter/src/data/model/personal_info_dto.dart';
 import 'package:dart_flutter/src/domain/entity/user.dart';
@@ -5,14 +6,22 @@ import 'package:dart_flutter/src/domain/entity/user.dart';
 class UserDto {
   PersonalInfoDto? personalInfo;
   UniversityDto? university;
+  List<TitleVoteDto>? profileQuestions;
 
-  UserDto({this.personalInfo, this.university});
+  UserDto({this.personalInfo, this.university, this.profileQuestions});
 
   UserDto.fromJson(Map<String, dynamic> json) {
     personalInfo = json['user'] != null ? PersonalInfoDto.fromJson(json['user']) : null;
     university = json['university'] != null
         ? UniversityDto.fromJson(json['university'])
         : null;
+    // profileQuestions = json['profileQuestions'] != null ? List<TitleVoteDto>.from(json['profileQuestions'].map((x) => TitleVoteDto.fromJson(x))) : [];
+    if (json['profileQuestions'] != null) {
+      profileQuestions = [];
+      json['profileQuestions'].forEach((v) {
+        profileQuestions!.add(TitleVoteDto.fromJson(v));
+      });
+    }
   }
 
   Map<String, dynamic> toJson() {
@@ -22,6 +31,9 @@ class UserDto {
     }
     if (university != null) {
       data['university'] = university!.toJson();
+    }
+    if (profileQuestions != null) {
+      data['profileQuestions'] = profileQuestions!.map((v) => v.toJson()).toList();
     }
     return data;
   }
@@ -41,17 +53,19 @@ class UserDto {
     return data;
   }
 
-  User newUserResponse() {
+  User newUser() {
     return User(
       personalInfo: personalInfo?.newUser(),
       university: university?.newUniversity(),
+      titleVotes: profileQuestions?.map((titleVoteDto) => titleVoteDto.newTitleVote()).toList() ?? [],
     );
   }
 
-  static UserDto fromUserResponse(User userResponse) {
+  static UserDto fromUser(User userResponse) {
     return UserDto(
       personalInfo: PersonalInfoDto.fromUser(userResponse.personalInfo!),
       university: UniversityDto.fromUniversity(userResponse.university!),
+      profileQuestions: userResponse.titleVotes.map((titleVote) => TitleVoteDto.fromTitleVote(titleVote)).toList(),
     );
   }
 

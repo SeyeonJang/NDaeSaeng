@@ -1,4 +1,4 @@
-import 'package:dart_flutter/src/common/util/HttpUtil.dart';
+import 'package:dart_flutter/src/common/util/http_util.dart';
 import 'package:dio/dio.dart';
 
 void main() async {

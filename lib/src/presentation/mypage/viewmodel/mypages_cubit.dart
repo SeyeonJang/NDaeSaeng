@@ -1,5 +1,5 @@
 import 'dart:io';
-
+import 'package:dart_flutter/src/domain/entity/title_vote.dart';
 import 'package:dart_flutter/src/domain/entity/user.dart';
 import 'package:dart_flutter/src/domain/use_case/friend_use_case.dart';
 import 'package:dart_flutter/src/domain/use_case/user_use_case.dart';
@@ -21,19 +21,25 @@ class MyPagesCubit extends Cubit<MyPagesState> {
     User userResponse = await _userUseCase.myInfo();
     state.setUserResponse(userResponse);
 
+    _userUseCase.setTitleVotes(userResponse.titleVotes);
+    state.setTitleVotes(userResponse.titleVotes);
+
     List<User> friends = await _friendUseCase.getMyFriends();
     state.setMyFriends(friends);
     List<User> newFriends = await _friendUseCase.getRecommendedFriends();
     state.setRecommendedFriends(newFriends);
+    getMyTitleVote();
+    getAllVotes();
 
     state.setIsLoading(false);
     emit(state.copy());
     print("mypage init 끝");
   }
 
-  void pressedFriendAddButton(User friend) {
-    _friendUseCase.addFriend(friend);
+  Future<void> pressedFriendAddButton(User friend) async {
+    await _friendUseCase.addFriend(friend);
     state.addFriend(friend);
+    state.newFriends = (await _friendUseCase.getRecommendedFriends(put: true)).toSet();
     emit(state.copy());
   }
 
@@ -65,9 +71,15 @@ class MyPagesCubit extends Cubit<MyPagesState> {
   }
 
   void refreshMyInfo() async {
+    state.setIsLoading(true);
+    emit(state.copy());
+
     _userUseCase.cleanUpUserResponseCache();
      User user = await _userUseCase.myInfo();
      state.setUserResponse(user);
+     getMyTitleVote();
+
+     state.setIsLoading(false);
      emit(state.copy());
   }
 
@@ -76,8 +88,7 @@ class MyPagesCubit extends Cubit<MyPagesState> {
   }
 
   String getProfileImageUrl(String userId) {
-    // return _userUseCase.getProfileImageUrl(userId);
-    String profileImageUrl = state.userResponse.personalInfo!.profileImageUrl ?? "DEFAULT";
+    String profileImageUrl = state.userResponse.personalInfo?.profileImageUrl ?? "DEFAULT";
     return profileImageUrl;
   }
 
@@ -97,5 +108,29 @@ class MyPagesCubit extends Cubit<MyPagesState> {
     final newState = state.copy();
     print(newState);
     emit(newState);
+  }
+
+  void addTitleVote(TitleVote titleVote, User user) async {
+    await _userUseCase.addTitleVote(titleVote, user);
+    refreshMyInfo();
+  }
+
+  Future<void> getMyTitleVote() async {
+    List<TitleVote> myTitleVotes = await _userUseCase.getMyTitleVote();
+    state.setTitleVotes(myTitleVotes);
+  }
+  
+  void removeTitleVote(int questionId, User user) async {
+    await _userUseCase.removeTitleVote(questionId, user);
+    refreshMyInfo();
+  }
+
+  Future<void> getAllVotes() async {
+    state.setIsLoading(true);
+    emit(state.copy());
+
+    List<TitleVote> myVotes = await _userUseCase.getVotesSummary();
+    state.setMyAllVotes(myVotes).setIsLoading(false);
+    emit(state.copy());
   }
 }

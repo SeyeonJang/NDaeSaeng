@@ -1,8 +1,8 @@
 import 'dart:io';
 
-import 'package:dart_flutter/src/domain/entity/friend.dart';
 import 'package:dart_flutter/src/domain/entity/user.dart';
-import 'package:json_annotation/json_annotation.dart';
+
+import '../../../../domain/entity/title_vote.dart';
 
 class MyPagesState {
   late bool isLoading;
@@ -13,6 +13,8 @@ class MyPagesState {
   late bool isMyLandPage;
   late bool isVertificateUploaded;
   late File profileImageFile;
+  late List<TitleVote> titleVotes;
+  late List<TitleVote> myAllVotes;
 
   MyPagesState({
     required this.isLoading,
@@ -23,6 +25,8 @@ class MyPagesState {
     required this.newFriendId,
     required this.isVertificateUploaded,
     required this.profileImageFile,
+    required this.titleVotes,
+    required this.myAllVotes,
   });
 
   MyPagesState.init() {
@@ -30,6 +34,7 @@ class MyPagesState {
     userResponse = User(
       personalInfo: null,
       university: null,
+      titleVotes: [],
     );
     friends = {};
     newFriends = {};
@@ -37,6 +42,8 @@ class MyPagesState {
     isMyLandPage = true;
     isVertificateUploaded = false;
     profileImageFile = File('');
+    titleVotes = [];
+    myAllVotes = [];
   }
 
   MyPagesState copy() => MyPagesState(
@@ -47,7 +54,9 @@ class MyPagesState {
         newFriends: newFriends,
         newFriendId: newFriendId,
         isVertificateUploaded: isVertificateUploaded,
-        profileImageFile: profileImageFile
+        profileImageFile: profileImageFile,
+        titleVotes: titleVotes,
+        myAllVotes: myAllVotes
       );
 
   void setIsLoading(bool isLoading) {
@@ -79,6 +88,35 @@ class MyPagesState {
     return this;
   }
 
+  MyPagesState setMyAllVotes(List<TitleVote> myAllVotes) {
+    // this.myAllVotes = myAllVotes.where((vote) => !titleVotes.contains(vote)).toList();
+    // this.myAllVotes = myAllVotes.where((vote) => vote.question.questionId != ( )).toList();
+
+    this.myAllVotes = myAllVotes.where((vote) {
+      for (var titleVote in titleVotes) {
+        if (titleVote.question.questionId == vote.question.questionId) {
+          return false; // 중복된 항목이므로 필터링
+        }
+      }
+      return true; // 중복되지 않은 항목이므로 유지
+    }).toList();
+
+
+    // myAllVotes = myAllVotes.where((vote) {
+    //   return !titleVotes.any((titleVote) => titleVote.question.questionId == vote.question.questionId);
+    // }).toList();
+    print("dsjksjksdjlksdjlsjlks ${myAllVotes}");
+    return this;
+  }
+
+  void addMyAllVotes(TitleVote vote) {
+    myAllVotes.add(vote);
+  }
+
+  void removeMyAllVotes(TitleVote vote) {
+    myAllVotes.remove(vote);
+  }
+
   void addFriend(User friend) {
     friends.add(friend);
     newFriends.remove(friend);
@@ -87,5 +125,10 @@ class MyPagesState {
   void deleteFriend(User friend) {
     friends.remove(friend);
     newFriends.add(friend);
+  }
+
+  MyPagesState setTitleVotes(List<TitleVote> titleVotes) {
+    this.titleVotes = titleVotes.toSet().toList();
+    return this;
   }
 }

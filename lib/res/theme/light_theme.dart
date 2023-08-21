@@ -11,8 +11,8 @@ ThemeData lightTheme = ThemeData(
   ),
   colorScheme: ColorScheme.light(
     background: Colors.white,
-    primary: Colors.indigoAccent,
-    primaryContainer: Colors.indigoAccent.withOpacity(0.2),
+    primary: Color(0xff7C83FD),
+    primaryContainer: Color(0xff7C83FD).withOpacity(0.2),
     // secondary: Colors,
   )
 );

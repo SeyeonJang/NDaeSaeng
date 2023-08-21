@@ -10,4 +10,8 @@ class DartAuthRepositoryImpl implements DartAuthRepository {
   Future<DartAuth> loginWithApple(String appleIdentifyToken) async {
     return (await DartApiRemoteDataSource.postLoginWithApple(appleIdentifyToken)).newDartAuth();
   }
+
+  Future<String> healthCheck() async {
+    return await DartApiRemoteDataSource.healthCheck();
+  }
 }

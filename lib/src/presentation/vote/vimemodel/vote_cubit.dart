@@ -1,4 +1,3 @@
-import 'package:dart_flutter/src/domain/entity/friend.dart';
 import 'package:dart_flutter/src/domain/entity/question.dart';
 import 'package:dart_flutter/src/domain/entity/user.dart';
 import 'package:dart_flutter/src/domain/entity/vote_request.dart';
@@ -66,6 +65,8 @@ class VoteCubit extends HydratedCubit<VoteState> {
   }
 
   void nextVote(VoteRequest voteRequest) async {
+    print(voteRequest.toString());
+
     state.setIsLoading(true);
     emit(state.copy());
     print(state.toString());
