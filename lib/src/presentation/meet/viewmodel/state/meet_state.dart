@@ -6,6 +6,7 @@ import 'package:dart_flutter/src/domain/entity/user.dart';
 @JsonSerializable()
 class MeetState {
   late MeetStateEnum meetPageState;
+  late List<Location> serverLocations;
   // meet - standby
   late User userResponse;
   // meet - createTeam
@@ -24,6 +25,7 @@ class MeetState {
 
   MeetState ({
     required this.meetPageState,
+    required this.serverLocations,
     required this.userResponse,
     required this.isLoading,
     required this.isMemberOneAdded,
@@ -40,6 +42,7 @@ class MeetState {
 
   MeetState.init() { // 초기값 설정
     meetPageState = MeetStateEnum.landing;
+    serverLocations = [];
     userResponse = User(
       personalInfo: null,
       university: null,
@@ -60,6 +63,7 @@ class MeetState {
 
   MeetState copy() => MeetState(
     meetPageState: meetPageState,
+    serverLocations: serverLocations,
     userResponse: userResponse,
     isLoading: isLoading,
     isMemberOneAdded: isMemberOneAdded,
@@ -76,6 +80,7 @@ class MeetState {
 
   void setAll(MeetState state) {
       meetPageState = state.meetPageState;
+      serverLocations = state.serverLocations;
       userResponse = state.userResponse;
       isLoading = state.isLoading;
       isMemberOneAdded = state.isMemberOneAdded;
@@ -88,6 +93,10 @@ class MeetState {
       teamName = state.teamName;
       isChecked = state.isChecked;
       teamCount = state.teamCount;
+  }
+
+  void setServerLocations(List<Location> serverLocations) {
+    this.serverLocations = serverLocations;
   }
 
   void setTeamCount(int teamCount) {

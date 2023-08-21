@@ -223,10 +223,13 @@ class _BottomSection extends StatelessWidget {
                                 }
                                 await Navigator.push(context, PageTransition(type: PageTransitionType.rightToLeftJoined, child: MeetCreateTeam(
                                   onFinish: () {
-                                    context.read<MeetCubit>().refreshMeetPage();
+                                    // context.read<MeetCubit>().refreshMeetPage();
                                   },
                                   state: context.read<MeetCubit>().state,
-                                ), childCurrent: this));
+                                ), childCurrent: this)).then((value) async {
+                                  if (value == null) return;
+                                  await context.read<MeetCubit>().createNewTeam(value);
+                                });
                                 context.read<MeetCubit>().refreshMeetPage();
                                 Navigator.pop(context);
                               },
@@ -273,10 +276,13 @@ class _BottomSection extends StatelessWidget {
               onTap: () async {
                 await Navigator.push(context, PageTransition(type: PageTransitionType.rightToLeftJoined, child: MeetCreateTeam(
                     onFinish: () {
-                      context.read<MeetCubit>().refreshMeetPage();
+                      // context.read<MeetCubit>().refreshMeetPage();
                     },
                   state: context.read<MeetCubit>().state,
-                ), childCurrent: this));
+                ), childCurrent: this)).then((value) async {
+                  if (value == null) return;
+                  await context.read<MeetCubit>().createNewTeam(value);
+                });
                 context.read<MeetCubit>().refreshMeetPage();
               },
               child: Container(

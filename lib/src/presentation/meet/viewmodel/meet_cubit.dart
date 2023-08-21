@@ -35,6 +35,10 @@ class MeetCubit extends Cubit<MeetState> {
     state.setIsMemberTwoAdded(false);
     print("${state.isMemberOneAdded} 랑 ${state.isMemberTwoAdded}");
 
+    List<Location> locations = await _meetUseCase.getLocations();
+    print(locations.toString());
+    state.setServerLocations(locations);
+
     state.setIsLoading(false);
     emit(state.copy());
     print("meet init 끝");
@@ -87,7 +91,8 @@ class MeetCubit extends Cubit<MeetState> {
     var myTeam = await _meetUseCase.createNewTeam(meetTeam);
     state.addMyTeam(myTeam);
     emit(state.copy());
-    print("cubit - 팀 추가 완료");
+    print("============================== 팀 추가 완료");
+    print(state.toString());
   }
 
   Future<MeetTeam> setTeam(String teamId) async {

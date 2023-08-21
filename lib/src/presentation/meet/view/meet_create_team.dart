@@ -211,14 +211,14 @@ class _MeetCreateTeamState extends State<MeetCreateTeam> {
                       ),
                     )
             ),
-            bottomNavigationBar:  _CreateTeamBottomSection(locations: cities, state: state, name: name, ancestorContext: context, onSetCities: setCities, onSetMatch: setCanMatchWithSameUniversity, createNewTeam: createNewTeam),
+            bottomNavigationBar:  _CreateTeamBottomSection(serverLocations: state.serverLocations, locations: cities, state: state, name: name, ancestorContext: context, onSetCities: setCities, onSetMatch: setCanMatchWithSameUniversity, createNewTeam: createNewTeam),
             ),
       );
   }
 
   Future<dynamic> _ShowModalBottomSheet(BuildContext context, List<User> friends) {
     List<User> filteredFriends = friends.where((friend) =>
-      friend.university?.id == state.userResponse.university?.id &&
+      friend.university?.name == state.userResponse.university?.name &&
       friend.personalInfo?.gender == state.userResponse.personalInfo?.gender
     ).toList();
     print("UI에서 필터링한 친구목록 ${filteredFriends}");
@@ -464,6 +464,7 @@ class _CreateTeamTopSectionState extends State<_CreateTeamTopSection> {
               Flexible(
                   child: TextField(
                     controller: _controller,
+                    maxLength: 10,
                     onChanged: (value) {
                       setState(() {
                         widget.state.teamName = value;
@@ -726,6 +727,7 @@ class NoVoteView extends StatelessWidget { // 받은 투표 없을 때
 }
 
 class _CreateTeamBottomSection extends StatefulWidget {
+  List<Location> serverLocations;
   List<Location> locations;
   MeetState state;
   String name;
@@ -737,6 +739,7 @@ class _CreateTeamBottomSection extends StatefulWidget {
 
   _CreateTeamBottomSection({
     super.key,
+    required this.serverLocations,
     required this.locations,
     required this.state,
     required this.name,
@@ -792,13 +795,10 @@ class _CreateTeamBottomSectionState extends State<_CreateTeamBottomSection> {
                         fontSize: SizeConfig.defaultSize * 1.6),),
                     TextButton(
                         onPressed: () {
-                          List<Map<String, dynamic>> citiesData = [
-                            {"id": 1, "name": "서울", "isChecked": false},  // TODO 서버로부터 지역 받아오기
-                            {"id": 2, "name": "대구", "isChecked": false},
-                            {"id": 3, "name": "부산", "isChecked": false},
-                            // {"id": 3, "name": "대구", "isChecked": false},
-                            // {"id": 4, "name": "제주도", "isChecked": false},
-                          ];
+                          List<Map<String, dynamic>> citiesData = [];
+                          for (int i = 0; i < widget.serverLocations.length; i++) {
+                            citiesData.add({"id": widget.serverLocations[i].id, "name": widget.serverLocations[i].name, "isChecked": false});
+                          }
                           List<Map<String, dynamic>> newCitiesData = [];
 
                           showDialog<String>
@@ -882,13 +882,20 @@ class _CreateTeamBottomSectionState extends State<_CreateTeamBottomSection> {
                         style: TextButton.styleFrom(
                             padding: EdgeInsets.zero
                         ),
-                        child: Text(
-                          widget.locations.isEmpty
-                            ? "선택해주세요"
-                            : widget.locations.map((city) => city.name).join(', '),
-                          style: TextStyle(
-                            fontSize: SizeConfig.defaultSize * 1.6,
-                            color: Colors.grey.shade400),))
+                        child: Container(
+                          width: SizeConfig.screenWidth * 0.53,
+                          child: Text(
+                            widget.locations.isEmpty
+                              ? "선택해주세요"
+                              : widget.locations.map((city) => city.name).join(', '),
+                            style: TextStyle(
+                              fontSize: SizeConfig.defaultSize * 1.6,
+                              color: Colors.grey.shade400,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            textAlign: TextAlign.right,
+                          ),
+                        ))
                   ],
                 ),
               ),
@@ -919,14 +926,7 @@ class _CreateTeamBottomSectionState extends State<_CreateTeamBottomSection> {
               GestureDetector(
                 onTap: () async {
                   if ((meetTeam.members.length == 1 || meetTeam.members.length == 2) && meetTeam.name != '' && meetTeam.locations.isNotEmpty) {
-                    print("${meetTeam.name} 이름 전달합니다");
-                    print("${meetTeam.members[0].university}");
-                    print("${meetTeam.toString()}");
-                    // await context.read<MeetCubit>().createNewTeam(meetTeam);
-
-                    MeetUseCase().createNewTeam(meetTeam);  //TODO: cubit 쪽으로 빼야 됨  BlocProvider.of<MeetCubit>(context).createNewTeam(meetTeam);
-
-                    Navigator.pop(widget.ancestorContext);
+                    Navigator.pop(widget.ancestorContext, meetTeam);
                   }
                 },
                 child: Container(

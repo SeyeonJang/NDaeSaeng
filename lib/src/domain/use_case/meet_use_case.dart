@@ -1,9 +1,13 @@
+import 'package:dart_flutter/src/data/repository/dart_location_repository.dart';
 import 'package:dart_flutter/src/data/repository/dart_meet_repository.dart';
+import 'package:dart_flutter/src/domain/entity/location.dart';
 import 'package:dart_flutter/src/domain/entity/meet_team.dart';
+import 'package:dart_flutter/src/domain/repository/location_repository.dart';
 import 'package:dart_flutter/src/domain/repository/meet_repository.dart';
 
 class MeetUseCase {
   final MeetRepository _meetRepository = DartMeetRepository();
+  final LocationRepository _locationRepository = DartLocationRepository();
 
   Future<MeetTeam> createNewTeam(MeetTeam meetTeam) async {
     return await _meetRepository.createNewTeam(meetTeam);
@@ -28,5 +32,9 @@ class MeetUseCase {
 
   Future<int> getTeamCount() async {
     return _meetRepository.getTeamCount();
+  }
+
+  Future<List<Location>> getLocations() async {
+    return _locationRepository.getLocations();
   }
 }
