@@ -1,4 +1,5 @@
 import 'package:dart_flutter/src/data/model/question_dto.dart';
+import 'package:dart_flutter/src/domain/entity/title_vote.dart';
 
 class TitleVoteDto {
   QuestionDto question;
@@ -19,7 +20,19 @@ class TitleVoteDto {
     );
   }
 
+  TitleVote newTitleVote() {
+    return TitleVote(
+      question: question.newQuestion(),
+      count: count,
+    );
+  }
 
+  static TitleVoteDto fromTitleVote(TitleVote titleVote) {
+    return TitleVoteDto(
+      question: QuestionDto.fromQuestion(titleVote.question),
+      count: titleVote.count,
+    );
+  }
 
   static TitleVoteDto fromJson(Map<String, dynamic> json) {
     return TitleVoteDto(

@@ -1,8 +1,8 @@
 import 'dart:convert';
 
 import 'package:dart_flutter/res/environment/app_environment.dart';
-import 'package:dart_flutter/src/data/model/friend_dto.dart';
 import 'package:dart_flutter/src/data/model/question_dto.dart';
+import 'package:dart_flutter/src/data/model/title_vote_dto.dart';
 import 'package:dart_flutter/src/data/model/university_dto.dart';
 import 'package:dart_flutter/src/data/model/user_request_dto.dart';
 
@@ -181,6 +181,16 @@ class DartApiRemoteDataSource {
     final body = vote.toJson();
 
     final response = await _httpUtil.request().post(path, data: body);
+  }
+
+  // vote: 받은 투표 개요 확인하기
+  static Future<List<TitleVoteDto>> getVotesSummary() async {
+    const path = '/v1/users/me/questions';
+    final response = await _httpUtil.request().get(path);
+
+    final List<dynamic> jsonResponse = response.data;
+    List<TitleVoteDto> titleVote = jsonResponse.map((vote) => TitleVoteDto.fromJson(vote)).toList();
+    return titleVote;
   }
 
   // vote: 받은 투표 리스트 확인하기

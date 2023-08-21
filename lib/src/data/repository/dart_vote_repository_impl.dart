@@ -48,20 +48,9 @@ class DartVoteRepositoryImpl implements VoteRepository {
   }
 
   @override
-  Future<List<TitleVote>> getVotesssssssssssssssssss() async {
-    List<TitleVote> mockData = [];
-    mockData.add(TitleVote(question: Question(questionId: 1, content: "짱짱멋진사람", icon: ""), count: 10));
-    mockData.add(TitleVote(question: Question(questionId: 2, content: "다트부셔버려", icon: ""), count: 1));
-    mockData.add(TitleVote(question: Question(questionId: 3, content: "잠을자고싶다", icon: ""), count: 6));
-    mockData.add(TitleVote(question: Question(questionId: 4, content: "a", icon: ""), count: 101));
-    mockData.add(TitleVote(question: Question(questionId: 5, content: "b", icon: ""), count: 101));
-    mockData.add(TitleVote(question: Question(questionId: 6, content: "c", icon: ""), count: 101));
-    mockData.add(TitleVote(question: Question(questionId: 7, content: "d", icon: ""), count: 101));
-    mockData.add(TitleVote(question: Question(questionId: 8, content: "e", icon: ""), count: 101));
-    mockData.add(TitleVote(question: Question(questionId: 9, content: "f", icon: ""), count: 101));
-    mockData.add(TitleVote(question: Question(questionId: 10, content: "g", icon: ""), count: 101));
-    mockData.add(TitleVote(question: Question(questionId: 11, content: "h", icon: ""), count: 101));
-    return mockData;
+  Future<List<TitleVote>> getMyVoteSummary() async {
+    var response = await DartApiRemoteDataSource.getVotesSummary();
+    return response.map((e) => e.newTitleVote()).toList();
   }
 
 }

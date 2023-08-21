@@ -11,5 +11,5 @@ abstract class VoteRepository {
   Future<VoteResponse> getVote(int voteId);
   Future<DateTime> getNextVoteTime();
   Future<DateTime> postNextVoteTime();
-  Future<List<TitleVote>> getVotesssssssssssssssssss();
+  Future<List<TitleVote>> getMyVoteSummary();
 }

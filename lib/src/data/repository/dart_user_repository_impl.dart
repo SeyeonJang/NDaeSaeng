@@ -55,11 +55,16 @@ class DartUserRepositoryImpl implements UserRepository {
 
   @override
   Future<User> patchMyInfo(User user) async {
-    userResponseCache.setObject(user);
+    UserDto userDto = await DartApiRemoteDataSource.patchMyInformation(UserRequestDto.fromUserResponse(user));
+    User patchedUser = userDto.newUserResponse();
+    userResponseCache.setObject(patchedUser);
 
-    return (await DartApiRemoteDataSource.patchMyInformation(
-        UserRequestDto.fromUserResponse(user)
-    )).newUserResponse();
+    print("==========================================================");
+    print(user.toString());
+    print(patchedUser.toString());
+    print("==========================================================");
+
+    return patchedUser;
   }
 
   @override

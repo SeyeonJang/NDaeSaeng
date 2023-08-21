@@ -44,6 +44,14 @@ class User {
     return data;
   }
 
+  void addTitleVote(TitleVote titleVote) {
+    titleVotes.add(titleVote);
+  }
+
+  void removeTitleVote(int questionId) {
+    titleVotes.removeWhere((e) => e.question.questionId == questionId);
+  }
+
   @override
   String toString() {
     return 'UserResponse{user: $personalInfo, university: $university, titleVote: $titleVotes}';

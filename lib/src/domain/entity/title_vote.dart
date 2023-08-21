@@ -34,6 +34,17 @@ class TitleVote {
   }
 
   @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true; // Check if it's the same instance
+    if (other is! TitleVote) return false; // Check if it's the same type
+
+    return this.question.questionId == other.question.questionId;
+  }
+
+  @override
+  int get hashCode => question.questionId.hashCode;
+
+  @override
   String toString() {
     return 'TitleVote{question: $question, count: $count}';
   }

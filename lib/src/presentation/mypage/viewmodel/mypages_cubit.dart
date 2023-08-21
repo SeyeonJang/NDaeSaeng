@@ -21,6 +21,9 @@ class MyPagesCubit extends Cubit<MyPagesState> {
     User userResponse = await _userUseCase.myInfo();
     state.setUserResponse(userResponse);
 
+    _userUseCase.setTitleVotes(userResponse.titleVotes);
+    state.setTitleVotes(userResponse.titleVotes);
+
     List<User> friends = await _friendUseCase.getMyFriends();
     state.setMyFriends(friends);
     List<User> newFriends = await _friendUseCase.getRecommendedFriends();
@@ -75,7 +78,6 @@ class MyPagesCubit extends Cubit<MyPagesState> {
      User user = await _userUseCase.myInfo();
      state.setUserResponse(user);
      getMyTitleVote();
-     state.titleVotes = [];
 
      state.setIsLoading(false);
      emit(state.copy());
@@ -86,8 +88,7 @@ class MyPagesCubit extends Cubit<MyPagesState> {
   }
 
   String getProfileImageUrl(String userId) {
-    // return _userUseCase.getProfileImageUrl(userId);
-    String profileImageUrl = state.userResponse.personalInfo!.profileImageUrl ?? "DEFAULT";
+    String profileImageUrl = state.userResponse.personalInfo?.profileImageUrl ?? "DEFAULT";
     return profileImageUrl;
   }
 
@@ -109,9 +110,9 @@ class MyPagesCubit extends Cubit<MyPagesState> {
     emit(newState);
   }
 
-  void addTitleVote(TitleVote titleVote) {
-    _userUseCase.addTitleVote(titleVote);
-    // state.removeMyAllVotes(titleVote);
+  void addTitleVote(TitleVote titleVote, User user) async {
+    await _userUseCase.addTitleVote(titleVote, user);
+    refreshMyInfo();
   }
 
   Future<void> getMyTitleVote() async {
@@ -119,14 +120,17 @@ class MyPagesCubit extends Cubit<MyPagesState> {
     state.setTitleVotes(myTitleVotes);
   }
   
-  void removeTitleVote(int questionId) {
-    _userUseCase.removeTitleVote(questionId);
-    // state.addMyAllVotes(titleVote);
+  void removeTitleVote(int questionId, User user) async {
+    await _userUseCase.removeTitleVote(questionId, user);
+    refreshMyInfo();
   }
 
   Future<void> getAllVotes() async {
-    List<TitleVote> myVotes = await _userUseCase.getAllVotes();
-    state.setMyAllVotes(myVotes);
-    print("${myVotes}ddd");
+    state.setIsLoading(true);
+    emit(state.copy());
+
+    List<TitleVote> myVotes = await _userUseCase.getVotesSummary();
+    state.setMyAllVotes(myVotes).setIsLoading(false);
+    emit(state.copy());
   }
 }

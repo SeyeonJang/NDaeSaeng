@@ -1,10 +1,7 @@
 import 'dart:io';
 
-import 'package:dart_flutter/src/domain/entity/friend.dart';
 import 'package:dart_flutter/src/domain/entity/user.dart';
-import 'package:json_annotation/json_annotation.dart';
 
-import '../../../../domain/entity/question.dart';
 import '../../../../domain/entity/title_vote.dart';
 
 class MyPagesState {

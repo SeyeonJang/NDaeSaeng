@@ -1,10 +1,8 @@
-import 'dart:convert';
 import 'dart:io';
 import 'package:dart_flutter/src/common/auth/dart_auth_cubit.dart';
 import 'package:dart_flutter/src/common/util/analytics_util.dart';
 import 'package:dart_flutter/src/common/util/toast_util.dart';
 import 'package:dart_flutter/src/domain/entity/personal_info.dart';
-import 'package:dart_flutter/src/domain/entity/title_vote.dart';
 import 'package:dart_flutter/src/domain/entity/user.dart';
 import 'package:dart_flutter/src/presentation/mypage/view/my_ask.dart';
 import 'package:dart_flutter/src/presentation/mypage/view/my_opinion.dart';
@@ -20,7 +18,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:restart_app/restart_app.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../../../res/config/size_config.dart';
 
@@ -245,7 +242,9 @@ class _MyPageViewState extends State<MyPageView> {
                               ),
                               TextButton(
                                 onPressed: () {
-                                  context.read<MyPagesCubit>().removeTitleVote(widget.state.titleVotes[i].question.questionId!); // TitleVote 삭제
+                                  if (context.read<MyPagesCubit>().state.isLoading == true) {
+                                    return;
+                                  }                                  context.read<MyPagesCubit>().removeTitleVote(widget.state.titleVotes[i].question.questionId!, widget.userResponse); // TitleVote 삭제
                                   context.read<MyPagesCubit>().refreshMyInfo();
                                   Navigator.pop(dialogContext, '삭제');
                                 },
@@ -295,8 +294,12 @@ class _MyPageViewState extends State<MyPageView> {
                     ),
                   for (int i=0; i<3-widget.state.titleVotes.length; i++) // TitleVote 없을 때
                     GestureDetector(
-                      onTap: () {
-                        context.read<MyPagesCubit>().getAllVotes();
+                      onTap: () async {
+                        if (context.read<MyPagesCubit>().state.isLoading) {
+                          return;
+                        }
+
+                        await context.read<MyPagesCubit>().getAllVotes();
                         print("UI get - ${widget.state.myAllVotes}");
 
                         showModalBottomSheet(
@@ -363,7 +366,10 @@ class _MyPageViewState extends State<MyPageView> {
                                               for (int j=0; j<widget.state.myAllVotes.length; j++) // (MyAllVotes의 개수만큼 반복)
                                                 GestureDetector(
                                                 onTap: () {
-                                                  context.read<MyPagesCubit>().addTitleVote(widget.state.myAllVotes[j]); // add
+                                                  if (context.read<MyPagesCubit>().state.isLoading == true) {
+                                                    return;
+                                                  }
+                                                  context.read<MyPagesCubit>().addTitleVote(widget.state.myAllVotes[j], widget.userResponse); // add
                                                   context.read<MyPagesCubit>().refreshMyInfo();
                                                   Navigator.pop(modalContext);
                                                 },
