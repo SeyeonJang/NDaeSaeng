@@ -109,6 +109,10 @@ class VoteState {
     return step == VoteStep.done;
   }
 
+  int getFriendsCount() {
+    return friends.length;
+  }
+
   Map<String, dynamic> toJson() => _$VoteStateToJson(this);
 
   VoteState fromJson(Map<String, dynamic> json) => _$VoteStateFromJson(json);
