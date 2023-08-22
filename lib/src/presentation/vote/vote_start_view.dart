@@ -99,15 +99,7 @@ class _VoteStartViewState extends State<VoteStartView> with SingleTickerProvider
                     return ElevatedButton(
                       onPressed: () {
                         AnalyticsUtil.logEvent("투표_시작_다음");
-                        List<User> friendList = state.friends;
-                        int friendCount = friendList.length;
-                        if (friendCount >= 4) {
-                          // 시작
-                          BlocProvider.of<VoteCubit>(context).stepStart();
-                        } else {
-                          // 친구 초대
-                          // 카카오톡 공유
-                        }
+                        BlocProvider.of<VoteCubit>(context).stepStart();
                       },
                       style: ButtonStyle(
                         backgroundColor: MaterialStateProperty.all(Color(0xff7C83FD)),

@@ -2,6 +2,8 @@ import 'dart:math';
 
 import 'package:confetti/confetti.dart';
 import 'package:dart_flutter/src/common/util/analytics_util.dart';
+import 'package:dart_flutter/src/presentation/standby/standby_landing_page.dart';
+import 'package:dart_flutter/src/presentation/standby/viewmodel/standby_cubit.dart';
 import 'package:dart_flutter/src/presentation/vote/vimemodel/state/vote_state.dart';
 import 'package:dart_flutter/src/presentation/vote/vimemodel/vote_cubit.dart';
 import 'package:dart_flutter/src/presentation/vote/vote_result_view.dart';
@@ -47,6 +49,7 @@ void _navigateToRoute(BuildContext context, Widget route) {
 
 class VotePages extends StatelessWidget {
   const VotePages({Key? key}) : super(key: key);
+  static const int MINIMUM_FRIENDS_FOR_VOTE = 4;
 
   @override
   Widget build(BuildContext context) {
@@ -54,6 +57,12 @@ class VotePages extends StatelessWidget {
       children: [
         BlocBuilder<VoteCubit, VoteState>(
           builder: (context, state) {
+            if (state.getFriendsCount() < MINIMUM_FRIENDS_FOR_VOTE) {
+              return BlocProvider<StandbyCubit>(
+                create: (BuildContext context) => StandbyCubit()..initPages(),
+                child: const StandbyLandingPage(),
+              );
+            }
             if (state.step.isDone) {  // 투표 결과 페이지는 로딩없이 나타납니다.
               AnalyticsUtil.logEvent("투표_끝_접속");
               return VoteResultView();

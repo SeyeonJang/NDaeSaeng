@@ -54,7 +54,7 @@ class MyPageLandingView extends StatefulWidget {
 }
 
 class _MyPageLandingViewState extends State<MyPageLandingView> {
-  String get profileImageUrl => widget.userResponse.personalInfo!.profileImageUrl ?? 'DEFAULT';
+  String get profileImageUrl => widget.userResponse.personalInfo?.profileImageUrl ?? 'DEFAULT';
 
   @override
   Widget build(BuildContext context) {
@@ -151,7 +151,7 @@ class _MyPageLandingViewState extends State<MyPageLandingView> {
                                                 fontSize: SizeConfig.defaultSize * 1.5,
                                                 color: Colors.white,
                                               ),),
-                                            if (widget.userResponse.personalInfo!.verification.isVerificationSuccess)
+                                            if (widget.userResponse.personalInfo?.verification.isVerificationSuccess ?? false)
                                               Row(
                                                 children: [
                                                   SizedBox(width: SizeConfig.defaultSize * 0.6),
