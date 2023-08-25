@@ -465,7 +465,7 @@ class _TutorialSlideState extends State<TutorialSlide> with TickerProviderStateM
                       child: Text("스킵",
                           style: TextStyle(
                               fontSize: SizeConfig.defaultSize * 1.8,
-                              fontWeight: FontWeight.w500,
+                              fontWeight: FontWeight.w400,
                               color: Color(0xff7C83FD)))),
                   Center(
                       child: SmoothPageIndicator(
@@ -491,7 +491,7 @@ class _TutorialSlideState extends State<TutorialSlide> with TickerProviderStateM
                       child: Text("다음",
                           style: TextStyle(
                               fontSize: SizeConfig.defaultSize * 1.8,
-                              fontWeight: FontWeight.w500,
+                              fontWeight: FontWeight.w400,
                               color: Color(0xff7C83FD)))),
                 ],
               ),
