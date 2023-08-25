@@ -451,8 +451,8 @@ class _TutorialSlideState extends State<TutorialSlide> with TickerProviderStateM
             ),
             )
           : Container(
-              padding: EdgeInsets.only(left: SizeConfig.defaultSize, right: SizeConfig.defaultSize),
-              height: SizeConfig.screenHeight * 0.09,
+              padding: EdgeInsets.only(left: SizeConfig.defaultSize * 2, right: SizeConfig.defaultSize * 2, bottom: SizeConfig.defaultSize * 2.5),
+              height: SizeConfig.screenHeight * 0.08,
               color: Colors.white,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -479,12 +479,12 @@ class _TutorialSlideState extends State<TutorialSlide> with TickerProviderStateM
                               spacing: SizeConfig.defaultSize * 1.5),
                           onDotClicked: (index) => _pageController.animateToPage(
                               index,
-                              duration: const Duration(milliseconds: 500),
+                              duration: const Duration(milliseconds: 400),
                               curve: Curves.easeIn))),
                   TextButton(
                       onPressed: () {
                         _pageController.nextPage(
-                            duration: Duration(milliseconds: 500),
+                            duration: Duration(milliseconds: 400),
                             curve: Curves.easeInOut);
                         AnalyticsUtil.logEvent("온보딩_다음", properties: {"페이지인덱스": _pageController.page!.round()});
                       },
