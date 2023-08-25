@@ -1,18 +1,21 @@
 import 'dart:convert';
 
 import 'package:dart_flutter/res/environment/app_environment.dart';
-import 'package:dart_flutter/src/data/model/friend_dto.dart';
 import 'package:dart_flutter/src/data/model/question_dto.dart';
+import 'package:dart_flutter/src/data/model/meet_team_request_dto.dart';
+import 'package:dart_flutter/src/data/model/title_vote_dto.dart';
 import 'package:dart_flutter/src/data/model/university_dto.dart';
 import 'package:dart_flutter/src/data/model/user_request_dto.dart';
 
-import '../../common/util/HttpUtil.dart';
+import '../../common/util/http_util.dart';
 import '../../data/model/dart_auth_dto.dart';
 import '../../data/model/user_signup_request_dto.dart';
-import '../../data/model/user_response_dto.dart';
+import '../../data/model/user_dto.dart';
 import '../../data/model/vote_request_dto.dart';
 
 import '../../data/model/vote_response_dto.dart';
+import '../model/meet_team_response_dto.dart';
+import '../model/type/team_region.dart';
 
 class DartApiRemoteDataSource {
   static final String baseUrl = AppEnvironment.getEnv.getApiBaseUrl();
@@ -27,6 +30,13 @@ class DartApiRemoteDataSource {
 
   static get httpUtil {
     return _httpUtil;
+  }
+
+  // health
+  static Future<String> healthCheck() async {
+    const path = '/v1/health';
+    final response = await _httpUtil.request().get(path);
+    return response.data;
   }
 
   // Auth: 카카오 로그인 요청
@@ -114,13 +124,17 @@ class DartApiRemoteDataSource {
 
   // Friend: 친구목록 가져오기 (realFriend를 통해 '내가 추가한 친구'와 '추천 친구'를 구분함)
   static Future<List<UserDto>> getMyFriends({bool suggested=false}) async {
-    const path = '/v1/friends';
-    final pathFull = "$path?suggested=$suggested";
-    final response = await _httpUtil.request().get(pathFull);
+    try {
+      const path = '/v1/friends';
+      final pathFull = "$path?suggested=$suggested";
+      final response = await _httpUtil.request().get(pathFull);
 
-    final List<dynamic> jsonResponse = response.data;
-    List<UserDto> friends = jsonResponse.map((user) => UserDto.fromJson(user)).toList();
-    return friends;
+      final List<dynamic> jsonResponse = response.data;
+      List<UserDto> friends = jsonResponse.map((user) => UserDto.fromJson(user)).toList();
+      return friends;
+    } catch (e) {
+      return [];  // 에러 발생시 빈 리스트를 반환
+    }
   }
 
   // Friend: 친구 추가하기
@@ -176,9 +190,19 @@ class DartApiRemoteDataSource {
     final response = await _httpUtil.request().post(path, data: body);
   }
 
+  // vote: 받은 투표 개요 확인하기
+  static Future<List<TitleVoteDto>> getVotesSummary() async {
+    const path = '/v1/users/me/questions';
+    final response = await _httpUtil.request().get(path);
+
+    final List<dynamic> jsonResponse = response.data;
+    List<TitleVoteDto> titleVote = jsonResponse.map((vote) => TitleVoteDto.fromJson(vote)).toList();
+    return titleVote;
+  }
+
   // vote: 받은 투표 리스트 확인하기
   static Future<List<VoteResponseDto>> getVotes() async {
-    const path = '/v1/votes';
+    const path = '/v1/users/me/votes';
 
     final response = await _httpUtil.request().get(path);
     final List<dynamic> jsonResponse = response.data;
@@ -208,5 +232,65 @@ class DartApiRemoteDataSource {
 
     final response = await _httpUtil.request().post(path);
     return DateTime.parse(response.data['nextVoteAvailableDateTime']);
+  }
+
+  // region/location: 전체 지역 정보 조회
+  static Future<List<TeamRegion>> getLocations() async {
+    const path = '/v1/regions';
+    final response = await _httpUtil.request().get(path);
+    final List<dynamic> jsonResponse = response.data;
+    List<TeamRegion> regions = jsonResponse.map((region) => TeamRegion.fromJson(region)).toList();
+    return regions;
+  }
+
+  // meet: 전체 신청 팀 수 조회
+  static Future<int> getTeamCount() async {
+    const path = '/v1/teams/count';
+    final response = await _httpUtil.request().get(path);
+    return response.data;
+  }
+
+  // meet: 내 팀 목록 조회
+  static Future<List<MeetTeamResponseDto>> getMyTeams() async {
+    const path = '/v1/users/me/teams';
+    final response = await _httpUtil.request().get(path);
+    final List<dynamic> jsonResponse = response.data;
+    List<MeetTeamResponseDto> teamResponses = jsonResponse.map((team) => MeetTeamResponseDto.fromJson(team)).toList();
+    return teamResponses;
+  }
+
+  // meet: 팀 상세 조회
+  static Future<MeetTeamResponseDto> getTeam(String teamId) async {
+    const path = '/v1/users/me/teams';
+    final pathUrl = "$path/$teamId";
+
+    final response = await _httpUtil.request().get(pathUrl);
+    return MeetTeamResponseDto.fromJson(response.data);
+  }
+
+  // meet: 팀 생성하기
+  static Future<MeetTeamResponseDto> postTeam(MeetTeamRequestDto teamRequestDto) async {
+    const path = '/v1/teams';
+    final body = teamRequestDto.toJson();
+
+    final response = await _httpUtil.request().post(path, data: body);
+    return MeetTeamResponseDto.fromJson(response.data);
+  }
+
+  // meet: 팀 삭제하기
+  static Future<void> deleteTeam(String teamId) async {
+    const path = '/v1/users/me/teams';
+    final pathUrl = "$path/$teamId";
+
+    final response = await _httpUtil.request().delete(pathUrl);
+  }
+
+  // meet: 팀 정보 업데이트
+  static Future<MeetTeamResponseDto> putTeam(MeetTeamRequestDto teamRequestDto) async {
+    const path = '/v1/users/me/teams';
+    final body = teamRequestDto.toJson();
+
+    final response = await _httpUtil.request().put(path, data: body);
+    return MeetTeamResponseDto.fromJson(response.data);
   }
 }

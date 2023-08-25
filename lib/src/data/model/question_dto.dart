@@ -29,6 +29,14 @@ class QuestionDto {
     );
   }
 
+  static QuestionDto fromQuestion(Question question) {
+    return QuestionDto(
+      questionId: question.questionId,
+      content: question.content,
+      icon: question.icon
+    );
+  }
+
   @override
   String toString() {
     return 'Question{questionId: $questionId, content: $content, icon: $icon}';

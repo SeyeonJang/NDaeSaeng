@@ -1,17 +1,20 @@
+import 'package:dart_flutter/src/domain/entity/title_vote.dart';
 import 'package:dart_flutter/src/domain/entity/university.dart';
 import 'package:dart_flutter/src/domain/entity/personal_info.dart';
 
 class User {
   PersonalInfo? personalInfo;
   University? university;
+  late List<TitleVote> titleVotes;
 
-  User({this.personalInfo, this.university});
+  User({this.personalInfo, this.university, required this.titleVotes});
 
   User.fromJson(Map<String, dynamic> json) {
     personalInfo = json['user'] != null ? PersonalInfo.fromJson(json['user']) : null;
     university = json['university'] != null
         ? University.fromJson(json['university'])
         : null;
+    titleVotes = (json['titleVote'] as List<dynamic>).map((e) => TitleVote.fromJson(e)).toList();
   }
 
   Map<String, dynamic> toJson() {
@@ -22,6 +25,7 @@ class User {
     if (university != null) {
       data['university'] = university!.toJson();
     }
+    data['titleVote'] = titleVotes.map((titleVote) => titleVote.toJson()).toList();
     return data;
   }
 
@@ -40,8 +44,16 @@ class User {
     return data;
   }
 
+  void addTitleVote(TitleVote titleVote) {
+    titleVotes.add(titleVote);
+  }
+
+  void removeTitleVote(int questionId) {
+    titleVotes.removeWhere((e) => e.question.questionId == questionId);
+  }
+
   @override
   String toString() {
-    return 'UserResponse{user: $personalInfo, university: $university}';
+    return 'UserResponse{user: $personalInfo, university: $university, titleVote: $titleVotes}';
   }
 }

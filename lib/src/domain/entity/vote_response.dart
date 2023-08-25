@@ -6,15 +6,15 @@ import 'package:dart_flutter/src/domain/entity/personal_info.dart';
 class VoteResponse {
   int? voteId;
   Question? question;
-  PickedUser? pickedUser;
+  PickingUser? pickingUser;
   DateTime? pickedTime;
 
-  VoteResponse({this.voteId, this.question, this.pickedUser, this.pickedTime});
+  VoteResponse({this.voteId, this.question, this.pickingUser, this.pickedTime});
 
   VoteResponse.fromJson(Map<String, dynamic> json) {
     voteId = json['voteId'];
     question = json['question'] != null ? Question.fromJson(json['question']) : null;
-    pickedUser = json['pickedUser'] != null ? PickedUser.fromJson(json['pickedUser']) : null;
+    pickingUser = json['pickingUser'] != null ? PickingUser.fromJson(json['pickingUser']) : null;
     pickedTime = DateTime.parse(json['pickedTime']);
   }
 
@@ -24,8 +24,8 @@ class VoteResponse {
     if (question != null) {
       data['question'] = question!.toJson();
     }
-    if (pickedUser != null) {
-      data['pickedUser'] = pickedUser!.toJson();
+    if (pickingUser != null) {
+      data['pickingUser'] = pickingUser!.toJson();
     }
     data['pickedTime'] = pickedTime?.toIso8601String();
     return data;
@@ -33,17 +33,17 @@ class VoteResponse {
 
   @override
   String toString() {
-    return 'VoteResponse{voteId: $voteId, question: $question, pickedUser: $pickedUser, pickedTime: $pickedTime}';
+    return 'VoteResponse{voteId: $voteId, question: $question, pickingUser: $pickingUser, pickedTime: $pickedTime}';
   }
 }
 
-class PickedUser {
+class PickingUser {
   PersonalInfo? user;
   University? university;
 
-  PickedUser({this.user, this.university});
+  PickingUser({this.user, this.university});
 
-  PickedUser.fromJson(Map<String, dynamic> json) {
+  PickingUser.fromJson(Map<String, dynamic> json) {
     user = json['user'] != null ? PersonalInfo.fromJson(json['user']) : null;
     university = json['university'] != null ? University.fromJson(json['university']) : null;
   }
@@ -61,6 +61,6 @@ class PickedUser {
 
   @override
   String toString() {
-    return 'PickedUser{user: $user, university: $university}';
+    return 'PickingUser{user: $user, university: $university}';
   }
 }
