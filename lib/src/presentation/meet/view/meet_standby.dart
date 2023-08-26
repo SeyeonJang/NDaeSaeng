@@ -376,7 +376,7 @@ class _TopSectionState extends State<_TopSection> with SingleTickerProviderState
       child: Column(
         children: [
             SizedBox(height: SizeConfig.defaultSize * 3,),
-          Text("개강시즌 과팅 오픈 예정", style: TextStyle(color: Colors.black, fontWeight: FontWeight.w600, fontSize: SizeConfig.defaultSize * 2.7)),
+          Text("9월 과팅 오픈 예정", style: TextStyle(color: Colors.black, fontWeight: FontWeight.w600, fontSize: SizeConfig.defaultSize * 2.7)),
             SizedBox(height: SizeConfig.defaultSize * 0.5),
           Text("오픈 전, 미리 팀을 만들어보며 준비할 수 있어요!", style: TextStyle(color: Colors.grey.shade400, fontSize: SizeConfig.defaultSize * 1.4)),
             SizedBox(height: SizeConfig.defaultSize * 2),
