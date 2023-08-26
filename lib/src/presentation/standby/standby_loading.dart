@@ -1,5 +1,5 @@
+import 'package:dart_flutter/res/config/size_config.dart';
 import 'package:dart_flutter/src/common/util/analytics_util.dart';
-import 'package:dart_flutter/src/presentation/standby/standby_landing_page.dart';
 import 'package:dart_flutter/src/presentation/standby/viewmodel/standby_cubit.dart';
 import 'package:dart_flutter/src/presentation/standby/viewmodel/state/standby_state.dart';
 import 'package:flutter/material.dart';
@@ -14,41 +14,46 @@ class StandbyLoading extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: Center(
-          child: Stack(
-            children: [
-              BlocBuilder<StandbyCubit, StandbyState> (
-                builder: (context, state) {
-                  // 내 정보를 분석툴에 저장
-                  print(state.userResponse.toString());
-                  AnalyticsUtil.setUserInformation(state.userResponse.toAnalytics());
-
-                  WidgetsBinding.instance.addPostFrameCallback((_) {
-                    Navigator.pushAndRemoveUntil(context, MaterialPageRoute(
-                        builder: (context) => const DartPageView()), (route) => false);
-                  });
-
-                  return const CircularProgressIndicator();
-
-                  // if (state.isFirstCommCompleted) {
-                  //   // 친구가 4명이상이면 메인화면으로 이동
-                  //   int count = state.addedFriends.length;
-                  //   if (count >= 4) {
-                  //     WidgetsBinding.instance.addPostFrameCallback((_) {
-                  //       Navigator.pushAndRemoveUntil(context, MaterialPageRoute(
-                  //           builder: (context) => const DartPageView()), (route) => false);
-                  //     });
-                  //   } else {
-                  //     // 친구가 없으면 스탠바이 페이지로 이동
-                  //     return const StandbyLandingPage();
-                  //   }
-                  // }
-                  //
-                  // return const CircularProgressIndicator();
-                },
+        child: Stack(
+          children: [
+            Container(
+              width: SizeConfig.screenWidth,
+              height: SizeConfig.screenHeight,
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment(0.8, 1),
+                  colors: [
+                    Color.fromARGB(100, 98, 105, 234),
+                    Color.fromARGB(100, 71, 126, 211),
+                    Color.fromARGB(100, 118, 204, 217),
+                    Color.fromARGB(100, 218, 204, 213),
+                  ],
+                ),
               ),
-            ],
-          ),
+            ),
+            BlocBuilder<StandbyCubit, StandbyState>(
+              builder: (context, state) {
+                // 내 정보를 분석툴에 저장
+                print(state.userResponse.toString());
+                AnalyticsUtil.setUserInformation(state.userResponse.toAnalytics());
+
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  Navigator.pushAndRemoveUntil(
+                      context, MaterialPageRoute(builder: (context) => const DartPageView()), (route) => false);
+                });
+
+                return const Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      CircularProgressIndicator(color: Colors.white,),
+                    ],
+                  ),
+                );
+              },
+            ),
+          ],
         ),
       ),
     );

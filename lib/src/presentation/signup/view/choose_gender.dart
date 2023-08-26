@@ -130,7 +130,7 @@ class _ChooseGenderState extends State<ChooseGender> {
                     ? ElevatedButton(
                     onPressed: () {
                       AnalyticsUtil.logEvent("회원가입_성별_다음");
-                      BlocProvider.of<SignupCubit>(context).stepGender(selectedGender);  // TODO 성별선택 controller 를 통해 사용자 입력을 받아오기
+                      BlocProvider.of<SignupCubit>(context).stepGender(selectedGender);
                       BlocProvider.of<DartAuthCubit>(context).doneSignup();
                     },
                     style: ElevatedButton.styleFrom(
