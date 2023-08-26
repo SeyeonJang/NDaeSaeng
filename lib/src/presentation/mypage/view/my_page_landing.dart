@@ -255,48 +255,48 @@ class _MyPageLandingViewState extends State<MyPageLandingView> {
 
         // =================================================================
 
-        // TODO : '인증 완료'면 안 띄우는 로직 만들기
-        InkWell(
-          onTap: () async {
-            AnalyticsUtil.logEvent("내정보_마이_학생증인증배너터치");
-            await Navigator.push(context, MaterialPageRoute(builder: (_) => StudentVertification(
-              userResponse: BlocProvider.of<MyPagesCubit>(context).state.userResponse,
-            )));
+        if (!widget.userResponse.personalInfo!.verification.isVerificationSuccess)
+          InkWell(
+            onTap: () async {
+              AnalyticsUtil.logEvent("내정보_마이_학생증인증배너터치");
+              await Navigator.push(context, MaterialPageRoute(builder: (_) => StudentVertification(
+                userResponse: BlocProvider.of<MyPagesCubit>(context).state.userResponse,
+              )));
 
-            PaintingBinding.instance.imageCache.clear();
-            BlocProvider.of<MyPagesCubit>(context).refreshMyInfo();
-            setState(() {
-            });
-          },
-          child: Padding( // TODO : 학생증
-            padding: EdgeInsets.symmetric(
-              // vertical: SizeConfig.defaultSize,
-                horizontal: SizeConfig.defaultSize * 0.5),
-            child: Container(
-              width: SizeConfig.screenWidth,
-              height: SizeConfig.defaultSize * 4.8,
-              decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border.all(width: 1.3, color: Color(0xff7C83FD))
-              ),
-              child: Padding(
-                padding: EdgeInsets.only(left: SizeConfig.defaultSize * 1.5, right: SizeConfig.defaultSize * 1.5),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text("지금 학생증 인증하면 프로필배지를 추가해드려요!", style: TextStyle(
-                        fontSize: SizeConfig.defaultSize * 1.4
-                    ),),
-                    Icon(
-                      Icons.arrow_right_alt_rounded, color: Color(0xff7C83FD)
-                    )
-                  ],
+              PaintingBinding.instance.imageCache.clear();
+              BlocProvider.of<MyPagesCubit>(context).refreshMyInfo();
+              setState(() {
+              });
+            },
+            child: Padding( // TODO : 학생증
+              padding: EdgeInsets.symmetric(
+                // vertical: SizeConfig.defaultSize,
+                  horizontal: SizeConfig.defaultSize * 0.5),
+              child: Container(
+                width: SizeConfig.screenWidth,
+                height: SizeConfig.defaultSize * 4.8,
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(width: 1.3, color: Color(0xff7C83FD))
+                ),
+                child: Padding(
+                  padding: EdgeInsets.only(left: SizeConfig.defaultSize * 1.5, right: SizeConfig.defaultSize * 1.5),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text("지금 학생증 인증하면 프로필배지를 추가해드려요!", style: TextStyle(
+                          fontSize: SizeConfig.defaultSize * 1.4
+                      ),),
+                      Icon(
+                        Icons.arrow_right_alt_rounded, color: Color(0xff7C83FD)
+                      )
+                    ],
+                  ),
                 ),
               ),
             ),
           ),
-        ),
 
         SizedBox(height: SizeConfig.defaultSize),
 
