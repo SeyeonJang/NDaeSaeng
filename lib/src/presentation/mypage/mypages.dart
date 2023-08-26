@@ -5,11 +5,21 @@ import 'package:dart_flutter/src/presentation/mypage/viewmodel/state/mypages_sta
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class MyPages extends StatelessWidget {
+class MyPages extends StatefulWidget {
   const MyPages({Key? key}) : super(key: key);
 
   @override
+  State<MyPages> createState() => _MyPagesState();
+}
+
+class _MyPagesState extends State<MyPages> with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
+
+  @override
   Widget build(BuildContext context) {
+    super.build(context);
+
     return Stack(
         children: [
           BlocBuilder<MyPagesCubit, MyPagesState>(
