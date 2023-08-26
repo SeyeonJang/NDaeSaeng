@@ -10,7 +10,7 @@ class MyOpinion extends StatefulWidget {
 }
 
 class _MyOpinionState extends State<MyOpinion> {
-  WebViewController _webViewController = WebViewController()..loadRequest(Uri.parse('https://tally.so/r/mYR270'));
+  WebViewController _webViewController = WebViewController()..setJavaScriptMode(JavaScriptMode.unrestricted)..loadRequest(Uri.parse('https://tally.so/r/mYR270'));
 
   @override
   Widget build(BuildContext context) {
