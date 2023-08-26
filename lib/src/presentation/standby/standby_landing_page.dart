@@ -1800,7 +1800,7 @@ class _openAddFriendsState extends State<openAddFriends> {
 }
 
 void shareContent(BuildContext context, String myCode) {
-  Share.share('엔대생에서 내가 널 칭찬 대상으로 투표하고 싶어! 앱에 들어와줘!\n내 코드는 $myCode 야. 나를 친구 추가하고 같이하자!\nhttps://dart.page.link/TG78\n\n내 코드 : $myCode');
+  Share.share('[엔대생] 엔대생에서 내가 널 칭찬 대상으로 투표하고 싶어! 앱에 들어와줘!\n내 코드는 $myCode 야. 나를 친구 추가하고 같이하자!\nhttps://dart.page.link/TG78\n\n내 코드 : $myCode');
   print("셰어");
 }
 
