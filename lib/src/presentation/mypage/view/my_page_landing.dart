@@ -33,7 +33,6 @@ class _MyPageLandingState extends State<MyPageLanding> {
       child: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.symmetric(
-              vertical: SizeConfig.defaultSize * 0,
               horizontal: SizeConfig.defaultSize),
           child: BlocBuilder<MyPagesCubit, MyPagesState>(
             builder: (context, state) {
