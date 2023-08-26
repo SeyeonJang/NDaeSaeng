@@ -1284,18 +1284,18 @@ class _FriendNotExistsViewState extends State<FriendNotExistsView> {
         width: SizeConfig.screenWidth * 0.4,
         height: SizeConfig.defaultSize * 8,
         decoration: BoxDecoration(color: Colors.grey[300], borderRadius: BorderRadius.circular(15)),
-        // decoration: BoxDecoration(
-        //     border: Border.all(
-        //       color: Colors.grey.shade400,
-        //       width: 1.3,
-        //     ),
-        //     borderRadius: BorderRadius.circular(15)),
         alignment: Alignment.center,
-        child: Text(
-          "눌러서 친구추가",
-          style: TextStyle(
-            fontSize: SizeConfig.defaultSize * 1.8,
-          ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              "눌러서 친구추가",
+              style: TextStyle(
+                fontSize: SizeConfig.defaultSize * 1.7,
+              ),
+            ),
+            Icon(Icons.add_rounded, size: SizeConfig.defaultSize * 2)
+          ],
         ),
       ),
     );
