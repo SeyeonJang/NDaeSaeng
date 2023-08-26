@@ -640,9 +640,16 @@ class _MyPageViewState extends State<MyPageView> {
                               const Text('닉네임은 최대 10글자예요!'),
                               TextField(
                                 controller: _textController,
+                                maxLength: 10,
                                 onChanged: (text) {
                                   setState(() {}); // Rebuild the AlertDialog when text changes
                                 },
+                                decoration: InputDecoration(
+                                  hintText: "바꿀 닉네임을 작성해주세요!",
+                                  hintStyle: TextStyle(fontSize: SizeConfig.defaultSize * 1.4),
+                                  contentPadding: EdgeInsets.zero,
+                                  enabledBorder: UnderlineInputBorder(borderSide: BorderSide(width: 0.6)),
+                                ),
                               ),
                             ],
                           ),
