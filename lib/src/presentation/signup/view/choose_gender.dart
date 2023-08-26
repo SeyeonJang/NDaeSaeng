@@ -105,7 +105,12 @@ class _ChooseGenderState extends State<ChooseGender> {
                         AnalyticsUtil.logEvent("회원가입_성별_이용약관");
                         Navigator.push(context, MaterialPageRoute(builder: (_) => Tos1()));
                       },
-                      child: Text("이용약관", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.3)),
+                      style: TextButton.styleFrom(
+                        minimumSize: Size.zero,
+                        padding: EdgeInsets.symmetric(vertical: SizeConfig.defaultSize * 1.2),
+                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      ),
+                      child: Text(" 이용약관 ", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.3, color: Color(0xff7C83FD))),
                     ),
                     Text("및", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.3)),
                     TextButton(
@@ -113,7 +118,12 @@ class _ChooseGenderState extends State<ChooseGender> {
                         AnalyticsUtil.logEvent("회원가입_성별_개인정보");
                         Navigator.push(context, MaterialPageRoute(builder: (_) => Tos2()));
                       },
-                      child: Text("개인정보 처리방침", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.3)),
+                      style: TextButton.styleFrom(
+                        minimumSize: Size.zero,
+                        padding: EdgeInsets.zero,
+                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      ),
+                      child: Text(" 개인정보 처리방침", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.3, color: Color(0xff7C83FD))),
                     ),
                     Text("에 동의하시면 계속 진행해주세요.", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.3)),
                   ]
