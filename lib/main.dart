@@ -22,16 +22,17 @@ import 'firebase_options.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  // 초기화 순서에 유의할 것
   const BUILD_TYPE = String.fromEnvironment('BUILD_TYPE', defaultValue: 'DEFAULT');
   AppEnvironment.setupEnv(BuildType.from(BUILD_TYPE));
   if (AppEnvironment.buildType == BuildType.dev) ToastUtil.showToast("실행환경: Develop");
   if (AppEnvironment.buildType == BuildType.stage) ToastUtil.showToast("실행환경: Staging");
   print("실행환경: ${AppEnvironment.getEnv.toString()}");
 
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   AnalyticsUtil.initialize();
   KakaoSdk.init(nativeAppKey: AppEnvironment.getEnv.getKakaoSdkKey());
   PushNotificationUtil.init();
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await Supabase.initialize(url: AppEnvironment.getEnv.getSupabaseUrl(), anonKey: AppEnvironment.getEnv.getSupabaseApiKey());
   HydratedBloc.storage = await HydratedStorage.build(storageDirectory: await getTemporaryDirectory());
 
