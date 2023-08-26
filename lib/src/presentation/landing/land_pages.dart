@@ -60,7 +60,7 @@ class _LandPagesState extends State<LandPages> {
                       if (isAppleUser) {
                         launchUrl(Uri.parse("https://apps.apple.com/us/app/dart/id6451335598"));
                       } else {
-                        launchUrl(Uri.parse("https://play.google.com/store/apps/details?id=com.sshdart.dart_flutter"));
+                        launchUrl(Uri.parse("https://play.google.com/store/apps/details?id=com.sshdart.dart_flutter"), mode: LaunchMode.externalNonBrowserApplication);
                       }
                     },
                   ),
