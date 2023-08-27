@@ -36,11 +36,22 @@ class MyPagesCubit extends Cubit<MyPagesState> {
     print("mypage init 끝");
   }
 
+  // 기존 코드
+  // Future<void> pressedFriendAddButton(User friend) async {
+  //   await _friendUseCase.addFriend(friend);
+  //   state.addFriend(friend);
+  //   state.newFriends = (await _friendUseCase.getRecommendedFriends(put: true)).toSet();
+  //   emit(state.copy());
+  // }
+
+  // 변경 코드
   Future<void> pressedFriendAddButton(User friend) async {
-    await _friendUseCase.addFriend(friend);
+    // UI 상에서 먼저 작동
     state.addFriend(friend);
-    state.newFriends = (await _friendUseCase.getRecommendedFriends(put: true)).toSet();
     emit(state.copy());
+    // UI 변경 이후 async await 진행
+    await _friendUseCase.addFriend(friend);
+    state.newFriends = (await _friendUseCase.getRecommendedFriends(put: true)).toSet();
   }
 
   void pressedFriendDeleteButton(User friend) {
