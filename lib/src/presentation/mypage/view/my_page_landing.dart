@@ -717,8 +717,8 @@ class _NotFriendComponentState extends State<NotFriendComponent> {
     BlocProvider.of<MyPagesCubit>(context).pressedFriendDeleteButton(widget.friend);
   }
 
-  void pressedAddButton(BuildContext context, int userId) async {
-    await BlocProvider.of<MyPagesCubit>(context).pressedFriendAddButton(widget.friend);
+  void pressedAddButton(BuildContext context, int userId) {
+    BlocProvider.of<MyPagesCubit>(context).pressedFriendAddButton(widget.friend);
   }
 
   String get profileImageUrl => widget.friend.personalInfo?.profileImageUrl ?? 'DEFAULT';
