@@ -18,6 +18,11 @@ VoteListState _$VoteListStateFromJson(Map<String, dynamic> json) =>
       ),
       isDetailPage: json['isDetailPage'] as bool,
       nowVoteId: json['nowVoteId'] as int,
+          userMe: User(
+                personalInfo: null,
+                university: null,
+                titleVotes: [],
+          ),
     );
 
 Map<String, dynamic> _$VoteListStateToJson(VoteListState instance) =>

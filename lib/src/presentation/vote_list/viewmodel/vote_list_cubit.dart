@@ -1,11 +1,14 @@
 import 'package:dart_flutter/src/domain/entity/vote_detail.dart';
 import 'package:dart_flutter/src/domain/entity/vote_response.dart';
+import 'package:dart_flutter/src/domain/use_case/user_use_case.dart';
 import 'package:dart_flutter/src/domain/use_case/vote_use_case.dart';
 import 'package:dart_flutter/src/presentation/vote_list/viewmodel/state/vote_list_state.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
+import 'package:dart_flutter/src/domain/entity/user.dart';
 
 class VoteListCubit extends HydratedCubit<VoteListState> {
   static final VoteUseCase _voteUseCase = VoteUseCase();
+  static final UserUseCase _userUseCase = UserUseCase();
 
   VoteListCubit() : super(VoteListState.init());
 
@@ -15,6 +18,8 @@ class VoteListCubit extends HydratedCubit<VoteListState> {
 
     List<VoteResponse> votes = await _voteUseCase.getVotes();
     state.setVotes(votes);
+    User userResponse = await _userUseCase.myInfo();
+    state.setUserMe(userResponse);
 
     state.setIsLoading(false);
     emit(state.copy());
@@ -39,6 +44,11 @@ class VoteListCubit extends HydratedCubit<VoteListState> {
 
   Future<VoteDetail> getVote(int voteId) async {
     return await _voteUseCase.getVote(voteId);
+  }
+
+  Future<void> getUserMe() async {
+    User userResponse = await _userUseCase.myInfo();
+    state.setUserMe(userResponse);
   }
 
   bool isVisited(int id) {

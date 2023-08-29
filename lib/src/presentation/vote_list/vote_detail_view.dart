@@ -29,11 +29,13 @@ class VoteDetailView extends StatelessWidget {
                     return Text('Error: ${snapshot.error}');
                   } else if (snapshot.hasData) {
                     VoteResponse vote = state.getVoteById(state.nowVoteId);
-                    VoteDetail myVote = snapshot.data!; // 비동기로 받아온 데이터를 사용
-                    print('ddddddddd ${myVote.toString()}');
+                    VoteDetail myVote = snapshot.data!;
+                    context.read<VoteListCubit>().getUserMe();
+                    User userMe = state.userMe;
                     return OneVote(
                       voteId: vote.voteId!,
                       vote: myVote,
+                      userMe: userMe
                     );
                   } else {
                     return Text('데이터 정보가 없습니다.');
@@ -51,9 +53,10 @@ class VoteDetailView extends StatelessWidget {
 class OneVote extends StatefulWidget {
   final int voteId;
   final VoteDetail vote;
+  final User userMe;
 
   const OneVote({
-    super.key, required this.voteId, required this.vote
+    super.key, required this.voteId, required this.vote, required this.userMe
   });
 
   @override
@@ -187,16 +190,16 @@ class _OneVoteState extends State<OneVote> with SingleTickerProviderStateMixin {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          FriendChoiceButton(userResponse: widget.vote.candidates[0]),
-                          FriendChoiceButton(userResponse: widget.vote.candidates[1]),
+                          FriendChoiceButton(userResponse: widget.vote.candidates[0], userMe: widget.userMe),
+                          FriendChoiceButton(userResponse: widget.vote.candidates[1], userMe: widget.userMe),
                         ],
                       ),
                       SizedBox(height: SizeConfig.defaultSize,),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          FriendChoiceButton(userResponse: widget.vote.candidates[2]),
-                          FriendChoiceButton(userResponse: widget.vote.candidates[3]),
+                          FriendChoiceButton(userResponse: widget.vote.candidates[2], userMe: widget.userMe),
+                          FriendChoiceButton(userResponse: widget.vote.candidates[3], userMe: widget.userMe),
                         ],
                       ),
                     ],
@@ -225,10 +228,12 @@ class _OneVoteState extends State<OneVote> with SingleTickerProviderStateMixin {
 class FriendChoiceButton extends StatelessWidget {
   static bool disabled = false;
   final User userResponse;
+  final User userMe;
 
   const FriendChoiceButton({
     super.key,
-    required this.userResponse
+    required this.userResponse,
+    required this.userMe
   });
 
   @override
@@ -237,15 +242,15 @@ class FriendChoiceButton extends StatelessWidget {
       width: SizeConfig.screenWidth * 0.4,
       height: SizeConfig.defaultSize * 8.2,
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: userMe.personalInfo!.id.hashCode == userResponse.personalInfo!.id.hashCode ? Colors.white : Colors.grey.shade200,
           borderRadius: BorderRadius.circular(15),
         ),
       child: ElevatedButton(
         onPressed: () {},
-          style: ElevatedButton.styleFrom( // TODO : 터치한 버튼은 색 변하게 하려고 했는데 구현 못함
+          style: ElevatedButton.styleFrom(
               primary: Colors.white,
               onPrimary: Color(0xff7C83FD),
-              backgroundColor: Colors.white,   // background color
+              backgroundColor: userMe.personalInfo!.id.hashCode == userResponse.personalInfo!.id.hashCode ? Colors.white : Colors.grey.shade300,   // background color
               foregroundColor: Color(0xff7C83FD), // text color
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(15), // 모서리 둥글기 설정
