@@ -47,14 +47,14 @@ class _VoteListPagesState extends State<VoteListPages> with AutomaticKeepAliveCl
           },
         ),
 
-        BlocBuilder<VoteListCubit, VoteListState> (
-          builder: (context, state) {
-            if (state.isLoading) {
-              return Center(child: CircularProgressIndicator());
-            }
-            return SizedBox();
-          }
-        ),
+        // BlocBuilder<VoteListCubit, VoteListState> (
+        //   builder: (context, state) {
+        //     if (state.isLoading) {
+        //       return Center(child: CircularProgressIndicator());
+        //     }
+        //     return SizedBox();
+        //   }
+        // ),
 
         // BlocBuilder<VoteListCubit, VoteListState>(
         //   builder: (context, state) {

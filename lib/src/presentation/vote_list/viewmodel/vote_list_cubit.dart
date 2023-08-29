@@ -5,10 +5,13 @@ import 'package:dart_flutter/src/domain/use_case/vote_use_case.dart';
 import 'package:dart_flutter/src/presentation/vote_list/viewmodel/state/vote_list_state.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:dart_flutter/src/domain/entity/user.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 class VoteListCubit extends HydratedCubit<VoteListState> {
   static final VoteUseCase _voteUseCase = VoteUseCase();
   static final UserUseCase _userUseCase = UserUseCase();
+  final PagingController<int, VoteResponse> pagingController = PagingController(firstPageKey: 0);
+  final int _numberOfPostsPerRequest = 10;
 
   VoteListCubit() : super(VoteListState.init());
 
@@ -41,6 +44,22 @@ class VoteListCubit extends HydratedCubit<VoteListState> {
   void backToVoteList() {
     state.setIsDetailPage(false);
     emit(state.copy());
+  }
+
+  Future<void> fetchPage(int pageKey) async {
+    try {
+      final newVotes = await _voteUseCase.getVotes(page: pageKey);
+      final isLastPage = newVotes.length < _numberOfPostsPerRequest;
+      if (isLastPage) {
+        pagingController.appendLastPage(newVotes);
+      } else {
+        final nextPageKey = pageKey + 1;
+        // await Future.delayed(Duration(seconds: 1));
+        pagingController.appendPage(newVotes, nextPageKey);
+      }
+    } catch (error) {
+      pagingController.error = error;
+    }
   }
 
   Future<VoteDetail> getVote(int voteId) async {
