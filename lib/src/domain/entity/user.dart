@@ -59,10 +59,7 @@ class User {
 
   @override
   bool operator == (Object other) {
-    if (personalInfo!.id.hashCode == (other as User).personalInfo!.id.hashCode) {
-      return true;
-    }
-    return false;
+    return personalInfo!.id.hashCode == (other as User).personalInfo!.id.hashCode;
   }
 
   @override
