@@ -60,7 +60,7 @@ class _LandPagesState extends State<LandPages> {
                       if (isAppleUser) {
                         launchUrl(Uri.parse("https://apps.apple.com/us/app/dart/id6451335598"));
                       } else {
-                        launchUrl(Uri.parse("https://play.google.com/store/apps/details?id=com.sshdart.dart_flutter"));
+                        launchUrl(Uri.parse("https://play.google.com/store/apps/details?id=com.sshdart.dart_flutter"), mode: LaunchMode.externalNonBrowserApplication);
                       }
                     },
                   ),
@@ -99,6 +99,7 @@ class _LandPagesState extends State<LandPages> {
           if (state.step == AuthStep.login) {
             BlocProvider.of<DartAuthCubit>(context).setAnalyticsUserInformation();
             BlocProvider.of<DartAuthCubit>(context).setPushNotificationUserId();
+            AnalyticsUtil.logEvent("로그인_로그인성공");
             return BlocProvider<StandbyCubit>(
               create: (BuildContext context) => StandbyCubit()..initPages(),
               child: const StandbyLoading(),

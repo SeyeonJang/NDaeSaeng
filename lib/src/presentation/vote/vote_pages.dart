@@ -45,12 +45,22 @@ void _navigateToRoute(BuildContext context, Widget route) {
 }
 
 
-class VotePages extends StatelessWidget {
+class VotePages extends StatefulWidget {
   const VotePages({Key? key}) : super(key: key);
   static const int MINIMUM_FRIENDS_FOR_VOTE = 4;
 
   @override
+  State<VotePages> createState() => _VotePagesState();
+}
+
+class _VotePagesState extends State<VotePages> with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
+
+  @override
   Widget build(BuildContext context) {
+    super.build(context);
+
     return Stack(
       children: [
         BlocBuilder<VoteCubit, VoteState>(

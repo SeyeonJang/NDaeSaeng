@@ -25,6 +25,7 @@ class _MyPageLandingState extends State<MyPageLanding> {
 
   @override
   Widget build(BuildContext context) {
+    AnalyticsUtil.logEvent("내정보_마이_접속");
     return RefreshIndicator(
       onRefresh: () async {
         context.read<MyPagesCubit>().refreshMyInfo();
@@ -103,6 +104,7 @@ class _MyPageLandingViewState extends State<MyPageLandingView> {
                                 if (profileImageUrl == "DEFAULT" || !profileImageUrl.startsWith("https://"))
                                   return Image.asset('assets/images/profile-mockup3.png', width: SizeConfig.defaultSize * 5.7, fit: BoxFit.cover,);
                                 else {
+                                  print('${state.profileImageFile.path} dddsdsdsdsd');
                                   return state.profileImageFile.path==''
                                       ? Image.network(profileImageUrl,
                                       width: SizeConfig.defaultSize * 5.7,
@@ -172,9 +174,17 @@ class _MyPageLandingViewState extends State<MyPageLandingView> {
                                     onPressed: () async {
                                       AnalyticsUtil.logEvent("내정보_마이_설정버튼");
                                       BlocProvider.of<MyPagesCubit>(context).refreshMyInfo();
-                                      final _profileImage = await Navigator.push(context, MaterialPageRoute(builder: (_) => MySettings(
-                                        userResponse: BlocProvider.of<MyPagesCubit>(context).state.userResponse,
-                                      )));
+                                      final _profileImage = await Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (_) => BlocProvider.value(
+                                            value: BlocProvider.of<MyPagesCubit>(context),
+                                            child: MySettings(
+                                              userResponse: BlocProvider.of<MyPagesCubit>(context).state.userResponse,
+                                            ),
+                                          ),
+                                        ),
+                                      );
                                       BlocProvider.of<MyPagesCubit>(context).setProfileImage(_profileImage);
 
                                       PaintingBinding.instance.imageCache.clear();
@@ -260,48 +270,48 @@ class _MyPageLandingViewState extends State<MyPageLandingView> {
 
         // =================================================================
 
-        // TODO : '인증 완료'면 안 띄우는 로직 만들기
-        InkWell(
-          onTap: () async {
-            AnalyticsUtil.logEvent("내정보_마이_학생증인증배너터치");
-            await Navigator.push(context, MaterialPageRoute(builder: (_) => StudentVertification(
-              userResponse: BlocProvider.of<MyPagesCubit>(context).state.userResponse,
-            )));
+        if (!widget.userResponse.personalInfo!.verification.isVerificationSuccess)
+          InkWell(
+            onTap: () async {
+              AnalyticsUtil.logEvent("내정보_마이_학생증인증배너터치");
+              await Navigator.push(context, MaterialPageRoute(builder: (_) => StudentVertification(
+                userResponse: BlocProvider.of<MyPagesCubit>(context).state.userResponse,
+              )));
 
-            PaintingBinding.instance.imageCache.clear();
-            BlocProvider.of<MyPagesCubit>(context).refreshMyInfo();
-            setState(() {
-            });
-          },
-          child: Padding( // TODO : 학생증
-            padding: EdgeInsets.symmetric(
-              // vertical: SizeConfig.defaultSize,
-                horizontal: SizeConfig.defaultSize * 0.5),
-            child: Container(
-              width: SizeConfig.screenWidth,
-              height: SizeConfig.defaultSize * 4.8,
-              decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border.all(width: 1.3, color: Color(0xff7C83FD))
-              ),
-              child: Padding(
-                padding: EdgeInsets.only(left: SizeConfig.defaultSize * 1.5, right: SizeConfig.defaultSize * 1.5),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text("지금 학생증 인증하면 프로필배지를 추가해드려요!", style: TextStyle(
-                        fontSize: SizeConfig.defaultSize * 1.4
-                    ),),
-                    Icon(
-                      Icons.arrow_right_alt_rounded, color: Color(0xff7C83FD)
-                    )
-                  ],
+              PaintingBinding.instance.imageCache.clear();
+              BlocProvider.of<MyPagesCubit>(context).refreshMyInfo();
+              setState(() {
+              });
+            },
+            child: Padding( // TODO : 학생증
+              padding: EdgeInsets.symmetric(
+                // vertical: SizeConfig.defaultSize,
+                  horizontal: SizeConfig.defaultSize * 0.5),
+              child: Container(
+                width: SizeConfig.screenWidth,
+                height: SizeConfig.defaultSize * 4.8,
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(width: 1.3, color: Color(0xff7C83FD))
+                ),
+                child: Padding(
+                  padding: EdgeInsets.only(left: SizeConfig.defaultSize * 1.5, right: SizeConfig.defaultSize * 1.5),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text("지금 학생증 인증하면 프로필배지를 추가해드려요!", style: TextStyle(
+                          fontSize: SizeConfig.defaultSize * 1.4
+                      ),),
+                      Icon(
+                        Icons.arrow_right_alt_rounded, color: Color(0xff7C83FD)
+                      )
+                    ],
+                  ),
                 ),
               ),
             ),
           ),
-        ),
 
         SizedBox(height: SizeConfig.defaultSize),
 
@@ -717,8 +727,8 @@ class _NotFriendComponentState extends State<NotFriendComponent> {
     BlocProvider.of<MyPagesCubit>(context).pressedFriendDeleteButton(widget.friend);
   }
 
-  void pressedAddButton(BuildContext context, int userId) async {
-    await BlocProvider.of<MyPagesCubit>(context).pressedFriendAddButton(widget.friend);
+  void pressedAddButton(BuildContext context, int userId) {
+    BlocProvider.of<MyPagesCubit>(context).pressedFriendAddButton(widget.friend);
   }
 
   String get profileImageUrl => widget.friend.personalInfo?.profileImageUrl ?? 'DEFAULT';
