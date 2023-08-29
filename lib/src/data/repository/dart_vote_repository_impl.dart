@@ -1,5 +1,6 @@
 import 'package:dart_flutter/src/domain/entity/question.dart';
 import 'package:dart_flutter/src/domain/entity/title_vote.dart';
+import 'package:dart_flutter/src/domain/entity/vote_detail.dart';
 import 'package:dart_flutter/src/domain/entity/vote_request.dart';
 import 'package:dart_flutter/src/domain/entity/vote_response.dart';
 import 'package:dart_flutter/src/domain/repository/vote_repository.dart';
@@ -33,8 +34,9 @@ class DartVoteRepositoryImpl implements VoteRepository {
   }
 
   @override
-  Future<VoteResponse> getVote(int voteId) async {
-    return (await DartApiRemoteDataSource.getVote(voteId)).newVoteResponse();
+  Future<VoteDetail> getVote(int voteId) async {
+    print('VoteDetail : ${(await DartApiRemoteDataSource.getVote(voteId)).newVoteDetail()}');
+    return (await DartApiRemoteDataSource.getVote(voteId)).newVoteDetail();
   }
 
   @override

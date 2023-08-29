@@ -81,4 +81,8 @@ class PersonalInfo {
   String toString() {
     return 'User{id: $id, name: $name, nickname: $nickname, profileUrl: $profileImageUrl, verification: $verification, phone: $phone, gender: $gender, admissionYear: $admissionYear, birthYear: $birthYear, recommendationCode: $recommendationCode, point: $point}';
   }
+
+  String getGender() {
+    return gender == "FEMALE" ? "여" : "남";
+  }
 }

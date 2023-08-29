@@ -10,7 +10,7 @@ class MyAsk extends StatefulWidget {
 }
 
 class _MyAskState extends State<MyAsk> {
-  WebViewController _webViewController = WebViewController()..loadRequest(Uri.parse('https://tally.so/r/wzNV5E'));
+  WebViewController _webViewController = WebViewController()..setJavaScriptMode(JavaScriptMode.unrestricted)..loadRequest(Uri.parse('https://tally.so/r/wzNV5E'));
 
 
   @override

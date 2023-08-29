@@ -6,6 +6,7 @@ import 'package:dart_flutter/src/data/model/meet_team_request_dto.dart';
 import 'package:dart_flutter/src/data/model/title_vote_dto.dart';
 import 'package:dart_flutter/src/data/model/university_dto.dart';
 import 'package:dart_flutter/src/data/model/user_request_dto.dart';
+import 'package:dart_flutter/src/data/model/vote_detail_dto.dart';
 
 import '../../common/util/http_util.dart';
 import '../../data/model/dart_auth_dto.dart';
@@ -211,12 +212,12 @@ class DartApiRemoteDataSource {
     return voteResponse;
   }
 
-  static Future<VoteResponseDto> getVote(int voteId) async {
-    const path = '/v1/votes';
+  static Future<VoteDetailDto> getVote(int voteId) async {
+    const path = '/v1/users/me/votes';
     final fullPath = '$path/$voteId';
 
     final response = await _httpUtil.request().get(fullPath);
-    return VoteResponseDto.fromJson(response.data);
+    return VoteDetailDto.fromJson(response.data);
   }
 
   // vote: 투표 가능한지 확인하기 (남은 시간 확인)
