@@ -99,6 +99,7 @@ class _LandPagesState extends State<LandPages> {
           if (state.step == AuthStep.login) {
             BlocProvider.of<DartAuthCubit>(context).setAnalyticsUserInformation();
             BlocProvider.of<DartAuthCubit>(context).setPushNotificationUserId();
+            AnalyticsUtil.logEvent("로그인_로그인성공");
             return BlocProvider<StandbyCubit>(
               create: (BuildContext context) => StandbyCubit()..initPages(),
               child: const StandbyLoading(),
