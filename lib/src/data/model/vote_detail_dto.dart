@@ -1,20 +1,29 @@
+import 'package:dart_flutter/src/data/model/user_dto.dart';
+import 'package:dart_flutter/src/data/model/vote_response_dto.dart';
+import 'package:dart_flutter/src/domain/entity/vote_detail.dart';
+import 'package:dart_flutter/src/domain/entity/vote_response.dart';
+import 'package:dart_flutter/src/domain/entity/user.dart';
+
+import 'package:dart_flutter/src/data/model/user_dto.dart';
+import 'package:dart_flutter/src/data/model/vote_response_dto.dart';
 import 'package:dart_flutter/src/domain/entity/vote_detail.dart';
 import 'package:dart_flutter/src/domain/entity/vote_response.dart';
 import 'package:dart_flutter/src/domain/entity/user.dart';
 
 class VoteDetailDto {
-  VoteResponse? voteResponse;
-  List<User>? candidates;
+  VoteResponseDto? voteResponse;
+  List<UserDto>? candidates;
 
   VoteDetailDto({this.voteResponse, this.candidates});
 
   VoteDetailDto.fromJson(Map<String, dynamic> json) {
-    voteResponse = json['voteResponse'] != null ? VoteResponse.fromJson(json['voteResponse']) : null;
+    voteResponse = json['voteResponse'] != null ? VoteResponseDto.fromJson(json['voteResponse']) : null;
+
     if (json['candidates'] != null) {
       candidates = [];
       if (json['candidates'] is List) {
         json['candidates'].forEach((v) {
-          candidates!.add(User.fromJson(v));
+          candidates!.add(UserDto.fromJson(v));
         });
       }
     }
@@ -33,8 +42,8 @@ class VoteDetailDto {
 
   VoteDetail newVoteDetail() {
     return VoteDetail(
-      voteResponse: voteResponse,
-      candidates: candidates
+      voteResponse: voteResponse?.newVoteResponse(),
+      candidates: candidates?.map((userDto) => userDto.newUser()).toList() ?? [],
     );
   }
 

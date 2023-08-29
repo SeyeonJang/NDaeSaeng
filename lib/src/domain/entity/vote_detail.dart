@@ -3,9 +3,9 @@ import 'package:dart_flutter/src/domain/entity/user.dart';
 
 class VoteDetail {
   VoteResponse? voteResponse;
-  List<User>? candidates;
+  late List<User> candidates;
 
-  VoteDetail({this.voteResponse, this.candidates});
+  VoteDetail({this.voteResponse, required this.candidates});
 
   VoteDetail.fromJson(Map<String, dynamic> json) {
     voteResponse = json['voteResponse'] != null ? VoteResponse.fromJson(json['voteResponse']) : null;
@@ -17,7 +17,7 @@ class VoteDetail {
     if (voteResponse != null) {
       data['voteResponse'] = voteResponse!.toJson();
     }
-    data['candidates'] = candidates!.map((candidates) => candidates.toJson()).toList(); // .toList() 추가
+    data['candidates'] = candidates!.map((candidates) => candidates.toJson());
     return data;
   }
 }
