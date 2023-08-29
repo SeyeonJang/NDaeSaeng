@@ -15,8 +15,8 @@ class VoteUseCase {
     _dartVoteRepository.sendMyVote(voteRequest);
   }
 
-  Future<List<VoteResponse>> getVotes() {
-    return _dartVoteRepository.getVotes();
+  Future<List<VoteResponse>> getVotes({int page = 0}) {
+    return _dartVoteRepository.getVotes(page: page);
   }
 
   Future<VoteResponse> getVote(int voteId) {

@@ -201,11 +201,12 @@ class DartApiRemoteDataSource {
   }
 
   // vote: 받은 투표 리스트 확인하기
-  static Future<List<VoteResponseDto>> getVotes() async {
+  static Future<List<VoteResponseDto>> getVotes({int page = 0}) async {
     const path = '/v1/users/me/votes';
+    final params = {"page": page};
 
-    final response = await _httpUtil.request().get(path);
-    final List<dynamic> jsonResponse = response.data;
+    final response = await _httpUtil.request().get(path, queryParameters: params);
+    final List<dynamic> jsonResponse = response.data['content'];
     List<VoteResponseDto> voteResponse = jsonResponse.map((vote) => VoteResponseDto.fromJson(vote)).toList();
     return voteResponse;
   }

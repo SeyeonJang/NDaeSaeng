@@ -7,7 +7,7 @@ abstract class VoteRepository {
   Future<List<Question>> getNewQuestions();
   Future<void> sendMyVotes(List<VoteRequest> voteRequests);
   Future<void> sendMyVote(VoteRequest voteRequest);
-  Future<List<VoteResponse>> getVotes();
+  Future<List<VoteResponse>> getVotes({int page});
   Future<VoteResponse> getVote(int voteId);
   Future<DateTime> getNextVoteTime();
   Future<DateTime> postNextVoteTime();
