@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:dart_flutter/src/common/util/toast_util.dart';
 import 'package:dart_flutter/src/domain/entity/title_vote.dart';
 import 'package:dart_flutter/src/domain/entity/user.dart';
 import 'package:dart_flutter/src/domain/use_case/friend_use_case.dart';
@@ -84,7 +85,14 @@ class MyPagesCubit extends Cubit<MyPagesState> {
   }
 
   void uploadProfileImage(File file, User userResponse) async {
-    _userUseCase.uploadProfileImage(file, userResponse);
+    try {
+      ToastUtil.showToast('내 사진을 업로드하고 있어요!');
+      await _userUseCase.uploadProfileImage(file, userResponse);
+      ToastUtil.showToast('내 사진 업로드가 완료됐어요!');
+    } catch (e) {
+      ToastUtil.showToast('사진 업로드 중 오류가 발생했습니다.');
+      print('사진 업로드 중 오류: $e');
+    }
   }
 
   String getProfileImageUrl(String userId) {
