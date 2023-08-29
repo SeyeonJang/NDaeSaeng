@@ -1289,18 +1289,18 @@ class _FriendNotExistsViewState extends State<FriendNotExistsView> {
         width: SizeConfig.screenWidth * 0.4,
         height: SizeConfig.defaultSize * 8,
         decoration: BoxDecoration(color: Colors.grey[300], borderRadius: BorderRadius.circular(15)),
-        // decoration: BoxDecoration(
-        //     border: Border.all(
-        //       color: Colors.grey.shade400,
-        //       width: 1.3,
-        //     ),
-        //     borderRadius: BorderRadius.circular(15)),
         alignment: Alignment.center,
-        child: Text(
-          "눌러서 친구추가",
-          style: TextStyle(
-            fontSize: SizeConfig.defaultSize * 1.8,
-          ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              "눌러서 친구추가",
+              style: TextStyle(
+                fontSize: SizeConfig.defaultSize * 1.7,
+              ),
+            ),
+            Icon(Icons.add_rounded, size: SizeConfig.defaultSize * 2)
+          ],
         ),
       ),
     );
@@ -1805,7 +1805,7 @@ class _openAddFriendsState extends State<openAddFriends> {
 }
 
 void shareContent(BuildContext context, String myCode) {
-  Share.share('엔대생에서 내가 널 칭찬 대상으로 투표하고 싶어! 앱에 들어와줘!\n내 코드는 $myCode 야. 나를 친구 추가하고 같이하자!\nhttps://dart.page.link/TG78\n\n내 코드 : $myCode');
+  Share.share('[엔대생] 엔대생에서 내가 널 칭찬 대상으로 투표하고 싶어! 앱에 들어와줘!\n내 코드는 $myCode 야. 나를 친구 추가하고 같이하자!\nhttps://dart.page.link/TG78\n\n내 코드 : $myCode');
   print("셰어");
 }
 

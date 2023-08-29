@@ -242,7 +242,7 @@ class _MyPageViewState extends State<MyPageView> {
                 children: [
                   for (int i=0; i<widget.state.titleVotes.length; i++) // TitleVote 있을 때
                     GestureDetector(
-                      onLongPress: () {
+                      onTap: () {
                         showDialog<String>(
                           context: context,
                           builder: (BuildContext dialogContext) => AlertDialog(
@@ -657,9 +657,16 @@ class _MyPageViewState extends State<MyPageView> {
                               const Text('닉네임은 최대 10글자예요!'),
                               TextField(
                                 controller: _textController,
+                                maxLength: 10,
                                 onChanged: (text) {
                                   setState(() {}); // Rebuild the AlertDialog when text changes
                                 },
+                                decoration: InputDecoration(
+                                  hintText: "바꿀 닉네임을 작성해주세요!",
+                                  hintStyle: TextStyle(fontSize: SizeConfig.defaultSize * 1.4),
+                                  contentPadding: EdgeInsets.zero,
+                                  enabledBorder: UnderlineInputBorder(borderSide: BorderSide(width: 0.6)),
+                                ),
                               ),
                             ],
                           ),
@@ -759,7 +766,7 @@ class _MyPageViewState extends State<MyPageView> {
   }
 
   void shareContent(BuildContext context, String myCode) {
-    Share.share('엔대생에서 내가 널 칭찬 대상으로 투표하고 싶어! 앱에 들어와줘!\n내 코드는 $myCode 야. 나를 친구 추가하고 같이하자!\nhttps://dart.page.link/TG78\n\n내 코드 : $myCode');
+    Share.share('[엔대생] 엔대생에서 내가 널 칭찬 대상으로 투표하고 싶어! 앱에 들어와줘!\n내 코드는 $myCode 야. 나를 친구 추가하고 같이하자!\nhttps://dart.page.link/TG78\n\n내 코드 : $myCode');
     print("셰어");
   }
 
