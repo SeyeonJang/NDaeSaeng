@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:dart_flutter/src/common/util/toast_util.dart';
 import 'package:dart_flutter/src/domain/entity/title_vote.dart';
 import 'package:dart_flutter/src/domain/entity/user.dart';
 import 'package:dart_flutter/src/domain/use_case/friend_use_case.dart';
@@ -50,8 +51,14 @@ class MyPagesCubit extends Cubit<MyPagesState> {
     state.addFriend(friend);
     emit(state.copy());
     // UI 변경 이후 async await 진행
-    await _friendUseCase.addFriend(friend);
-    state.newFriends = (await _friendUseCase.getRecommendedFriends(put: true)).toSet();
+    try {
+      await _friendUseCase.addFriend(friend);
+      state.newFriends = (await _friendUseCase.getRecommendedFriends(put: true)).toSet();
+    } catch (e) {
+      state.deleteFriend(friend);
+      ToastUtil.showToast("친구 추가에 실패했어요!");
+    }
+    emit(state.copy());
   }
 
   void pressedFriendDeleteButton(User friend) {
