@@ -28,8 +28,8 @@ class DartVoteRepositoryImpl implements VoteRepository {
   }
 
   @override
-  Future<List<VoteResponse>> getVotes() async {
-    return (await DartApiRemoteDataSource.getVotes()).map((voteResponse) => voteResponse.newVoteResponse()).toList();
+  Future<List<VoteResponse>> getVotes({int page = 0}) async {
+    return (await DartApiRemoteDataSource.getVotes(page: page)).map((voteResponse) => voteResponse.newVoteResponse()).toList();
   }
 
   @override
