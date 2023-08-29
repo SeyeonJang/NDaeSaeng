@@ -1,4 +1,3 @@
-import 'package:dart_flutter/src/domain/entity/friend.dart';
 import 'package:dart_flutter/src/domain/entity/question.dart';
 import 'package:dart_flutter/src/domain/entity/user.dart';
 import 'package:dart_flutter/src/domain/entity/vote_request.dart';
@@ -29,16 +28,6 @@ class VoteState {
     required this.nextVoteDateTime,
     required this.friends,
   });
-
-  VoteState.init() {
-    isLoading = false;
-    step = VoteStep.start;
-    voteIterator = 0;
-    votes = [];
-    questions = [];
-    nextVoteDateTime = DateTime.now();
-    friends = [];
-  }
 
   VoteState copy() => VoteState(
         isLoading: isLoading,
@@ -124,8 +113,9 @@ class VoteState {
 }
 
 enum VoteStep {
-  start, process, done, wait;
+  standby, start, process, done, wait;
 
+  get isStandby => this == VoteStep.standby;
   get isStart => this == VoteStep.start;
   get isProcess => this == VoteStep.process;
   get isDone => this == VoteStep.done;

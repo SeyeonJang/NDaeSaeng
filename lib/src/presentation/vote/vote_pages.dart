@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:confetti/confetti.dart';
 import 'package:dart_flutter/src/common/util/analytics_util.dart';
 import 'package:dart_flutter/src/presentation/standby/standby_landing_page.dart';
@@ -57,7 +55,7 @@ class VotePages extends StatelessWidget {
       children: [
         BlocBuilder<VoteCubit, VoteState>(
           builder: (context, state) {
-            if (state.getFriendsCount() < MINIMUM_FRIENDS_FOR_VOTE) {
+            if (state.step.isStandby) {  // 친구 4명 대기화면
               return BlocProvider<StandbyCubit>(
                 create: (BuildContext context) => StandbyCubit()..initPages(),
                 child: const StandbyLandingPage(),

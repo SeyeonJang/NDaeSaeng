@@ -23,7 +23,6 @@ class _VoteTimerState extends State<VoteTimer> {
           .of<VoteCubit>(context)
           .state
           .leftNextVoteTime();
-      print(totalSeconds);
     });
 
     if (totalSeconds <= 0) {
