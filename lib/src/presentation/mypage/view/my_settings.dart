@@ -225,7 +225,7 @@ class _MyPageViewState extends State<MyPageView> {
                 children: [
                   for (int i=0; i<widget.state.titleVotes.length; i++) // TitleVote 있을 때
                     GestureDetector(
-                      onLongPress: () {
+                      onTap: () {
                         showDialog<String>(
                           context: context,
                           builder: (BuildContext dialogContext) => AlertDialog(
