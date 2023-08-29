@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:dart_flutter/src/common/util/toast_util.dart';
 import 'package:dart_flutter/src/domain/entity/title_vote.dart';
 import 'package:dart_flutter/src/domain/entity/user.dart';
 import 'package:dart_flutter/src/domain/use_case/friend_use_case.dart';
@@ -36,10 +37,27 @@ class MyPagesCubit extends Cubit<MyPagesState> {
     print("mypage init 끝");
   }
 
+  // 기존 코드
+  // Future<void> pressedFriendAddButton(User friend) async {
+  //   await _friendUseCase.addFriend(friend);
+  //   state.addFriend(friend);
+  //   state.newFriends = (await _friendUseCase.getRecommendedFriends(put: true)).toSet();
+  //   emit(state.copy());
+  // }
+
+  // 변경 코드
   Future<void> pressedFriendAddButton(User friend) async {
-    await _friendUseCase.addFriend(friend);
+    // UI 상에서 먼저 작동
     state.addFriend(friend);
-    state.newFriends = (await _friendUseCase.getRecommendedFriends(put: true)).toSet();
+    emit(state.copy());
+    // UI 변경 이후 async await 진행
+    try {
+      await _friendUseCase.addFriend(friend);
+      state.newFriends = (await _friendUseCase.getRecommendedFriends(put: true)).toSet();
+    } catch (e) {
+      state.deleteFriend(friend);
+      ToastUtil.showToast("친구 추가에 실패했어요!");
+    }
     emit(state.copy());
   }
 
@@ -84,7 +102,14 @@ class MyPagesCubit extends Cubit<MyPagesState> {
   }
 
   void uploadProfileImage(File file, User userResponse) async {
-    _userUseCase.uploadProfileImage(file, userResponse);
+    try {
+      ToastUtil.showToast('내 사진을 업로드하고 있어요!');
+      await _userUseCase.uploadProfileImage(file, userResponse);
+      ToastUtil.showToast('내 사진 업로드가 완료됐어요!');
+    } catch (e) {
+      ToastUtil.showToast('사진 업로드 중 오류가 발생했습니다.');
+      print('사진 업로드 중 오류: $e');
+    }
   }
 
   String getProfileImageUrl(String userId) {

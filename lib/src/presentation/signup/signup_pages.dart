@@ -26,7 +26,7 @@ class _SignupPagesState extends State<SignupPages> {
         BlocBuilder<SignupCubit, SignupState>(
           builder: (context, state) {
             if (state.isLoading) {
-              return Center(child: CircularProgressIndicator());
+              return const Center(child: CircularProgressIndicator());
             }
             if (state.signupStep.isSchool) {
               AnalyticsUtil.logEvent("회원가입_학교_접속");
@@ -54,14 +54,9 @@ class _SignupPagesState extends State<SignupPages> {
               AnalyticsUtil.logEvent("회원가입_성별_접속");
               return const ChooseGender();
             }
-            return SafeArea(child: Center(child: Text(state.toString())));
+            return const SizedBox.shrink();
           },
         ),
-        // BlocBuilder<SignupCubit, SignupState>(
-        //   builder: (context, state) {
-        //     return SafeArea(child: Container(alignment: Alignment.bottomCenter,child: Text(state.toString())));
-        //   },
-        // ),
       ],
     );
   }

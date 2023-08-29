@@ -1,8 +1,6 @@
 import 'package:dart_flutter/src/common/util/analytics_util.dart';
 import 'package:dart_flutter/src/common/util/toast_util.dart';
-import 'package:dart_flutter/src/domain/entity/friend.dart';
 import 'package:dart_flutter/src/domain/entity/user.dart';
-import 'package:dart_flutter/src/presentation/page_view.dart';
 import 'package:dart_flutter/src/presentation/landing/view/tutorial_slide.dart';
 import 'package:dart_flutter/src/presentation/standby/viewmodel/standby_cubit.dart';
 import 'package:dart_flutter/src/presentation/standby/viewmodel/state/standby_state.dart';
@@ -178,34 +176,40 @@ class _StandbyLandingPageState extends State<StandbyLandingPage> with TickerProv
                         //   width: SizeConfig.defaultSize * 15.5,
                         //   height: SizeConfig.defaultSize * 15.5,
                         // ),
-                        Container(
-                          alignment: Alignment.center,
-                          child: GestureDetector(
-                            onTap: () {
-                              AnalyticsUtil.logEvent("대기_아이콘터치");
-                            },
-                            child: SlideTransition(
-                              position: _animation,
-                              child: Image.asset(
-                                'assets/images/letter.png',
-                                width: SizeConfig.defaultSize * 25,
+                        Stack(
+                          children: [
+                            Container(
+                              alignment: Alignment.center,
+                              child: GestureDetector(
+                                onTap: () {
+                                  AnalyticsUtil.logEvent("대기_아이콘터치");
+                                },
+                                child: SlideTransition(
+                                  position: _animation,
+                                  child: Image.asset(
+                                    'assets/images/letter.png',
+                                    width: SizeConfig.defaultSize * 25,
+                                  ),
+                                ),
                               ),
                             ),
-                          ),
+                            BlocBuilder<StandbyCubit, StandbyState>(builder: (context, state) {
+                              if (state.isLoading) {
+                                return const Center(child: CircularProgressIndicator());
+                              } else {
+                                List<User> friends = state.addedFriends.toList();
+                                int count = friends.length;
+                                print("count : $count");
+                                print("friends : $friends");
+                                if (count >= 4) {
+                                  context.read<VoteCubit>().exitStandby();
+                                }
+                              }
+                              return const SizedBox.shrink();
+                            }),
+                          ],
                         ),
                         // SizedBox(height: SizeConfig.defaultSize * 1.5),
-                        BlocBuilder<StandbyCubit, StandbyState>(builder: (context, state) {
-                          if (state.isLoading) {
-                            return CircularProgressIndicator();
-                          } else {
-                            List<User> friends = state.addedFriends.toList();
-                            int count = friends.length;
-                            if (count >= 4) {
-                              context.read<VoteCubit>().refreshFriends();
-                            }
-                          }
-                          return SizedBox.shrink();
-                        }),
 
                         BlocBuilder<StandbyCubit, StandbyState>(builder: (context, state) {
                           List<User> friends = state.addedFriends.toList();
@@ -344,7 +348,8 @@ class _StandbyLandingPageState extends State<StandbyLandingPage> with TickerProv
               ),
             ],
           ),
-        ));
+        ),
+    );
   }
 }
 

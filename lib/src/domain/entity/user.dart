@@ -53,6 +53,16 @@ class User {
   }
 
   @override
+  int get hashCode {
+    return personalInfo!.id.hashCode;
+  }
+
+  @override
+  bool operator == (Object other) {
+    return personalInfo!.id.hashCode == (other as User).personalInfo!.id.hashCode;
+  }
+
+  @override
   String toString() {
     return 'UserResponse{user: $personalInfo, university: $university, titleVote: $titleVotes}';
   }

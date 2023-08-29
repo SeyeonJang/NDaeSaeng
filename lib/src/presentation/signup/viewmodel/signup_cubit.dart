@@ -60,7 +60,7 @@ class SignupCubit extends Cubit<SignupState> {
 
     bool isIos = state.loginType.contains("apple");
     if (isIos) {
-      state.memo = state.memo ?? '';
+      state.memo = state.memo;
       state.inputState.name = state.memo.isEmpty ? '오늘' : state.memo;
       state.signupStep = SignupStep.gender;
     } else {
@@ -100,18 +100,26 @@ class SignupCubit extends Cubit<SignupState> {
     return '';
   }
 
-  void stepGender(String gender) {
-    state.inputState.gender = gender;
-    print(state.inputState.toString());
-
-    UserRequest userRequest = state.inputState.toUserRequest();
-    print(userRequest.toString());
-    _signupRequest(userRequest);
-
+  void stepGender(String gender) async {
+    state.isLoading = true;
     emit(state.copy());
+
+    try {
+      state.inputState.gender = gender;
+      UserRequest userRequest = state.inputState.toUserRequest();
+      print(userRequest.toString());
+      await _signupRequest(userRequest);
+    } catch(e, trace) {
+      print(e);
+      print(trace);
+      throw Error();
+    } finally {
+      state.isLoading = false;
+      emit(state.copy());
+    }
   }
 
-  void _signupRequest(UserRequest userRequest) async {
+  Future<void> _signupRequest(UserRequest userRequest) async {
     await _userUseCase.signup(userRequest);
   }
 
