@@ -1,3 +1,4 @@
+import 'package:dart_flutter/src/domain/entity/vote_detail.dart';
 import 'package:dart_flutter/src/domain/entity/vote_response.dart';
 import 'package:dart_flutter/src/domain/use_case/vote_use_case.dart';
 import 'package:dart_flutter/src/presentation/vote_list/viewmodel/state/vote_list_state.dart';
@@ -34,6 +35,10 @@ class VoteListCubit extends HydratedCubit<VoteListState> {
   void backToVoteList() {
     state.setIsDetailPage(false);
     emit(state.copy());
+  }
+
+  Future<VoteDetail> getVote(int voteId) async {
+    return await _voteUseCase.getVote(voteId);
   }
 
   bool isVisited(int id) {
