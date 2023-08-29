@@ -16,6 +16,7 @@ class VoteListCubit extends HydratedCubit<VoteListState> {
     state.setIsLoading(true);
     emit(state.copy());
 
+    state.isDetailPage = false;
     List<VoteResponse> votes = await _voteUseCase.getVotes();
     state.setVotes(votes);
     User userResponse = await _userUseCase.myInfo();
