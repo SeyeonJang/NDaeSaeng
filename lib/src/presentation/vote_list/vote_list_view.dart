@@ -53,75 +53,85 @@ class _VoteListViewState extends State<VoteListView> with SingleTickerProviderSt
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Padding(
-        padding: EdgeInsets.all(SizeConfig.defaultSize * 1.5),
-        child: BlocBuilder<VoteListCubit, VoteListState>(
-          builder: (context, state) {
-            if (state.votes.length == 0) {
-              return Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Container(
-                      child: GestureDetector(
-                        onTap: () {
-                          AnalyticsUtil.logEvent("투표목록_받은투표없음_아이콘터치");
-                        },
-                        child: AnimatedBuilder(
-                          animation: _animationController,
-                          builder: (context, child) {
-                            return Transform.scale(
-                              scale: _animation.value,
-                              child: Column(
-                                mainAxisAlignment:
-                                MainAxisAlignment.spaceBetween,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Image.asset(
-                                    'assets/images/letter.png',
-                                    // color: Colors.indigo,
-                                    width: SizeConfig.defaultSize * 30,
-                                  ),
-                                ],
+      body: BlocBuilder<VoteListCubit, VoteListState>(
+        builder: (context, state) {
+          return RefreshIndicator(
+            onRefresh: () async {
+              context.read<VoteListCubit>().initVotes();
+            },
+            child: SingleChildScrollView(
+              physics: AlwaysScrollableScrollPhysics(), // 스크롤 항상 가능하도록 설정
+              child: Container(
+                child: Padding(
+                    padding: EdgeInsets.all(SizeConfig.defaultSize * 1.5),
+                    child: (state.votes.length == 0)
+                        ? Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Container(
+                            child: GestureDetector(
+                              onTap: () {
+                                AnalyticsUtil.logEvent("투표목록_받은투표없음_아이콘터치");
+                              },
+                              child: AnimatedBuilder(
+                                animation: _animationController,
+                                builder: (context, child) {
+                                  return Transform.scale(
+                                    scale: _animation.value,
+                                    child: Column(
+                                      mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      children: [
+                                        Image.asset(
+                                          'assets/images/letter.png',
+                                          // color: Colors.indigo,
+                                          width: SizeConfig.defaultSize * 30,
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                },
                               ),
-                            );
-                          },
-                        ),
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              AnalyticsUtil.logEvent("투표목록_받은투표없음_텍스트터치");
+                            },
+                            child: Text("아직 받은 투표가 없어요!", style: TextStyle(
+                                fontSize: SizeConfig.defaultSize * 2, fontWeight: FontWeight.w600
+                            ),),
+                          ),
+                          SizedBox(height: SizeConfig.defaultSize *2,),
+                          GestureDetector(
+                            onTap: () {
+                              AnalyticsUtil.logEvent("투표목록_받은투표없음_텍스트터치");
+                            },
+                            child: Text("친구들이 나를 투표하면 알림을 줄게요!", style: TextStyle(
+                                fontSize: SizeConfig.defaultSize * 2, fontWeight: FontWeight.w600
+                            ),),
+                          ),
+                          // Container( // TODO HOTFIX : 투표 꿀팁 일단 보류 (넣으면 좋음)
+                          //   child: Column(
+                          //     children: [
+                          //       Text("투표를 많이 받는 꿀팁"),
+                          //       Text("Dart에서 이미지게임으로 친구들을 투표하면\n친구들에게 나의 존재를 알릴 수 있어요!\n투표를 하거나 친구들을 많이 초대해서 투표수를 늘려보세요!")
+                          //     ],
+                          //   ),
+                          // )
+                        ],
                       ),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        AnalyticsUtil.logEvent("투표목록_받은투표없음_텍스트터치");
-                      },
-                      child: Text("아직 받은 투표가 없어요!", style: TextStyle(
-                          fontSize: SizeConfig.defaultSize * 2, fontWeight: FontWeight.w600
-                      ),),
-                    ),
-                    SizedBox(height: SizeConfig.defaultSize *2,),
-                    GestureDetector(
-                      onTap: () {
-                        AnalyticsUtil.logEvent("투표목록_받은투표없음_텍스트터치");
-                      },
-                      child: Text("친구들이 나를 투표하면 알림을 줄게요!", style: TextStyle(
-                          fontSize: SizeConfig.defaultSize * 2, fontWeight: FontWeight.w600
-                      ),),
-                    ),
-                    // Container( // TODO HOTFIX : 투표 꿀팁 일단 보류 (넣으면 좋음)
-                    //   child: Column(
-                    //     children: [
-                    //       Text("투표를 많이 받는 꿀팁"),
-                    //       Text("Dart에서 이미지게임으로 친구들을 투표하면\n친구들에게 나의 존재를 알릴 수 있어요!\n투표를 하거나 친구들을 많이 초대해서 투표수를 늘려보세요!")
-                    //     ],
-                    //   ),
-                    // )
-                  ],
+                    )
+                        : makeList(state.votes)
+
                 ),
-              );
-            }
-            return makeList(state.votes);
-          },
-        ),
+              ),
+            ),
+          );
+        }
       ),
     );
   }

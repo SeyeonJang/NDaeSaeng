@@ -25,16 +25,21 @@ class _MyPageLandingState extends State<MyPageLanding> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Padding(
-        padding: EdgeInsets.symmetric(
-            vertical: SizeConfig.defaultSize * 0,
-            horizontal: SizeConfig.defaultSize),
-        child: BlocBuilder<MyPagesCubit, MyPagesState>(
-          builder: (context, state) {
-            final user = state.userResponse;
-            return MyPageLandingView(userResponse: user);
-          }
+    return RefreshIndicator(
+      onRefresh: () async {
+        context.read<MyPagesCubit>().refreshMyInfo();
+        AnalyticsUtil.logEvent('내정보_마이_새로고침');
+      },
+      child: SingleChildScrollView(
+        child: Padding(
+          padding: EdgeInsets.symmetric(
+              horizontal: SizeConfig.defaultSize),
+          child: BlocBuilder<MyPagesCubit, MyPagesState>(
+            builder: (context, state) {
+              final user = state.userResponse;
+              return MyPageLandingView(userResponse: user);
+            }
+          ),
         ),
       ),
     );

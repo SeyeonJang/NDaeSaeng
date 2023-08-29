@@ -16,28 +16,27 @@ class MeetStandby extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            BlocBuilder<MeetCubit, MeetState>(
-              builder: (context, state) {
-                return _TopSection(teams: state.teamCount, notifications: 123);
-              }
-            ),
-              SizedBox(height: SizeConfig.defaultSize * 2,),
-            Container(height: SizeConfig.defaultSize * 2, width: SizeConfig.screenWidth, color: Colors.grey.shade50,),
-              SizedBox(height: SizeConfig.defaultSize * 2,),
-            _MiddleSection(),
-          ],
+      body: RefreshIndicator(
+        onRefresh: () async {
+          context.read<MeetCubit>().initState();
+        },
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              BlocBuilder<MeetCubit, MeetState>(
+                builder: (context, state) {
+                  return _TopSection(teams: state.teamCount, notifications: 123);
+                }
+              ),
+                SizedBox(height: SizeConfig.defaultSize * 2,),
+              Container(height: SizeConfig.defaultSize * 2, width: SizeConfig.screenWidth, color: Colors.grey.shade50,),
+                SizedBox(height: SizeConfig.defaultSize * 2,),
+              _MiddleSection(),
+            ],
+          ),
         ),
       ),
       bottomNavigationBar: _BottomSection(ancestorContext: context),
-      // bottomNavigationBar: BlocBuilder<MeetCubit, MeetState>(
-      //   builder: (context, state) {
-      //     MeetState.init();
-      //     return _BottomSection(state: state, ancestorContext: context);
-      //   }
-      // ),
     );
   }
 }
