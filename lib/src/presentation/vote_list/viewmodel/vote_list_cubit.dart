@@ -54,4 +54,9 @@ class VoteListCubit extends HydratedCubit<VoteListState> {
   Map<String, dynamic> toJson(VoteListState state) {
     return state.toJson();
   }
+
+  @override
+  String toString() {
+    return 'VoteListCubit{}';
+  }
 }
