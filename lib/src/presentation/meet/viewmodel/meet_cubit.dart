@@ -122,7 +122,12 @@ class MeetCubit extends Cubit<MeetState> {
     state.setIsLoading(true);
     emit(state.copy());
 
+    User userResponse = await _userUseCase.myInfo();
+    state.setMyInfo(userResponse);
+    List<User> friends = await _friendUseCase.getMyFriends();
+    state.setMyFriends(friends);
     await getMyTeams();
+    await fetchTeamCount();
 
     state.setIsLoading(false);
     emit(state.copy());
