@@ -25,6 +25,7 @@ class _MyPageLandingState extends State<MyPageLanding> {
 
   @override
   Widget build(BuildContext context) {
+    AnalyticsUtil.logEvent("내정보_마이_접속");
     return RefreshIndicator(
       onRefresh: () async {
         context.read<MyPagesCubit>().refreshMyInfo();
@@ -103,6 +104,7 @@ class _MyPageLandingViewState extends State<MyPageLandingView> {
                                 if (profileImageUrl == "DEFAULT" || !profileImageUrl.startsWith("https://"))
                                   return Image.asset('assets/images/profile-mockup3.png', width: SizeConfig.defaultSize * 5.7, fit: BoxFit.cover,);
                                 else {
+                                  print('${state.profileImageFile.path} dddsdsdsdsd');
                                   return state.profileImageFile.path==''
                                       ? Image.network(profileImageUrl,
                                       width: SizeConfig.defaultSize * 5.7,
@@ -172,9 +174,17 @@ class _MyPageLandingViewState extends State<MyPageLandingView> {
                                     onPressed: () async {
                                       AnalyticsUtil.logEvent("내정보_마이_설정버튼");
                                       BlocProvider.of<MyPagesCubit>(context).refreshMyInfo();
-                                      final _profileImage = await Navigator.push(context, MaterialPageRoute(builder: (_) => MySettings(
-                                        userResponse: BlocProvider.of<MyPagesCubit>(context).state.userResponse,
-                                      )));
+                                      final _profileImage = await Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (_) => BlocProvider.value(
+                                            value: BlocProvider.of<MyPagesCubit>(context),
+                                            child: MySettings(
+                                              userResponse: BlocProvider.of<MyPagesCubit>(context).state.userResponse,
+                                            ),
+                                          ),
+                                        ),
+                                      );
                                       BlocProvider.of<MyPagesCubit>(context).setProfileImage(_profileImage);
 
                                       PaintingBinding.instance.imageCache.clear();

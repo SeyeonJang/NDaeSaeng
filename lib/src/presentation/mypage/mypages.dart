@@ -25,7 +25,6 @@ class _MyPagesState extends State<MyPages> with AutomaticKeepAliveClientMixin {
           BlocBuilder<MyPagesCubit, MyPagesState>(
               builder: (context, state) {
                 if (state.isMyLandPage) {
-                  AnalyticsUtil.logEvent("내정보_마이_접속");
                   return const MyPageLanding();
                 }
                 return SafeArea(child: Center(child: Text(state.toString())));
