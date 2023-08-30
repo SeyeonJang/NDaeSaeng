@@ -1,3 +1,4 @@
+import 'package:dart_flutter/src/common/pagination/pagination.dart';
 import 'package:dart_flutter/src/domain/entity/vote_detail.dart';
 import 'package:dart_flutter/src/domain/entity/vote_response.dart';
 import 'package:dart_flutter/src/domain/use_case/user_use_case.dart';
@@ -11,7 +12,7 @@ class VoteListCubit extends HydratedCubit<VoteListState> {
   static final VoteUseCase _voteUseCase = VoteUseCase();
   static final UserUseCase _userUseCase = UserUseCase();
   final PagingController<int, VoteResponse> pagingController = PagingController(firstPageKey: 0);
-  final int _numberOfPostsPerRequest = 10;
+  late int _numberOfPostsPerRequest;
 
   VoteListCubit() : super(VoteListState.init());
 
@@ -20,7 +21,9 @@ class VoteListCubit extends HydratedCubit<VoteListState> {
     emit(state.copy());
 
     state.isDetailPage = false;
-    List<VoteResponse> votes = await _voteUseCase.getVotes(page: 0);
+    Pagination<VoteResponse> paginationResponse = await _voteUseCase.getVotes(page: 0);
+    _numberOfPostsPerRequest = paginationResponse.numberOfElements ?? 10;
+    List<VoteResponse> votes = paginationResponse.content ?? [];
     state.setVotes(votes);
     User userResponse = await _userUseCase.myInfo();
     state.setUserMe(userResponse);
@@ -48,7 +51,7 @@ class VoteListCubit extends HydratedCubit<VoteListState> {
 
   Future<void> fetchPage(int pageKey) async {
     try {
-      final newVotes = await _voteUseCase.getVotes(page: pageKey);
+      final newVotes = (await _voteUseCase.getVotes(page: pageKey)).content ?? [];
       final isLastPage = newVotes.length < _numberOfPostsPerRequest;
       if (isLastPage) {
         pagingController.appendLastPage(newVotes);

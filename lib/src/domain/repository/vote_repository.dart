@@ -1,3 +1,4 @@
+import 'package:dart_flutter/src/common/pagination/pagination.dart';
 import 'package:dart_flutter/src/domain/entity/question.dart';
 import 'package:dart_flutter/src/domain/entity/title_vote.dart';
 import 'package:dart_flutter/src/domain/entity/vote_detail.dart';
@@ -8,7 +9,7 @@ abstract class VoteRepository {
   Future<List<Question>> getNewQuestions();
   Future<void> sendMyVotes(List<VoteRequest> voteRequests);
   Future<void> sendMyVote(VoteRequest voteRequest);
-  Future<List<VoteResponse>> getVotes({int page});
+  Future<Pagination<VoteResponse>> getVotes({int page});
   Future<VoteDetail> getVote(int voteId);
   Future<DateTime> getNextVoteTime();
   Future<DateTime> postNextVoteTime();

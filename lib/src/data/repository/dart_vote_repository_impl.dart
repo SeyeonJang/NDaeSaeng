@@ -1,3 +1,4 @@
+import 'package:dart_flutter/src/data/model/vote_response_dto.dart';
 import 'package:dart_flutter/src/domain/entity/question.dart';
 import 'package:dart_flutter/src/domain/entity/title_vote.dart';
 import 'package:dart_flutter/src/domain/entity/vote_detail.dart';
@@ -5,6 +6,7 @@ import 'package:dart_flutter/src/domain/entity/vote_request.dart';
 import 'package:dart_flutter/src/domain/entity/vote_response.dart';
 import 'package:dart_flutter/src/domain/repository/vote_repository.dart';
 
+import '../../common/pagination/pagination.dart';
 import '../../data/datasource/dart_api_remote_datasource.dart';
 import '../model/vote_request_dto.dart';
 
@@ -29,8 +31,11 @@ class DartVoteRepositoryImpl implements VoteRepository {
   }
 
   @override
-  Future<List<VoteResponse>> getVotes({int page = 0}) async {
-    return (await DartApiRemoteDataSource.getVotes(page: page)).map((voteResponse) => voteResponse.newVoteResponse()).toList();
+  Future<Pagination<VoteResponse>> getVotes({int page = 0}) async {
+    Pagination<VoteResponseDto> pageResponse = await DartApiRemoteDataSource.getVotes(page: page);
+    return pageResponse.newContent(
+        pageResponse.content?.map((voteResponse) => voteResponse.newVoteResponse()).toList() ?? []
+    );
   }
 
   @override
