@@ -40,7 +40,7 @@ class StandbyLoading extends StatelessWidget {
 
                 WidgetsBinding.instance.addPostFrameCallback((_) {
                   Navigator.pushAndRemoveUntil(
-                      context, MaterialPageRoute(builder: (context) => const DartPageView()), (route) => false);
+                      context, MaterialPageRoute(builder: (context) => DartPageView(initialPage: 2,)), (route) => false);
                 });
 
                 return const Center(

@@ -27,6 +27,8 @@ class MeetCubit extends Cubit<MeetState> {
     state.setMyInfo(userResponse);
     List<User> friends = await _friendUseCase.getMyFriends();
     state.setMyFriends(friends);
+    List<User> newFriends = await _friendUseCase.getRecommendedFriends();
+    state.setRecommendedFriends(newFriends);
     await getMyTeams();
     await fetchTeamCount();
     print("팀수: ${state.teamCount}");
@@ -177,5 +179,39 @@ class MeetCubit extends Cubit<MeetState> {
     state.meetPageState = MeetStateEnum.threePeopleDone;
     emit(state.copy());
     print(state.toString());
+  }
+
+  Future<void> pressedFriendCodeAddButton(String inviteCode) async {
+    state.isLoading = true;
+    emit(state.copy());
+
+    try {
+      User friend = await _friendUseCase.addFriendBy(inviteCode);
+      state.addFriend(friend);
+      state.setRecommendedFriends(await _friendUseCase.getRecommendedFriends(put: true));
+    } catch (e, trace) {
+      print("친구추가 실패! $e $trace");
+      throw Error();
+    } finally {
+      state.isLoading = false;
+      emit(state.copy());
+    }
+  }
+
+  Future<void> pressedFriendAddButton(User friend) async {
+    state.isLoading = true;
+    emit(state.copy());
+
+    try {
+      await _friendUseCase.addFriend(friend);
+      state.addFriend(friend);
+      state.setRecommendedFriends(await _friendUseCase.getRecommendedFriends(put: true));
+    } catch (e, trace) {
+      print("친구추가 실패! $e $trace");
+      throw Error();
+    } finally {
+      state.isLoading = false;
+      emit(state.copy());
+    }
   }
 }

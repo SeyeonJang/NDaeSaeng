@@ -203,27 +203,31 @@ class _MyPageLandingViewState extends State<MyPageLandingView> {
                                       builder: (context, state) {
                                         String university = state.userResponse.university?.name??'#####학교';
                                         String department = state.userResponse.university?.department??'######학과';
-                                        return Row(
-                                          children: [
-                                            SizedBox(width: SizeConfig.defaultSize * 0.5,),
-                                            Text(
-                                              university,
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.w500,
-                                                  fontSize: SizeConfig.defaultSize * 1.3,
-                                                  color: Colors.white
+                                        return Container(
+                                          width: SizeConfig.screenWidth * 0.67,
+                                          child: Row(
+                                            children: [
+                                              SizedBox(width: SizeConfig.defaultSize * 0.5,),
+                                              Text(
+                                                university,
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.w500,
+                                                    fontSize: SizeConfig.defaultSize * 1.3,
+                                                    color: Colors.white
+                                                ),
                                               ),
-                                            ),
-                                            SizedBox(width: SizeConfig.defaultSize * 0.5,),
-                                            Text(
-                                              department,
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.w500,
-                                                  fontSize: SizeConfig.defaultSize * 1.3,
-                                                  color: Colors.white
+                                              SizedBox(width: SizeConfig.defaultSize * 0.5,),
+                                              Text(
+                                                department,
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.w500,
+                                                    fontSize: SizeConfig.defaultSize * 1.3,
+                                                    color: Colors.white,
+                                                  overflow: TextOverflow.ellipsis
+                                                ),
                                               ),
-                                            ),
-                                          ],
+                                            ],
+                                          ),
                                         );
                                       }
                                   ),
