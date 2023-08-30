@@ -29,8 +29,8 @@ class MeetCubit extends Cubit<MeetState> {
     state.setMyFriends(friends);
     List<User> newFriends = await _friendUseCase.getRecommendedFriends();
     state.setRecommendedFriends(newFriends);
-    await getMyTeams();
-    await fetchTeamCount();
+    await getMyTeams(put: false);
+    await fetchTeamCount(put: false);
     print("팀수: ${state.teamCount}");
 
     state.setIsMemberOneAdded(false);
@@ -103,10 +103,10 @@ class MeetCubit extends Cubit<MeetState> {
     return newMeetTeam;
   }
 
-  Future<void> getMyTeams() async {
+  Future<void> getMyTeams({bool put = true}) async {
     List<MeetTeam> myTeams = await _meetUseCase.getMyTeams();
     state.setMyTeams(myTeams);
-    emit(state.copy());
+    if (put) emit(state.copy());
     print("팀 목록 ${state.myTeams}");
   }
 
@@ -141,11 +141,10 @@ class MeetCubit extends Cubit<MeetState> {
     print("cubit - set Filtered Friends 끝 ${filteredFriends}");
   }
 
-  Future<int> fetchTeamCount() async {
+  Future<int> fetchTeamCount({bool put = true}) async {
     int teamCount = await _meetUseCase.getTeamCount();
-    print("ddddddddddddd ================================> $teamCount");
     state.setTeamCount(teamCount);
-    emit(state.copy());
+    if (put) emit(state.copy());
     return state.teamCount;
   }
 

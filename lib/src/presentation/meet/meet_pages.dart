@@ -16,9 +16,12 @@ class MeetPage2 extends StatefulWidget {
 class _MeetPage2State extends State<MeetPage2> with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive {
-    if (context.read<MeetCubit>().state.friends.length < 2)
-      return false;
     return true;
+    // print("weeeeeeeeeeeeewwwwweeeeeeeeeeeeeeee");
+    // print(context.read<MeetCubit>().state.friends.length);
+    // if (context.read<MeetCubit>().state.friends.length < 2)
+    //   return false;
+    // return true;
   }
 
   @override
