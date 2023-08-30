@@ -153,7 +153,11 @@ class DartApiRemoteDataSource {
     final body = {"recommendationCode": inviteCode};
 
     final response = await _httpUtil.request().post(path, data: body);
-    return UserDto.fromJson(response.data);
+    final locationPath = _getPathFromUrl(response.headers.map['location']?.first ?? "");
+    print(locationPath);
+    final responseFriendDto = await _httpUtil.request().get(locationPath);
+
+    return UserDto.fromJson(responseFriendDto.data);
   }
 
   // Friend: 친구 삭제하기 (연결끊기)
@@ -295,5 +299,15 @@ class DartApiRemoteDataSource {
 
     final response = await _httpUtil.request().put(path, data: body);
     return MeetTeamResponseDto.fromJson(response.data);
+  }
+
+  static String _getPathFromUrl(String url) {
+    RegExp regExp = RegExp(r'https?://[^/]+(/.*)');
+    RegExpMatch? match = regExp.firstMatch(url);
+
+    if (match != null && match.groupCount >= 1) {
+      return match.group(1) ?? "";
+    }
+    return '';
   }
 }
