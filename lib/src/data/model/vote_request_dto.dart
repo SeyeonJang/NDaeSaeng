@@ -12,20 +12,6 @@ class VoteRequestDto {
         required this.candidateIds,
       required this.questionId});
 
-  // VoteRequestDto.from(Map<String, dynamic> json)
-  //     : pickedUserId = json['pickedUserId'],
-  //       candidateIds = json['candidateIds'],
-  //       questionId = json['questionId'];
-  //
-  // VoteRequestDto.fromJson(Map<String, dynamic> json) {
-  //   questionId = json['questionId'];
-  //   pickedUserId = json['pickedUserId'];
-  //   firstUserId = json['firstUserId'];
-  //   secondUserId = json['secondUserId'];
-  //   thirdUserId = json['thirdUserId'];
-  //   fourthUserId = json['fourthUserId'];
-  // }
-
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['questionId'] = this.questionId;

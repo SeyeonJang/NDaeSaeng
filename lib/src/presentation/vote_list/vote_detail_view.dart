@@ -196,16 +196,16 @@ class _OneVoteState extends State<OneVote> with SingleTickerProviderStateMixin {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          FriendChoiceButton(userResponse: widget.vote.candidates[0], userMe: widget.userMe, vote: widget.vote),
-                          FriendChoiceButton(userResponse: widget.vote.candidates[1], userMe: widget.userMe, vote: widget.vote),
+                          FriendChoiceButton(userResponse: widget.vote.candidates.length > 0 ? widget.vote.candidates[0] : null, userMe: widget.userMe, vote: widget.vote),
+                          FriendChoiceButton(userResponse: widget.vote.candidates.length > 1 ? widget.vote.candidates[1] : null, userMe: widget.userMe, vote: widget.vote),
                         ],
                       ),
                       SizedBox(height: SizeConfig.defaultSize,),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          FriendChoiceButton(userResponse: widget.vote.candidates[2], userMe: widget.userMe, vote: widget.vote),
-                          FriendChoiceButton(userResponse: widget.vote.candidates[3], userMe: widget.userMe, vote: widget.vote),
+                          FriendChoiceButton(userResponse: widget.vote.candidates.length > 2 ? widget.vote.candidates[2] : null, userMe: widget.userMe, vote: widget.vote),
+                          FriendChoiceButton(userResponse: widget.vote.candidates.length > 3 ? widget.vote.candidates[3] : null, userMe: widget.userMe, vote: widget.vote),
                         ],
                       ),
                     ],
@@ -233,7 +233,7 @@ class _OneVoteState extends State<OneVote> with SingleTickerProviderStateMixin {
 
 class FriendChoiceButton extends StatelessWidget {
   static bool disabled = false;
-  final User userResponse;
+  final User? userResponse;
   final User userMe;
   final VoteDetail vote;
 
@@ -246,13 +246,13 @@ class FriendChoiceButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    userMe.personalInfo!.id.hashCode == userResponse.personalInfo!.id.hashCode
+    userMe.personalInfo!.id.hashCode == userResponse?.personalInfo!.id.hashCode
       ? AnalyticsUtil.logEvent('받은투표_상세보기_선택지_친구터치', properties: {
-        "나를 투표한 사람 성별": vote.pickingUser!.user!.gender,
-        "나를 투표한 사람 학번": vote.pickingUser!.user!.admissionYear,
-        "선택지 성별": userResponse.personalInfo!.gender,
-        "선택지 학번": userResponse.personalInfo!.recommendationCode,
-        "선택지 학교 정보": userResponse.university,
+        "나를 투표한 사람 성별": vote.pickingUser?.user!.gender ?? "성별정보없음",
+        "나를 투표한 사람 학번": vote.pickingUser?.user!.admissionYear ?? "학번정보없음",
+        "선택지 성별": userResponse?.personalInfo?.gender ?? "성별정보없음",
+        "선택지 학번": userResponse?.personalInfo?.recommendationCode ?? "학번정보없음",
+        "선택지 학교 정보": userResponse?.university ?? "학교정보없음",
       })
       : AnalyticsUtil.logEvent('받은투표_상세보기_선택지_본인터치', properties: {
         "나를 투표한 사람 성별": vote.pickingUser!.user!.gender,
@@ -262,7 +262,7 @@ class FriendChoiceButton extends StatelessWidget {
       width: SizeConfig.screenWidth * 0.4,
       height: SizeConfig.defaultSize * 8.2,
         decoration: BoxDecoration(
-          color: userMe.personalInfo!.id.hashCode == userResponse.personalInfo!.id.hashCode ? Colors.white : Colors.grey.shade200,
+          color: userMe.personalInfo!.id.hashCode == userResponse?.personalInfo!.id.hashCode ? Colors.white : Colors.grey.shade200,
           borderRadius: BorderRadius.circular(15),
         ),
       child: ElevatedButton(
@@ -270,7 +270,7 @@ class FriendChoiceButton extends StatelessWidget {
           style: ElevatedButton.styleFrom(
               primary: Colors.white,
               onPrimary: Color(0xff7C83FD),
-              backgroundColor: userMe.personalInfo!.id.hashCode == userResponse.personalInfo!.id.hashCode ? Colors.white : Colors.grey.shade300,   // background color
+              backgroundColor: userMe.personalInfo!.id.hashCode == userResponse?.personalInfo!.id.hashCode ? Colors.white : Colors.grey.shade300,   // background color
               foregroundColor: Color(0xff7C83FD), // text color
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(15), // 모서리 둥글기 설정
@@ -287,13 +287,13 @@ class FriendChoiceButton extends StatelessWidget {
                 ClipOval(
                   clipBehavior: Clip.antiAlias,
                   child: Container(
-                    child: userResponse.personalInfo?.profileImageUrl == 'DEFAULT'
+                    child: (userResponse?.personalInfo?.profileImageUrl ?? 'DEFAULT') == 'DEFAULT'
                         ? ClipOval(
                         child: Image.asset('assets/images/profile-mockup2.png', width: SizeConfig.defaultSize * 2.5, fit: BoxFit.cover,)
                     )
                         : ClipOval(
                         child: Image.network(
-                          userResponse.personalInfo!.profileImageUrl,
+                          userResponse?.personalInfo!.profileImageUrl ?? "",
                             width: SizeConfig.defaultSize * 2.5,
                             height: SizeConfig.defaultSize * 2.5,
                             fit: BoxFit.cover)
@@ -302,7 +302,7 @@ class FriendChoiceButton extends StatelessWidget {
                 ),
                 SizedBox(width: SizeConfig.defaultSize * 1,),
                 Text(
-                  userResponse.personalInfo?.name ?? '이름',
+                  userResponse?.personalInfo?.name ?? '이름',
                   style: TextStyle(
                     fontSize: SizeConfig.defaultSize * 2.3,
                     fontWeight: FontWeight.w600,
@@ -313,7 +313,7 @@ class FriendChoiceButton extends StatelessWidget {
             ),
             SizedBox(height: SizeConfig.defaultSize * 0.5,),
             Text(
-              "${userResponse.personalInfo?.admissionYear.toString().substring(2,4) ?? 'xx'}학번 ${userResponse.university?.department ?? 'xx학과'}",
+              "${userResponse?.personalInfo?.admissionYear.toString().substring(2,4) ?? 'xx'}학번 ${userResponse?.university?.department ?? 'xx학과'}",
               style: TextStyle(
                   fontSize: SizeConfig.defaultSize * 1.4,
                   fontWeight: FontWeight.w500,
