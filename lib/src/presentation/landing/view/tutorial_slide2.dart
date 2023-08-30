@@ -53,6 +53,8 @@ class _TutorialSlideState extends State<TutorialSlide2> with TickerProviderState
         AnalyticsUtil.logEvent("온보딩_두번째_접속");
       } else if (currentPage == 2) {
         AnalyticsUtil.logEvent("온보딩_세번째_접속");
+      } else if (currentPage == 3) {
+        AnalyticsUtil.logEvent("온보딩_네번째_접속");
       }
     });
 
@@ -262,9 +264,9 @@ class _TutorialSlideState extends State<TutorialSlide2> with TickerProviderState
                 children: [
                   SizedBox(height: SizeConfig.defaultSize * 6,),
 
-                  MeetView(questionName: ['첫 인상이 좋았던', '귀여워서 밥 사주고 싶은 사람', '누구보다 공감을 잘 해주는'], count: ['30+','20+','5+'],),
+                  GestureDetector(onTap: () {AnalyticsUtil.logEvent("온보딩_첫번째_예시프로필1터치");}, child: MeetView(questionName: ['첫 인상이 좋았던', '귀여워서 밥 사주고 싶은 사람', '누구보다 공감을 잘 해주는'], count: ['30+','20+','5+'],)),
                   SizedBox(height: SizeConfig.defaultSize),
-                  MeetView2(questionName: ['운동하는 모습이 멋있는 갓생러', '우리 학과 수석으로 들어왔을 것 같은 사람', '너 T야? 큐티?'], count: ['20+','5+','5+'],),
+                  GestureDetector(onTap: () {AnalyticsUtil.logEvent("온보딩_첫번째_예시프로필2터치");}, child: MeetView2(questionName: ['운동하는 모습이 멋있는 갓생러', '우리 학과 수석으로 들어왔을 것 같은 사람', '너 T야? 큐티?'], count: ['20+','5+','5+'],)),
 
                   SizedBox(height: SizeConfig.defaultSize * 5,),
                   Text("엔대생에서 인증된 대학생들과 과팅해요!", style: TextStyle(fontSize: SizeConfig.defaultSize * 2, fontWeight: FontWeight.w600),),
@@ -291,7 +293,7 @@ class _TutorialSlideState extends State<TutorialSlide2> with TickerProviderState
                     SizedBox(height: SizeConfig.defaultSize * 5,),
                     GestureDetector(
                       onTap: () {
-                        AnalyticsUtil.logEvent("온보딩_첫번째_예시질문터치");
+                        AnalyticsUtil.logEvent("온보딩_두번째_예시질문터치");
                       },
                       child: AnimatedBuilder(
                         animation: _fadeAnimation,
@@ -399,7 +401,7 @@ class _TutorialSlideState extends State<TutorialSlide2> with TickerProviderState
                               children: [
                                 GestureDetector(
                                   onTap: () {
-                                    AnalyticsUtil.logEvent("온보딩_세번째_아이콘터치");
+                                    AnalyticsUtil.logEvent("온보딩_네번째_아이콘터치");
                                   },
                                   child: Image.asset(
                                     'assets/images/letter.png',
@@ -415,12 +417,7 @@ class _TutorialSlideState extends State<TutorialSlide2> with TickerProviderState
                     ),
                     SizedBox(height: SizeConfig.defaultSize * 3,),
                     Text("누가 나에게 관심을 갖고 있는지 궁금하다면?", style: TextStyle(fontSize: SizeConfig.defaultSize * 2, fontWeight: FontWeight.w600),),
-                    // SizedBox(height: SizeConfig.defaultSize * 0.3),
-                    // Text("궁금하지 않으신가요?", style: TextStyle(fontSize: SizeConfig.defaultSize * 2, fontWeight: FontWeight.w500),),
-                    // SizedBox(height: SizeConfig.defaultSize * 5),
-
                     SizedBox(height: SizeConfig.defaultSize * 2,),
-
                     Text("나를 향한 투표들이 기다리고 있어요!", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.5, fontWeight: FontWeight.w500),),
                     SizedBox(height: SizeConfig.defaultSize * 0.3),
                     Text("친구들과 즐기러 가볼까요?", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.5, fontWeight: FontWeight.w500),),
@@ -773,7 +770,7 @@ class VoteFriend extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        AnalyticsUtil.logEvent("온보딩_두번째_목록터치", properties: {"목록 인덱스" : index});
+        AnalyticsUtil.logEvent("온보딩_세번째_목록터치", properties: {"목록 인덱스" : index});
       },
       child: Container(
         width: SizeConfig.screenWidth * 0.9,
