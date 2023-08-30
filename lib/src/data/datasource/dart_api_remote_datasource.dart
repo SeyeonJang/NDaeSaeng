@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:dart_flutter/res/environment/app_environment.dart';
+import 'package:dart_flutter/src/common/pagination/pagination.dart';
 import 'package:dart_flutter/src/data/model/question_dto.dart';
 import 'package:dart_flutter/src/data/model/meet_team_request_dto.dart';
 import 'package:dart_flutter/src/data/model/title_vote_dto.dart';
@@ -202,13 +203,14 @@ class DartApiRemoteDataSource {
   }
 
   // vote: 받은 투표 리스트 확인하기
-  static Future<List<VoteResponseDto>> getVotes() async {
+  static Future<Pagination<VoteResponseDto>> getVotes({int page = 0}) async {
     const path = '/v1/users/me/votes';
+    final params = {"page": page};
 
-    final response = await _httpUtil.request().get(path);
-    final List<dynamic> jsonResponse = response.data;
-    List<VoteResponseDto> voteResponse = jsonResponse.map((vote) => VoteResponseDto.fromJson(vote)).toList();
-    return voteResponse;
+    final response = await _httpUtil.request().get(path, queryParameters: params);
+
+    Pagination<VoteResponseDto> pagination = Pagination.fromJson(response.data, (item) => VoteResponseDto.fromJson(item));
+    return pagination;
   }
 
   static Future<VoteDetailDto> getVote(int voteId) async {

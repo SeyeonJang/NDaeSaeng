@@ -7,6 +7,7 @@ import 'package:dart_flutter/src/presentation/vote_list/viewmodel/vote_list_cubi
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 class VoteListView extends StatefulWidget {
   const VoteListView({Key? key}) : super(key: key);
@@ -24,6 +25,9 @@ class _VoteListViewState extends State<VoteListView> with SingleTickerProviderSt
   void initState() {
     super.initState();
     BlocProvider.of<VoteListCubit>(context).initVotes();
+
+    context.read<VoteListCubit>().pagingController.addPageRequestListener((pageKey) => context.read<VoteListCubit>().fetchPage(pageKey));
+    SchedulerBinding.instance!.addPostFrameCallback((_) => BlocProvider.of<VoteListCubit>(context).initVotes());
 
     _animationController = AnimationController(
       vsync: this,
@@ -44,6 +48,7 @@ class _VoteListViewState extends State<VoteListView> with SingleTickerProviderSt
 
   @override
   void dispose() {
+    context.read<VoteListCubit>().pagingController.dispose();
     _animationController.dispose();
     _scrollController.dispose();
     super.dispose();
@@ -61,7 +66,8 @@ class _VoteListViewState extends State<VoteListView> with SingleTickerProviderSt
             },
             child: SingleChildScrollView(
               physics: AlwaysScrollableScrollPhysics(), // 스크롤 항상 가능하도록 설정
-              child: Container(
+              child: Container( // Flexible
+                height: SizeConfig.screenHeight * 0.8,
                 child: Padding(
                     padding: EdgeInsets.all(SizeConfig.defaultSize * 1.5),
                     child: (state.votes.length == 0)
@@ -125,7 +131,36 @@ class _VoteListViewState extends State<VoteListView> with SingleTickerProviderSt
                         ],
                       ),
                     )
-                        : makeList(state.votes)
+                        : RefreshIndicator(
+                      onRefresh: () async => context.read<VoteListCubit>().pagingController.refresh(),
+                      child: Container(
+                        height: SizeConfig.screenHeight * 1.5,
+                        child: PagedListView<int, VoteResponse>(
+                          pagingController: BlocProvider.of<VoteListCubit>(context).pagingController,
+                          builderDelegate: PagedChildBuilderDelegate<VoteResponse>(
+                            itemBuilder:
+                                (context, vote, index) {
+                              var timeago = TimeagoUtil().format(vote.pickedTime!);
+                              var visited = BlocProvider.of<VoteListCubit>(context).isVisited(vote.voteId!);
+                              return Column(
+                                children: [
+                                  dart(
+                                      voteId: vote.voteId!,
+                                      admissionYear: vote.pickingUser?.user?.admissionYear.toString() ?? "XXXX",
+                                      gender: vote.pickingUser?.user?.gender ?? "",
+                                      question: vote.question!.content ?? "(알수없음)",
+                                      datetime: timeago,
+                                      isVisited: visited,
+                                      questionId: vote.question!.questionId!
+                                  ),
+                                  SizedBox(height: SizeConfig.defaultSize * 1.4),
+                                ],
+                              );
+                            },
+                          ),
+                        ),
+                      ),
+                    )
 
                 ),
               ),

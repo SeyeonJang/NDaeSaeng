@@ -1,3 +1,4 @@
+import 'package:dart_flutter/src/common/pagination/pagination.dart';
 import 'package:dart_flutter/src/domain/entity/vote_detail.dart';
 import 'package:dart_flutter/src/domain/entity/vote_response.dart';
 import 'package:dart_flutter/src/domain/use_case/user_use_case.dart';
@@ -5,10 +6,13 @@ import 'package:dart_flutter/src/domain/use_case/vote_use_case.dart';
 import 'package:dart_flutter/src/presentation/vote_list/viewmodel/state/vote_list_state.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:dart_flutter/src/domain/entity/user.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 class VoteListCubit extends HydratedCubit<VoteListState> {
   static final VoteUseCase _voteUseCase = VoteUseCase();
   static final UserUseCase _userUseCase = UserUseCase();
+  final PagingController<int, VoteResponse> pagingController = PagingController(firstPageKey: 0);
+  late int _numberOfPostsPerRequest;
 
   VoteListCubit() : super(VoteListState.init());
 
@@ -17,7 +21,9 @@ class VoteListCubit extends HydratedCubit<VoteListState> {
     emit(state.copy());
 
     state.isDetailPage = false;
-    List<VoteResponse> votes = await _voteUseCase.getVotes();
+    Pagination<VoteResponse> paginationResponse = await _voteUseCase.getVotes(page: 0);
+    _numberOfPostsPerRequest = paginationResponse.numberOfElements ?? 10;
+    List<VoteResponse> votes = paginationResponse.content ?? [];
     state.setVotes(votes);
     User userResponse = await _userUseCase.myInfo();
     state.setUserMe(userResponse);
@@ -41,6 +47,22 @@ class VoteListCubit extends HydratedCubit<VoteListState> {
   void backToVoteList() {
     state.setIsDetailPage(false);
     emit(state.copy());
+  }
+
+  Future<void> fetchPage(int pageKey) async {
+    try {
+      final newVotes = (await _voteUseCase.getVotes(page: pageKey)).content ?? [];
+      final isLastPage = newVotes.length < _numberOfPostsPerRequest;
+      if (isLastPage) {
+        pagingController.appendLastPage(newVotes);
+      } else {
+        final nextPageKey = pageKey + 1;
+        // await Future.delayed(Duration(seconds: 1));
+        pagingController.appendPage(newVotes, nextPageKey);
+      }
+    } catch (error) {
+      pagingController.error = error;
+    }
   }
 
   Future<VoteDetail> getVote(int voteId) async {

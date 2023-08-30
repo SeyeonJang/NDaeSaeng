@@ -1,3 +1,4 @@
+import 'package:dart_flutter/src/common/pagination/pagination.dart';
 import 'package:dart_flutter/src/data/repository/dart_vote_repository_impl.dart';
 import 'package:dart_flutter/src/domain/entity/question.dart';
 import 'package:dart_flutter/src/domain/entity/vote_detail.dart';
@@ -16,8 +17,8 @@ class VoteUseCase {
     _dartVoteRepository.sendMyVote(voteRequest);
   }
 
-  Future<List<VoteResponse>> getVotes() {
-    return _dartVoteRepository.getVotes();
+  Future<Pagination<VoteResponse>> getVotes({int page = 0}) {
+    return _dartVoteRepository.getVotes(page: page);
   }
 
   Future<VoteDetail> getVote(int voteId) {
