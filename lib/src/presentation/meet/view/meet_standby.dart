@@ -48,6 +48,9 @@ class MeetStandby extends StatelessWidget {
                 friend.personalInfo?.gender == state.userResponse.personalInfo?.gender
             ).toList();
 
+            // if (state.teamCount > 0) { // 친구가 없는데 팀은 있는 경우 (친구 초대 행동 유도르 위해 빼둠)
+            //   return _BottomSection(ancestorContext: context);
+            // }
             return state.friends.isEmpty || filteredFriends.isEmpty
                 ? InviteFriendButton(ancestorState: state,)
                 : (state.teamCount == 0 ? MakeTeamButton() : _BottomSection(ancestorContext: context))
