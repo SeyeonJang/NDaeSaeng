@@ -71,15 +71,15 @@ class _LandPagesState extends State<LandPages> {
 
           // 화면 그리기
           if (state.step == AuthStep.land) {
-            if (state.tutorialStatus == TutorialStatus.notShown) {
-              AnalyticsUtil.logEvent("온보딩슬라이드_접속");
-              return TutorialSlide(
-                onTutorialFinished: () {
-                  // 튜토리얼이 완료되면 AuthCubit을 사용하여 상태 변경
-                  BlocProvider.of<DartAuthCubit>(context).markTutorialShown();
-                },
-              );
-            }
+            // if (state.tutorialStatus == TutorialStatus.notShown) {
+            //   AnalyticsUtil.logEvent("온보딩슬라이드_접속");
+            //   return TutorialSlide(
+            //     onTutorialFinished: () {
+            //       // 튜토리얼이 완료되면 AuthCubit을 사용하여 상태 변경
+            //       BlocProvider.of<DartAuthCubit>(context).markTutorialShown();
+            //     },
+            //   );
+            // }
             AnalyticsUtil.logEvent("로그인_접속");
             return const LoginPage();
           }
