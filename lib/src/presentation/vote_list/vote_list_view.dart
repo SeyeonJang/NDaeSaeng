@@ -62,6 +62,7 @@ class _VoteListViewState extends State<VoteListView> with SingleTickerProviderSt
         builder: (context, state) {
           return RefreshIndicator(
             onRefresh: () async {
+              AnalyticsUtil.logEvent('받은투표_당겨서새로고침');
               context.read<VoteListCubit>().initVotes();
             },
             child: SingleChildScrollView(

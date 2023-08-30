@@ -1,4 +1,5 @@
 import 'package:dart_flutter/src/common/pagination/pagination.dart';
+import 'package:dart_flutter/src/common/util/analytics_util.dart';
 import 'package:dart_flutter/src/domain/entity/vote_detail.dart';
 import 'package:dart_flutter/src/domain/entity/vote_response.dart';
 import 'package:dart_flutter/src/domain/use_case/user_use_case.dart';
@@ -57,6 +58,7 @@ class VoteListCubit extends HydratedCubit<VoteListState> {
         pagingController.appendLastPage(newVotes);
       } else {
         final nextPageKey = pageKey + 1;
+        AnalyticsUtil.logEvent('받은투표_불러오기(페이지네이션)');
         // await Future.delayed(Duration(seconds: 1));
         pagingController.appendPage(newVotes, nextPageKey);
       }
