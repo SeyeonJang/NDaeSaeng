@@ -29,7 +29,7 @@ class _MyPageLandingState extends State<MyPageLanding> {
     return RefreshIndicator(
       onRefresh: () async {
         context.read<MyPagesCubit>().refreshMyInfo();
-        AnalyticsUtil.logEvent('내정보_마이_새로고침');
+        AnalyticsUtil.logEvent('내정보_마이_당겨서새로고침');
       },
       child: SingleChildScrollView(
         child: Padding(
