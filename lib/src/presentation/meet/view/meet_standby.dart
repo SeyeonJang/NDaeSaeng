@@ -73,8 +73,17 @@ class MakeTeamButton extends StatelessWidget {
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: SizeConfig.defaultSize * 2, vertical: SizeConfig.defaultSize),
         child: GestureDetector(
-          onTap: () {
-
+          onTap: () async {
+            await Navigator.push(context, PageTransition(type: PageTransitionType.rightToLeftJoined, child: MeetCreateTeam(
+              onFinish: () {
+                // context.read<MeetCubit>().refreshMeetPage();
+              },
+              state: context.read<MeetCubit>().state,
+            ), childCurrent: this)).then((value) async {
+              if (value == null) return;
+              await context.read<MeetCubit>().createNewTeam(value);
+            });
+            context.read<MeetCubit>().refreshMeetPage();
           },
           child: Container(
               width: SizeConfig.screenWidth,
@@ -112,18 +121,7 @@ class InviteFriendButton extends StatelessWidget { // 내 친구 초대하기
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: SizeConfig.defaultSize * 2, vertical: SizeConfig.defaultSize),
         child: GestureDetector(
-          onTap: () async {
-            await Navigator.push(context, PageTransition(type: PageTransitionType.rightToLeftJoined, child: MeetCreateTeam(
-              onFinish: () {
-                // context.read<MeetCubit>().refreshMeetPage();
-              },
-              state: context.read<MeetCubit>().state,
-            ), childCurrent: this)).then((value) async {
-              if (value == null) return;
-              await context.read<MeetCubit>().createNewTeam(value);
-            });
-            context.read<MeetCubit>().refreshMeetPage();
-          },
+          onTap: () {},
           child: Container(
             width: SizeConfig.screenWidth,
             height: SizeConfig.defaultSize * 6,
