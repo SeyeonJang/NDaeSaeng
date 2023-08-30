@@ -137,14 +137,27 @@ class _TapBarButton extends StatelessWidget {
           onTapNavigation(targetPage);
         },
         child: Container(
-            color: Colors.white,
-            width: SizeConfig.screenWidth * 0.22,
-            height: SizeConfig.defaultSize * 7,
-            alignment: Alignment.center,
-            child: Padding(
-              padding: const EdgeInsets.all(0),
-              child: Text(name, style: TextStyle(fontSize: SizeConfig.defaultSize * 1.6, fontWeight: (targetPage == nowPage) ? FontWeight.w600 : FontWeight.w500, color: (targetPage == nowPage) ? (targetPage == 2 ? Color(0xffFF5C58) : Color(0xff7C83FD)) : Colors.grey)),
-            )
+          color: Colors.white,
+          width: SizeConfig.screenWidth * 0.22,
+          height: SizeConfig.defaultSize * 7,
+          alignment: Alignment.center,
+          child: Padding(
+            padding: const EdgeInsets.all(0),
+            child:
+            Text(name, style:
+            TextStyle(fontSize:
+            (targetPage == nowPage)
+                ? SizeConfig.defaultSize * 1.65
+                : SizeConfig.defaultSize * 1.6,
+                fontWeight:
+                (targetPage == nowPage)
+                    ? FontWeight.w600
+                    : FontWeight.w500,
+                color:
+                (targetPage == nowPage)
+                    ? (targetPage == 2 ? Color(0xffFF5C58) : Color(0xff7C83FD))
+                    : Colors.grey)),
+          ),
         )
     );
   }
