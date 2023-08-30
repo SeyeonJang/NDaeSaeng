@@ -4,7 +4,7 @@ import 'package:dart_flutter/res/config/size_config.dart';
 import 'package:dart_flutter/src/common/auth/dart_auth_cubit.dart';
 import 'package:dart_flutter/src/common/util/analytics_util.dart';
 import 'package:dart_flutter/src/common/util/toast_util.dart';
-import 'package:dart_flutter/src/presentation/landing/view/tutorial_slide.dart';
+import 'package:dart_flutter/src/presentation/landing/view/tutorial_slide2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'dart:async';
@@ -50,31 +50,40 @@ class _LoginPageState extends State<LoginPage> {
 
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Center(
+      body: Container(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // 원래 로그인 View
-            // SizedBox(
-            //   height: SizeConfig.defaultSize * 2,
-            // ),
-            // Text("나에게 호감을 표시한 사람들은?", style: TextStyle(fontSize: SizeConfig.defaultSize * 2, fontWeight: FontWeight.w800)),
-            // SizedBox(height: SizeConfig.defaultSize * 2,),
-            // AnimatedContainer(
-            //   height: SizeConfig.screenHeight * 0.15,
-            //     duration: Duration(milliseconds: 400),
-            //     curve: Curves.easeInOut,
-            //     child: Image.asset(
-            //       _images[_currentPage],
-            //       fit: BoxFit.cover,
-            //     ),
-            // ),
-
-            // TutorialSlide(onTutorialFinished: () {})
+            Expanded(child: TutorialSlide2(onTutorialFinished: () {})),
           ],
         ),
       ),
+
+      // 원래 로그인 View
+      // body: Center(
+      //   child: Column(
+      //     mainAxisAlignment: MainAxisAlignment.center,
+      //     children: [
+      //       // SizedBox(
+      //       //   height: SizeConfig.defaultSize * 2,
+      //       // ),
+      //       // Text("나에게 호감을 표시한 사람들은?", style: TextStyle(fontSize: SizeConfig.defaultSize * 2, fontWeight: FontWeight.w800)),
+      //       // SizedBox(height: SizeConfig.defaultSize * 2,),
+      //       // AnimatedContainer(
+      //       //   height: SizeConfig.screenHeight * 0.15,
+      //       //     duration: Duration(milliseconds: 400),
+      //       //     curve: Curves.easeInOut,
+      //       //     child: Image.asset(
+      //       //       _images[_currentPage],
+      //       //       fit: BoxFit.cover,
+      //       //     ),
+      //       // ),
+      //
+      //       // TutorialSlide(onTutorialFinished: () {})
+      //     ],
+      //   ),
+      // ),
       bottomNavigationBar: Container( // 로그인 버튼
+        // color: Color(0xff7C83FD),
         height: SizeConfig.screenHeight * 0.18,
         child: Center(
           child: Column(
