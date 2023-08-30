@@ -66,7 +66,8 @@ class _VoteListViewState extends State<VoteListView> with SingleTickerProviderSt
             },
             child: SingleChildScrollView(
               physics: AlwaysScrollableScrollPhysics(), // 스크롤 항상 가능하도록 설정
-              child: Container(
+              child: Container( // Flexible
+                height: SizeConfig.screenHeight * 0.8,
                 child: Padding(
                     padding: EdgeInsets.all(SizeConfig.defaultSize * 1.5),
                     child: (state.votes.length == 0)
