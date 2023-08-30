@@ -14,7 +14,12 @@ class MyPages extends StatefulWidget {
 
 class _MyPagesState extends State<MyPages> with AutomaticKeepAliveClientMixin {
   @override
-  bool get wantKeepAlive => true;
+  // bool get wantKeepAlive => true;
+  bool get wantKeepAlive {
+    if (context.read<MyPagesCubit>().state.friends.length < 4)
+      return false;
+    return true;
+  }
 
   @override
   Widget build(BuildContext context) {

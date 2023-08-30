@@ -55,7 +55,12 @@ class VotePages extends StatefulWidget {
 
 class _VotePagesState extends State<VotePages> with AutomaticKeepAliveClientMixin {
   @override
-  bool get wantKeepAlive => true;
+  // bool get wantKeepAlive => true;
+  bool get wantKeepAlive {
+    if (context.read<VoteCubit>().state.step.isStandby || context.read<VoteCubit>().state.step.isStart)
+      return false;
+    return true;
+  }
 
   @override
   Widget build(BuildContext context) {

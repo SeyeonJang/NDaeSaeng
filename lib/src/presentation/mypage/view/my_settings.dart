@@ -194,7 +194,7 @@ class _MyPageViewState extends State<MyPageView> {
                       child: BlocBuilder<MyPagesCubit, MyPagesState>(
                       builder: (context, state) {
                         if (profileImageUrl == "DEFAULT" || !profileImageUrl.startsWith("https://"))
-                          return Image.asset('assets/images/profile-mockup2.png', width: SizeConfig.defaultSize * 5.7, fit: BoxFit.cover,);
+                          return Image.asset('assets/images/profile-mockup2.png', width: SizeConfig.defaultSize * 12, fit: BoxFit.cover,);
                         else {
                           return state.profileImageFile.path==''
                               ? Image.network(profileImageUrl,
