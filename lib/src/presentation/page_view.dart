@@ -14,7 +14,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class DartPageView extends StatefulWidget {
-  const DartPageView({Key? key}) : super(key: key);
+  final int initialPage;
+  DartPageView({Key? key, this.initialPage = 0}) : super(key: key);
 
   @override
   State<DartPageView> createState() => _DartPageViewState();
@@ -22,12 +23,13 @@ class DartPageView extends StatefulWidget {
 
 class _DartPageViewState extends State<DartPageView> {
   int _page = 0;
-  late final PageController _pageController = PageController();
+  late final PageController _pageController = PageController(initialPage: widget.initialPage);
   DateTime? currentBackPressTime;
 
   @override
   void initState() {
     super.initState();
+    _page = widget.initialPage;
   }
 
   void _onPageChanged(int page) {
