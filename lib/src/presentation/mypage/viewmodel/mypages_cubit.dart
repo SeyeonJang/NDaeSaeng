@@ -93,8 +93,12 @@ class MyPagesCubit extends Cubit<MyPagesState> {
     emit(state.copy());
 
     _userUseCase.cleanUpUserResponseCache();
-     User user = await _userUseCase.myInfo();
-     state.setUserResponse(user);
+     User userResponse = await _userUseCase.myInfo();
+     state.setUserResponse(userResponse);
+    List<User> friends = await _friendUseCase.getMyFriends();
+    state.setMyFriends(friends);
+    List<User> newFriends = await _friendUseCase.getRecommendedFriends();
+    state.setRecommendedFriends(newFriends);
      getMyTitleVote();
 
      state.setIsLoading(false);
