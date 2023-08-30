@@ -58,7 +58,9 @@ class VoteListCubit extends HydratedCubit<VoteListState> {
         pagingController.appendLastPage(newVotes);
       } else {
         final nextPageKey = pageKey + 1;
-        AnalyticsUtil.logEvent('받은투표_불러오기(페이지네이션)');
+        AnalyticsUtil.logEvent('받은투표_불러오기(페이지네이션)', properties: {
+          '새로 불러온 페이지 인덱스': nextPageKey
+        });
         // await Future.delayed(Duration(seconds: 1));
         pagingController.appendPage(newVotes, nextPageKey);
       }
