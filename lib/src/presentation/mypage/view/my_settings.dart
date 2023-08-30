@@ -33,6 +33,7 @@ class MySettings extends StatelessWidget {
       backgroundColor: Colors.white,
       body: RefreshIndicator(
         onRefresh: () async {
+          AnalyticsUtil.logEvent('내정보_설정_당겨서새로고침');
           context.read<MyPagesCubit>().refreshMyInfo();
         },
         child: BlocBuilder<MyPagesCubit, MyPagesState>(

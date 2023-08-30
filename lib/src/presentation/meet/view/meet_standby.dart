@@ -22,6 +22,7 @@ class MeetStandby extends StatelessWidget {
       backgroundColor: Colors.white,
       body: RefreshIndicator(
         onRefresh: () async {
+          AnalyticsUtil.logEvent('과팅_대기_당겨서새로고침');
           context.read<MeetCubit>().initState();
         },
         child: SingleChildScrollView(
@@ -57,11 +58,6 @@ class MeetStandby extends StatelessWidget {
             ;
           }
         )
-
-      // _BottomSection(ancestorContext: context),
-      // If 친구가 없으면
-      // ? 내 친구 초대하기
-      // : if 같은 학교, 같은 성별 친구가 없으면 ? 팀 만들기 : _BottomSection
     );
   }
 }
@@ -80,6 +76,7 @@ class MakeTeamButton extends StatelessWidget {
         padding: EdgeInsets.symmetric(horizontal: SizeConfig.defaultSize * 2, vertical: SizeConfig.defaultSize),
         child: GestureDetector(
           onTap: () async {
+            AnalyticsUtil.logEvent('과팅_대기_팀만들기버튼_터치(팀없을때)');
             await Navigator.push(context, PageTransition(type: PageTransitionType.rightToLeftJoined, child: MeetCreateTeam(
               onFinish: () {
                 // context.read<MeetCubit>().refreshMeetPage();
@@ -137,6 +134,7 @@ class _InviteFriendButtonState extends State<InviteFriendButton> {
         padding: EdgeInsets.symmetric(horizontal: SizeConfig.defaultSize * 2, vertical: SizeConfig.defaultSize),
         child: GestureDetector(
           onTap: () {
+            AnalyticsUtil.logEvent('과팅_대기_친추버튼');
             showModalBottomSheet(
                 context: context,
                 shape: const RoundedRectangleBorder(
@@ -145,7 +143,7 @@ class _InviteFriendButtonState extends State<InviteFriendButton> {
                 backgroundColor: Colors.white,
                 isScrollControlled: true,
                 builder: (BuildContext _) {
-                  AnalyticsUtil.logEvent("대기_친추_접속");
+                  AnalyticsUtil.logEvent("과팅_대기_친추_접속");
                   return StatefulBuilder(
                     builder: (BuildContext statefulContext, StateSetter thisState) {
                       return Container(
@@ -164,7 +162,7 @@ class _InviteFriendButtonState extends State<InviteFriendButton> {
                                     padding: EdgeInsets.all(SizeConfig.defaultSize),
                                     child: IconButton(
                                         onPressed: () {
-                                          AnalyticsUtil.logEvent("대기_친추_닫기");
+                                          AnalyticsUtil.logEvent("과팅_대기_친추_닫기");
                                           Navigator.pop(context);
                                         },
                                         icon: Icon(Icons.close_rounded, color: Colors.black, size: SizeConfig.defaultSize * 3,)),
@@ -232,7 +230,7 @@ class _InviteFriendButtonState extends State<InviteFriendButton> {
                                           ),
                                           ElevatedButton(
                                             onPressed: () {
-                                              AnalyticsUtil.logEvent("대기_친추_내코드복사");
+                                              AnalyticsUtil.logEvent("과팅_대기_친추_내코드복사");
                                               String myCodeCopy = widget.ancestorState.userResponse.personalInfo?.recommendationCode ?? '내 코드 복사에 실패했어요🥲';
                                               Clipboard.setData(ClipboardData(
                                                   text:
@@ -279,7 +277,7 @@ class _InviteFriendButtonState extends State<InviteFriendButton> {
                               SizedBox(height: SizeConfig.defaultSize ,),
                               GestureDetector(
                                 onTap: () {
-                                  AnalyticsUtil.logEvent("대기_친추_링크공유");
+                                  AnalyticsUtil.logEvent("과팅_대기_친추_링크공유");
                                   shareContent(context, widget.ancestorState.userResponse.personalInfo?.recommendationCode ?? '내 코드');
                                 },
                                 child: Padding(
@@ -429,7 +427,7 @@ class _InviteFriendButtonState extends State<InviteFriendButton> {
                                                     widget.ancestorState.isLoading = false;
                                                   });
                                                 });
-                                                AnalyticsUtil.logEvent("대기_친추_친구코드_추가", properties: {
+                                                AnalyticsUtil.logEvent("과팅_대기_친추_친구코드_추가", properties: {
                                                   '친구코드 번호': friendCode, '친구코드 정상여부': friendCodeConfirm
                                                 });
                                               }
@@ -1047,7 +1045,7 @@ class NotFriendComponent extends StatelessWidget {
           children: [
             GestureDetector(
               onTap: () {
-                AnalyticsUtil.logEvent("대기_친추_알수도있는친구_목록터치", properties: {
+                AnalyticsUtil.logEvent("과팅_대기_친추_알수도있는친구_목록터치", properties: {
                   "친구 성별": friend.personalInfo!.gender == "FEMALE"
                       ? "여자"
                       : "남자",
@@ -1091,7 +1089,7 @@ class NotFriendComponent extends StatelessWidget {
               onSelected: (value) {
                 // 팝업 메뉴에서 선택된 값 처리
                 if (value == 'report') {
-                  AnalyticsUtil.logEvent("대기_친추_알수도있는친구더보기_신고");
+                  AnalyticsUtil.logEvent("과팅_대기_친추_알수도있는친구더보기_신고");
                   showDialog<String>(
                     context: context,
                     builder: (BuildContext context) =>
@@ -1105,7 +1103,7 @@ class NotFriendComponent extends StatelessWidget {
                             TextButton(
                               onPressed: () {
                                 AnalyticsUtil.logEvent(
-                                    "대기_친추_알수도있는친구더보기_신고_취소");
+                                    "과팅_대기_친추_알수도있는친구더보기_신고_취소");
                                 Navigator.pop(context, '취소');
                               },
                               child: const Text('취소', style: TextStyle(
@@ -1115,7 +1113,7 @@ class NotFriendComponent extends StatelessWidget {
                               onPressed: () =>
                               {
                                 AnalyticsUtil.logEvent(
-                                    "대기_친추_알수도있는친구더보기_신고_신고확정"),
+                                    "과팅_대기_친추_알수도있는친구더보기_신고_신고확정"),
                                 Navigator.pop(context, '신고'),
                                 ToastUtil.showToast("사용자가 신고되었어요!"),
                                 // TODO : 신고 기능 (서버 연결)
@@ -1141,7 +1139,7 @@ class NotFriendComponent extends StatelessWidget {
 
             ElevatedButton(
               onPressed: () {
-                AnalyticsUtil.logEvent("대기_친추_알수도있는친구_친구추가");
+                AnalyticsUtil.logEvent("과팅_대기_친추_알수도있는친구_친구추가");
                 if (isAdd) {
                   pressedAddButton(context, friend.personalInfo!.id);
                   // Navigator.pop(context);
