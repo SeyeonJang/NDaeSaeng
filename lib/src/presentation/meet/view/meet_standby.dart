@@ -1,5 +1,6 @@
 import 'package:dart_flutter/res/config/size_config.dart';
 import 'package:dart_flutter/src/common/util/analytics_util.dart';
+import 'package:dart_flutter/src/domain/entity/user.dart';
 import 'package:dart_flutter/src/presentation/meet/view/meet_create_team.dart';
 import 'package:dart_flutter/src/presentation/meet/view/meet_update_team.dart';
 import 'package:dart_flutter/src/presentation/meet/viewmodel/meet_cubit.dart';
@@ -36,7 +37,112 @@ class MeetStandby extends StatelessWidget {
           ),
         ),
       ),
-      bottomNavigationBar: _BottomSection(ancestorContext: context),
+      bottomNavigationBar:
+        BlocBuilder<MeetCubit, MeetState>(
+          builder: (context,state) {
+            List<User> filteredFriends = state.friends.where((friend) =>
+            friend.university?.name == state.userResponse.university?.name &&
+                friend.personalInfo?.gender == state.userResponse.personalInfo?.gender
+            ).toList();
+
+            return state.friends.isEmpty
+                ? InviteFriendButton()
+                : (filteredFriends.isEmpty ? MakeTeamButton() : _BottomSection(ancestorContext: context))
+            ;
+          }
+        )
+
+      // _BottomSection(ancestorContext: context),
+      // If 친구가 없으면
+      // ? 내 친구 초대하기
+      // : if 같은 학교, 같은 성별 친구가 없으면 ? 팀 만들기 : _BottomSection
+    );
+  }
+}
+
+class MakeTeamButton extends StatelessWidget {
+  const MakeTeamButton({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: SizeConfig.screenWidth,
+      height: SizeConfig.defaultSize * 8.5,
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: SizeConfig.defaultSize * 2, vertical: SizeConfig.defaultSize),
+        child: GestureDetector(
+          onTap: () {
+
+          },
+          child: Container(
+              width: SizeConfig.screenWidth,
+              height: SizeConfig.defaultSize * 6,
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                border: Border.all(
+                  color: Colors.white,
+                ),
+                color: Color(0xffFE6059),
+                borderRadius: BorderRadius.circular(13),
+              ),
+              child: Text("과팅에 참여할 팀 만들기", style: TextStyle(
+                  color: Colors.white,
+                  fontSize: SizeConfig.defaultSize * 2,
+                  fontWeight: FontWeight.w600
+              ),)
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class InviteFriendButton extends StatelessWidget { // 내 친구 초대하기
+  const InviteFriendButton({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: SizeConfig.screenWidth,
+      height: SizeConfig.defaultSize * 8.5,
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: SizeConfig.defaultSize * 2, vertical: SizeConfig.defaultSize),
+        child: GestureDetector(
+          onTap: () async {
+            await Navigator.push(context, PageTransition(type: PageTransitionType.rightToLeftJoined, child: MeetCreateTeam(
+              onFinish: () {
+                // context.read<MeetCubit>().refreshMeetPage();
+              },
+              state: context.read<MeetCubit>().state,
+            ), childCurrent: this)).then((value) async {
+              if (value == null) return;
+              await context.read<MeetCubit>().createNewTeam(value);
+            });
+            context.read<MeetCubit>().refreshMeetPage();
+          },
+          child: Container(
+            width: SizeConfig.screenWidth,
+            height: SizeConfig.defaultSize * 6,
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: Colors.white,
+              ),
+              color: Color(0xffFE6059),
+              borderRadius: BorderRadius.circular(13),
+            ),
+            child: Text("과팅에 참여할 친구 초대하기", style: TextStyle(
+              color: Colors.white,
+              fontSize: SizeConfig.defaultSize * 2,
+              fontWeight: FontWeight.w600
+            ),)
+          ),
+        ),
+      ),
     );
   }
 }
