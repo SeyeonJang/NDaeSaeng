@@ -89,7 +89,7 @@ class _LoginPageState extends State<LoginPage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text("3초만에 회원가입하기", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.5)),
+              Text("3초만에 회원가입하기!", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.5)),
               SizedBox(height: SizeConfig.defaultSize * 1,),
               Container(
                 width: SizeConfig.screenWidth * 0.8,

@@ -254,9 +254,27 @@ class _TutorialSlideState extends State<TutorialSlide2> with TickerProviderState
         child: PageView(
           controller: _pageController,
           onPageChanged: (index) {
-            setState(() => isLastPage = index == 2);
+            setState(() => isLastPage = index == 3);
           },
           children: [
+            Container(
+              child: Column(
+                children: [
+                  SizedBox(height: SizeConfig.defaultSize * 6,),
+
+                  MeetView(questionName: ['첫 인상이 좋았던', '귀여워서 밥 사주고 싶은 사람', '누구보다 공감을 잘 해주는'], count: ['30+','20+','5+'],),
+                  SizedBox(height: SizeConfig.defaultSize),
+                  MeetView2(questionName: ['운동하는 모습이 멋있는 갓생러', '우리 학과 수석으로 들어왔을 것 같은 사람', '너 T야? 큐티?'], count: ['20+','5+','5+'],),
+
+                  SizedBox(height: SizeConfig.defaultSize * 5,),
+                  Text("엔대생에서 인증된 대학생들과 과팅해요!", style: TextStyle(fontSize: SizeConfig.defaultSize * 2, fontWeight: FontWeight.w600),),
+                  SizedBox(height: SizeConfig.defaultSize * 2,),
+                  Text("엔대생에서는 학생증 인증을 통해 인증된", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.5, fontWeight: FontWeight.w500),),
+                  SizedBox(height: SizeConfig.defaultSize * 0.3),
+                  Text("다양한 학교, 학과의 대학생들과 연결돼요!", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.5, fontWeight: FontWeight.w500),),
+                ],
+              )
+            ),
             Container(
               color: Colors.white,
               child: Center(
@@ -288,11 +306,12 @@ class _TutorialSlideState extends State<TutorialSlide2> with TickerProviderState
                         },
                       ),
                     ),
-                    // Text("${questions[0]}", style: TextStyle(fontSize: SizeConfig.defaultSize * 2, fontWeight: FontWeight.w600),),
-                    SizedBox(height: SizeConfig.defaultSize * 11.5,),
+                    SizedBox(height: SizeConfig.defaultSize * 9,),
+                    Text("내 친구들과 이미지게임을 즐겨요!", style: TextStyle(fontSize: SizeConfig.defaultSize * 2, fontWeight: FontWeight.w600),),
+                    SizedBox(height: SizeConfig.defaultSize * 2,),
                     RichText(
                         text: TextSpan(
-                            style: TextStyle(fontSize: SizeConfig.defaultSize * 2, fontWeight: FontWeight.w500),
+                            style: TextStyle(fontSize: SizeConfig.defaultSize * 1.5, fontWeight: FontWeight.w500),
                             children: <TextSpan>[
                               TextSpan(text: "엔대생에서는 ", style: TextStyle(color: Colors.black)),
                               TextSpan(text: "긍정적인 질문", style: TextStyle(color: Colors.black, fontWeight: FontWeight.w500)),
@@ -303,7 +322,7 @@ class _TutorialSlideState extends State<TutorialSlide2> with TickerProviderState
                     SizedBox(height: SizeConfig.defaultSize * 0.3),
                     RichText(
                         text: TextSpan(
-                            style: TextStyle(fontSize: SizeConfig.defaultSize * 2, fontWeight: FontWeight.w500),
+                            style: TextStyle(fontSize: SizeConfig.defaultSize * 1.5, fontWeight: FontWeight.w500),
                             children: <TextSpan>[
                               TextSpan(text: "내 친구들을 ", style: TextStyle(color: Colors.black)),
                               TextSpan(text: "투표", style: TextStyle(color: Color(0xff7C83FD))),
@@ -342,10 +361,12 @@ class _TutorialSlideState extends State<TutorialSlide2> with TickerProviderState
                       child: VoteFriend(admissionYear: "23", gender: "남", question: "OOO 갓생 폼 미쳤다", datetime: "30분 전", index: 4,),
                     ), SizedBox(height: SizeConfig.defaultSize * 1.6),
 
-                    SizedBox(height: SizeConfig.defaultSize * 3.5,),
+                    SizedBox(height: SizeConfig.defaultSize * 1),
+                    Text("쌓이는 알림, 더해가는 즐거움!", style: TextStyle(fontSize: SizeConfig.defaultSize * 2, fontWeight: FontWeight.w600),),
+                    SizedBox(height: SizeConfig.defaultSize * 2),
                     RichText(
                         text: TextSpan(
-                            style: TextStyle(fontSize: SizeConfig.defaultSize * 2, fontWeight: FontWeight.w500),
+                            style: TextStyle(fontSize: SizeConfig.defaultSize * 1.5, fontWeight: FontWeight.w500),
                             children: <TextSpan>[
                               TextSpan(text: "내가 투표받으면 ", style: TextStyle(color: Colors.black)),
                               TextSpan(text: "알림", style: TextStyle(color: Color(0xff7C83FD), fontWeight: FontWeight.w500)),
@@ -354,7 +375,7 @@ class _TutorialSlideState extends State<TutorialSlide2> with TickerProviderState
                         )
                     ),
                     SizedBox(height: SizeConfig.defaultSize * 0.3),
-                    Text("친구들도 내가 보낸 투표를 봐요!", style: TextStyle(fontSize: SizeConfig.defaultSize * 2, fontWeight: FontWeight.w500),),
+                    Text("친구들도 내가 보낸 투표를 봐요!", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.5, fontWeight: FontWeight.w500),),
                   ],
                 ),
               ),
@@ -364,7 +385,7 @@ class _TutorialSlideState extends State<TutorialSlide2> with TickerProviderState
               child: Center(
                 child: Column(
                   children: [
-                    SizedBox(height: SizeConfig.defaultSize * 6,),
+                    SizedBox(height: SizeConfig.defaultSize * 12,),
                     Container(
                       child: AnimatedBuilder(
                         animation: _letterAnimationController,
@@ -392,17 +413,17 @@ class _TutorialSlideState extends State<TutorialSlide2> with TickerProviderState
                         },
                       ),
                     ),
-                    SizedBox(height: SizeConfig.defaultSize * 4,),
+                    SizedBox(height: SizeConfig.defaultSize * 3,),
                     Text("누가 나에게 관심을 갖고 있는지 궁금하다면?", style: TextStyle(fontSize: SizeConfig.defaultSize * 2, fontWeight: FontWeight.w600),),
                     // SizedBox(height: SizeConfig.defaultSize * 0.3),
                     // Text("궁금하지 않으신가요?", style: TextStyle(fontSize: SizeConfig.defaultSize * 2, fontWeight: FontWeight.w500),),
                     // SizedBox(height: SizeConfig.defaultSize * 5),
 
-                    SizedBox(height: SizeConfig.defaultSize * 4.5,),
+                    SizedBox(height: SizeConfig.defaultSize * 2,),
 
-                    Text("나를 향한 투표들이 기다리고 있어요!", style: TextStyle(fontSize: SizeConfig.defaultSize * 2, fontWeight: FontWeight.w500),),
+                    Text("나를 향한 투표들이 기다리고 있어요!", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.5, fontWeight: FontWeight.w500),),
                     SizedBox(height: SizeConfig.defaultSize * 0.3),
-                    Text("친구들과 즐기러 가볼까요?", style: TextStyle(fontSize: SizeConfig.defaultSize * 2, fontWeight: FontWeight.w500),),
+                    Text("친구들과 즐기러 가볼까요?", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.5, fontWeight: FontWeight.w500),),
                   ],
                 ),
               ),
@@ -420,7 +441,7 @@ class _TutorialSlideState extends State<TutorialSlide2> with TickerProviderState
             Center(
                 child: SmoothPageIndicator(
                     controller: _pageController,
-                    count: 3,
+                    count: 4,
                     effect: WormEffect(
                         activeDotColor: Color(0xff7C83FD),
                         dotColor: Colors.grey.shade200,
@@ -432,6 +453,300 @@ class _TutorialSlideState extends State<TutorialSlide2> with TickerProviderState
                         duration: const Duration(milliseconds: 400),
                         curve: Curves.easeIn))),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class MeetView extends StatelessWidget {
+  List<String> questionName;
+  List<String> count;
+
+  MeetView({
+    super.key,
+    required this.questionName,
+    required this.count
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: SizeConfig.defaultSize * 3),
+      child: Container( // 카드뷰 시작 *****************
+        width: SizeConfig.screenWidth,
+        height: SizeConfig.defaultSize * 18,
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(
+                color: Color(0xffFF5C58).withOpacity(0.5),
+                width: 1.5
+            )
+        ),
+        child: Padding(
+          padding: EdgeInsets.symmetric(vertical: SizeConfig.defaultSize * 1, horizontal: SizeConfig.defaultSize * 1.5),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row( // 위층 (받은 투표 윗 부분 Row)
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          AnalyticsUtil.logEvent("과팅_팀만들기_카드_프사_터치");
+                        },
+                        child: ClipOval(
+                          child: Image.asset('assets/images/profile1.jpeg', width: SizeConfig.defaultSize * 5.2, fit: BoxFit.cover,),
+                      )),
+                      SizedBox(width: SizeConfig.defaultSize * 0.8),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            height: SizeConfig.defaultSize * 3,
+                            child: Row( // 위층 (이름 ~ 년생)
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Container(
+                                  height: SizeConfig.defaultSize * 3.3,
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      SizedBox(width: SizeConfig.defaultSize * 0.5,),
+                                      Text(
+                                        '지니',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: SizeConfig.defaultSize * 1.6,
+                                          color: Colors.black,
+                                        ),),
+                                      Text(
+                                        "∙ 03년생",
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: SizeConfig.defaultSize * 1.6,
+                                          color: Colors.black,
+                                        ),),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Row( // 2층
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              SizedBox(width: SizeConfig.defaultSize * 0.5,),
+                              Container(
+                                child: Text(
+                                  "경영학과",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: SizeConfig.defaultSize * 1.6,
+                                    color: Colors.black,
+                                    overflow: TextOverflow.ellipsis,
+
+                                  ),
+                                ),
+                              ),
+                              SizedBox(width: SizeConfig.defaultSize * 0.3),
+                              Image.asset("assets/images/check.png", width: SizeConfig.defaultSize * 1.3),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              Container(
+                height: SizeConfig.defaultSize * 9.5,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    for (int i = 0; i < 3; i++)
+                      Container(
+                          width: SizeConfig.screenWidth,
+                          height: SizeConfig.defaultSize * 3,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(5),
+                              color: Color(0xffFF5C58)
+                          ),
+                          alignment: Alignment.center,
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(horizontal: SizeConfig.defaultSize * 2),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(questionName[i], style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: SizeConfig.defaultSize * 1.3
+                                ),),
+                                Text(count[i],  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: SizeConfig.defaultSize * 1.3
+                                ),)
+                              ],
+                            ),
+                          )
+                      ),
+                  ],
+                ),
+              )
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class MeetView2 extends StatelessWidget {
+  List<String> questionName;
+  List<String> count;
+
+  MeetView2({
+    super.key,
+    required this.questionName,
+    required this.count
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: SizeConfig.defaultSize * 3),
+      child: Container( // 카드뷰 시작 *****************
+        width: SizeConfig.screenWidth,
+        height: SizeConfig.defaultSize * 18,
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(
+                color: Color(0xffFF5C58).withOpacity(0.5),
+                width: 1.5
+            )
+        ),
+        child: Padding(
+          padding: EdgeInsets.symmetric(vertical: SizeConfig.defaultSize * 1, horizontal: SizeConfig.defaultSize * 1.5),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row( // 위층 (받은 투표 윗 부분 Row)
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      GestureDetector(
+                          onTap: () {
+                            AnalyticsUtil.logEvent("과팅_팀만들기_카드_프사_터치");
+                          },
+                          child: ClipOval(
+                            child: Image.asset('assets/images/profile1.jpeg', width: SizeConfig.defaultSize * 5.2, fit: BoxFit.cover,),
+                          )),
+                      SizedBox(width: SizeConfig.defaultSize * 0.8),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            height: SizeConfig.defaultSize * 3,
+                            child: Row( // 위층 (이름 ~ 년생)
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Container(
+                                  height: SizeConfig.defaultSize * 3.3,
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      SizedBox(width: SizeConfig.defaultSize * 0.5,),
+                                      Text(
+                                        '지니',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: SizeConfig.defaultSize * 1.6,
+                                          color: Colors.black,
+                                        ),),
+                                      Text(
+                                        "∙ 03년생",
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: SizeConfig.defaultSize * 1.6,
+                                          color: Colors.black,
+                                        ),),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Row( // 2층
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              SizedBox(width: SizeConfig.defaultSize * 0.5,),
+                              Container(
+                                child: Text(
+                                  "경영학과",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: SizeConfig.defaultSize * 1.6,
+                                    color: Colors.black,
+                                    overflow: TextOverflow.ellipsis,
+
+                                  ),
+                                ),
+                              ),
+                              SizedBox(width: SizeConfig.defaultSize * 0.3),
+                              Image.asset("assets/images/check.png", width: SizeConfig.defaultSize * 1.3),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              Container(
+                height: SizeConfig.defaultSize * 9.5,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    for (int i = 0; i < 3; i++)
+                      Container(
+                          width: SizeConfig.screenWidth,
+                          height: SizeConfig.defaultSize * 3,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(5),
+                              color: Color(0xffFF5C58)
+                          ),
+                          alignment: Alignment.center,
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(horizontal: SizeConfig.defaultSize * 2),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(questionName[i], style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: SizeConfig.defaultSize * 1.3
+                                ),),
+                                Text(count[i],  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: SizeConfig.defaultSize * 1.3
+                                ),)
+                              ],
+                            ),
+                          )
+                      ),
+                  ],
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );
