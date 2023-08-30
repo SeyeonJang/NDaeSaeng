@@ -519,7 +519,7 @@ class MeetView extends StatelessWidget {
                                     children: [
                                       SizedBox(width: SizeConfig.defaultSize * 0.5,),
                                       Text(
-                                        '지니',
+                                        '포챠코',
                                         style: TextStyle(
                                           fontWeight: FontWeight.w500,
                                           fontSize: SizeConfig.defaultSize * 1.6,
@@ -544,7 +544,7 @@ class MeetView extends StatelessWidget {
                               SizedBox(width: SizeConfig.defaultSize * 0.5,),
                               Container(
                                 child: Text(
-                                  "경영학과",
+                                  "연세대학교 교육학과",
                                   style: TextStyle(
                                     fontWeight: FontWeight.w500,
                                     fontSize: SizeConfig.defaultSize * 1.6,
@@ -646,7 +646,7 @@ class MeetView2 extends StatelessWidget {
                             AnalyticsUtil.logEvent("과팅_팀만들기_카드_프사_터치");
                           },
                           child: ClipOval(
-                            child: Image.asset('assets/images/profile1.jpeg', width: SizeConfig.defaultSize * 5.2, fit: BoxFit.cover,),
+                            child: Image.asset('assets/images/hyeonsikchoi.jpeg', width: SizeConfig.defaultSize * 4.2, fit: BoxFit.cover,),
                           )),
                       SizedBox(width: SizeConfig.defaultSize * 0.8),
                       Column(
@@ -666,14 +666,14 @@ class MeetView2 extends StatelessWidget {
                                     children: [
                                       SizedBox(width: SizeConfig.defaultSize * 0.5,),
                                       Text(
-                                        '지니',
+                                        '도라에몽',
                                         style: TextStyle(
                                           fontWeight: FontWeight.w500,
                                           fontSize: SizeConfig.defaultSize * 1.6,
                                           color: Colors.black,
                                         ),),
                                       Text(
-                                        "∙ 03년생",
+                                        "∙ 01년생",
                                         style: TextStyle(
                                           fontWeight: FontWeight.w500,
                                           fontSize: SizeConfig.defaultSize * 1.6,
@@ -691,7 +691,7 @@ class MeetView2 extends StatelessWidget {
                               SizedBox(width: SizeConfig.defaultSize * 0.5,),
                               Container(
                                 child: Text(
-                                  "경영학과",
+                                  "서울대학교 경제학과",
                                   style: TextStyle(
                                     fontWeight: FontWeight.w500,
                                     fontSize: SizeConfig.defaultSize * 1.6,
