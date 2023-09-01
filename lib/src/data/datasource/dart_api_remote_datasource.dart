@@ -1,11 +1,13 @@
 import 'dart:convert';
 
 import 'package:dart_flutter/res/environment/app_environment.dart';
+import 'package:dart_flutter/src/common/pagination/pagination.dart';
 import 'package:dart_flutter/src/data/model/question_dto.dart';
 import 'package:dart_flutter/src/data/model/meet_team_request_dto.dart';
 import 'package:dart_flutter/src/data/model/title_vote_dto.dart';
 import 'package:dart_flutter/src/data/model/university_dto.dart';
 import 'package:dart_flutter/src/data/model/user_request_dto.dart';
+import 'package:dart_flutter/src/data/model/vote_detail_dto.dart';
 
 import '../../common/util/http_util.dart';
 import '../../data/model/dart_auth_dto.dart';
@@ -151,7 +153,11 @@ class DartApiRemoteDataSource {
     final body = {"recommendationCode": inviteCode};
 
     final response = await _httpUtil.request().post(path, data: body);
-    return UserDto.fromJson(response.data);
+    final locationPath = _getPathFromUrl(response.headers.map['location']?.first ?? "");
+    print(locationPath);
+    final responseFriendDto = await _httpUtil.request().get(locationPath);
+
+    return UserDto.fromJson(responseFriendDto.data);
   }
 
   // Friend: 친구 삭제하기 (연결끊기)
@@ -201,21 +207,22 @@ class DartApiRemoteDataSource {
   }
 
   // vote: 받은 투표 리스트 확인하기
-  static Future<List<VoteResponseDto>> getVotes() async {
+  static Future<Pagination<VoteResponseDto>> getVotes({int page = 0}) async {
     const path = '/v1/users/me/votes';
+    final params = {"page": page};
 
-    final response = await _httpUtil.request().get(path);
-    final List<dynamic> jsonResponse = response.data;
-    List<VoteResponseDto> voteResponse = jsonResponse.map((vote) => VoteResponseDto.fromJson(vote)).toList();
-    return voteResponse;
+    final response = await _httpUtil.request().get(path, queryParameters: params);
+
+    Pagination<VoteResponseDto> pagination = Pagination.fromJson(response.data, (item) => VoteResponseDto.fromJson(item));
+    return pagination;
   }
 
-  static Future<VoteResponseDto> getVote(int voteId) async {
-    const path = '/v1/votes';
+  static Future<VoteDetailDto> getVote(int voteId) async {
+    const path = '/v1/users/me/votes';
     final fullPath = '$path/$voteId';
 
     final response = await _httpUtil.request().get(fullPath);
-    return VoteResponseDto.fromJson(response.data);
+    return VoteDetailDto.fromJson(response.data);
   }
 
   // vote: 투표 가능한지 확인하기 (남은 시간 확인)
@@ -292,5 +299,15 @@ class DartApiRemoteDataSource {
 
     final response = await _httpUtil.request().put(path, data: body);
     return MeetTeamResponseDto.fromJson(response.data);
+  }
+
+  static String _getPathFromUrl(String url) {
+    RegExp regExp = RegExp(r'https?://[^/]+(/.*)');
+    RegExpMatch? match = regExp.firstMatch(url);
+
+    if (match != null && match.groupCount >= 1) {
+      return match.group(1) ?? "";
+    }
+    return '';
   }
 }

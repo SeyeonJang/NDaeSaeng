@@ -25,16 +25,22 @@ class _MyPageLandingState extends State<MyPageLanding> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Padding(
-        padding: EdgeInsets.symmetric(
-            vertical: SizeConfig.defaultSize * 0,
-            horizontal: SizeConfig.defaultSize),
-        child: BlocBuilder<MyPagesCubit, MyPagesState>(
-          builder: (context, state) {
-            final user = state.userResponse;
-            return MyPageLandingView(userResponse: user);
-          }
+    AnalyticsUtil.logEvent("내정보_마이_접속");
+    return RefreshIndicator(
+      onRefresh: () async {
+        context.read<MyPagesCubit>().refreshMyInfo();
+        AnalyticsUtil.logEvent('내정보_마이_당겨서새로고침');
+      },
+      child: SingleChildScrollView(
+        child: Padding(
+          padding: EdgeInsets.symmetric(
+              horizontal: SizeConfig.defaultSize),
+          child: BlocBuilder<MyPagesCubit, MyPagesState>(
+            builder: (context, state) {
+              final user = state.userResponse;
+              return MyPageLandingView(userResponse: user);
+            }
+          ),
         ),
       ),
     );
@@ -98,6 +104,7 @@ class _MyPageLandingViewState extends State<MyPageLandingView> {
                                 if (profileImageUrl == "DEFAULT" || !profileImageUrl.startsWith("https://"))
                                   return Image.asset('assets/images/profile-mockup3.png', width: SizeConfig.defaultSize * 5.7, fit: BoxFit.cover,);
                                 else {
+                                  print('${state.profileImageFile.path} dddsdsdsdsd');
                                   return state.profileImageFile.path==''
                                       ? Image.network(profileImageUrl,
                                       width: SizeConfig.defaultSize * 5.7,
@@ -167,9 +174,17 @@ class _MyPageLandingViewState extends State<MyPageLandingView> {
                                     onPressed: () async {
                                       AnalyticsUtil.logEvent("내정보_마이_설정버튼");
                                       BlocProvider.of<MyPagesCubit>(context).refreshMyInfo();
-                                      final _profileImage = await Navigator.push(context, MaterialPageRoute(builder: (_) => MySettings(
-                                        userResponse: BlocProvider.of<MyPagesCubit>(context).state.userResponse,
-                                      )));
+                                      final _profileImage = await Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (_) => BlocProvider.value(
+                                            value: BlocProvider.of<MyPagesCubit>(context),
+                                            child: MySettings(
+                                              userResponse: BlocProvider.of<MyPagesCubit>(context).state.userResponse,
+                                            ),
+                                          ),
+                                        ),
+                                      );
                                       BlocProvider.of<MyPagesCubit>(context).setProfileImage(_profileImage);
 
                                       PaintingBinding.instance.imageCache.clear();
@@ -188,27 +203,31 @@ class _MyPageLandingViewState extends State<MyPageLandingView> {
                                       builder: (context, state) {
                                         String university = state.userResponse.university?.name??'#####학교';
                                         String department = state.userResponse.university?.department??'######학과';
-                                        return Row(
-                                          children: [
-                                            SizedBox(width: SizeConfig.defaultSize * 0.5,),
-                                            Text(
-                                              university,
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.w500,
-                                                  fontSize: SizeConfig.defaultSize * 1.3,
-                                                  color: Colors.white
+                                        return Container(
+                                          width: SizeConfig.screenWidth * 0.67,
+                                          child: Row(
+                                            children: [
+                                              SizedBox(width: SizeConfig.defaultSize * 0.5,),
+                                              Text(
+                                                university,
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.w500,
+                                                    fontSize: SizeConfig.defaultSize * 1.3,
+                                                    color: Colors.white
+                                                ),
                                               ),
-                                            ),
-                                            SizedBox(width: SizeConfig.defaultSize * 0.5,),
-                                            Text(
-                                              department,
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.w500,
-                                                  fontSize: SizeConfig.defaultSize * 1.3,
-                                                  color: Colors.white
+                                              SizedBox(width: SizeConfig.defaultSize * 0.5,),
+                                              Text(
+                                                department,
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.w500,
+                                                    fontSize: SizeConfig.defaultSize * 1.3,
+                                                    color: Colors.white,
+                                                  overflow: TextOverflow.ellipsis
+                                                ),
                                               ),
-                                            ),
-                                          ],
+                                            ],
+                                          ),
                                         );
                                       }
                                   ),
@@ -255,48 +274,48 @@ class _MyPageLandingViewState extends State<MyPageLandingView> {
 
         // =================================================================
 
-        // TODO : '인증 완료'면 안 띄우는 로직 만들기
-        InkWell(
-          onTap: () async {
-            AnalyticsUtil.logEvent("내정보_마이_학생증인증배너터치");
-            await Navigator.push(context, MaterialPageRoute(builder: (_) => StudentVertification(
-              userResponse: BlocProvider.of<MyPagesCubit>(context).state.userResponse,
-            )));
+        if (!widget.userResponse.personalInfo!.verification.isVerificationSuccess)
+          InkWell(
+            onTap: () async {
+              AnalyticsUtil.logEvent("내정보_마이_학생증인증배너터치");
+              await Navigator.push(context, MaterialPageRoute(builder: (_) => StudentVertification(
+                userResponse: BlocProvider.of<MyPagesCubit>(context).state.userResponse,
+              )));
 
-            PaintingBinding.instance.imageCache.clear();
-            BlocProvider.of<MyPagesCubit>(context).refreshMyInfo();
-            setState(() {
-            });
-          },
-          child: Padding( // TODO : 학생증
-            padding: EdgeInsets.symmetric(
-              // vertical: SizeConfig.defaultSize,
-                horizontal: SizeConfig.defaultSize * 0.5),
-            child: Container(
-              width: SizeConfig.screenWidth,
-              height: SizeConfig.defaultSize * 4.8,
-              decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border.all(width: 1.3, color: Color(0xff7C83FD))
-              ),
-              child: Padding(
-                padding: EdgeInsets.only(left: SizeConfig.defaultSize * 1.5, right: SizeConfig.defaultSize * 1.5),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text("지금 학생증 인증하면 프로필배지를 추가해드려요!", style: TextStyle(
-                        fontSize: SizeConfig.defaultSize * 1.4
-                    ),),
-                    Icon(
-                      Icons.arrow_right_alt_rounded, color: Color(0xff7C83FD)
-                    )
-                  ],
+              PaintingBinding.instance.imageCache.clear();
+              BlocProvider.of<MyPagesCubit>(context).refreshMyInfo();
+              setState(() {
+              });
+            },
+            child: Padding( // TODO : 학생증
+              padding: EdgeInsets.symmetric(
+                // vertical: SizeConfig.defaultSize,
+                  horizontal: SizeConfig.defaultSize * 0.5),
+              child: Container(
+                width: SizeConfig.screenWidth,
+                height: SizeConfig.defaultSize * 4.8,
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(width: 1.3, color: Color(0xff7C83FD))
+                ),
+                child: Padding(
+                  padding: EdgeInsets.only(left: SizeConfig.defaultSize * 1.5, right: SizeConfig.defaultSize * 1.5),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text("지금 학생증 인증하면 프로필배지를 추가해드려요!", style: TextStyle(
+                          fontSize: SizeConfig.defaultSize * 1.4
+                      ),),
+                      Icon(
+                        Icons.arrow_right_alt_rounded, color: Color(0xff7C83FD)
+                      )
+                    ],
+                  ),
                 ),
               ),
             ),
           ),
-        ),
 
         SizedBox(height: SizeConfig.defaultSize),
 
@@ -712,8 +731,8 @@ class _NotFriendComponentState extends State<NotFriendComponent> {
     BlocProvider.of<MyPagesCubit>(context).pressedFriendDeleteButton(widget.friend);
   }
 
-  void pressedAddButton(BuildContext context, int userId) async {
-    await BlocProvider.of<MyPagesCubit>(context).pressedFriendAddButton(widget.friend);
+  void pressedAddButton(BuildContext context, int userId) {
+    BlocProvider.of<MyPagesCubit>(context).pressedFriendAddButton(widget.friend);
   }
 
   String get profileImageUrl => widget.friend.personalInfo?.profileImageUrl ?? 'DEFAULT';
@@ -946,7 +965,7 @@ class _openAddFriendsState extends State<openAddFriends> {
   }
 
   void shareContent(BuildContext context, String myCode) {
-    Share.share('엔대생에서 내가 널 칭찬 대상으로 투표하고 싶어! 앱에 들어와줘!\n내 코드는 $myCode 야. 나를 친구 추가하고 같이하자!\nhttps://dart.page.link/TG78\n\n내 코드 : $myCode');
+    Share.share('[엔대생] 엔대생에서 내가 널 칭찬 대상으로 투표하고 싶어! 앱에 들어와줘!\n내 코드는 $myCode 야. 나를 친구 추가하고 같이하자!\nhttps://dart.page.link/TG78\n\n내 코드 : $myCode');
     print("셰어");
   }
 

@@ -14,7 +14,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class DartPageView extends StatefulWidget {
-  const DartPageView({Key? key}) : super(key: key);
+  final int initialPage;
+  DartPageView({Key? key, this.initialPage = 0}) : super(key: key);
 
   @override
   State<DartPageView> createState() => _DartPageViewState();
@@ -22,12 +23,13 @@ class DartPageView extends StatefulWidget {
 
 class _DartPageViewState extends State<DartPageView> {
   int _page = 0;
-  late final PageController _pageController = PageController();
+  late final PageController _pageController = PageController(initialPage: widget.initialPage);
   DateTime? currentBackPressTime;
 
   @override
   void initState() {
     super.initState();
+    _page = widget.initialPage;
   }
 
   void _onPageChanged(int page) {
@@ -97,7 +99,7 @@ class _DartPageViewState extends State<DartPageView> {
                           child: const VotePages(),
                       ),
                       BlocProvider(
-                        create: (context) => VoteListCubit(),
+                        create: (context) => VoteListCubit()..initVotes(),
                         child: const VoteListPages(),
                       ),
                       BlocProvider<MeetCubit>(
@@ -135,14 +137,27 @@ class _TapBarButton extends StatelessWidget {
           onTapNavigation(targetPage);
         },
         child: Container(
-            color: Colors.white,
-            width: SizeConfig.screenWidth * 0.22,
-            height: SizeConfig.defaultSize * 7,
-            alignment: Alignment.center,
-            child: Padding(
-              padding: const EdgeInsets.all(0),
-              child: Text(name, style: TextStyle(fontSize: SizeConfig.defaultSize * 1.6, fontWeight: (targetPage == nowPage) ? FontWeight.w600 : FontWeight.w500, color: (targetPage == nowPage) ? (targetPage == 2 ? Color(0xffFF5C58) : Color(0xff7C83FD)) : Colors.grey)),
-            )
+          color: Colors.white,
+          width: SizeConfig.screenWidth * 0.22,
+          height: SizeConfig.defaultSize * 7,
+          alignment: Alignment.center,
+          child: Padding(
+            padding: const EdgeInsets.all(0),
+            child:
+            Text(name, style:
+            TextStyle(fontSize:
+            (targetPage == nowPage)
+                ? SizeConfig.defaultSize * 1.65
+                : SizeConfig.defaultSize * 1.6,
+                fontWeight:
+                (targetPage == nowPage)
+                    ? FontWeight.w600
+                    : FontWeight.w500,
+                color:
+                (targetPage == nowPage)
+                    ? (targetPage == 2 ? Color(0xffFF5C58) : Color(0xff7C83FD))
+                    : Colors.grey)),
+          ),
         )
     );
   }

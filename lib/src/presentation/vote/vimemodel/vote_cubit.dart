@@ -13,7 +13,7 @@ class VoteCubit extends HydratedCubit<VoteState> {
   // VoteCubit() : super(VoteState.init());
   VoteCubit() : super(VoteState(
       isLoading: false,
-      step: VoteStep.start,
+      step: VoteStep.standby,
       voteIterator: 0,
       votes: [],
       questions: [],
@@ -29,9 +29,11 @@ class VoteCubit extends HydratedCubit<VoteState> {
     List<User> friends = await _friendUseCase.getMyFriends();
     state.setFriends(friends);
 
-    // 투표중이지 않았던 경우, 다음 투표 가능 시간을 기록
-    if (!state.step.isProcess) {
-      // 다음 스텝 지정
+    if (friends.length < 4) {
+      state.setStep(VoteStep.standby);
+
+    } else if (!state.step.isProcess) {
+        // 투표중이지 않았던 경우, 다음 투표 가능 시간을 기록하고, 다음 스텝 지정
       await getNextVoteTime();
       _setStepByNextVoteTime();
     }
@@ -40,9 +42,14 @@ class VoteCubit extends HydratedCubit<VoteState> {
     emit(state.copy());
   }
 
-  void refreshFriends() async {
+  void exitStandby() async {
     List<User> friends = await _friendUseCase.getMyFriends();
     state.setFriends(friends);
+
+    if (friends.length >= 4) {
+      state.setStep(VoteStep.start);
+    }
+
     emit(state.copy());
   }
 
@@ -77,8 +84,6 @@ class VoteCubit extends HydratedCubit<VoteState> {
     emit(state.copy());
     print(state.toString());
 
-    // await Future.delayed(Duration(seconds: 3));
-
     state.pickUserInVote(voteRequest);
     _voteUseCase.sendMyVote(voteRequest);  // 투표한 내용을 서버로 전달
     state.nextVote();
@@ -108,6 +113,9 @@ class VoteCubit extends HydratedCubit<VoteState> {
 
   Future<DateTime> getNextVoteTime() async {
     DateTime myNextVoteTime = await _voteUseCase.getNextVoteTime();
+    print("===============");
+    print(myNextVoteTime);
+
     state.setNextVoteDateTime(myNextVoteTime);
     return myNextVoteTime;
   }

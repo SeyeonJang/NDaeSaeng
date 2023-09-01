@@ -22,6 +22,8 @@ class MeetState {
   late String teamName;
   late bool isChecked;
   late int teamCount;
+  // meet - 친구 추가
+  late Set<User> newFriends;
 
   MeetState ({
     required this.meetPageState,
@@ -37,7 +39,8 @@ class MeetState {
     required this.myTeams,
     required this.teamName,
     required this.isChecked,
-    required this.teamCount
+    required this.teamCount,
+    required this.newFriends
   });
 
   MeetState.init() { // 초기값 설정
@@ -59,6 +62,7 @@ class MeetState {
     teamName = '';
     isChecked = false;
     teamCount = 0;
+    newFriends = {};
   }
 
   MeetState copy() => MeetState(
@@ -75,7 +79,8 @@ class MeetState {
     myTeams: myTeams,
     teamName: teamName,
     isChecked: isChecked,
-    teamCount: teamCount
+    teamCount: teamCount,
+    newFriends: newFriends
   );
 
   void setAll(MeetState state) {
@@ -93,6 +98,17 @@ class MeetState {
       teamName = state.teamName;
       isChecked = state.isChecked;
       teamCount = state.teamCount;
+      newFriends = state.newFriends;
+  }
+
+  void addFriend(User friend) {
+    friends.add(friend);
+    newFriends.remove(friend);
+  }
+
+  MeetState setRecommendedFriends(List<User> friends) {
+    newFriends = friends.toSet();
+    return this;
   }
 
   void setServerLocations(List<Location> serverLocations) {

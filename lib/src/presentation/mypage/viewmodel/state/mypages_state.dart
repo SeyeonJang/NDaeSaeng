@@ -101,6 +101,8 @@ class MyPagesState {
       return true; // 중복되지 않은 항목이므로 유지
     }).toList();
 
+    // 내림차순 정렬
+    this.myAllVotes.sort((a, b) => b.count.compareTo(a.count));
 
     // myAllVotes = myAllVotes.where((vote) {
     //   return !titleVotes.any((titleVote) => titleVote.question.questionId == vote.question.questionId);

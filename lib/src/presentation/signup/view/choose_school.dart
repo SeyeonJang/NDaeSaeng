@@ -46,18 +46,6 @@ class _ScaffoldBodyState extends State<ScaffoldBody> {
   late bool isSelectedOnTypeAhead = false;
   String universityName = "";
 
-  // void _typeOnTypeAhead() { // ver.1
-  //   setState(() {
-  //     isSelectedOnTypeAhead = false;
-  //   });
-  // }
-  // void _typeOnTypeAhead() { // ver.2
-  //   if (!_typeAheadController.text.isEmpty) { // 텍스트 필드가 비어있을 때에만 업데이트
-  //     setState(() {
-  //       isSelectedOnTypeAhead = false;
-  //     });
-  //   }
-  // }
   void _typeOnTypeAhead() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!_typeAheadController.text.isEmpty) {
@@ -111,7 +99,7 @@ class _ScaffoldBodyState extends State<ScaffoldBody> {
             padding: EdgeInsets.all(SizeConfig.defaultSize * 2),
             child: TypeAheadField(
               noItemsFoundBuilder: (context) {
-                return Padding(
+                return const Padding(
                   padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
                   child: Text(
                     "학교를 입력해주세요!",
@@ -119,7 +107,7 @@ class _ScaffoldBodyState extends State<ScaffoldBody> {
                   ),
                 );
               },
-              suggestionsBoxDecoration: SuggestionsBoxDecoration( // 목록 배경색
+              suggestionsBoxDecoration: const SuggestionsBoxDecoration( // 목록 배경색
                 color: Colors.white,
                 elevation: 2.0,
               ),
@@ -134,6 +122,7 @@ class _ScaffoldBodyState extends State<ScaffoldBody> {
                     fontSize: getFlexibleSize(target: 15),
                     fontWeight: FontWeight.w400,
                     color: isSelectedOnTypeAhead ? Color(0xff7C83FD) : Colors.black),
+                textAlignVertical: TextAlignVertical.center,
                 decoration: InputDecoration(
                     enabledBorder: OutlineInputBorder(
                       borderSide: BorderSide(
@@ -141,13 +130,13 @@ class _ScaffoldBodyState extends State<ScaffoldBody> {
                         width: 2.0,
                       ),
                     ),
-                    focusedBorder: OutlineInputBorder(
+                    focusedBorder: const OutlineInputBorder(
                       borderSide: BorderSide(
                       color: Color(0xff7C83FD), // 테두리 색상
                       width: 2.0,
                       ),
                     ),
-                    prefixIcon: Icon(Icons.school_rounded, color: Color(0xff7C83FD),),
+                    prefixIcon: const Icon(Icons.school_rounded, color: Color(0xff7C83FD),),
                     hintText: "학교 이름")),
 
             suggestionsCallback: (pattern) {
@@ -163,7 +152,6 @@ class _ScaffoldBodyState extends State<ScaffoldBody> {
                 return ListTile(
                   leading: Icon(Icons.school),
                   title: Text(suggestion['name']),
-                  // subtitle: Text('\$${suggestion['price']}'),
                 );
             },
 

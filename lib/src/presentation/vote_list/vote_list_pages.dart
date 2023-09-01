@@ -7,11 +7,20 @@ import 'package:dart_flutter/src/presentation/vote_list/vote_list_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class VoteListPages extends StatelessWidget {
+class VoteListPages extends StatefulWidget {
   const VoteListPages({Key? key}) : super(key: key);
 
   @override
+  State<VoteListPages> createState() => _VoteListPagesState();
+}
+
+class _VoteListPagesState extends State<VoteListPages> with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
+
+  @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Stack(
       children: [
         // SafeArea(child: Center(child: Text("hello"))),
@@ -38,14 +47,14 @@ class VoteListPages extends StatelessWidget {
           },
         ),
 
-        BlocBuilder<VoteListCubit, VoteListState> (
-          builder: (context, state) {
-            if (state.isLoading) {
-              return Center(child: CircularProgressIndicator());
-            }
-            return SizedBox();
-          }
-        ),
+        // BlocBuilder<VoteListCubit, VoteListState> (
+        //   builder: (context, state) {
+        //     if (state.isLoading) {
+        //       return Center(child: CircularProgressIndicator());
+        //     }
+        //     return SizedBox();
+        //   }
+        // ),
 
         // BlocBuilder<VoteListCubit, VoteListState>(
         //   builder: (context, state) {
