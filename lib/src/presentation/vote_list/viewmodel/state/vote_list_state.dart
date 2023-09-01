@@ -1,5 +1,6 @@
 import 'package:dart_flutter/src/domain/entity/vote_response.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:dart_flutter/src/domain/entity/user.dart';
 
 part 'vote_list_state.g.dart';
 
@@ -11,6 +12,7 @@ class VoteListState {
   late bool isFirstTime;
   late bool isDetailPage;
   late int nowVoteId;
+  late User userMe;
 
   VoteListState({
     required this.isLoading,
@@ -19,6 +21,7 @@ class VoteListState {
     required this.visited,
     required this.isDetailPage,
     required this.nowVoteId,
+    required this.userMe
   });
 
   VoteListState.init() {
@@ -28,6 +31,11 @@ class VoteListState {
     visited = {};
     isDetailPage = false;
     nowVoteId = 0;
+    userMe = User(
+      personalInfo: null,
+      university: null,
+      titleVotes: [],
+    );
   }
 
   VoteListState copy() => VoteListState(
@@ -37,7 +45,13 @@ class VoteListState {
     visited: visited,
     isDetailPage: isDetailPage,
     nowVoteId: nowVoteId,
+    userMe: userMe
   );
+
+  VoteListState setUserMe(userMe) {
+    this.userMe = userMe;
+    return this;
+  }
 
   VoteListState setIsLoading(bool isLoading) {
     this.isLoading = isLoading;

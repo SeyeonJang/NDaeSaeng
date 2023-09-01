@@ -30,21 +30,24 @@ class MySettings extends StatelessWidget {
   Widget build(BuildContext context) {
     AnalyticsUtil.logEvent("내정보_설정_접속");
     return Scaffold(
-        backgroundColor: Colors.white,
-        body: BlocProvider<MyPagesCubit>(
-          create: (context) => MyPagesCubit()..initPages(),
-            child: BlocBuilder<MyPagesCubit, MyPagesState>(
-              builder: (context, state) {
-                // context.read<MyPagesCubit>().getMyTitleVote();
-                return SafeArea(
-                    child: MyPageView(userResponse: userResponse, state: state),
-                );
-              }
-            )
+      backgroundColor: Colors.white,
+      body: RefreshIndicator(
+        onRefresh: () async {
+          AnalyticsUtil.logEvent('내정보_설정_당겨서새로고침');
+          context.read<MyPagesCubit>().refreshMyInfo();
+        },
+        child: BlocBuilder<MyPagesCubit, MyPagesState>(
+          builder: (context, state) {
+            return SafeArea(
+              child: MyPageView(userResponse: userResponse, state: state),
+            );
+          },
         ),
+      ),
     );
   }
 }
+
 
 class MyPageView extends StatefulWidget {
   final User userResponse;
@@ -138,6 +141,7 @@ class _MyPageViewState extends State<MyPageView> {
         BlocProvider.of<MyPagesCubit>(context).uploadProfileImage(_selectedImage!, widget.userResponse);
         AnalyticsUtil.logEvent("내정보_설정_프로필사진변경");
         isSelectImage = true;
+        BlocProvider.of<MyPagesCubit>(context).setProfileImage(_selectedImage!);
       });
     }
   }
@@ -166,6 +170,7 @@ class _MyPageViewState extends State<MyPageView> {
         Center(
           child: GestureDetector(
             onTap: () {
+              print('지금 상태는 $isSelectImage');
               _pickImage();
             },
             child: ClipOval(
@@ -176,27 +181,40 @@ class _MyPageViewState extends State<MyPageView> {
                   //       colors: [Color(0xff7C83FD), Color(0xff7C83FD)]),
                   //   borderRadius: BorderRadius.circular(32),
                   // ),
-                  child: profileImageUrl != "DEFAULT"
-                      ? Padding(
-                        padding: EdgeInsets.all(SizeConfig.defaultSize * 0.1),
-                        child: ClipOval(
-                          child: isSelectImage
-                              ? Image.file( // 이미지 파일에서 고르는 코드
-                            _selectedImage!,
-                            fit: BoxFit.cover,
-                            width: SizeConfig.defaultSize * 12,
-                            height: SizeConfig.defaultSize * 12,
-                          )
-                              : Image.network(profileImageUrl,
-                          width: SizeConfig.defaultSize * 12,
-                          height: SizeConfig.defaultSize * 12,
-                            fit: BoxFit.cover,
-                          )
-                        ),
-                      )
-                      : ClipOval(
-                        child: Image.asset('assets/images/profile-mockup2.png', width: SizeConfig.defaultSize * 12, fit: BoxFit.cover,)
-                      )
+
+                child: isSelectImage
+                    ? ClipOval(
+                      child: Image.file( // 이미지 파일에서 고르는 코드
+                        _selectedImage!,
+                        fit: BoxFit.cover,
+                        width: SizeConfig.defaultSize * 12,
+                        height: SizeConfig.defaultSize * 12,
+                      ))
+                    : ClipOval(
+                      child: BlocBuilder<MyPagesCubit, MyPagesState>(
+                      builder: (context, state) {
+                        if (profileImageUrl == "DEFAULT" || !profileImageUrl.startsWith("https://"))
+                          return Image.asset('assets/images/profile-mockup2.png', width: SizeConfig.defaultSize * 12, fit: BoxFit.cover,);
+                        else {
+                          return state.profileImageFile.path==''
+                              ? Image.network(profileImageUrl,
+                              width: SizeConfig.defaultSize * 12,
+                              height: SizeConfig.defaultSize * 12,
+                              fit: BoxFit.cover)
+                              : Image.file(state.profileImageFile,
+                              width: SizeConfig.defaultSize * 12,
+                              height: SizeConfig.defaultSize * 12,
+                              fit: BoxFit.cover);
+                          // print('================================================================');
+                          // print(state.userResponse.personalInfo!.profileImageUrl);
+                          // return Image.network(state.userResponse.personalInfo!.profileImageUrl,
+                          //         width: SizeConfig.defaultSize * 5.7,
+                          //         height: SizeConfig.defaultSize * 5.7,
+                          //         fit: BoxFit.cover);
+                        }
+                      }
+                  ),
+                )
               ),
             ),
           ),
@@ -225,7 +243,7 @@ class _MyPageViewState extends State<MyPageView> {
                 children: [
                   for (int i=0; i<widget.state.titleVotes.length; i++) // TitleVote 있을 때
                     GestureDetector(
-                      onLongPress: () {
+                      onTap: () {
                         showDialog<String>(
                           context: context,
                           builder: (BuildContext dialogContext) => AlertDialog(
@@ -640,9 +658,16 @@ class _MyPageViewState extends State<MyPageView> {
                               const Text('닉네임은 최대 10글자예요!'),
                               TextField(
                                 controller: _textController,
+                                maxLength: 10,
                                 onChanged: (text) {
                                   setState(() {}); // Rebuild the AlertDialog when text changes
                                 },
+                                decoration: InputDecoration(
+                                  hintText: "바꿀 닉네임을 작성해주세요!",
+                                  hintStyle: TextStyle(fontSize: SizeConfig.defaultSize * 1.4),
+                                  contentPadding: EdgeInsets.zero,
+                                  enabledBorder: UnderlineInputBorder(borderSide: BorderSide(width: 0.6)),
+                                ),
                               ),
                             ],
                           ),
@@ -742,7 +767,7 @@ class _MyPageViewState extends State<MyPageView> {
   }
 
   void shareContent(BuildContext context, String myCode) {
-    Share.share('엔대생에서 내가 널 칭찬 대상으로 투표하고 싶어! 앱에 들어와줘!\n내 코드는 $myCode 야. 나를 친구 추가하고 같이하자!\nhttps://dart.page.link/TG78\n\n내 코드 : $myCode');
+    Share.share('[엔대생] 엔대생에서 내가 널 칭찬 대상으로 투표하고 싶어! 앱에 들어와줘!\n내 코드는 $myCode 야. 나를 친구 추가하고 같이하자!\nhttps://dart.page.link/TG78\n\n내 코드 : $myCode');
     print("셰어");
   }
 

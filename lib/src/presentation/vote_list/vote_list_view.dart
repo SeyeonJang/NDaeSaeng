@@ -7,6 +7,7 @@ import 'package:dart_flutter/src/presentation/vote_list/viewmodel/vote_list_cubi
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 class VoteListView extends StatefulWidget {
   const VoteListView({Key? key}) : super(key: key);
@@ -24,6 +25,9 @@ class _VoteListViewState extends State<VoteListView> with SingleTickerProviderSt
   void initState() {
     super.initState();
     BlocProvider.of<VoteListCubit>(context).initVotes();
+
+    context.read<VoteListCubit>().pagingController.addPageRequestListener((pageKey) => context.read<VoteListCubit>().fetchPage(pageKey));
+    SchedulerBinding.instance!.addPostFrameCallback((_) => BlocProvider.of<VoteListCubit>(context).initVotes());
 
     _animationController = AnimationController(
       vsync: this,
@@ -44,6 +48,7 @@ class _VoteListViewState extends State<VoteListView> with SingleTickerProviderSt
 
   @override
   void dispose() {
+    context.read<VoteListCubit>().pagingController.dispose();
     _animationController.dispose();
     _scrollController.dispose();
     super.dispose();
@@ -53,75 +58,116 @@ class _VoteListViewState extends State<VoteListView> with SingleTickerProviderSt
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Padding(
-        padding: EdgeInsets.all(SizeConfig.defaultSize * 1.5),
-        child: BlocBuilder<VoteListCubit, VoteListState>(
-          builder: (context, state) {
-            if (state.votes.length == 0) {
-              return Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Container(
-                      child: GestureDetector(
-                        onTap: () {
-                          AnalyticsUtil.logEvent("투표목록_받은투표없음_아이콘터치");
-                        },
-                        child: AnimatedBuilder(
-                          animation: _animationController,
-                          builder: (context, child) {
-                            return Transform.scale(
-                              scale: _animation.value,
-                              child: Column(
-                                mainAxisAlignment:
-                                MainAxisAlignment.spaceBetween,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Image.asset(
-                                    'assets/images/letter.png',
-                                    // color: Colors.indigo,
-                                    width: SizeConfig.defaultSize * 30,
-                                  ),
-                                ],
+      body: BlocBuilder<VoteListCubit, VoteListState>(
+        builder: (context, state) {
+          return RefreshIndicator(
+            onRefresh: () async {
+              AnalyticsUtil.logEvent('받은투표_당겨서새로고침');
+              context.read<VoteListCubit>().initVotes();
+            },
+            child: SingleChildScrollView(
+              physics: AlwaysScrollableScrollPhysics(), // 스크롤 항상 가능하도록 설정
+              child: Container( // Flexible
+                height: SizeConfig.screenHeight * 0.8,
+                child: Padding(
+                    padding: EdgeInsets.all(SizeConfig.defaultSize * 1.5),
+                    child: (state.votes.length == 0)
+                        ? Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Container(
+                            child: GestureDetector(
+                              onTap: () {
+                                AnalyticsUtil.logEvent("투표목록_받은투표없음_아이콘터치");
+                              },
+                              child: AnimatedBuilder(
+                                animation: _animationController,
+                                builder: (context, child) {
+                                  return Transform.scale(
+                                    scale: _animation.value,
+                                    child: Column(
+                                      mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      children: [
+                                        Image.asset(
+                                          'assets/images/letter.png',
+                                          // color: Colors.indigo,
+                                          width: SizeConfig.defaultSize * 30,
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                },
                               ),
-                            );
-                          },
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              AnalyticsUtil.logEvent("투표목록_받은투표없음_텍스트터치");
+                            },
+                            child: Text("아직 받은 투표가 없어요!", style: TextStyle(
+                                fontSize: SizeConfig.defaultSize * 2, fontWeight: FontWeight.w600
+                            ),),
+                          ),
+                          SizedBox(height: SizeConfig.defaultSize *2,),
+                          GestureDetector(
+                            onTap: () {
+                              AnalyticsUtil.logEvent("투표목록_받은투표없음_텍스트터치");
+                            },
+                            child: Text("친구들이 나를 투표하면 알림을 줄게요!", style: TextStyle(
+                                fontSize: SizeConfig.defaultSize * 2, fontWeight: FontWeight.w600
+                            ),),
+                          ),
+                          // Container( // TODO HOTFIX : 투표 꿀팁 일단 보류 (넣으면 좋음)
+                          //   child: Column(
+                          //     children: [
+                          //       Text("투표를 많이 받는 꿀팁"),
+                          //       Text("Dart에서 이미지게임으로 친구들을 투표하면\n친구들에게 나의 존재를 알릴 수 있어요!\n투표를 하거나 친구들을 많이 초대해서 투표수를 늘려보세요!")
+                          //     ],
+                          //   ),
+                          // )
+                        ],
+                      ),
+                    )
+                        : RefreshIndicator(
+                      onRefresh: () async => context.read<VoteListCubit>().pagingController.refresh(),
+                      child: Container(
+                        height: SizeConfig.screenHeight * 1.5,
+                        child: PagedListView<int, VoteResponse>(
+                          pagingController: BlocProvider.of<VoteListCubit>(context).pagingController,
+                          builderDelegate: PagedChildBuilderDelegate<VoteResponse>(
+                            itemBuilder:
+                                (context, vote, index) {
+                              var timeago = TimeagoUtil().format(vote.pickedTime!);
+                              var visited = BlocProvider.of<VoteListCubit>(context).isVisited(vote.voteId!);
+                              return Column(
+                                children: [
+                                  dart(
+                                      voteId: vote.voteId!,
+                                      admissionYear: vote.pickingUser?.user?.admissionYear.toString() ?? "XXXX",
+                                      gender: vote.pickingUser?.user?.gender ?? "",
+                                      question: vote.question!.content ?? "(알수없음)",
+                                      datetime: timeago,
+                                      isVisited: visited,
+                                      questionId: vote.question!.questionId!
+                                  ),
+                                  SizedBox(height: SizeConfig.defaultSize * 1.4),
+                                ],
+                              );
+                            },
+                          ),
                         ),
                       ),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        AnalyticsUtil.logEvent("투표목록_받은투표없음_텍스트터치");
-                      },
-                      child: Text("아직 받은 투표가 없어요!", style: TextStyle(
-                          fontSize: SizeConfig.defaultSize * 2, fontWeight: FontWeight.w600
-                      ),),
-                    ),
-                    SizedBox(height: SizeConfig.defaultSize *2,),
-                    GestureDetector(
-                      onTap: () {
-                        AnalyticsUtil.logEvent("투표목록_받은투표없음_텍스트터치");
-                      },
-                      child: Text("친구들이 나를 투표하면 알림을 줄게요!", style: TextStyle(
-                          fontSize: SizeConfig.defaultSize * 2, fontWeight: FontWeight.w600
-                      ),),
-                    ),
-                    // Container( // TODO HOTFIX : 투표 꿀팁 일단 보류 (넣으면 좋음)
-                    //   child: Column(
-                    //     children: [
-                    //       Text("투표를 많이 받는 꿀팁"),
-                    //       Text("Dart에서 이미지게임으로 친구들을 투표하면\n친구들에게 나의 존재를 알릴 수 있어요!\n투표를 하거나 친구들을 많이 초대해서 투표수를 늘려보세요!")
-                    //     ],
-                    //   ),
-                    // )
-                  ],
+                    )
+
                 ),
-              );
-            }
-            return makeList(state.votes);
-          },
-        ),
+              ),
+            ),
+          );
+        }
       ),
     );
   }
@@ -198,7 +244,7 @@ class dart extends StatelessWidget {
           "투표한 사람 학번": admissionYear.substring(2,4),
           "투표한 시간": datetime
         });
-        // BlocProvider.of<VoteListCubit>(context).pressedVoteInList(voteId); // TODO : MVP 이후 복구하기 (힌트 & Point가 생겼을 때)
+        BlocProvider.of<VoteListCubit>(context).pressedVoteInList(voteId);
       },
       child: Container(
         padding: EdgeInsets.all(SizeConfig.defaultSize * 1),

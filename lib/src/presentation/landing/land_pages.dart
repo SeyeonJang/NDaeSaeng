@@ -60,7 +60,7 @@ class _LandPagesState extends State<LandPages> {
                       if (isAppleUser) {
                         launchUrl(Uri.parse("https://apps.apple.com/us/app/dart/id6451335598"));
                       } else {
-                        launchUrl(Uri.parse("https://play.google.com/store/apps/details?id=com.sshdart.dart_flutter"));
+                        launchUrl(Uri.parse("https://play.google.com/store/apps/details?id=com.sshdart.dart_flutter"), mode: LaunchMode.externalNonBrowserApplication);
                       }
                     },
                   ),
@@ -71,15 +71,15 @@ class _LandPagesState extends State<LandPages> {
 
           // 화면 그리기
           if (state.step == AuthStep.land) {
-            if (state.tutorialStatus == TutorialStatus.notShown) {
-              AnalyticsUtil.logEvent("온보딩슬라이드_접속");
-              return TutorialSlide(
-                onTutorialFinished: () {
-                  // 튜토리얼이 완료되면 AuthCubit을 사용하여 상태 변경
-                  BlocProvider.of<DartAuthCubit>(context).markTutorialShown();
-                },
-              );
-            }
+            // if (state.tutorialStatus == TutorialStatus.notShown) {
+            //   AnalyticsUtil.logEvent("온보딩슬라이드_접속");
+            //   return TutorialSlide(
+            //     onTutorialFinished: () {
+            //       // 튜토리얼이 완료되면 AuthCubit을 사용하여 상태 변경
+            //       BlocProvider.of<DartAuthCubit>(context).markTutorialShown();
+            //     },
+            //   );
+            // }
             AnalyticsUtil.logEvent("로그인_접속");
             return const LoginPage();
           }
@@ -99,6 +99,7 @@ class _LandPagesState extends State<LandPages> {
           if (state.step == AuthStep.login) {
             BlocProvider.of<DartAuthCubit>(context).setAnalyticsUserInformation();
             BlocProvider.of<DartAuthCubit>(context).setPushNotificationUserId();
+            AnalyticsUtil.logEvent("로그인_로그인성공");
             return BlocProvider<StandbyCubit>(
               create: (BuildContext context) => StandbyCubit()..initPages(),
               child: const StandbyLoading(),
