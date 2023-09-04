@@ -62,20 +62,23 @@ class _NoResponseSendViewState extends State<_NoResponseSendView> with SingleTic
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          SlideTransition(
-              position: _animation,
-              child: Image.asset('assets/images/chat_heart.png', width: SizeConfig.screenWidth * 0.3)
-          ),
-            SizedBox(height: SizeConfig.screenHeight * 0.1,),
-            SizedBox(height: SizeConfig.screenWidth * 0.1,),
-          Text("보낸 요청이 없어요!", style: TextStyle(fontSize: SizeConfig.defaultSize * 2, fontWeight: FontWeight.w600),),
-            SizedBox(height: SizeConfig.defaultSize,),
-          Text("과팅 탭에서 이성 팀에게 채팅을 보내보세요!", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.7),)
-        ],
+    return Container(
+      color: Colors.white,
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SlideTransition(
+                position: _animation,
+                child: Image.asset('assets/images/chat_heart.png', width: SizeConfig.screenWidth * 0.3)
+            ),
+              SizedBox(height: SizeConfig.screenHeight * 0.1,),
+              SizedBox(height: SizeConfig.screenWidth * 0.1,),
+            Text("보낸 요청이 없어요!", style: TextStyle(fontSize: SizeConfig.defaultSize * 2, fontWeight: FontWeight.w600),),
+              SizedBox(height: SizeConfig.defaultSize,),
+            Text("과팅 탭에서 이성 팀에게 채팅을 보내보세요!", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.7),)
+          ],
+        ),
       ),
     );
   }

@@ -64,19 +64,22 @@ class _NoChatViewState extends State<_NoChatView> with SingleTickerProviderState
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          SlideTransition(
-            position: _animation,
-            child: Image.asset('assets/images/chat_heart2.png', width: SizeConfig.screenWidth * 0.4)
-          ),
-            SizedBox(height: SizeConfig.screenHeight * 0.1,),
-          Text("아직 시작한 채팅이 없어요!", style: TextStyle(fontSize: SizeConfig.defaultSize * 2, fontWeight: FontWeight.w600),),
-            SizedBox(height: SizeConfig.defaultSize,),
-          Text("과팅 탭에서 이성 팀에게 채팅을 보내보세요!", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.7),)
-        ],
+    return Container(
+      color: Colors.white,
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SlideTransition(
+              position: _animation,
+              child: Image.asset('assets/images/chat_heart2.png', width: SizeConfig.screenWidth * 0.4)
+            ),
+              SizedBox(height: SizeConfig.screenHeight * 0.1,),
+            Text("아직 시작한 채팅이 없어요!", style: TextStyle(fontSize: SizeConfig.defaultSize * 2, fontWeight: FontWeight.w600),),
+              SizedBox(height: SizeConfig.defaultSize,),
+            Text("과팅 탭에서 이성 팀에게 채팅을 보내보세요!", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.7),)
+          ],
+        ),
       ),
     );
   }
