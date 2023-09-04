@@ -3,7 +3,6 @@ import 'package:dart_flutter/src/common/util/toast_util.dart';
 import 'package:dart_flutter/src/presentation/chat/chat_pages.dart';
 import 'package:dart_flutter/src/presentation/chat/viewmodel/chat_cubit.dart';
 import 'package:dart_flutter/src/presentation/meet/view/meet_board.dart';
-import 'package:dart_flutter/src/presentation/meet/view/meet_standby.dart';
 import 'package:dart_flutter/src/presentation/meet/viewmodel/meet_cubit.dart';
 import 'package:dart_flutter/src/presentation/mypage/mypages.dart';
 import 'package:dart_flutter/src/presentation/mypage/viewmodel/mypages_cubit.dart';
@@ -82,12 +81,16 @@ class _DartPageViewState extends State<DartPageView> {
     return Scaffold(
       backgroundColor: Colors.white,
 
-      body: Padding(
-        padding: EdgeInsets.only(top: SizeConfig.defaultSize * 6.5),
-        child: WillPopScope(
-          onWillPop: _onWillPop,
-          child: _tabs[_page]
-        ),
+      // body: Padding(
+      //   padding: EdgeInsets.only(top: SizeConfig.defaultSize * 6.5),
+      //   child: WillPopScope(
+      //     onWillPop: _onWillPop,
+      //     child: _tabs[_page]
+      //   ),
+      // ),
+      body: WillPopScope(
+        onWillPop: _onWillPop,
+        child: _tabs[_page],
       ),
 
       bottomNavigationBar: BottomNavigationBar(
