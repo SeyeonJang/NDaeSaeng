@@ -14,6 +14,34 @@ class MeetCubit extends Cubit<MeetState> {
   static final MeetUseCase _meetUseCase = MeetUseCase();
   bool _initialized = false;
 
+  void initMeet() async {
+    state.setIsLoading(true);
+    emit(state.copy());
+
+    User userResponse = await _userUseCase.myInfo();
+    state.setMyInfo(userResponse);
+
+    await getMyTeams(put: false);
+
+    state.setIsLoading(false);
+    emit(state.copy());
+  }
+
+  void initCreateTeam() async {
+    state.setIsLoading(true);
+    emit(state.copy());
+
+    List<User> friends = await _friendUseCase.getMyFriends();
+    state.setMyFriends(friends);
+    List<User> newFriends = await _friendUseCase.getRecommendedFriends();
+    state.setRecommendedFriends(newFriends);
+    List<Location> locations = await _meetUseCase.getLocations();
+    state.setServerLocations(locations);
+
+    state.setIsLoading(false);
+    emit(state.copy());
+  }
+
   void initState() async {
     print(_initialized);
     if (_initialized) return;
