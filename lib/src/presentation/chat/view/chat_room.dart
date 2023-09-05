@@ -2,7 +2,7 @@ import 'package:dart_flutter/res/config/size_config.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-const String _name = "이름";
+const String _name = "닉네임";
 
 class ChatRoom extends StatefulWidget {
   const ChatRoom({super.key});
@@ -187,11 +187,8 @@ class ChatMessage extends StatelessWidget {
   Widget build(BuildContext context) {
     // 위젯에 애니메이션을 발생하기 위해 SizeTransition을 추가
     return SizeTransition(
-      // 사용할 애니메이션 효과 설정
-      sizeFactor:
-      CurvedAnimation(parent: animationController, curve: Curves.easeOut),
+      sizeFactor: CurvedAnimation(parent: animationController, curve: Curves.ease),
       axisAlignment: 0.0,
-      // 리스트뷰에 추가될 컨테이너 위젯
       child: Container(
         margin: const EdgeInsets.symmetric(vertical: 10.0),
         child: Row(
@@ -200,9 +197,22 @@ class ChatMessage extends StatelessWidget {
             Container(
               margin: const EdgeInsets.only(right: 16.0),
               // 사용자명의 첫번째 글자를 서클 아바타로 표시
-              child: CircleAvatar(child: Text(_name[0])),
+              child: Container( // 버리는 사진
+                width: SizeConfig.defaultSize * 4,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                ),
+                child: Center(
+                  child: Image.asset(
+                    'assets/images/profile-mockup3.png',
+                    width: SizeConfig.defaultSize * 4, // 이미지 크기
+                    height: SizeConfig.defaultSize * 4,
+                  ),
+                ),
+              ),
             ),
-            Expanded(
+            Container(
+              width: SizeConfig.screenWidth * 0.65,
               // 컬럼 추가
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -212,7 +222,20 @@ class ChatMessage extends StatelessWidget {
                   // 입력받은 메시지 출력
                   Container(
                     margin: const EdgeInsets.only(top: 5.0),
-                    child: Text(text),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.only(bottomLeft: Radius.circular(12), bottomRight: Radius.circular(12), topRight: Radius.circular(12), topLeft: Radius.circular(3)),
+                      // color: Colors.grey.shade200,
+                      border: Border.all(
+                        color: Color(0xffFF5C58)
+                      )
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0), // 상하 및 좌우 공백 조절
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(text),
+                      ),
+                    ),
                   ),
                 ],
               ),
