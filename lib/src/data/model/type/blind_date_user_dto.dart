@@ -1,4 +1,6 @@
 
+import 'package:dart_flutter/src/domain/entity/type/blind_date_user.dart';
+
 class BlindDateUserDto {
   int? id;
   String? name;
@@ -6,6 +8,15 @@ class BlindDateUserDto {
   String? department;
 
   BlindDateUserDto({this.id, this.name, this.profileImageUrl, this.department});
+
+  BlindDateUser newBlindDateUser() {
+    return BlindDateUser(
+        id: id ?? 0,
+        name: name ?? "(알수없음)",
+        profileImageUrl: profileImageUrl ?? "DEFAULT",
+        department: department ?? "(알수없음)",
+    );
+  }
 
   BlindDateUserDto.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -15,11 +26,11 @@ class BlindDateUserDto {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['name'] = this.name;
-    data['profileImageUrl'] = this.profileImageUrl;
-    data['department'] = this.department;
+    final Map<String, dynamic> data = Map<String, dynamic>();
+    data['id'] = id;
+    data['name'] = name;
+    data['profileImageUrl'] = profileImageUrl;
+    data['department'] = department;
     return data;
   }
 
