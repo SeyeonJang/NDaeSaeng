@@ -33,7 +33,7 @@ class ChatGetOneTeamView extends StatelessWidget { // Component
                       Text("  21.5세", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.6),)
                     ],
                   ),
-                  Text("서울 인천", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.4),),
+                  Text("우리 팀 이름", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.4),),
                 ],
               ),
               SizedBox(height: SizeConfig.defaultSize * 1,),

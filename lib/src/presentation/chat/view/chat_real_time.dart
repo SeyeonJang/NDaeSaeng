@@ -13,7 +13,7 @@ class ChatRealTime extends StatelessWidget {
     return BlocBuilder<ChatCubit, ChatState>(
       builder: (context, state) {
         return Scaffold(
-          backgroundColor: Colors.grey.shade50,
+          backgroundColor: Colors.grey.shade200,
           body: SingleChildScrollView(
               child: Padding(
                 padding: EdgeInsets.all(SizeConfig.defaultSize),
