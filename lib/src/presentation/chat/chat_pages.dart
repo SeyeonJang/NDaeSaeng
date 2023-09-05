@@ -48,15 +48,30 @@ class _ChatPagesState extends State<ChatPages> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-            padding: EdgeInsets.only(left: SizeConfig.defaultSize * 1, right: SizeConfig.defaultSize * 1),
+            padding: EdgeInsets.only(left: SizeConfig.defaultSize * 1, right: SizeConfig.defaultSize * 1, top: SizeConfig.defaultSize),
             child: Container(
               width: SizeConfig.screenWidth * 0.7,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _TapBarButton(name: "실시간 채팅", targetPage: 0, nowPage: _page, onTapNavigation: _onTapNavigation),
-                  _TapBarButton(name: "받은 요청", targetPage: 1, nowPage: _page, onTapNavigation: _onTapNavigation),
-                  _TapBarButton(name: "보낸 요청", targetPage: 2, nowPage: _page, onTapNavigation: _onTapNavigation),
+                  Row(
+                    children: [
+                      SizedBox(width: SizeConfig.defaultSize,),
+                      Text("채팅", style: TextStyle(
+                          fontSize: SizeConfig.defaultSize * 1.8,
+                          fontWeight: FontWeight.w600
+                      ),),
+                    ],
+                  ),
+
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      _TapBarButton(name: "실시간 채팅", targetPage: 0, nowPage: _page, onTapNavigation: _onTapNavigation),
+                      _TapBarButton(name: "받은 요청", targetPage: 1, nowPage: _page, onTapNavigation: _onTapNavigation),
+                      _TapBarButton(name: "보낸 요청", targetPage: 2, nowPage: _page, onTapNavigation: _onTapNavigation),
+                    ],
+                  ),
                 ],
               ),
             ),
