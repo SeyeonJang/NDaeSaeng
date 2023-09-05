@@ -1,4 +1,5 @@
 import 'package:dart_flutter/src/presentation/meet/view/meet_my_team_detail.dart';
+import 'package:dart_flutter/src/presentation/meet/view/meet_other_team_detail.dart';
 import 'package:dart_flutter/src/presentation/meet/viewmodel/state/meet_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -29,6 +30,15 @@ class MeetOneTeamCardview extends StatelessWidget { // Component
           );
         } else {
           AnalyticsUtil.logEvent("과팅_목록_이성팀_터치");
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => BlocProvider<MeetCubit>(
+                create: (_) => MeetCubit(), // Replace with your MeetCubit instantiation.
+                child: const MeetOtherTeamDetail(),
+              ),
+            ),
+          );
         }
       },
       child: Container(

@@ -24,6 +24,8 @@ class MeetCubit extends Cubit<MeetState> {
     state.setMyFriends(friends);
     List<User> newFriends = await _friendUseCase.getRecommendedFriends();
     state.setRecommendedFriends(newFriends);
+    List<Location> locations = await _meetUseCase.getLocations();
+    state.setServerLocations(locations);
 
     await getMyTeams(put: false);
 
