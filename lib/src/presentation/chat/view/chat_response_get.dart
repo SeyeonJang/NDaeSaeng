@@ -1,4 +1,8 @@
+import 'package:dart_flutter/src/presentation/chat/view/chat_get_one_team_view.dart';
+import 'package:dart_flutter/src/presentation/chat/viewmodel/chat_cubit.dart';
+import 'package:dart_flutter/src/presentation/chat/viewmodel/state/chat_state.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../res/config/size_config.dart';
 
 class ChatResponseGet extends StatelessWidget {
@@ -6,9 +10,17 @@ class ChatResponseGet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.grey.shade50,
-      body: const _NoResponseGetView(),
+    return BlocBuilder<ChatCubit, ChatState>(
+      builder: (context, state) {
+        return Scaffold(
+          backgroundColor: Colors.grey.shade50,
+          body: Padding(
+            padding: EdgeInsets.all(SizeConfig.defaultSize),
+            child: ChatGetOneTeamView(chatState: state),
+          ),
+          // body: const _NoResponseGetView(),
+        );
+      }
     );
   }
 }

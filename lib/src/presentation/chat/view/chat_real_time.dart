@@ -1,17 +1,28 @@
 import 'package:dart_flutter/res/config/size_config.dart';
+import 'package:dart_flutter/src/presentation/chat/view/chat_real_time_one_team_view.dart';
+import 'package:dart_flutter/src/presentation/chat/viewmodel/chat_cubit.dart';
+import 'package:dart_flutter/src/presentation/chat/viewmodel/state/chat_state.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ChatRealTime extends StatelessWidget {
   const ChatRealTime({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.grey.shade50,
-      body: const _NoChatView(),
-      // body: SingleChildScrollView(
-      //   child: ,
-      // ),
+    return BlocBuilder<ChatCubit, ChatState>(
+      builder: (context, state) {
+        return Scaffold(
+          backgroundColor: Colors.grey.shade50,
+          body: SingleChildScrollView(
+              child: Padding(
+                padding: EdgeInsets.all(SizeConfig.defaultSize),
+                child: ChatRealTimeOneTeamView(chatState: state,),
+              ) // TODO : pagination
+          ),
+          // body: const _NoChatView(),
+        );
+      }
     );
   }
 }
