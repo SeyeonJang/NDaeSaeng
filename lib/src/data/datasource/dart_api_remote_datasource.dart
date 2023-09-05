@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:dart_flutter/res/environment/app_environment.dart';
 import 'package:dart_flutter/src/common/pagination/pagination.dart';
+import 'package:dart_flutter/src/data/model/blind_date_team_detail_dto.dart';
+import 'package:dart_flutter/src/data/model/blind_date_team_dto.dart';
 import 'package:dart_flutter/src/data/model/question_dto.dart';
 import 'package:dart_flutter/src/data/model/meet_team_request_dto.dart';
 import 'package:dart_flutter/src/data/model/title_vote_dto.dart';
@@ -250,14 +252,14 @@ class DartApiRemoteDataSource {
     return regions;
   }
 
-  // meet: 전체 신청 팀 수 조회
+  // team: 전체 신청 팀 수 조회
   static Future<int> getTeamCount() async {
     const path = '/v1/teams/count';
     final response = await _httpUtil.request().get(path);
     return response.data;
   }
 
-  // meet: 내 팀 목록 조회
+  // team: 내 팀 목록 조회
   static Future<List<MeetTeamResponseDto>> getMyTeams() async {
     const path = '/v1/users/me/teams';
     final response = await _httpUtil.request().get(path);
@@ -266,7 +268,7 @@ class DartApiRemoteDataSource {
     return teamResponses;
   }
 
-  // meet: 팀 상세 조회
+  // team: 내 팀 상세 조회
   static Future<MeetTeamResponseDto> getTeam(String teamId) async {
     const path = '/v1/users/me/teams';
     final pathUrl = "$path/$teamId";
@@ -275,7 +277,7 @@ class DartApiRemoteDataSource {
     return MeetTeamResponseDto.fromJson(response.data);
   }
 
-  // meet: 팀 생성하기
+  // team: 팀 생성하기
   static Future<MeetTeamResponseDto> postTeam(MeetTeamRequestDto teamRequestDto) async {
     const path = '/v1/teams';
     final body = teamRequestDto.toJson();
@@ -284,7 +286,7 @@ class DartApiRemoteDataSource {
     return MeetTeamResponseDto.fromJson(response.data);
   }
 
-  // meet: 팀 삭제하기
+  // team: 내 팀 삭제하기
   static Future<void> deleteTeam(String teamId) async {
     const path = '/v1/users/me/teams';
     final pathUrl = "$path/$teamId";
@@ -292,13 +294,33 @@ class DartApiRemoteDataSource {
     final response = await _httpUtil.request().delete(pathUrl);
   }
 
-  // meet: 팀 정보 업데이트
+  // team: 내 팀 정보 업데이트
   static Future<MeetTeamResponseDto> putTeam(MeetTeamRequestDto teamRequestDto) async {
     const path = '/v1/users/me/teams';
     final body = teamRequestDto.toJson();
 
     final response = await _httpUtil.request().put(path, data: body);
     return MeetTeamResponseDto.fromJson(response.data);
+  }
+
+  // team: 과팅 팀 리스트 조회하기
+  static Future<Pagination<BlindDateTeamDto>> getBlindDateTeams({int regionId = 0}) async {
+    const path = '/v1/teams';
+    final pathUrl = "$path?regionId=$regionId";
+
+    final response = await _httpUtil.request().get(pathUrl);
+
+    Pagination<BlindDateTeamDto> pagination = Pagination.fromJson(response.data, (item) => BlindDateTeamDto.fromJson(item));
+    return pagination;
+  }
+
+  // team: 과팅 팀 상세 조회하기
+  static Future<BlindDateTeamDetailDto> getBlindDateTeamDetail(int teamId) async {
+    const path = '/v1/teams';
+    final pathUrl = "$path/$teamId";
+
+    final response = await _httpUtil.request().get(pathUrl);
+    return BlindDateTeamDetailDto.fromJson(response.data);
   }
 
   static String _getPathFromUrl(String url) {
