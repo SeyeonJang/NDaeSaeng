@@ -20,6 +20,10 @@ class MeetCubit extends Cubit<MeetState> {
 
     User userResponse = await _userUseCase.myInfo();
     state.setMyInfo(userResponse);
+    List<User> friends = await _friendUseCase.getMyFriends();
+    state.setMyFriends(friends);
+    List<User> newFriends = await _friendUseCase.getRecommendedFriends();
+    state.setRecommendedFriends(newFriends);
 
     await getMyTeams(put: false);
 
@@ -31,6 +35,8 @@ class MeetCubit extends Cubit<MeetState> {
     state.setIsLoading(true);
     emit(state.copy());
 
+    User userResponse = await _userUseCase.myInfo();
+    state.setMyInfo(userResponse);
     List<User> friends = await _friendUseCase.getMyFriends();
     state.setMyFriends(friends);
     List<User> newFriends = await _friendUseCase.getRecommendedFriends();

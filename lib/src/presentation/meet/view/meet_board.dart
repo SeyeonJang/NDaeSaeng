@@ -8,60 +8,137 @@ import 'package:dart_flutter/src/presentation/meet/viewmodel/state/meet_state.da
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:dart_flutter/src/domain/entity/user.dart';
+import '../../../domain/entity/meet_team.dart';
 
 class MeetBoard extends StatelessWidget {
   const MeetBoard({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.grey.shade50,
+    return BlocBuilder<MeetCubit, MeetState>(
+      builder: (context, state) {
+        List<User> filteredFriends = state.friends.where((friend) =>
+        friend.university?.name == state.userResponse.university?.name &&
+            friend.personalInfo?.gender == state.userResponse.personalInfo?.gender
+        ).toList();
+        print("친구 수 : ${state.friends.length}, 과팅 같이 나갈 수 있는 친구 수 : ${filteredFriends.length}, 팀 개수 : ${state.teamCount}");
 
-      appBar: AppBar(
-        toolbarHeight: SizeConfig.defaultSize * 8.5,
-        backgroundColor: Colors.white,
-        title: BlocBuilder<MeetCubit, MeetState>(
-          builder: (context, state) {
-            return _TopSection(ancestorState: state);
-          }
-        ),
+        return Scaffold(
+          backgroundColor: Colors.grey.shade50,
+
+          appBar: AppBar(
+            toolbarHeight: SizeConfig.defaultSize * 8.5,
+            backgroundColor: Colors.white,
+            title: state.friends.isEmpty || filteredFriends.isEmpty
+                ? _TopSectionInvitedFriend(meetState: state,)
+                : (state.teamCount == 0 ? _TopSectionMakeTeam(meetState: state,) : _TopSection(ancestorState: state)),
+          ),
+
+          body: _BodySection(meetState: state,),
+
+          floatingActionButton: filteredFriends.isNotEmpty
+              ? FloatingActionButton(
+                  onPressed: () async {
+                    AnalyticsUtil.logEvent("과팅_목록_팀만들기버튼_터치");
+                    if (state.isLoading) {
+                      ToastUtil.showMeetToast("다시 터치해주세요!", 2);
+                      return;
+                    }
+                    await Navigator.push(context, PageTransition(type: PageTransitionType.rightToLeftJoined, child: MeetCreateTeam(
+                      onFinish: () {
+                        // context.read<MeetCubit>().refreshMeetPage();
+                      },
+                      state: state,
+                    ), childCurrent: this)).then((value) async {
+                      if (value == null) return;
+                      await context.read<MeetCubit>().createNewTeam(value);
+                    });
+                    // context.read<MeetCubit>().refreshMeetPage();
+                    Navigator.pop(context);
+                  },
+                  shape: CircleBorder(),
+                  child: Icon(Icons.add_rounded),
+                  backgroundColor: const Color(0xffFE6059),)
+              : null,
+        );
+      }
+    );
+  }
+}
+
+class _TopSectionMakeTeam extends StatelessWidget { // 팀 X 과팅 나갈 친구 O
+  final MeetState meetState;
+
+  _TopSectionMakeTeam({
+    super.key,
+    required this.meetState
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Column(
+        children: [
+          Text("팀 생성은 100% 무료! 지금 바로 팀을 만들 수 있어요!", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.4),),
+            SizedBox(height: SizeConfig.defaultSize * 0.5,),
+          Container(
+            width: SizeConfig.screenWidth,
+            height: SizeConfig.defaultSize * 5,
+            decoration: BoxDecoration(
+              color: Color(0xffFE6059),
+              borderRadius: BorderRadius.circular(10)),
+            child: Center(
+              child: Text("우리 학교 친구와 과팅 팀 만들기", style: TextStyle(
+                fontSize: SizeConfig.defaultSize * 1.9,
+                color: Colors.white,
+                fontWeight: FontWeight.w600
+              ),),
+            ),
+          )
+        ],
       ),
+    );
+  }
+}
 
-      body: BlocBuilder<MeetCubit, MeetState>(
-        builder: (context, state) {
-          return _BodySection(meetState: state,);
-        }
-      ),
+class _TopSectionInvitedFriend extends StatelessWidget { // 친구 O/X, 과팅 나갈 친구 X
+ final MeetState meetState;
 
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          AnalyticsUtil.logEvent("과팅_목록_팀만들기버튼_터치");
-          if (context.read<MeetCubit>().state.isLoading) {
-            ToastUtil.showMeetToast("다시 터치해주세요!", 2);
-            return;
-          }
-          await Navigator.push(context, PageTransition(type: PageTransitionType.rightToLeftJoined, child: MeetCreateTeam(
-            onFinish: () {
-              // context.read<MeetCubit>().refreshMeetPage();
-            },
-            state: context.read<MeetCubit>().state,
-          ), childCurrent: this)).then((value) async {
-            if (value == null) return;
-            await context.read<MeetCubit>().createNewTeam(value);
-          });
-          // context.read<MeetCubit>().refreshMeetPage();
-          Navigator.pop(context);
-        },
-        shape: CircleBorder(),
-        child: Icon(Icons.add_rounded),
-        backgroundColor: const Color(0xffFE6059),
+  _TopSectionInvitedFriend({
+    super.key,
+    required this.meetState
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Column(
+        children: [
+          Text("친구 1명만 초대해도 바로 팀을 만들 수 있어요!", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.4),),
+          SizedBox(height: SizeConfig.defaultSize * 0.5,),
+          Container(
+            width: SizeConfig.screenWidth,
+            height: SizeConfig.defaultSize * 5,
+            decoration: BoxDecoration(
+                color: Color(0xffFE6059),
+                borderRadius: BorderRadius.circular(10)),
+            child: Center(
+              child: Text("한 명 초대하고 10초만에 과팅 등록하기", style: TextStyle(
+                  fontSize: SizeConfig.defaultSize * 1.9,
+                  color: Colors.white,
+                  fontWeight: FontWeight.w600
+              ),),
+            ),
+          )
+        ],
       ),
     );
   }
 }
 
 class _BodySection extends StatelessWidget {
-  MeetState meetState;
+  final MeetState meetState;
 
   _BodySection({
     super.key,
@@ -75,6 +152,7 @@ class _BodySection extends StatelessWidget {
         padding: EdgeInsets.symmetric(horizontal: SizeConfig.defaultSize * 1, vertical: SizeConfig.defaultSize),
         child: Column(
           children: [
+            // TODO : 팀이 있으면 우리 팀 나오고 없으면 안 나오기 (TopBar에서 선택된 팀이 나오도록 하기)
             MeetOneTeamCardview(meetState: meetState, isMyTeam: true), // 우리팀
             Column(
               children: [
@@ -90,7 +168,7 @@ class _BodySection extends StatelessWidget {
 }
 
 class _TopSection extends StatefulWidget {
-  MeetState ancestorState;
+  final MeetState ancestorState;
 
   _TopSection({
     super.key,
@@ -102,11 +180,18 @@ class _TopSection extends StatefulWidget {
 }
 
 class _TopSectionState extends State<_TopSection> {
+  late String selectedTeamName; // Add this line
+  late List<MeetTeam> myTeams;
+
+  @override
+  void initState() {
+    super.initState();
+    selectedTeamName = widget.ancestorState.myTeams[0].name; // Initialize in initState()
+    myTeams = widget.ancestorState.myTeams;
+  }
+
   @override
   Widget build(BuildContext context) {
-    String selectedTeamName = "팀 1 dddddddddd"; // 초기 선택된 팀 이름
-    List<String> teamNames = ["팀 1 dddddddddd", "팀 2", "팀 3", "팀 4"]; // Mockup 팀 이름 목록
-
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: SizeConfig.defaultSize * 0.5),
       child: Column(
@@ -131,11 +216,11 @@ class _TopSectionState extends State<_TopSection> {
                         selectedTeamName = newValue!;
                       });
                     },
-                    items: teamNames.map((teamName) {
+                    items: myTeams.map((myTeam) {
                       return DropdownMenuItem<String>(
-                        value: teamName,
+                        value: myTeam.name,
                         child: Text(
-                          teamName,
+                          myTeam.name,
                           style: TextStyle(
                             fontSize: SizeConfig.defaultSize * 1.6,
                             fontWeight: FontWeight.w500,
