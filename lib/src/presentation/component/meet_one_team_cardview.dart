@@ -1,18 +1,17 @@
+import 'package:dart_flutter/src/domain/entity/blind_date_team.dart';
 import 'package:dart_flutter/src/presentation/meet/view/meet_my_team_detail.dart';
 import 'package:dart_flutter/src/presentation/meet/view/meet_other_team_detail.dart';
-import 'package:dart_flutter/src/presentation/meet/viewmodel/state/meet_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../res/config/size_config.dart';
 import '../../common/util/analytics_util.dart';
 import '../meet/viewmodel/meet_cubit.dart';
 
-class MeetOneTeamCardview extends StatelessWidget { // Component
-  final MeetState meetState;
+class MeetOneTeamCardview extends StatelessWidget {
+  final BlindDateTeam team;
   final bool isMyTeam;
 
-  const MeetOneTeamCardview({super.key, required this.meetState, required this.isMyTeam});
-
+  const MeetOneTeamCardview({super.key, required this.team, required this.isMyTeam});
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -48,8 +47,16 @@ class MeetOneTeamCardview extends StatelessWidget { // Component
           borderRadius: BorderRadius.circular(10),
           color: Colors.white,
           border: Border.all(
-            color: isMyTeam ? Color(0xffFE6059) : Colors.white
-          )
+            color: isMyTeam ? Color(0xffFE6059) : Colors.white,
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.shade300,
+              spreadRadius: 0,
+              blurRadius: 2.0,
+              offset: Offset(0,2), // changes position of shadow
+            ),
+          ],
         ),
         child: Padding( // Container 내부 패딩
           padding: EdgeInsets.symmetric(vertical: SizeConfig.defaultSize * 1.2, horizontal: SizeConfig.defaultSize * 1.5),
@@ -61,11 +68,18 @@ class MeetOneTeamCardview extends StatelessWidget { // Component
                 children: [
                   Row(
                     children: [
-                      Text("팀 이름", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.6, fontWeight: FontWeight.w600),),
-                      Text("  21.5세", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.6),)
+                      Text(team.name, style: TextStyle(fontSize: SizeConfig.defaultSize * 1.6, fontWeight: FontWeight.w600),),
+                      Text("  ${(2023-team.averageBirthYear+1).toStringAsFixed(1)}세", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.6),)
                     ],
                   ),
-                  Text("서울 인천", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.4),),
+                  Container(
+                    width: SizeConfig.screenWidth * 0.3,
+                    // color: Colors.red,
+                    alignment: Alignment.centerRight,
+                    child: Text(team.regions.map((location) => location.name).join(' '),
+                      style: TextStyle(fontSize: SizeConfig.defaultSize * 1.4, overflow: TextOverflow.ellipsis, color: Colors.grey),
+                      maxLines: 1,)
+                  ),
                 ],
               ),
               SizedBox(height: SizeConfig.defaultSize * 1,),
@@ -117,15 +131,20 @@ class MeetOneTeamCardview extends StatelessWidget { // Component
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            Text("${meetState.userResponse.university?.name ?? '학교를 불러오지 못했어요'}",
+                            Text(team.universityName,
                               style: TextStyle(fontSize: SizeConfig.defaultSize * 1.4, fontWeight: FontWeight.w600),),
-                            if (meetState.userResponse.personalInfo?.verification.isVerificationSuccess ?? false)
+                            Text(" "),
+                            if (team.isCertifiedTeam)
                               Image.asset("assets/images/check.png", width: SizeConfig.defaultSize * 1.3),
                           ],
                         ),
-                        Text("${meetState.userResponse.university?.department ?? '학과를 불러오지 못했어요'}",
-                          style: TextStyle(fontSize: SizeConfig.defaultSize * 1.4, overflow: TextOverflow.ellipsis),)
+                        Container(
+                          width: SizeConfig.defaultSize * 24,
+                          child: Text(team.teamUsers.map((user) => user.department).toSet().fold('', (previousValue, element) => previousValue.isEmpty ? element : '$previousValue & $element'),
+                            style: TextStyle(fontSize: SizeConfig.defaultSize * 1.3, overflow: TextOverflow.ellipsis, color: Color(0xffFE6059), fontWeight: FontWeight.w600),),
+                        )
                       ],
                     ),
                   )

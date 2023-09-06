@@ -1,12 +1,15 @@
 import 'package:dart_flutter/res/config/size_config.dart';
 import 'package:dart_flutter/src/common/util/analytics_util.dart';
 import 'package:dart_flutter/src/common/util/toast_util.dart';
+import 'package:dart_flutter/src/domain/entity/blind_date_team.dart';
 import 'package:dart_flutter/src/presentation/meet/view/meet_create_team.dart';
 import 'package:dart_flutter/src/presentation/component/meet_one_team_cardview.dart';
 import 'package:dart_flutter/src/presentation/meet/viewmodel/meet_cubit.dart';
 import 'package:dart_flutter/src/presentation/meet/viewmodel/state/meet_state.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:dart_flutter/src/domain/entity/user.dart';
 import '../../../domain/entity/meet_team.dart';
@@ -31,11 +34,14 @@ class MeetBoard extends StatelessWidget {
             toolbarHeight: SizeConfig.defaultSize * 8.5,
             backgroundColor: Colors.white,
             title: state.friends.isEmpty || filteredFriends.isEmpty
-                ? _TopSectionInvitedFriend(meetState: state,)
+                ? _TopSectionInviteFriend(meetState: state,)
                 : (state.teamCount == 0 ? _TopSectionMakeTeam(meetState: state,) : _TopSection(ancestorState: state)),
           ),
 
-          body: _BodySection(meetState: state,),
+          body: RefreshIndicator(
+            onRefresh: () async => context.read<MeetCubit>().pagingController.refresh(),
+            child: _BodySection(meetState: state,)
+          ),
 
           floatingActionButton: filteredFriends.isNotEmpty
               ? FloatingActionButton(
@@ -80,20 +86,23 @@ class _TopSectionMakeTeam extends StatelessWidget { // 팀 X 과팅 나갈 친�
     return Center(
       child: Column(
         children: [
-          Text("팀 생성은 100% 무료! 지금 바로 팀을 만들 수 있어요!", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.4),),
+          Text("팀 생성 무제한 무료! 지금 바로 팀을 만들 수 있어요!", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.4),),
             SizedBox(height: SizeConfig.defaultSize * 0.5,),
-          Container(
-            width: SizeConfig.screenWidth,
-            height: SizeConfig.defaultSize * 5,
-            decoration: BoxDecoration(
-              color: Color(0xffFE6059),
-              borderRadius: BorderRadius.circular(10)),
-            child: Center(
-              child: Text("우리 학교 친구와 과팅 팀 만들기", style: TextStyle(
-                fontSize: SizeConfig.defaultSize * 1.9,
-                color: Colors.white,
-                fontWeight: FontWeight.w600
-              ),),
+          GestureDetector(
+            onTap: () {},
+            child: Container(
+              width: SizeConfig.screenWidth,
+              height: SizeConfig.defaultSize * 5,
+              decoration: BoxDecoration(
+                color: Color(0xffFE6059),
+                borderRadius: BorderRadius.circular(10)),
+              child: Center(
+                child: Text("우리 학교 친구와 과팅 팀 만들기", style: TextStyle(
+                  fontSize: SizeConfig.defaultSize * 1.9,
+                  color: Colors.white,
+                  fontWeight: FontWeight.w600
+                ),),
+              ),
             ),
           )
         ],
@@ -102,10 +111,10 @@ class _TopSectionMakeTeam extends StatelessWidget { // 팀 X 과팅 나갈 친�
   }
 }
 
-class _TopSectionInvitedFriend extends StatelessWidget { // 친구 O/X, 과팅 나갈 친구 X
+class _TopSectionInviteFriend extends StatelessWidget { // 친구 O/X, 과팅 나갈 친구 X
  final MeetState meetState;
 
-  _TopSectionInvitedFriend({
+  _TopSectionInviteFriend({
     super.key,
     required this.meetState
   });
@@ -137,7 +146,7 @@ class _TopSectionInvitedFriend extends StatelessWidget { // 친구 O/X, 과팅 �
   }
 }
 
-class _BodySection extends StatelessWidget {
+class _BodySection extends StatefulWidget {
   final MeetState meetState;
 
   _BodySection({
@@ -146,22 +155,51 @@ class _BodySection extends StatelessWidget {
   });
 
   @override
+  State<_BodySection> createState() => _BodySectionState();
+}
+
+class _BodySectionState extends State<_BodySection> {
+  @override
+  void initState() {
+    super.initState();
+    context.read<MeetCubit>().pagingController.addPageRequestListener((pageKey) => context.read<MeetCubit>().fetchPage(pageKey));
+    SchedulerBinding.instance!.addPostFrameCallback((_) => BlocProvider.of<MeetCubit>(context).initMeet());
+  }
+
+  @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: SizeConfig.defaultSize * 1, vertical: SizeConfig.defaultSize),
-        child: Column(
-          children: [
-            // TODO : 팀이 있으면 우리 팀 나오고 없으면 안 나오기 (TopBar에서 선택된 팀이 나오도록 하기)
-            MeetOneTeamCardview(meetState: meetState, isMyTeam: true), // 우리팀
-            Column(
-              children: [
-                SizedBox(height: SizeConfig.defaultSize * 0.6,),
-                MeetOneTeamCardview(meetState: meetState, isMyTeam: false) // 이성팀 for문
-              ],
-            )
-          ],
-        )
+      physics: AlwaysScrollableScrollPhysics(),
+      child: Container(
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: SizeConfig.defaultSize * 1, vertical: SizeConfig.defaultSize),
+          child: Column(
+            children: [
+              // TODO : 팀이 있으면 우리 팀 나오고 없으면 안 나오기 (TopBar에서 선택된 팀이 나오도록 하기)
+              // MeetOneTeamCardview(team: BlindMeetTeam{}, isMyTeam: true), // 우리팀
+
+              widget.meetState.blindDateTeams.length == 0
+                ? Text("이성 팀이 아직 없어요!")
+                : Container(
+                  height: SizeConfig.screenHeight * 1.5,
+                  child: PagedListView<int, BlindDateTeam>(
+                      pagingController: context.read<MeetCubit>().pagingController,
+                      builderDelegate: PagedChildBuilderDelegate<BlindDateTeam>(
+                        itemBuilder: (context, blindDateTeam, index) {
+                          return Column(
+                            children: [
+                                SizedBox(height: SizeConfig.defaultSize * 0.6,),
+                              MeetOneTeamCardview(team: blindDateTeam, isMyTeam: false)
+                            ],
+                          );
+                          // return Text(index.toString());
+                        }
+                      )
+                  )
+              )
+            ],
+          )
+        ),
       ),
     );
   }
