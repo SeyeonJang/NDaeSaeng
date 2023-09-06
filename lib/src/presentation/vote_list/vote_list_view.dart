@@ -171,39 +171,6 @@ class _VoteListViewState extends State<VoteListView> with SingleTickerProviderSt
       ),
     );
   }
-
-  ListView makeList(List<VoteResponse> snapshot) {
-    SchedulerBinding.instance!.addPostFrameCallback((_) {
-      _scrollController
-          .jumpTo(_scrollController.position.maxScrollExtent);
-    });
-
-    return ListView.builder(
-      controller: _scrollController,
-      reverse: true,
-      shrinkWrap: true,
-      itemBuilder: (context, index) {
-        var vote = snapshot[index];
-        var timeago = TimeagoUtil().format(vote.pickedTime!);
-        var visited = BlocProvider.of<VoteListCubit>(context).isVisited(vote.voteId!);
-        return Column(
-          children: [
-            dart(
-              voteId: vote.voteId!,
-              admissionYear: vote.pickingUser?.user?.admissionYear.toString() ?? "XXXX",
-              gender: vote.pickingUser?.user?.gender ?? "",
-              question: vote.question!.content ?? "(알수없음)",
-              datetime: timeago,
-              isVisited: visited,
-              questionId: vote.question!.questionId!
-            ),
-            SizedBox(height: SizeConfig.defaultSize * 1.4),
-          ],
-        );
-      },
-      itemCount: snapshot.length,
-    );
-  }
 }
 
 class dart extends StatelessWidget {

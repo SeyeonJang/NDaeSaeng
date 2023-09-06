@@ -112,7 +112,7 @@ class MeetOneTeamCardview extends StatelessWidget {
                             ),
                           ),
                         ),
-                        for (int i = 2; i >= 0 ; i--)
+                        for (int i = team.teamUsers.length-1; i >= 0 ; i--)
                           Positioned(
                             left: i * SizeConfig.defaultSize * 3,
                             child: Container(
@@ -121,13 +121,9 @@ class MeetOneTeamCardview extends StatelessWidget {
                                 shape: BoxShape.circle,
                               ),
                               child: Center(
-                                child: Image.asset(
-                                  i == 0
-                                      ? 'assets/images/profile-mockup.png'
-                                      : (i == 1 ? 'assets/images/profile-mockup2.png' : 'assets/images/profile-mockup3.png'), // 이미지 경로를 각 이미지에 맞게 설정
-                                  width: SizeConfig.defaultSize * 4, // 이미지 크기
-                                  height: SizeConfig.defaultSize * 4,
-                                ),
+                                child: team.teamUsers[i].profileImageUrl == "DEFAULT" || team.teamUsers[i].profileImageUrl.startsWith("https://")
+                                  ? Image.asset('assets/images/profile-mockup3.png', width: SizeConfig.defaultSize * 4, height: SizeConfig.defaultSize * 4, fit: BoxFit.cover,)
+                                  : Image.network(team.teamUsers[i].profileImageUrl, width: SizeConfig.defaultSize * 4, height: SizeConfig.defaultSize * 4, fit: BoxFit.cover,)
                               ),
                             ),
                           ),

@@ -14,8 +14,26 @@ import 'package:page_transition/page_transition.dart';
 import 'package:dart_flutter/src/domain/entity/user.dart';
 import '../../../domain/entity/meet_team.dart';
 
-class MeetBoard extends StatelessWidget {
+class MeetBoard extends StatefulWidget {
   const MeetBoard({super.key});
+
+  @override
+  State<MeetBoard> createState() => _MeetBoardState();
+}
+
+class _MeetBoardState extends State<MeetBoard> {
+  @override
+  void initState() {
+    super.initState();
+    context.read<MeetCubit>().pagingController.addPageRequestListener((pageKey) => context.read<MeetCubit>().fetchPage(pageKey));
+    SchedulerBinding.instance!.addPostFrameCallback((_) => context.read<MeetCubit>().initMeet());
+  }
+
+  @override
+  void dispose() {
+    context.read<MeetCubit>().pagingController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,48 +44,63 @@ class MeetBoard extends StatelessWidget {
             friend.personalInfo?.gender == state.userResponse.personalInfo?.gender
         ).toList();
         print("친구 수 : ${state.friends.length}, 과팅 같이 나갈 수 있는 친구 수 : ${filteredFriends.length}, 팀 개수 : ${state.teamCount}");
+        PagingController<int, BlindDateTeam> pagingController = context.read<MeetCubit>().pagingController;
 
-        return Scaffold(
-          backgroundColor: Colors.grey.shade50,
+        return (state.isLoading)
+          ? Scaffold(
+              appBar: AppBar(),
+              body: Container(
+                width: SizeConfig.screenWidth,
+                height: SizeConfig.screenHeight,
+                color: Colors.white,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    CircularProgressIndicator(color: Color(0xffFE6059)),
+                    SizedBox(height: SizeConfig.defaultSize * 5,),
+                    Text("이성 팀을 불러오고 있어요 . . . 🥰", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.8),)
+                  ],
+                ),
+              ),
+            )
+          : Scaffold(
+              backgroundColor: Colors.grey.shade50,
 
-          appBar: AppBar(
-            toolbarHeight: SizeConfig.defaultSize * 8.5,
-            backgroundColor: Colors.white,
-            title: state.friends.isEmpty || filteredFriends.isEmpty
-                ? _TopSectionInviteFriend(meetState: state,)
-                : (state.teamCount == 0 ? _TopSectionMakeTeam(meetState: state,) : _TopSection(ancestorState: state)),
-          ),
+              appBar: AppBar(
+                toolbarHeight: SizeConfig.defaultSize * 8.5,
+                backgroundColor: Colors.white,
+                title: state.friends.isEmpty || filteredFriends.isEmpty
+                    ? _TopSectionInviteFriend(meetState: state,)
+                    : (state.teamCount == 0 ? _TopSectionMakeTeam(meetState: state,) : _TopSection(ancestorState: state)),
+              ),
 
-          body: RefreshIndicator(
-            onRefresh: () async => context.read<MeetCubit>().pagingController.refresh(),
-            child: _BodySection(meetState: state,)
-          ),
+              body: _BodySection(meetState: state, context: context, pagingController: pagingController,),
 
-          floatingActionButton: filteredFriends.isNotEmpty
-              ? FloatingActionButton(
-                  onPressed: () async {
-                    AnalyticsUtil.logEvent("과팅_목록_팀만들기버튼_터치");
-                    if (state.isLoading) {
-                      ToastUtil.showMeetToast("다시 터치해주세요!", 2);
-                      return;
-                    }
-                    await Navigator.push(context, PageTransition(type: PageTransitionType.rightToLeftJoined, child: MeetCreateTeam(
-                      onFinish: () {
+              floatingActionButton: filteredFriends.isNotEmpty
+                  ? FloatingActionButton(
+                      onPressed: () async {
+                        AnalyticsUtil.logEvent("과팅_목록_팀만들기버튼_터치");
+                        if (state.isLoading) {
+                          ToastUtil.showMeetToast("다시 터치해주세요!", 2);
+                          return;
+                        }
+                        final meetCubit = context.read<MeetCubit>(); // MeetCubit 인스턴스 가져오기
+                        await Navigator.push(context, PageTransition(type: PageTransitionType.rightToLeftJoined, child: MeetCreateTeam(
+                          onFinish: () { meetCubit.initMeet(); },
+                          state: state,
+                        ), childCurrent: widget)).then((value) async {
+                          if (value == null) return;
+                          await context.read<MeetCubit>().createNewTeam(value);
+                        });
                         context.read<MeetCubit>().initMeet();
+                        Navigator.pop(context);
                       },
-                      state: state,
-                    ), childCurrent: this)).then((value) async {
-                      if (value == null) return;
-                      await context.read<MeetCubit>().createNewTeam(value);
-                    });
-                    context.read<MeetCubit>().initMeet();
-                    Navigator.pop(context);
-                  },
-                  shape: CircleBorder(),
-                  child: Icon(Icons.add_rounded),
-                  backgroundColor: const Color(0xffFE6059),)
-              : null,
-        );
+                      shape: CircleBorder(),
+                      child: Icon(Icons.add_rounded),
+                      backgroundColor: const Color(0xffFE6059),
+                    )
+                    : null,
+          );
       }
     );
   }
@@ -148,10 +181,14 @@ class _TopSectionInviteFriend extends StatelessWidget { // 친구 O/X, 과팅 �
 
 class _BodySection extends StatefulWidget {
   final MeetState meetState;
+  final BuildContext context;
+  PagingController<int, BlindDateTeam> pagingController;
 
   _BodySection({
     super.key,
-    required this.meetState
+    required this.meetState,
+    required this.context,
+    required this.pagingController
   });
 
   @override
@@ -159,46 +196,68 @@ class _BodySection extends StatefulWidget {
 }
 
 class _BodySectionState extends State<_BodySection> {
+  late MeetCubit meetCubit;
+  final ScrollController _scrollController = ScrollController();
+
   @override
   void initState() {
     super.initState();
-    context.read<MeetCubit>().pagingController.addPageRequestListener((pageKey) => context.read<MeetCubit>().fetchPage(pageKey));
-    SchedulerBinding.instance!.addPostFrameCallback((_) => BlocProvider.of<MeetCubit>(context).initMeet());
+    _scrollController.addListener(() {
+      // 아래로 스크롤할 때 실행되는 콜백 함수
+      if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
+        // 스크롤이 가장 아래에 도달하면 아래 방향 새로 고침 실행
+        widget.pagingController.refresh();
+      }
+    });
   }
 
+  // @override
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      physics: AlwaysScrollableScrollPhysics(),
-      child: Container(
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: SizeConfig.defaultSize * 1, vertical: SizeConfig.defaultSize),
-          child: Column(
-            children: [
-              // TODO : 팀이 있으면 우리 팀 나오고 없으면 안 나오기 (TopBar에서 선택된 팀이 나오도록 하기)
-              // MeetOneTeamCardview(team: BlindMeetTeam{}, isMyTeam: true), // 우리팀
+    return RefreshIndicator(
+      onRefresh: () async {
+        context.read<MeetCubit>().initMeet();
+      },
+      child: SingleChildScrollView(
+        physics: AlwaysScrollableScrollPhysics(),
+        controller: _scrollController,
+        child: Container(
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: SizeConfig.defaultSize * 1, vertical: SizeConfig.defaultSize),
+            child: Column(
+              children: [
+                // TODO : 팀이 있으면 우리 팀 나오고 없으면 안 나오기 (TopBar에서 선택된 팀이 나오도록 하기)
+                // MeetOneTeamCardview(team: BlindMeetTeam{}, isMyTeam: true), // 우리팀
 
-              widget.meetState.blindDateTeams.length == 0
-                ? Text("이성 팀이 아직 없어요!")
-                : Container(
-                  height: SizeConfig.screenHeight * 1.5,
-                  child: PagedListView<int, BlindDateTeam>(
-                    pagingController: context.read<MeetCubit>().pagingController,
-                    builderDelegate: PagedChildBuilderDelegate<BlindDateTeam>(
-                      itemBuilder: (context, blindDateTeam, index) {
-                        return Column(
-                          children: [
-                              SizedBox(height: SizeConfig.defaultSize * 0.6,),
-                            MeetOneTeamCardview(team: blindDateTeam, isMyTeam: false, myTeamCount: widget.meetState.teamCount,)
-                          ],
-                        );
-                        // return Text(index.toString());
-                      }
-                    )
-                  )
-              )
-            ],
-          )
+                // 팀 오는지 확인
+                // for (int i=0; i<widget.meetState.blindDateTeams.length; i++)
+                //   Text(widget.meetState.blindDateTeams[i].name),
+
+                widget.meetState.blindDateTeams.length == 0
+                  ? Text("이성 팀이 아직 없어요!")
+                  : RefreshIndicator(
+                    onRefresh: () async => widget.pagingController.refresh(),
+                    child: Container(
+                      height: SizeConfig.screenHeight * 0.7,
+                      child: PagedListView<int, BlindDateTeam>(
+                        pagingController: widget.pagingController,
+                        builderDelegate: PagedChildBuilderDelegate<BlindDateTeam>(
+                            itemBuilder: (context, blindDateTeam, index) {
+                              return Column(
+                                children: [
+                                  SizedBox(height: SizeConfig.defaultSize * 0.6,),
+                                  MeetOneTeamCardview(team: blindDateTeam, isMyTeam: false, myTeamCount: widget.meetState.teamCount,)
+                                ],
+                              );
+                            },
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: SizeConfig.defaultSize * 20)
+              ],
+            )
+          ),
         ),
       ),
     );
