@@ -16,7 +16,6 @@ VoteListState _$VoteListStateFromJson(Map<String, dynamic> json) =>
       visited: (json['visited'] as Map<String, dynamic>).map(
         (k, e) => MapEntry(int.parse(k), e as bool),
       ),
-      isDetailPage: json['isDetailPage'] as bool,
       nowVoteId: json['nowVoteId'] as int,
           userMe: User(
                 personalInfo: null,
@@ -31,6 +30,5 @@ Map<String, dynamic> _$VoteListStateToJson(VoteListState instance) =>
       'votes': instance.votes,
       'visited': instance.visited.map((k, e) => MapEntry(k.toString(), e)),
       'isFirstTime': instance.isFirstTime,
-      'isDetailPage': instance.isDetailPage,
       'nowVoteId': instance.nowVoteId,
     };
