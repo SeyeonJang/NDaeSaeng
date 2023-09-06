@@ -40,7 +40,6 @@ class DartVoteRepositoryImpl implements VoteRepository {
 
   @override
   Future<VoteDetail> getVote(int voteId) async {
-    print('VoteDetail : ${(await DartApiRemoteDataSource.getVote(voteId)).newVoteDetail()}');
     return (await DartApiRemoteDataSource.getVote(voteId)).newVoteDetail();
   }
 
