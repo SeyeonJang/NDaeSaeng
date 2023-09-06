@@ -1,11 +1,17 @@
+import 'package:dart_flutter/src/domain/entity/blind_date_team.dart';
 import 'package:dart_flutter/src/domain/entity/location.dart';
 import 'package:dart_flutter/src/domain/entity/meet_team.dart';
 import 'package:dart_flutter/src/domain/use_case/meet_use_case.dart';
 import 'package:dart_flutter/src/presentation/meet/viewmodel/state/meet_state.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:dart_flutter/src/domain/entity/user.dart';
 import 'package:dart_flutter/src/domain/use_case/user_use_case.dart';
 import 'package:dart_flutter/src/domain/use_case/friend_use_case.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+
+import '../../../common/pagination/pagination.dart';
+import '../../../common/util/analytics_util.dart';
 
 class MeetCubit extends Cubit<MeetState> {
   MeetCubit() : super(MeetState.init());
@@ -14,7 +20,16 @@ class MeetCubit extends Cubit<MeetState> {
   static final MeetUseCase _meetUseCase = MeetUseCase();
   bool _initialized = false;
 
+  // pagination
+  late int _numberOfPostsPerRequest;
+  final PagingController<int, BlindDateTeam> pagingController = PagingController(firstPageKey: 0);
+
   void initMeet() async {
+    state.setIsLoading(true);
+    emit(state.copy());
+
+    state.setIsLoading(false);
+    emit(state.copy());
     state.setIsLoading(true);
     emit(state.copy());
 
@@ -26,6 +41,14 @@ class MeetCubit extends Cubit<MeetState> {
     state.setRecommendedFriends(newFriends);
     List<Location> locations = await _meetUseCase.getLocations();
     state.setServerLocations(locations);
+
+    Pagination<BlindDateTeam> paginationBlindTeams = await _meetUseCase.getBlindDateTeams(page:0, targetLocationId: 0);
+    _numberOfPostsPerRequest = paginationBlindTeams.numberOfElements ?? 10;
+    List<BlindDateTeam> blindDateTeams = paginationBlindTeams.content ?? [];
+    state.setBlindDateTeams(blindDateTeams);
+
+    print("=========================");
+    print(state.blindDateTeams.toString());
 
     await getMyTeams(put: false);
 
@@ -87,6 +110,27 @@ class MeetCubit extends Cubit<MeetState> {
     state.setAll(meetState);
     emit(state.copy());
   }
+
+  Future<void> fetchPage(int pageKey) async {
+    try {
+      final newVotes = (await _meetUseCase.getBlindDateTeams(page: pageKey)).content ?? [];
+      final isLastPage = newVotes.length < _numberOfPostsPerRequest;
+      if (isLastPage) {
+        pagingController.appendLastPage(newVotes);
+      } else {
+        final nextPageKey = pageKey + 1;
+        AnalyticsUtil.logEvent('과팅_목록_이성 팀 불러오기(페이지네이션)', properties: {
+          '새로 불러온 페이지 인덱스': nextPageKey
+        });
+        // await Future.delayed(Duration(seconds: 1));
+        pagingController.appendPage(newVotes, nextPageKey);
+      }
+    } catch (error) {
+      pagingController.error = error;
+    }
+  }
+
+  // =================================================================
 
   void pressedMemberAddButton(User friend) { // TODO : User friend 파라미터로 친구 정보 받아와서 teamMembers 친구 목록에 넣기
     state.setIsLoading(true);
@@ -156,7 +200,7 @@ class MeetCubit extends Cubit<MeetState> {
     _meetUseCase.updateMyTeam(meetTeam);
   }
 
-  void refreshMeetPage() async {
+  void refreshMeetPage() async { // TODO : refresh 수정
     state.setIsLoading(true);
     emit(state.copy());
 
