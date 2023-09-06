@@ -53,14 +53,14 @@ class MeetBoard extends StatelessWidget {
                     }
                     await Navigator.push(context, PageTransition(type: PageTransitionType.rightToLeftJoined, child: MeetCreateTeam(
                       onFinish: () {
-                        // context.read<MeetCubit>().refreshMeetPage();
+                        context.read<MeetCubit>().initMeet();
                       },
                       state: state,
                     ), childCurrent: this)).then((value) async {
                       if (value == null) return;
                       await context.read<MeetCubit>().createNewTeam(value);
                     });
-                    // context.read<MeetCubit>().refreshMeetPage();
+                    context.read<MeetCubit>().initMeet();
                     Navigator.pop(context);
                   },
                   shape: CircleBorder(),
@@ -183,18 +183,18 @@ class _BodySectionState extends State<_BodySection> {
                 : Container(
                   height: SizeConfig.screenHeight * 1.5,
                   child: PagedListView<int, BlindDateTeam>(
-                      pagingController: context.read<MeetCubit>().pagingController,
-                      builderDelegate: PagedChildBuilderDelegate<BlindDateTeam>(
-                        itemBuilder: (context, blindDateTeam, index) {
-                          return Column(
-                            children: [
-                                SizedBox(height: SizeConfig.defaultSize * 0.6,),
-                              MeetOneTeamCardview(team: blindDateTeam, isMyTeam: false)
-                            ],
-                          );
-                          // return Text(index.toString());
-                        }
-                      )
+                    pagingController: context.read<MeetCubit>().pagingController,
+                    builderDelegate: PagedChildBuilderDelegate<BlindDateTeam>(
+                      itemBuilder: (context, blindDateTeam, index) {
+                        return Column(
+                          children: [
+                              SizedBox(height: SizeConfig.defaultSize * 0.6,),
+                            MeetOneTeamCardview(team: blindDateTeam, isMyTeam: false, myTeamCount: widget.meetState.teamCount,)
+                          ],
+                        );
+                        // return Text(index.toString());
+                      }
+                    )
                   )
               )
             ],

@@ -1,3 +1,4 @@
+import 'package:dart_flutter/src/common/util/toast_util.dart';
 import 'package:dart_flutter/src/domain/entity/blind_date_team.dart';
 import 'package:dart_flutter/src/domain/entity/blind_date_team_detail.dart';
 import 'package:dart_flutter/src/presentation/meet/view/meet_my_team_detail.dart';
@@ -11,8 +12,9 @@ import '../meet/viewmodel/meet_cubit.dart';
 class MeetOneTeamCardview extends StatelessWidget {
   final BlindDateTeam team;
   final bool isMyTeam;
+  final int myTeamCount;
 
-  const MeetOneTeamCardview({super.key, required this.team, required this.isMyTeam});
+  const MeetOneTeamCardview({super.key, required this.team, required this.isMyTeam, required this.myTeamCount});
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -32,15 +34,19 @@ class MeetOneTeamCardview extends StatelessWidget {
         } else {
           AnalyticsUtil.logEvent("과팅_목록_이성팀_터치");
           // context.read<MeetCubit>().pressedOneTeam(team.id);
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => BlocProvider<MeetCubit>(
-                create: (_) => MeetCubit(), // Replace with your MeetCubit instantiation.
-                child: MeetOtherTeamDetail(teamId: team.id),
+          if (myTeamCount == 0) {
+            ToastUtil.showMeetToast("팀을 만들기 전에는 다른 팀을 볼 수 없어요!", 1);
+          } else {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => BlocProvider<MeetCubit>(
+                  create: (_) => MeetCubit(),
+                  child: MeetOtherTeamDetail(teamId: team.id),
+                ),
               ),
-            ),
-          );
+            );
+          }
         }
       },
       child: Container(
