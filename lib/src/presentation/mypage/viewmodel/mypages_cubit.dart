@@ -6,6 +6,7 @@ import 'package:dart_flutter/src/domain/use_case/friend_use_case.dart';
 import 'package:dart_flutter/src/domain/use_case/user_use_case.dart';
 import 'package:dart_flutter/src/presentation/mypage/viewmodel/state/mypages_state.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 class MyPagesCubit extends Cubit<MyPagesState> {
   static final UserUseCase _userUseCase = UserUseCase();
@@ -31,6 +32,9 @@ class MyPagesCubit extends Cubit<MyPagesState> {
     state.setRecommendedFriends(newFriends);
     getMyTitleVote();
     getAllVotes();
+
+    String appVersion = await getAppVersion();
+    state.setAppVersion(appVersion);
 
     state.setIsLoading(false);
     emit(state.copy());
@@ -161,5 +165,11 @@ class MyPagesCubit extends Cubit<MyPagesState> {
     List<TitleVote> myVotes = await _userUseCase.getVotesSummary();
     state.setMyAllVotes(myVotes).setIsLoading(false);
     emit(state.copy());
+  }
+
+  Future<String> getAppVersion() async {
+    final PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    final String version = packageInfo.version;
+    return version;
   }
 }

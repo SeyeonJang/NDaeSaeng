@@ -1000,7 +1000,18 @@ class _MyPageViewState extends State<MyPageView> {
                 child: Text("1:1 문의",
                     style: TextStyle(fontSize: SizeConfig.defaultSize * 1.4, color: Color(0xff7C83FD))),
               ),
-            ]),
+
+                  const DtDivider(),
+                  const DtFlexSpacer(20),
+                 Container(
+                   alignment: Alignment.center,
+                  child: Text("엔대생 v${context.read<MyPagesCubit>().state.appVersion}",
+                      style: TextStyle(fontSize: SizeConfig.defaultSize * 1.2, color: Colors.grey)),
+                 ),
+                  const DtFlexSpacer(20),
+
+                  ],
+            ),
           ),
         ],
       ),

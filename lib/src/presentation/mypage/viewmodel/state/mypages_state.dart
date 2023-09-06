@@ -15,6 +15,7 @@ class MyPagesState {
   late File profileImageFile;
   late List<TitleVote> titleVotes;
   late List<TitleVote> myAllVotes;
+  late String appVersion;
 
   MyPagesState({
     required this.isLoading,
@@ -27,6 +28,7 @@ class MyPagesState {
     required this.profileImageFile,
     required this.titleVotes,
     required this.myAllVotes,
+    required this.appVersion,
   });
 
   MyPagesState.init() {
@@ -44,6 +46,7 @@ class MyPagesState {
     profileImageFile = File('');
     titleVotes = [];
     myAllVotes = [];
+    appVersion = "";
   }
 
   MyPagesState copy() => MyPagesState(
@@ -56,7 +59,8 @@ class MyPagesState {
         isVertificateUploaded: isVertificateUploaded,
         profileImageFile: profileImageFile,
         titleVotes: titleVotes,
-        myAllVotes: myAllVotes
+        myAllVotes: myAllVotes,
+        appVersion: appVersion
       );
 
   void setIsLoading(bool isLoading) {
@@ -107,7 +111,6 @@ class MyPagesState {
     // myAllVotes = myAllVotes.where((vote) {
     //   return !titleVotes.any((titleVote) => titleVote.question.questionId == vote.question.questionId);
     // }).toList();
-    print("dsjksjksdjlksdjlsjlks ${myAllVotes}");
     return this;
   }
 
@@ -132,5 +135,9 @@ class MyPagesState {
   MyPagesState setTitleVotes(List<TitleVote> titleVotes) {
     this.titleVotes = titleVotes.toSet().toList();
     return this;
+  }
+
+  void setAppVersion(String appVersion) {
+    this.appVersion = appVersion;
   }
 }
