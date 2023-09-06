@@ -3,9 +3,10 @@ import 'package:dart_flutter/src/domain/entity/meet_team.dart';
 import 'package:flutter/material.dart';
 import 'package:dart_flutter/src/domain/entity/user.dart';
 import '../../../res/config/size_config.dart';
+import '../../domain/entity/type/blind_date_user_detail.dart';
 
 class MeetOneMemberCardview extends StatelessWidget {
-  final User userResponse;
+  final BlindDateUserDetail userResponse;
 
   const MeetOneMemberCardview({super.key, required this.userResponse});
 
@@ -16,7 +17,15 @@ class MeetOneMemberCardview extends StatelessWidget {
       height: SizeConfig.defaultSize * 21.5,
       decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(10)
+          borderRadius: BorderRadius.circular(10),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.shade300,
+            spreadRadius: 1,
+            blurRadius: 2.0,
+            offset: Offset(0,1), // changes position of shadow
+          ),
+        ],
       ),
       child: Padding(
         padding: EdgeInsets.symmetric(vertical: SizeConfig.defaultSize * 1.2, horizontal: SizeConfig.defaultSize * 1.5),
@@ -33,12 +42,12 @@ class MeetOneMemberCardview extends StatelessWidget {
                       onTap: () {
                         AnalyticsUtil.logEvent("과팅_팀만들기_카드_프사_터치");
                       },
-                      child: userResponse.personalInfo?.profileImageUrl == "DEFAULT" || userResponse.personalInfo?.profileImageUrl == null
+                      child: userResponse.profileImageUrl == "DEFAULT" || userResponse.profileImageUrl == null
                           ? ClipOval(
                         child: Image.asset('assets/images/profile-mockup3.png', width: SizeConfig.defaultSize * 6.2, fit: BoxFit.cover,),
                       )
                           : ClipOval(
-                          child: Image.network(userResponse.personalInfo!.profileImageUrl,
+                          child: Image.network(userResponse.profileImageUrl,
                             width: SizeConfig.defaultSize * 6.2,
                             height: SizeConfig.defaultSize * 6.2,
                             fit: BoxFit.cover,)
@@ -64,18 +73,16 @@ class MeetOneMemberCardview extends StatelessWidget {
                                     GestureDetector(
                                       onTap: () {
                                         AnalyticsUtil.logEvent("과팅_팀만들기_카드_정보_터치", properties: {
-                                          'nickname': userResponse.personalInfo?.nickname ?? "닉네임없음",
-                                          'birthYear': userResponse.personalInfo?.birthYear.toString().substring(2,4)??"??",
-                                          'verification': userResponse.personalInfo?.verification.isVerificationSuccess.toString() ?? "false"
+                                          'nickname': userResponse.name,
+                                          'birthYear': userResponse.birthYear.toString().substring(2,4),
+                                          'verification': userResponse.isCertifiedUser
                                         });
                                       },
                                       child: Row(
                                           children: [
                                             SizedBox(width: SizeConfig.defaultSize * 0.5,),
                                             Text(
-                                              userResponse.personalInfo?.nickname == 'DEFAULT'
-                                                  ? ('${userResponse.personalInfo?.name}' ?? '이름')
-                                                  : (userResponse.personalInfo?.nickname ?? '닉네임'),
+                                              userResponse.name,
                                               style: TextStyle(
                                                 fontWeight: FontWeight.w500,
                                                 fontSize: SizeConfig.defaultSize * 1.6,
@@ -83,12 +90,12 @@ class MeetOneMemberCardview extends StatelessWidget {
                                               ),),
                                             SizedBox(width: SizeConfig.defaultSize * 0.3),
 
-                                            if (userResponse.personalInfo?.verification.isVerificationSuccess ?? false)
+                                            if (userResponse.isCertifiedUser)
                                               Image.asset("assets/images/check.png", width: SizeConfig.defaultSize * 1.3),
 
                                             SizedBox(width: SizeConfig.defaultSize * 0.5),
                                             Text(
-                                              "∙ ${userResponse.personalInfo?.birthYear.toString().substring(2,4)??"??"}년생",
+                                              "∙ ${userResponse.birthYear.toString().substring(2,4)}년생",
                                               style: TextStyle(
                                                 fontWeight: FontWeight.w500,
                                                 fontSize: SizeConfig.defaultSize * 1.6,
@@ -113,11 +120,11 @@ class MeetOneMemberCardview extends StatelessWidget {
                                 child: GestureDetector(
                                   onTap: () {
                                     AnalyticsUtil.logEvent("과팅_팀만들기_카드_학부_터치", properties: {
-                                      'department': userResponse.university?.department ?? "알수없음"
+                                      'department': userResponse.department
                                     });
                                   },
                                   child: Text(
-                                    userResponse.university?.department ?? "??학부",
+                                    userResponse.department,
                                     style: TextStyle(
                                       fontWeight: FontWeight.w500,
                                       fontSize: SizeConfig.defaultSize * 1.6,
@@ -145,8 +152,8 @@ class MeetOneMemberCardview extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   for (int i = 0; i < 3; i++)
-                    userResponse.titleVotes.length > i ?
-                    VoteView(userResponse.titleVotes[i].question.content ?? "(알수없음)", userResponse.titleVotes[i].count) :
+                    userResponse.profileQuestionResponses.length > i ?
+                    VoteView(userResponse.profileQuestionResponses[i].question.content ?? "(알수없음)", userResponse.profileQuestionResponses[i].count) :
                     NoVoteView(),
                 ],
               ),

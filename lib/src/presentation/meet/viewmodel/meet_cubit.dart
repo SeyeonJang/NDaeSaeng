@@ -12,6 +12,7 @@ import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 import '../../../common/pagination/pagination.dart';
 import '../../../common/util/analytics_util.dart';
+import '../../../domain/entity/blind_date_team_detail.dart';
 
 class MeetCubit extends Cubit<MeetState> {
   MeetCubit() : super(MeetState.init());
@@ -128,6 +129,15 @@ class MeetCubit extends Cubit<MeetState> {
     } catch (error) {
       pagingController.error = error;
     }
+  }
+
+  Future<BlindDateTeamDetail> getBlindDateTeam(int id) async {
+    return await _meetUseCase.getBlindDateTeam(id);
+  }
+
+  void pressedOneTeam(int teamId) {
+    state.setTeamId(teamId);
+    emit(state.copy());
   }
 
   // =================================================================

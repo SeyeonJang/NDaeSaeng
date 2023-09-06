@@ -1,4 +1,5 @@
 import 'package:dart_flutter/src/domain/entity/blind_date_team.dart';
+import 'package:dart_flutter/src/domain/entity/blind_date_team_detail.dart';
 import 'package:dart_flutter/src/presentation/meet/view/meet_my_team_detail.dart';
 import 'package:dart_flutter/src/presentation/meet/view/meet_other_team_detail.dart';
 import 'package:flutter/material.dart';
@@ -18,23 +19,25 @@ class MeetOneTeamCardview extends StatelessWidget {
       onTap: () {
         if (isMyTeam) {
           AnalyticsUtil.logEvent("과팅_목록_내팀_터치");
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => BlocProvider<MeetCubit>(
-                create: (_) => MeetCubit(), // Replace with your MeetCubit instantiation.
-                child: const MeetMyTeamDetail(),
-              ),
-            ),
-          );
+          // TODO : My Team Detail View (BlindTeamDetail로 수정하고 주석 풀기)
+          // Navigator.push(
+          //   context,
+          //   MaterialPageRoute(
+          //     builder: (context) => BlocProvider<MeetCubit>(
+          //       create: (_) => MeetCubit(), // Replace with your MeetCubit instantiation.
+          //       child: const MeetMyTeamDetail(),
+          //     ),
+          //   ),
+          // );
         } else {
           AnalyticsUtil.logEvent("과팅_목록_이성팀_터치");
+          // context.read<MeetCubit>().pressedOneTeam(team.id);
           Navigator.push(
             context,
             MaterialPageRoute(
               builder: (context) => BlocProvider<MeetCubit>(
                 create: (_) => MeetCubit(), // Replace with your MeetCubit instantiation.
-                child: const MeetOtherTeamDetail(),
+                child: MeetOtherTeamDetail(teamId: team.id),
               ),
             ),
           );
