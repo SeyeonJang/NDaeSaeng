@@ -18,102 +18,124 @@ class MeetOtherTeamDetail extends StatelessWidget {
         return FutureBuilder<BlindDateTeamDetail>(
           future: context.read<MeetCubit>().getBlindDateTeam(teamId),
           builder: (context, futureState) {
-            BlindDateTeamDetail blindDateTeamDetail = futureState.data!;
-            return Scaffold(
-              backgroundColor: Colors.grey.shade50,
+            if (futureState.connectionState == ConnectionState.waiting) {
+              return Scaffold(
+                body: Container(
+                  width: SizeConfig.screenWidth,
+                  height: SizeConfig.screenHeight,
+                  color: Colors.white,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        CircularProgressIndicator(color: Color(0xffFE6059)),
+                          SizedBox(height: SizeConfig.defaultSize * 5,),
+                        Text("팀 정보를 불러오고 있어요 . . .", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.8),)
+                      ],
+                    ),
+                ),
+              );
+            } else if (futureState.hasError) {
+              return Text('Error: ${futureState.error}');
+            } else if (futureState.hasData) {
+              BlindDateTeamDetail blindDateTeamDetail = futureState.data!;
+              return Scaffold(
+                backgroundColor: Colors.grey.shade50,
 
-              appBar: AppBar(
-                toolbarHeight: SizeConfig.defaultSize * 7,
-                automaticallyImplyLeading: false,
-                surfaceTintColor: Colors.white,
-                title: _TopBarSection(team: blindDateTeamDetail),
-              ),
+                appBar: AppBar(
+                  toolbarHeight: SizeConfig.defaultSize * 7,
+                  automaticallyImplyLeading: false,
+                  surfaceTintColor: Colors.white,
+                  title: _TopBarSection(team: blindDateTeamDetail),
+                ),
 
-              body: SingleChildScrollView(
+                body: SingleChildScrollView(
+                    child: Padding(
+                      padding: EdgeInsets.all(SizeConfig.defaultSize * 1.5),
+                      child: Column(
+                        children: [
+                          ...List.generate(blindDateTeamDetail.teamUsers.length, (index) {
+                            return Column(
+                              children: [
+                                MeetOneMemberCardview(userResponse: blindDateTeamDetail.teamUsers[index]),
+                                SizedBox(height: SizeConfig.defaultSize),
+                              ],
+                            );
+                          }),
+                        ],
+                      ),
+                    )
+                ),
+
+                bottomNavigationBar: Container(
+                  width: SizeConfig.screenWidth,
+                  height: SizeConfig.defaultSize * 17,
+                  color: Colors.white,
                   child: Padding(
                     padding: EdgeInsets.all(SizeConfig.defaultSize * 1.5),
                     child: Column(
                       children: [
-                        ...List.generate(blindDateTeamDetail.teamUsers.length, (index) {
-                          return Column(
-                            children: [
-                              MeetOneMemberCardview(userResponse: blindDateTeamDetail.teamUsers[index]),
-                              SizedBox(height: SizeConfig.defaultSize),
-                            ],
-                          );
-                        }),
-                      ],
-                    ),
-                  )
-              ),
-
-              bottomNavigationBar: Container(
-                width: SizeConfig.screenWidth,
-                height: SizeConfig.defaultSize * 17,
-                color: Colors.white,
-                child: Padding(
-                  padding: EdgeInsets.all(SizeConfig.defaultSize * 1.5),
-                  child: Column(
-                    children: [
-                      Container(
-                        width: SizeConfig.screenWidth,
-                        height: SizeConfig.defaultSize * 5.5,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(10),
-                          border: Border.all(
-                            color: Colors.grey.shade200,
-                            width: 2
-                          )
-                        ),
-                        child: Padding(
-                          padding: EdgeInsets.only(left: SizeConfig.defaultSize * 2, right: SizeConfig.defaultSize * 1.5),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text("우리 팀 이름", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.8),),  // TODO : 팀 이름
-                              Row(
-                                children: [
-                                  Text("팀 바꾸기"),
-                                  Icon(Icons.expand_more_rounded, color: Colors.grey,)
-                                ],
+                        Container(
+                          width: SizeConfig.screenWidth,
+                          height: SizeConfig.defaultSize * 5.5,
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(10),
+                              border: Border.all(
+                                  color: Colors.grey.shade200,
+                                  width: 2
                               )
-                            ],
+                          ),
+                          child: Padding(
+                            padding: EdgeInsets.only(left: SizeConfig.defaultSize * 2, right: SizeConfig.defaultSize * 1.5),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text("우리 팀 이름", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.8),),  // TODO : 팀 이름
+                                Row(
+                                  children: [
+                                    Text("팀 바꾸기"),
+                                    Icon(Icons.expand_more_rounded, color: Colors.grey,)
+                                  ],
+                                )
+                              ],
+                            ),
                           ),
                         ),
-                      ),
                         SizedBox(height: SizeConfig.defaultSize,),
-                      Container(
-                        width: SizeConfig.screenWidth,
-                        height: SizeConfig.defaultSize * 5.5,
-                        decoration: BoxDecoration(
+                        Container(
+                          width: SizeConfig.screenWidth,
+                          height: SizeConfig.defaultSize * 5.5,
+                          decoration: BoxDecoration(
                             color: Color(0xffFE6059),
                             borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Center(
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text("2000", style: TextStyle(
+                                      decoration: TextDecoration.lineThrough,
+                                      fontSize: SizeConfig.defaultSize * 1.5,
+                                      fontWeight: FontWeight.w400,
+                                      color: Colors.white
+                                  ),),
+                                  Text(" 500 포인트로 대화 시작하기", style: TextStyle(
+                                      fontSize: SizeConfig.defaultSize * 2,
+                                      fontWeight: FontWeight.w600,
+                                      color: Colors.white
+                                  ),),
+                                ],
+                              )),
                         ),
-                        child: Center(
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text("2000", style: TextStyle(
-                                  decoration: TextDecoration.lineThrough,
-                                  fontSize: SizeConfig.defaultSize * 1.5,
-                                  fontWeight: FontWeight.w400,
-                                  color: Colors.white
-                                ),),
-                                Text(" 500 포인트로 대화 시작하기", style: TextStyle(
-                                  fontSize: SizeConfig.defaultSize * 2,
-                                  fontWeight: FontWeight.w600,
-                                  color: Colors.white
-                                ),),
-                              ],
-                            )),
-                      ),
                         SizedBox(height: SizeConfig.defaultSize * 2)
-                    ],
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            );
+              );
+            } else {
+              return Text("데이터 정보가 없습니다.");
+            }
           }
         );
       }

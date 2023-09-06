@@ -199,10 +199,17 @@ class VoteView extends StatelessWidget { // 받은 투표 있을 때
                     color: Colors.white,
                     fontSize: SizeConfig.defaultSize * 1.3
                 ),),
-                Text("$count",  style: TextStyle(
+                count<5
+                    ? Text(" ", style: TextStyle(
+                    fontSize: SizeConfig.defaultSize * 1.3,
                     color: Colors.white,
-                    fontSize: SizeConfig.defaultSize * 1.3
-                ),)
+                    overflow: TextOverflow.ellipsis
+                    ),)
+                    : Text("${(count~/5)*5}+", style: TextStyle(
+                    fontSize: SizeConfig.defaultSize * 1.3,
+                    color: Colors.white,
+                    overflow: TextOverflow.ellipsis
+                    ),)
               ],
             ),
           )
@@ -229,11 +236,11 @@ class NoVoteView extends StatelessWidget { // 받은 투표 없을 때
           width: SizeConfig.screenWidth,
           height: SizeConfig.defaultSize * 3.5,
           decoration: BoxDecoration(
-            color: Colors.grey.shade50,
+            color: Colors.grey.shade100,
             borderRadius: BorderRadius.circular(8),
           ),
           alignment: Alignment.center,
-          child: Text("내정보 탭에서 받은 투표를 프로필로 넣어보세요!", style: TextStyle(
+          child: Text("아직 받은 투표를 프로필에 넣지 않았어요!", style: TextStyle(
               color: Color(0xffFF5C58),
               fontSize: SizeConfig.defaultSize * 1.3
           ),)
