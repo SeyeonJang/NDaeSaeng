@@ -69,6 +69,7 @@ class _MeetBoardState extends State<MeetBoard> {
               appBar: AppBar(
                 toolbarHeight: SizeConfig.defaultSize * 8.5,
                 backgroundColor: Colors.white,
+                surfaceTintColor: Colors.white,
                 title: state.friends.isEmpty || filteredFriends.isEmpty
                     ? _TopSectionInviteFriend(meetState: state,)
                     : (state.myTeams.length == 0 ? _TopSectionMakeTeam(meetState: state,) : _TopSection(ancestorState: state, context: context,)),
@@ -90,8 +91,8 @@ class _MeetBoardState extends State<MeetBoard> {
                               builder: (context) => BlocProvider<MeetCubit>(
                                 create: (_) => MeetCubit(),
                                 child: MeetCreateTeam(
-                                  onFinish: () { meetCubit.initMeet(); },
-                                  state: state
+                                  onFinish: () { meetCubit.refreshMeetPage(); },
+                                  state: meetCubit.state
                                 ),
                               ),
                             ))
@@ -239,46 +240,59 @@ class _BodySectionState extends State<_BodySection> {
       onRefresh: () async {
         context.read<MeetCubit>().initMeet();
       },
-      child: SingleChildScrollView(
-        physics: AlwaysScrollableScrollPhysics(),
-        controller: _scrollController,
-        child: Container(
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: SizeConfig.defaultSize * 1, vertical: SizeConfig.defaultSize),
-            child: Column(
-              children: [
-                if (widget.meetState.myTeams.length > 0) // MyTeam
-                  MeetOneTeamCardview(
-                      team: makeTeam(),
-                      isMyTeam: true,
-                      myTeamCount: widget.meetState.myTeams.length,),
+      child: Column(
+        children: [
+          if (widget.meetState.myTeams.length > 0) // MyTeam
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: SizeConfig.defaultSize * 1),
+              child: MeetOneTeamCardview(
+                team: makeTeam(),
+                isMyTeam: true,
+                myTeamCount: widget.meetState.myTeams.length,),
+            ),
+          Flexible(
+            child: SingleChildScrollView(
+              physics: AlwaysScrollableScrollPhysics(),
+              controller: _scrollController,
+              child: Container(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: SizeConfig.defaultSize * 1, vertical: SizeConfig.defaultSize),
+                  child: Column(
+                    children: [
+                      // widget.pagingController.itemList?.length == 0 // OtherTeam
 
-                widget.meetState.blindDateTeams.length == 0 // OtherTeam
-                  ? Text("이성 팀이 아직 없어요!")
-                  : RefreshIndicator(
-                    onRefresh: () async => widget.pagingController.refresh(),
-                    child: Container(
-                      height: SizeConfig.screenHeight * 0.7,
-                      child: PagedListView<int, BlindDateTeam>(
-                        pagingController: widget.pagingController,
-                        builderDelegate: PagedChildBuilderDelegate<BlindDateTeam>(
-                            itemBuilder: (context, blindDateTeam, index) {
-                              return Column(
-                                children: [
-                                  SizedBox(height: SizeConfig.defaultSize * 0.6,),
-                                  MeetOneTeamCardview(team: blindDateTeam, isMyTeam: false, myTeamCount: widget.meetState.myTeams.length,)
-                                ],
-                              );
-                            },
+                      // widget.meetState.blindDateTeams.length == 0 // OtherTeam
+                      //   ? Text("이성 팀이 아직 없어요!")
+                      //   :
+                      RefreshIndicator(
+                          onRefresh: () async => widget.pagingController.refresh(),
+                          child: Container(
+                            height: SizeConfig.screenHeight * 0.6,
+                            child: PagedListView<int, BlindDateTeam>(
+                              pagingController: widget.pagingController,
+                              builderDelegate: PagedChildBuilderDelegate<BlindDateTeam>(
+                                  itemBuilder: (context, blindDateTeam, index) {
+                                    return widget.pagingController.itemList?.length == 0
+                                        ? Text("이성 팀이 아직 없어요!")
+                                        : Column(
+                                      children: [
+                                        SizedBox(height: SizeConfig.defaultSize * 0.6,),
+                                        MeetOneTeamCardview(team: blindDateTeam, isMyTeam: false, myTeamCount: widget.meetState.myTeams.length,)
+                                      ],
+                                    );
+                                  },
+                              ),
+                            ),
+                          ),
                         ),
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: SizeConfig.defaultSize * 20)
-              ],
-            )
+                        SizedBox(height: SizeConfig.defaultSize * 30)
+                    ],
+                  )
+                ),
+              ),
+            ),
           ),
-        ),
+        ],
       ),
     );
   }

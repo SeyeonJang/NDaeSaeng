@@ -1,4 +1,5 @@
 import 'package:dart_flutter/res/config/size_config.dart';
+import 'package:dart_flutter/src/common/util/toast_util.dart';
 import 'package:dart_flutter/src/domain/entity/meet_team.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -47,7 +48,7 @@ class MeetMyTeamDetail extends StatelessWidget {
                       toolbarHeight: SizeConfig.defaultSize * 7,
                       automaticallyImplyLeading: false,
                       surfaceTintColor: Colors.white,
-                      title: _TopBarSection(team: blindDateTeamDetail),
+                      title: _TopBarSection(team: blindDateTeamDetail, ancestorContext: context,),
                     ),
 
                     body: SingleChildScrollView(
@@ -80,10 +81,12 @@ class MeetMyTeamDetail extends StatelessWidget {
 
 class _TopBarSection extends StatelessWidget {
   BlindDateTeamDetail team;
+  BuildContext ancestorContext;
 
   _TopBarSection({
     super.key,
-    required this.team
+    required this.team,
+    required this.ancestorContext
   });
 
   @override
@@ -113,7 +116,61 @@ class _TopBarSection extends StatelessWidget {
               Row(
                 children: [
                   Text("${(2023-team.averageBirthYear+1).toStringAsFixed(1)}세", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.7),),
-                  // TODO : 팀 삭제
+                  PopupMenuButton<String>(
+                    icon: Icon(Icons.more_horiz_rounded, color: Colors.grey.shade300,),
+                    color: Colors.white,
+                    surfaceTintColor: Colors.white,
+                    onSelected: (value) {
+                      // AnalyticsUtil.logEvent("과팅_대기_내팀보기_내팀_더보기_터치", properties: {
+                      //   "teamName": context.read<MeetCubit>().state.myTeams[i].name,
+                      //   "members": context.read<MeetCubit>().state.myTeams[i].members.length,
+                      // });
+                      if (value == 'delete') {
+                        // AnalyticsUtil.logEvent("과팅_대기_내팀보기_내팀_더보기_삭제_터치", properties: {
+                        //   "teamName": context.read<MeetCubit>().state.myTeams[i].name,
+                        //   "members": context.read<MeetCubit>().state.myTeams[i].members.length,
+                        // });
+                        showDialog<String>(
+                          context: context,
+                          builder: (BuildContext dialogContext) => AlertDialog(
+                            content: Text('\'${team.name=='' ? '(팀명 없음)' : team.name}\' 팀을 삭제하시겠어요?', style: TextStyle(fontSize: SizeConfig.defaultSize * 1.8),),
+                            backgroundColor: Colors.white,
+                            surfaceTintColor: Colors.white,
+                            actions: <Widget>[
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pop(dialogContext, '취소');
+                                },
+                                child: const Text('취소', style: TextStyle(color: Color(0xffFF5C58)),),
+                              ),
+                              TextButton(
+                                onPressed: () async {
+                                  await ancestorContext.read<MeetCubit>().removeTeam(team.id.toString());
+                                  ToastUtil.showMeetToast("팀을 삭제했어요!", 0);
+                                  Navigator.pop(dialogContext);
+                                  Navigator.pop(context);
+                                  ancestorContext.read<MeetCubit>().initMeet();
+                                },
+                                child: const Text('삭제', style: TextStyle(color: Color(0xffFF5C58)),),
+                              ),
+                            ],
+                          ),
+                        );
+                      }
+                    },
+                    itemBuilder: (BuildContext context) {
+                      return [
+                        PopupMenuItem<String>(
+                          value: 'delete',
+                          child: Text("삭제하기", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.5)),
+                        ),
+                        // PopupMenuItem<String>(
+                        //   value: 'edit',
+                        //   child: Text("수정하기", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.5)),
+                        // ),
+                      ];
+                    },
+                  ),
                 ],
               )
             ],

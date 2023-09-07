@@ -39,23 +39,20 @@ class MeetCubit extends Cubit<MeetState> {
     state.setMyFriends(friends);
     List<User> newFriends = await _friendUseCase.getRecommendedFriends();
     state.setRecommendedFriends(newFriends);
-    List<Location> locations = await _meetUseCase.getLocations();
-    state.setServerLocations(locations);
 
-    Pagination<BlindDateTeam> paginationBlindTeams = await _meetUseCase.getBlindDateTeams(page:0, targetLocationId: 0);
-    _numberOfPostsPerRequest = paginationBlindTeams.numberOfElements ?? 10;
-    List<BlindDateTeam> blindDateTeams = paginationBlindTeams.content ?? [];
-    state.setBlindDateTeams(blindDateTeams);
+    // TODO : 필터링 기능 넣을 때 복구
+    // List<Location> locations = await _meetUseCase.getLocations();
+    // state.setServerLocations(locations);
 
-    print(state.blindDateTeams.toString());
+    // Pagination<BlindDateTeam> paginationBlindTeams = await _meetUseCase.getBlindDateTeams(page:0, targetLocationId: 0);
+    // _numberOfPostsPerRequest = paginationBlindTeams.numberOfElements ?? 10;
+    _numberOfPostsPerRequest = 10;
+
+    // List<BlindDateTeam> blindDateTeams = paginationBlindTeams.content ?? [];
+    // state.setBlindDateTeams(blindDateTeams);
 
     await getMyTeams(put: false);
-    print("========================= 안녕");
-    print(state.myTeams);
     state.setMyTeam(state.myTeams[0]);
-    print("========================= 하이");
-    print(state.myTeams[0]);
-    print(state.newTeam);
 
     state.setIsLoading(false);
     emit(state.copy());
@@ -118,17 +115,17 @@ class MeetCubit extends Cubit<MeetState> {
 
   Future<void> fetchPage(int pageKey) async {
     try {
-      final newVotes = (await _meetUseCase.getBlindDateTeams(page: pageKey)).content ?? [];
-      final isLastPage = newVotes.length < _numberOfPostsPerRequest;
+      final newTeams = (await _meetUseCase.getBlindDateTeams(page: pageKey)).content ?? [];
+      final isLastPage = newTeams.length < _numberOfPostsPerRequest;
       if (isLastPage) {
-        pagingController.appendLastPage(newVotes);
+        pagingController.appendLastPage(newTeams);
       } else {
         final nextPageKey = pageKey + 1;
         AnalyticsUtil.logEvent('과팅_목록_이성 팀 불러오기(페이지네이션)', properties: {
           '새로 불러온 페이지 인덱스': nextPageKey
         });
         // await Future.delayed(Duration(seconds: 1));
-        pagingController.appendPage(newVotes, nextPageKey);
+        pagingController.appendPage(newTeams, nextPageKey);
       }
     } catch (error) {
       pagingController.error = error;
@@ -228,8 +225,15 @@ class MeetCubit extends Cubit<MeetState> {
     state.setMyInfo(userResponse);
     List<User> friends = await _friendUseCase.getMyFriends();
     state.setMyFriends(friends);
+
+    Pagination<BlindDateTeam> paginationBlindTeams = await _meetUseCase.getBlindDateTeams(page:0, targetLocationId: 0);
+    _numberOfPostsPerRequest = paginationBlindTeams.numberOfElements ?? 10;
+    List<BlindDateTeam> blindDateTeams = paginationBlindTeams.content ?? [];
+    state.setBlindDateTeams(blindDateTeams);
+
     await getMyTeams();
-    await fetchTeamCount();
+    state.setMyTeam(state.myTeams[0]);
+    // await fetchTeamCount();
 
     state.setIsLoading(false);
     emit(state.copy());
