@@ -14,6 +14,7 @@ import '../../../common/util/analytics_util.dart';
 import '../../../domain/entity/blind_date_team_detail.dart';
 
 class MeetCubit extends Cubit<MeetState> {
+
   MeetCubit() : super(MeetState.init());
   static final UserUseCase _userUseCase = UserUseCase();
   static final FriendUseCase _friendUseCase = FriendUseCase();
@@ -21,7 +22,7 @@ class MeetCubit extends Cubit<MeetState> {
   bool _initialized = false;
 
   // pagination
-  late int _numberOfPostsPerRequest;
+  static const int NUMBER_OF_POSTS_PER_REQUEST = 10;
   final PagingController<int, BlindDateTeam> pagingController = PagingController(firstPageKey: 0);
 
   void initMeet() async {
@@ -46,7 +47,6 @@ class MeetCubit extends Cubit<MeetState> {
 
     // Pagination<BlindDateTeam> paginationBlindTeams = await _meetUseCase.getBlindDateTeams(page:0, targetLocationId: 0);
     // _numberOfPostsPerRequest = paginationBlindTeams.numberOfElements ?? 10;
-    _numberOfPostsPerRequest = 10;
 
     // List<BlindDateTeam> blindDateTeams = paginationBlindTeams.content ?? [];
     // state.setBlindDateTeams(blindDateTeams);
@@ -115,8 +115,8 @@ class MeetCubit extends Cubit<MeetState> {
 
   Future<void> fetchPage(int pageKey) async {
     try {
-      final newTeams = (await _meetUseCase.getBlindDateTeams(page: pageKey)).content ?? [];
-      final isLastPage = newTeams.length < _numberOfPostsPerRequest;
+      final newTeams = (await _meetUseCase.getBlindDateTeams(page: pageKey, size: NUMBER_OF_POSTS_PER_REQUEST)).content ?? [];
+      final isLastPage = newTeams.length < NUMBER_OF_POSTS_PER_REQUEST;
       if (isLastPage) {
         pagingController.appendLastPage(newTeams);
       } else {
@@ -226,10 +226,10 @@ class MeetCubit extends Cubit<MeetState> {
     List<User> friends = await _friendUseCase.getMyFriends();
     state.setMyFriends(friends);
 
-    Pagination<BlindDateTeam> paginationBlindTeams = await _meetUseCase.getBlindDateTeams(page:0, targetLocationId: 0);
-    _numberOfPostsPerRequest = paginationBlindTeams.numberOfElements ?? 10;
-    List<BlindDateTeam> blindDateTeams = paginationBlindTeams.content ?? [];
-    state.setBlindDateTeams(blindDateTeams);
+    // Pagination<BlindDateTeam> paginationBlindTeams = await _meetUseCase.getBlindDateTeams(page:0, size: NUMBER_OF_POSTS_PER_REQUEST, targetLocationId: 0);
+    // _numberOfPostsPerRequest = paginationBlindTeams.numberOfElements ?? 10;
+    // List<BlindDateTeam> blindDateTeams = paginationBlindTeams.content ?? [];
+    // state.setBlindDateTeams(blindDateTeams);
 
     await getMyTeams();
     state.setMyTeam(state.myTeams[0]);

@@ -304,9 +304,9 @@ class DartApiRemoteDataSource {
   }
 
   // team: 과팅 팀 리스트 조회하기
-  static Future<Pagination<BlindDateTeamDto>> getBlindDateTeams({int page = 0, int regionId = 0}) async {
+  static Future<Pagination<BlindDateTeamDto>> getBlindDateTeams({int page = 0, int size = 10, int regionId = 0}) async {
     const path = '/v1/teams';
-    final pathUrl = "$path?regionId=$regionId&page=$page";
+    final pathUrl = "$path?regionId=$regionId&page=$page&size=$size";
 
     final response = await _httpUtil.request().get(pathUrl);
 

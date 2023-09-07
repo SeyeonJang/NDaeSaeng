@@ -49,7 +49,7 @@ class MeetUseCase {
     return _blindDateTeamRepository.getTeam(id);
   }
 
-  Future<Pagination<BlindDateTeam>> getBlindDateTeams({int page = 0, int targetLocationId = 0}) async {
-    return _blindDateTeamRepository.getTeams(page: page, targetLocationId: targetLocationId);
+  Future<Pagination<BlindDateTeam>> getBlindDateTeams({int page = 0, int size = 10, int targetLocationId = 0}) async {
+    return _blindDateTeamRepository.getTeams(page: page, size: size, targetLocationId: targetLocationId);
   }
 }
