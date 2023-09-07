@@ -18,6 +18,14 @@ class ChatSendOneTeamView extends StatelessWidget { // Component
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
           color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.shade300,
+              spreadRadius: 0,
+              blurRadius: 2.0,
+              offset: Offset(0,2), // changes position of shadow
+            ),
+          ],
         ),
         child: Padding( // Container 내부 패딩
           padding: EdgeInsets.symmetric(vertical: SizeConfig.defaultSize * 1.2, horizontal: SizeConfig.defaultSize * 1.5),

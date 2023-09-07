@@ -21,6 +21,14 @@ class ChatRealTimeOneTeamView extends StatelessWidget { // Component
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
           color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.shade300,
+              spreadRadius: 0,
+              blurRadius: 2.0,
+              offset: Offset(0,2), // changes position of shadow
+            ),
+          ],
         ),
         child: Padding(
           padding: EdgeInsets.symmetric(vertical: SizeConfig.defaultSize * 1.2, horizontal: SizeConfig.defaultSize * 1.5),
@@ -28,22 +36,52 @@ class ChatRealTimeOneTeamView extends StatelessWidget { // Component
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text("팀이름이름이름", style: TextStyle(
+                      fontSize: SizeConfig.defaultSize * 1.5, fontWeight: FontWeight.w600
+                    ),),
+                      SizedBox(height: SizeConfig.defaultSize * 0.2,),
+                    Row(
+                      // mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Text("${chatState.userResponse.university?.name ?? '(알 수 없음)'}",
+                          style: TextStyle(fontSize: SizeConfig.defaultSize, fontWeight: FontWeight.w300, overflow: TextOverflow.ellipsis),),
+                        Text(" "),
+                        if (chatState.userResponse.personalInfo?.verification.isVerificationSuccess ?? false)
+                          Image.asset("assets/images/check.png", width: SizeConfig.defaultSize),
+                      ],
+                    ),
+                  ],
+                ),
+                Text("우리팀이름이름", style: TextStyle(
+                  fontSize: SizeConfig.defaultSize * 1.2
+                ),)
+                ],
+              ),
+                SizedBox(height: SizeConfig.defaultSize * 0.8,),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Container(
-                    width: SizeConfig.defaultSize * 10.5,
+                    width: SizeConfig.defaultSize * 12,
                     child: Stack(
                       children: [
                         Container( // 버리는 사진
-                          width: SizeConfig.defaultSize * 4,
+                          width: SizeConfig.defaultSize * 3.7,
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
                           ),
                           child: Center(
                             child: Image.asset(
                               'assets/images/profile-mockup3.png',
-                              width: SizeConfig.defaultSize * 4, // 이미지 크기
-                              height: SizeConfig.defaultSize * 4,
+                              width: SizeConfig.defaultSize * 3.7, // 이미지 크기
+                              height: SizeConfig.defaultSize * 3.7
                             ),
                           ),
                         ),
@@ -51,7 +89,7 @@ class ChatRealTimeOneTeamView extends StatelessWidget { // Component
                           Positioned(
                             left: i * SizeConfig.defaultSize * 3,
                             child: Container(
-                              width: SizeConfig.defaultSize * 4,
+                              width: SizeConfig.defaultSize * 3.7,
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
                               ),
@@ -60,8 +98,8 @@ class ChatRealTimeOneTeamView extends StatelessWidget { // Component
                                   i == 0
                                       ? 'assets/images/profile-mockup.png'
                                       : (i == 1 ? 'assets/images/profile-mockup2.png' : 'assets/images/profile-mockup3.png'), // 이미지 경로를 각 이미지에 맞게 설정
-                                  width: SizeConfig.defaultSize * 4, // 이미지 크기
-                                  height: SizeConfig.defaultSize * 4,
+                                  width: SizeConfig.defaultSize * 3.7, // 이미지 크기
+                                  height: SizeConfig.defaultSize * 3.7,
                                 ),
                               ),
                             ),
@@ -70,88 +108,33 @@ class ChatRealTimeOneTeamView extends StatelessWidget { // Component
                     ),
                   ),
                   Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Text("${chatState.userResponse.university?.name ?? '학교를 불러오지 못했어요'}",
-                              style: TextStyle(fontSize: SizeConfig.defaultSize * 1.4, fontWeight: FontWeight.w600, overflow: TextOverflow.ellipsis),),
-                            if (chatState.userResponse.personalInfo?.verification.isVerificationSuccess ?? false)
-                              Image.asset("assets/images/check.png", width: SizeConfig.defaultSize * 1.3),
-                          ],
-                        ),
-                        Text("${chatState.userResponse.university?.department ?? '학과를 불러오지 못했어요'}",
-                          style: TextStyle(fontSize: SizeConfig.defaultSize * 1.2, overflow: TextOverflow.ellipsis, color: Color(0xffFF5C58)),)
-                      ],
-                    ),
-                  )
-                ],
-              ),
-                SizedBox(height: SizeConfig.defaultSize,),
-              Row(
-                children: [
-                    SizedBox(width: SizeConfig.defaultSize * 0.5),
-                  Container(
-                    width: SizeConfig.defaultSize * 9.8,
-                    child: Column(
+                    child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text("상대팀이름이름", style: TextStyle(
-                          fontSize: SizeConfig.defaultSize * 1.5, fontWeight: FontWeight.w600
-                        ),),
-                        Text("❤️ 우리팀이름이름", style: TextStyle(
-                          fontSize: SizeConfig.defaultSize * 1.2,
-                          color: Colors.grey
-                        ),)
-                      ],
-                    ),
-                  ),
-                    SizedBox(width: SizeConfig.defaultSize * 1.4),
-                  Container(
-                    width: SizeConfig.defaultSize * 19.5,
-                    height: SizeConfig.defaultSize * 3.5,
-                    alignment: Alignment.topLeft,
-                    child: Text("dddddddsaasdasdasdasdasdasdasdasdsadasdasdasdsadasdassa", maxLines: 1, style: TextStyle(
-                      fontSize: SizeConfig.defaultSize * 1.4,
-                      overflow: TextOverflow.ellipsis,
-                      color: Colors.grey
-                    ),)
-                  ),
-                    SizedBox(width: SizeConfig.defaultSize * 1.4),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.end,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Container(
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: Color(0xffFF5C58)
-                          ),
-                          child: Padding(
-                            padding: EdgeInsets.all(SizeConfig.defaultSize * 0.3),
-                            child: Text("100", style: TextStyle(
-                              fontSize: SizeConfig.defaultSize * 1.2,
-                              color: Colors.white
-                            ),),
-                          ),
+                            width: SizeConfig.defaultSize * 18,
+                            height: SizeConfig.defaultSize * 3.5,
+                            alignment: Alignment.topLeft,
+                            child: Text("dddddddsaasdasdasdasdasdasdasdasdsadasdasdasdsadasdassa", maxLines: 2, style: TextStyle(
+                                fontSize: SizeConfig.defaultSize * 1.4,
+                                overflow: TextOverflow.ellipsis,
+                                color: Colors.grey
+                            ),)
                         ),
-                          SizedBox(height: SizeConfig.defaultSize * 0.5,),
-                        Text("오전 11:39", style: TextStyle(
-                          fontSize: SizeConfig.defaultSize * 0.8,
-                          color: Colors.grey
-                        ),)
+                        Text('1시간 전', style: TextStyle(
+                            fontSize: SizeConfig.defaultSize * 1.1,
+                            color: Color(0xffFF5C58)
+                        ),),
                       ],
                     ),
-                  )
+                  ),
                 ],
               )
             ],
-          )
+          ),
         ),
-      ),
+      )
     );
   }
 }
