@@ -2,6 +2,7 @@ import 'package:dart_flutter/src/domain/entity/blind_date_team_detail.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../res/config/size_config.dart';
+import '../../../common/util/toast_util.dart';
 import '../../component/meet_one_member_cardview.dart';
 import '../viewmodel/meet_cubit.dart';
 import '../viewmodel/state/meet_state.dart';
@@ -178,7 +179,52 @@ class _TopBarSection extends StatelessWidget {
               Row(
                 children: [
                   Text("${(2023-team.averageBirthYear+1).toStringAsFixed(1)}세", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.7),),
-                  IconButton(onPressed: () {}, icon: const Icon(Icons.more_horiz_rounded), padding: EdgeInsets.zero,)
+                  PopupMenuButton<String>(
+                    icon: Icon(Icons.more_horiz_rounded, color: Colors.grey.shade300,),
+                    padding: EdgeInsets.zero,
+                    color: Colors.white,
+                    surfaceTintColor: Colors.white,
+                    onSelected: (value) {
+                      if (value == 'report') {
+                        // AnalyticsUtil.logEvent("내정보_마이_내친구더보기_신고");
+                        showDialog<String>(
+                          context: context,
+                          builder: (BuildContext context) => AlertDialog(
+                            title: const Text('팀을 신고하시겠어요?'),
+                            content: const Text('팀을 신고하면 엔대생에서 빠르게 신고 처리를 해드려요!'),
+                            backgroundColor: Colors.white,
+                            surfaceTintColor: Colors.white,
+                            actions: <Widget>[
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context, '취소');
+                                  // AnalyticsUtil.logEvent("내정보_마이_내친구신고_취소");
+                                },
+                                child: const Text('취소', style: TextStyle(color: Color(0xffFE6059)),),
+                              ),
+                              TextButton(
+                                onPressed: () => {
+                                  // AnalyticsUtil.logEvent("내정보_마이_내친구신고_신고확정"), // TODO : properties로 신고한 팀 넘기기
+                                  Navigator.pop(context, '신고'),
+                                  ToastUtil.showMeetToast("사용자가 신고되었어요!", 1),
+                                  // TODO : 신고 기능 (서버 연결)
+                                },
+                                child: const Text('신고', style: TextStyle(color: Color(0xffFE6059)),),
+                              ),
+                            ],
+                          ),
+                        );
+                      }
+                    },
+                    itemBuilder: (BuildContext context) {
+                      return [
+                        PopupMenuItem<String>(
+                          value: 'report',
+                          child: Text("신고하기", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.5)),
+                        ),
+                      ];
+                    },
+                  ),
                 ],
               )
             ],
