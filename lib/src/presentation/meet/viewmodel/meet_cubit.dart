@@ -47,10 +47,15 @@ class MeetCubit extends Cubit<MeetState> {
     List<BlindDateTeam> blindDateTeams = paginationBlindTeams.content ?? [];
     state.setBlindDateTeams(blindDateTeams);
 
-    print("=========================");
     print(state.blindDateTeams.toString());
 
     await getMyTeams(put: false);
+    print("========================= 안녕");
+    print(state.myTeams);
+    state.setMyTeam(state.myTeams[0]);
+    print("========================= 하이");
+    print(state.myTeams[0]);
+    print(state.newTeam);
 
     state.setIsLoading(false);
     emit(state.copy());
@@ -139,6 +144,11 @@ class MeetCubit extends Cubit<MeetState> {
     emit(state.copy());
   }
 
+  void setMyTeam(MeetTeam myTeam) {
+    state.setMyTeam(myTeam);
+    emit(state.copy());
+  }
+
   // =================================================================
 
   void pressedMemberAddButton(User friend) { // TODO : User friend 파라미터로 친구 정보 받아와서 teamMembers 친구 목록에 넣기
@@ -195,6 +205,7 @@ class MeetCubit extends Cubit<MeetState> {
   Future<void> getMyTeams({bool put = true}) async {
     List<MeetTeam> myTeams = await _meetUseCase.getMyTeams();
     state.setMyTeams(myTeams);
+    // state.setMyTeam(myTeams[0]);
     if (put) emit(state.copy());
     print("팀 목록 ${state.myTeams}");
   }

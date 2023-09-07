@@ -176,9 +176,8 @@ class MeetState {
     return this;
   }
 
-  MeetState setMyTeam(MeetTeam team) {
-    this.newTeam = team;
-    return this;
+  void setMyTeam(MeetTeam team) {
+    newTeam = team;
   }
 
   MeetState setTeamMembers(List<User> filteredFriends) {

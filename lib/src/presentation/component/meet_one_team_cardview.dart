@@ -21,16 +21,15 @@ class MeetOneTeamCardview extends StatelessWidget {
       onTap: () {
         if (isMyTeam) {
           AnalyticsUtil.logEvent("과팅_목록_내팀_터치");
-          // TODO : My Team Detail View (BlindTeamDetail로 수정하고 주석 풀기)
-          // Navigator.push(
-          //   context,
-          //   MaterialPageRoute(
-          //     builder: (context) => BlocProvider<MeetCubit>(
-          //       create: (_) => MeetCubit(), // Replace with your MeetCubit instantiation.
-          //       child: const MeetMyTeamDetail(),
-          //     ),
-          //   ),
-          // );
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => BlocProvider<MeetCubit>(
+                create: (_) => MeetCubit(), // Replace with your MeetCubit instantiation.
+                child: MeetMyTeamDetail(teamId: team.id,),
+              ),
+            ),
+          );
         } else {
           AnalyticsUtil.logEvent("과팅_목록_이성팀_터치");
           // context.read<MeetCubit>().pressedOneTeam(team.id);

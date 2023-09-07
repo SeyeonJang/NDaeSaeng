@@ -43,7 +43,7 @@ class _MeetBoardState extends State<MeetBoard> {
         friend.university?.name == state.userResponse.university?.name &&
             friend.personalInfo?.gender == state.userResponse.personalInfo?.gender
         ).toList();
-        print("친구 수 : ${state.friends.length}, 과팅 같이 나갈 수 있는 친구 수 : ${filteredFriends.length}, 팀 개수 : ${state.teamCount}");
+        print("친구 수 : ${state.friends.length}, 과팅 같이 나갈 수 있는 친구 수 : ${filteredFriends.length}, 팀 개수 : ${state.myTeams.length}");
         PagingController<int, BlindDateTeam> pagingController = context.read<MeetCubit>().pagingController;
 
         return (state.isLoading)
@@ -71,7 +71,7 @@ class _MeetBoardState extends State<MeetBoard> {
                 backgroundColor: Colors.white,
                 title: state.friends.isEmpty || filteredFriends.isEmpty
                     ? _TopSectionInviteFriend(meetState: state,)
-                    : (state.teamCount == 0 ? _TopSectionMakeTeam(meetState: state,) : _TopSection(ancestorState: state)),
+                    : (state.myTeams.length == 0 ? _TopSectionMakeTeam(meetState: state,) : _TopSection(ancestorState: state, context: context,)),
               ),
 
               body: _BodySection(meetState: state, context: context, pagingController: pagingController,),
@@ -85,14 +85,21 @@ class _MeetBoardState extends State<MeetBoard> {
                           return;
                         }
                         final meetCubit = context.read<MeetCubit>(); // MeetCubit 인스턴스 가져오기
-                        await Navigator.push(context, PageTransition(type: PageTransitionType.rightToLeftJoined, child: MeetCreateTeam(
-                          onFinish: () { meetCubit.initMeet(); },
-                          state: state,
-                        ), childCurrent: widget)).then((value) async {
-                          if (value == null) return;
-                          await context.read<MeetCubit>().createNewTeam(value);
-                        });
-                        context.read<MeetCubit>().initMeet();
+                        await Navigator.push(context,
+                            MaterialPageRoute(
+                              builder: (context) => BlocProvider<MeetCubit>(
+                                create: (_) => MeetCubit(),
+                                child: MeetCreateTeam(
+                                  onFinish: () { meetCubit.initMeet(); },
+                                  state: state
+                                ),
+                              ),
+                            ))
+                            .then((value) async {
+                                if (value == null) return;
+                                await meetCubit.createNewTeam(value);
+                            });
+                        meetCubit.initMeet();
                         Navigator.pop(context);
                       },
                       shape: CircleBorder(),
@@ -198,6 +205,7 @@ class _BodySection extends StatefulWidget {
 class _BodySectionState extends State<_BodySection> {
   late MeetCubit meetCubit;
   final ScrollController _scrollController = ScrollController();
+  late MeetTeam nowTeam = widget.meetState.myTeams[0];
 
   @override
   void initState() {
@@ -209,6 +217,19 @@ class _BodySectionState extends State<_BodySection> {
         widget.pagingController.refresh();
       }
     });
+  }
+
+  BlindDateTeam makeTeam() {
+    BlindDateTeam blindDateTeam = BlindDateTeam(
+        id: nowTeam.getId(),
+        name: nowTeam.getName(),
+        averageBirthYear: nowTeam.getAverageBirthYear(),
+        regions: nowTeam.getRegions(),
+        universityName: nowTeam.getUniversityName(),
+        isCertifiedTeam: nowTeam.getIsCertifiedTeam(),
+        teamUsers: nowTeam.getTeamUsers()
+    );
+    return blindDateTeam;
   }
 
   // @override
@@ -226,14 +247,13 @@ class _BodySectionState extends State<_BodySection> {
             padding: EdgeInsets.symmetric(horizontal: SizeConfig.defaultSize * 1, vertical: SizeConfig.defaultSize),
             child: Column(
               children: [
-                // TODO : 팀이 있으면 우리 팀 나오고 없으면 안 나오기 (TopBar에서 선택된 팀이 나오도록 하기)
-                // MeetOneTeamCardview(team: BlindMeetTeam{}, isMyTeam: true), // 우리팀
+                if (widget.meetState.myTeams.length > 0) // MyTeam
+                  MeetOneTeamCardview(
+                      team: makeTeam(),
+                      isMyTeam: true,
+                      myTeamCount: widget.meetState.myTeams.length,),
 
-                // 팀 오는지 확인
-                // for (int i=0; i<widget.meetState.blindDateTeams.length; i++)
-                //   Text(widget.meetState.blindDateTeams[i].name),
-
-                widget.meetState.blindDateTeams.length == 0
+                widget.meetState.blindDateTeams.length == 0 // OtherTeam
                   ? Text("이성 팀이 아직 없어요!")
                   : RefreshIndicator(
                     onRefresh: () async => widget.pagingController.refresh(),
@@ -246,7 +266,7 @@ class _BodySectionState extends State<_BodySection> {
                               return Column(
                                 children: [
                                   SizedBox(height: SizeConfig.defaultSize * 0.6,),
-                                  MeetOneTeamCardview(team: blindDateTeam, isMyTeam: false, myTeamCount: widget.meetState.teamCount,)
+                                  MeetOneTeamCardview(team: blindDateTeam, isMyTeam: false, myTeamCount: widget.meetState.myTeams.length,)
                                 ],
                               );
                             },
@@ -266,10 +286,12 @@ class _BodySectionState extends State<_BodySection> {
 
 class _TopSection extends StatefulWidget {
   final MeetState ancestorState;
+  final BuildContext context;
 
   _TopSection({
     super.key,
-    required this.ancestorState
+    required this.ancestorState,
+    required this.context
   });
 
   @override
