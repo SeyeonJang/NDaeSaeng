@@ -23,7 +23,7 @@ class MeetCubit extends Cubit<MeetState> {
   static const int NUMBER_OF_POSTS_PER_REQUEST = 10;
   final PagingController<int, BlindDateTeam> pagingController = PagingController(firstPageKey: 0);
 
-  void initMeet() async {
+  void initMeet({MeetTeam? initPickedTeam}) async {
     state.setIsLoading(true);
     emit(state.copy());
 
@@ -49,11 +49,14 @@ class MeetCubit extends Cubit<MeetState> {
     // state.setBlindDateTeams(blindDateTeams);
 
     await getMyTeams(put: false);
-    if (!state.pickedTeam)
+    if (!state.pickedTeam && state.myTeams.isNotEmpty) {
       state.setMyTeam(state.myTeams[0]);
+    }
+    if (initPickedTeam != null) setPickedTeam(initPickedTeam);
 
     state.setIsLoading(false);
     emit(state.copy());
+    print("test: ${state.getMyTeam()}");
   }
 
   void initCreateTeam() async {
@@ -235,7 +238,8 @@ class MeetCubit extends Cubit<MeetState> {
     // state.setBlindDateTeams(blindDateTeams);
 
     await getMyTeams();
-    state.setMyTeam(state.myTeams[0]);
+    if (!state.pickedTeam && state.myTeams.length > 0)
+      state.setMyTeam(state.myTeams[0]);
     // await fetchTeamCount();
 
     state.setIsLoading(false);

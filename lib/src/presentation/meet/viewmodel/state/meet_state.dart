@@ -20,7 +20,9 @@ class MeetState {
   late Set<User> teamMembers;
   late Set<Location> cities;
   late List<MeetTeam> myTeams;
-  late MeetTeam newTeam;
+  // late MeetTeam newTeam;
+
+  late MeetTeam? myTeam; // todo : change to not lazy init
   late String teamName;
   late bool isChecked;
   late int teamCount;
@@ -43,6 +45,7 @@ class MeetState {
     required this.teamMembers,
     required this.cities,
     required this.myTeams,
+    required this.myTeam,
     required this.teamName,
     required this.isChecked,
     required this.teamCount,
@@ -68,6 +71,7 @@ class MeetState {
     teamMembers = {};
     cities = {};
     myTeams = [];
+    myTeam = null;
     teamName = '';
     isChecked = false;
     teamCount = 0;
@@ -88,6 +92,7 @@ class MeetState {
     filteredFriends: filteredFriends,
     teamMembers: teamMembers,
     cities: cities,
+    myTeam: myTeam,
     myTeams: myTeams,
     teamName: teamName,
     isChecked: isChecked,
@@ -185,11 +190,13 @@ class MeetState {
   }
 
   void setMyTeam(MeetTeam team) {
-    newTeam = team;
+    myTeam = team;
+    print("setMyTeam");
   }
 
-  MeetTeam getMyTeam() {
-    return newTeam;
+  MeetTeam? getMyTeam() {
+    print("getMyTeam");
+    return myTeam;
   }
 
   MeetState setTeamMembers(List<User> filteredFriends) {
