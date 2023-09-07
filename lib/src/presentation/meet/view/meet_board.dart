@@ -10,7 +10,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-import 'package:page_transition/page_transition.dart';
 import 'package:dart_flutter/src/domain/entity/user.dart';
 import '../../../domain/entity/meet_team.dart';
 
@@ -26,7 +25,7 @@ class _MeetBoardState extends State<MeetBoard> {
   void initState() {
     super.initState();
     context.read<MeetCubit>().pagingController.addPageRequestListener((pageKey) => context.read<MeetCubit>().fetchPage(pageKey));
-    SchedulerBinding.instance!.addPostFrameCallback((_) => context.read<MeetCubit>().initMeet());
+    SchedulerBinding.instance.addPostFrameCallback((_) => context.read<MeetCubit>().initMeet());
   }
 
   @override
@@ -313,13 +312,13 @@ class _TopSection extends StatefulWidget {
 }
 
 class _TopSectionState extends State<_TopSection> {
-  late String selectedTeamName; // Add this line
+  late MeetTeam selectedTeam; // Add this line
   late List<MeetTeam> myTeams;
 
   @override
   void initState() {
     super.initState();
-    selectedTeamName = widget.ancestorState.myTeams[0].name; // Initialize in initState()
+    selectedTeam = widget.ancestorState.myTeams[0]; // TODO : myTeams[0] 말고 state.getTeam() 가져와야하는데 못 가져옴
     myTeams = widget.ancestorState.myTeams;
   }
 
@@ -341,17 +340,19 @@ class _TopSectionState extends State<_TopSection> {
             children: [
               Row(
                 children: [
-                  DropdownButton<String>(
-                    value: selectedTeamName,
+                  DropdownButton<MeetTeam>(
+                    value: selectedTeam,
                     padding: EdgeInsets.all(0),
                     onChanged: (newValue) {
                       setState(() {
-                        selectedTeamName = newValue!;
+                        selectedTeam = newValue!;
+                        widget.context.read<MeetCubit>().setPickedTeam(selectedTeam);
+                        widget.context.read<MeetCubit>().initMeet();
                       });
                     },
                     items: myTeams.map((myTeam) {
-                      return DropdownMenuItem<String>(
-                        value: myTeam.name,
+                      return DropdownMenuItem<MeetTeam>(
+                        value: myTeam,
                         child: Text(
                           myTeam.name,
                           style: TextStyle(
@@ -362,8 +363,8 @@ class _TopSectionState extends State<_TopSection> {
                       );
                     }).toList(),
                   ),
-                  Text("으로 보고 있어요!", style: TextStyle(
-                    fontSize: SizeConfig.defaultSize * 1.6,
+                  Text("팀으로 보고 있어요!", style: TextStyle(
+                    fontSize: SizeConfig.defaultSize * 1.5,
                     fontWeight: FontWeight.w400
                   ),),
                 ],

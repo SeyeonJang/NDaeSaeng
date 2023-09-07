@@ -1,4 +1,3 @@
-import 'package:dart_flutter/src/domain/entity/blind_date_team_detail.dart';
 import 'package:dart_flutter/src/domain/entity/location.dart';
 import 'package:dart_flutter/src/domain/entity/meet_team.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -30,6 +29,7 @@ class MeetState {
   // meet - blindDate
   late List<BlindDateTeam> blindDateTeams;
   late int nowTeamId;
+  late bool pickedTeam;
 
   MeetState ({
     required this.meetPageState,
@@ -48,7 +48,8 @@ class MeetState {
     required this.teamCount,
     required this.newFriends,
     required this.blindDateTeams,
-    required this.nowTeamId
+    required this.nowTeamId,
+    required this.pickedTeam
   });
 
   MeetState.init() { // 초기값 설정
@@ -73,6 +74,7 @@ class MeetState {
     newFriends = {};
     blindDateTeams = [];
     nowTeamId = 0;
+    pickedTeam = false;
   }
 
   MeetState copy() => MeetState(
@@ -92,7 +94,8 @@ class MeetState {
     teamCount: teamCount,
     newFriends: newFriends,
     blindDateTeams: blindDateTeams,
-    nowTeamId: nowTeamId
+    nowTeamId: nowTeamId,
+    pickedTeam: pickedTeam
   );
 
   void setAll(MeetState state) {
@@ -113,6 +116,11 @@ class MeetState {
       newFriends = state.newFriends;
       blindDateTeams = state.blindDateTeams;
       nowTeamId = state.nowTeamId;
+      pickedTeam = state.pickedTeam;
+  }
+
+  void setPickedTeam(bool pickedTeam) {
+    this.pickedTeam = pickedTeam;
   }
 
   void addFriend(User friend) {
@@ -178,6 +186,10 @@ class MeetState {
 
   void setMyTeam(MeetTeam team) {
     newTeam = team;
+  }
+
+  MeetTeam getMyTeam() {
+    return newTeam;
   }
 
   MeetState setTeamMembers(List<User> filteredFriends) {

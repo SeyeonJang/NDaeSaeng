@@ -1,6 +1,5 @@
 import 'package:dart_flutter/src/common/util/toast_util.dart';
 import 'package:dart_flutter/src/domain/entity/blind_date_team.dart';
-import 'package:dart_flutter/src/domain/entity/blind_date_team_detail.dart';
 import 'package:dart_flutter/src/presentation/meet/view/meet_my_team_detail.dart';
 import 'package:dart_flutter/src/presentation/meet/view/meet_other_team_detail.dart';
 import 'package:flutter/material.dart';
@@ -77,7 +76,7 @@ class MeetOneTeamCardview extends StatelessWidget {
                   Row(
                     children: [
                       Text(team.name, style: TextStyle(fontSize: SizeConfig.defaultSize * 1.6, fontWeight: FontWeight.w600),),
-                      Text("  ${(2023-team.averageBirthYear+1).toStringAsFixed(1)}세", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.6),)
+                      Text("  ${(2023-team.averageBirthYear+1).toStringAsFixed(1)}세", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.45),)
                     ],
                   ),
                   Container(

@@ -8,8 +8,6 @@ import 'package:dart_flutter/src/domain/entity/user.dart';
 import 'package:dart_flutter/src/domain/use_case/user_use_case.dart';
 import 'package:dart_flutter/src/domain/use_case/friend_use_case.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-
-import '../../../common/pagination/pagination.dart';
 import '../../../common/util/analytics_util.dart';
 import '../../../domain/entity/blind_date_team_detail.dart';
 
@@ -41,9 +39,8 @@ class MeetCubit extends Cubit<MeetState> {
     List<User> newFriends = await _friendUseCase.getRecommendedFriends();
     state.setRecommendedFriends(newFriends);
 
-    // TODO : 필터링 기능 넣을 때 복구
-    // List<Location> locations = await _meetUseCase.getLocations();
-    // state.setServerLocations(locations);
+    List<Location> locations = await _meetUseCase.getLocations();
+    state.setServerLocations(locations);
 
     // Pagination<BlindDateTeam> paginationBlindTeams = await _meetUseCase.getBlindDateTeams(page:0, targetLocationId: 0);
     // _numberOfPostsPerRequest = paginationBlindTeams.numberOfElements ?? 10;
@@ -52,7 +49,8 @@ class MeetCubit extends Cubit<MeetState> {
     // state.setBlindDateTeams(blindDateTeams);
 
     await getMyTeams(put: false);
-    state.setMyTeam(state.myTeams[0]);
+    if (!state.pickedTeam)
+      state.setMyTeam(state.myTeams[0]);
 
     state.setIsLoading(false);
     emit(state.copy());
@@ -62,12 +60,12 @@ class MeetCubit extends Cubit<MeetState> {
     state.setIsLoading(true);
     emit(state.copy());
 
-    User userResponse = await _userUseCase.myInfo();
-    state.setMyInfo(userResponse);
-    List<User> friends = await _friendUseCase.getMyFriends();
-    state.setMyFriends(friends);
-    List<User> newFriends = await _friendUseCase.getRecommendedFriends();
-    state.setRecommendedFriends(newFriends);
+    // User userResponse = await _userUseCase.myInfo();
+    // state.setMyInfo(userResponse);
+    // List<User> friends = await _friendUseCase.getMyFriends();
+    // state.setMyFriends(friends);
+    // List<User> newFriends = await _friendUseCase.getRecommendedFriends();
+    // state.setRecommendedFriends(newFriends);
     List<Location> locations = await _meetUseCase.getLocations();
     state.setServerLocations(locations);
 
@@ -144,6 +142,11 @@ class MeetCubit extends Cubit<MeetState> {
   void setMyTeam(MeetTeam myTeam) {
     state.setMyTeam(myTeam);
     emit(state.copy());
+  }
+
+  void setPickedTeam(MeetTeam myTeam) {
+    state.setPickedTeam(true);
+    setMyTeam(myTeam);
   }
 
   // =================================================================
