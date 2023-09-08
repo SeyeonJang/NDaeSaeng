@@ -90,7 +90,7 @@ class _ChatRoomState extends State<ChatRoom> with TickerProviderStateMixin {
                     ],
                   ),
                   onTap: () {
-                    // id로 회원정보 값 가져오기
+                    // id로 회원정보 값 가져오기 (userResponse 주면됨)
                     Navigator.push(context, MaterialPageRoute(builder: (context) => const ChatProfile()));
                   },
                 ),
@@ -123,7 +123,8 @@ class _ChatRoomState extends State<ChatRoom> with TickerProviderStateMixin {
                     ],
                   ),
                   onTap: () {
-                    // id로 회원정보 값 가져오기
+                    // id로 회원정보 값 가져오기 (userResponse 주면됨)
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => const ChatProfile()));
                   },
                 ),
             ],
