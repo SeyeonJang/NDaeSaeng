@@ -1,4 +1,5 @@
 import 'package:dart_flutter/res/config/size_config.dart';
+import 'package:dart_flutter/src/presentation/chat/view/chat_profile.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -12,12 +13,9 @@ class ChatRoom extends StatefulWidget {
 }
 
 class _ChatRoomState extends State<ChatRoom> with TickerProviderStateMixin {
-  // 입력한 메시지를 저장하는 리스트
-  final List<ChatMessage> _message = <ChatMessage>[];
-  // 텍스트필드 제어용 컨트롤러
-  final TextEditingController _textController = TextEditingController();
-  // 텍스트필드에 입력된 데이터의 존재 여부
-  bool _isComposing = false;
+  final List<ChatMessage> _message = <ChatMessage>[]; // 입력한 메시지를 저장하는 리스트
+  final TextEditingController _textController = TextEditingController(); // 텍스트필드 제어용 컨트롤러
+  bool _isComposing = false; // 텍스트필드에 입력된 데이터의 존재 여부
 
   @override
   Widget build(BuildContext context) {
@@ -28,25 +26,108 @@ class _ChatRoomState extends State<ChatRoom> with TickerProviderStateMixin {
         surfaceTintColor: Colors.white,
         title: Text("팀이름", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.8),),
       ),
-      endDrawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: [
-            DrawerHeader(
-              child: Text('Drawer Header'),
-              decoration: BoxDecoration(
-                color: Colors.grey.shade200,
+
+      endDrawer: SafeArea(
+        child: Drawer(
+          child: ListView(
+            padding: EdgeInsets.zero,
+            children: [
+              DrawerHeader(
+                child: Padding(
+                  padding: EdgeInsets.only(top: SizeConfig.defaultSize * 4),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text("지금 채팅 중인 팀은"),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text('한양대학교 ', style: TextStyle(
+                            fontSize: SizeConfig.defaultSize * 1.8, fontWeight: FontWeight.w600
+                          ),),
+                          // if (chatState.userResponse.personalInfo?.verification.isVerificationSuccess ?? false)
+                            Image.asset("assets/images/check.png", width: SizeConfig.defaultSize * 1.55),
+                        ],
+                      ),
+                        SizedBox(height: SizeConfig.defaultSize * 2,),
+                      Text("23.5세"),
+                        SizedBox(height: SizeConfig.defaultSize * 0.3,),
+                      Text("서울 인천 경기 부산 머머 머머 머머 머머")
+                    ],
+                  ),
+                ),
+                decoration: BoxDecoration(
+                  color: Colors.grey.shade200,
+                ),
               ),
-            ),
-            ListTile(
-              title: Text('Item 1'),
-              onTap: () {},
-            ),
-            ListTile(
-              title: Text('Item 2'),
-              onTap: () {},
-            ),
-          ],
+
+              Padding(
+                padding: EdgeInsets.only(left: SizeConfig.defaultSize * 1.8, top: SizeConfig.defaultSize * 2, bottom: SizeConfig.defaultSize * 2),
+                child: Text("상대팀이름", style: TextStyle(
+                  fontSize: SizeConfig.defaultSize * 1.5,
+                  fontWeight: FontWeight.w400
+                ),),
+              ),
+              for (int i=1; i<=3; i++)
+                ListTile(
+                  title: Row(
+                    children: [
+                      Container( // 버리는 사진
+                        width: SizeConfig.defaultSize * 3.7,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                        ),
+                        child: Center(
+                          child: Image.asset(
+                              'assets/images/profile-mockup3.png',
+                              width: SizeConfig.defaultSize * 3.7, // 이미지 크기
+                              height: SizeConfig.defaultSize * 3.7
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: SizeConfig.defaultSize * 1.3),
+                      Text('상대팀 $i'),
+                    ],
+                  ),
+                  onTap: () {
+                    // id로 회원정보 값 가져오기
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => const ChatProfile()));
+                  },
+                ),
+              Padding(
+                padding: EdgeInsets.only(left: SizeConfig.defaultSize * 1.8, top: SizeConfig.defaultSize * 2, bottom: SizeConfig.defaultSize * 2),
+                child: Text("우리팀이름", style: TextStyle(
+                    fontSize: SizeConfig.defaultSize * 1.5,
+                    fontWeight: FontWeight.w400
+                ),),
+              ),
+              for (int i=1; i<=3; i++)
+                ListTile(
+                  title: Row(
+                    children: [
+                      Container( // 버리는 사진
+                        width: SizeConfig.defaultSize * 3.7,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                        ),
+                        child: Center(
+                          child: Image.asset(
+                              'assets/images/profile-mockup3.png',
+                              width: SizeConfig.defaultSize * 3.7, // 이미지 크기
+                              height: SizeConfig.defaultSize * 3.7
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: SizeConfig.defaultSize * 1.3),
+                      Text('우리팀 $i'),
+                    ],
+                  ),
+                  onTap: () {
+                    // id로 회원정보 값 가져오기
+                  },
+                ),
+            ],
+          ),
         ),
       ),
       body: Container(
