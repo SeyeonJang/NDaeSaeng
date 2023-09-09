@@ -54,23 +54,27 @@ class _ChatPagesState extends State<ChatPages> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(
-                    children: [
-                      SizedBox(width: SizeConfig.defaultSize,),
-                      Text("채팅", style: TextStyle(
-                          fontSize: SizeConfig.defaultSize * 1.8,
-                          fontWeight: FontWeight.w600
-                      ),),
-                    ],
+                  Container(
+                    child: Row(
+                      children: [
+                        SizedBox(width: SizeConfig.defaultSize,),
+                        Text("채팅", style: TextStyle(
+                            fontSize: SizeConfig.defaultSize * 1.8,
+                            fontWeight: FontWeight.w600
+                        ),),
+                      ],
+                    ),
                   ),
 
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      _TapBarButton(name: "실시간 채팅", targetPage: 0, nowPage: _page, onTapNavigation: _onTapNavigation),
-                      _TapBarButton(name: "받은 요청", targetPage: 1, nowPage: _page, onTapNavigation: _onTapNavigation),
-                      _TapBarButton(name: "보낸 요청", targetPage: 2, nowPage: _page, onTapNavigation: _onTapNavigation),
-                    ],
+                  Container(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        _TapBarButton(name: "실시간 채팅", targetPage: 0, nowPage: _page, onTapNavigation: _onTapNavigation),
+                        // _TapBarButton(name: "받은 요청", targetPage: 1, nowPage: _page, onTapNavigation: _onTapNavigation),
+                        // _TapBarButton(name: "보낸 요청", targetPage: 2, nowPage: _page, onTapNavigation: _onTapNavigation),
+                      ],
+                    ),
                   ),
                 ],
               ),
@@ -82,8 +86,8 @@ class _ChatPagesState extends State<ChatPages> {
               controller: _pageController,
               children: const [
                 ChatRealTime(),
-                ChatResponseGet(),
-                ChatResponseSend(),
+                // ChatResponseGet(),
+                // ChatResponseSend(),
               ],
             ),
           ),
@@ -110,7 +114,7 @@ class _TapBarButton extends StatelessWidget {
         child: Container(
           color: Colors.white,
           width: SizeConfig.screenWidth * 0.22,
-          height: SizeConfig.defaultSize * 7,
+          height: SizeConfig.defaultSize * 6,
           alignment: Alignment.center,
           child: Padding(
             padding: const EdgeInsets.all(0),
@@ -118,7 +122,7 @@ class _TapBarButton extends StatelessWidget {
             Text(name, style:
             TextStyle(fontSize:
             (targetPage == nowPage)
-                ? SizeConfig.defaultSize * 1.62
+                ? SizeConfig.defaultSize * 1.61
                 : SizeConfig.defaultSize * 1.6,
                 fontWeight:
                 (targetPage == nowPage)
