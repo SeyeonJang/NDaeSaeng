@@ -1,7 +1,9 @@
 import 'package:dart_flutter/src/presentation/chat/view/chat_room.dart';
+import 'package:dart_flutter/src/presentation/chat/view/chating_room.dart';
 import 'package:dart_flutter/src/presentation/chat/viewmodel/state/chat_state.dart';
 import 'package:flutter/material.dart';
 import '../../../../res/config/size_config.dart';
+import 'chatroom/chatting_room.dart';
 
 class ChatRealTimeOneTeamView extends StatelessWidget { // Component
   final ChatState chatState;
@@ -13,7 +15,8 @@ class ChatRealTimeOneTeamView extends StatelessWidget { // Component
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.push(context, MaterialPageRoute(builder: (context) => const ChatRoom()));
+        Navigator.push(context, MaterialPageRoute(builder: (context) => const ChattingRoom()));
+        // Navigator.push(context, MaterialPageRoute(builder: (context) => const ChatRoom()));
       },
       child: Container(
         width: SizeConfig.screenWidth,
