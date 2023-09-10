@@ -11,4 +11,17 @@ class Location {
     required this.id,
     required this.name,
   });
+
+  factory Location.fromJson(Map<String, dynamic> json) {
+    final tId = json['id'];
+    final tName = json['name'];
+    return Location(id: tId, name: tName);
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = Map<String, dynamic>();
+    data['id'] = id;
+    data['name'] = name;
+    return data;
+  }
 }
