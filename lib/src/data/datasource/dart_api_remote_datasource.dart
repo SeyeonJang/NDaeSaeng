@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:dart_flutter/res/environment/app_environment.dart';
 import 'package:dart_flutter/src/common/pagination/pagination.dart';
+import 'package:dart_flutter/src/data/model/chatroom_dto.dart';
+import 'package:dart_flutter/src/data/model/proposal_response_dto.dart';
 import 'package:dart_flutter/src/data/model/question_dto.dart';
 import 'package:dart_flutter/src/data/model/meet_team_request_dto.dart';
 import 'package:dart_flutter/src/data/model/title_vote_dto.dart';
@@ -17,6 +19,7 @@ import '../../data/model/vote_request_dto.dart';
 
 import '../../data/model/vote_response_dto.dart';
 import '../model/meet_team_response_dto.dart';
+import '../model/proposal_request_dto.dart';
 import '../model/type/team_region.dart';
 
 class DartApiRemoteDataSource {
@@ -300,6 +303,37 @@ class DartApiRemoteDataSource {
     final response = await _httpUtil.request().put(path, data: body);
     return MeetTeamResponseDto.fromJson(response.data);
   }
+
+  // proposal: 내가 보낸/받은 제안 확인
+  static Future<List<ProposalResponseDto>> getProposalList(bool received) async {
+    const path = '/v1/users/me/proposals?type=received';
+    final String type = received ? "received" : "sent";
+    final pathUrl = "$path?type=$type";
+
+    final List jsonResponse = (await _httpUtil.request().get(pathUrl)).data;
+    List<ProposalResponseDto> proposalResponses = jsonResponse.map((proposal) => ProposalResponseDto.fromJson(proposal)).toList();
+    return proposalResponses;
+  }
+
+  // proposal: 제안 보내기 (채팅 요청)
+  static Future<void> postProposal(ProposalRequestDto proposalRequest) async {
+    const path = '/v1/proposals';
+    final body = proposalRequest.toJson();
+
+    final response = await _httpUtil.request().post(path, data: body);
+  }
+
+  // proposal: 제안 수락/거절 (업데이트)
+
+  // chat: 채팅방 목록 확인
+  static Future<List<ChatroomDto>> getChatroomList() async {
+    const path = '/v1/users/me/chat/rooms';
+    final List jsonResponse = (await _httpUtil.request().get(path)).data;
+    List<ChatroomDto> responses = jsonResponse.map((chatroom) => ChatroomDto.fromJson(chatroom)).toList();
+    return responses;
+  }
+
+  // chat: 채팅방 나가기 (업데이트)
 
   static String _getPathFromUrl(String url) {
     RegExp regExp = RegExp(r'https?://[^/]+(/.*)');
