@@ -84,8 +84,11 @@ class _ChatPagesState extends State<ChatPages> {
             child: PageView(
               onPageChanged: _onPageChanged,
               controller: _pageController,
-              children: const [
-                ChatRealTime(),
+              children: [
+                BlocProvider<ChatCubit>(
+                  create: (context) => ChatCubit()..initChat(),
+                  child: const ChatRealTime()
+                ),
                 // ChatResponseGet(),
                 // ChatResponseSend(),
               ],
