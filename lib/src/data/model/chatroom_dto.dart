@@ -1,6 +1,6 @@
 import 'package:dart_flutter/src/domain/entity/blind_date_team.dart';
 import 'package:dart_flutter/src/domain/entity/chat_message.dart';
-import 'package:dart_flutter/src/domain/entity/matched_teams.dart';
+import 'package:dart_flutter/src/domain/entity/chat_room.dart';
 import 'package:dart_flutter/src/domain/entity/type/blind_date_user.dart';
 
 class ChatroomDto {
@@ -33,13 +33,13 @@ class ChatroomDto {
     }
   }
 
-  MatchedTeams newMatchedTeams() {
+  ChatRoom newMatchedTeams() {
     List<BlindDateTeam> bt = [
       teamDtoToBlindDateTeam(requestingTeam),
       teamDtoToBlindDateTeam(requestedTeam),
     ];
 
-    return MatchedTeams(
+    return ChatRoom(
         id: _chatRoomId ?? 0,
         meetTeams: bt,
         messages: [ChatMessage(

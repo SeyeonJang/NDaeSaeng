@@ -1,4 +1,6 @@
-import 'package:dart_flutter/src/domain/entity/matched_teams.dart';
+import 'package:dart_flutter/src/domain/entity/blind_date_team.dart';
+import 'package:dart_flutter/src/domain/entity/chat_message.dart';
+import 'package:dart_flutter/src/domain/entity/chat_room.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:dart_flutter/src/domain/entity/user.dart';
 
@@ -6,14 +8,14 @@ import 'package:dart_flutter/src/domain/entity/user.dart';
 class ChatState {
   late User userResponse;
   late bool isLoading;
-  late List<MatchedTeams> myMatchedTeams;
-  late MatchedTeams oneMatchedTeams;
+  late List<ChatRoom> myChatRooms;
+  late ChatRoom chatRoom;
 
   ChatState ({
     required this.userResponse,
     required this.isLoading,
-    required this.myMatchedTeams,
-    required this.oneMatchedTeams
+    required this.myChatRooms,
+    required this.chatRoom
   });
 
   ChatState.init() {
@@ -23,31 +25,32 @@ class ChatState {
       titleVotes: []
     );
     isLoading = false;
-    myMatchedTeams = [];
-    oneMatchedTeams = MatchedTeams(
+    myChatRooms = [];
+    chatRoom = ChatRoom(
         id: 0,
-        meetTeams: [],
-        messages: []
+        myTeam: BlindDateTeam(id: 0, name: '', averageBirthYear: 0, regions: [], universityName: '', isCertifiedTeam: false, teamUsers: []),
+        otherTeam: BlindDateTeam(id: 0, name: '', averageBirthYear: 0, regions: [], universityName: '', isCertifiedTeam: false, teamUsers: []),
+        message: ChatMessage(userId: 0, message: '', sendTime: DateTime.now())
     );
   }
 
   ChatState copy() => ChatState(
     userResponse: userResponse,
     isLoading: isLoading,
-    myMatchedTeams: myMatchedTeams,
-    oneMatchedTeams: oneMatchedTeams
+    myChatRooms: myChatRooms,
+    chatRoom: chatRoom
   );
 
   void setIsLoading(bool isLoading) {
     this.isLoading = isLoading;
   }
 
-  void setMyMatchedTeams(List<MatchedTeams> myMatchedTeams) {
-    this.myMatchedTeams = myMatchedTeams;
+  void setChatRooms(List<ChatRoom> myMatchedTeams) {
+    this.myChatRooms = myMatchedTeams;
   }
 
-  void setOneMatchedTeams(MatchedTeams oneMatchedTeams) {
-    this.oneMatchedTeams = oneMatchedTeams;
+  void setOneMatchedTeams(ChatRoom oneMatchedTeams) {
+    this.chatRoom = oneMatchedTeams;
   }
 
   void setMyInfo(User userResponse) {

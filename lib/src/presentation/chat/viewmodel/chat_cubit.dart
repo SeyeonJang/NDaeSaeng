@@ -1,4 +1,4 @@
-import 'package:dart_flutter/src/domain/entity/matched_teams.dart';
+import 'package:dart_flutter/src/domain/entity/chat_room.dart';
 import 'package:dart_flutter/src/domain/entity/user.dart';
 import 'package:dart_flutter/src/domain/use_case/chat_use_case.dart';
 import 'package:dart_flutter/src/domain/use_case/user_use_case.dart';
@@ -16,15 +16,15 @@ class ChatCubit extends Cubit<ChatState> {
 
     User userResponse = await _userUseCase.myInfo();
     state.setMyInfo(userResponse);
-    List<MatchedTeams> myMatchedTeams = await _chatUseCase.getMatchedTeams();
-    state.setMyMatchedTeams(myMatchedTeams);
+    List<ChatRoom> myChatRooms = await _chatUseCase.getChatRooms();
+    state.setChatRooms(myChatRooms);
 
     state.setIsLoading(false);
     emit(state.copy());
   }
 
-  Future<void> getOneMatchedTeams(int teamId) async {
-    MatchedTeams myMatchedTeams = await _chatUseCase.getMatchedTeam(teamId);
+  Future<void> getChatRoomDetail(int teamId) async {
+    ChatRoom myMatchedTeams = await _chatUseCase.getChatRoomDetail(teamId);
     state.setOneMatchedTeams(myMatchedTeams);
   }
 }
