@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:dart_flutter/res/environment/app_environment.dart';
 import 'package:dart_flutter/src/common/pagination/pagination.dart';
+import 'package:dart_flutter/src/data/model/chatroom_detail_dto.dart';
 import 'package:dart_flutter/src/data/model/chatroom_dto.dart';
 import 'package:dart_flutter/src/data/model/proposal_response_dto.dart';
 import 'package:dart_flutter/src/data/model/question_dto.dart';
@@ -310,7 +311,130 @@ class DartApiRemoteDataSource {
     final String type = received ? "received" : "sent";
     final pathUrl = "$path?type=$type";
 
-    final List jsonResponse = (await _httpUtil.request().get(pathUrl)).data;
+    final ddd = '''
+    [
+    {
+      "proposalId": 1,
+    "createdTime": "2023-09-10T19:53:37",
+    "requestingTeam": {
+    "teamId": 16,
+    "name": "hello",
+    "averageAge": 22.666666666666668,
+    "users": [
+    {
+    "userId": 463,
+    "nickname": "DEFAULT",
+    "birthYear": 2000,
+    "studentIdCardVerificationStatus": "NOT_VERIFIED_YET",
+    "profileImageUrl": "DEFAULT",
+    "university": {
+    "universityId": 45,
+    "name": "ICT폴리텍대학",
+    "department": "모바일통신학과"
+    }
+    },
+    {
+    "userId": 1539,
+    "nickname": "DEFAULT",
+    "birthYear": 2003,
+    "studentIdCardVerificationStatus": "NOT_VERIFIED_YET",
+    "profileImageUrl": "DEFAULT",
+    "university": {
+    "universityId": 45,
+    "name": "ICT폴리텍대학",
+    "department": "모바일통신학과"
+    }
+    },
+    {
+    "userId": 3407,
+    "nickname": "DEFAULT",
+    "birthYear": 1998,
+    "studentIdCardVerificationStatus": "NOT_VERIFIED_YET",
+    "profileImageUrl": "DEFAULT",
+    "university": {
+    "universityId": 45,
+    "name": "ICT폴리텍대학",
+    "department": "모바일통신학과"
+    }
+    }
+    ],
+    "regions": [
+    {
+    "regionId": 1,
+    "name": "경기"
+    },
+    {
+    "regionId": 2,
+    "name": "경남"
+    },
+    {
+    "regionId": 3,
+    "name": "인천"
+    }
+    ]
+    },
+    "requestedTeam": {
+    "teamId": 18,
+    "name": "hello",
+    "averageAge": 23,
+    "users": [
+    {
+    "userId": 463,
+    "nickname": "DEFAULT",
+    "birthYear": 2000,
+    "studentIdCardVerificationStatus": "NOT_VERIFIED_YET",
+    "profileImageUrl": "DEFAULT",
+    "university": {
+    "universityId": 45,
+    "name": "ICT폴리텍대학",
+    "department": "모바일통신학과"
+    }
+    },
+    {
+    "userId": 3403,
+    "nickname": "DEFAULT",
+    "birthYear": 2002,
+    "studentIdCardVerificationStatus": "NOT_VERIFIED_YET",
+    "profileImageUrl": "DEFAULT",
+    "university": {
+    "universityId": 45,
+    "name": "ICT폴리텍대학",
+    "department": "모바일통신학과"
+    }
+    },
+    {
+    "userId": 3407,
+    "nickname": "DEFAULT",
+    "birthYear": 1998,
+    "studentIdCardVerificationStatus": "NOT_VERIFIED_YET",
+    "profileImageUrl": "DEFAULT",
+    "university": {
+    "universityId": 45,
+    "name": "ICT폴리텍대학",
+    "department": "모바일통신학과"
+    }
+    }
+    ],
+    "regions": [
+    {
+    "regionId": 1,
+    "name": "경기"
+    },
+    {
+    "regionId": 2,
+    "name": "경남"
+    },
+    {
+    "regionId": 3,
+    "name": "인천"
+    }
+    ]
+    }
+    }
+    ]
+    ''';
+    // final List jsonResponse = (await _httpUtil.request().get(pathUrl)).data;
+    final List jsonResponse = jsonDecode(ddd);
     List<ProposalResponseDto> proposalResponses = jsonResponse.map((proposal) => ProposalResponseDto.fromJson(proposal)).toList();
     return proposalResponses;
   }
@@ -328,9 +452,322 @@ class DartApiRemoteDataSource {
   // chat: 채팅방 목록 확인
   static Future<List<ChatroomDto>> getChatroomList() async {
     const path = '/v1/users/me/chat/rooms';
-    final List jsonResponse = (await _httpUtil.request().get(path)).data;
+    // final List jsonResponse = (await _httpUtil.request().get(path)).data;
+
+    final ddd = '''
+    [
+    {
+        "chatRoomId": 1,
+        "latestChatMessageContent": null,
+        "latestChatMessageTime": null,
+        "requestingTeam": {
+            "teamId": 16,
+            "name": "hello",
+            "isStudentIdCardVerified": false,
+            "university": {
+                "universityId": 45,
+                "name": "ICT폴리텍대학"
+            },
+            "teamUsers": [
+                {
+                    "userId": 463,
+                    "profileImageUrl": "DEFAULT"
+                },
+                {
+                    "userId": 1539,
+                    "profileImageUrl": "DEFAULT"
+                },
+                {
+                    "userId": 3407,
+                    "profileImageUrl": "DEFAULT"
+                }
+            ],
+            "teamRegions": [
+                {
+                    "regionId": 1,
+                    "name": "경기"
+                },
+                {
+                    "regionId": 2,
+                    "name": "경남"
+                },
+                {
+                    "regionId": 3,
+                    "name": "인천"
+                }
+            ]
+        },
+        "requestedTeam": {
+            "teamId": 18,
+            "name": "hello",
+            "isStudentIdCardVerified": false,
+            "university": {
+                "universityId": 45,
+                "name": "ICT폴리텍대학"
+            },
+            "teamUsers": [
+                {
+                    "userId": 463,
+                    "profileImageUrl": "DEFAULT"
+                },
+                {
+                    "userId": 3403,
+                    "profileImageUrl": "DEFAULT"
+                },
+                {
+                    "userId": 3407,
+                    "profileImageUrl": "DEFAULT"
+                }
+            ],
+            "teamRegions": [
+                {
+                    "regionId": 1,
+                    "name": "경기"
+                },
+                {
+                    "regionId": 2,
+                    "name": "경남"
+                },
+                {
+                    "regionId": 3,
+                    "name": "인천"
+                }
+            ]
+        }
+    },
+    {
+        "chatRoomId": 2,
+        "latestChatMessageContent": null,
+        "latestChatMessageTime": null,
+        "requestingTeam": {
+            "teamId": 16,
+            "name": "hello",
+            "isStudentIdCardVerified": false,
+            "university": {
+                "universityId": 45,
+                "name": "ICT폴리텍대학"
+            },
+            "teamUsers": [
+                {
+                    "userId": 463,
+                    "profileImageUrl": "DEFAULT"
+                },
+                {
+                    "userId": 1539,
+                    "profileImageUrl": "DEFAULT"
+                },
+                {
+                    "userId": 3407,
+                    "profileImageUrl": "DEFAULT"
+                }
+            ],
+            "teamRegions": [
+                {
+                    "regionId": 1,
+                    "name": "경기"
+                },
+                {
+                    "regionId": 2,
+                    "name": "경남"
+                },
+                {
+                    "regionId": 3,
+                    "name": "인천"
+                }
+            ]
+        },
+        "requestedTeam": {
+            "teamId": 20,
+            "name": "hello",
+            "isStudentIdCardVerified": false,
+            "university": {
+                "universityId": 45,
+                "name": "ICT폴리텍대학"
+            },
+            "teamUsers": [
+                {
+                    "userId": 3403,
+                    "profileImageUrl": "DEFAULT"
+                },
+                {
+                    "userId": 3407,
+                    "profileImageUrl": "DEFAULT"
+                }
+            ],
+            "teamRegions": [
+                {
+                    "regionId": 1,
+                    "name": "경기"
+                },
+                {
+                    "regionId": 2,
+                    "name": "경남"
+                },
+                {
+                    "regionId": 3,
+                    "name": "인천"
+                }
+            ]
+        }
+    }
+]
+    ''';
+    final List jsonResponse = jsonDecode(ddd);
+
     List<ChatroomDto> responses = jsonResponse.map((chatroom) => ChatroomDto.fromJson(chatroom)).toList();
     return responses;
+  }
+
+  // chat: 채팅방 상세조회
+  static Future<ChatroomDetailDto> getChatroomDetail(int chatroomId) async {
+    const path = '/v1/users/me/chat/rooms';
+    final pathUrl = '$path/$chatroomId';
+
+    // final response = (await _httpUtil.request().get(pathUrl)).data;
+
+    final ddd = '''
+    {
+    "chatRoomId": 1,
+    "latestChatMessageContent": null,
+    "latestChatMessageTime": null,
+    "requestingTeam": {
+        "teamId": 16,
+        "name": "hello",
+        "isStudentIdCardVerified": false,
+        "university": {
+            "universityId": 45,
+            "name": "ICT폴리텍대학",
+            "department": "모바일통신학과"
+        },
+        "teamUsers": [
+            {
+                "userId": 463,
+                "nickname": "DEFAULT",
+                "birthYear": 2000,
+                "profileImageUrl": "DEFAULT",
+                "university": {
+                    "universityId": 45,
+                    "name": "ICT폴리텍대학",
+                    "department": "모바일통신학과"
+                },
+                "profileQuestions": []
+            },
+            {
+                "userId": 1539,
+                "nickname": "DEFAULT",
+                "birthYear": 2003,
+                "profileImageUrl": "DEFAULT",
+                "university": {
+                    "universityId": 45,
+                    "name": "ICT폴리텍대학",
+                    "department": "모바일통신학과"
+                },
+                "profileQuestions": []
+            },
+            {
+                "userId": 3407,
+                "nickname": "냥냥이",
+                "birthYear": 1998,
+                "profileImageUrl": "https://w7.pngwing.com/pngs/90/776/png-transparent-internet-meme-cat-internet-forum-game-meme-game-cat-like-mammal-carnivoran.png",
+                "university": {
+                    "universityId": 45,
+                    "name": "ICT폴리텍대학",
+                    "department": "모바일통신학과"
+                },
+                "profileQuestions": [
+                    {
+                        "profileQuestionId": 1,
+                        "question": {
+                            "questionId": 1,
+                            "content": "시험 전날 공부해도 100점 맞을 것 같은 사람"
+                        },
+                        "count": 4
+                    }
+                ]
+            }
+        ],
+        "teamRegions": [
+            {
+                "regionId": 1,
+                "name": "경기"
+            },
+            {
+                "regionId": 2,
+                "name": "경남"
+            },
+            {
+                "regionId": 3,
+                "name": "인천"
+            }
+        ]
+    },
+    "requestedTeam": {
+        "teamId": 18,
+        "name": "hello",
+        "isStudentIdCardVerified": false,
+        "university": {
+            "universityId": 45,
+            "name": "ICT폴리텍대학",
+            "department": "모바일통신학과"
+        },
+        "teamUsers": [
+            {
+                "userId": 463,
+                "nickname": "DEFAULT",
+                "birthYear": 2000,
+                "profileImageUrl": "DEFAULT",
+                "university": {
+                    "universityId": 45,
+                    "name": "ICT폴리텍대학",
+                    "department": "모바일통신학과"
+                },
+                "profileQuestions": []
+            },
+            {
+                "userId": 3403,
+                "nickname": "DEFAULT",
+                "birthYear": 2002,
+                "profileImageUrl": "DEFAULT",
+                "university": {
+                    "universityId": 45,
+                    "name": "ICT폴리텍대학",
+                    "department": "모바일통신학과"
+                },
+                "profileQuestions": []
+            },
+            {
+                "userId": 3406,
+                "nickname": "DEFAULT",
+                "birthYear": 1997,
+                "profileImageUrl": "DEFAULT",
+                "university": {
+                    "universityId": 5048,
+                    "name": "경북대학교",
+                    "department": "자동차공학부 친환경자동차전공"
+                },
+                "profileQuestions": []
+            }
+        ],
+        "teamRegions": [
+            {
+                "regionId": 1,
+                "name": "경기"
+            },
+            {
+                "regionId": 2,
+                "name": "경남"
+            },
+            {
+                "regionId": 3,
+                "name": "인천"
+            }
+        ]
+    }
+}
+    ''';
+    final response = jsonDecode(ddd);
+
+    return ChatroomDetailDto.fromJson(response);
   }
 
   // chat: 채팅방 나가기 (업데이트)

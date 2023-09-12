@@ -5,8 +5,8 @@ import 'package:dart_flutter/src/domain/repository/chat_repository.dart';
 class ChatUseCase {
   final ChatRepository _chatRepository = MockChatRepository();
 
-  Future<ChatRoom> getChatRoomDetail(int teamId) async {
-    return _chatRepository.getChatRoomDetail(teamId);
+  Future<ChatRoom> getChatRoomDetail(int chatroomId) async {
+    return _chatRepository.getChatRoomDetail(chatroomId);
   }
 
   Future<List<ChatRoom>> getChatRooms() async {

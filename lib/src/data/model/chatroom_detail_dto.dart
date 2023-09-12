@@ -1,3 +1,9 @@
+import 'package:dart_flutter/src/domain/entity/blind_date_team_detail.dart';
+import 'package:dart_flutter/src/domain/entity/chat_room_detail.dart';
+import 'package:dart_flutter/src/domain/entity/type/blind_date_user_detail.dart';
+
+import '../../domain/entity/chat_message.dart';
+
 class ChatroomDetailDto {
   int? _chatRoomId;
   String? _latestChatMessageContent;
@@ -5,12 +11,11 @@ class ChatroomDetailDto {
   RequestingTeam? _requestingTeam;
   RequestingTeam? _requestedTeam;
 
-  ChatroomDetailDto(
-      {int? chatRoomId,
-        String? latestChatMessageContent,
-        String? latestChatMessageTime,
-        RequestingTeam? requestingTeam,
-        RequestingTeam? requestedTeam}) {
+  ChatroomDetailDto({int? chatRoomId,
+    String? latestChatMessageContent,
+    String? latestChatMessageTime,
+    RequestingTeam? requestingTeam,
+    RequestingTeam? requestedTeam}) {
     if (chatRoomId != null) {
       this._chatRoomId = chatRoomId;
     }
@@ -28,18 +33,86 @@ class ChatroomDetailDto {
     }
   }
 
+  ChatRoomDetail newChatRoomDetail(int userId) {
+    // find my team
+    var tempTeamA = teamDtoToBlindDateTeam(requestingTeam);
+    var tempTeamB = teamDtoToBlindDateTeam(requestedTeam);
+
+    BlindDateTeamDetail myTeam;
+    BlindDateTeamDetail otherTeam;
+    if (isMyTeam(tempTeamA, userId)) {
+      myTeam = tempTeamA;
+      otherTeam = tempTeamB;
+    } else {
+      myTeam = tempTeamB;
+      otherTeam = tempTeamA;
+    }
+
+    // return
+    return ChatRoomDetail(
+      id: _chatRoomId ?? 0,
+      myTeam: myTeam,
+      otherTeam: otherTeam,
+      messages: [ChatMessage(
+        userId: 0,
+        message: _latestChatMessageContent ?? "",
+        sendTime: DateTime.parse(_latestChatMessageTime ?? "0000-00-00 00:00:00"),
+      ),],
+    );
+  }
+
+  bool isMyTeam(BlindDateTeamDetail team, int userId) {
+    for (var user in team.teamUsers) {
+      if (user.id == userId) return true;
+    }
+    return false;
+  }
+
+  BlindDateTeamDetail teamDtoToBlindDateTeam(RequestingTeam? rq) {
+    return BlindDateTeamDetail(
+      id: rq?._teamId ?? 0,
+      name: rq?._name ?? "(알수없음)",
+      averageBirthYear: 0,
+      regions: [],
+      universityName: rq?._university?._name ?? "(알수없음)",
+      isCertifiedTeam: rq?._isStudentIdCardVerified ?? false,
+      teamUsers: rq?._teamUsers
+          ?.map((user) =>
+          BlindDateUserDetail(
+              id: user._userId ?? 0,
+              name: user._nickname ?? "(알수없음)",
+              profileImageUrl: user._profileImageUrl ?? "DEFAULT",
+              department: user._university?._department ?? "(알수없음)",
+              isCertifiedUser: false,  //TODO 인증여부 서버에서 받아야함
+              birthYear: user._birthYear ?? 0,
+              profileQuestionResponses: [
+              ]))
+          .toList() ??
+          [],
+    );
+  }
+
   int? get chatRoomId => _chatRoomId;
+
   set chatRoomId(int? chatRoomId) => _chatRoomId = chatRoomId;
+
   String? get latestChatMessageContent => _latestChatMessageContent;
+
   set latestChatMessageContent(String? latestChatMessageContent) =>
       _latestChatMessageContent = latestChatMessageContent;
+
   String? get latestChatMessageTime => _latestChatMessageTime;
+
   set latestChatMessageTime(String? latestChatMessageTime) =>
       _latestChatMessageTime = latestChatMessageTime;
+
   RequestingTeam? get requestingTeam => _requestingTeam;
+
   set requestingTeam(RequestingTeam? requestingTeam) =>
       _requestingTeam = requestingTeam;
+
   RequestingTeam? get requestedTeam => _requestedTeam;
+
   set requestedTeam(RequestingTeam? requestedTeam) =>
       _requestedTeam = requestedTeam;
 
@@ -68,6 +141,11 @@ class ChatroomDetailDto {
     }
     return data;
   }
+
+  @override
+  String toString() {
+    return 'ChatroomDetailDto{_chatRoomId: $_chatRoomId, _latestChatMessageContent: $_latestChatMessageContent, _latestChatMessageTime: $_latestChatMessageTime, _requestingTeam: $_requestingTeam, _requestedTeam: $_requestedTeam}';
+  }
 }
 
 class RequestingTeam {
@@ -78,13 +156,12 @@ class RequestingTeam {
   List<TeamUsers>? _teamUsers;
   List<TeamRegions>? _teamRegions;
 
-  RequestingTeam(
-      {int? teamId,
-        String? name,
-        bool? isStudentIdCardVerified,
-        University? university,
-        List<TeamUsers>? teamUsers,
-        List<TeamRegions>? teamRegions}) {
+  RequestingTeam({int? teamId,
+    String? name,
+    bool? isStudentIdCardVerified,
+    University? university,
+    List<TeamUsers>? teamUsers,
+    List<TeamRegions>? teamRegions}) {
     if (teamId != null) {
       this._teamId = teamId;
     }
@@ -106,17 +183,28 @@ class RequestingTeam {
   }
 
   int? get teamId => _teamId;
+
   set teamId(int? teamId) => _teamId = teamId;
+
   String? get name => _name;
+
   set name(String? name) => _name = name;
+
   bool? get isStudentIdCardVerified => _isStudentIdCardVerified;
+
   set isStudentIdCardVerified(bool? isStudentIdCardVerified) =>
       _isStudentIdCardVerified = isStudentIdCardVerified;
+
   University? get university => _university;
+
   set university(University? university) => _university = university;
+
   List<TeamUsers>? get teamUsers => _teamUsers;
+
   set teamUsers(List<TeamUsers>? teamUsers) => _teamUsers = teamUsers;
+
   List<TeamRegions>? get teamRegions => _teamRegions;
+
   set teamRegions(List<TeamRegions>? teamRegions) => _teamRegions = teamRegions;
 
   RequestingTeam.fromJson(Map<String, dynamic> json) {
@@ -156,6 +244,11 @@ class RequestingTeam {
     }
     return data;
   }
+
+  @override
+  String toString() {
+    return 'RequestingTeam{_teamId: $_teamId, _name: $_name, _isStudentIdCardVerified: $_isStudentIdCardVerified, _university: $_university, _teamUsers: $_teamUsers, _teamRegions: $_teamRegions}';
+  }
 }
 
 class University {
@@ -176,10 +269,15 @@ class University {
   }
 
   int? get universityId => _universityId;
+
   set universityId(int? universityId) => _universityId = universityId;
+
   String? get name => _name;
+
   set name(String? name) => _name = name;
+
   String? get department => _department;
+
   set department(String? department) => _department = department;
 
   University.fromJson(Map<String, dynamic> json) {
@@ -205,13 +303,12 @@ class TeamUsers {
   University? _university;
   List<ProfileQuestions>? _profileQuestions;
 
-  TeamUsers(
-      {int? userId,
-        String? nickname,
-        int? birthYear,
-        String? profileImageUrl,
-        University? university,
-        List<ProfileQuestions>? profileQuestions}) {
+  TeamUsers({int? userId,
+    String? nickname,
+    int? birthYear,
+    String? profileImageUrl,
+    University? university,
+    List<ProfileQuestions>? profileQuestions}) {
     if (userId != null) {
       this._userId = userId;
     }
@@ -233,17 +330,28 @@ class TeamUsers {
   }
 
   int? get userId => _userId;
+
   set userId(int? userId) => _userId = userId;
+
   String? get nickname => _nickname;
+
   set nickname(String? nickname) => _nickname = nickname;
+
   int? get birthYear => _birthYear;
+
   set birthYear(int? birthYear) => _birthYear = birthYear;
+
   String? get profileImageUrl => _profileImageUrl;
+
   set profileImageUrl(String? profileImageUrl) =>
       _profileImageUrl = profileImageUrl;
+
   University? get university => _university;
+
   set university(University? university) => _university = university;
+
   List<ProfileQuestions>? get profileQuestions => _profileQuestions;
+
   set profileQuestions(List<ProfileQuestions>? profileQuestions) =>
       _profileQuestions = profileQuestions;
 
@@ -278,6 +386,11 @@ class TeamUsers {
     }
     return data;
   }
+
+  @override
+  String toString() {
+    return 'TeamUsers{_userId: $_userId, _nickname: $_nickname, _birthYear: $_birthYear, _profileImageUrl: $_profileImageUrl, _university: $_university, _profileQuestions: $_profileQuestions}';
+  }
 }
 
 class ProfileQuestions {
@@ -298,11 +411,16 @@ class ProfileQuestions {
   }
 
   int? get profileQuestionId => _profileQuestionId;
+
   set profileQuestionId(int? profileQuestionId) =>
       _profileQuestionId = profileQuestionId;
+
   Question? get question => _question;
+
   set question(Question? question) => _question = question;
+
   int? get count => _count;
+
   set count(int? count) => _count = count;
 
   ProfileQuestions.fromJson(Map<String, dynamic> json) {
@@ -338,8 +456,11 @@ class Question {
   }
 
   int? get questionId => _questionId;
+
   set questionId(int? questionId) => _questionId = questionId;
+
   String? get content => _content;
+
   set content(String? content) => _content = content;
 
   Question.fromJson(Map<String, dynamic> json) {
@@ -369,8 +490,11 @@ class TeamRegions {
   }
 
   int? get regionId => _regionId;
+
   set regionId(int? regionId) => _regionId = regionId;
+
   String? get name => _name;
+
   set name(String? name) => _name = name;
 
   TeamRegions.fromJson(Map<String, dynamic> json) {

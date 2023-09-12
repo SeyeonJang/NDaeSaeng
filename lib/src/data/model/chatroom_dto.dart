@@ -12,10 +12,10 @@ class ChatroomDto {
 
   ChatroomDto(
       {int? chatRoomId,
-        String? latestChatMessageContent,
-        String? latestChatMessageTime,
-        RequestingTeam? requestingTeam,
-        RequestingTeam? requestedTeam}) {
+      String? latestChatMessageContent,
+      String? latestChatMessageTime,
+      RequestingTeam? requestingTeam,
+      RequestingTeam? requestedTeam}) {
     if (chatRoomId != null) {
       this._chatRoomId = chatRoomId;
     }
@@ -33,21 +33,39 @@ class ChatroomDto {
     }
   }
 
-  ChatRoom newMatchedTeams() {
-    List<BlindDateTeam> bt = [
-      teamDtoToBlindDateTeam(requestingTeam),
-      teamDtoToBlindDateTeam(requestedTeam),
-    ];
+  ChatRoom newChatRoom(int userId) {
+    // find my team
+    var tempTeamA = teamDtoToBlindDateTeam(requestingTeam);
+    var tempTeamB = teamDtoToBlindDateTeam(requestedTeam);
 
+    BlindDateTeam myTeam;
+    BlindDateTeam otherTeam;
+    if (isMyTeam(tempTeamA, userId)) {
+      myTeam = tempTeamA;
+      otherTeam = tempTeamB;
+    } else {
+      myTeam = tempTeamB;
+      otherTeam = tempTeamA;
+    }
+
+    // return
     return ChatRoom(
-        id: _chatRoomId ?? 0,
-        meetTeams: bt,
-        messages: [ChatMessage(
-            userId: 0,
-            message: _latestChatMessageContent ?? "",
-            sendTime: DateTime.parse(_latestChatMessageTime ?? "0000-00-00 00:00:00"),
-        )],
+      id: _chatRoomId ?? 0,
+      myTeam: myTeam,
+      otherTeam: otherTeam,
+      message: ChatMessage(
+        userId: 0,
+        message: _latestChatMessageContent ?? "",
+        sendTime: DateTime.parse(_latestChatMessageTime ?? "0000-00-00 00:00:00"),
+      ),
     );
+  }
+
+  bool isMyTeam(BlindDateTeam team, int userId) {
+    for (var user in team.teamUsers) {
+      if (user.id == userId) return true;
+    }
+    return false;
   }
 
   BlindDateTeam teamDtoToBlindDateTeam(RequestingTeam? rq) {
@@ -58,40 +76,44 @@ class ChatroomDto {
       regions: [],
       universityName: rq?._university?._name ?? "(알수없음)",
       isCertifiedTeam: rq?._isStudentIdCardVerified ?? false,
-      teamUsers: rq?._teamUsers?.map((user) => BlindDateUser(
-          id: user._userId ?? 0,
-          name: "(알수없음)",
-          profileImageUrl: user._profileImageUrl ?? "DEFAULT",
-          department: "(알수없음)"
-      )).toList() ?? [],
+      teamUsers: rq?._teamUsers
+              ?.map((user) => BlindDateUser(
+                  id: user._userId ?? 0,
+                  name: "(알수없음)",
+                  profileImageUrl: user._profileImageUrl ?? "DEFAULT",
+                  department: "(알수없음)"))
+              .toList() ??
+          [],
     );
   }
 
   int? get chatRoomId => _chatRoomId;
+
   set chatRoomId(int? chatRoomId) => _chatRoomId = chatRoomId;
+
   String? get latestChatMessageContent => _latestChatMessageContent;
+
   set latestChatMessageContent(String? latestChatMessageContent) =>
       _latestChatMessageContent = latestChatMessageContent;
+
   String? get latestChatMessageTime => _latestChatMessageTime;
-  set latestChatMessageTime(String? latestChatMessageTime) =>
-      _latestChatMessageTime = latestChatMessageTime;
+
+  set latestChatMessageTime(String? latestChatMessageTime) => _latestChatMessageTime = latestChatMessageTime;
+
   RequestingTeam? get requestingTeam => _requestingTeam;
-  set requestingTeam(RequestingTeam? requestingTeam) =>
-      _requestingTeam = requestingTeam;
+
+  set requestingTeam(RequestingTeam? requestingTeam) => _requestingTeam = requestingTeam;
+
   RequestingTeam? get requestedTeam => _requestedTeam;
-  set requestedTeam(RequestingTeam? requestedTeam) =>
-      _requestedTeam = requestedTeam;
+
+  set requestedTeam(RequestingTeam? requestedTeam) => _requestedTeam = requestedTeam;
 
   ChatroomDto.fromJson(Map<String, dynamic> json) {
     _chatRoomId = json['chatRoomId'];
     _latestChatMessageContent = json['latestChatMessageContent'];
     _latestChatMessageTime = json['latestChatMessageTime'];
-    _requestingTeam = json['requestingTeam'] != null
-        ? new RequestingTeam.fromJson(json['requestingTeam'])
-        : null;
-    _requestedTeam = json['requestedTeam'] != null
-        ? new RequestingTeam.fromJson(json['requestedTeam'])
-        : null;
+    _requestingTeam = json['requestingTeam'] != null ? new RequestingTeam.fromJson(json['requestingTeam']) : null;
+    _requestedTeam = json['requestedTeam'] != null ? new RequestingTeam.fromJson(json['requestedTeam']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -107,6 +129,11 @@ class ChatroomDto {
     }
     return data;
   }
+
+  @override
+  String toString() {
+    return 'ChatroomDto{_chatRoomId: $_chatRoomId, _latestChatMessageContent: $_latestChatMessageContent, _latestChatMessageTime: $_latestChatMessageTime, _requestingTeam: $_requestingTeam, _requestedTeam: $_requestedTeam}';
+  }
 }
 
 class RequestingTeam {
@@ -119,11 +146,11 @@ class RequestingTeam {
 
   RequestingTeam(
       {int? teamId,
-        String? name,
-        bool? isStudentIdCardVerified,
-        University? university,
-        List<TeamUsers>? teamUsers,
-        List<TeamRegions>? teamRegions}) {
+      String? name,
+      bool? isStudentIdCardVerified,
+      University? university,
+      List<TeamUsers>? teamUsers,
+      List<TeamRegions>? teamRegions}) {
     if (teamId != null) {
       this._teamId = teamId;
     }
@@ -145,26 +172,34 @@ class RequestingTeam {
   }
 
   int? get teamId => _teamId;
+
   set teamId(int? teamId) => _teamId = teamId;
+
   String? get name => _name;
+
   set name(String? name) => _name = name;
+
   bool? get isStudentIdCardVerified => _isStudentIdCardVerified;
-  set isStudentIdCardVerified(bool? isStudentIdCardVerified) =>
-      _isStudentIdCardVerified = isStudentIdCardVerified;
+
+  set isStudentIdCardVerified(bool? isStudentIdCardVerified) => _isStudentIdCardVerified = isStudentIdCardVerified;
+
   University? get university => _university;
+
   set university(University? university) => _university = university;
+
   List<TeamUsers>? get teamUsers => _teamUsers;
+
   set teamUsers(List<TeamUsers>? teamUsers) => _teamUsers = teamUsers;
+
   List<TeamRegions>? get teamRegions => _teamRegions;
+
   set teamRegions(List<TeamRegions>? teamRegions) => _teamRegions = teamRegions;
 
   RequestingTeam.fromJson(Map<String, dynamic> json) {
     _teamId = json['teamId'];
     _name = json['name'];
     _isStudentIdCardVerified = json['isStudentIdCardVerified'];
-    _university = json['university'] != null
-        ? new University.fromJson(json['university'])
-        : null;
+    _university = json['university'] != null ? new University.fromJson(json['university']) : null;
     if (json['teamUsers'] != null) {
       _teamUsers = <TeamUsers>[];
       json['teamUsers'].forEach((v) {
@@ -195,6 +230,11 @@ class RequestingTeam {
     }
     return data;
   }
+
+  @override
+  String toString() {
+    return 'RequestingTeam{_teamId: $_teamId, _name: $_name, _isStudentIdCardVerified: $_isStudentIdCardVerified, _university: $_university, _teamUsers: $_teamUsers, _teamRegions: $_teamRegions}';
+  }
 }
 
 class University {
@@ -211,8 +251,11 @@ class University {
   }
 
   int? get universityId => _universityId;
+
   set universityId(int? universityId) => _universityId = universityId;
+
   String? get name => _name;
+
   set name(String? name) => _name = name;
 
   University.fromJson(Map<String, dynamic> json) {
@@ -242,10 +285,12 @@ class TeamUsers {
   }
 
   int? get userId => _userId;
+
   set userId(int? userId) => _userId = userId;
+
   String? get profileImageUrl => _profileImageUrl;
-  set profileImageUrl(String? profileImageUrl) =>
-      _profileImageUrl = profileImageUrl;
+
+  set profileImageUrl(String? profileImageUrl) => _profileImageUrl = profileImageUrl;
 
   TeamUsers.fromJson(Map<String, dynamic> json) {
     _userId = json['userId'];
@@ -274,8 +319,11 @@ class TeamRegions {
   }
 
   int? get regionId => _regionId;
+
   set regionId(int? regionId) => _regionId = regionId;
+
   String? get name => _name;
+
   set name(String? name) => _name = name;
 
   TeamRegions.fromJson(Map<String, dynamic> json) {

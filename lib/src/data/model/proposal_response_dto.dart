@@ -57,6 +57,11 @@ class ProposalResponseDto {
     }
     return data;
   }
+
+  @override
+  String toString() {
+    return 'ProposalResponseDto{_proposalId: $_proposalId, _createdTime: $_createdTime, _requestingTeam: $_requestingTeam, _requestedTeam: $_requestedTeam}';
+  }
 }
 
 class RequestingTeam {
@@ -116,6 +121,8 @@ class RequestingTeam {
         _regions!.add(new Regions.fromJson(v));
       });
     }
+
+
   }
 
   Map<String, dynamic> toJson() {
@@ -130,6 +137,11 @@ class RequestingTeam {
       data['regions'] = this._regions!.map((v) => v.toJson()).toList();
     }
     return data;
+  }
+
+  @override
+  String toString() {
+    return 'RequestingTeam{_teamId: $_teamId, _name: $_name, _averageAge: $_averageAge, _users: $_users, _regions: $_regions}';
   }
 }
 
@@ -209,6 +221,11 @@ class Users {
     }
     return data;
   }
+
+  @override
+  String toString() {
+    return 'Users{_userId: $_userId, _nickname: $_nickname, _birthYear: $_birthYear, _studentIdCardVerificationStatus: $_studentIdCardVerificationStatus, _profileImageUrl: $_profileImageUrl, _university: $_university}';
+  }
 }
 
 class University {
@@ -278,6 +295,11 @@ class Regions {
     data['regionId'] = this._regionId;
     data['name'] = this._name;
     return data;
+  }
+
+  @override
+  String toString() {
+    return 'Regions{_regionId: $_regionId, _name: $_name}';
   }
 }
 
@@ -352,5 +374,10 @@ class RequestedTeam {
       data['regions'] = this._regions!.map((v) => v.toJson()).toList();
     }
     return data;
+  }
+
+  @override
+  String toString() {
+    return 'RequestedTeam{_teamId: $_teamId, _name: $_name, _averageAge: $_averageAge, _users: $_users, _regions: $_regions}';
   }
 }
