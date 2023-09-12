@@ -14,13 +14,30 @@ class ChatRealTime extends StatelessWidget {
       builder: (context, state) {
         return Scaffold(
           backgroundColor: Colors.grey.shade50,
-          body: SingleChildScrollView(
-              child: Padding(
-                padding: EdgeInsets.all(SizeConfig.defaultSize),
-                child: ChatRealTimeOneTeamView(chatState: state,),
-              ) // TODO : pagination
-          ),
-          // body: const _NoChatView(),
+          body: Column(
+            children: [
+              if (state.isLoading)
+                CircularProgressIndicator(),
+              state.myChatRooms.length == 0
+                  ? const _NoChatView()
+                  : SingleChildScrollView(
+                    child: Padding(
+                      padding: EdgeInsets.all(SizeConfig.defaultSize),
+                      child: Column(
+                        children: [
+                          for (int i=0; i<state.myChatRooms.length; i++)
+                            Column(
+                              children: [
+                                ChatRealTimeOneTeamView(ancestorContext: context, chatState: state, matchedTeams: state.myChatRooms[i],),
+                                  SizedBox(height: SizeConfig.defaultSize)
+                              ],
+                            ),
+                        ],
+                      ),
+                    )
+                  ),
+            ],
+          )// TODO : pagination
         );
       }
     );

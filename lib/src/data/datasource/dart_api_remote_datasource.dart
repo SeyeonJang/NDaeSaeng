@@ -654,7 +654,7 @@ class DartApiRemoteDataSource {
             },
             {
                 "userId": 1539,
-                "nickname": "DEFAULT",
+                "nickname": "ㅠ푸ㅠㅜㅍ퓨ㅍ",
                 "birthYear": 2003,
                 "profileImageUrl": "DEFAULT",
                 "university": {

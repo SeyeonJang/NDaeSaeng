@@ -1,4 +1,5 @@
 import 'package:dart_flutter/src/domain/entity/chat_room.dart';
+import 'package:dart_flutter/src/domain/entity/chat_room_detail.dart';
 import 'package:dart_flutter/src/domain/entity/user.dart';
 import 'package:dart_flutter/src/domain/use_case/chat_use_case.dart';
 import 'package:dart_flutter/src/domain/use_case/user_use_case.dart';
@@ -24,7 +25,7 @@ class ChatCubit extends Cubit<ChatState> {
   }
 
   Future<void> getChatRoomDetail(int teamId) async {
-    ChatRoom myMatchedTeams = await _chatUseCase.getChatRoomDetail(teamId);
-    state.setOneMatchedTeams(myMatchedTeams);
+    ChatRoomDetail myMatchedTeams = await _chatUseCase.getChatRoomDetail(teamId);
+    state.setChatRoom(myMatchedTeams);
   }
 }
