@@ -47,6 +47,8 @@ dependencies:
   # network
   http: ^1.0.0
   dio: ^5.2.1+1
+  web_socket_channel: ^2.4.0
+  stomp_dart_client: ^1.0.0
 
   # service api
   kakao_flutter_sdk: ^1.4.1

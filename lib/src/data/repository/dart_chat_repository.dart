@@ -1,3 +1,4 @@
+import 'package:dart_flutter/res/environment/app_environment.dart';
 import 'package:dart_flutter/src/data/datasource/dart_api_remote_datasource.dart';
 import 'package:dart_flutter/src/data/model/chatroom_detail_dto.dart';
 import 'package:dart_flutter/src/data/model/chatroom_dto.dart';
@@ -14,7 +15,7 @@ class DartChatRepository implements ChatRepository {
   Future<ChatRoomDetail> getChatRoomDetail(int chatroomId) async {
     ChatroomDetailDto chatroomDetail = await DartApiRemoteDataSource.getChatroomDetail(chatroomId);
     int userId = (await _userRepository.myInfo()).personalInfo?.id ?? 0;
-    return chatroomDetail.newChatRoomDetail(userId);
+    return chatroomDetail.newChatRoomDetail(AppEnvironment.getEnv.getApiBaseUrl(), userId);
   }
 
   @override
