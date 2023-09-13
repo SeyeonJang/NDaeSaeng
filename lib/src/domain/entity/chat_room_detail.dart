@@ -1,17 +1,20 @@
 import 'package:dart_flutter/src/domain/entity/blind_date_team_detail.dart';
 import 'package:dart_flutter/src/domain/entity/chat_message.dart';
+import 'package:dart_flutter/src/common/chat/chat_connection.dart';
 
 class ChatRoomDetail {
   final int id;
   final BlindDateTeamDetail myTeam;
   final BlindDateTeamDetail otherTeam;
   final List<ChatMessage> messages;
+  final ChatConnection connection;
 
   ChatRoomDetail({
     required this.id,
     required this.myTeam,
     required this.otherTeam,
-    required this.messages
+    required this.messages,
+    required this.connection
   });
 
   factory ChatRoomDetail.fromJson(Map<String, dynamic> json) {
@@ -24,13 +27,16 @@ class ChatRoomDetail {
       parsedMessages =
           messagesJsonList.map((v) => ChatMessage.fromJson(v)).toList();
     }
-
+    ChatConnection connection = ChatConnection(
+      json["connection"]["baseUrl"], json["connection"]["id"]
+    );
 
     return ChatRoomDetail(
       id: parsedId,
       myTeam: parsedMyTeam,
       otherTeam: parsedOtherTeam,
       messages: parsedMessages,
+      connection: connection
     );
   }
 

@@ -269,6 +269,11 @@ class University {
     data['name'] = this._name;
     return data;
   }
+
+  @override
+  String toString() {
+    return 'University{_universityId: $_universityId, _name: $_name}';
+  }
 }
 
 class TeamUsers {

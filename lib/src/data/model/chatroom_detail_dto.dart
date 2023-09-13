@@ -1,3 +1,4 @@
+import 'package:dart_flutter/src/common/chat/chat_connection.dart';
 import 'package:dart_flutter/src/domain/entity/blind_date_team_detail.dart';
 import 'package:dart_flutter/src/domain/entity/chat_room_detail.dart';
 import 'package:dart_flutter/src/domain/entity/type/blind_date_user_detail.dart';
@@ -33,7 +34,7 @@ class ChatroomDetailDto {
     }
   }
 
-  ChatRoomDetail newChatRoomDetail(int userId) {
+  ChatRoomDetail newChatRoomDetail(String baseUrl, int userId) {
     // find my team
     var tempTeamA = teamDtoToBlindDateTeam(requestingTeam);
     var tempTeamB = teamDtoToBlindDateTeam(requestedTeam);
@@ -58,6 +59,7 @@ class ChatroomDetailDto {
         message: _latestChatMessageContent ?? "",
         sendTime: DateTime.parse(_latestChatMessageTime ?? "0000-00-00 00:00:00"),
       ),],
+      connection: ChatConnection(baseUrl, _chatRoomId ?? 0),
     );
   }
 
