@@ -1,10 +1,15 @@
 import 'package:chatview/chatview.dart';
 import 'package:dart_flutter/res/config/size_config.dart';
+import 'package:dart_flutter/src/domain/entity/chat_room_detail.dart';
+import 'package:dart_flutter/src/domain/entity/user.dart';
 import 'package:dart_flutter/src/presentation/chat/view/chat_profile.dart';
 import 'package:flutter/material.dart';
 
 class ChattingRoom extends StatefulWidget {
-  const ChattingRoom({super.key});
+  final ChatRoomDetail chatRoomDetail;
+  final User user;
+
+  const ChattingRoom({super.key, required this.chatRoomDetail, required this.user});
 
   @override
   State<ChattingRoom> createState() => _ChattingRoomState();
@@ -19,7 +24,7 @@ class _ChattingRoomState extends State<ChattingRoom> {
       appBar: AppBar(
         backgroundColor: Colors.white,
         surfaceTintColor: Colors.white,
-        title: Text("팀이름", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.8),),
+        title: Text(widget.chatRoomDetail.otherTeam.name, style: TextStyle(fontSize: SizeConfig.defaultSize * 1.8),),
       ),
 
       endDrawerEnableOpenDragGesture: false,
@@ -30,116 +35,131 @@ class _ChattingRoomState extends State<ChattingRoom> {
             padding: EdgeInsets.zero,
             children: [
               DrawerHeader(
+                decoration: BoxDecoration(
+                  color: Colors.grey.shade50,
+                ),
                 child: Padding(
                   padding: EdgeInsets.only(top: SizeConfig.defaultSize * 4),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text("지금 채팅 중인 팀은"),
+                      const Text("지금 채팅 중인 팀은"),
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Text('한양대학교 ', style: TextStyle(
+                          Text('${widget.chatRoomDetail.otherTeam.universityName} ', style: TextStyle(
                               fontSize: SizeConfig.defaultSize * 1.8, fontWeight: FontWeight.w600
                           ),),
-                          // if (chatState.userResponse.personalInfo?.verification.isVerificationSuccess ?? false)
-                          Image.asset("assets/images/check.png", width: SizeConfig.defaultSize * 1.55),
+                          if (widget.chatRoomDetail.otherTeam.isCertifiedTeam)
+                            Image.asset("assets/images/check.png", width: SizeConfig.defaultSize * 1.55),
                         ],
                       ),
-                      SizedBox(height: SizeConfig.defaultSize * 2,),
-                      Text("23.5세"),
-                      SizedBox(height: SizeConfig.defaultSize * 0.3,),
-                      Text("서울 인천 경기 부산 머머 머머 머머 머머")
+                        SizedBox(height: SizeConfig.defaultSize * 2,),
+                      Text("${widget.chatRoomDetail.otherTeam.averageBirthYear.toString().substring(2,)}세"),
+                        SizedBox(height: SizeConfig.defaultSize * 0.3,),
+                      Text(widget.chatRoomDetail.otherTeam.regions.map((location) => location.name).join(' '))
                     ],
                   ),
-                ),
-                decoration: BoxDecoration(
-                  color: Colors.grey.shade100,
                 ),
               ),
 
               Padding(
                 padding: EdgeInsets.only(left: SizeConfig.defaultSize * 1.8, top: SizeConfig.defaultSize * 2, bottom: SizeConfig.defaultSize * 2),
-                child: Text("상대팀이름", style: TextStyle(
+                child: Text(widget.chatRoomDetail.otherTeam.name, style: TextStyle(
                     fontSize: SizeConfig.defaultSize * 1.5,
-                    fontWeight: FontWeight.w400
+                    fontWeight: FontWeight.w600
                 ),),
               ),
-              for (int i=1; i<=3; i++)
+              for (int i=0; i<widget.chatRoomDetail.otherTeam.teamUsers.length; i++)
                 ListTile(
                   title: Row(
                     children: [
                       Row(
                         children: [
-                          Container( // 버리는 사진
-                            width: SizeConfig.defaultSize * 3.7,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                            ),
-                            child: Center(
-                              child: Image.asset(
-                                  'assets/images/profile-mockup3.png',
-                                  width: SizeConfig.defaultSize * 3.7, // 이미지 크기
-                                  height: SizeConfig.defaultSize * 3.7
-                              ),
-                            ),
+                          ClipOval(
+                            child: widget.chatRoomDetail.otherTeam.teamUsers[i].profileImageUrl == 'DEFAULT' || !widget.chatRoomDetail.otherTeam.teamUsers[i].profileImageUrl.startsWith('https://')
+                                ? Image.asset(
+                                'assets/images/profile-mockup3.png',
+                                width: SizeConfig.defaultSize * 3.7,
+                                height: SizeConfig.defaultSize * 3.7
+                                )
+                                : Image.network(widget.chatRoomDetail.otherTeam.teamUsers[i].profileImageUrl,
+                                width: SizeConfig.defaultSize * 3.7,
+                                height: SizeConfig.defaultSize * 3.7,
+                                fit: BoxFit.cover,)
                           ),
-                          SizedBox(width: SizeConfig.defaultSize * 1.3),
-                          Text('상대팀 $i', style: TextStyle(
+                            SizedBox(width: SizeConfig.defaultSize * 1.3),
+                          Text(widget.chatRoomDetail.otherTeam.teamUsers[i].name == 'DEFAULT' ? '닉네임없음' : widget.chatRoomDetail.otherTeam.teamUsers[i].name,
+                            style: TextStyle(
                             fontSize: SizeConfig.defaultSize * 1.5
                           ),),
                         ],
                       ),
-                      SizedBox(width: SizeConfig.defaultSize * 4,),
+                        SizedBox(width: SizeConfig.defaultSize * 5),
                       Expanded(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Text("학과학과학과학과학과", style: TextStyle(
-                            fontSize: SizeConfig.defaultSize * 1.2,
-                            overflow: TextOverflow.ellipsis
-                      ),),
-                          ],
+                        child: Container(
+                          alignment: Alignment.centerRight,
+                          child: Text(widget.chatRoomDetail.otherTeam.teamUsers[i].department, style: TextStyle(
+                          fontSize: SizeConfig.defaultSize * 1.2,
+                          overflow: TextOverflow.ellipsis,
+                          color: Colors.grey
+                          ),),
                         ))
                     ],
                   ),
                   onTap: () {
-                    // id로 회원정보 값 가져오기 (userResponse 주면됨)
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => const ChatProfile()));
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => ChatProfile(university: widget.chatRoomDetail.otherTeam.universityName, profile: widget.chatRoomDetail.otherTeam.teamUsers[i])));
                   },
                 ),
               Padding(
                 padding: EdgeInsets.only(left: SizeConfig.defaultSize * 1.8, top: SizeConfig.defaultSize * 2, bottom: SizeConfig.defaultSize * 2),
-                child: Text("우리팀이름", style: TextStyle(
+                child: Text(widget.chatRoomDetail.myTeam.name, style: TextStyle(
                     fontSize: SizeConfig.defaultSize * 1.5,
-                    fontWeight: FontWeight.w400
+                    fontWeight: FontWeight.w600
                 ),),
               ),
-              for (int i=1; i<=3; i++)
-                ListTile(
-                  title: Row(
-                    children: [
-                      Container( // 버리는 사진
-                        width: SizeConfig.defaultSize * 3.7,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
+              for (int i=0; i<widget.chatRoomDetail.myTeam.teamUsers.length; i++)
+                Expanded(
+                  child: ListTile(
+                    title: Row(
+                      children: [
+                        Row(
+                          children: [
+                            ClipOval(
+                                child: widget.chatRoomDetail.myTeam.teamUsers[i].profileImageUrl == 'DEFAULT' || !widget.chatRoomDetail.myTeam.teamUsers[i].profileImageUrl.startsWith('https://')
+                                    ? Image.asset(
+                                    'assets/images/profile-mockup3.png',
+                                    width: SizeConfig.defaultSize * 3.7, // 이미지 크기
+                                    height: SizeConfig.defaultSize * 3.7
+                                )
+                                    : Image.network(widget.chatRoomDetail.myTeam.teamUsers[i].profileImageUrl,
+                                  width: SizeConfig.defaultSize * 3.7,
+                                  height: SizeConfig.defaultSize * 3.7,
+                                  fit: BoxFit.cover,)
+                            ),
+                              SizedBox(width: SizeConfig.defaultSize * 1.3),
+                            Text(widget.chatRoomDetail.myTeam.teamUsers[i].name == 'DEFAULT' ? '닉네임없음' : widget.chatRoomDetail.myTeam.teamUsers[i].name, style: TextStyle(
+                              fontSize: SizeConfig.defaultSize * 1.5
+                            ),),
+                          ],
                         ),
-                        child: Center(
-                          child: Image.asset(
-                              'assets/images/profile-mockup3.png',
-                              width: SizeConfig.defaultSize * 3.7, // 이미지 크기
-                              height: SizeConfig.defaultSize * 3.7
+                          SizedBox(width: SizeConfig.defaultSize * 5),
+                        Expanded(
+                          child: Container(
+                            alignment: Alignment.centerRight,
+                            child: Text(widget.chatRoomDetail.myTeam.teamUsers[i].department, style: TextStyle(
+                              fontSize: SizeConfig.defaultSize * 1.2,
+                              overflow: TextOverflow.ellipsis,
+                              color: Colors.grey
+                            ),),
                           ),
-                        ),
-                      ),
-                      SizedBox(width: SizeConfig.defaultSize * 1.3),
-                      Text('우리팀 $i'),
-                    ],
+                        )
+                      ],
+                    ),
+                    onTap: () {
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => ChatProfile(university: widget.chatRoomDetail.myTeam.universityName, profile: widget.chatRoomDetail.myTeam.teamUsers[i])));
+                    },
                   ),
-                  onTap: () {
-                    // id로 회원정보 값 가져오기 (userResponse 주면됨)
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => const ChatProfile()));
-                  },
                 ),
             ],
           ),
@@ -163,21 +183,21 @@ class _ChattingRoomState extends State<ChattingRoom> {
         ),
 
         sendMessageConfig: SendMessageConfiguration( // 메시지 입력창 설정
-          textFieldBackgroundColor: Colors.grey.shade100,
+          textFieldBackgroundColor: Colors.grey.shade50,
           enableCameraImagePicker: false, // 카메라 제거
           enableGalleryImagePicker: false, // 갤러리 제거,
           allowRecordingVoice: false, // 녹음(음성메시지) 제거
-          sendButtonIcon: Icon(Icons.send_rounded, color: Color(0xffFF5C58),),
+          sendButtonIcon: const Icon(Icons.send_rounded, color: Color(0xffFF5C58),),
           textFieldConfig: TextFieldConfiguration(
             hintText: "메시지를 입력해주세요",
-            textStyle: TextStyle(color: Colors.black),
+            textStyle: const TextStyle(color: Colors.black),
             borderRadius: BorderRadius.circular(10),
           ),
         ),
 
         chatBubbleConfig: ChatBubbleConfiguration(
-          outgoingChatBubbleConfig: ChatBubble( // 내가 보낸 채팅
-            margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 15),
+          outgoingChatBubbleConfig: const ChatBubble( // 내가 보낸 채팅
+            margin: EdgeInsets.symmetric(horizontal: 12, vertical: 15),
             linkPreviewConfig: LinkPreviewConfiguration(
               proxyUrl: "Proxy URL", // Need for web
               backgroundColor: Color(0xff272336),
@@ -187,16 +207,16 @@ class _ChattingRoomState extends State<ChattingRoom> {
             color: Color(0xffFF5C58),
           ),
           inComingChatBubbleConfig: ChatBubble( // 상대방 채팅
-            linkPreviewConfig: LinkPreviewConfiguration(
+            linkPreviewConfig: const LinkPreviewConfiguration(
               proxyUrl: "Proxy URL", // Need for web
               linkStyle: TextStyle(fontSize: 14, color: Colors.black),
               backgroundColor: Color(0xff9f85ff),
               bodyStyle: TextStyle(color: Colors.black),
               titleStyle: TextStyle(color: Colors.black),
             ),
-            textStyle: TextStyle(color: Colors.black),
-            senderNameTextStyle: TextStyle(color: Colors.black),
-            color: Colors.grey.shade200,
+            textStyle: const TextStyle(color: Colors.black),
+            senderNameTextStyle: const TextStyle(color: Colors.black),
+            color: Colors.grey.shade100,
           ),
         ),
 
@@ -297,19 +317,16 @@ class _ChattingRoomState extends State<ChattingRoom> {
   final chatController = ChatController(
     initialMessageList: [
       Message(
-        id: '1',
         message: "안녕",
         createdAt: DateTime.now(),
         sendBy: '1', // userId of who sends the message
       ),
       Message(
-        id: '2',
         message: "하세요!",
         createdAt: DateTime.now(),
         sendBy: '2',
       ),
       Message(
-        id: '3',
         message: "채팅채팅",
         createdAt: DateTime.now(),
         sendBy: '3',
@@ -333,7 +350,6 @@ class _ChattingRoomState extends State<ChattingRoom> {
   void onSendTap(String message, ReplyMessage replyMessage, MessageType messageType) {
     chatController.addMessage(
       Message(
-        id: '1', // This can be the next message-id if you need to add according to your usecase
         createdAt: DateTime.now(),
         message: message,
         sendBy: '1',
