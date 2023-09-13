@@ -20,7 +20,8 @@ class DartChatRepository implements ChatRepository {
     int userId = (await _userRepository.myInfo()).personalInfo?.id ?? 0;
     Pagination<MessageSub> messages = await DartApiRemoteDataSource.getChatMessageList(chatroomId, page: 0);
 
-    return chatroomDetail.newChatRoomDetail(AppEnvironment.getEnv.getApiBaseUrl(), userId, messages);
+    String baseUrl = _getPathFromUrl(AppEnvironment.getEnv.getApiBaseUrl());
+    return chatroomDetail.newChatRoomDetail(baseUrl, userId, messages);
   }
 
   @override
@@ -40,5 +41,15 @@ class DartChatRepository implements ChatRepository {
     )).toList() ?? [];
 
     return messages.newContent(chatMessages);
+  }
+
+  static String _getPathFromUrl(String url) {
+    RegExp regExp = RegExp(r'https?://[^/]+(/.*)');
+    RegExpMatch? match = regExp.firstMatch(url);
+
+    if (match != null && match.groupCount >= 1) {
+      return match.group(1) ?? "";
+    }
+    return '';
   }
 }
