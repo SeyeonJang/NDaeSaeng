@@ -1,11 +1,11 @@
-import 'package:dart_flutter/src/common/chat/type/message_type.dart';
+import 'package:dart_flutter/src/common/chat/type/chat_message_type.dart';
 import 'package:meta/meta.dart';
 
 @immutable
 class MessagePub {
   final int chatRoomId;
   final int senderId;
-  final MessageType chatMessageType;
+  final ChatMessageType chatMessageType;
   final String content;
 
   const MessagePub({

@@ -1,10 +1,10 @@
-import 'package:chatview/chatview.dart';
+import 'package:dart_flutter/src/common/chat/type/chat_message_type.dart';
 
 class MessageSub {
   final int chatRoomId;
   final int chatMessageId;
   final int senderId;
-  final MessageType chatMessageType;
+  final ChatMessageType chatMessageType;
   final String content;
   final DateTime createdTime;
 
@@ -32,7 +32,7 @@ class MessageSub {
     return MessageSub(
       chatRoomId: json['chatRoomId'],
       chatMessageId: json['chatMessageId'],
-      chatMessageType: json['chatMessageType'],
+      chatMessageType: ChatMessageType.fromString(json['chatMessageType']),
       senderId: json['senderId'],
       content: json['content'],
       createdTime: DateTime.parse(json['createdTime']),
