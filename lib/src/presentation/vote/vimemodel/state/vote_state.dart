@@ -19,6 +19,9 @@ class VoteState {
   late DateTime nextVoteDateTime;
   late List<User> friends;
 
+  late User userResponse;
+  late Set<User> newFriends;
+
   VoteState({
     required this.isLoading,
     required this.step,
@@ -27,6 +30,8 @@ class VoteState {
     required this.questions,
     required this.nextVoteDateTime,
     required this.friends,
+    required this.userResponse,
+    required this.newFriends
   });
 
   VoteState copy() => VoteState(
@@ -37,6 +42,8 @@ class VoteState {
         questions: questions,
         nextVoteDateTime: nextVoteDateTime,
         friends: friends,
+        userResponse: userResponse,
+        newFriends: newFriends
       );
 
   VoteState setIsLoading(bool isLoading) {
@@ -100,6 +107,21 @@ class VoteState {
 
   int getFriendsCount() {
     return friends.length;
+  }
+
+  VoteState setMyInfo(User userResponse) {
+    this.userResponse = userResponse;
+    return this;
+  }
+
+  void addFriend(User friend) {
+    friends.add(friend);
+    newFriends.remove(friend);
+  }
+
+  VoteState setRecommendedFriends(List<User> friends) {
+    newFriends = friends.toSet();
+    return this;
   }
 
   Map<String, dynamic> toJson() => _$VoteStateToJson(this);
