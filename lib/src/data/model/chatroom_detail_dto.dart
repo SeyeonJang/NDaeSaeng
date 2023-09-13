@@ -1,4 +1,6 @@
 import 'package:dart_flutter/src/common/chat/chat_connection.dart';
+import 'package:dart_flutter/src/common/chat/message_sub.dart';
+import 'package:dart_flutter/src/common/pagination/pagination.dart';
 import 'package:dart_flutter/src/domain/entity/blind_date_team_detail.dart';
 import 'package:dart_flutter/src/domain/entity/chat_room_detail.dart';
 import 'package:dart_flutter/src/domain/entity/type/blind_date_user_detail.dart';
@@ -34,7 +36,7 @@ class ChatroomDetailDto {
     }
   }
 
-  ChatRoomDetail newChatRoomDetail(String baseUrl, int userId) {
+  ChatRoomDetail newChatRoomDetail(String baseUrl, int userId, Pagination<MessageSub> messages) {
     // find my team
     var tempTeamA = teamDtoToBlindDateTeam(requestingTeam);
     var tempTeamB = teamDtoToBlindDateTeam(requestedTeam);
@@ -49,16 +51,15 @@ class ChatroomDetailDto {
       otherTeam = tempTeamA;
     }
 
+    // set messages
+    List<ChatMessage> chatMessages = messages.content?.map((msg) => ChatMessage(userId: msg.senderId, message: msg.content, sendTime: msg.createdTime)).toList() ?? [];
+
     // return
     return ChatRoomDetail(
       id: _chatRoomId ?? 0,
       myTeam: myTeam,
       otherTeam: otherTeam,
-      messages: [ChatMessage(
-        userId: 0,
-        message: _latestChatMessageContent ?? "",
-        sendTime: DateTime.parse(_latestChatMessageTime ?? "0000-00-00 00:00:00"),
-      ),],
+      messages: chatMessages,
       connection: ChatConnection(baseUrl, _chatRoomId ?? 0),
     );
   }

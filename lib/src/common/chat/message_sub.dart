@@ -27,4 +27,15 @@ class MessageSub {
     data['createdTime'] = createdTime;
     return data;
   }
+
+  static MessageSub fromJson(Map<String, dynamic> json) {
+    return MessageSub(
+      chatRoomId: json['chatRoomId'],
+      chatMessageId: json['chatMessageId'],
+      chatMessageType: json['chatMessageType'],
+      senderId: json['senderId'],
+      content: json['content'],
+      createdTime: DateTime.parse(json['createdTime']),
+    );
+  }
 }
