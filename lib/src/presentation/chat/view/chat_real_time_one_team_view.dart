@@ -20,12 +20,13 @@ class ChatRealTimeOneTeamView extends StatelessWidget { // Component
   @override
   Widget build(BuildContext context) {
     String getTimeDifference(DateTime time) {
+      final adjustedTime = time.add(Duration(hours: 9));
       final now = DateTime.now();
-      final difference = now.difference(time);
+      final difference = now.difference(adjustedTime);
 
       if (difference.inDays > 0) {
         final dateFormat = DateFormat('MM월 dd일');
-        return dateFormat.format(time);
+        return dateFormat.format(adjustedTime);
       } else if (difference.inHours > 0) {
         return '${difference.inHours}시간 전';
       } else if (difference.inMinutes > 0) {
