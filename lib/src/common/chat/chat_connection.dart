@@ -1,3 +1,5 @@
+import 'package:dart_flutter/src/common/exception/stomp_authroization_exception.dart';
+import 'package:dart_flutter/src/common/exception/stomp_connection_exception.dart';
 import 'package:stomp_dart_client/stomp.dart';
 import 'package:stomp_dart_client/stomp_config.dart';
 import 'package:stomp_dart_client/stomp_frame.dart';
@@ -9,16 +11,29 @@ class ChatConnection {
   late StompClient _client;
   late String _subDestination;
   late String _pubDestination;
+  static late String _authorizationToken;
 
   ChatConnection(final String baseUrl, final int chatroomId) {
-    _client = StompClient(
-      config: StompConfig(
-        url: 'ws://$baseUrl/ws',
-        onConnect: onConnectCallback,
-      )
-    );
+    try {
+      _setStompClientInfromation(baseUrl);
+    } catch (e, trace) {
+      throw StompAuthorizationException("STOMP 인증 토큰 정보가 없습니다.");
+    }
     _subDestination = '$subscribeUri/$chatroomId';
     _pubDestination = '$publishUri/$chatroomId';
+
+  }
+
+  void _setStompClientInfromation(String baseUrl) {
+    _client = StompClient(
+        config: StompConfig(
+            url: 'ws://$baseUrl/v1/ws',
+            onConnect: onConnectCallback,
+            stompConnectHeaders: {
+              "Authorization": "Bearer $_authorizationToken"
+            }
+        )
+    );
   }
 
   void onConnectCallback(StompFrame connectFrame) {
@@ -26,8 +41,12 @@ class ChatConnection {
   }
 
   Future<void> activate() async {
-    _client.activate();
-    await Future.delayed(const Duration(seconds: 1));
+    try {
+      _client.activate();
+      await Future.delayed(const Duration(seconds: 1));
+    } catch (e, trace) {
+      throw StompConnectionException("STOMP 연결에 실패했습니다.");
+    }
   }
 
   Future<void> deactivate() async {
@@ -43,7 +62,15 @@ class ChatConnection {
   }
 
   void send(final String message) {
-    print("내가보낸거 $message");
     _client.send(destination: _pubDestination, body: message, headers: {});
+  }
+
+  static set accessToken(String value) {
+    _authorizationToken = value;
+  }
+
+  @override
+  String toString() {
+    return 'ChatConnection{_client: $_client, _subDestination: $_subDestination, _pubDestination: $_pubDestination}';
   }
 }

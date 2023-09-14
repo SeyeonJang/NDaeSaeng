@@ -1,4 +1,5 @@
 import 'package:dart_flutter/src/common/auth/state/dart_auth_state.dart';
+import 'package:dart_flutter/src/common/chat/chat_connection.dart';
 import 'package:dart_flutter/src/common/exception/authroization_exception.dart';
 import 'package:dart_flutter/src/common/util/analytics_util.dart';
 import 'package:dart_flutter/src/common/util/push_notification_util.dart';
@@ -71,6 +72,7 @@ class DartAuthCubit extends HydratedCubit<DartAuthState> {
 
   void setAccessToken(String accessToken) {
     DartApiRemoteDataSource.addAuthorizationToken(accessToken);
+    ChatConnection.accessToken = accessToken;
   }
 
   DartAuthState cleanUpAuthInformation() {
