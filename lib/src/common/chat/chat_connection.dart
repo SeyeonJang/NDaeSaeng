@@ -1,5 +1,3 @@
-import 'package:dart_flutter/src/common/exception/stomp_authroization_exception.dart';
-import 'package:dart_flutter/src/common/exception/stomp_connection_exception.dart';
 import 'package:stomp_dart_client/stomp.dart';
 import 'package:stomp_dart_client/stomp_config.dart';
 import 'package:stomp_dart_client/stomp_frame.dart';

@@ -24,8 +24,11 @@ class ChatCubit extends Cubit<ChatState> {
     emit(state.copy());
   }
 
-  Future<void> getChatRoomDetail(int teamId) async {
+  Future<ChatRoomDetail> getChatRoomDetail(int teamId) async {
     ChatRoomDetail myMatchedTeams = await _chatUseCase.getChatRoomDetail(teamId);
-    state.setChatRoom(myMatchedTeams);
+    // print("getChatRoomDetail한 결과");
+    // print(myMatchedTeams.connection);
+    // state.setChatRoom(myMatchedTeams);
+    return myMatchedTeams;
   }
 }
