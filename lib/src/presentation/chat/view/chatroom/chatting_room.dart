@@ -65,7 +65,8 @@ class _ChattingRoomState extends State<ChattingRoom> {
       chatController.addMessage(
         Message(
           message: msg.content,
-          createdAt: msg.createdTime.add(Duration(hours: 9)),
+          createdAt: msg.createdTime,
+          // createdAt: msg.createdTime.add(Duration(hours: 9)),
           sendBy: msg.senderId.toString(),
         ),
       );
@@ -137,6 +138,9 @@ class _ChattingRoomState extends State<ChattingRoom> {
 
   @override
   Widget build(BuildContext context) {
+    print("================================");
+    print("otherTeam");
+    print(widget.chatRoomDetail.otherTeam);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -171,8 +175,8 @@ class _ChattingRoomState extends State<ChattingRoom> {
                             Image.asset("assets/images/check.png", width: SizeConfig.defaultSize * 1.55),
                         ],
                       ),
-                        SizedBox(height: SizeConfig.defaultSize * 2,),
-                      Text("${widget.chatRoomDetail.otherTeam.averageBirthYear.toString().substring(2,)}세"),
+                        SizedBox(height: SizeConfig.defaultSize * 1.5,),
+                      Text("${(2023-widget.chatRoomDetail.otherTeam.averageBirthYear+1).toString().substring(0,4)}세"),
                         SizedBox(height: SizeConfig.defaultSize * 0.3,),
                       Text(widget.chatRoomDetail.otherTeam.regions.map((location) => location.name).join(' '))
                     ],
@@ -255,12 +259,16 @@ class _ChattingRoomState extends State<ChattingRoom> {
                                   fit: BoxFit.cover,)
                             ),
                               SizedBox(width: SizeConfig.defaultSize * 1.3),
-                            Text(widget.chatRoomDetail.myTeam.teamUsers[i].name == 'DEFAULT' ? '닉네임없음' : widget.chatRoomDetail.myTeam.teamUsers[i].name, style: TextStyle(
+                            (widget.chatRoomDetail.myTeam.teamUsers[i].id == (widget.user.personalInfo?.id ?? 'DEFAULT'))
+                            ? Text(widget.chatRoomDetail.myTeam.teamUsers[i].name == 'DEFAULT' ? '닉네임없음' : "${widget.chatRoomDetail.myTeam.teamUsers[i].name} (나)", style: TextStyle(
+                                fontSize: SizeConfig.defaultSize * 1.5
+                              ))
+                            : Text(widget.chatRoomDetail.myTeam.teamUsers[i].name == 'DEFAULT' ? '닉네임없음' : widget.chatRoomDetail.myTeam.teamUsers[i].name, style: TextStyle(
                               fontSize: SizeConfig.defaultSize * 1.5
                             ),),
                           ],
                         ),
-                          SizedBox(width: SizeConfig.defaultSize * 5),
+                          SizedBox(width: SizeConfig.defaultSize * 4),
                         Expanded(
                           child: Container(
                             alignment: Alignment.centerRight,
@@ -289,8 +297,7 @@ class _ChattingRoomState extends State<ChattingRoom> {
         chatViewState: ChatViewState.hasMessages,
         onSendTap: onSendTap,
         loadMoreData: loadMoreMessages,
-        // loadMoreData: chatController.loadMoreData(messageList),
-        loadingWidget: const CircularProgressIndicator(),
+        loadingWidget: const CircularProgressIndicator(color: Colors.black,),
 
         featureActiveConfig: const FeatureActiveConfig( // 기본적으로 true로 되어있는 설정 끄기 (답장, 이모지 등)
           enableSwipeToReply: false,
@@ -309,6 +316,7 @@ class _ChattingRoomState extends State<ChattingRoom> {
           allowRecordingVoice: false, // 녹음(음성메시지) 제거
           sendButtonIcon: const Icon(Icons.send_rounded, color: Color(0xffFF5C58),),
           textFieldConfig: TextFieldConfiguration(
+            maxLines: 35,
             hintText: "메시지를 입력해주세요",
             textStyle: const TextStyle(color: Colors.black),
             borderRadius: BorderRadius.circular(10),

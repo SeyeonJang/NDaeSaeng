@@ -1,3 +1,4 @@
+import 'package:dart_flutter/src/common/util/toast_util.dart';
 import 'package:dart_flutter/src/domain/entity/chat_room_detail.dart';
 import 'package:dart_flutter/src/presentation/chat/viewmodel/state/chatting_cubit.dart';
 import 'package:intl/intl.dart';
@@ -10,7 +11,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../res/config/size_config.dart';
 import 'chatroom/chatting_room.dart';
 
-class ChatRealTimeOneTeamView extends StatelessWidget { // Component
+class ChatRealTimeOneTeamView extends StatefulWidget { // Component
   final BuildContext ancestorContext;
   final ChatState chatState;
   final ChatRoom matchedTeams;
@@ -18,15 +19,22 @@ class ChatRealTimeOneTeamView extends StatelessWidget { // Component
   const ChatRealTimeOneTeamView({super.key, required this.ancestorContext, required this.chatState, required this.matchedTeams});
 
   @override
+  State<ChatRealTimeOneTeamView> createState() => _ChatRealTimeOneTeamViewState();
+}
+
+class _ChatRealTimeOneTeamViewState extends State<ChatRealTimeOneTeamView> {
+  bool _isTapped = false;
+
+  @override
   Widget build(BuildContext context) {
     String getTimeDifference(DateTime time) {
-      final adjustedTime = time.add(Duration(hours: 9));
+      // final adjustedTime = time.add(Duration(hours: 9));
       final now = DateTime.now();
-      final difference = now.difference(adjustedTime);
+      final difference = now.difference(time);
 
       if (difference.inDays > 0) {
         final dateFormat = DateFormat('MM월 dd일');
-        return dateFormat.format(adjustedTime);
+        return dateFormat.format(time);
       } else if (difference.inHours > 0) {
         return '${difference.inHours}시간 전';
       } else if (difference.inMinutes > 0) {
@@ -40,23 +48,26 @@ class ChatRealTimeOneTeamView extends StatelessWidget { // Component
 
     return GestureDetector(
       onTap: () async {
-        ChatRoomDetail crd = await ancestorContext.read<ChatCubit>().getChatRoomDetail(matchedTeams.id);
-        ancestorContext.read<ChatCubit>().setPagination(crd.id);
-        ancestorContext.read<ChatCubit>().state.setChatRoomId(crd.id);
-        // Navigator.push(context, MaterialPageRoute(builder: (context) => ChattingRoom(chatRoomDetail: crd, user: chatState.userResponse,)));
+        if (_isTapped == true) {
+          return;
+        }
+        setState(() {
+          _isTapped = true;
+        });
+        ToastUtil.showMeetToast('채팅방에 입장중입니다 . . .', 1);
+        ChatRoomDetail crd = await widget.ancestorContext.read<ChatCubit>().getChatRoomDetail(widget.matchedTeams.id);
         Navigator.push(
           context,
           MaterialPageRoute(
-            // builder: (_) => BlocProvider.value(
-            //   value: BlocProvider.of<ChattingCubit>(context),
-            //   child: ChattingRoom(chatRoomDetail: crd, user: chatState.userResponse),
-            // ),
             builder: (_) => BlocProvider<ChattingCubit>(
               create: (context) => ChattingCubit(),
-              child: ChattingRoom(chatRoomDetail: crd, user: chatState.userResponse),
+              child: ChattingRoom(chatRoomDetail: crd, user: widget.chatState.userResponse),
             ),
           ),
         );
+        setState(() {
+          _isTapped = false;
+        });
       },
       child: Container(
         width: SizeConfig.screenWidth,
@@ -85,23 +96,23 @@ class ChatRealTimeOneTeamView extends StatelessWidget { // Component
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(matchedTeams.otherTeam.name, style: TextStyle(
+                    Text(widget.matchedTeams.otherTeam.name, style: TextStyle(
                       fontSize: SizeConfig.defaultSize * 1.5, fontWeight: FontWeight.w600
                     ),),
                       SizedBox(height: SizeConfig.defaultSize * 0.2,),
                     Row(
                       // mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        Text(matchedTeams.otherTeam.universityName,
+                        Text(widget.matchedTeams.otherTeam.universityName,
                           style: TextStyle(fontSize: SizeConfig.defaultSize, fontWeight: FontWeight.w300, overflow: TextOverflow.ellipsis),),
                         Text(" "),
-                        if (matchedTeams.otherTeam.isCertifiedTeam ?? false)
+                        if (widget.matchedTeams.otherTeam.isCertifiedTeam ?? false)
                           Image.asset("assets/images/check.png", width: SizeConfig.defaultSize),
                       ],
                     ),
                   ],
                 ),
-                Text(matchedTeams.myTeam.name ?? '(알 수 없음)', style: TextStyle(
+                Text(widget.matchedTeams.myTeam.name ?? '(알 수 없음)', style: TextStyle(
                   fontSize: SizeConfig.defaultSize * 1.2
                 ),)
                 ],
@@ -132,7 +143,7 @@ class ChatRealTimeOneTeamView extends StatelessWidget { // Component
                           Positioned(
                             left: i * SizeConfig.defaultSize * 3,
                             child: ClipOval(
-                              child: matchedTeams.otherTeam.teamUsers[i].profileImageUrl == 'DEFAULT' || !matchedTeams.otherTeam.teamUsers[i].profileImageUrl.startsWith('https://')
+                              child: widget.matchedTeams.otherTeam.teamUsers[i].profileImageUrl == 'DEFAULT' || !widget.matchedTeams.otherTeam.teamUsers[i].profileImageUrl.startsWith('https://')
                                 ? Image.asset(
                                   'assets/images/profile-mockup3.png',
                                   width: SizeConfig.defaultSize * 3.7,
@@ -140,10 +151,10 @@ class ChatRealTimeOneTeamView extends StatelessWidget { // Component
                                   )
                                 : Image.network(
                                   i == 0
-                                      ? matchedTeams.otherTeam.teamUsers[0].profileImageUrl
+                                      ? widget.matchedTeams.otherTeam.teamUsers[0].profileImageUrl
                                       : (i == 1
-                                        ? matchedTeams.otherTeam.teamUsers[1].profileImageUrl
-                                        : matchedTeams.otherTeam.teamUsers[2].profileImageUrl
+                                        ? widget.matchedTeams.otherTeam.teamUsers[1].profileImageUrl
+                                        : widget.matchedTeams.otherTeam.teamUsers[2].profileImageUrl
                                       ), // 이미지 경로를 각 이미지에 맞게 설정
                                   width: SizeConfig.defaultSize * 3.7, // 이미지 크기
                                   height: SizeConfig.defaultSize * 3.7,
@@ -163,13 +174,13 @@ class ChatRealTimeOneTeamView extends StatelessWidget { // Component
                             width: SizeConfig.defaultSize * 18,
                             height: SizeConfig.defaultSize * 3.5,
                             alignment: Alignment.topLeft,
-                            child: Text(matchedTeams.message.message, maxLines: 2, style: TextStyle(
+                            child: Text(widget.matchedTeams.message.message, maxLines: 2, style: TextStyle(
                                 fontSize: SizeConfig.defaultSize * 1.4,
                                 overflow: TextOverflow.ellipsis,
                                 color: Colors.grey
                             ),)
                         ),
-                        Text(getTimeDifference(matchedTeams.message.sendTime), style: TextStyle(
+                        Text(getTimeDifference(widget.matchedTeams.message.sendTime), style: TextStyle(
                             fontSize: SizeConfig.defaultSize * 1.1,
                             color: Color(0xffFF5C58)
                         ),),
