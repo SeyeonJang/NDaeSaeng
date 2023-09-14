@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:chatview/chatview.dart';
 import 'package:dart_flutter/res/config/size_config.dart';
 import 'package:dart_flutter/src/common/chat/chat_connection.dart';
@@ -10,7 +9,9 @@ import 'package:dart_flutter/src/domain/entity/chat_room_detail.dart';
 import 'package:dart_flutter/src/domain/entity/type/blind_date_user_detail.dart';
 import 'package:dart_flutter/src/domain/entity/user.dart';
 import 'package:dart_flutter/src/presentation/chat/view/chat_profile.dart';
+import 'package:dart_flutter/src/presentation/chat/viewmodel/state/chatting_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ChattingRoom extends StatefulWidget {
   final ChatRoomDetail chatRoomDetail;
@@ -24,8 +25,24 @@ class ChattingRoom extends StatefulWidget {
 
 class _ChattingRoomState extends State<ChattingRoom> {
   String message = '';
+  int page = 0;
+  List<Message> hihi = [
+    for (int i=0; i<50; i++)
+      Message(
+          message: '$i',
+          createdAt: DateTime.now(),
+          sendBy: '7233'
+      )
+  ];
   ChatController chatController = ChatController(
-      initialMessageList: [],
+      initialMessageList: [
+        // for (int i=0; i<10; i++)
+        //   Message(
+        //       message: '컨트리뷰터 장세연',
+        //       createdAt: DateTime.now(),
+        //       sendBy: '7233'
+        //   )
+      ],
       scrollController: ScrollController(),
       chatUsers: []
   );
@@ -36,13 +53,19 @@ class _ChattingRoomState extends State<ChattingRoom> {
     await chatConn.activate();
     print("Chat open");
 
+    print('********************************');
+    print(chatController.initialMessageList.length);
+    await loadMoreMessages();
+    print('********************************');
+    print(chatController.initialMessageList.length);
+
     chatConn.subscribe((frame) {
       MessageSub msg = MessageSub.fromJson(jsonDecode(frame.body ?? jsonEncode(MessageSub(chatRoomId: 0, chatMessageId: 0, senderId: 0, chatMessageType: ChatMessageType.TALK, content: '', createdTime: DateTime.now()).toJson())));
       print('새로운 메시지가 도착해따! $msg');
       chatController.addMessage(
         Message(
           message: msg.content,
-          createdAt: msg.createdTime,
+          createdAt: msg.createdTime.add(Duration(hours: 9)),
           sendBy: msg.senderId.toString(),
         ),
       );
@@ -103,6 +126,13 @@ class _ChattingRoomState extends State<ChattingRoom> {
     );
     chatConn.send(jsonEncode(msg));
     print("Chat Send 완료\n메시지 : $message");
+  }
+
+  Future<void> loadMoreMessages() async {
+    // List<Message> newMessages = hihi;
+    List<Message> newMessages = await BlocProvider.of<ChattingCubit>(context).fetchMoreMessages(widget.chatRoomDetail.id, page);
+    page += 1;
+    chatController.loadMoreData(newMessages);
   }
 
   @override
@@ -258,7 +288,9 @@ class _ChattingRoomState extends State<ChattingRoom> {
         chatController: chatController,
         chatViewState: ChatViewState.hasMessages,
         onSendTap: onSendTap,
-        // loadMoreData: chatController.loadMoreData(),
+        loadMoreData: loadMoreMessages,
+        // loadMoreData: chatController.loadMoreData(messageList),
+        loadingWidget: const CircularProgressIndicator(),
 
         featureActiveConfig: const FeatureActiveConfig( // 기본적으로 true로 되어있는 설정 끄기 (답장, 이모지 등)
           enableSwipeToReply: false,
@@ -267,7 +299,7 @@ class _ChattingRoomState extends State<ChattingRoom> {
           enableReplySnackBar: false,
           enableCurrentUserProfileAvatar: false,
           enableSwipeToSeeTime: true,
-          enablePagination: true, // Pagination
+          enablePagination: true,
         ),
 
         sendMessageConfig: SendMessageConfiguration( // 메시지 입력창 설정
@@ -287,7 +319,7 @@ class _ChattingRoomState extends State<ChattingRoom> {
           outgoingChatBubbleConfig: const ChatBubble( // 내가 보낸 채팅
             margin: EdgeInsets.symmetric(horizontal: 12, vertical: 15),
             linkPreviewConfig: LinkPreviewConfiguration(
-              proxyUrl: "Proxy URL", // Need for web
+              // proxyUrl: "Proxy URL", // Need for web
               backgroundColor: Color(0xff272336),
               bodyStyle: TextStyle(color: Colors.white),
               titleStyle: TextStyle(color: Colors.white),
@@ -296,7 +328,7 @@ class _ChattingRoomState extends State<ChattingRoom> {
           ),
           inComingChatBubbleConfig: ChatBubble( // 상대방 채팅
             linkPreviewConfig: const LinkPreviewConfiguration(
-              proxyUrl: "Proxy URL", // Need for web
+              // proxyUrl: "Proxy URL", // Need for web
               linkStyle: TextStyle(fontSize: 14, color: Colors.black),
               backgroundColor: Color(0xff9f85ff),
               bodyStyle: TextStyle(color: Colors.black),

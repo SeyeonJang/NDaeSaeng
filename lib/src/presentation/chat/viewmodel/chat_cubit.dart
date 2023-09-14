@@ -1,3 +1,6 @@
+import 'package:chatview/chatview.dart';
+import 'package:dart_flutter/src/common/pagination/pagination.dart';
+import 'package:dart_flutter/src/domain/entity/chat_message.dart';
 import 'package:dart_flutter/src/domain/entity/chat_room.dart';
 import 'package:dart_flutter/src/domain/entity/chat_room_detail.dart';
 import 'package:dart_flutter/src/domain/entity/user.dart';
@@ -10,6 +13,7 @@ class ChatCubit extends Cubit<ChatState> {
   ChatCubit() : super(ChatState.init());
   static final UserUseCase _userUseCase = UserUseCase();
   static final ChatUseCase _chatUseCase = ChatUseCase();
+  late int _numberOfPostsPerRequest;
 
   void initChat() async {
     state.setIsLoading(true);
@@ -24,11 +28,13 @@ class ChatCubit extends Cubit<ChatState> {
     emit(state.copy());
   }
 
+  void setPagination(int chatRoomId) async {
+    Pagination<ChatMessage> paginationResponse = await _chatUseCase.getChatMessages(chatRoomId, page: 0);
+    _numberOfPostsPerRequest = paginationResponse.numberOfElements ?? 50;
+  }
+
   Future<ChatRoomDetail> getChatRoomDetail(int teamId) async {
     ChatRoomDetail myMatchedTeams = await _chatUseCase.getChatRoomDetail(teamId);
-    // print("getChatRoomDetail한 결과");
-    // print(myMatchedTeams.connection);
-    // state.setChatRoom(myMatchedTeams);
     return myMatchedTeams;
   }
 }

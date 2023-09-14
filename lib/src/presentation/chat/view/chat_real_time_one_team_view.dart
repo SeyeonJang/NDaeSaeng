@@ -1,4 +1,5 @@
 import 'package:dart_flutter/src/domain/entity/chat_room_detail.dart';
+import 'package:dart_flutter/src/presentation/chat/viewmodel/state/chatting_cubit.dart';
 import 'package:intl/intl.dart';
 import 'package:dart_flutter/src/domain/entity/chat_room.dart';
 import 'package:dart_flutter/src/presentation/chat/view/chating_room.dart';
@@ -39,11 +40,22 @@ class ChatRealTimeOneTeamView extends StatelessWidget { // Component
     return GestureDetector(
       onTap: () async {
         ChatRoomDetail crd = await ancestorContext.read<ChatCubit>().getChatRoomDetail(matchedTeams.id);
-        print("djkldjdlkjldkjdlkljkdljkdklsdksdsksdkl");
-        print(crd);
-        // print(ancestorContext.read<ChatCubit>().state.myChatRoom);
-        // print(chatState.myChatRoom);
-        Navigator.push(context, MaterialPageRoute(builder: (context) => ChattingRoom(chatRoomDetail: crd, user: chatState.userResponse,)));
+        ancestorContext.read<ChatCubit>().setPagination(crd.id);
+        ancestorContext.read<ChatCubit>().state.setChatRoomId(crd.id);
+        // Navigator.push(context, MaterialPageRoute(builder: (context) => ChattingRoom(chatRoomDetail: crd, user: chatState.userResponse,)));
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            // builder: (_) => BlocProvider.value(
+            //   value: BlocProvider.of<ChattingCubit>(context),
+            //   child: ChattingRoom(chatRoomDetail: crd, user: chatState.userResponse),
+            // ),
+            builder: (_) => BlocProvider<ChattingCubit>(
+              create: (context) => ChattingCubit(),
+              child: ChattingRoom(chatRoomDetail: crd, user: chatState.userResponse),
+            ),
+          ),
+        );
       },
       child: Container(
         width: SizeConfig.screenWidth,

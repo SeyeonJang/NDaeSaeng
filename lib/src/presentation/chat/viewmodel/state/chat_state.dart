@@ -14,13 +14,15 @@ class ChatState {
   late List<ChatRoom> myChatRooms;
   late ChatRoom chatRoom; // 안쓰는중
   late ChatRoomDetail myChatRoom;
+  late int chatRoomId;
 
   ChatState ({
     required this.userResponse,
     required this.isLoading,
     required this.myChatRooms,
     required this.chatRoom,
-    required this.myChatRoom
+    required this.myChatRoom,
+    required this.chatRoomId
   });
 
   ChatState.init() {
@@ -44,6 +46,7 @@ class ChatState {
         messages: [],
         connection: ChatConnection('', 0)
     );
+    chatRoomId = 0;
   }
 
   ChatState copy() => ChatState(
@@ -51,7 +54,8 @@ class ChatState {
     isLoading: isLoading,
     myChatRooms: myChatRooms,
     chatRoom: chatRoom,
-    myChatRoom: myChatRoom
+    myChatRoom: myChatRoom,
+    chatRoomId: chatRoomId
   );
 
   void setIsLoading(bool isLoading) {
@@ -68,5 +72,9 @@ class ChatState {
 
   void setMyInfo(User userResponse) {
     this.userResponse = userResponse;
+  }
+
+  void setChatRoomId(int chatRoomId) {
+    this.chatRoomId = chatRoomId;
   }
 }
