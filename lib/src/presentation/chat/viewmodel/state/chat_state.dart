@@ -1,3 +1,4 @@
+import 'package:dart_flutter/src/common/chat/chat_connection.dart';
 import 'package:dart_flutter/src/domain/entity/blind_date_team.dart';
 import 'package:dart_flutter/src/domain/entity/blind_date_team_detail.dart';
 import 'package:dart_flutter/src/domain/entity/chat_message.dart';
@@ -40,7 +41,8 @@ class ChatState {
         id: 0,
         myTeam: BlindDateTeamDetail(id: 0, name: '', averageBirthYear: 0, regions: [], universityName: '', isCertifiedTeam: false, teamUsers: []),
         otherTeam: BlindDateTeamDetail(id: 0, name: '', averageBirthYear: 0, regions: [], universityName: '', isCertifiedTeam: false, teamUsers: []),
-        messages: []
+        messages: [],
+        connection: ChatConnection('', 0)
     );
   }
 

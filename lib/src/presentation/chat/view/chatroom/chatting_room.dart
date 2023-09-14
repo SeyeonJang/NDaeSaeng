@@ -1,6 +1,13 @@
+import 'dart:convert';
+
 import 'package:chatview/chatview.dart';
 import 'package:dart_flutter/res/config/size_config.dart';
+import 'package:dart_flutter/src/common/chat/chat_connection.dart';
+import 'package:dart_flutter/src/common/chat/message_pub.dart';
+import 'package:dart_flutter/src/common/chat/message_sub.dart';
+import 'package:dart_flutter/src/common/chat/type/chat_message_type.dart';
 import 'package:dart_flutter/src/domain/entity/chat_room_detail.dart';
+import 'package:dart_flutter/src/domain/entity/type/blind_date_user_detail.dart';
 import 'package:dart_flutter/src/domain/entity/user.dart';
 import 'package:dart_flutter/src/presentation/chat/view/chat_profile.dart';
 import 'package:flutter/material.dart';
@@ -17,6 +24,86 @@ class ChattingRoom extends StatefulWidget {
 
 class _ChattingRoomState extends State<ChattingRoom> {
   String message = '';
+  ChatController chatController = ChatController(
+      initialMessageList: [],
+      scrollController: ScrollController(),
+      chatUsers: []
+  );
+  ChatUser currentUser = ChatUser(id: '0', name: '');
+  ChatConnection chatConn = ChatConnection('', 0);
+
+  void initConnectionAndSendFirstMessage() async {
+    await chatConn.activate();
+    print("Chat open");
+
+    chatConn.subscribe((frame) {
+      MessageSub msg = MessageSub.fromJson(jsonDecode(frame.body ?? jsonEncode(MessageSub(chatRoomId: 0, chatMessageId: 0, senderId: 0, chatMessageType: ChatMessageType.TALK, content: '', createdTime: DateTime.now()).toJson())));
+      print('새로운 메시지가 도착해따! $msg');
+      chatController.addMessage(
+        Message(
+          message: msg.content,
+          createdAt: msg.createdTime,
+          sendBy: msg.senderId.toString(),
+        ),
+      );
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    chatConn = widget.chatRoomDetail.connection;
+
+    initConnectionAndSendFirstMessage();
+
+    currentUser = ChatUser(
+      id: widget.user.personalInfo?.id.toString() ?? '0',
+      name: (widget.user.personalInfo?.nickname ?? 'DEFAULT') == 'DEFAULT' ? widget.user.personalInfo?.name ?? '알수없음' : widget.user.personalInfo?.nickname ?? '알수없음',
+      profilePhoto: widget.user.personalInfo?.profileImageUrl ?? ''
+    );
+    chatController.chatUsers.add(currentUser);
+
+    for (BlindDateUserDetail user in widget.chatRoomDetail.myTeam.teamUsers) {
+      if (user.id != widget.user.personalInfo!.id) {
+        chatController.chatUsers.add(
+            ChatUser(
+                id: user.id.toString(),
+                name: user.name,
+                profilePhoto: user.profileImageUrl
+            )
+        );
+      }
+    }
+    for (BlindDateUserDetail user in widget.chatRoomDetail.otherTeam.teamUsers) {
+      chatController.chatUsers.add(
+        ChatUser(
+            id: user.id.toString(),
+            name: user.name,
+            profilePhoto: user.profileImageUrl
+        )
+      );
+    }
+
+    // 이전에 대화한 기록
+    final List<Message> previousMessages = [];
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    chatConn.deactivate();
+  }
+
+  void onSendTap(String message, ReplyMessage replyMessage, MessageType messageType) {
+    MessagePub msg = MessagePub(
+        chatRoomId: widget.chatRoomDetail.id,
+        senderId: widget.user.personalInfo?.id ?? 0,
+        chatMessageType: ChatMessageType.TALK,
+        content: message
+    );
+    chatConn.send(jsonEncode(msg));
+    print("Chat Send 완료\n메시지 : $message");
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -171,6 +258,7 @@ class _ChattingRoomState extends State<ChattingRoom> {
         chatController: chatController,
         chatViewState: ChatViewState.hasMessages,
         onSendTap: onSendTap,
+        // loadMoreData: chatController.loadMoreData(),
 
         featureActiveConfig: const FeatureActiveConfig( // 기본적으로 true로 되어있는 설정 끄기 (답장, 이모지 등)
           enableSwipeToReply: false,
@@ -178,8 +266,8 @@ class _ChattingRoomState extends State<ChattingRoom> {
           enableDoubleTapToLike: false,
           enableReplySnackBar: false,
           enableCurrentUserProfileAvatar: false,
-          enableSwipeToSeeTime: true
-          // enablePagination: true, // Pagination
+          enableSwipeToSeeTime: true,
+          enablePagination: true, // Pagination
         ),
 
         sendMessageConfig: SendMessageConfiguration( // 메시지 입력창 설정
@@ -298,63 +386,53 @@ class _ChattingRoomState extends State<ChattingRoom> {
     );
   }
 
-  final currentUser = ChatUser(
-    id: '1',
-    name: '장세연',
-    profilePhoto: 'Profile photo URL',
-  );
-  // final _userTwo = ChatUser(
-  //   id: '2',
-  //   name: '성서진',
-  //   profilePhoto: 'Profile photo URL',
-  // );
-  // final _userThree = ChatUser(
-  //   id: '3',
-  //   name: '초롱',
-  //   profilePhoto: 'Profile photo URL',
-  // );
+// final currentUser = ChatUser(
+//   id: '1',
+//   name: '장세연',
+//   profilePhoto: 'Profile photo URL',
+// );
+// final _userTwo = ChatUser(
+//   id: '2',
+//   name: '성서진',
+//   profilePhoto: 'Profile photo URL',
+// );
+// final _userThree = ChatUser(
+//   id: '3',
+//   name: '초롱',
+//   profilePhoto: 'Profile photo URL',
+// );
 
-  final chatController = ChatController(
-    initialMessageList: [
-      Message(
-        message: "안녕",
-        createdAt: DateTime.now(),
-        sendBy: '1', // userId of who sends the message
-      ),
-      Message(
-        message: "하세요!",
-        createdAt: DateTime.now(),
-        sendBy: '2',
-      ),
-      Message(
-        message: "채팅채팅",
-        createdAt: DateTime.now(),
-        sendBy: '3',
-      ),
-    ],
-    scrollController: ScrollController(),
-    chatUsers: [
-      ChatUser(
-        id: '2',
-        name: '성서진',
-        profilePhoto: 'https://www.wyzowl.com/wp-content/uploads/2022/04/img_624d8245533d8.jpg',
-      ),
-      ChatUser(
-        id: '3',
-        name: '초롱',
-        profilePhoto: 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FEPjzf%2FbtstxQOVRym%2FwTZOsCvGjwnWtU1qaT575k%2Fimg.png',
-      )
-    ],
-  );
-
-  void onSendTap(String message, ReplyMessage replyMessage, MessageType messageType) {
-    chatController.addMessage(
-      Message(
-        createdAt: DateTime.now(),
-        message: message,
-        sendBy: '1',
-        messageType: messageType,
-      ),
-    );
-  }
+// MOCKUP DATA
+// final chatController = ChatController(
+//   initialMessageList: [
+//     Message(
+//       message: "안녕",
+//       createdAt: DateTime.now(),
+//       sendBy: '1', // userId of who sends the message
+//     ),
+//     Message(
+//       message: "하세요!",
+//       createdAt: DateTime.now(),
+//       sendBy: '2',
+//     ),
+//     Message(
+//       message: "채팅채팅",
+//       createdAt: DateTime.now(),
+//       sendBy: '3',
+//     ),
+//   ],
+//   scrollController: ScrollController(),
+//   chatUsers: [
+//     ChatUser(
+//       id: '2',
+//       name: '성서진',
+//       profilePhoto: 'https://www.wyzowl.com/wp-content/uploads/2022/04/img_624d8245533d8.jpg',
+//     ),
+//     ChatUser(
+//       id: '3',
+//       name: '초롱',
+//       profilePhoto: 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FEPjzf%2FbtstxQOVRym%2FwTZOsCvGjwnWtU1qaT575k%2Fimg.png',
+//     )
+//   ],
+// );
 }

@@ -46,4 +46,9 @@ class ChatConnection {
     print("내가보낸거 $message");
     _client.send(destination: _pubDestination, body: message, headers: {});
   }
+
+  @override
+  String toString() {
+    return 'ChatConnection{_client: $_client, _subDestination: $_subDestination, _pubDestination: $_pubDestination}';
+  }
 }

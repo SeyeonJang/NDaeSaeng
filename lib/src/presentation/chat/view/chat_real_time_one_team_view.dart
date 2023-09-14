@@ -1,3 +1,4 @@
+import 'package:dart_flutter/src/domain/entity/chat_room_detail.dart';
 import 'package:intl/intl.dart';
 import 'package:dart_flutter/src/domain/entity/chat_room.dart';
 import 'package:dart_flutter/src/presentation/chat/view/chating_room.dart';
@@ -37,8 +38,12 @@ class ChatRealTimeOneTeamView extends StatelessWidget { // Component
 
     return GestureDetector(
       onTap: () async {
-        ancestorContext.read<ChatCubit>().getChatRoomDetail(matchedTeams.id);
-        Navigator.push(context, MaterialPageRoute(builder: (context) => ChattingRoom(chatRoomDetail: chatState.myChatRoom, user: chatState.userResponse,)));
+        ChatRoomDetail crd = await ancestorContext.read<ChatCubit>().getChatRoomDetail(matchedTeams.id);
+        print("djkldjdlkjldkjdlkljkdljkdklsdksdsksdkl");
+        print(crd);
+        // print(ancestorContext.read<ChatCubit>().state.myChatRoom);
+        // print(chatState.myChatRoom);
+        Navigator.push(context, MaterialPageRoute(builder: (context) => ChattingRoom(chatRoomDetail: crd, user: chatState.userResponse,)));
       },
       child: Container(
         width: SizeConfig.screenWidth,
