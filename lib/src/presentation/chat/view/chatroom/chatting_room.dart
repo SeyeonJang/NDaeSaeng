@@ -26,23 +26,8 @@ class ChattingRoom extends StatefulWidget {
 class _ChattingRoomState extends State<ChattingRoom> {
   String message = '';
   int page = 0;
-  List<Message> hihi = [
-    for (int i=0; i<50; i++)
-      Message(
-          message: '$i',
-          createdAt: DateTime.now(),
-          sendBy: '7233'
-      )
-  ];
   ChatController chatController = ChatController(
-      initialMessageList: [
-        // for (int i=0; i<10; i++)
-        //   Message(
-        //       message: '컨트리뷰터 장세연',
-        //       createdAt: DateTime.now(),
-        //       sendBy: '7233'
-        //   )
-      ],
+      initialMessageList: [],
       scrollController: ScrollController(),
       chatUsers: []
   );
@@ -53,15 +38,10 @@ class _ChattingRoomState extends State<ChattingRoom> {
     await chatConn.activate();
     print("Chat open");
 
-    print('********************************');
-    print(chatController.initialMessageList.length);
     await loadMoreMessages();
-    print('********************************');
-    print(chatController.initialMessageList.length);
 
     chatConn.subscribe((frame) {
       MessageSub msg = MessageSub.fromJson(jsonDecode(frame.body ?? jsonEncode(MessageSub(chatRoomId: 0, chatMessageId: 0, senderId: 0, chatMessageType: ChatMessageType.TALK, content: '', createdTime: DateTime.now()).toJson())));
-      print('새로운 메시지가 도착해따! $msg');
       chatController.addMessage(
         Message(
           message: msg.content,
@@ -107,9 +87,6 @@ class _ChattingRoomState extends State<ChattingRoom> {
         )
       );
     }
-
-    // 이전에 대화한 기록
-    final List<Message> previousMessages = [];
   }
 
   @override
@@ -130,7 +107,6 @@ class _ChattingRoomState extends State<ChattingRoom> {
   }
 
   Future<void> loadMoreMessages() async {
-    // List<Message> newMessages = hihi;
     List<Message> newMessages = await BlocProvider.of<ChattingCubit>(context).fetchMoreMessages(widget.chatRoomDetail.id, page);
     page += 1;
     chatController.loadMoreData(newMessages);
@@ -138,9 +114,6 @@ class _ChattingRoomState extends State<ChattingRoom> {
 
   @override
   Widget build(BuildContext context) {
-    print("================================");
-    print("otherTeam");
-    print(widget.chatRoomDetail.otherTeam);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -327,7 +300,6 @@ class _ChattingRoomState extends State<ChattingRoom> {
           outgoingChatBubbleConfig: const ChatBubble( // 내가 보낸 채팅
             margin: EdgeInsets.symmetric(horizontal: 12, vertical: 15),
             linkPreviewConfig: LinkPreviewConfiguration(
-              // proxyUrl: "Proxy URL", // Need for web
               backgroundColor: Color(0xff272336),
               bodyStyle: TextStyle(color: Colors.white),
               titleStyle: TextStyle(color: Colors.white),
@@ -336,7 +308,6 @@ class _ChattingRoomState extends State<ChattingRoom> {
           ),
           inComingChatBubbleConfig: ChatBubble( // 상대방 채팅
             linkPreviewConfig: const LinkPreviewConfiguration(
-              // proxyUrl: "Proxy URL", // Need for web
               linkStyle: TextStyle(fontSize: 14, color: Colors.black),
               backgroundColor: Color(0xff9f85ff),
               bodyStyle: TextStyle(color: Colors.black),

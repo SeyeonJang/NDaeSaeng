@@ -20,6 +20,6 @@ class ChattingCubit extends Cubit<ChatState> {
         )
       );
     }
-    return msg;
+    return msg.reversed.toList();
   }
 }
