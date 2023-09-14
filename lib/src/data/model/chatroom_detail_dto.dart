@@ -3,6 +3,7 @@ import 'package:dart_flutter/src/common/chat/message_sub.dart';
 import 'package:dart_flutter/src/common/pagination/pagination.dart';
 import 'package:dart_flutter/src/domain/entity/blind_date_team_detail.dart';
 import 'package:dart_flutter/src/domain/entity/chat_room_detail.dart';
+import 'package:dart_flutter/src/domain/entity/location.dart';
 import 'package:dart_flutter/src/domain/entity/type/blind_date_user_detail.dart';
 
 import '../../domain/entity/chat_message.dart';
@@ -72,11 +73,13 @@ class ChatroomDetailDto {
   }
 
   BlindDateTeamDetail teamDtoToBlindDateTeam(RequestingTeam? rq) {
+    var averageYear = getAverageAge(rq?._teamUsers?.map((user) => user._birthYear ?? 0).toList() ?? []);
+
     return BlindDateTeamDetail(
       id: rq?._teamId ?? 0,
       name: rq?._name ?? "(알수없음)",
-      averageBirthYear: 0,
-      regions: [],
+      averageBirthYear: averageYear,
+      regions: rq?._teamRegions?.map((region) => region.newLocation()).toList() ?? [],
       universityName: rq?._university?._name ?? "(알수없음)",
       isCertifiedTeam: rq?._isStudentIdCardVerified ?? false,
       teamUsers: rq?._teamUsers
@@ -500,6 +503,10 @@ class TeamRegions {
 
   set name(String? name) => _name = name;
 
+  Location newLocation() {
+    return Location(id: _regionId ?? 0, name: _name ?? "(알수없음)");
+  }
+
   TeamRegions.fromJson(Map<String, dynamic> json) {
     _regionId = json['regionId'];
     _name = json['name'];
@@ -511,4 +518,16 @@ class TeamRegions {
     data['name'] = this._name;
     return data;
   }
+}
+
+double getAverageAge(List<int> userAges) {
+  var validAges = userAges.where((age) => age != 0);
+
+  if (validAges.isEmpty) {
+    return 0.0;
+  }
+
+  var sum = validAges.reduce((value, element) => value + element);
+
+  return sum / validAges.length;
 }
