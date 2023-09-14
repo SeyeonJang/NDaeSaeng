@@ -17,9 +17,20 @@ class ChatRealTime extends StatelessWidget {
           body: Column(
             children: [
               if (state.isLoading)
-                CircularProgressIndicator(),
+                Column(
+                  children: [
+                      SizedBox(height: SizeConfig.defaultSize,),
+                    CircularProgressIndicator(
+                      color: Color(0xffFF5C58),
+                    ),
+                      SizedBox(height: SizeConfig.defaultSize,),
+                    Text("채팅 목록을 불러오는 중입니다 ..."),
+                      SizedBox(height: SizeConfig.defaultSize,),
+                  ],
+                ),
+
               state.myChatRooms.length == 0
-                  ? const _NoChatView()
+                  ? Expanded(child: const Center(child: _NoChatView())) // TODO : 채팅 없을 때 뷰 잘 보이는지 확인하기
                   : SingleChildScrollView(
                     child: Padding(
                       padding: EdgeInsets.all(SizeConfig.defaultSize),
