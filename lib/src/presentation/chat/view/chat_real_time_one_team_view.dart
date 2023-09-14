@@ -56,7 +56,7 @@ class _ChatRealTimeOneTeamViewState extends State<ChatRealTimeOneTeamView> {
         });
         ToastUtil.showMeetToast('채팅방에 입장중입니다 . . .', 1);
         ChatRoomDetail crd = await widget.ancestorContext.read<ChatCubit>().getChatRoomDetail(widget.matchedTeams.id);
-        Navigator.push(
+        await Navigator.push(
           context,
           MaterialPageRoute(
             builder: (_) => BlocProvider<ChattingCubit>(
@@ -68,6 +68,7 @@ class _ChatRealTimeOneTeamViewState extends State<ChatRealTimeOneTeamView> {
         setState(() {
           _isTapped = false;
         });
+        widget.ancestorContext.read<ChatCubit>().initChat();
       },
       child: Container(
         width: SizeConfig.screenWidth,

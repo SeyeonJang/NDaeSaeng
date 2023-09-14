@@ -32,23 +32,23 @@ class ChatRealTime extends StatelessWidget {
           : Column(
             children: [
               state.myChatRooms.length == 0
-                  ? Expanded(child: const Center(child: _NoChatView())) // TODO : 채팅 없을 때 뷰 잘 보이는지 확인하기
-                  : SingleChildScrollView(
-                    child: Padding(
-                      padding: EdgeInsets.all(SizeConfig.defaultSize),
-                      child: Column(
-                        children: [
-                          for (int i=0; i<state.myChatRooms.length; i++)
-                            Column(
-                              children: [
-                                ChatRealTimeOneTeamView(ancestorContext: context, chatState: state, matchedTeams: state.myChatRooms[i],),
-                                  SizedBox(height: SizeConfig.defaultSize)
-                              ],
-                            ),
-                        ],
-                      ),
-                    )
-                  ),
+                ? Expanded(child: const Center(child: _NoChatView())) // TODO : 채팅 없을 때 뷰 잘 보이는지 확인하기
+                : SingleChildScrollView(
+                  child: Padding(
+                    padding: EdgeInsets.all(SizeConfig.defaultSize),
+                    child: Column(
+                      children: [
+                        for (int i=0; i<state.myChatRooms.length; i++)
+                          Column(
+                            children: [
+                              ChatRealTimeOneTeamView(ancestorContext: context, chatState: state, matchedTeams: state.myChatRooms[i],),
+                                SizedBox(height: SizeConfig.defaultSize)
+                            ],
+                          ),
+                      ],
+                    ),
+                  )
+                ),
             ],
           )// TODO : pagination
         );
