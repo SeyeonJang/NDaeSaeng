@@ -1,15 +1,14 @@
 import 'package:dart_flutter/src/common/util/analytics_util.dart';
 import 'package:dart_flutter/src/domain/entity/vote_detail.dart';
-import 'package:dart_flutter/src/domain/entity/vote_response.dart';
-import 'package:dart_flutter/src/presentation/vote_list/viewmodel/state/vote_list_state.dart';
-import 'package:dart_flutter/src/presentation/vote_list/viewmodel/vote_list_cubit.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:dart_flutter/src/domain/entity/user.dart';
 import '../../../res/config/size_config.dart';
 
 class VoteDetailView extends StatelessWidget {
-  const VoteDetailView({Key? key}) : super(key: key);
+  final Future<VoteDetail> voteDetail;
+  final User me;
+
+  const VoteDetailView({Key? key, required this.voteDetail, required this.me}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -20,31 +19,25 @@ class VoteDetailView extends StatelessWidget {
         child: Padding(
           padding: EdgeInsets.symmetric(
               vertical: SizeConfig.defaultSize * 2),
-          child: BlocBuilder<VoteListCubit,VoteListState> (
-            builder: (context, state) {
-              return FutureBuilder<VoteDetail>(
-                future: context.read<VoteListCubit>().getVote(state.nowVoteId),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Center(child: CircularProgressIndicator(color: Colors.white)); // 로딩 중에 표시할 위젯
-                  } else if (snapshot.hasError) {
-                    return Text('Error: ${snapshot.error}');
-                  } else if (snapshot.hasData) {
-                    VoteResponse vote = state.getVoteById(state.nowVoteId);
-                    VoteDetail myVote = snapshot.data!;
-                    context.read<VoteListCubit>().getUserMe();
-                    User userMe = state.userMe;
-                    return OneVote(
-                      voteId: vote.voteId!,
-                      vote: myVote,
-                      userMe: userMe
-                    );
-                  } else {
-                    return Text('데이터 정보가 없습니다.');
-                  }
-                },
-              );
-            }
+          child: FutureBuilder<VoteDetail>(
+            future: voteDetail,
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return Center(child: CircularProgressIndicator(color: Colors.white)); // 로딩 중에 표시할 위젯
+              } else if (snapshot.hasError) {
+                return Text('Error: ${snapshot.error}');
+              } else if (snapshot.hasData) {
+                VoteDetail myVote = snapshot.data!;
+                User userMe = me;
+                return OneVote(
+                    voteId: snapshot.data?.voteId ?? 0,
+                    vote: myVote,
+                    userMe: userMe
+                );
+              } else {
+                return Text('데이터 정보가 없습니다.');
+              }
+            },
           ),
         ),
       ),
@@ -139,7 +132,7 @@ class _OneVoteState extends State<OneVote> with SingleTickerProviderStateMixin {
                 IconButton(
                     onPressed: () {
                       AnalyticsUtil.logEvent('받은투표_상세보기_뒤로가기');
-                      BlocProvider.of<VoteListCubit>(context).backToVoteList();
+                      Navigator.pop(context);
                     },
                     icon: Icon(Icons.arrow_back_ios_new_rounded,
                         size: SizeConfig.defaultSize * 2.3,
@@ -151,7 +144,7 @@ class _OneVoteState extends State<OneVote> with SingleTickerProviderStateMixin {
                     color: Colors.white)),
                 IconButton(
                     onPressed: () {
-                      BlocProvider.of<VoteListCubit>(context).backToVoteList();
+                      Navigator.pop(context);
                     },
                     icon: Icon(Icons.arrow_back_ios_new_rounded,
                       size: SizeConfig.defaultSize * 2.3,

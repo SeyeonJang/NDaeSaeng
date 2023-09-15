@@ -10,7 +10,6 @@ class VoteListState {
   late List<VoteResponse> votes;
   late Map<int, bool> visited;
   late bool isFirstTime;
-  late bool isDetailPage;
   late int nowVoteId;
   late User userMe;
 
@@ -19,7 +18,6 @@ class VoteListState {
     required this.votes,
     required this.isFirstTime,
     required this.visited,
-    required this.isDetailPage,
     required this.nowVoteId,
     required this.userMe
   });
@@ -29,7 +27,6 @@ class VoteListState {
     votes = [];
     isFirstTime = true;
     visited = {};
-    isDetailPage = false;
     nowVoteId = 0;
     userMe = User(
       personalInfo: null,
@@ -43,7 +40,6 @@ class VoteListState {
     votes: votes,
     isFirstTime: isFirstTime,
     visited: visited,
-    isDetailPage: isDetailPage,
     nowVoteId: nowVoteId,
     userMe: userMe
   );
@@ -65,11 +61,6 @@ class VoteListState {
 
   VoteListState firstTime() {
     isFirstTime = false;
-    return this;
-  }
-
-  VoteListState setIsDetailPage(bool isDetailPage) {
-    this.isDetailPage = isDetailPage;
     return this;
   }
 
@@ -98,6 +89,6 @@ class VoteListState {
 
   @override
   String toString() {
-    return 'VoteListState{isLoading: $isLoading, votes: $votes, visited: $visited, isFirstTime: $isFirstTime, isDetailPage: $isDetailPage, nowVoteId: $nowVoteId}';
+    return 'VoteListState{isLoading: $isLoading, votes: $votes, visited: $visited, isFirstTime: $isFirstTime, nowVoteId: $nowVoteId}';
   }
 }

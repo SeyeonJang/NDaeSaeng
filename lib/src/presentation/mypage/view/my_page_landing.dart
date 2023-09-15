@@ -274,7 +274,7 @@ class _MyPageLandingViewState extends State<MyPageLandingView> {
 
         // =================================================================
 
-        if (!widget.userResponse.personalInfo!.verification.isVerificationSuccess)
+        if (!(widget.userResponse.personalInfo?.verification.isVerificationSuccess ?? false))
           InkWell(
             onTap: () async {
               AnalyticsUtil.logEvent("내정보_마이_학생증인증배너터치");
