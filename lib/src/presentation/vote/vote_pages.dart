@@ -85,7 +85,10 @@ class _VotePagesState extends State<VotePages> with AutomaticKeepAliveClientMixi
             }
             if (state.step.isWait) {
               AnalyticsUtil.logEvent("투표_타이머_접속");
-              return const VoteTimer();
+              return BlocProvider(
+                create: (BuildContext context) => VoteCubit()..initUser(),
+                child: VoteTimer(state: state)
+              );
             }
             return SafeArea(child: Container(alignment: Alignment.bottomCenter,child: Text(state.toString())));
           },

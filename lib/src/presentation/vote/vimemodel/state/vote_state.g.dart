@@ -20,6 +20,10 @@ VoteState _$VoteStateFromJson(Map<String, dynamic> json) => VoteState(
       friends: (json['friends'] as List<dynamic>)
           .map((e) => User.fromJson(e as Map<String, dynamic>))
           .toList(),
+      userResponse: User.fromJson(json['userResponse'] as Map<String, dynamic>),
+      newFriends: (json['newFriends'] as List<dynamic>)
+          .map((e) => User.fromJson(e as Map<String, dynamic>))
+          .toSet(),
       contacts: (json['contacts'] as List<dynamic>)
           .map((e) => ContactFriend.fromJson(e as Map<String, dynamic>))
           .toList() ?? [],
@@ -33,6 +37,8 @@ Map<String, dynamic> _$VoteStateToJson(VoteState instance) => <String, dynamic>{
       'questions': instance.questions,
       'nextVoteDateTime': instance.nextVoteDateTime.toIso8601String(),
       'friends': instance.friends,
+      'userResponse': instance.userResponse,
+      'newFriends': instance.newFriends.toList()
       'contacts': instance.contacts
     };
 

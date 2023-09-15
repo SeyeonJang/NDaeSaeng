@@ -23,6 +23,8 @@ class VoteState {
   late DateTime nextVoteDateTime;
   late List<User> friends;
 
+  late User userResponse;
+  late Set<User> newFriends;
   List<ContactFriend> contacts = []; // ios 오류때문에 초기화 해야함
   // PermissionStatus status;
 
@@ -34,6 +36,8 @@ class VoteState {
     required this.questions,
     required this.nextVoteDateTime,
     required this.friends,
+    required this.userResponse,
+    required this.newFriends
     required this.contacts,
     // required this.status
   });
@@ -46,6 +50,8 @@ class VoteState {
         questions: questions,
         nextVoteDateTime: nextVoteDateTime,
         friends: friends,
+        userResponse: userResponse,
+        newFriends: newFriends
         contacts: contacts,
         // status: status
       );
@@ -125,6 +131,21 @@ class VoteState {
 
   int getFriendsCount() {
     return friends.length;
+  }
+
+  VoteState setMyInfo(User userResponse) {
+    this.userResponse = userResponse;
+    return this;
+  }
+
+  void addFriend(User friend) {
+    friends.add(friend);
+    newFriends.remove(friend);
+  }
+
+  VoteState setRecommendedFriends(List<User> friends) {
+    newFriends = friends.toSet();
+    return this;
   }
 
   Map<String, dynamic> toJson() => _$VoteStateToJson(this);
