@@ -2,6 +2,7 @@ import 'package:dart_flutter/src/domain/entity/question.dart';
 import 'package:dart_flutter/src/domain/entity/user.dart';
 import 'package:dart_flutter/src/domain/entity/vote_request.dart';
 import 'package:dart_flutter/src/domain/use_case/friend_use_case.dart';
+import 'package:dart_flutter/src/domain/use_case/guest_use_case.dart';
 import 'package:dart_flutter/src/domain/use_case/vote_use_case.dart';
 import 'package:dart_flutter/src/presentation/vote/vimemodel/state/vote_state.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
@@ -9,16 +10,18 @@ import 'package:hydrated_bloc/hydrated_bloc.dart';
 class VoteCubit extends HydratedCubit<VoteState> {
   static final FriendUseCase _friendUseCase = FriendUseCase();
   static final VoteUseCase _voteUseCase = VoteUseCase();
+  static final GuestUseCase _guestUseCase = GuestUseCase();
 
   // VoteCubit() : super(VoteState.init());
   VoteCubit() : super(VoteState(
       isLoading: false,
-      step: VoteStep.standby,
+      step: VoteStep.start,
       voteIterator: 0,
       votes: [],
       questions: [],
       nextVoteDateTime: DateTime.now(),
       friends: [],
+      contacts: []
   ));
 
   void initVotes() async {
@@ -29,11 +32,7 @@ class VoteCubit extends HydratedCubit<VoteState> {
     List<User> friends = await _friendUseCase.getMyFriends();
     state.setFriends(friends);
 
-    if (friends.length < 4) {
-      state.setStep(VoteStep.standby);
-
-    } else if (!state.step.isProcess) {
-        // 투표중이지 않았던 경우, 다음 투표 가능 시간을 기록하고, 다음 스텝 지정
+    if (!state.step.isProcess) {  // 투표중이지 않았던 경우, 다음 투표 가능 시간을 기록하고, 다음 스텝 지정
       await getNextVoteTime();
       _setStepByNextVoteTime();
     }
@@ -74,6 +73,20 @@ class VoteCubit extends HydratedCubit<VoteState> {
       state.setStep(VoteStep.process);
     }
 
+    emit(state.copy());
+  }
+
+  void nextVoteWithContact() async {
+    state.setIsLoading(true);
+    emit(state.copy());
+
+    state.nextVote();
+    if (state.isVoteDone()) {
+      DateTime myNextVoteTime = await _voteUseCase.setNextVoteTime();
+      state.setNextVoteDateTime(myNextVoteTime);
+    }
+
+    state.setIsLoading(false);
     emit(state.copy());
   }
 
@@ -140,6 +153,10 @@ class VoteCubit extends HydratedCubit<VoteState> {
 
   bool isVoteTimeOver() {
     return state.isVoteTimeOver();
+  }
+
+  void inviteGuest(String name, String phoneNumber, String questionContent) {
+    _guestUseCase.inviteGuest(name, phoneNumber, questionContent);
   }
 
   @override
