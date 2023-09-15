@@ -344,9 +344,9 @@ class _ChattingRoomState extends State<ChattingRoom> {
         ),
 
         chatBubbleConfig: ChatBubbleConfiguration(
-          outgoingChatBubbleConfig: const ChatBubble( // 내가 보낸 채팅
-            margin: EdgeInsets.symmetric(horizontal: 12, vertical: 15),
-            linkPreviewConfig: LinkPreviewConfiguration(
+          outgoingChatBubbleConfig: ChatBubble( // 내가 보낸 채팅
+            textStyle: TextStyle(fontSize: SizeConfig.defaultSize * 1.5, color: Colors.white),
+            linkPreviewConfig: const LinkPreviewConfiguration(
               backgroundColor: Color(0xff272336),
               bodyStyle: TextStyle(color: Colors.white),
               titleStyle: TextStyle(color: Colors.white),
@@ -355,12 +355,11 @@ class _ChattingRoomState extends State<ChattingRoom> {
           ),
           inComingChatBubbleConfig: ChatBubble( // 상대방 채팅
             linkPreviewConfig: const LinkPreviewConfiguration(
-              linkStyle: TextStyle(fontSize: 14, color: Colors.black),
               backgroundColor: Color(0xff9f85ff),
               bodyStyle: TextStyle(color: Colors.black),
               titleStyle: TextStyle(color: Colors.black),
             ),
-            textStyle: const TextStyle(color: Colors.black),
+            textStyle: TextStyle(fontSize: SizeConfig.defaultSize * 1.5, color: Colors.black),
             senderNameTextStyle: const TextStyle(color: Colors.black),
             color: Colors.grey.shade100,
           ),
