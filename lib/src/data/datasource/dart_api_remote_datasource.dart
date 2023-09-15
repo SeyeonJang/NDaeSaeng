@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:dart_flutter/res/environment/app_environment.dart';
 import 'package:dart_flutter/src/common/pagination/pagination.dart';
+import 'package:dart_flutter/src/data/model/guest_invite_message_request.dart';
 import 'package:dart_flutter/src/data/model/question_dto.dart';
 import 'package:dart_flutter/src/data/model/meet_team_request_dto.dart';
 import 'package:dart_flutter/src/data/model/title_vote_dto.dart';
@@ -167,6 +168,14 @@ class DartApiRemoteDataSource {
 
     final response = await _httpUtil.request().delete(path, queryParameters: params);
     return response.data;
+  }
+
+  // Friend: 주소록 친구에게 투표 문자 보내기
+  static Future<void> postGuestInviteMessage(GuestInviteMessageRequest inviteRequest) async {
+    const path = '/v1/guests';
+    final body = inviteRequest.toJson();
+
+    final response = await _httpUtil.request().post(path, data: body);
   }
 
   // vote: 새로운 투표들을 받기
