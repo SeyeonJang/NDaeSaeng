@@ -204,9 +204,14 @@ class _VoteViewState extends State<VoteView> with SingleTickerProviderStateMixin
                     // ),
                     child: SlideTransition(
                       position: _animation,
-                      child: Image.asset(
-                        'assets/images/contacts.png',
-                        width: SizeConfig.defaultSize * 22,
+                      child: Container(
+                          width: SizeConfig.defaultSize * 22,
+                          height: SizeConfig.defaultSize * 22,
+                          child: question.icon == null ?
+                          Image.asset(
+                            'assets/images/contacts.png',
+                            width: SizeConfig.defaultSize * 22,
+                          ) : Center(child: Text(question.icon!, style: TextStyle(fontSize: SizeConfig.defaultSize * 15)))
                       ),
                     ),
                   ),
