@@ -499,6 +499,7 @@ class ContactsButton extends StatelessWidget {
                             });
                             Navigator.pop(sheetContext);
                             context.read<VoteCubit>().inviteGuest(contactPerson?.name ?? '(알수없음)', contactPerson?.phoneNumber ?? '010-xxxx-xxxx', question);
+                            context.read<VoteCubit>().nextVoteWithContact();
                             ToastUtil.showToast("익명으로 메시지가 전송되었어요!");
                           },
                           child: const Text('전송', style: TextStyle(color: const Color(0xff7C83FD))),
