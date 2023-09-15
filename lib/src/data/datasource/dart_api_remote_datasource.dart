@@ -1,7 +1,11 @@
 import 'dart:convert';
 
 import 'package:dart_flutter/res/environment/app_environment.dart';
+import 'package:dart_flutter/src/common/chat/message_sub.dart';
 import 'package:dart_flutter/src/common/pagination/pagination.dart';
+import 'package:dart_flutter/src/data/model/chatroom_detail_dto.dart';
+import 'package:dart_flutter/src/data/model/chatroom_dto.dart';
+import 'package:dart_flutter/src/data/model/proposal_response_dto.dart';
 import 'package:dart_flutter/src/data/model/question_dto.dart';
 import 'package:dart_flutter/src/data/model/meet_team_request_dto.dart';
 import 'package:dart_flutter/src/data/model/title_vote_dto.dart';
@@ -17,6 +21,7 @@ import '../../data/model/vote_request_dto.dart';
 
 import '../../data/model/vote_response_dto.dart';
 import '../model/meet_team_response_dto.dart';
+import '../model/proposal_request_dto.dart';
 import '../model/type/team_region.dart';
 
 class DartApiRemoteDataSource {
@@ -300,6 +305,181 @@ class DartApiRemoteDataSource {
     final response = await _httpUtil.request().put(path, data: body);
     return MeetTeamResponseDto.fromJson(response.data);
   }
+
+  // proposal: 내가 보낸/받은 제안 확인
+  static Future<List<ProposalResponseDto>> getProposalList(bool received) async {
+    const path = '/v1/users/me/proposals?type=received';
+    final String type = received ? "received" : "sent";
+    final pathUrl = "$path?type=$type";
+
+    final ddd = '''
+    [
+    {
+      "proposalId": 1,
+    "createdTime": "2023-09-10T19:53:37",
+    "requestingTeam": {
+    "teamId": 16,
+    "name": "hello",
+    "averageAge": 22.666666666666668,
+    "users": [
+    {
+    "userId": 463,
+    "nickname": "DEFAULT",
+    "birthYear": 2000,
+    "studentIdCardVerificationStatus": "NOT_VERIFIED_YET",
+    "profileImageUrl": "DEFAULT",
+    "university": {
+    "universityId": 45,
+    "name": "ICT폴리텍대학",
+    "department": "모바일통신학과"
+    }
+    },
+    {
+    "userId": 1539,
+    "nickname": "DEFAULT",
+    "birthYear": 2003,
+    "studentIdCardVerificationStatus": "NOT_VERIFIED_YET",
+    "profileImageUrl": "DEFAULT",
+    "university": {
+    "universityId": 45,
+    "name": "ICT폴리텍대학",
+    "department": "모바일통신학과"
+    }
+    },
+    {
+    "userId": 3407,
+    "nickname": "DEFAULT",
+    "birthYear": 1998,
+    "studentIdCardVerificationStatus": "NOT_VERIFIED_YET",
+    "profileImageUrl": "DEFAULT",
+    "university": {
+    "universityId": 45,
+    "name": "ICT폴리텍대학",
+    "department": "모바일통신학과"
+    }
+    }
+    ],
+    "regions": [
+    {
+    "regionId": 1,
+    "name": "경기"
+    },
+    {
+    "regionId": 2,
+    "name": "경남"
+    },
+    {
+    "regionId": 3,
+    "name": "인천"
+    }
+    ]
+    },
+    "requestedTeam": {
+    "teamId": 18,
+    "name": "hello",
+    "averageAge": 23,
+    "users": [
+    {
+    "userId": 463,
+    "nickname": "DEFAULT",
+    "birthYear": 2000,
+    "studentIdCardVerificationStatus": "NOT_VERIFIED_YET",
+    "profileImageUrl": "DEFAULT",
+    "university": {
+    "universityId": 45,
+    "name": "ICT폴리텍대학",
+    "department": "모바일통신학과"
+    }
+    },
+    {
+    "userId": 3403,
+    "nickname": "DEFAULT",
+    "birthYear": 2002,
+    "studentIdCardVerificationStatus": "NOT_VERIFIED_YET",
+    "profileImageUrl": "DEFAULT",
+    "university": {
+    "universityId": 45,
+    "name": "ICT폴리텍대학",
+    "department": "모바일통신학과"
+    }
+    },
+    {
+    "userId": 3407,
+    "nickname": "DEFAULT",
+    "birthYear": 1998,
+    "studentIdCardVerificationStatus": "NOT_VERIFIED_YET",
+    "profileImageUrl": "DEFAULT",
+    "university": {
+    "universityId": 45,
+    "name": "ICT폴리텍대학",
+    "department": "모바일통신학과"
+    }
+    }
+    ],
+    "regions": [
+    {
+    "regionId": 1,
+    "name": "경기"
+    },
+    {
+    "regionId": 2,
+    "name": "경남"
+    },
+    {
+    "regionId": 3,
+    "name": "인천"
+    }
+    ]
+    }
+    }
+    ]
+    ''';
+    // final List jsonResponse = (await _httpUtil.request().get(pathUrl)).data;
+    final List jsonResponse = jsonDecode(ddd);
+    List<ProposalResponseDto> proposalResponses = jsonResponse.map((proposal) => ProposalResponseDto.fromJson(proposal)).toList();
+    return proposalResponses;
+  }
+
+  // proposal: 제안 보내기 (채팅 요청)
+  static Future<void> postProposal(ProposalRequestDto proposalRequest) async {
+    const path = '/v1/proposals';
+    final body = proposalRequest.toJson();
+
+    final response = await _httpUtil.request().post(path, data: body);
+  }
+
+  // proposal: 제안 수락/거절 (업데이트)
+
+  // chat: 채팅방 목록 확인
+  static Future<List<ChatroomDto>> getChatroomList() async {
+    const path = '/v1/users/me/chat/rooms';
+    final List jsonResponse = (await _httpUtil.request().get(path)).data;
+
+    List<ChatroomDto> responses = jsonResponse.map((chatroom) => ChatroomDto.fromJson(chatroom)).toList();
+    return responses;
+  }
+
+  // chat: 채팅방 상세조회
+  static Future<ChatroomDetailDto> getChatroomDetail(int chatroomId) async {
+    const path = '/v1/users/me/chat/rooms';
+    final pathUrl = '$path/$chatroomId';
+
+    final response = (await _httpUtil.request().get(pathUrl)).data;
+
+    return ChatroomDetailDto.fromJson(response);
+  }
+
+  // chat: 채팅 기록 가져오기
+  static Future<Pagination<MessageSub>> getChatMessageList(final int chatRoomId, {final int page = 0}) async {
+    final path = '/v1/chat/rooms/$chatRoomId/messages';
+    final params = {"page": page};
+
+    final response = await _httpUtil.request().get(path, queryParameters: params);
+    Pagination<MessageSub> pagination = Pagination.fromJson(response.data, (msg) => MessageSub.fromJson(msg));
+    return pagination;
+  }
+
+  // chat: 채팅방 나가기 (업데이트)
 
   static String _getPathFromUrl(String url) {
     RegExp regExp = RegExp(r'https?://[^/]+(/.*)');
