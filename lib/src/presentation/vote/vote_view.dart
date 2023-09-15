@@ -28,6 +28,17 @@ class _VoteViewState extends State<VoteView> with SingleTickerProviderStateMixin
   late List<Contact> contacts = [];
   late List<ContactFriend> contactFriends = [];
 
+  String contactNameBuilder(String? familyName, String? givenName) {
+    String result = "";
+    if (familyName != null && familyName.isNotEmpty && familyName != 'null') {
+      result += familyName;
+    }
+    if (givenName != null && givenName.isNotEmpty && familyName != 'null') {
+      result += givenName;
+    }
+    return result;
+  }
+
   // 연락처 제공 동의
   Future<void> getPermission() async {
     _status = await Permission.contacts.status;
@@ -35,7 +46,7 @@ class _VoteViewState extends State<VoteView> with SingleTickerProviderStateMixin
     if (_status.isGranted) { //연락처 권한 줬는지 여부
       contacts = await ContactsService.getContacts();
       for (int i=0; i<contacts.length; i++) {
-        contactFriends.add(ContactFriend(name: '${contacts[i].familyName}${contacts[i].givenName}' ?? '(알수없음)', phoneNumber: contacts[i].phones?[0].value ?? '010-xxxx-xxxx'));
+        contactFriends.add(ContactFriend(name: contactNameBuilder(contacts[i].familyName, contacts[i].givenName), phoneNumber: contacts[i].phones?[0].value ?? '010-xxxx-xxxx'));
       }
       context.read<VoteCubit>().state.setContacts(contactFriends);
     } else if (_status.isDenied) {
@@ -45,7 +56,7 @@ class _VoteViewState extends State<VoteView> with SingleTickerProviderStateMixin
           AnalyticsUtil.logEvent('투표_세부_주소록동의_동의');
           contacts = await ContactsService.getContacts();
             for (int i=0; i<contacts.length; i++) {
-              contactFriends.add(ContactFriend(name: '${contacts[i].familyName}${contacts[i].givenName}' ?? '(알수없음)', phoneNumber: contacts[i].phones?[0].value ?? '010-xxxx-xxxx'));
+              contactFriends.add(ContactFriend(name: contactNameBuilder(contacts[i].familyName, contacts[i].givenName), phoneNumber: contacts[i].phones?[0].value ?? '010-xxxx-xxxx'));
             }
             if (contactFriends.isNotEmpty) {
               context.read<VoteCubit>().state.setContacts(contactFriends);
@@ -398,6 +409,17 @@ class _NoContactsButtonState extends State<NoContactsButton> {
   late List<Contact> contacts = [];
   late List<ContactFriend> contactFriends = [];
 
+  String contactNameBuilder(String? familyName, String? givenName) {
+    String result = "";
+    if (familyName != null && familyName.isNotEmpty && familyName != 'null') {
+      result += familyName;
+    }
+    if (givenName != null && givenName.isNotEmpty && familyName != 'null') {
+      result += givenName;
+    }
+    return result;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -411,7 +433,7 @@ class _NoContactsButtonState extends State<NoContactsButton> {
             AnalyticsUtil.logEvent('투표_세부_주소록동의버튼_주소록동의_동의');
             contacts = await ContactsService.getContacts(withThumbnails: false);
               for (int i=0; i<contacts.length; i++) {
-                contactFriends.add(ContactFriend(name: '${contacts[i].familyName}${contacts[i].givenName}' ?? '(알수없음)', phoneNumber: contacts[i].phones?[0].value ?? '010-xxxx-xxxx'));
+                contactFriends.add(ContactFriend(name: contactNameBuilder(contacts[i].familyName, contacts[i].givenName), phoneNumber: contacts[i].phones?[0].value ?? '010-xxxx-xxxx'));
               }
               if (contactFriends.isNotEmpty) {
                 context.read<VoteCubit>().state.setContacts(contactFriends);
