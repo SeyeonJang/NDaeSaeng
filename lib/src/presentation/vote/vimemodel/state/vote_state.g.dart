@@ -33,7 +33,6 @@ Map<String, dynamic> _$VoteStateToJson(VoteState instance) => <String, dynamic>{
     };
 
 const _$VoteStepEnumMap = {
-  VoteStep.standby: 'standby',
   VoteStep.start: 'start',
   VoteStep.process: 'process',
   VoteStep.done: 'done',

@@ -113,9 +113,8 @@ class VoteState {
 }
 
 enum VoteStep {
-  standby, start, process, done, wait;
+  start, process, done, wait;
 
-  get isStandby => this == VoteStep.standby;
   get isStart => this == VoteStep.start;
   get isProcess => this == VoteStep.process;
   get isDone => this == VoteStep.done;

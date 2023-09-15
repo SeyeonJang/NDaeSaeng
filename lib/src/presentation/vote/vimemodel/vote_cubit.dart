@@ -13,7 +13,7 @@ class VoteCubit extends HydratedCubit<VoteState> {
   // VoteCubit() : super(VoteState.init());
   VoteCubit() : super(VoteState(
       isLoading: false,
-      step: VoteStep.standby,
+      step: VoteStep.start,
       voteIterator: 0,
       votes: [],
       questions: [],
@@ -29,11 +29,7 @@ class VoteCubit extends HydratedCubit<VoteState> {
     List<User> friends = await _friendUseCase.getMyFriends();
     state.setFriends(friends);
 
-    if (friends.length < 4) {
-      state.setStep(VoteStep.standby);
-
-    } else if (!state.step.isProcess) {
-        // 투표중이지 않았던 경우, 다음 투표 가능 시간을 기록하고, 다음 스텝 지정
+    if (!state.step.isProcess) {  // 투표중이지 않았던 경우, 다음 투표 가능 시간을 기록하고, 다음 스텝 지정
       await getNextVoteTime();
       _setStepByNextVoteTime();
     }
