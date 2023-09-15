@@ -1,4 +1,5 @@
 import 'package:dart_flutter/res/config/size_config.dart';
+import 'package:dart_flutter/src/common/util/analytics_util.dart';
 import 'package:dart_flutter/src/presentation/chat/view/chat_real_time_one_team_view.dart';
 import 'package:dart_flutter/src/presentation/chat/viewmodel/chat_cubit.dart';
 import 'package:dart_flutter/src/presentation/chat/viewmodel/state/chat_state.dart';
@@ -12,6 +13,8 @@ class ChatRealTime extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<ChatCubit, ChatState>(
       builder: (context, state) {
+        AnalyticsUtil.logEvent('채팅_실시간채팅_목록_접속');
+        
         return Scaffold(
           backgroundColor: Colors.grey.shade50,
           body: (state.isLoading)

@@ -1,3 +1,4 @@
+import 'package:dart_flutter/src/common/util/analytics_util.dart';
 import 'package:dart_flutter/src/common/util/toast_util.dart';
 import 'package:dart_flutter/src/domain/entity/chat_room_detail.dart';
 import 'package:dart_flutter/src/presentation/chat/viewmodel/state/chatting_cubit.dart';
@@ -48,6 +49,15 @@ class _ChatRealTimeOneTeamViewState extends State<ChatRealTimeOneTeamView> {
 
     return GestureDetector(
       onTap: () async {
+        AnalyticsUtil.logEvent('채팅_실시간채팅_목록_채팅방터치', properties: {
+          '채팅방 ID': widget.matchedTeams.id,
+          '상대 팀 ID': widget.matchedTeams.otherTeam.id,
+          '상대 팀 학교': widget.matchedTeams.otherTeam.universityName,
+          '상대 팀 평균나이': widget.matchedTeams.otherTeam.averageBirthYear,
+          '우리 팀 ID': widget.matchedTeams.myTeam.id,
+          '우리 팀 학교': widget.matchedTeams.myTeam.universityName,
+          '우리 팀 평균나이': widget.matchedTeams.myTeam.averageBirthYear
+        });
         if (_isTapped == true) {
           return;
         }
