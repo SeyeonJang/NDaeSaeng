@@ -132,11 +132,12 @@ class _ChattingRoomState extends State<ChattingRoom> {
                   color: Colors.grey.shade50,
                 ),
                 child: Padding(
-                  padding: EdgeInsets.only(top: SizeConfig.defaultSize * 4),
+                  padding: EdgeInsets.only(top: SizeConfig.defaultSize * 2.3),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const Text("지금 채팅 중인 팀은"),
+                        SizedBox(height: SizeConfig.defaultSize * 0.3,),
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
@@ -147,10 +148,12 @@ class _ChattingRoomState extends State<ChattingRoom> {
                             Image.asset("assets/images/check.png", width: SizeConfig.defaultSize * 1.55),
                         ],
                       ),
-                        SizedBox(height: SizeConfig.defaultSize * 1.5,),
+                        SizedBox(height: SizeConfig.defaultSize * 1.6,),
                       Text("${(2023-widget.chatRoomDetail.otherTeam.averageBirthYear+1).toString().substring(0,4)}세"),
                         SizedBox(height: SizeConfig.defaultSize * 0.3,),
-                      Text(widget.chatRoomDetail.otherTeam.regions.map((location) => location.name).join(' '))
+                      Text("여기서 만나요! 🤚🏻 ${widget.chatRoomDetail.otherTeam.regions.map((location) => location.name).join(' ')}", style: TextStyle(
+                        fontSize: SizeConfig.defaultSize * 1.2
+                      ),)
                     ],
                   ),
                 ),
