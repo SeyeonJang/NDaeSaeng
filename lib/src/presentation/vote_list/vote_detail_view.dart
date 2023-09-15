@@ -161,9 +161,14 @@ class _OneVoteState extends State<OneVote> with SingleTickerProviderStateMixin {
                   children: [
                     SlideTransition(
                       position: _animation,
-                      child: Image.asset(
-                        'assets/images/magnifier.png',
-                        width: SizeConfig.defaultSize * 25,
+                      child: Container(
+                          width: SizeConfig.defaultSize * 22,
+                          height: SizeConfig.defaultSize * 22,
+                          child: widget.vote.question?.icon == null ?
+                          Image.asset(
+                            'assets/images/contacts.png',
+                            width: SizeConfig.defaultSize * 22,
+                          ) : Center(child: Text(widget.vote.question?.icon ?? "🤣", style: TextStyle(fontSize: SizeConfig.defaultSize * 15)))
                       ),
                     ),
                   ],
