@@ -1,4 +1,5 @@
 import 'package:dart_flutter/res/config/size_config.dart';
+import 'package:dart_flutter/src/common/util/analytics_util.dart';
 import 'package:dart_flutter/src/common/util/toast_util.dart';
 import 'package:dart_flutter/src/presentation/chat/chat_pages.dart';
 import 'package:dart_flutter/src/presentation/chat/viewmodel/chat_cubit.dart';
@@ -30,6 +31,17 @@ class _DartPageViewState extends State<DartPageView> {
     setState(() {
       _page = page;
       _pageController.jumpToPage(page); // 페이지 전환
+      if (page == 0) {
+        AnalyticsUtil.logEvent('하단 탭 터치_투표');
+      } else if (page == 1) {
+        AnalyticsUtil.logEvent('하단 탭 터치_받은투표');
+      } else if (page == 2) {
+        AnalyticsUtil.logEvent('하단 탭 터치_과팅');
+      } else if (page == 3) {
+        AnalyticsUtil.logEvent('하단 탭 터치_채팅');
+      } else if (page == 4) {
+        AnalyticsUtil.logEvent('하단 탭 터치_내정보');
+      }
     });
   }
 

@@ -1,3 +1,4 @@
+import 'package:dart_flutter/src/common/util/analytics_util.dart';
 import 'package:dart_flutter/src/domain/entity/type/blind_date_user_detail.dart';
 import 'package:flutter/material.dart';
 
@@ -11,6 +12,7 @@ class ChatProfile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    AnalyticsUtil.logEvent('채팅_채팅방_프로필_접속');
     return Scaffold(
       backgroundColor: Colors.white,
 
@@ -23,17 +25,24 @@ class ChatProfile extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              ClipOval(
-                  child: profile.profileImageUrl == 'DEFAULT' || !profile.profileImageUrl.startsWith('https://')
-                      ? Image.asset(
-                      'assets/images/profile-mockup3.png',
+              GestureDetector(
+                onTap: () {
+                  AnalyticsUtil.logEvent('채팅_채팅방_프로필_사진_터치', properties: {
+                    '터치한 사람 프로필 URL': profile.profileImageUrl
+                  });
+                },
+                child: ClipOval(
+                    child: profile.profileImageUrl == 'DEFAULT' || !profile.profileImageUrl.startsWith('https://')
+                        ? Image.asset(
+                        'assets/images/profile-mockup3.png',
+                        width: SizeConfig.screenWidth * 0.5,
+                        height: SizeConfig.screenWidth * 0.5
+                    )
+                        : Image.network(profile.profileImageUrl,
                       width: SizeConfig.screenWidth * 0.5,
-                      height: SizeConfig.screenWidth * 0.5
-                  )
-                      : Image.network(profile.profileImageUrl,
-                    width: SizeConfig.screenWidth * 0.5,
-                    height: SizeConfig.screenWidth * 0.5,
-                    fit: BoxFit.cover,)
+                      height: SizeConfig.screenWidth * 0.5,
+                      fit: BoxFit.cover,)
+                ),
               ),
                 SizedBox(height: SizeConfig.defaultSize * 1.6,),
 
@@ -46,9 +55,16 @@ class ChatProfile extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(university, style: TextStyle(
-                    fontSize: SizeConfig.defaultSize * 1.7
-                  ),),
+                  GestureDetector(
+                    onTap: () {
+                      AnalyticsUtil.logEvent('채팅_채팅방_프로필_학교터치', properties: {
+                        '학교 이름': university
+                      });
+                    },
+                    child: Text(university, style: TextStyle(
+                      fontSize: SizeConfig.defaultSize * 1.7
+                    ),),
+                  ),
                   Text('${profile.birthYear.toString().substring(2,4)}년생', style: TextStyle(
                       fontSize: SizeConfig.defaultSize * 1.7
                   ),)
@@ -60,9 +76,16 @@ class ChatProfile extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Text(profile.department, style: TextStyle(
-                      fontSize: SizeConfig.defaultSize * 1.7
-                  ),),
+                  GestureDetector(
+                    onTap: () {
+                      AnalyticsUtil.logEvent('채팅_채팅방_프로필_학교터치', properties: {
+                        '학과 이름': profile.department
+                      });
+                    },
+                    child: Text(profile.department, style: TextStyle(
+                        fontSize: SizeConfig.defaultSize * 1.7
+                    ),),
+                  ),
                     SizedBox(width: SizeConfig.defaultSize * 0.5,),
                   if (profile.isCertifiedUser ?? false)
                     Image.asset("assets/images/check.png", width: SizeConfig.defaultSize * 1.5),
@@ -110,10 +133,10 @@ class VoteView extends StatelessWidget { // 받은 투표 있을 때
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        // AnalyticsUtil.logEvent("과팅_팀만들기_카드_투표_터치", properties: {
-        //   'questionName': questionName,
-        //   'count': count
-        // });
+        AnalyticsUtil.logEvent('채팅_채팅방_프로필_받은투표(있음)_터치', properties: {
+          '질문 내용': questionName,
+          '받은 개수': count
+        });
       },
       child: Container(
           width: SizeConfig.screenWidth,
@@ -153,10 +176,7 @@ class NoVoteView extends StatelessWidget { // 받은 투표 없을 때
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        // AnalyticsUtil.logEvent("과팅_팀만들기_카드_투표_터치", properties: {
-        //   'questionName': "빈칸",
-        //   'count': 0
-        // });
+        AnalyticsUtil.logEvent('채팅_채팅방_프로필_받은투표(없음)_터치');
       },
       child: Container(
           width: SizeConfig.screenWidth,

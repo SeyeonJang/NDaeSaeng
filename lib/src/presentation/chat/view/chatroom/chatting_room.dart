@@ -5,6 +5,7 @@ import 'package:dart_flutter/src/common/chat/chat_connection.dart';
 import 'package:dart_flutter/src/common/chat/message_pub.dart';
 import 'package:dart_flutter/src/common/chat/message_sub.dart';
 import 'package:dart_flutter/src/common/chat/type/chat_message_type.dart';
+import 'package:dart_flutter/src/common/util/analytics_util.dart';
 import 'package:dart_flutter/src/domain/entity/chat_room_detail.dart';
 import 'package:dart_flutter/src/domain/entity/type/blind_date_user_detail.dart';
 import 'package:dart_flutter/src/domain/entity/user.dart';
@@ -36,6 +37,7 @@ class _ChattingRoomState extends State<ChattingRoom> {
 
   void initConnectionAndSendFirstMessage() async {
     await chatConn.activate();
+    AnalyticsUtil.logEvent('채팅_채팅방_연결');
 
     await loadMoreMessages();
 
@@ -54,6 +56,7 @@ class _ChattingRoomState extends State<ChattingRoom> {
 
   @override
   void initState() {
+    AnalyticsUtil.logEvent('채팅_채팅방_접속');
     super.initState();
     chatConn = widget.chatRoomDetail.connection;
 
@@ -92,6 +95,7 @@ class _ChattingRoomState extends State<ChattingRoom> {
   void dispose() {
     super.dispose();
     chatConn.deactivate();
+    AnalyticsUtil.logEvent('채팅_채팅방_연결제거');
   }
 
   void onSendTap(String message, ReplyMessage replyMessage, MessageType messageType) {
@@ -102,12 +106,20 @@ class _ChattingRoomState extends State<ChattingRoom> {
         content: message
     );
     chatConn.send(jsonEncode(msg));
+    AnalyticsUtil.logEvent('채팅_채팅방_메시지전송', properties: {
+      '보낸 사람 성별': widget.user.personalInfo?.gender,
+      '보낸 사람 학교 이름': widget.user.university?.name,
+      '보낸 사람 학과 이름': widget.user.university?.department
+    });
   }
 
   Future<void> loadMoreMessages() async {
     List<Message> newMessages = await BlocProvider.of<ChattingCubit>(context).fetchMoreMessages(widget.chatRoomDetail.id, page);
     page += 1;
     chatController.loadMoreData(newMessages);
+    if (page != 0) AnalyticsUtil.logEvent('채팅_채팅방_이전메시지불러오기(페이지네이션)', properties: {
+      '불러온 페이지 인덱스' : page
+    });
   }
 
   @override
@@ -132,11 +144,12 @@ class _ChattingRoomState extends State<ChattingRoom> {
                   color: Colors.grey.shade50,
                 ),
                 child: Padding(
-                  padding: EdgeInsets.only(top: SizeConfig.defaultSize * 4),
+                  padding: EdgeInsets.only(top: SizeConfig.defaultSize * 2.3),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const Text("지금 채팅 중인 팀은"),
+                        SizedBox(height: SizeConfig.defaultSize * 0.3,),
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
@@ -147,10 +160,12 @@ class _ChattingRoomState extends State<ChattingRoom> {
                             Image.asset("assets/images/check.png", width: SizeConfig.defaultSize * 1.55),
                         ],
                       ),
-                        SizedBox(height: SizeConfig.defaultSize * 1.5,),
+                        SizedBox(height: SizeConfig.defaultSize * 1.6,),
                       Text("${(2023-widget.chatRoomDetail.otherTeam.averageBirthYear+1).toString().substring(0,4)}세"),
                         SizedBox(height: SizeConfig.defaultSize * 0.3,),
-                      Text(widget.chatRoomDetail.otherTeam.regions.map((location) => location.name).join(' '))
+                      Text("여기서 만나요! 🤚🏻 ${widget.chatRoomDetail.otherTeam.regions.map((location) => location.name).join(' ')}", style: TextStyle(
+                        fontSize: SizeConfig.defaultSize * 1.2
+                      ),)
                     ],
                   ),
                 ),
@@ -165,6 +180,16 @@ class _ChattingRoomState extends State<ChattingRoom> {
               ),
               for (int i=0; i<widget.chatRoomDetail.otherTeam.teamUsers.length; i++)
                 ListTile(
+                  onTap: () {
+                    AnalyticsUtil.logEvent('채팅_채팅방_상대팀프로필터치', properties: {
+                      '터치한 상대 ID': widget.chatRoomDetail.otherTeam.teamUsers[i].id,
+                      '터치한 상대 학교': widget.chatRoomDetail.otherTeam.universityName,
+                      '터치한 상대 학과': widget.chatRoomDetail.otherTeam.teamUsers[i].department,
+                      '터치한 상대 프로필 URL': widget.chatRoomDetail.otherTeam.teamUsers[i].profileImageUrl,
+                      '터치한 상대 생년': widget.chatRoomDetail.otherTeam.teamUsers[i].birthYear
+                    });
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => ChatProfile(university: widget.chatRoomDetail.otherTeam.universityName, profile: widget.chatRoomDetail.otherTeam.teamUsers[i])));
+                  },
                   title: Row(
                     children: [
                       Row(
@@ -200,9 +225,6 @@ class _ChattingRoomState extends State<ChattingRoom> {
                         ))
                     ],
                   ),
-                  onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => ChatProfile(university: widget.chatRoomDetail.otherTeam.universityName, profile: widget.chatRoomDetail.otherTeam.teamUsers[i])));
-                  },
                 ),
               Padding(
                 padding: EdgeInsets.only(left: SizeConfig.defaultSize * 1.8, top: SizeConfig.defaultSize * 2, bottom: SizeConfig.defaultSize * 2),
@@ -214,6 +236,16 @@ class _ChattingRoomState extends State<ChattingRoom> {
               for (int i=0; i<widget.chatRoomDetail.myTeam.teamUsers.length; i++)
                 Expanded(
                   child: ListTile(
+                    onTap: () {
+                      AnalyticsUtil.logEvent('채팅_채팅방_우리팀프로필터치', properties: {
+                        '터치한 팀원 ID': widget.chatRoomDetail.myTeam.teamUsers[i].id,
+                        '터치한 팀원 학교': widget.chatRoomDetail.myTeam.universityName,
+                        '터치한 팀원 학과': widget.chatRoomDetail.myTeam.teamUsers[i].department,
+                        '터치한 팀원 프로필 URL': widget.chatRoomDetail.myTeam.teamUsers[i].profileImageUrl,
+                        '터치한 팀원 생년': widget.chatRoomDetail.myTeam.teamUsers[i].birthYear
+                      });
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => ChatProfile(university: widget.chatRoomDetail.myTeam.universityName, profile: widget.chatRoomDetail.myTeam.teamUsers[i])));
+                    },
                     title: Row(
                       children: [
                         Row(
@@ -253,9 +285,6 @@ class _ChattingRoomState extends State<ChattingRoom> {
                         )
                       ],
                     ),
-                    onTap: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => ChatProfile(university: widget.chatRoomDetail.myTeam.universityName, profile: widget.chatRoomDetail.myTeam.teamUsers[i])));
-                    },
                   ),
                 ),
               const ListTile(),
@@ -263,6 +292,7 @@ class _ChattingRoomState extends State<ChattingRoom> {
               ListTile(
                 title: const Text('나가기', style: TextStyle(color: Colors.grey)),
                 onTap: () {
+                  AnalyticsUtil.logEvent('채팅_채팅방_나가기터치');
                   showDialog(
                     context: context,
                     builder: (BuildContext sheetContext) {
@@ -275,6 +305,7 @@ class _ChattingRoomState extends State<ChattingRoom> {
                           TextButton(
                             onPressed: () {
                               Navigator.pop(sheetContext);
+                              AnalyticsUtil.logEvent('채팅_채팅방_나가기_취소');
                             },
                             child: const Text('취소'),
                           ),
@@ -294,6 +325,10 @@ class _ChattingRoomState extends State<ChattingRoom> {
 
                               setState(() {
                                 chatConn.deactivate();
+                              });
+                              AnalyticsUtil.logEvent('채팅_채팅방_나가기_나가기', properties: {
+                                '상대 팀 ID': widget.chatRoomDetail.otherTeam.id,
+                                '우리 팀 ID': widget.chatRoomDetail.myTeam.id
                               });
                             },
                             child: const Text('나가기'),
@@ -341,9 +376,9 @@ class _ChattingRoomState extends State<ChattingRoom> {
         ),
 
         chatBubbleConfig: ChatBubbleConfiguration(
-          outgoingChatBubbleConfig: const ChatBubble( // 내가 보낸 채팅
-            margin: EdgeInsets.symmetric(horizontal: 12, vertical: 15),
-            linkPreviewConfig: LinkPreviewConfiguration(
+          outgoingChatBubbleConfig: ChatBubble( // 내가 보낸 채팅
+            textStyle: TextStyle(fontSize: SizeConfig.defaultSize * 1.5, color: Colors.white),
+            linkPreviewConfig: const LinkPreviewConfiguration(
               backgroundColor: Color(0xff272336),
               bodyStyle: TextStyle(color: Colors.white),
               titleStyle: TextStyle(color: Colors.white),
@@ -352,12 +387,11 @@ class _ChattingRoomState extends State<ChattingRoom> {
           ),
           inComingChatBubbleConfig: ChatBubble( // 상대방 채팅
             linkPreviewConfig: const LinkPreviewConfiguration(
-              linkStyle: TextStyle(fontSize: 14, color: Colors.black),
               backgroundColor: Color(0xff9f85ff),
               bodyStyle: TextStyle(color: Colors.black),
               titleStyle: TextStyle(color: Colors.black),
             ),
-            textStyle: const TextStyle(color: Colors.black),
+            textStyle: TextStyle(fontSize: SizeConfig.defaultSize * 1.5, color: Colors.black),
             senderNameTextStyle: const TextStyle(color: Colors.black),
             color: Colors.grey.shade100,
           ),
