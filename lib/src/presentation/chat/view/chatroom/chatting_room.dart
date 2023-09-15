@@ -127,6 +127,7 @@ class _ChattingRoomState extends State<ChattingRoom> {
           surfaceTintColor: Colors.white,
           child: ListView(
             padding: EdgeInsets.zero,
+            physics: const AlwaysScrollableScrollPhysics(),
             children: [
               DrawerHeader(
                 decoration: BoxDecoration(
@@ -259,6 +260,40 @@ class _ChattingRoomState extends State<ChattingRoom> {
                     },
                   ),
                 ),
+              const ListTile(),
+              const ListTile(),
+              ListTile(
+                title: const Text('나가기', style: TextStyle(color: Colors.grey)),
+                onTap: () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext sheetContext) {
+                      return AlertDialog(
+                        backgroundColor: Colors.white,
+                        surfaceTintColor: Colors.white,
+                        title: Center(child: Text("정말 채팅방을 나가시겠어요?", style: TextStyle(fontSize: SizeConfig.defaultSize * 2, fontWeight: FontWeight.w400),)),
+                        content: Text("\n${widget.chatRoomDetail.otherTeam.name} 팀은\n나와 이야기를 더 하고 싶어해요!\n나를 제외한 우리 팀은 계속 채팅을 이어나가고,\n한 번 나가면 다시 채팅방에 들어올 수 없어요.", textAlign: TextAlign.left),
+                        actions: [
+                          TextButton(
+                            onPressed: () {
+                              Navigator.pop(sheetContext);
+                            },
+                            child: const Text('취소'),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              Navigator.pop(sheetContext);
+                              Navigator.of(context).pop(); // EndDrawer 닫기
+                              Navigator.of(context).pop(); // 채팅방 나가기
+                              // TODO : 나가기 로직
+                            },
+                            child: const Text('나가기'),
+                          )
+                        ],
+                      );
+                  });
+                },
+              ),
             ],
           ),
         ),

@@ -81,7 +81,7 @@ class _ChatRealTimeOneTeamViewState extends State<ChatRealTimeOneTeamView> {
               color: Colors.grey.shade300,
               spreadRadius: 0,
               blurRadius: 2.0,
-              offset: Offset(0,2), // changes position of shadow
+              offset: const Offset(0,2), // changes position of shadow
             ),
           ],
         ),
@@ -106,7 +106,7 @@ class _ChatRealTimeOneTeamViewState extends State<ChatRealTimeOneTeamView> {
                       children: [
                         Text(widget.matchedTeams.otherTeam.universityName,
                           style: TextStyle(fontSize: SizeConfig.defaultSize, fontWeight: FontWeight.w300, overflow: TextOverflow.ellipsis),),
-                        Text(" "),
+                        const Text(" "),
                         if (widget.matchedTeams.otherTeam.isCertifiedTeam ?? false)
                           Image.asset("assets/images/check.png", width: SizeConfig.defaultSize),
                       ],
@@ -123,13 +123,13 @@ class _ChatRealTimeOneTeamViewState extends State<ChatRealTimeOneTeamView> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Container(
+                  SizedBox(
                     width: SizeConfig.defaultSize * 12,
                     child: Stack(
                       children: [
                         Container( // 버리는 사진
                           width: SizeConfig.defaultSize * 3.7,
-                          decoration: BoxDecoration(
+                          decoration: const BoxDecoration(
                             shape: BoxShape.circle,
                           ),
                           child: Center(
@@ -140,7 +140,7 @@ class _ChatRealTimeOneTeamViewState extends State<ChatRealTimeOneTeamView> {
                             ),
                           ),
                         ),
-                        for (int i = 2; i >= 0 ; i--)
+                        for (int i = widget.matchedTeams.otherTeam.teamUsers.length-1; i >= 0 ; i--)
                           Positioned(
                             left: i * SizeConfig.defaultSize * 3,
                             child: ClipOval(
@@ -183,7 +183,7 @@ class _ChatRealTimeOneTeamViewState extends State<ChatRealTimeOneTeamView> {
                         ),
                         Text(getTimeDifference(widget.matchedTeams.message.sendTime), style: TextStyle(
                             fontSize: SizeConfig.defaultSize * 1.1,
-                            color: Color(0xffFF5C58)
+                            color: const Color(0xffFF5C58)
                         ),),
                       ],
                     ),
