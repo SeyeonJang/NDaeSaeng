@@ -1,6 +1,5 @@
 // import 'dart:html';
 
-import 'package:contacts_service/contacts_service.dart';
 import 'package:dart_flutter/src/domain/entity/contact_friend.dart';
 import 'package:dart_flutter/src/domain/entity/question.dart';
 import 'package:dart_flutter/src/domain/entity/user.dart';
@@ -37,7 +36,7 @@ class VoteState {
     required this.nextVoteDateTime,
     required this.friends,
     required this.userResponse,
-    required this.newFriends
+    required this.newFriends,
     required this.contacts,
     // required this.status
   });
@@ -51,7 +50,7 @@ class VoteState {
         nextVoteDateTime: nextVoteDateTime,
         friends: friends,
         userResponse: userResponse,
-        newFriends: newFriends
+        newFriends: newFriends,
         contacts: contacts,
         // status: status
       );

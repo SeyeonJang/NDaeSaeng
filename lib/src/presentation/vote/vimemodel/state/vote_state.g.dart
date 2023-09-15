@@ -38,7 +38,7 @@ Map<String, dynamic> _$VoteStateToJson(VoteState instance) => <String, dynamic>{
       'nextVoteDateTime': instance.nextVoteDateTime.toIso8601String(),
       'friends': instance.friends,
       'userResponse': instance.userResponse,
-      'newFriends': instance.newFriends.toList()
+      'newFriends': instance.newFriends.toList(),
       'contacts': instance.contacts
     };
 
