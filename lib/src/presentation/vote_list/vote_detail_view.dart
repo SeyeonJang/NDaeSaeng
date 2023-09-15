@@ -1,4 +1,5 @@
 import 'package:dart_flutter/src/common/util/analytics_util.dart';
+import 'package:dart_flutter/src/common/util/nickname_dict_util.dart';
 import 'package:dart_flutter/src/domain/entity/vote_detail.dart';
 import 'package:flutter/material.dart';
 import 'package:dart_flutter/src/domain/entity/user.dart';
@@ -300,7 +301,7 @@ class FriendChoiceButton extends StatelessWidget {
                 ),
                 SizedBox(width: SizeConfig.defaultSize * 1,),
                 Text(
-                  userResponse?.personalInfo?.name ?? '이름',
+                  userResponse?.personalInfo?.name ?? NicknameDictUtil.getRandomNickname(maxLength: 4),
                   style: TextStyle(
                     fontSize: SizeConfig.defaultSize * 2.3,
                     fontWeight: FontWeight.w600,
