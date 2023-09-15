@@ -13,6 +13,7 @@ import 'package:dart_flutter/src/domain/use_case/user_use_case.dart';
 import 'package:dio/dio.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:restart_app/restart_app.dart';
 
 import '../../data/datasource/dart_api_remote_datasource.dart';
 import '../../domain/entity/dart_auth.dart';
@@ -61,9 +62,14 @@ class DartAuthCubit extends HydratedCubit<DartAuthState> {
     try {
       print(await DartApiRemoteDataSource.healthCheck());
       return true;
-    } on DioException catch(e) {
+    } on DioException catch(e, trace) {
+      print(e);
+      print(trace);
       if (e.error is AuthorizationException) {
         emit(cleanUpAuthInformation());
+        ToastUtil.showToast("인증 정보가 만료되었어요 😢");
+        await Future.delayed(const Duration(seconds: 2));
+        Restart.restartApp();
       }
     }
     ToastUtil.showToast("로그인 요청 실패");
