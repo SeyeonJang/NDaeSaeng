@@ -36,7 +36,6 @@ class _ChattingRoomState extends State<ChattingRoom> {
 
   void initConnectionAndSendFirstMessage() async {
     await chatConn.activate();
-    print("Chat open");
 
     await loadMoreMessages();
 
@@ -103,7 +102,6 @@ class _ChattingRoomState extends State<ChattingRoom> {
         content: message
     );
     chatConn.send(jsonEncode(msg));
-    print("Chat Send 완료\n메시지 : $message");
   }
 
   Future<void> loadMoreMessages() async {
@@ -285,7 +283,18 @@ class _ChattingRoomState extends State<ChattingRoom> {
                               Navigator.pop(sheetContext);
                               Navigator.of(context).pop(); // EndDrawer 닫기
                               Navigator.of(context).pop(); // 채팅방 나가기
-                              // TODO : 나가기 로직
+
+                              MessagePub msg = MessagePub(
+                                  chatRoomId: widget.chatRoomDetail.id,
+                                  senderId: widget.user.personalInfo?.id ?? 0,
+                                  chatMessageType: ChatMessageType.QUIT,
+                                  content: message
+                              );
+                              chatConn.send(jsonEncode(msg));
+
+                              setState(() {
+                                chatConn.deactivate();
+                              });
                             },
                             child: const Text('나가기'),
                           )
