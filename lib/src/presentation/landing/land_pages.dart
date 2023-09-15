@@ -56,6 +56,7 @@ class _LandPagesState extends State<LandPages> {
                   TextButton(
                     child: const Text('업데이트'),
                     onPressed: () {
+                      AnalyticsUtil.logEvent('업데이트_버튼터치');
                       bool isAppleUser = Platform.isIOS;
                       if (isAppleUser) {
                         launchUrl(Uri.parse("https://apps.apple.com/us/app/dart/id6451335598"));
