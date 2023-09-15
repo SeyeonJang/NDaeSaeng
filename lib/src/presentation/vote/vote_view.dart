@@ -42,7 +42,8 @@ class _VoteViewState extends State<VoteView> with SingleTickerProviderStateMixin
         await Permission.contacts.request();
         PermissionStatus status2 = await Permission.contacts.status;
         if (status2.isGranted) {
-            contacts = await ContactsService.getContacts();
+          AnalyticsUtil.logEvent('투표_세부_주소록동의_동의');
+          contacts = await ContactsService.getContacts();
             for (int i=0; i<contacts.length; i++) {
               contactFriends.add(ContactFriend(name: contacts[i].givenName ?? '(알수없음)', phoneNumber: contacts[i].phones?[0].value ?? '010-xxxx-xxxx'));
             }
@@ -54,6 +55,7 @@ class _VoteViewState extends State<VoteView> with SingleTickerProviderStateMixin
             }
             context.read<VoteCubit>().refresh();
         } else if (status2.isDenied) {
+          AnalyticsUtil.logEvent('투표_세부_주소록동의_거절');
           ToastUtil.showToast("연락처 제공을 동의해야\n더 많은 친구들과 앱을 즐겨요!");
         }
     }
@@ -91,7 +93,6 @@ class _VoteViewState extends State<VoteView> with SingleTickerProviderStateMixin
 
   @override
   void initState() {
-
     Future.delayed(Duration.zero, () async => {
         await getPermission()
     });    // getPermission().then((_) => {})
@@ -407,7 +408,8 @@ class _NoContactsButtonState extends State<NoContactsButton> {
         onPressed: () async {
           _status = await Permission.contacts.request();
           if (_status.isGranted) {
-              contacts = await ContactsService.getContacts(withThumbnails: false);
+            AnalyticsUtil.logEvent('투표_세부_주소록동의버튼_주소록동의_동의');
+            contacts = await ContactsService.getContacts(withThumbnails: false);
               for (int i=0; i<contacts.length; i++) {
                 contactFriends.add(ContactFriend(name: contacts[i].givenName ?? '(알수없음)', phoneNumber: contacts[i].phones?[0].value ?? '010-xxxx-xxxx'));
               }
@@ -418,6 +420,7 @@ class _NoContactsButtonState extends State<NoContactsButton> {
                 ToastUtil.showToast("연락처를 받아오는 데 실패했어요!");
               }
           } else if (_status.isDenied) {
+            AnalyticsUtil.logEvent('투표_세부_주소록동의버튼_주소록동의_거절');
             ToastUtil.showToast("연락처 제공을 동의해야\n더 많은 친구들과 앱을 즐겨요!");
           }
 
@@ -464,6 +467,9 @@ class ContactsButton extends StatelessWidget {
       color: Colors.white,
       child: ElevatedButton(
           onPressed: () {
+            AnalyticsUtil.logEvent('투표_세부_주소록친구_터치', properties: {
+              '질문': question
+            });
             showDialog(
                 context: context,
                 builder: (BuildContext sheetContext) {
@@ -479,11 +485,18 @@ class ContactsButton extends StatelessWidget {
                             if (state.isLoading) return;
                             context.read<VoteCubit>().nextVoteWithContact();
                             Navigator.pop(sheetContext);
+                            AnalyticsUtil.logEvent('투표_세부_주소록친구_넘어가기터치', properties: {
+                              '질문': question
+                            });
+
                           },
                           child: const Text('넘어가기', style: TextStyle(color: Colors.grey)),
                         ),
                         TextButton(
                           onPressed: () {
+                            AnalyticsUtil.logEvent('투표_세부_주소록친구_메시지전송터치', properties: {
+                              '질문': question
+                            });
                             Navigator.pop(sheetContext);
                             context.read<VoteCubit>().inviteGuest(contactPerson?.name ?? '(알수없음)', contactPerson?.phoneNumber ?? '010-xxxx-xxxx', question);
                             ToastUtil.showToast("익명으로 메시지가 전송되었어요!");
