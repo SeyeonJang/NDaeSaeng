@@ -2,6 +2,7 @@ import 'package:dart_flutter/src/domain/entity/question.dart';
 import 'package:dart_flutter/src/domain/entity/user.dart';
 import 'package:dart_flutter/src/domain/entity/vote_request.dart';
 import 'package:dart_flutter/src/domain/use_case/friend_use_case.dart';
+import 'package:dart_flutter/src/domain/use_case/guest_use_case.dart';
 import 'package:dart_flutter/src/domain/use_case/vote_use_case.dart';
 import 'package:dart_flutter/src/presentation/vote/vimemodel/state/vote_state.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
@@ -9,6 +10,7 @@ import 'package:hydrated_bloc/hydrated_bloc.dart';
 class VoteCubit extends HydratedCubit<VoteState> {
   static final FriendUseCase _friendUseCase = FriendUseCase();
   static final VoteUseCase _voteUseCase = VoteUseCase();
+  static final GuestUseCase _guestUseCase = GuestUseCase();
 
   // VoteCubit() : super(VoteState.init());
   VoteCubit() : super(VoteState(
@@ -19,6 +21,7 @@ class VoteCubit extends HydratedCubit<VoteState> {
       questions: [],
       nextVoteDateTime: DateTime.now(),
       friends: [],
+      contacts: []
   ));
 
   void initVotes() async {
@@ -70,6 +73,20 @@ class VoteCubit extends HydratedCubit<VoteState> {
       state.setStep(VoteStep.process);
     }
 
+    emit(state.copy());
+  }
+
+  void nextVoteWithContact() async {
+    state.setIsLoading(true);
+    emit(state.copy());
+
+    state.nextVote();
+    if (state.isVoteDone()) {
+      DateTime myNextVoteTime = await _voteUseCase.setNextVoteTime();
+      state.setNextVoteDateTime(myNextVoteTime);
+    }
+
+    state.setIsLoading(false);
     emit(state.copy());
   }
 
@@ -136,6 +153,10 @@ class VoteCubit extends HydratedCubit<VoteState> {
 
   bool isVoteTimeOver() {
     return state.isVoteTimeOver();
+  }
+
+  void inviteGuest(String name, String phoneNumber, String questionContent) {
+    _guestUseCase.inviteGuest(name, phoneNumber, questionContent);
   }
 
   @override

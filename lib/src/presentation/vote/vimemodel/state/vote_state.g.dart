@@ -20,7 +20,10 @@ VoteState _$VoteStateFromJson(Map<String, dynamic> json) => VoteState(
       friends: (json['friends'] as List<dynamic>)
           .map((e) => User.fromJson(e as Map<String, dynamic>))
           .toList(),
-    );
+      contacts: (json['contacts'] as List<dynamic>)
+          .map((e) => ContactFriend.fromJson(e as Map<String, dynamic>))
+          .toList() ?? [],
+);
 
 Map<String, dynamic> _$VoteStateToJson(VoteState instance) => <String, dynamic>{
       'isLoading': false,
@@ -30,6 +33,7 @@ Map<String, dynamic> _$VoteStateToJson(VoteState instance) => <String, dynamic>{
       'questions': instance.questions,
       'nextVoteDateTime': instance.nextVoteDateTime.toIso8601String(),
       'friends': instance.friends,
+      'contacts': instance.contacts
     };
 
 const _$VoteStepEnumMap = {

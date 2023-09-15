@@ -1,3 +1,7 @@
+// import 'dart:html';
+
+import 'package:contacts_service/contacts_service.dart';
+import 'package:dart_flutter/src/domain/entity/contact_friend.dart';
 import 'package:dart_flutter/src/domain/entity/question.dart';
 import 'package:dart_flutter/src/domain/entity/user.dart';
 import 'package:dart_flutter/src/domain/entity/vote_request.dart';
@@ -19,6 +23,9 @@ class VoteState {
   late DateTime nextVoteDateTime;
   late List<User> friends;
 
+  List<ContactFriend> contacts = []; // ios 오류때문에 초기화 해야함
+  // PermissionStatus status;
+
   VoteState({
     required this.isLoading,
     required this.step,
@@ -27,6 +34,8 @@ class VoteState {
     required this.questions,
     required this.nextVoteDateTime,
     required this.friends,
+    required this.contacts,
+    // required this.status
   });
 
   VoteState copy() => VoteState(
@@ -37,7 +46,23 @@ class VoteState {
         questions: questions,
         nextVoteDateTime: nextVoteDateTime,
         friends: friends,
+        contacts: contacts,
+        // status: status
       );
+
+  // VoteState setStatus(PermissionStatus status) {
+  //   this.status = status;
+  //   return this;
+  // }
+
+  VoteState setContacts(List<ContactFriend> contacts) {
+    this.contacts = contacts;
+    return this;
+  }
+
+  List<ContactFriend> getShuffleContacts() {
+    return contacts..shuffle();
+  }
 
   VoteState setIsLoading(bool isLoading) {
     this.isLoading = isLoading;
@@ -64,9 +89,9 @@ class VoteState {
   }
 
   List<User> getShuffleFriends() {
-    if (friends.length < 4) {
-      print("친구수가 4명보다 적습니다. 투표할 수 없음");
-    }
+    // if (friends.length < 4) {
+    //   print("친구수가 4명보다 적습니다. 투표할 수 없음");
+    // }
     return friends..shuffle();
   }
 
