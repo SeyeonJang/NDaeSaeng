@@ -1,7 +1,5 @@
 import 'package:confetti/confetti.dart';
 import 'package:dart_flutter/src/common/util/analytics_util.dart';
-import 'package:dart_flutter/src/presentation/standby/standby_landing_page.dart';
-import 'package:dart_flutter/src/presentation/standby/viewmodel/standby_cubit.dart';
 import 'package:dart_flutter/src/presentation/vote/vimemodel/state/vote_state.dart';
 import 'package:dart_flutter/src/presentation/vote/vimemodel/vote_cubit.dart';
 import 'package:dart_flutter/src/presentation/vote/vote_result_view.dart';
@@ -57,7 +55,7 @@ class _VotePagesState extends State<VotePages> with AutomaticKeepAliveClientMixi
   @override
   // bool get wantKeepAlive => true;
   bool get wantKeepAlive {
-    if (context.read<VoteCubit>().state.step.isStandby || context.read<VoteCubit>().state.step.isStart)
+    if (context.read<VoteCubit>().state.step.isStart)
       return false;
     return true;
   }
@@ -70,12 +68,6 @@ class _VotePagesState extends State<VotePages> with AutomaticKeepAliveClientMixi
       children: [
         BlocBuilder<VoteCubit, VoteState>(
           builder: (context, state) {
-            if (state.step.isStandby) {  // 친구 4명 대기화면
-              return BlocProvider<StandbyCubit>(
-                create: (BuildContext context) => StandbyCubit()..initPages(),
-                child: const StandbyLandingPage(),
-              );
-            }
             if (state.step.isDone) {  // 투표 결과 페이지는 로딩없이 나타납니다.
               AnalyticsUtil.logEvent("투표_끝_접속");
               return VoteResultView();

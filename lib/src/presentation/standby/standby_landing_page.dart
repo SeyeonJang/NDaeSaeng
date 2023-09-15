@@ -13,6 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:flutter/services.dart';
 
+@Deprecated("사용되지않음")
 class StandbyLandingPage extends StatefulWidget {
   const StandbyLandingPage({
     super.key,
