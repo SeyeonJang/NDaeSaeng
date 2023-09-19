@@ -1,3 +1,5 @@
+import 'package:dart_flutter/src/data/model/proposal_request_dto.dart';
+import 'package:dart_flutter/src/domain/entity/blind_date_team.dart';
 import 'package:dart_flutter/src/domain/entity/location.dart';
 import 'package:dart_flutter/src/domain/entity/meet_team.dart';
 import 'package:dart_flutter/src/domain/use_case/meet_use_case.dart';
@@ -6,13 +8,74 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:dart_flutter/src/domain/entity/user.dart';
 import 'package:dart_flutter/src/domain/use_case/user_use_case.dart';
 import 'package:dart_flutter/src/domain/use_case/friend_use_case.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+import '../../../common/util/analytics_util.dart';
+import '../../../domain/entity/blind_date_team_detail.dart';
 
 class MeetCubit extends Cubit<MeetState> {
+
   MeetCubit() : super(MeetState.init());
   static final UserUseCase _userUseCase = UserUseCase();
   static final FriendUseCase _friendUseCase = FriendUseCase();
   static final MeetUseCase _meetUseCase = MeetUseCase();
   bool _initialized = false;
+
+  // pagination
+  static const int NUMBER_OF_POSTS_PER_REQUEST = 10;
+  final PagingController<int, BlindDateTeam> pagingController = PagingController(firstPageKey: 0);
+
+  void initMeet({MeetTeam? initPickedTeam}) async {
+    state.setIsLoading(true);
+    emit(state.copy());
+
+    state.setIsLoading(false);
+    emit(state.copy());
+    state.setIsLoading(true);
+    emit(state.copy());
+
+    User userResponse = await _userUseCase.myInfo();
+    state.setMyInfo(userResponse);
+    List<User> friends = await _friendUseCase.getMyFriends();
+    state.setMyFriends(friends);
+    List<User> newFriends = await _friendUseCase.getRecommendedFriends();
+    state.setRecommendedFriends(newFriends);
+
+    List<Location> locations = await _meetUseCase.getLocations();
+    state.setServerLocations(locations);
+
+    // Pagination<BlindDateTeam> paginationBlindTeams = await _meetUseCase.getBlindDateTeams(page:0, targetLocationId: 0);
+    // _numberOfPostsPerRequest = paginationBlindTeams.numberOfElements ?? 10;
+
+    // List<BlindDateTeam> blindDateTeams = paginationBlindTeams.content ?? [];
+    // state.setBlindDateTeams(blindDateTeams);
+
+    await getMyTeams(put: false);
+    if (!state.pickedTeam && state.myTeams.isNotEmpty) {
+      state.setMyTeam(state.myTeams[0]);
+    }
+    if (initPickedTeam != null) setPickedTeam(initPickedTeam);
+
+    state.setIsLoading(false);
+    emit(state.copy());
+    print("test: ${state.getMyTeam()}");
+  }
+
+  void initCreateTeam() async {
+    state.setIsLoading(true);
+    emit(state.copy());
+
+    // User userResponse = await _userUseCase.myInfo();
+    // state.setMyInfo(userResponse);
+    // List<User> friends = await _friendUseCase.getMyFriends();
+    // state.setMyFriends(friends);
+    // List<User> newFriends = await _friendUseCase.getRecommendedFriends();
+    // state.setRecommendedFriends(newFriends);
+    List<Location> locations = await _meetUseCase.getLocations();
+    state.setServerLocations(locations);
+
+    state.setIsLoading(false);
+    emit(state.copy());
+  }
 
   void initState() async {
     print(_initialized);
@@ -51,6 +114,53 @@ class MeetCubit extends Cubit<MeetState> {
     state.setAll(meetState);
     emit(state.copy());
   }
+
+  Future<void> fetchPage(int pageKey) async {
+    try {
+      final newTeams = (await _meetUseCase.getBlindDateTeams(page: pageKey, size: NUMBER_OF_POSTS_PER_REQUEST)).content ?? [];
+      final isLastPage = newTeams.length < NUMBER_OF_POSTS_PER_REQUEST;
+      if (isLastPage) {
+        pagingController.appendLastPage(newTeams);
+      } else {
+        final nextPageKey = pageKey + 1;
+        AnalyticsUtil.logEvent('과팅_목록_이성 팀 불러오기(페이지네이션)', properties: {
+          '새로 불러온 페이지 인덱스': nextPageKey
+        });
+        // await Future.delayed(Duration(seconds: 1));
+        pagingController.appendPage(newTeams, nextPageKey);
+      }
+    } catch (error) {
+      pagingController.error = error;
+    }
+  }
+
+  Future<BlindDateTeamDetail> getBlindDateTeam(int id) async {
+    return await _meetUseCase.getBlindDateTeam(id);
+  }
+
+  void pressedOneTeam(int teamId) {
+    state.setTeamId(teamId);
+    emit(state.copy());
+  }
+
+  void setMyTeam(MeetTeam myTeam) {
+    state.setMyTeam(myTeam);
+    emit(state.copy());
+  }
+
+  void setPickedTeam(MeetTeam myTeam) {
+    state.setPickedTeam(true);
+    setMyTeam(myTeam);
+  }
+
+  void postProposal(int requestingTeamId, int requestedTeamId) async {
+    ProposalRequestDto newProposal = ProposalRequestDto(requestingTeamId: requestingTeamId, requestedTeamId: requestedTeamId);
+    _meetUseCase.postProposal(newProposal);
+    state.setProposalStatus(false);
+    emit(state.copy());
+  }
+
+  // =================================================================
 
   void pressedMemberAddButton(User friend) { // TODO : User friend 파라미터로 친구 정보 받아와서 teamMembers 친구 목록에 넣기
     state.setIsLoading(true);
@@ -106,6 +216,7 @@ class MeetCubit extends Cubit<MeetState> {
   Future<void> getMyTeams({bool put = true}) async {
     List<MeetTeam> myTeams = await _meetUseCase.getMyTeams();
     state.setMyTeams(myTeams);
+    // state.setMyTeam(myTeams[0]);
     if (put) emit(state.copy());
     print("팀 목록 ${state.myTeams}");
   }
@@ -120,7 +231,7 @@ class MeetCubit extends Cubit<MeetState> {
     _meetUseCase.updateMyTeam(meetTeam);
   }
 
-  void refreshMeetPage() async {
+  void refreshMeetPage() async { // TODO : refresh 수정
     state.setIsLoading(true);
     emit(state.copy());
 
@@ -128,8 +239,16 @@ class MeetCubit extends Cubit<MeetState> {
     state.setMyInfo(userResponse);
     List<User> friends = await _friendUseCase.getMyFriends();
     state.setMyFriends(friends);
+
+    // Pagination<BlindDateTeam> paginationBlindTeams = await _meetUseCase.getBlindDateTeams(page:0, size: NUMBER_OF_POSTS_PER_REQUEST, targetLocationId: 0);
+    // _numberOfPostsPerRequest = paginationBlindTeams.numberOfElements ?? 10;
+    // List<BlindDateTeam> blindDateTeams = paginationBlindTeams.content ?? [];
+    // state.setBlindDateTeams(blindDateTeams);
+
     await getMyTeams();
-    await fetchTeamCount();
+    if (!state.pickedTeam && state.myTeams.length > 0)
+      state.setMyTeam(state.myTeams[0]);
+    // await fetchTeamCount();
 
     state.setIsLoading(false);
     emit(state.copy());

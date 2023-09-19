@@ -52,4 +52,11 @@ class DartChatRepository implements ChatRepository {
     }
     return '';
   }
+
+  @override
+  Future<void> createChatRoom(int proposalId) async {
+    await DartApiRemoteDataSource.postChatRoom(proposalId);  // 정상적으로 수락한 경우 채팅방 생성
+  }
+
+
 }

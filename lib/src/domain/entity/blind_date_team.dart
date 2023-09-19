@@ -1,7 +1,8 @@
 import 'package:dart_flutter/src/domain/entity/location.dart';
 import 'package:dart_flutter/src/domain/entity/type/blind_date_user.dart';
+import 'package:dart_flutter/src/domain/entity/type/team.dart';
 
-class BlindDateTeam {
+class BlindDateTeam extends Team {
   final int id;
   final String name;
   final double averageBirthYear;
@@ -12,12 +13,12 @@ class BlindDateTeam {
 
   BlindDateTeam(
       {required this.id,
-        required this.name,
-        required this.averageBirthYear,
-        required this.regions,
-        required this.universityName,
-        required this.isCertifiedTeam,
-        required this.teamUsers});
+       required this.name,
+       required this.averageBirthYear,
+       required this.regions,
+       required this.universityName,
+       required this.isCertifiedTeam,
+       required this.teamUsers});
 
   factory BlindDateTeam.fromJson(Map<String, dynamic> json) {
     final int parsedId = json['id'];
@@ -71,5 +72,40 @@ class BlindDateTeam {
   @override
   String toString() {
     return 'BlindDateTeamResponse{id: $id, name: $name, averageBirthYear: $averageBirthYear, regions: $regions, universityName: $universityName, isCertifiedTeam: $isCertifiedTeam, teamUsers: $teamUsers}';
+  }
+
+  @override
+  int getId() {
+    return id;
+  }
+
+  @override
+  String getName() {
+    return name;
+  }
+
+  @override
+  double getAverageBirthYear() {
+    return averageBirthYear;
+  }
+
+  @override
+  List<Location> getRegions() {
+    return regions;
+  }
+
+  @override
+  String getUniversityName() {
+    return universityName;
+  }
+
+  @override
+  bool getIsCertifiedTeam() {
+    return isCertifiedTeam;
+  }
+
+  @override
+  List<BlindDateUser> getTeamUsers() {
+    return teamUsers;
   }
 }

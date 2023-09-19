@@ -1,5 +1,6 @@
 import 'package:dart_flutter/src/data/model/type/blind_date_user_detail_dto.dart';
 import 'package:dart_flutter/src/data/model/type/team_region.dart';
+import 'package:dart_flutter/src/domain/entity/blind_date_team_detail.dart';
 
 class BlindDateTeamDetailDto {
   int? id;
@@ -9,6 +10,7 @@ class BlindDateTeamDetailDto {
   String? universityName;
   bool? isCertifiedTeam;
   List<BlindDateUserDetailDto>? teamUsers;
+  bool? proposalStatus; // TODO : 최현식
 
   BlindDateTeamDetailDto(
       {this.id,
@@ -18,6 +20,19 @@ class BlindDateTeamDetailDto {
         this.universityName,
         this.isCertifiedTeam,
         this.teamUsers});
+
+  BlindDateTeamDetail newBlindDateTeamDetail() {
+    return BlindDateTeamDetail(
+        id: id ?? 0,
+        name: name ?? "(알수없음)",
+        averageBirthYear: averageBirthYear ?? 1950.0,
+        regions: regions?.map((region) => region.newLocation()).toList() ?? [],
+        universityName: universityName ?? "(알수없음)",
+        isCertifiedTeam: isCertifiedTeam ?? false,
+        teamUsers: teamUsers?.map((user) => user.newBlindDateUserDetail()).toList() ?? [],
+        proposalStatus: proposalStatus ?? true, // TODO : 최현식
+    );
+  }
 
   BlindDateTeamDetailDto.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -40,17 +55,17 @@ class BlindDateTeamDetailDto {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['name'] = this.name;
-    data['averageBirthYear'] = this.averageBirthYear;
-    if (this.regions != null) {
-      data['regions'] = this.regions!.map((v) => v.toJson()).toList();
+    final Map<String, dynamic> data = Map<String, dynamic>();
+    data['id'] = id;
+    data['name'] = name;
+    data['averageBirthYear'] = averageBirthYear;
+    if (regions != null) {
+      data['regions'] = regions!.map((v) => v.toJson()).toList();
     }
-    data['universityName'] = this.universityName;
-    data['isCertifiedTeam'] = this.isCertifiedTeam;
-    if (this.teamUsers != null) {
-      data['teamUsers'] = this.teamUsers!.map((v) => v.toJson()).toList();
+    data['universityName'] = universityName;
+    data['isCertifiedTeam'] = isCertifiedTeam;
+    if (teamUsers != null) {
+      data['teamUsers'] = teamUsers!.map((v) => v.toJson()).toList();
     }
     return data;
   }

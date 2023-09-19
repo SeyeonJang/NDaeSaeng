@@ -7,4 +7,5 @@ abstract class ChatRepository {
   Future<ChatRoomDetail> getChatRoomDetail(int chatRoomId);
   Future<List<ChatRoom>> getChatRooms();
   Future<Pagination<ChatMessage>> getChatMessages(int chatRoomId, {int page = 0});
+  Future<void> createChatRoom(int proposalId);
 }

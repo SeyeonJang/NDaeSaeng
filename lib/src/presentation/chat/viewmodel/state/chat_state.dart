@@ -41,8 +41,8 @@ class ChatState {
     );
     myChatRoom = ChatRoomDetail(
         id: 0,
-        myTeam: BlindDateTeamDetail(id: 0, name: '', averageBirthYear: 0, regions: [], universityName: '', isCertifiedTeam: false, teamUsers: []),
-        otherTeam: BlindDateTeamDetail(id: 0, name: '', averageBirthYear: 0, regions: [], universityName: '', isCertifiedTeam: false, teamUsers: []),
+        myTeam: BlindDateTeamDetail(id: 0, name: '', averageBirthYear: 0, regions: [], universityName: '', isCertifiedTeam: false, teamUsers: [], proposalStatus: true),
+        otherTeam: BlindDateTeamDetail(id: 0, name: '', averageBirthYear: 0, regions: [], universityName: '', isCertifiedTeam: false, teamUsers: [], proposalStatus: true),
         messages: [],
         connection: ChatConnection('', 0)
     );

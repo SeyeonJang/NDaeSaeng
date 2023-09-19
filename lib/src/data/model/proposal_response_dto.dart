@@ -1,59 +1,86 @@
+import 'package:dart_flutter/src/domain/entity/blind_date_team.dart';
+import 'package:dart_flutter/src/domain/entity/location.dart';
+import 'package:dart_flutter/src/domain/entity/proposal.dart';
+import 'package:dart_flutter/src/domain/entity/type/IdCardVerificationStatus.dart';
+import 'package:dart_flutter/src/domain/entity/type/blind_date_user.dart';
+
 class ProposalResponseDto {
   int? _proposalId;
   String? _createdTime;
-  RequestingTeam? _requestingTeam;
-  RequestedTeam? _requestedTeam;
+  ProposalTeam? _requestingTeam;
+  ProposalTeam? _requestedTeam;
 
   ProposalResponseDto(
       {int? proposalId,
         String? createdTime,
-        RequestingTeam? requestingTeam,
-        RequestedTeam? requestedTeam}) {
+        ProposalTeam? requestingTeam,
+        ProposalTeam? requestedTeam}) {
     if (proposalId != null) {
-      this._proposalId = proposalId;
+      _proposalId = proposalId;
     }
     if (createdTime != null) {
-      this._createdTime = createdTime;
+      _createdTime = createdTime;
     }
     if (requestingTeam != null) {
-      this._requestingTeam = requestingTeam;
+      _requestingTeam = requestingTeam;
     }
     if (requestedTeam != null) {
-      this._requestedTeam = requestedTeam;
+      _requestedTeam = requestedTeam;
     }
+  }
+
+  Proposal newProposal() {
+    return Proposal(
+      proposalId: _proposalId ?? 0,
+      createdTime: _createdTime != null ? DateTime.parse(_createdTime!) : DateTime.now(),
+      requestedTeam: _requestedTeam?.newBlindDateTeam() ?? emptyBlindDateTeam(),
+      requestingTeam: _requestingTeam?.newBlindDateTeam() ?? emptyBlindDateTeam()
+    );
+  }
+
+  static BlindDateTeam emptyBlindDateTeam() {
+    return BlindDateTeam(
+        id: 0,
+        name: "(알수없음)",
+        averageBirthYear: 0.0,
+        regions: [],
+        universityName: "(알수없음)",
+        isCertifiedTeam: false,
+        teamUsers: []
+    );
   }
 
   int? get proposalId => _proposalId;
   set proposalId(int? proposalId) => _proposalId = proposalId;
   String? get createdTime => _createdTime;
   set createdTime(String? createdTime) => _createdTime = createdTime;
-  RequestingTeam? get requestingTeam => _requestingTeam;
-  set requestingTeam(RequestingTeam? requestingTeam) =>
+  ProposalTeam? get requestingTeam => _requestingTeam;
+  set requestingTeam(ProposalTeam? requestingTeam) =>
       _requestingTeam = requestingTeam;
-  RequestedTeam? get requestedTeam => _requestedTeam;
-  set requestedTeam(RequestedTeam? requestedTeam) =>
+  ProposalTeam? get requestedTeam => _requestedTeam;
+  set requestedTeam(ProposalTeam? requestedTeam) =>
       _requestedTeam = requestedTeam;
 
   ProposalResponseDto.fromJson(Map<String, dynamic> json) {
     _proposalId = json['proposalId'];
     _createdTime = json['createdTime'];
     _requestingTeam = json['requestingTeam'] != null
-        ? new RequestingTeam.fromJson(json['requestingTeam'])
+        ? ProposalTeam.fromJson(json['requestingTeam'])
         : null;
     _requestedTeam = json['requestedTeam'] != null
-        ? new RequestedTeam.fromJson(json['requestedTeam'])
+        ? ProposalTeam.fromJson(json['requestedTeam'])
         : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['proposalId'] = this._proposalId;
-    data['createdTime'] = this._createdTime;
-    if (this._requestingTeam != null) {
-      data['requestingTeam'] = this._requestingTeam!.toJson();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['proposalId'] = _proposalId;
+    data['createdTime'] = _createdTime;
+    if (_requestingTeam != null) {
+      data['requestingTeam'] = _requestingTeam!.toJson();
     }
-    if (this._requestedTeam != null) {
-      data['requestedTeam'] = this._requestedTeam!.toJson();
+    if (_requestedTeam != null) {
+      data['requestedTeam'] = _requestedTeam!.toJson();
     }
     return data;
   }
@@ -64,34 +91,57 @@ class ProposalResponseDto {
   }
 }
 
-class RequestingTeam {
+class ProposalTeam {
   int? _teamId;
   String? _name;
   double? _averageAge;
   List<Users>? _users;
   List<Regions>? _regions;
 
-  RequestingTeam(
+  ProposalTeam(
       {int? teamId,
         String? name,
         double? averageAge,
         List<Users>? users,
         List<Regions>? regions}) {
     if (teamId != null) {
-      this._teamId = teamId;
+      _teamId = teamId;
     }
     if (name != null) {
-      this._name = name;
+      _name = name;
     }
     if (averageAge != null) {
-      this._averageAge = averageAge;
+      _averageAge = averageAge;
     }
     if (users != null) {
-      this._users = users;
+      _users = users;
     }
     if (regions != null) {
-      this._regions = regions;
+      _regions = regions;
     }
+  }
+
+  BlindDateTeam newBlindDateTeam() {
+    // 인증자가 있는 팀인지 확인
+    bool isCertifiedTeam = false;
+    if (users != null) {
+      for (var user in users!) {
+        if (IdCardVerificationStatus.fromValue(user._studentIdCardVerificationStatus).isVerificationSuccess) {
+          isCertifiedTeam = true;
+          break;
+        }
+      }
+    }
+
+    return BlindDateTeam(
+        id: _teamId ?? 0,
+        name: _name ?? "(알수없음)",
+        averageBirthYear: _averageAge ?? 0.0,
+        regions: regions?.map((region) => region.newLocation()).toList() ?? [],
+        universityName: users?.first._university?._name ?? "(알수없음)",
+        isCertifiedTeam: isCertifiedTeam,
+        teamUsers: users?.map((user) => user.newBlindDateUser()).toList() ?? []
+    );
   }
 
   int? get teamId => _teamId;
@@ -105,20 +155,20 @@ class RequestingTeam {
   List<Regions>? get regions => _regions;
   set regions(List<Regions>? regions) => _regions = regions;
 
-  RequestingTeam.fromJson(Map<String, dynamic> json) {
+  ProposalTeam.fromJson(Map<String, dynamic> json) {
     _teamId = json['teamId'];
     _name = json['name'];
     _averageAge = json['averageAge'];
     if (json['users'] != null) {
       _users = <Users>[];
       json['users'].forEach((v) {
-        _users!.add(new Users.fromJson(v));
+        _users!.add(Users.fromJson(v));
       });
     }
     if (json['regions'] != null) {
       _regions = <Regions>[];
       json['regions'].forEach((v) {
-        _regions!.add(new Regions.fromJson(v));
+        _regions!.add(Regions.fromJson(v));
       });
     }
 
@@ -126,15 +176,15 @@ class RequestingTeam {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['teamId'] = this._teamId;
-    data['name'] = this._name;
-    data['averageAge'] = this._averageAge;
-    if (this._users != null) {
-      data['users'] = this._users!.map((v) => v.toJson()).toList();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['teamId'] = _teamId;
+    data['name'] = _name;
+    data['averageAge'] = _averageAge;
+    if (_users != null) {
+      data['users'] = _users!.map((v) => v.toJson()).toList();
     }
-    if (this._regions != null) {
-      data['regions'] = this._regions!.map((v) => v.toJson()).toList();
+    if (_regions != null) {
+      data['regions'] = _regions!.map((v) => v.toJson()).toList();
     }
     return data;
   }
@@ -161,23 +211,32 @@ class Users {
         String? profileImageUrl,
         University? university}) {
     if (userId != null) {
-      this._userId = userId;
+      _userId = userId;
     }
     if (nickname != null) {
-      this._nickname = nickname;
+      _nickname = nickname;
     }
     if (birthYear != null) {
-      this._birthYear = birthYear;
+      _birthYear = birthYear;
     }
     if (studentIdCardVerificationStatus != null) {
-      this._studentIdCardVerificationStatus = studentIdCardVerificationStatus;
+      _studentIdCardVerificationStatus = studentIdCardVerificationStatus;
     }
     if (profileImageUrl != null) {
-      this._profileImageUrl = profileImageUrl;
+      _profileImageUrl = profileImageUrl;
     }
     if (university != null) {
-      this._university = university;
+      _university = university;
     }
+  }
+
+  BlindDateUser newBlindDateUser() {
+    return BlindDateUser(
+      id: _userId ?? 0,
+      name: _nickname ?? "(알수없음)",
+      profileImageUrl: _profileImageUrl ?? "DEFAULT",
+      department: _university?._department ?? "(알수없음)",
+    );
   }
 
   int? get userId => _userId;
@@ -204,20 +263,20 @@ class Users {
     _studentIdCardVerificationStatus = json['studentIdCardVerificationStatus'];
     _profileImageUrl = json['profileImageUrl'];
     _university = json['university'] != null
-        ? new University.fromJson(json['university'])
+        ? University.fromJson(json['university'])
         : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['userId'] = this._userId;
-    data['nickname'] = this._nickname;
-    data['birthYear'] = this._birthYear;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['userId'] = _userId;
+    data['nickname'] = _nickname;
+    data['birthYear'] = _birthYear;
     data['studentIdCardVerificationStatus'] =
-        this._studentIdCardVerificationStatus;
-    data['profileImageUrl'] = this._profileImageUrl;
-    if (this._university != null) {
-      data['university'] = this._university!.toJson();
+        _studentIdCardVerificationStatus;
+    data['profileImageUrl'] = _profileImageUrl;
+    if (_university != null) {
+      data['university'] = _university!.toJson();
     }
     return data;
   }
@@ -235,13 +294,13 @@ class University {
 
   University({int? universityId, String? name, String? department}) {
     if (universityId != null) {
-      this._universityId = universityId;
+      _universityId = universityId;
     }
     if (name != null) {
-      this._name = name;
+      _name = name;
     }
     if (department != null) {
-      this._department = department;
+      _department = department;
     }
   }
 
@@ -259,10 +318,10 @@ class University {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['universityId'] = this._universityId;
-    data['name'] = this._name;
-    data['department'] = this._department;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['universityId'] = _universityId;
+    data['name'] = _name;
+    data['department'] = _department;
     return data;
   }
 }
@@ -273,11 +332,15 @@ class Regions {
 
   Regions({int? regionId, String? name}) {
     if (regionId != null) {
-      this._regionId = regionId;
+      _regionId = regionId;
     }
     if (name != null) {
-      this._name = name;
+      _name = name;
     }
+  }
+
+  Location newLocation() {
+    return Location(id: _regionId ?? 0, name: _name ?? "(알수없음)");
   }
 
   int? get regionId => _regionId;
@@ -291,93 +354,14 @@ class Regions {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['regionId'] = this._regionId;
-    data['name'] = this._name;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['regionId'] = _regionId;
+    data['name'] = _name;
     return data;
   }
 
   @override
   String toString() {
     return 'Regions{_regionId: $_regionId, _name: $_name}';
-  }
-}
-
-class RequestedTeam {
-  int? _teamId;
-  String? _name;
-  int? _averageAge;
-  List<Users>? _users;
-  List<Regions>? _regions;
-
-  RequestedTeam(
-      {int? teamId,
-        String? name,
-        int? averageAge,
-        List<Users>? users,
-        List<Regions>? regions}) {
-    if (teamId != null) {
-      this._teamId = teamId;
-    }
-    if (name != null) {
-      this._name = name;
-    }
-    if (averageAge != null) {
-      this._averageAge = averageAge;
-    }
-    if (users != null) {
-      this._users = users;
-    }
-    if (regions != null) {
-      this._regions = regions;
-    }
-  }
-
-  int? get teamId => _teamId;
-  set teamId(int? teamId) => _teamId = teamId;
-  String? get name => _name;
-  set name(String? name) => _name = name;
-  int? get averageAge => _averageAge;
-  set averageAge(int? averageAge) => _averageAge = averageAge;
-  List<Users>? get users => _users;
-  set users(List<Users>? users) => _users = users;
-  List<Regions>? get regions => _regions;
-  set regions(List<Regions>? regions) => _regions = regions;
-
-  RequestedTeam.fromJson(Map<String, dynamic> json) {
-    _teamId = json['teamId'];
-    _name = json['name'];
-    _averageAge = json['averageAge'];
-    if (json['users'] != null) {
-      _users = <Users>[];
-      json['users'].forEach((v) {
-        _users!.add(new Users.fromJson(v));
-      });
-    }
-    if (json['regions'] != null) {
-      _regions = <Regions>[];
-      json['regions'].forEach((v) {
-        _regions!.add(new Regions.fromJson(v));
-      });
-    }
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['teamId'] = this._teamId;
-    data['name'] = this._name;
-    data['averageAge'] = this._averageAge;
-    if (this._users != null) {
-      data['users'] = this._users!.map((v) => v.toJson()).toList();
-    }
-    if (this._regions != null) {
-      data['regions'] = this._regions!.map((v) => v.toJson()).toList();
-    }
-    return data;
-  }
-
-  @override
-  String toString() {
-    return 'RequestedTeam{_teamId: $_teamId, _name: $_name, _averageAge: $_averageAge, _users: $_users, _regions: $_regions}';
   }
 }
