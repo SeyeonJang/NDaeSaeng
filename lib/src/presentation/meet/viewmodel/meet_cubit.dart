@@ -60,6 +60,19 @@ class MeetCubit extends Cubit<MeetState> {
     print("test: ${state.getMyTeam()}");
   }
 
+  void initMeetIntro() async {
+    state.setIsLoading(true);
+    emit(state.copy());
+
+    await getMyTeams(put: false);
+    if (!state.pickedTeam && state.myTeams.isNotEmpty) {
+      state.setMyTeam(state.myTeams[0]);
+    }
+
+    state.setIsLoading(false);
+    emit(state.copy());
+  }
+
   void initCreateTeam() async {
     state.setIsLoading(true);
     emit(state.copy());
