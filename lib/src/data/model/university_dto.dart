@@ -12,7 +12,7 @@ class UniversityDto {
   });
 
   UniversityDto.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
+    id = json['id'] ?? json['university_id'];
     name = json['name'];
     department = json['department'];
   }

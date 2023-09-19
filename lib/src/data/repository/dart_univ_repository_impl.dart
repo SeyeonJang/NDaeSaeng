@@ -6,13 +6,49 @@ import 'package:dart_flutter/src/domain/repository/university_repository.dart';
 import 'package:sqflite/sqflite.dart';
 
 class DartUniversityRepositoryImpl implements UniversityRepository {
-  Future<List<University>> getUniversities() async { // TODO
-    var db = await UniversityLocalDatasource.getDatabase();
-    var results = await db.rawQuery('''
+  @override
+  Future<List<University>> getUniversities() async {
+    String query = '''
       SELECT *
       FROM university 
-      LIMIT 10
-    ''');
+    ''';
+
+    return await getAllWithQuery(query);
+  }
+
+  @override
+  Future<List<University>> getUniversitiesByName(String name) async {
+    String query = '''
+      SELECT * 
+      FROM university
+      WHERE university.name LIKE ? 
+    ''';
+
+    var db = await UniversityLocalDatasource.getDatabase();
+    var results = await db.rawQuery(query, [name]);
+
+    List<University> universities = [];
+    for (var res in results) {
+      universities.add(UniversityDto.fromJson(res).newUniversity());
+    }
+
+    return universities;
+  }
+
+  @override
+  Future<List<University>> getUniversitiesDistinctName() async {
+    String query = ''' 
+      SELECT university.university_id, university.name
+      FROM university 
+      GROUP BY university.name;
+    ''';
+
+    return await getAllWithQuery(query);
+  }
+
+  Future<List<University>> getAllWithQuery(String query) async {
+    var db = await UniversityLocalDatasource.getDatabase();
+    var results = await db.rawQuery(query);
 
     List<University> universities = [];
     for (var res in results) {
