@@ -1,11 +1,7 @@
 import 'package:dart_flutter/res/config/size_config.dart';
 import 'package:dart_flutter/src/common/util/analytics_util.dart';
-import 'package:dart_flutter/src/common/util/toast_util.dart';
-import 'package:dart_flutter/src/domain/entity/user.dart';
 import 'package:dart_flutter/src/presentation/meet/view/meet_create_team.dart';
-import 'package:dart_flutter/src/presentation/meet/view/meet_update_team.dart';
 import 'package:dart_flutter/src/presentation/meet/viewmodel/meet_cubit.dart';
-import 'package:dart_flutter/src/presentation/standby/standby_landing_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -19,7 +15,7 @@ class MeetIntro extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: SingleChildScrollView(
+      body: const SingleChildScrollView(
         child: BodySection(),
       ),
 
@@ -27,7 +23,7 @@ class MeetIntro extends StatelessWidget {
         BlocBuilder<MeetCubit, MeetState>(
           builder: (context,state) {
             return state.myTeams.length < 1
-                ? MakeTeamButton()
+                ? const MakeTeamButton()
                 : SeeMyTeamButton(ancestorContext: context);
           }
         )
@@ -110,7 +106,7 @@ class BodySection extends StatelessWidget {
             SizedBox(height: SizeConfig.defaultSize * 5,),
           SizedBox(
             height: SizeConfig.defaultSize * 4,
-            child: Row(
+            child: const Row(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
@@ -169,7 +165,7 @@ class BodySection extends StatelessWidget {
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(5),
                       ),
-                      child: Text("팀명, 만나고 싶은 지역, 팀원 정보를 입력한다", style: TextStyle(
+                      child: const Text("팀명, 만나고 싶은 지역, 팀원 정보를 입력한다", style: TextStyle(
                           fontWeight: FontWeight.w500
                       ),)
                   )
@@ -183,7 +179,7 @@ class BodySection extends StatelessWidget {
             child: Container(
               width: SizeConfig.defaultSize * 2.8, // 원의 너비
               height: SizeConfig.defaultSize * 2.8, // 원의 높이
-              color: Color(0xffFE6059), // 빨간색 배경
+              color: const Color(0xffFE6059), // 빨간색 배경
               child: Center(
                 child: Text('2', style: TextStyle(
                     color: Colors.white, // 흰색 텍스트
@@ -223,7 +219,7 @@ class BodySection extends StatelessWidget {
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(5),
                       ),
-                      child: Text("마음에 드는 팀에게 호감을 보낸다", style: TextStyle(
+                      child: const Text("마음에 드는 팀에게 호감을 보낸다", style: TextStyle(
                         fontWeight: FontWeight.w500
                       ),)
                   )
@@ -237,7 +233,7 @@ class BodySection extends StatelessWidget {
             child: Container(
               width: SizeConfig.defaultSize * 2.8, // 원의 너비
               height: SizeConfig.defaultSize * 2.8, // 원의 높이
-              color: Color(0xffFE6059), // 빨간색 배경
+              color: const Color(0xffFE6059), // 빨간색 배경
               child: Center(
                 child: Text('3', style: TextStyle(
                     color: Colors.white, // 흰색 텍스트
@@ -284,9 +280,9 @@ class BodySection extends StatelessWidget {
                                   alignment: Alignment.center,
                                   decoration: BoxDecoration(
                                     color: Colors.grey.shade100,
-                                    borderRadius: BorderRadius.only(topLeft: Radius.circular(13), topRight: Radius.circular(13), bottomRight: Radius.circular(13)),
+                                    borderRadius: const BorderRadius.only(topLeft: Radius.circular(13), topRight: Radius.circular(13), bottomRight: Radius.circular(13)),
                                   ),
-                                  child: Text("안녕하세요! 저희는 OOOO학과\n학생들이에요! 대화해보고 싶어요! ☺️"),
+                                  child: const Text("안녕하세요! 저희는 OOOO학과\n학생들이에요! 대화해보고 싶어요! ☺️"),
                                 ),
                               ],
                             ),
@@ -298,11 +294,11 @@ class BodySection extends StatelessWidget {
                                   width: SizeConfig.defaultSize * 27.2,
                                   height: SizeConfig.defaultSize * 3.2,
                                   alignment: Alignment.center,
-                                  decoration: BoxDecoration(
+                                  decoration: const BoxDecoration(
                                     color: Color(0xffFE6059),
                                     borderRadius: BorderRadius.only(topLeft: Radius.circular(13), topRight: Radius.circular(13), bottomLeft: Radius.circular(13)),
                                   ),
-                                  child: Text("안녕하세요! 저희도 대화해보고 싶어요! 😊", style: TextStyle(color: Colors.white),),
+                                  child: const Text("안녕하세요! 저희도 대화해보고 싶어요! 😊", style: TextStyle(color: Colors.white),),
                                 ),
                               ],
                             ),
@@ -320,7 +316,7 @@ class BodySection extends StatelessWidget {
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(5),
                       ),
-                    child: Text("상대 팀도 호감을 수락하면 채팅 시작!", style: TextStyle(
+                    child: const Text("상대 팀도 호감을 수락하면 채팅 시작!", style: TextStyle(
                         fontWeight: FontWeight.w500
                     ),)
                   )
@@ -370,7 +366,7 @@ class MakeTeamButton extends StatelessWidget {
                 border: Border.all(
                   color: Colors.white,
                 ),
-                color: Color(0xffFE6059),
+                color: const Color(0xffFE6059),
                 borderRadius: BorderRadius.circular(13),
               ),
               child: Text("과팅에 참여할 팀 만들기", style: TextStyle(
@@ -412,7 +408,7 @@ class SeeMyTeamButton extends StatelessWidget {
               border: Border.all(
                 color: Colors.white,
               ),
-              color: Color(0xffFE6059),
+              color: const Color(0xffFE6059),
               borderRadius: BorderRadius.circular(13),
             ),
             child: Text("내 팀 보기", style: TextStyle(color: Colors.white, fontSize: SizeConfig.defaultSize * 2, fontWeight: FontWeight.w600)),
@@ -447,8 +443,8 @@ class _MiddleSection extends StatelessWidget {
               child: Container(alignment: Alignment.center,
                 width: SizeConfig.screenWidth * 0.8,
                   decoration: BoxDecoration(
-                    color: Color(0xffFE6059).withOpacity(0.06),
-                    borderRadius: BorderRadius.only(topLeft: Radius.circular(15), topRight: Radius.circular(15), bottomLeft: Radius.zero, bottomRight: Radius.circular(15)),
+                    color: const Color(0xffFE6059).withOpacity(0.06),
+                    borderRadius: const BorderRadius.only(topLeft: Radius.circular(15), topRight: Radius.circular(15), bottomLeft: Radius.zero, bottomRight: Radius.circular(15)),
                   ),
                 child: Padding(
                   padding: EdgeInsets.all(SizeConfig.defaultSize * 1.2),
@@ -465,8 +461,8 @@ class _MiddleSection extends StatelessWidget {
               child: Container(alignment: Alignment.center,
                   width: SizeConfig.screenWidth * 0.8,
                   decoration: BoxDecoration(
-                    color: Color(0xffFE6059).withOpacity(0.06),
-                    borderRadius: BorderRadius.only(topLeft: Radius.circular(15), topRight: Radius.circular(15), bottomLeft: Radius.circular(15), bottomRight: Radius.zero),
+                    color: const Color(0xffFE6059).withOpacity(0.06),
+                    borderRadius: const BorderRadius.only(topLeft: Radius.circular(15), topRight: Radius.circular(15), bottomLeft: Radius.circular(15), bottomRight: Radius.zero),
                   ),
                   child: Padding(
                     padding: EdgeInsets.all(SizeConfig.defaultSize * 1.4),
@@ -483,8 +479,8 @@ class _MiddleSection extends StatelessWidget {
               child: Container(alignment: Alignment.center,
                   width: SizeConfig.screenWidth * 0.8,
                   decoration: BoxDecoration(
-                    color: Color(0xffFE6059).withOpacity(0.06),
-                    borderRadius: BorderRadius.only(topLeft: Radius.circular(15), topRight: Radius.circular(15), bottomLeft: Radius.zero, bottomRight: Radius.circular(15)),
+                    color: const Color(0xffFE6059).withOpacity(0.06),
+                    borderRadius: const BorderRadius.only(topLeft: Radius.circular(15), topRight: Radius.circular(15), bottomLeft: Radius.zero, bottomRight: Radius.circular(15)),
                   ),
                   child: Padding(
                     padding: EdgeInsets.all(SizeConfig.defaultSize * 1.2),
@@ -509,7 +505,7 @@ class _MiddleSection extends StatelessWidget {
                 height: SizeConfig.defaultSize * 13,
                 decoration: BoxDecoration(
                   color: Colors.grey.shade50,
-                  borderRadius: BorderRadius.all(Radius.circular(13)),
+                  borderRadius: const BorderRadius.all(Radius.circular(13)),
                 ),
                 child: Padding(
                   padding: EdgeInsets.symmetric(horizontal: SizeConfig.defaultSize * 1.5, vertical: SizeConfig.defaultSize * 1.5),
