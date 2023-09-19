@@ -1,5 +1,6 @@
 import 'package:dart_flutter/src/data/model/type/blind_date_user_dto.dart';
 import 'package:dart_flutter/src/data/model/type/team_region.dart';
+import 'package:dart_flutter/src/domain/entity/blind_date_team.dart';
 
 class BlindDateTeamDto {
   int? id;
@@ -18,6 +19,18 @@ class BlindDateTeamDto {
         this.universityName,
         this.isCertifiedTeam,
         this.teamUsers});
+
+  BlindDateTeam newBlindDateTeam() {
+    return BlindDateTeam(
+        id: id ?? 0,
+        name: name ?? "(알수없음)",
+        averageBirthYear: averageBirthYear ?? 1950.0,
+        regions: regions?.map((region) => region.newLocation()).toList() ?? [],
+        universityName: universityName ?? "(알수없음)",
+        isCertifiedTeam: isCertifiedTeam ?? false,
+        teamUsers: teamUsers?.map((user) => user.newBlindDateUser()).toList() ?? []
+    );
+  }
 
   BlindDateTeamDto.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -40,17 +53,17 @@ class BlindDateTeamDto {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['name'] = this.name;
-    data['averageBirthYear'] = this.averageBirthYear;
-    if (this.regions != null) {
-      data['regions'] = this.regions!.map((v) => v.toJson()).toList();
+    final Map<String, dynamic> data = Map<String, dynamic>();
+    data['id'] = id;
+    data['name'] = name;
+    data['averageBirthYear'] = averageBirthYear;
+    if (regions != null) {
+      data['regions'] = regions!.map((v) => v.toJson()).toList();
     }
-    data['universityName'] = this.universityName;
-    data['isCertifiedTeam'] = this.isCertifiedTeam;
-    if (this.teamUsers != null) {
-      data['teamUsers'] = this.teamUsers!.map((v) => v.toJson()).toList();
+    data['universityName'] = universityName;
+    data['isCertifiedTeam'] = isCertifiedTeam;
+    if (teamUsers != null) {
+      data['teamUsers'] = teamUsers!.map((v) => v.toJson()).toList();
     }
     return data;
   }

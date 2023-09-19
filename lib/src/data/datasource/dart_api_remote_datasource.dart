@@ -7,6 +7,8 @@ import 'package:dart_flutter/src/data/model/guest_invite_message_request.dart';
 import 'package:dart_flutter/src/data/model/chatroom_detail_dto.dart';
 import 'package:dart_flutter/src/data/model/chatroom_dto.dart';
 import 'package:dart_flutter/src/data/model/proposal_response_dto.dart';
+import 'package:dart_flutter/src/data/model/blind_date_team_detail_dto.dart';
+import 'package:dart_flutter/src/data/model/blind_date_team_dto.dart';
 import 'package:dart_flutter/src/data/model/question_dto.dart';
 import 'package:dart_flutter/src/data/model/meet_team_request_dto.dart';
 import 'package:dart_flutter/src/data/model/title_vote_dto.dart';
@@ -264,14 +266,14 @@ class DartApiRemoteDataSource {
     return regions;
   }
 
-  // meet: 전체 신청 팀 수 조회
+  // team: 전체 신청 팀 수 조회
   static Future<int> getTeamCount() async {
     const path = '/v1/teams/count';
     final response = await _httpUtil.request().get(path);
     return response.data;
   }
 
-  // meet: 내 팀 목록 조회
+  // team: 내 팀 목록 조회
   static Future<List<MeetTeamResponseDto>> getMyTeams() async {
     const path = '/v1/users/me/teams';
     final response = await _httpUtil.request().get(path);
@@ -280,7 +282,7 @@ class DartApiRemoteDataSource {
     return teamResponses;
   }
 
-  // meet: 팀 상세 조회
+  // team: 내 팀 상세 조회
   static Future<MeetTeamResponseDto> getTeam(String teamId) async {
     const path = '/v1/users/me/teams';
     final pathUrl = "$path/$teamId";
@@ -289,7 +291,7 @@ class DartApiRemoteDataSource {
     return MeetTeamResponseDto.fromJson(response.data);
   }
 
-  // meet: 팀 생성하기
+  // team: 팀 생성하기
   static Future<MeetTeamResponseDto> postTeam(MeetTeamRequestDto teamRequestDto) async {
     const path = '/v1/teams';
     final body = teamRequestDto.toJson();
@@ -298,7 +300,7 @@ class DartApiRemoteDataSource {
     return MeetTeamResponseDto.fromJson(response.data);
   }
 
-  // meet: 팀 삭제하기
+  // team: 내 팀 삭제하기
   static Future<void> deleteTeam(String teamId) async {
     const path = '/v1/users/me/teams';
     final pathUrl = "$path/$teamId";
@@ -306,7 +308,7 @@ class DartApiRemoteDataSource {
     final response = await _httpUtil.request().delete(pathUrl);
   }
 
-  // meet: 팀 정보 업데이트
+  // team: 내 팀 정보 업데이트
   static Future<MeetTeamResponseDto> putTeam(MeetTeamRequestDto teamRequestDto) async {
     const path = '/v1/users/me/teams';
     final body = teamRequestDto.toJson();
@@ -315,138 +317,24 @@ class DartApiRemoteDataSource {
     return MeetTeamResponseDto.fromJson(response.data);
   }
 
-  // proposal: 내가 보낸/받은 제안 확인
-  static Future<List<ProposalResponseDto>> getProposalList(bool received) async {
-    const path = '/v1/users/me/proposals?type=received';
-    final String type = received ? "received" : "sent";
-    final pathUrl = "$path?type=$type";
+  // team: 과팅 팀 리스트 조회하기
+  static Future<Pagination<BlindDateTeamDto>> getBlindDateTeams({int page = 0, int size = 10, int regionId = 0}) async {
+    const path = '/v1/teams';
+    final pathUrl = "$path?regionId=$regionId&page=$page&size=$size";
 
-    final ddd = '''
-    [
-    {
-      "proposalId": 1,
-    "createdTime": "2023-09-10T19:53:37",
-    "requestingTeam": {
-    "teamId": 16,
-    "name": "hello",
-    "averageAge": 22.666666666666668,
-    "users": [
-    {
-    "userId": 463,
-    "nickname": "DEFAULT",
-    "birthYear": 2000,
-    "studentIdCardVerificationStatus": "NOT_VERIFIED_YET",
-    "profileImageUrl": "DEFAULT",
-    "university": {
-    "universityId": 45,
-    "name": "ICT폴리텍대학",
-    "department": "모바일통신학과"
-    }
-    },
-    {
-    "userId": 1539,
-    "nickname": "DEFAULT",
-    "birthYear": 2003,
-    "studentIdCardVerificationStatus": "NOT_VERIFIED_YET",
-    "profileImageUrl": "DEFAULT",
-    "university": {
-    "universityId": 45,
-    "name": "ICT폴리텍대학",
-    "department": "모바일통신학과"
-    }
-    },
-    {
-    "userId": 3407,
-    "nickname": "DEFAULT",
-    "birthYear": 1998,
-    "studentIdCardVerificationStatus": "NOT_VERIFIED_YET",
-    "profileImageUrl": "DEFAULT",
-    "university": {
-    "universityId": 45,
-    "name": "ICT폴리텍대학",
-    "department": "모바일통신학과"
-    }
-    }
-    ],
-    "regions": [
-    {
-    "regionId": 1,
-    "name": "경기"
-    },
-    {
-    "regionId": 2,
-    "name": "경남"
-    },
-    {
-    "regionId": 3,
-    "name": "인천"
-    }
-    ]
-    },
-    "requestedTeam": {
-    "teamId": 18,
-    "name": "hello",
-    "averageAge": 23,
-    "users": [
-    {
-    "userId": 463,
-    "nickname": "DEFAULT",
-    "birthYear": 2000,
-    "studentIdCardVerificationStatus": "NOT_VERIFIED_YET",
-    "profileImageUrl": "DEFAULT",
-    "university": {
-    "universityId": 45,
-    "name": "ICT폴리텍대학",
-    "department": "모바일통신학과"
-    }
-    },
-    {
-    "userId": 3403,
-    "nickname": "DEFAULT",
-    "birthYear": 2002,
-    "studentIdCardVerificationStatus": "NOT_VERIFIED_YET",
-    "profileImageUrl": "DEFAULT",
-    "university": {
-    "universityId": 45,
-    "name": "ICT폴리텍대학",
-    "department": "모바일통신학과"
-    }
-    },
-    {
-    "userId": 3407,
-    "nickname": "DEFAULT",
-    "birthYear": 1998,
-    "studentIdCardVerificationStatus": "NOT_VERIFIED_YET",
-    "profileImageUrl": "DEFAULT",
-    "university": {
-    "universityId": 45,
-    "name": "ICT폴리텍대학",
-    "department": "모바일통신학과"
-    }
-    }
-    ],
-    "regions": [
-    {
-    "regionId": 1,
-    "name": "경기"
-    },
-    {
-    "regionId": 2,
-    "name": "경남"
-    },
-    {
-    "regionId": 3,
-    "name": "인천"
-    }
-    ]
-    }
-    }
-    ]
-    ''';
-    // final List jsonResponse = (await _httpUtil.request().get(pathUrl)).data;
-    final List jsonResponse = jsonDecode(ddd);
-    List<ProposalResponseDto> proposalResponses = jsonResponse.map((proposal) => ProposalResponseDto.fromJson(proposal)).toList();
-    return proposalResponses;
+    final response = await _httpUtil.request().get(pathUrl);
+
+    Pagination<BlindDateTeamDto> pagination = Pagination.fromJson(response.data, (item) => BlindDateTeamDto.fromJson(item));
+    return pagination;
+  }
+
+  // team: 과팅 팀 상세 조회하기
+  static Future<BlindDateTeamDetailDto> getBlindDateTeamDetail(int teamId) async {
+    const path = '/v1/teams';
+    final pathUrl = "$path/$teamId";
+
+    final response = await _httpUtil.request().get(pathUrl);
+    return BlindDateTeamDetailDto.fromJson(response.data);
   }
 
   // proposal: 제안 보내기 (채팅 요청)
@@ -488,7 +376,15 @@ class DartApiRemoteDataSource {
     return pagination;
   }
 
-  // chat: 채팅방 나가기 (업데이트)
+  // proposal: 내가 보낸/받은 제안 확인
+  static Future<List<ProposalResponseDto>> getProposalList(bool received) async {
+    const path = '/v1/users/me/proposals?type=received';
+    final String type = received ? "received" : "sent";
+    final pathUrl = "$path?type=$type";
+    final List jsonResponse = (await _httpUtil.request().get(pathUrl)).data;
+    List<ProposalResponseDto> proposalResponses = jsonResponse.map((proposal) => ProposalResponseDto.fromJson(proposal)).toList();
+    return proposalResponses;
+  }
 
   static String _getPathFromUrl(String url) {
     RegExp regExp = RegExp(r'https?://[^/]+(/.*)');
