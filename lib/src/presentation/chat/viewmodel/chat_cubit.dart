@@ -67,4 +67,12 @@ class ChatCubit extends Cubit<ChatState> {
   Future<BlindDateTeamDetail> getBlindDateTeam(int id) async {
     return await _meetUseCase.getBlindDateTeam(id);
   }
+
+  Future<void> acceptChatProposal(int proposalId) async {
+    await _chatUseCase.acceptChatProposal(proposalId);
+  }
+
+  Future<void> rejectChatProposal(int proposalId) async {
+    await _chatUseCase.rejectChatProposal(proposalId);
+  }
 }

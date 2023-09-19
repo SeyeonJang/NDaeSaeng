@@ -21,8 +21,8 @@ class ChatGetOneTeamView extends StatelessWidget { // Component
           MaterialPageRoute(
             builder: (context) => BlocProvider<ChatCubit>(
               create: (_) => ChatCubit(), // Replace with your MeetCubit instantiation.
-              child: ChatResponseGetDetail(teamId: 8187,),
-              // child: ChatResponseGetDetail(teamId: proposal.requestingTeam.id,), // TODO : 이거로 바꾸기
+              // child: ChatResponseGetDetail(teamId: 8187,),
+              child: ChatResponseGetDetail(teamId: proposal.requestingTeam.id,),
             ),
           ),
         );

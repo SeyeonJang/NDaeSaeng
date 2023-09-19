@@ -18,20 +18,20 @@ class ChatResponseSend extends StatelessWidget {
       builder: (context, state) {
         return Scaffold(
           backgroundColor: Colors.grey.shade50,
-          body: state.requestedList.length != 0 //  TODO : == 로 바꾸기
+          body: state.requestedList.length == 0
               ? const _NoResponseSendView()
               : Padding(
                   padding: EdgeInsets.all(SizeConfig.defaultSize),
                   child: Column(
                       children: [
-                        for (int i=0; i<1; i++)
-                        // for (int i=0; i<state.receivedList.length; i++) // TODO : 이거로 바꾸기
+                        // for (int i=0; i<1; i++)
+                        for (int i=0; i<state.receivedList.length; i++)
                           Column(
                             children: [
-                              // ChatGetOneTeamView(chatState: state, oneProposal: state.receivedList[i],), // TODO : 이거로 바꾸기
-                              ChatSendOneTeamView(chatState: state, proposal: Proposal(proposalId: 1, createdTime: DateTime.now(),
-                                requestingTeam: BlindDateTeam(id: 0, name: '요이하', averageBirthYear: 2012.3333, regions: [Location(id: 1, name: '서울')], universityName: '보낸대학교', isCertifiedTeam: true , teamUsers: [BlindDateUser(id: 1, name: '이번', profileImageUrl: 'DEFAULT', department: '무슨학과')]),
-                                requestedTeam: BlindDateTeam(id: 0, name: '하이요', averageBirthYear: 2002.3333, regions: [Location(id: 0, name: '인천')], universityName: '받은대학교', isCertifiedTeam: true , teamUsers: [BlindDateUser(id: 0, name: '일번', profileImageUrl: 'DEFAULT', department: '무슨학과'), BlindDateUser(id: 2, name: '삼번', profileImageUrl: 'DEFAULT', department: '무슨무슨학과')]),),),
+                              ChatSendOneTeamView(chatState: state, proposal: state.receivedList[i],),
+                              // ChatSendOneTeamView(chatState: state, proposal: Proposal(proposalId: 1, createdTime: DateTime.now(),
+                              //   requestingTeam: BlindDateTeam(id: 0, name: '요이하', averageBirthYear: 2012.3333, regions: [Location(id: 1, name: '서울')], universityName: '보낸대학교', isCertifiedTeam: true , teamUsers: [BlindDateUser(id: 1, name: '이번', profileImageUrl: 'DEFAULT', department: '무슨학과')]),
+                              //   requestedTeam: BlindDateTeam(id: 0, name: '하이요', averageBirthYear: 2002.3333, regions: [Location(id: 0, name: '인천')], universityName: '받은대학교', isCertifiedTeam: true , teamUsers: [BlindDateUser(id: 0, name: '일번', profileImageUrl: 'DEFAULT', department: '무슨학과'), BlindDateUser(id: 2, name: '삼번', profileImageUrl: 'DEFAULT', department: '무슨무슨학과')]),),),
                               SizedBox(height: SizeConfig.defaultSize * 1.5,)
                             ],
                           ),
