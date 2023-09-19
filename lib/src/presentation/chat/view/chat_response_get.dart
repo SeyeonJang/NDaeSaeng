@@ -1,3 +1,7 @@
+import 'package:dart_flutter/src/domain/entity/blind_date_team.dart';
+import 'package:dart_flutter/src/domain/entity/location.dart';
+import 'package:dart_flutter/src/domain/entity/proposal.dart';
+import 'package:dart_flutter/src/domain/entity/type/blind_date_user.dart';
 import 'package:dart_flutter/src/presentation/chat/view/chat_get_one_team_view.dart';
 import 'package:dart_flutter/src/presentation/chat/viewmodel/chat_cubit.dart';
 import 'package:dart_flutter/src/presentation/chat/viewmodel/state/chat_state.dart';
@@ -5,7 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../res/config/size_config.dart';
 
-class ChatResponseGet extends StatelessWidget {
+class ChatResponseGet extends StatelessWidget { // 받은 요청
   const ChatResponseGet({super.key});
 
   @override
@@ -14,11 +18,28 @@ class ChatResponseGet extends StatelessWidget {
       builder: (context, state) {
         return Scaffold(
           backgroundColor: Colors.grey.shade50,
-          body: Padding(
-            padding: EdgeInsets.all(SizeConfig.defaultSize),
-            child: ChatGetOneTeamView(chatState: state),
-          ),
-          // body: const _NoResponseGetView(),
+          body: state.receivedList.length != 0 //  TODO : == 로 바꾸기
+              ? const _NoResponseGetView()
+              : Padding(
+                  padding: EdgeInsets.all(SizeConfig.defaultSize),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        for (int i=0; i<1; i++)
+                        // for (int i=0; i<state.receivedList.length; i++) // TODO : 이거로 바꾸기
+                          Column(
+                            children: [
+                              // ChatGetOneTeamView(chatState: state, oneProposal: state.receivedList[i],), // TODO : 이거로 바꾸기
+                              ChatGetOneTeamView(chatState: state, proposal: Proposal(proposalId: 1, createdTime: DateTime.now(),
+                                  requestingTeam: BlindDateTeam(id: 0, name: '하이요', averageBirthYear: 2002.3333, regions: [Location(id: 0, name: '인천')], universityName: '보낸대학교', isCertifiedTeam: true , teamUsers: [BlindDateUser(id: 0, name: '일번', profileImageUrl: 'DEFAULT', department: '무슨학과'), BlindDateUser(id: 2, name: '삼번', profileImageUrl: 'DEFAULT', department: '무슨무슨학과')]),
+                                  requestedTeam: BlindDateTeam(id: 0, name: '요이하', averageBirthYear: 2012.3333, regions: [Location(id: 1, name: '서울')], universityName: '받은대학교', isCertifiedTeam: true , teamUsers: [BlindDateUser(id: 1, name: '이번', profileImageUrl: 'DEFAULT', department: '무슨학과')]), ),),
+                              SizedBox(height: SizeConfig.defaultSize * 1.5,)
+                            ],
+                          ),
+                      ],
+                    )
+                  ),
+                ),
         );
       }
     );
