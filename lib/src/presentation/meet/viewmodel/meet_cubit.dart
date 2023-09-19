@@ -1,3 +1,4 @@
+import 'package:dart_flutter/src/data/model/proposal_request_dto.dart';
 import 'package:dart_flutter/src/domain/entity/blind_date_team.dart';
 import 'package:dart_flutter/src/domain/entity/location.dart';
 import 'package:dart_flutter/src/domain/entity/meet_team.dart';
@@ -150,6 +151,18 @@ class MeetCubit extends Cubit<MeetState> {
   void setPickedTeam(MeetTeam myTeam) {
     state.setPickedTeam(true);
     setMyTeam(myTeam);
+  }
+
+  void postProposal(int requestingTeamId, int requestedTeamId) async {
+    state.setIsLoading(true);
+    emit(state.copy());
+
+    ProposalRequestDto newProposal = ProposalRequestDto(requestingTeamId: requestingTeamId, requestedTeamId: requestedTeamId);
+    await _meetUseCase.postProposal(newProposal);
+
+    // TODO : 요청 상태를 true로 변경
+    state.setIsLoading(false);
+    emit(state.copy());
   }
 
   // =================================================================
