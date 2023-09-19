@@ -37,6 +37,7 @@ class DartMeetRepository implements MeetRepository {
     return await DartApiRemoteDataSource.getTeamCount();
   }
 
+  @Deprecated("ProposalRepository로 이전")
   @override
   Future<void> postProposal(ProposalRequestDto proposalRequest) async {
     await DartApiRemoteDataSource.postProposal(proposalRequest);
