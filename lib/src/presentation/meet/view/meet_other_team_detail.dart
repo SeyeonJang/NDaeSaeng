@@ -169,7 +169,7 @@ class MeetOtherTeamDetail extends StatelessWidget {
                                                         ]
                                                     )
                                                 ),
-                                                Text("과팅 신청을 보낼 수 있어요!", style: TextStyle(
+                                                Text("호감을 보낼 수 있어요!", style: TextStyle(
                                                   fontSize: SizeConfig.defaultSize * 1.8,
                                                   fontWeight: FontWeight.w500,
                                                   color: Colors.black,
@@ -178,7 +178,7 @@ class MeetOtherTeamDetail extends StatelessWidget {
                                             ),
                                             Column(
                                               children: [
-                                                Text("상대 팀이 채팅 요청을 수락하면", style: TextStyle(
+                                                Text("상대 팀이 내 호감을 수락하면", style: TextStyle(
                                                   fontSize: SizeConfig.defaultSize * 1.5,
                                                   fontWeight: FontWeight.w500,
                                                   color: Colors.grey,
@@ -255,8 +255,8 @@ class MeetOtherTeamDetail extends StatelessWidget {
                                                   });
                                                   return AlertDialog(
                                                     surfaceTintColor: Colors.white,
-                                                    title: Container(alignment: Alignment.center, child: Text('요청이 성공적으로 전달됐어요!', style: TextStyle(fontSize: SizeConfig.defaultSize * 1.5, fontWeight: FontWeight.w600, color: Color(0xffFF5C58)),)),
-                                                    content: Container(alignment: Alignment.center, height: SizeConfig.defaultSize * 4, child: Text('곧 상대의 수락 결과를 알려드릴게요!',)),
+                                                    title: Container(alignment: Alignment.center, child: Text('내 호감이 성공적으로 전달됐어요!', style: TextStyle(fontSize: SizeConfig.defaultSize * 1.5, fontWeight: FontWeight.w600, color: Color(0xffFF5C58)),)),
+                                                    content: Container(alignment: Alignment.center, height: SizeConfig.defaultSize * 4, child: Text('곧 상대의 채팅 수락 결과를 알려드릴게요!',)),
                                                   );
                                                 }
                                             );
@@ -268,7 +268,7 @@ class MeetOtherTeamDetail extends StatelessWidget {
                                               borderRadius: BorderRadius.circular(10),
                                               color: Color(0xffFF5C58),
                                             ),
-                                            child: Center(child: Text("채팅 요청 보내기", style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600),)),
+                                            child: Center(child: Text("호감 보내기", style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600),)),
                                             // TODO : 포인트 재개하면 복구하기
                                             // child: Center(child: Text("500 포인트로 채팅 요청", style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600),)),
                                           ),
@@ -287,7 +287,7 @@ class MeetOtherTeamDetail extends StatelessWidget {
                               borderRadius: BorderRadius.circular(10),
                             ),
                             child: Center(
-                              child: Text("채팅 요청 보내기", style: TextStyle(
+                              child: Text("호감 보내기", style: TextStyle(
                                 fontSize: SizeConfig.defaultSize * 2,
                                 fontWeight: FontWeight.w600,
                                 color: Colors.white

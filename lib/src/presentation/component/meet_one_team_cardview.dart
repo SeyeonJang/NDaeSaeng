@@ -14,7 +14,7 @@ class MeetOneTeamCardview extends StatelessWidget {
   final int myTeamCount;
   final int myTeamId;
 
-  const MeetOneTeamCardview({super.key, required this.team, required this.isMyTeam, required this.myTeamCount, required this.myTeamId});
+  const MeetOneTeamCardview({Key? key, required this.team, required this.isMyTeam, required this.myTeamCount, required this.myTeamId});
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
