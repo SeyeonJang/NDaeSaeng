@@ -1,4 +1,5 @@
 import 'package:dart_flutter/src/domain/entity/blind_date_team_detail.dart';
+import 'package:dart_flutter/src/presentation/component/meet_one_member_cardview_novote.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../res/config/size_config.dart';
@@ -57,8 +58,8 @@ class MeetOtherTeamDetail extends StatelessWidget {
                           ...List.generate(blindDateTeamDetail.teamUsers.length, (index) {
                             return Column(
                               children: [
-                                MeetOneMemberCardview(userResponse: blindDateTeamDetail.teamUsers[index]),
-                                SizedBox(height: SizeConfig.defaultSize),
+                                MeetOneMemberCardviewNoVote(userResponse: blindDateTeamDetail.teamUsers[index], university: blindDateTeamDetail.universityName,),
+                                SizedBox(height: SizeConfig.defaultSize * 1.5),
                               ],
                             );
                           }),
@@ -355,10 +356,10 @@ class _TopBarSection extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(team.universityName, style: TextStyle(
-                  fontSize: SizeConfig.defaultSize * 1.7,),
-                ),
-                Text("       "),
+                // Text(team.universityName, style: TextStyle(
+                //   fontSize: SizeConfig.defaultSize * 1.7,),
+                // ),
+                // Text("       "),
                 Expanded(
                   child: Container(
                     alignment: Alignment.centerRight,

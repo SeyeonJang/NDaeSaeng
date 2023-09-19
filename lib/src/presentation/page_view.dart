@@ -93,17 +93,17 @@ class _DartPageViewState extends State<DartPageView> {
     return Scaffold(
       backgroundColor: Colors.white,
 
-      // body: Padding(
-      //   padding: EdgeInsets.only(top: SizeConfig.defaultSize * 6.5),
-      //   child: WillPopScope(
-      //     onWillPop: _onWillPop,
-      //     child: _tabs[_page]
-      //   ),
-      // ),
-      body: WillPopScope(
-        onWillPop: _onWillPop,
-        child: _tabs[_page],
+      body: Padding(
+        padding: EdgeInsets.only(top: SizeConfig.defaultSize * 6.5),
+        child: WillPopScope(
+          onWillPop: _onWillPop,
+          child: _tabs[_page]
+        ),
       ),
+      // body: WillPopScope(
+      //   onWillPop: _onWillPop,
+      //   child: _tabs[_page],
+      // ),
 
       bottomNavigationBar: BottomNavigationBar(
         onTap: (index) {
