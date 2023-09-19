@@ -2,7 +2,7 @@ import 'package:dart_flutter/src/common/util/analytics_util.dart';
 import 'package:dart_flutter/src/domain/entity/type/blind_date_user_detail.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../res/config/size_config.dart';
+import '../../../../../res/config/size_config.dart';
 
 class ChatProfile extends StatelessWidget {
   final String university;

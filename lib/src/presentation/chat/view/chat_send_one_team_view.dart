@@ -1,12 +1,13 @@
+import 'package:dart_flutter/src/domain/entity/proposal.dart';
 import 'package:flutter/material.dart';
 import '../../../../res/config/size_config.dart';
 import '../viewmodel/state/chat_state.dart';
 
 class ChatSendOneTeamView extends StatelessWidget { // Component
   final ChatState chatState;
-  // final MeetTeam meetTeam;
+  final Proposal proposal;
 
-  const ChatSendOneTeamView({super.key, required this.chatState});
+  const ChatSendOneTeamView({super.key, required this.chatState, required this.proposal});
 
   @override
   Widget build(BuildContext context) {
@@ -37,11 +38,11 @@ class ChatSendOneTeamView extends StatelessWidget { // Component
                 children: [
                   Row(
                     children: [
-                      Text("팀 이름", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.6, fontWeight: FontWeight.w600),),
-                      Text("  21.5세", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.6),)
+                      Text(proposal.requestedTeam.name, style: TextStyle(fontSize: SizeConfig.defaultSize * 1.6, fontWeight: FontWeight.w600),),
+                      Text("  ${(2023-proposal.requestedTeam.averageBirthYear+1).toString().substring(0,4)}세", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.6),)
                     ],
                   ),
-                  Text("우리팀이름", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.4),),
+                  Text(proposal.requestingTeam.name, style: TextStyle(fontSize: SizeConfig.defaultSize * 1.4),),
                 ],
               ),
               SizedBox(height: SizeConfig.defaultSize * 1,),
@@ -65,7 +66,7 @@ class ChatSendOneTeamView extends StatelessWidget { // Component
                             ),
                           ),
                         ),
-                        for (int i = 2; i >= 0 ; i--)
+                        for (int i = proposal.requestedTeam.teamUsers.length-1; i >= 0 ; i--)
                           Positioned(
                             left: i * SizeConfig.defaultSize * 3,
                             child: Container(
@@ -74,13 +75,9 @@ class ChatSendOneTeamView extends StatelessWidget { // Component
                                 shape: BoxShape.circle,
                               ),
                               child: Center(
-                                child: Image.asset(
-                                  i == 0
-                                      ? 'assets/images/profile-mockup.png'
-                                      : (i == 1 ? 'assets/images/profile-mockup2.png' : 'assets/images/profile-mockup3.png'), // 이미지 경로를 각 이미지에 맞게 설정
-                                  width: SizeConfig.defaultSize * 4, // 이미지 크기
-                                  height: SizeConfig.defaultSize * 4,
-                                ),
+                                  child: proposal.requestedTeam.teamUsers[i].profileImageUrl == "DEFAULT" || proposal.requestedTeam.teamUsers[i].profileImageUrl.startsWith("https://")
+                                      ? Image.asset('assets/images/profile-mockup3.png', width: SizeConfig.defaultSize * 4, height: SizeConfig.defaultSize * 4, fit: BoxFit.cover,)
+                                      : Image.network(proposal.requestedTeam.teamUsers[i].profileImageUrl, width: SizeConfig.defaultSize * 4, height: SizeConfig.defaultSize * 4, fit: BoxFit.cover,)
                               ),
                             ),
                           ),
@@ -94,20 +91,20 @@ class ChatSendOneTeamView extends StatelessWidget { // Component
                       children: [
                         Row(
                           children: [
-                            Text("${chatState.userResponse.university?.name ?? '학교를 불러오지 못했어요'}",
+                            Text("${proposal.requestedTeam.universityName} ",
                               style: TextStyle(fontSize: SizeConfig.defaultSize * 1.4, fontWeight: FontWeight.w600),),
-                            if (chatState.userResponse.personalInfo?.verification.isVerificationSuccess ?? false)
-                              Image.asset("assets/images/check.png", width: SizeConfig.defaultSize * 1.3),
+                            if (proposal.requestedTeam.isCertifiedTeam ?? false)
+                              Image.asset("assets/images/check.png", width: SizeConfig.defaultSize * 1.2),
                           ],
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Expanded(
-                              child: Text("${chatState.userResponse.university?.department ?? '학과를 불러오지 못했어요'}",
+                              child: Text(proposal.requestedTeam.teamUsers.map((user) => user.department).toSet().fold('', (previousValue, element) => previousValue.isEmpty ? element : '$previousValue & $element'),
                                 style: TextStyle(fontSize: SizeConfig.defaultSize * 1.4, overflow: TextOverflow.ellipsis),),
                             ),
-                            Text("8/31 요청", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.4, color: Color(0xff7C83FD)),)
+                            Text("${proposal.createdTime.month}/${proposal.createdTime.day} 보냄", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.4, color: Color(0xff7C83FD)),)
                           ],
                         )
                       ],

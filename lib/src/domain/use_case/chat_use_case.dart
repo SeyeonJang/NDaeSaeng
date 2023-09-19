@@ -43,10 +43,10 @@ class ChatUseCase {
   }
 
   Future<List<Proposal>> getMyRequestedProposals() async {
-    return await getMyRequestedProposals();
+    return await _proposalRepository.getMyRequestedProposals();
   }
 
   Future<List<Proposal>> getMyReceivedProposals() async {
-    return await getMyReceivedProposals();
+    return await _proposalRepository.getMyReceivedProposals();
   }
 }
