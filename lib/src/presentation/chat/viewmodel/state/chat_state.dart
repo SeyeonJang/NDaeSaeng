@@ -4,6 +4,7 @@ import 'package:dart_flutter/src/domain/entity/blind_date_team_detail.dart';
 import 'package:dart_flutter/src/domain/entity/chat_message.dart';
 import 'package:dart_flutter/src/domain/entity/chat_room.dart';
 import 'package:dart_flutter/src/domain/entity/chat_room_detail.dart';
+import 'package:dart_flutter/src/domain/entity/proposal.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:dart_flutter/src/domain/entity/user.dart';
 
@@ -15,6 +16,8 @@ class ChatState {
   late ChatRoom chatRoom; // 안쓰는중
   late ChatRoomDetail myChatRoom;
   late int chatRoomId;
+  late List<Proposal> receivedList;
+  late List<Proposal> requestedList;
 
   ChatState ({
     required this.userResponse,
@@ -22,7 +25,9 @@ class ChatState {
     required this.myChatRooms,
     required this.chatRoom,
     required this.myChatRoom,
-    required this.chatRoomId
+    required this.chatRoomId,
+    required this.receivedList,
+    required this.requestedList
   });
 
   ChatState.init() {
@@ -47,6 +52,8 @@ class ChatState {
         connection: ChatConnection('', 0)
     );
     chatRoomId = 0;
+    receivedList = [];
+    requestedList = [];
   }
 
   ChatState copy() => ChatState(
@@ -55,7 +62,9 @@ class ChatState {
     myChatRooms: myChatRooms,
     chatRoom: chatRoom,
     myChatRoom: myChatRoom,
-    chatRoomId: chatRoomId
+    chatRoomId: chatRoomId,
+    receivedList: receivedList,
+    requestedList: requestedList
   );
 
   void setIsLoading(bool isLoading) {
@@ -76,5 +85,13 @@ class ChatState {
 
   void setChatRoomId(int chatRoomId) {
     this.chatRoomId = chatRoomId;
+  }
+
+  void setReceivedList(List<Proposal> receivedList) {
+    this.receivedList = receivedList;
+  }
+
+  void setRequestedList(List<Proposal> requestedList) {
+    this.requestedList = requestedList;
   }
 }
