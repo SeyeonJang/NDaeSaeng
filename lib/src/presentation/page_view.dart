@@ -23,7 +23,7 @@ class DartPageView extends StatefulWidget {
 }
 
 class _DartPageViewState extends State<DartPageView> {
-  int _page = 2;
+  int _page = 0;
   late final PageController _pageController = PageController(initialPage: widget.initialPage);
   DateTime? currentBackPressTime;
 
