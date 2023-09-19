@@ -4,14 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../res/config/size_config.dart';
 import '../../../common/util/toast_util.dart';
-import '../../component/meet_one_member_cardview.dart';
 import '../viewmodel/meet_cubit.dart';
 import '../viewmodel/state/meet_state.dart';
 
 class MeetOtherTeamDetail extends StatelessWidget {
   int teamId;
+  int myTeamId;
 
-  MeetOtherTeamDetail({super.key, required this.teamId});
+  MeetOtherTeamDetail({super.key, required this.teamId, required this.myTeamId});
 
   @override
   Widget build(BuildContext context) {
@@ -40,10 +40,6 @@ class MeetOtherTeamDetail extends StatelessWidget {
               return Text('Error: ${futureState.error}');
             } else if (futureState.hasData) {
               BlindDateTeamDetail blindDateTeamDetail = futureState.data!;
-
-              // TODO : 서버 연결하면 다시 확인하기
-              if (blindDateTeamDetail.proposalStatus == false)
-                state.setProposalStatus(blindDateTeamDetail.proposalStatus);
 
               return Scaffold(
                 backgroundColor: Colors.grey.shade50,
@@ -250,7 +246,7 @@ class MeetOtherTeamDetail extends StatelessWidget {
                                         GestureDetector(
                                           onTap: () {
                                             Navigator.pop(modalContext, true);
-                                            context.read<MeetCubit>().postProposal(teamId, blindDateTeamDetail.id);
+                                            context.read<MeetCubit>().postProposal(myTeamId, blindDateTeamDetail.id);
                                             showDialog<String>(
                                                 context: modalContext,
                                                 builder: (BuildContext dialogContext) {

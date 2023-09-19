@@ -305,8 +305,6 @@ class _TopSectionInviteFriendState extends State<_TopSectionInviteFriend> {
                                                     myCodeCopy)); // 클립보드에 복사되었어요 <- 메시지 자동으로 Android에서 뜸 TODO : iOS는 확인하고 복사멘트 띄우기
                                               },
                                               style: ElevatedButton.styleFrom(
-                                                primary: Colors.white,
-                                                onPrimary: Color(0xffFE6059),
                                                 textStyle: TextStyle(
                                                   color: Color(0xffFE6059),
                                                 ),
@@ -678,7 +676,7 @@ class _BodySectionState extends State<_BodySection> {
                                         : Column(
                                       children: [
                                         SizedBox(height: SizeConfig.defaultSize * 0.6,),
-                                        MeetOneTeamCardview(team: blindDateTeam, isMyTeam: false, myTeamCount: widget.meetState.myTeams.length,)
+                                        MeetOneTeamCardview(team: blindDateTeam, isMyTeam: false, myTeamCount: widget.meetState.myTeams.length, myTeamId: nowTeam.id,)
                                       ],
                                     );
                                   },
