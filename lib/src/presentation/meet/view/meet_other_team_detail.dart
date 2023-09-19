@@ -1,4 +1,5 @@
 import 'package:dart_flutter/src/domain/entity/blind_date_team_detail.dart';
+import 'package:dart_flutter/src/presentation/component/meet_one_member_cardview_novote.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../res/config/size_config.dart';
@@ -39,6 +40,11 @@ class MeetOtherTeamDetail extends StatelessWidget {
               return Text('Error: ${futureState.error}');
             } else if (futureState.hasData) {
               BlindDateTeamDetail blindDateTeamDetail = futureState.data!;
+
+              // TODO : 서버 연결하면 다시 확인하기
+              if (blindDateTeamDetail.proposalStatus == false)
+                state.setProposalStatus(blindDateTeamDetail.proposalStatus);
+
               return Scaffold(
                 backgroundColor: Colors.grey.shade50,
 
@@ -57,8 +63,8 @@ class MeetOtherTeamDetail extends StatelessWidget {
                           ...List.generate(blindDateTeamDetail.teamUsers.length, (index) {
                             return Column(
                               children: [
-                                MeetOneMemberCardview(userResponse: blindDateTeamDetail.teamUsers[index]),
-                                SizedBox(height: SizeConfig.defaultSize),
+                                MeetOneMemberCardviewNoVote(userResponse: blindDateTeamDetail.teamUsers[index], university: blindDateTeamDetail.universityName,),
+                                SizedBox(height: SizeConfig.defaultSize * 1.5),
                               ],
                             );
                           }),
@@ -103,20 +109,55 @@ class MeetOtherTeamDetail extends StatelessWidget {
                         //   ),
                         // ),
                         SizedBox(height: SizeConfig.defaultSize,),
-                        GestureDetector(
+
+                        state.proposalStatus == false
+                          ? Container(
+                            width: SizeConfig.screenWidth,
+                            height: SizeConfig.defaultSize * 5.5,
+                            decoration: BoxDecoration(
+                              color: Colors.grey.shade300,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Center(
+                                child: Text("이미 채팅 요청을 보냈어요!", style: TextStyle(
+                                    fontSize: SizeConfig.defaultSize * 2,
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.white
+                                ),)
+
+                              // TODO : 포인트 제도 생겼을 때 위 Text 지우고 아래 복구
+                              // child: Row(
+                              //   mainAxisAlignment: MainAxisAlignment.center,
+                              //   children: [
+                              //     Text("2000", style: TextStyle(
+                              //         decoration: TextDecoration.lineThrough,
+                              //         fontSize: SizeConfig.defaultSize * 1.5,
+                              //         fontWeight: FontWeight.w400,
+                              //         color: Colors.white
+                              //     ),),
+                              //     Text(" 500 포인트로 대화 시작하기", style: TextStyle(
+                              //         fontSize: SizeConfig.defaultSize * 2,
+                              //         fontWeight: FontWeight.w600,
+                              //         color: Colors.white
+                              //     ),),
+                              //   ],
+                              // ),
+                            ),
+                          )
+                          : GestureDetector(
                           onTap: () {
                             showDialog(
                               context: context,
-                              builder: (BuildContext context) {
+                              builder: (BuildContext modalContext) {
                                 return AlertDialog(
                                   backgroundColor: Colors.white,
                                   surfaceTintColor: Colors.white,
                                   content: Container(
                                       width: SizeConfig.screenWidth * 0.9,
-                                      height: SizeConfig.screenHeight * 0.2,
+                                      height: SizeConfig.screenHeight * 0.15,
                                       alignment: Alignment.center,
                                       child: Padding(
-                                        padding: const EdgeInsets.all(8.0),
+                                        padding: EdgeInsets.only(top: SizeConfig.defaultSize * 0.8),
                                         child: Column(
                                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                                           children: [
@@ -124,15 +165,16 @@ class MeetOtherTeamDetail extends StatelessWidget {
                                               children: [
                                                 RichText(
                                                     text: TextSpan(
-                                                        style: TextStyle(fontSize: SizeConfig.defaultSize * 1.7, fontWeight: FontWeight.w500),
+                                                        style: TextStyle(fontSize: SizeConfig.defaultSize * 1.8, fontWeight: FontWeight.w500),
                                                         children: <TextSpan>[
-                                                          TextSpan(text: "500 포인트", style: TextStyle(color: Color(0xffFF5C58), fontWeight: FontWeight.w600)),
-                                                          TextSpan(text: "로 \'${blindDateTeamDetail.name}\' 팀에게", style: TextStyle(color: Colors.black)),
+                                                          TextSpan(text: "지금 바로 ", style: TextStyle(color: Colors.black)),
+                                                          TextSpan(text: "\'${blindDateTeamDetail.name}\'", style: TextStyle(color: Color(0xffFF5C58), fontWeight: FontWeight.w600)),
+                                                          TextSpan(text: "에게", style: TextStyle(color: Colors.black)),
                                                         ]
                                                     )
                                                 ),
                                                 Text("과팅 신청을 보낼 수 있어요!", style: TextStyle(
-                                                  fontSize: SizeConfig.defaultSize * 1.7,
+                                                  fontSize: SizeConfig.defaultSize * 1.8,
                                                   fontWeight: FontWeight.w500,
                                                   color: Colors.black,
                                                 ),),
@@ -140,32 +182,48 @@ class MeetOtherTeamDetail extends StatelessWidget {
                                             ),
                                             Column(
                                               children: [
-                                                Text("팀원 중 신청하는 사람의 포인트가 소모돼요!", style: TextStyle(
-                                                  fontSize: SizeConfig.defaultSize * 1.5,
-                                                  fontWeight: FontWeight.w500,
-                                                  color: Colors.black,
-                                                ),),
-                                                Text("한 번 사용한 포인트는 되돌릴 수 없어요!", style: TextStyle(
-                                                  fontSize: SizeConfig.defaultSize * 1.5,
-                                                  fontWeight: FontWeight.w500,
-                                                  color: Colors.black,
-                                                ),),
-                                              ],
-                                            ),
-                                            Column(
-                                              children: [
-                                                Text("현재 내 포인트 : 00000 포인트", style: TextStyle(
+                                                Text("상대 팀이 채팅 요청을 수락하면", style: TextStyle(
                                                   fontSize: SizeConfig.defaultSize * 1.5,
                                                   fontWeight: FontWeight.w500,
                                                   color: Colors.grey,
                                                 ),),
-                                                Text("현재 설정된 내 팀 : 아아아아아아아아 팀", style: TextStyle(
+                                                Text("바로 채팅을 시작할 수 있어요!", style: TextStyle(
                                                   fontSize: SizeConfig.defaultSize * 1.5,
                                                   fontWeight: FontWeight.w500,
                                                   color: Colors.grey,
                                                 ),),
                                               ],
                                             )
+
+                                            // TODO : 포인트 제도 재개 시 복구하기
+                                            // Column(
+                                            //   children: [
+                                            //     Text("팀원 중 신청하는 사람의 포인트가 소모돼요!", style: TextStyle(
+                                            //       fontSize: SizeConfig.defaultSize * 1.5,
+                                            //       fontWeight: FontWeight.w500,
+                                            //       color: Colors.black,
+                                            //     ),),
+                                            //     Text("한 번 사용한 포인트는 되돌릴 수 없어요!", style: TextStyle(
+                                            //       fontSize: SizeConfig.defaultSize * 1.5,
+                                            //       fontWeight: FontWeight.w500,
+                                            //       color: Colors.black,
+                                            //     ),),
+                                            //   ],
+                                            // ),
+                                            // Column(
+                                            //   children: [
+                                            //     Text("현재 내 포인트 : 00000 포인트", style: TextStyle(
+                                            //       fontSize: SizeConfig.defaultSize * 1.5,
+                                            //       fontWeight: FontWeight.w500,
+                                            //       color: Colors.grey,
+                                            //     ),),
+                                            //     Text("현재 설정된 내 팀 : 아아아아아아아아 팀", style: TextStyle(
+                                            //       fontSize: SizeConfig.defaultSize * 1.5,
+                                            //       fontWeight: FontWeight.w500,
+                                            //       color: Colors.grey,
+                                            //     ),),
+                                            //   ],
+                                            // )
                                           ],
                                         ),
                                       )),
@@ -176,7 +234,7 @@ class MeetOtherTeamDetail extends StatelessWidget {
                                         Expanded(
                                           child: GestureDetector(
                                             onTap: () {
-                                              Navigator.pop(context, false);
+                                              Navigator.pop(modalContext, false);
                                             },
                                             child: Container(
                                               height: SizeConfig.defaultSize * 4.5,
@@ -191,10 +249,10 @@ class MeetOtherTeamDetail extends StatelessWidget {
                                           SizedBox(width: SizeConfig.defaultSize,),
                                         GestureDetector(
                                           onTap: () {
-                                            Navigator.pop(context, true);
-                                            // TODO : 채팅 요청 & 포인트 빠지기
+                                            Navigator.pop(modalContext, true);
+                                            context.read<MeetCubit>().postProposal(teamId, blindDateTeamDetail.id);
                                             showDialog<String>(
-                                                context: context,
+                                                context: modalContext,
                                                 builder: (BuildContext dialogContext) {
                                                   Future.delayed(Duration(seconds: 2), () {
                                                     Navigator.pop(dialogContext);
@@ -214,7 +272,9 @@ class MeetOtherTeamDetail extends StatelessWidget {
                                               borderRadius: BorderRadius.circular(10),
                                               color: Color(0xffFF5C58),
                                             ),
-                                            child: Center(child: Text("500 포인트로 채팅 요청", style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600),)),
+                                            child: Center(child: Text("채팅 요청 보내기", style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600),)),
+                                            // TODO : 포인트 재개하면 복구하기
+                                            // child: Center(child: Text("500 포인트로 채팅 요청", style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600),)),
                                           ),
                                         ),
                                       ],
@@ -231,22 +291,30 @@ class MeetOtherTeamDetail extends StatelessWidget {
                               borderRadius: BorderRadius.circular(10),
                             ),
                             child: Center(
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text("2000", style: TextStyle(
-                                        decoration: TextDecoration.lineThrough,
-                                        fontSize: SizeConfig.defaultSize * 1.5,
-                                        fontWeight: FontWeight.w400,
-                                        color: Colors.white
-                                    ),),
-                                    Text(" 500 포인트로 대화 시작하기", style: TextStyle(
-                                        fontSize: SizeConfig.defaultSize * 2,
-                                        fontWeight: FontWeight.w600,
-                                        color: Colors.white
-                                    ),),
-                                  ],
-                                )),
+                              child: Text("채팅 요청 보내기", style: TextStyle(
+                                fontSize: SizeConfig.defaultSize * 2,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.white
+                              ),)
+
+                                // TODO : 포인트 제도 생겼을 때 위 Text 지우고 아래 복구
+                                // child: Row(
+                                //   mainAxisAlignment: MainAxisAlignment.center,
+                                //   children: [
+                                //     Text("2000", style: TextStyle(
+                                //         decoration: TextDecoration.lineThrough,
+                                //         fontSize: SizeConfig.defaultSize * 1.5,
+                                //         fontWeight: FontWeight.w400,
+                                //         color: Colors.white
+                                //     ),),
+                                //     Text(" 500 포인트로 대화 시작하기", style: TextStyle(
+                                //         fontSize: SizeConfig.defaultSize * 2,
+                                //         fontWeight: FontWeight.w600,
+                                //         color: Colors.white
+                                //     ),),
+                                //   ],
+                                // ),
+                            ),
                           ),
                         ),
                         SizedBox(height: SizeConfig.defaultSize * 2)
@@ -355,10 +423,10 @@ class _TopBarSection extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(team.universityName, style: TextStyle(
-                  fontSize: SizeConfig.defaultSize * 1.7,),
-                ),
-                Text("       "),
+                // Text(team.universityName, style: TextStyle(
+                //   fontSize: SizeConfig.defaultSize * 1.7,),
+                // ),
+                // Text("       "),
                 Expanded(
                   child: Container(
                     alignment: Alignment.centerRight,

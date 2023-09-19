@@ -10,6 +10,7 @@ class BlindDateTeamDetailDto {
   String? universityName;
   bool? isCertifiedTeam;
   List<BlindDateUserDetailDto>? teamUsers;
+  bool? proposalStatus; // TODO : 최현식
 
   BlindDateTeamDetailDto(
       {this.id,
@@ -28,7 +29,8 @@ class BlindDateTeamDetailDto {
         regions: regions?.map((region) => region.newLocation()).toList() ?? [],
         universityName: universityName ?? "(알수없음)",
         isCertifiedTeam: isCertifiedTeam ?? false,
-        teamUsers: teamUsers?.map((user) => user.newBlindDateUserDetail()).toList() ?? []
+        teamUsers: teamUsers?.map((user) => user.newBlindDateUserDetail()).toList() ?? [],
+        proposalStatus: proposalStatus ?? true, // TODO : 최현식
     );
   }
 

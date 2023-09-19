@@ -1,3 +1,4 @@
+import 'package:dart_flutter/src/data/model/proposal_request_dto.dart';
 import 'package:dart_flutter/src/domain/entity/blind_date_team.dart';
 import 'package:dart_flutter/src/domain/entity/location.dart';
 import 'package:dart_flutter/src/domain/entity/meet_team.dart';
@@ -150,6 +151,13 @@ class MeetCubit extends Cubit<MeetState> {
   void setPickedTeam(MeetTeam myTeam) {
     state.setPickedTeam(true);
     setMyTeam(myTeam);
+  }
+
+  void postProposal(int requestingTeamId, int requestedTeamId) async {
+    ProposalRequestDto newProposal = ProposalRequestDto(requestingTeamId: requestingTeamId, requestedTeamId: requestedTeamId);
+    _meetUseCase.postProposal(newProposal);
+    state.setProposalStatus(false);
+    emit(state.copy());
   }
 
   // =================================================================

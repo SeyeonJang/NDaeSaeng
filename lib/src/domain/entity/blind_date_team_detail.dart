@@ -12,6 +12,7 @@ class BlindDateTeamDetail extends Team {
   final String universityName;
   final bool isCertifiedTeam;
   final List<BlindDateUserDetail> teamUsers;
+  final bool proposalStatus;
 
   BlindDateTeamDetail(
       {required this.id,
@@ -20,7 +21,8 @@ class BlindDateTeamDetail extends Team {
        required this.regions,
        required this.universityName,
        required this.isCertifiedTeam,
-       required this.teamUsers});
+       required this.teamUsers,
+       required this.proposalStatus});
 
   factory BlindDateTeamDetail.fromJson(Map<String, dynamic> json) {
     final int parsedId = json['id'];
@@ -44,6 +46,8 @@ class BlindDateTeamDetail extends Team {
           teamUsersJsonList.map((v) => BlindDateUserDetail.fromJson(v)).toList();
     }
 
+    final bool parsedProposalStatus = json['proposalStatus'];
+
     return BlindDateTeamDetail(
         id:parsedId ,
         name:parsedName ,
@@ -51,7 +55,8 @@ class BlindDateTeamDetail extends Team {
         regions :parsedRegions ,
         universityName :parsedUniversityName ,
         isCertifiedTeam :parsedIsCertifiedTeam ,
-        teamUsers :parsedTeamUsers
+        teamUsers :parsedTeamUsers,
+        proposalStatus: parsedProposalStatus
     );
   }
 

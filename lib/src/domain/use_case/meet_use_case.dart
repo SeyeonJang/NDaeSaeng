@@ -1,3 +1,4 @@
+import 'package:dart_flutter/src/data/model/proposal_request_dto.dart';
 import 'package:dart_flutter/src/data/repository/dart_location_repository.dart';
 import 'package:dart_flutter/src/data/repository/dart_meet_repository.dart';
 import 'package:dart_flutter/src/domain/entity/blind_date_team.dart';
@@ -51,5 +52,9 @@ class MeetUseCase {
 
   Future<Pagination<BlindDateTeam>> getBlindDateTeams({int page = 0, int size = 10, int targetLocationId = 0}) async {
     return _blindDateTeamRepository.getTeams(page: page, size: size, targetLocationId: targetLocationId);
+  }
+
+  Future<void> postProposal(ProposalRequestDto proposalRequest) async {
+    _meetRepository.postProposal(proposalRequest);
   }
 }
