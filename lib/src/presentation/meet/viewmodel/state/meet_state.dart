@@ -32,6 +32,7 @@ class MeetState {
   late List<BlindDateTeam> blindDateTeams;
   late int nowTeamId;
   late bool pickedTeam;
+  late bool proposalStatus;
 
   MeetState ({
     required this.meetPageState,
@@ -52,7 +53,8 @@ class MeetState {
     required this.newFriends,
     required this.blindDateTeams,
     required this.nowTeamId,
-    required this.pickedTeam
+    required this.pickedTeam,
+    required this.proposalStatus
   });
 
   MeetState.init() { // 초기값 설정
@@ -79,6 +81,7 @@ class MeetState {
     blindDateTeams = [];
     nowTeamId = 0;
     pickedTeam = false;
+    proposalStatus = true;
   }
 
   MeetState copy() => MeetState(
@@ -100,7 +103,8 @@ class MeetState {
     newFriends: newFriends,
     blindDateTeams: blindDateTeams,
     nowTeamId: nowTeamId,
-    pickedTeam: pickedTeam
+    pickedTeam: pickedTeam,
+    proposalStatus: proposalStatus
   );
 
   void setAll(MeetState state) {
@@ -122,6 +126,12 @@ class MeetState {
       blindDateTeams = state.blindDateTeams;
       nowTeamId = state.nowTeamId;
       pickedTeam = state.pickedTeam;
+      proposalStatus = state.proposalStatus;
+  }
+
+  MeetState setProposalStatus(bool proposalStatus) {
+    this.proposalStatus = proposalStatus;
+    return this;
   }
 
   void setPickedTeam(bool pickedTeam) {

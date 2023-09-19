@@ -95,6 +95,7 @@ class ChatroomDetailDto {
               ]))
           .toList() ??
           [],
+      proposalStatus: rq?._teamProposalStatus ?? true // TODO : 최현식
     );
   }
 
@@ -161,13 +162,15 @@ class RequestingTeam {
   University? _university;
   List<TeamUsers>? _teamUsers;
   List<TeamRegions>? _teamRegions;
+  bool? _teamProposalStatus; // TODO : 최현식
 
   RequestingTeam({int? teamId,
     String? name,
     bool? isStudentIdCardVerified,
     University? university,
     List<TeamUsers>? teamUsers,
-    List<TeamRegions>? teamRegions}) {
+    List<TeamRegions>? teamRegions,
+    bool? proposalStatus}) { // TODO : 최현식
     if (teamId != null) {
       this._teamId = teamId;
     }
@@ -185,6 +188,9 @@ class RequestingTeam {
     }
     if (teamRegions != null) {
       this._teamRegions = teamRegions;
+    }
+    if (proposalStatus != null) { // TODO : 최현식
+      this._teamProposalStatus = _teamProposalStatus;
     }
   }
 

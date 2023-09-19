@@ -154,14 +154,9 @@ class MeetCubit extends Cubit<MeetState> {
   }
 
   void postProposal(int requestingTeamId, int requestedTeamId) async {
-    state.setIsLoading(true);
-    emit(state.copy());
-
     ProposalRequestDto newProposal = ProposalRequestDto(requestingTeamId: requestingTeamId, requestedTeamId: requestedTeamId);
-    await _meetUseCase.postProposal(newProposal);
-
-    // TODO : 요청 상태를 true로 변경
-    state.setIsLoading(false);
+    _meetUseCase.postProposal(newProposal);
+    state.setProposalStatus(false);
     emit(state.copy());
   }
 
