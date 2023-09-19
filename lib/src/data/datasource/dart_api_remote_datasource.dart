@@ -345,7 +345,25 @@ class DartApiRemoteDataSource {
     final response = await _httpUtil.request().post(path, data: body);
   }
 
-  // proposal: 제안 수락/거절 (업데이트)
+  // proposal: 제안 수락/거절 (patch)
+  static Future<ProposalResponseDto> patchProposal(int proposalId, String proposalStatus) async {
+    const path = '/v1/users/me/propsals';
+    final pathUrl = "$path/$proposalId";
+    final body = {"proposalStatus": proposalStatus};
+
+    final response = await _httpUtil.request().patch(path, data: body);
+    return ProposalResponseDto.fromJson(response.data);
+  }
+
+  // proposal: 내가 보낸/받은 제안 확인
+  static Future<List<ProposalResponseDto>> getProposalList(bool received) async {
+    const path = '/v1/users/me/proposals?type=received';
+    final String type = received ? "received" : "sent";
+    final pathUrl = "$path?type=$type";
+    final List jsonResponse = (await _httpUtil.request().get(pathUrl)).data;
+    List<ProposalResponseDto> proposalResponses = jsonResponse.map((proposal) => ProposalResponseDto.fromJson(proposal)).toList();
+    return proposalResponses;
+  }
 
   // chat: 채팅방 목록 확인
   static Future<List<ChatroomDto>> getChatroomList() async {
@@ -376,14 +394,12 @@ class DartApiRemoteDataSource {
     return pagination;
   }
 
-  // proposal: 내가 보낸/받은 제안 확인
-  static Future<List<ProposalResponseDto>> getProposalList(bool received) async {
-    const path = '/v1/users/me/proposals?type=received';
-    final String type = received ? "received" : "sent";
-    final pathUrl = "$path?type=$type";
-    final List jsonResponse = (await _httpUtil.request().get(pathUrl)).data;
-    List<ProposalResponseDto> proposalResponses = jsonResponse.map((proposal) => ProposalResponseDto.fromJson(proposal)).toList();
-    return proposalResponses;
+  // chat: 채팅방 생성 (제안 수락시 이어지는 로직)
+  static Future<void> postChatRoom(final int proposalId) async {
+    final path = '/v1/chat/rooms';
+    final body = {"proposalId": proposalId};
+
+    await _httpUtil.request().get(path, data: body);
   }
 
   static String _getPathFromUrl(String url) {

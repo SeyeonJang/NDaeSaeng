@@ -4,10 +4,10 @@ class ProposalRequestDto {
 
   ProposalRequestDto({int? requestingTeamId, int? requestedTeamId}) {
     if (requestingTeamId != null) {
-      this._requestingTeamId = requestingTeamId;
+      _requestingTeamId = requestingTeamId;
     }
     if (requestedTeamId != null) {
-      this._requestedTeamId = requestedTeamId;
+      _requestedTeamId = requestedTeamId;
     }
   }
 
@@ -24,9 +24,9 @@ class ProposalRequestDto {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['requestingTeamId'] = this._requestingTeamId;
-    data['requestedTeamId'] = this._requestedTeamId;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['requestingTeamId'] = _requestingTeamId;
+    data['requestedTeamId'] = _requestedTeamId;
     return data;
   }
 }
