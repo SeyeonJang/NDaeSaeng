@@ -43,10 +43,11 @@ class MeetCubit extends Cubit<MeetState> {
 
     User userResponse = await _userUseCase.myInfo();
     state.setMyInfo(userResponse);
-    List<User> friends = await _friendUseCase.getMyFriends();
-    state.setMyFriends(friends);
-    List<User> newFriends = await _friendUseCase.getRecommendedFriends();
-    state.setRecommendedFriends(newFriends);
+    // TODO : 친구와 과팅 나갈 때 복구
+    // List<User> friends = await _friendUseCase.getMyFriends();
+    // state.setMyFriends(friends);
+    // List<User> newFriends = await _friendUseCase.getRecommendedFriends();
+    // state.setRecommendedFriends(newFriends);
 
     List<Location> locations = await _meetUseCase.getLocations();
     state.setServerLocations(locations);
