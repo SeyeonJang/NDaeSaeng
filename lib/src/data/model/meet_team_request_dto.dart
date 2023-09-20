@@ -1,4 +1,6 @@
+import 'package:dart_flutter/src/domain/entity/friend.dart';
 import 'package:dart_flutter/src/domain/entity/meet_team.dart';
+import 'package:dart_flutter/src/domain/entity/type/student.dart';
 
 class MeetTeamRequestDto {
   String? name;
@@ -7,12 +9,7 @@ class MeetTeamRequestDto {
   List<int>? teamUserIds;
   List<_FriendDto>? friends;
 
-  MeetTeamRequestDto(
-      {this.name,
-        this.isVisibleToSameUniversity,
-        this.teamRegionIds,
-        this.teamUserIds,
-        this.friends});
+  MeetTeamRequestDto({this.name, this.isVisibleToSameUniversity, this.teamRegionIds, this.teamUserIds, this.friends});
 
   MeetTeamRequestDto.fromJson(Map<String, dynamic> json) {
     name = json['name'];
@@ -38,11 +35,20 @@ class MeetTeamRequestDto {
   }
 
   static MeetTeamRequestDto fromMeetTeam(MeetTeam meetTeam) {
+    List<int> teamUserIds = meetTeam.members.map((user) => user.getId()).toList();
+    teamUserIds.removeWhere((element) => element == 0);
+
+    List<_FriendDto> friends = [];
+    if (teamUserIds.isEmpty) {
+      friends = meetTeam.members.map((user) => _FriendDto.fromStudnet(user)).toList();
+    }
+
     return MeetTeamRequestDto(
       name: meetTeam.name,
       isVisibleToSameUniversity: meetTeam.canMatchWithSameUniversity,
-      teamUserIds: meetTeam.members.map((user) => user.getId()).toList(),
+      teamUserIds: teamUserIds,
       teamRegionIds: meetTeam.locations.map((location) => location.id).toList(),
+      friends: friends.isNotEmpty ? friends : null,
     );
   }
 }
@@ -54,6 +60,14 @@ class _FriendDto {
   String? porfileimageurl;
 
   _FriendDto({this.name, this.birthyear, this.universityId, this.porfileimageurl});
+
+  static _FriendDto fromStudnet(Student student) {
+    return _FriendDto(
+        name: student.getName(),
+        birthyear: student.getBirthYear(),
+        universityId: student.getUniversityId(),
+        porfileimageurl: student.getProfileImageUrl());
+  }
 
   _FriendDto.fromJson(Map<String, dynamic> json) {
     name = json['name'];
