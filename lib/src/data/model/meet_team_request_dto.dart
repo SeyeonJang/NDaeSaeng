@@ -57,31 +57,31 @@ class _FriendDto {
   String? name;
   int? birthyear;
   int? universityId;
-  String? porfileimageurl;
+  String? profileImageUrl;
 
-  _FriendDto({this.name, this.birthyear, this.universityId, this.porfileimageurl});
+  _FriendDto({this.name, this.birthyear, this.universityId, this.profileImageUrl});
 
   static _FriendDto fromStudnet(Student student) {
     return _FriendDto(
         name: student.getName(),
         birthyear: student.getBirthYear(),
         universityId: student.getUniversityId(),
-        porfileimageurl: student.getProfileImageUrl());
+        profileImageUrl: student.getProfileImageUrl());
   }
 
   _FriendDto.fromJson(Map<String, dynamic> json) {
-    name = json['name'];
-    birthyear = json['birthyear'];
+    name = json['nickname'];
+    birthyear = json['birthYear'];
     universityId = json['universityId'];
-    porfileimageurl = json['porfileimageurl'];
+    profileImageUrl = json['profileImageUrl'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['name'] = this.name;
-    data['birthyear'] = this.birthyear;
+    data['nickname'] = this.name;
+    data['birthYear'] = this.birthyear;
     data['universityId'] = this.universityId;
-    data['porfileimageurl'] = this.porfileimageurl;
+    data['profileImageUrl'] = this.profileImageUrl;
     return data;
   }
 }
