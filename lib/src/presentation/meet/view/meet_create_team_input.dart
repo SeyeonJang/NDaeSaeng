@@ -118,6 +118,8 @@ class _MeetCreateTeamInputState extends State<MeetCreateTeamInput> {
 
   @override
   Widget build(BuildContext context) {
+    bool isKeyboardVisible = MediaQuery.of(context).viewInsets.bottom > 0;
+
     Future<bool> _onBackKey() async {
       return await showDialog(
         context: context,
@@ -247,7 +249,10 @@ class _MeetCreateTeamInputState extends State<MeetCreateTeamInput> {
                                                 fontSize: SizeConfig.defaultSize * 1.6
                                             ),)
                                     ),
-                                  )
+                                  ),
+                                  SizedBox(
+                                    height: isKeyboardVisible ? 100.0 : 0.0, // 키보드가 켜져 있을 때만 SizedBox를 올립니다.
+                                  ),
                                 ],
                               ),
                             ),
@@ -862,7 +867,7 @@ class _MemberCardViewNoVoteState extends State<MemberCardViewNoVote> {
                           ),
                         ),
                         prefixIcon: const Icon(Icons.school_rounded, color: Color(0xff7C83FD),),
-                        hintText: "친구 학과 이름")),
+                        hintText: "친구 학과를 입력하고 선택해주세요")),
 
                 suggestionsCallback: (pattern) {
                   // 입력된 패턴에 기반하여 검색 결과를 반환
