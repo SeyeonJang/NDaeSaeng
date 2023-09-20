@@ -1,6 +1,7 @@
 import 'package:dart_flutter/res/config/size_config.dart';
 import 'package:dart_flutter/src/common/util/analytics_util.dart';
 import 'package:dart_flutter/src/presentation/meet/view/meet_create_team_input.dart';
+import 'package:dart_flutter/src/presentation/meet/view/meet_my_team_detail.dart';
 import 'package:dart_flutter/src/presentation/meet/viewmodel/meet_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -21,9 +22,6 @@ class MeetIntro extends StatelessWidget {
       bottomNavigationBar:
         BlocBuilder<MeetCubit, MeetState>(
           builder: (context,state) {
-            // return state.myTeams.length < 1
-            //     ? const MakeTeamButton()
-            //     : SeeMyTeamButton(ancestorContext: context);
             return state.isLoading
                 ? Container(
                     width: SizeConfig.screenWidth,
@@ -38,7 +36,7 @@ class MeetIntro extends StatelessWidget {
                       ],
                     ),
                   )
-                : MakeTeamButton(ancestorContext: context);
+                : state.myTeams.length < 1 ? MakeTeamButton(ancestorContext: context) : SeeMyTeamButton(ancestorContext: context, teamId: state.myTeams[0].id,);
           }
         )
     );
@@ -429,11 +427,13 @@ class MakeTeamButton extends StatelessWidget {
 }
 
 class SeeMyTeamButton extends StatelessWidget {
-  BuildContext ancestorContext;
+  final BuildContext ancestorContext;
+  final int teamId;
 
   SeeMyTeamButton({
     super.key,
-    required this.ancestorContext
+    required this.ancestorContext,
+    required this.teamId
   });
 
   @override
@@ -446,7 +446,17 @@ class SeeMyTeamButton extends StatelessWidget {
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: SizeConfig.defaultSize * 2, vertical: SizeConfig.defaultSize),
         child: GestureDetector( // 내 팀 보기 버튼 *******
-          onTap: () {},
+          onTap: () {
+            Navigator.push(
+              ancestorContext,
+              MaterialPageRoute(
+                builder: (context) => BlocProvider<MeetCubit>(
+                  create: (_) => MeetCubit(), // Replace with your MeetCubit instantiation.
+                  child: MeetMyTeamDetail(teamId: teamId,),
+                ),
+              ),
+            );
+          },
           child: Container(
             width: SizeConfig.screenWidth,
             height: SizeConfig.defaultSize * 6,
