@@ -64,6 +64,11 @@ class MeetCubit extends Cubit<MeetState> {
     state.setIsLoading(true);
     emit(state.copy());
 
+    User userResponse = await _userUseCase.myInfo();
+    state.setMyInfo(userResponse);
+    List<Location> locations = await _meetUseCase.getLocations();
+    state.setServerLocations(locations);
+
     await getMyTeams(put: false);
     if (!state.pickedTeam && state.myTeams.isNotEmpty) {
       state.setMyTeam(state.myTeams[0]);

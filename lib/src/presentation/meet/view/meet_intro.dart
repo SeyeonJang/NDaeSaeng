@@ -1,6 +1,7 @@
 import 'package:dart_flutter/res/config/size_config.dart';
 import 'package:dart_flutter/src/common/util/analytics_util.dart';
 import 'package:dart_flutter/src/presentation/meet/view/meet_create_team.dart';
+import 'package:dart_flutter/src/presentation/meet/view/meet_create_team_input.dart';
 import 'package:dart_flutter/src/presentation/meet/viewmodel/meet_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -22,9 +23,24 @@ class MeetIntro extends StatelessWidget {
       bottomNavigationBar:
         BlocBuilder<MeetCubit, MeetState>(
           builder: (context,state) {
-            return state.myTeams.length < 1
-                ? const MakeTeamButton()
-                : SeeMyTeamButton(ancestorContext: context);
+            // return state.myTeams.length < 1
+            //     ? const MakeTeamButton()
+            //     : SeeMyTeamButton(ancestorContext: context);
+            return state.isLoading
+                ? Container(
+                    width: SizeConfig.screenWidth,
+                    height: SizeConfig.defaultSize * 12,
+                    alignment: Alignment.center,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        CircularProgressIndicator(color: Colors.grey, ),
+                          SizedBox(width: SizeConfig.defaultSize * 2),
+                        Text("내 정보를 불러오고 있어요!", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.7),),
+                      ],
+                    ),
+                  )
+                : MakeTeamButton();
           }
         )
     );
@@ -341,39 +357,53 @@ class MakeTeamButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: SizeConfig.screenWidth,
-      height: SizeConfig.defaultSize * 7.8,
+      height: SizeConfig.defaultSize * 12,
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: SizeConfig.defaultSize * 2, vertical: SizeConfig.defaultSize),
         child: GestureDetector(
           onTap: () async {
-            AnalyticsUtil.logEvent('과팅_대기_팀만들기버튼_터치');
-            await Navigator.push(context, PageTransition(type: PageTransitionType.rightToLeftJoined, child: MeetCreateTeam(
+            AnalyticsUtil.logEvent('홈_팀만들기버튼_터치');
+            await Navigator.push(context, PageTransition(type: PageTransitionType.rightToLeftJoined, child: MeetCreateTeamInput(
               onFinish: () {
-                // context.read<MeetCubit>().refreshMeetPage();
+                // context.read<MeetCubit>().initMeetIntro();
               },
               state: context.read<MeetCubit>().state,
             ), childCurrent: this)).then((value) async {
               if (value == null) return;
               await context.read<MeetCubit>().createNewTeam(value);
             });
-            context.read<MeetCubit>().refreshMeetPage();
+            context.read<MeetCubit>().initMeetIntro();
           },
-          child: Container(
-              width: SizeConfig.screenWidth,
-              height: SizeConfig.defaultSize * 6,
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                border: Border.all(
-                  color: Colors.white,
-                ),
-                color: const Color(0xffFE6059),
-                borderRadius: BorderRadius.circular(13),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              Container(
+                  width: SizeConfig.screenWidth,
+                  height: SizeConfig.defaultSize * 6,
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    color: const Color(0xffFE6059),
+                    borderRadius: BorderRadius.circular(13),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.shade300,
+                        spreadRadius: 1,
+                        blurRadius: 2.0,
+                        offset: Offset(0,1), // changes position of shadow
+                      ),
+                    ],
+                  ),
+                  child: Text("팀 만들기", style: TextStyle(
+                      color: Colors.white,
+                      fontSize: SizeConfig.defaultSize * 2,
+                      fontWeight: FontWeight.w600
+                  ),)
               ),
-              child: Text("과팅에 참여할 팀 만들기", style: TextStyle(
-                  color: Colors.white,
-                  fontSize: SizeConfig.defaultSize * 2,
-                  fontWeight: FontWeight.w600
+              Text("위 버튼을 눌러 팀 만들고 바로 과팅 시작하기", style: TextStyle(
+                fontWeight: FontWeight.w100,
+                color: Colors.grey
               ),)
+            ],
           ),
         ),
       ),

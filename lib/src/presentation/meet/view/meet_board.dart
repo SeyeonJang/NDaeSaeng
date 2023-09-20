@@ -626,7 +626,6 @@ class _BodySectionState extends State<_BodySection> {
     return blindDateTeam;
   }
 
-  // @override
   @override
   Widget build(BuildContext context) {
     return RefreshIndicator(
@@ -653,26 +652,16 @@ class _BodySectionState extends State<_BodySection> {
                   padding: EdgeInsets.symmetric(horizontal: SizeConfig.defaultSize * 1, vertical: SizeConfig.defaultSize),
                   child: Column(
                     children: [
-                      // widget.pagingController.itemList?.length == 0 // OtherTeam
-
-                      // widget.meetState.blindDateTeams.length == 0 // OtherTeam
-                      //   ? Text("이성 팀이 아직 없어요!")
-                      //   :
                       RefreshIndicator(
                           onRefresh: () async => widget.pagingController.refresh(),
                           child: Container(
-
-                            // height: widget.meetState.friends.isEmpty || widget.meetState.filteredFriends.isEmpty || widget.meetState.myTeams.length==0
-                            //     ? SizeConfig.screenHeight * 0.7
-                            //     : SizeConfig.screenHeight * 0.6,
                             height: SizeConfig.screenHeight * 0.9,
-
                             child: PagedListView<int, BlindDateTeam>(
                               pagingController: widget.pagingController,
                               builderDelegate: PagedChildBuilderDelegate<BlindDateTeam>(
                                   itemBuilder: (context, blindDateTeam, index) {
                                     return widget.pagingController.itemList?.length == 0
-                                        ? Text("이성 팀이 아직 없어요!")
+                                        ? const Text("이성 팀이 아직 없어요!")
                                         : Column(
                                       children: [
                                         SizedBox(height: SizeConfig.defaultSize * 0.6,),
