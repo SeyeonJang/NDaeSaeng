@@ -89,9 +89,9 @@ class ChatGetOneTeamView extends StatelessWidget { // Component
                                 shape: BoxShape.circle,
                               ),
                               child: Center(
-                                  child: proposal.requestingTeam.teamUsers[i].profileImageUrl == "DEFAULT" || proposal.requestingTeam.teamUsers[i].profileImageUrl.startsWith("https://")
+                                  child: proposal.requestingTeam.teamUsers[i].getProfileImageUrl() == "DEFAULT" || proposal.requestingTeam.teamUsers[i].getProfileImageUrl().startsWith("https://")
                                       ? Image.asset('assets/images/profile-mockup3.png', width: SizeConfig.defaultSize * 4, height: SizeConfig.defaultSize * 4, fit: BoxFit.cover,)
-                                      : Image.network(proposal.requestingTeam.teamUsers[i].profileImageUrl, width: SizeConfig.defaultSize * 4, height: SizeConfig.defaultSize * 4, fit: BoxFit.cover,)
+                                      : Image.network(proposal.requestingTeam.teamUsers[i].getProfileImageUrl(), width: SizeConfig.defaultSize * 4, height: SizeConfig.defaultSize * 4, fit: BoxFit.cover,)
                               ),
                             ),
                           ),
@@ -115,7 +115,7 @@ class ChatGetOneTeamView extends StatelessWidget { // Component
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Expanded(
-                              child: Text(proposal.requestingTeam.teamUsers.map((user) => user.department).toSet().fold('', (previousValue, element) => previousValue.isEmpty ? element : '$previousValue & $element'),
+                              child: Text(proposal.requestingTeam.teamUsers.map((user) => user.getDepartment()).toSet().fold('', (previousValue, element) => previousValue.isEmpty ? element : '$previousValue & $element'),
                                 style: TextStyle(fontSize: SizeConfig.defaultSize * 1.4, overflow: TextOverflow.ellipsis),),
                             ),
                             Text("${proposal.createdTime.month}/${proposal.createdTime.day} 도착", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.4, color: Color(0xffFF5C58)),)

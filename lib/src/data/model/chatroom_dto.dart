@@ -63,7 +63,7 @@ class ChatroomDto {
 
   bool isMyTeam(BlindDateTeam team, int userId) {
     for (var user in team.teamUsers) {
-      if (user.id == userId) return true;
+      if (user.getId() == userId) return true;
     }
     return false;
   }

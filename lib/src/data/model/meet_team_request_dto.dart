@@ -41,7 +41,7 @@ class MeetTeamRequestDto {
     return MeetTeamRequestDto(
       name: meetTeam.name,
       isVisibleToSameUniversity: meetTeam.canMatchWithSameUniversity,
-      teamUserIds: meetTeam.members.map((user) => user.personalInfo!.id).toList(),
+      teamUserIds: meetTeam.members.map((user) => user.getId()).toList(),
       teamRegionIds: meetTeam.locations.map((location) => location.id).toList(),
     );
   }

@@ -3,7 +3,6 @@ import 'package:dart_flutter/src/domain/entity/type/blind_date_user.dart';
 import 'package:dart_flutter/src/domain/entity/type/blind_date_user_detail.dart';
 import 'package:dart_flutter/src/domain/entity/type/student.dart';
 import 'package:dart_flutter/src/domain/entity/type/team.dart';
-import 'package:dart_flutter/src/domain/mapper/blind_date_user_mapper.dart';
 import 'package:dart_flutter/src/domain/mapper/student_mapper.dart';
 
 class BlindDateTeamDetail implements Team {

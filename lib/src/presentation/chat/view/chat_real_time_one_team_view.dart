@@ -154,7 +154,7 @@ class _ChatRealTimeOneTeamViewState extends State<ChatRealTimeOneTeamView> {
                           Positioned(
                             left: i * SizeConfig.defaultSize * 3,
                             child: ClipOval(
-                              child: widget.matchedTeams.otherTeam.teamUsers[i].profileImageUrl == 'DEFAULT' || !widget.matchedTeams.otherTeam.teamUsers[i].profileImageUrl.startsWith('https://')
+                              child: widget.matchedTeams.otherTeam.teamUsers[i].getProfileImageUrl() == 'DEFAULT' || !widget.matchedTeams.otherTeam.teamUsers[i].getProfileImageUrl().startsWith('https://')
                                 ? Image.asset(
                                   'assets/images/profile-mockup3.png',
                                   width: SizeConfig.defaultSize * 3.7,
@@ -162,10 +162,10 @@ class _ChatRealTimeOneTeamViewState extends State<ChatRealTimeOneTeamView> {
                                   )
                                 : Image.network(
                                   i == 0
-                                      ? widget.matchedTeams.otherTeam.teamUsers[0].profileImageUrl
+                                      ? widget.matchedTeams.otherTeam.teamUsers[0].getProfileImageUrl()
                                       : (i == 1
-                                        ? widget.matchedTeams.otherTeam.teamUsers[1].profileImageUrl
-                                        : widget.matchedTeams.otherTeam.teamUsers[2].profileImageUrl
+                                        ? widget.matchedTeams.otherTeam.teamUsers[1].getProfileImageUrl()
+                                        : widget.matchedTeams.otherTeam.teamUsers[2].getProfileImageUrl()
                                       ), // 이미지 경로를 각 이미지에 맞게 설정
                                   width: SizeConfig.defaultSize * 3.7, // 이미지 크기
                                   height: SizeConfig.defaultSize * 3.7,

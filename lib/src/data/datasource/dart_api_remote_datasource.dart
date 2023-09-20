@@ -357,7 +357,7 @@ class DartApiRemoteDataSource {
 
   // proposal: 내가 보낸/받은 제안 확인
   static Future<List<ProposalResponseDto>> getProposalList(bool received) async {
-    const path = '/v1/users/me/proposals?type=received';
+    const path = '/v1/users/me/proposals';
     final String type = received ? "received" : "sent";
     final pathUrl = "$path?type=$type";
     final List jsonResponse = (await _httpUtil.request().get(pathUrl)).data;

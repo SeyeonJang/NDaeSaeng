@@ -1,4 +1,5 @@
 import 'package:dart_flutter/src/domain/entity/blind_date_team_detail.dart';
+import 'package:dart_flutter/src/domain/mapper/student_mapper.dart';
 import 'package:dart_flutter/src/presentation/chat/viewmodel/chat_cubit.dart';
 import 'package:dart_flutter/src/presentation/component/meet_one_member_cardview_novote.dart';
 import 'package:flutter/material.dart';
@@ -59,7 +60,7 @@ class ChatResponseGetDetail extends StatelessWidget {
                           ...List.generate(blindDateTeamDetail.teamUsers.length, (index) {
                             return Column(
                               children: [
-                                MeetOneMemberCardviewNoVote(userResponse: blindDateTeamDetail.teamUsers[index], university: blindDateTeamDetail.universityName,),
+                                MeetOneMemberCardviewNoVote(userResponse: StudentMapper.toBlindDateUserDetail(blindDateTeamDetail.teamUsers[index]), university: blindDateTeamDetail.universityName,),
                                 SizedBox(height: SizeConfig.defaultSize * 1.5),
                               ],
                             );
