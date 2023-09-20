@@ -5,6 +5,7 @@ import 'package:dart_flutter/src/data/model/proposal_request_dto.dart';
 import 'package:dart_flutter/src/domain/entity/blind_date_team.dart';
 import 'package:dart_flutter/src/domain/entity/location.dart';
 import 'package:dart_flutter/src/domain/entity/meet_team.dart';
+import 'package:dart_flutter/src/domain/use_case/ghost_use_case.dart';
 import 'package:dart_flutter/src/domain/use_case/meet_use_case.dart';
 import 'package:dart_flutter/src/domain/use_case/university_use_case.dart';
 import 'package:dart_flutter/src/presentation/meet/viewmodel/state/meet_state.dart';
@@ -24,6 +25,7 @@ class MeetCubit extends Cubit<MeetState> {
   static final FriendUseCase _friendUseCase = FriendUseCase();
   static final MeetUseCase _meetUseCase = MeetUseCase();
   static final UniversityUseCase _universityUseCase = UniversityUseCase();
+  static final GhostUseCase _ghostUseCase = GhostUseCase();
   bool _initialized = false;
 
   // pagination
@@ -75,7 +77,7 @@ class MeetCubit extends Cubit<MeetState> {
     // TODO : Location, University 지우고 create init할 때 진행시키기
     List<Location> locations = await _meetUseCase.getLocations();
     state.setServerLocations(locations);
-    List<University> universities = await _universityUseCase.getUniversities();
+    List<University> universities = await _universityUseCase.getUniversityByName(state.userResponse.university?.name ?? '');
     state.universities = universities;
 
     await getMyTeams(put: false);
@@ -378,15 +380,18 @@ class MeetCubit extends Cubit<MeetState> {
   }
 
   // 이미지 업로드 (CreateTeam w/ NoVote)
-  void uploadProfileImage(File file, User userResponse) async {
+  Future<String> uploadProfileImage(File file, int userId, String name) async {
+    String url = 'DEFAULT';
     try {
-      ToastUtil.showToast('내 사진을 업로드하고 있어요!');
+      ToastUtil.showToast('사진을 업로드하고 있어요!');
+      url = await _ghostUseCase.uploadProfileImage(userId.toString(), name, file);
       // await _userUseCase.uploadProfileImage(file, userResponse); // TODO : 이미지 업로드 useCase
-      ToastUtil.showToast('내 사진 업로드가 완료됐어요!');
+      ToastUtil.showToast('사진 업로드가 완료됐어요!');
     } catch (e) {
       ToastUtil.showToast('사진 업로드 중 오류가 발생했습니다.');
       print('사진 업로드 중 오류: $e');
     }
+    return url;
   }
 
   void setProfileImage(File file) {

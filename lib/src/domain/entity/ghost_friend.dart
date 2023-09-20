@@ -71,4 +71,9 @@ class GhostFriend implements Student {
   int getUniversityId() {
     return universityId ?? 0;
   }
+
+  @override
+  String toString() {
+    return 'GhostFriend{name: $name, birthYear: $birthYear, universityId: $universityId, profileImageUrl: $profileImageUrl}';
+  }
 }
