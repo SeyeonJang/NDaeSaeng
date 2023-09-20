@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:dart_flutter/res/config/size_config.dart';
 import 'package:dart_flutter/src/common/util/analytics_util.dart';
 import 'package:dart_flutter/src/common/util/university_finder.dart';
+import 'package:dart_flutter/src/domain/entity/ghost_friend.dart';
 import 'package:dart_flutter/src/domain/entity/location.dart';
 import 'package:dart_flutter/src/domain/entity/meet_team.dart';
 import 'package:dart_flutter/src/domain/entity/type/blind_date_user_detail.dart';
@@ -29,9 +30,7 @@ class MeetCreateTeamInput extends StatefulWidget {
 class _MeetCreateTeamInputState extends State<MeetCreateTeamInput> {
   String name = '';
   late MeetState state;
-
-  late List<User> friendsList;
-  late Set<User> teamMemberList;
+  late List<GhostFriend> teamMemberList;
   late int teamMemberCount;
   late List<Location> cities;
   late bool canMatchWithSameUniversity;
@@ -40,32 +39,24 @@ class _MeetCreateTeamInputState extends State<MeetCreateTeamInput> {
   void initState() {
     super.initState();
     // AnalyticsUtil.logEvent("과팅_팀만들기_접속");
-
     state = widget.state;
-
-    friendsList = state.friends.toList();
-    // teamMemberList = state.teamMembers;
-    teamMemberList = {};
-
-    teamMemberCount = teamMemberList.length;
+    teamMemberList = [];
+    teamMemberCount = 0;
     cities = [];
     canMatchWithSameUniversity = false;
   }
 
-  void addFriendToMyTeam(User friend) {
-    setState(() {
-      setState(() {
-        teamMemberList.add(friend);
-        friendsList.remove(friend);
-        teamMemberCount = teamMemberList.length;
-      });
-    });
-  }
-
-  void removeFriendFromMyTeam() {
+  void removeFriendFromMyTeam(int memberIndex) {
     state.minusTeamCount();
     setState(() {
       teamMemberCount = state.teamCount;
+      print("삭제합니다");
+      print(memberIndex);
+
+      print(teamMemberList.toString());
+      teamMemberList.removeAt(memberIndex);
+      print(teamMemberList.toString());
+
     });
   }
 
@@ -81,13 +72,42 @@ class _MeetCreateTeamInputState extends State<MeetCreateTeamInput> {
     });
   }
 
+  void setTeamMemberName(int memberIndex, String name) {
+    setState(() {
+      teamMemberList[memberIndex].name = name;
+    });
+  }
+
+  void setTeamMemberbirthYear(int memberIndex, String birthYear) {
+    int birthYearInt = int.parse(birthYear);
+    if (birthYearInt < 70) {  // 70을 기준으로 년도 반환
+      birthYearInt += 2000;
+    }
+    birthYearInt += 1900;
+    setState(() {
+      teamMemberList[memberIndex].birthYear = birthYearInt;
+    });
+  }
+
+  void setTeamMemberUniversityId(int memberIndex, int universityId) {
+    setState(() {
+      teamMemberList[memberIndex].universityId = universityId;
+    });
+  }
+
+  void setTeamMemberProfile(int memberIndex, String profile) {
+    setState(() {
+      teamMemberList[memberIndex].profileImageUrl = profile;
+    });
+  }
+
   MeetTeam createNewTeam() {
     return MeetTeam(
       id: 0,
       name: name,
-      members: teamMemberList.toList(),
+      members: teamMemberList,
       locations: cities,
-      canMatchWithSameUniversity: canMatchWithSameUniversity,
+      canMatchWithSameUniversity: canMatchWithSameUniversity ? false : true,
       university: state.userResponse.university
     );
   }
@@ -198,11 +218,11 @@ class _MeetCreateTeamInputState extends State<MeetCreateTeamInput> {
                                   // MemberCardView(userResponse: state.userResponse, state: state, isMyself: true, onRemoveFriend: removeFriendFromMyTeam),
                                   // 친구1
                                   teamMemberCount >= 1
-                                      ? MemberCardViewNoVote(context: widget.ancestorContext, state: state, isMyself: false, onRemoveFriend: removeFriendFromMyTeam)
+                                      ? MemberCardViewNoVote(context: widget.ancestorContext, state: state, isMyself: false, onRemoveFriend: removeFriendFromMyTeam, memberIndex: 0, onSetTeamMemberName: setTeamMemberName, onSetTeamMemberBirthYear: setTeamMemberName, onSetTeamMemberUniversityId: setTeamMemberUniversityId, onSetTeamMemberProfile: setTeamMemberProfile,)
                                       : Container(),
                                   // 친구2
                                   teamMemberCount == 2
-                                      ? MemberCardViewNoVote(context: widget.ancestorContext, state: state, isMyself: false, onRemoveFriend: removeFriendFromMyTeam)
+                                      ? MemberCardViewNoVote(context: widget.ancestorContext, state: state, isMyself: false, onRemoveFriend: removeFriendFromMyTeam, memberIndex: 1, onSetTeamMemberName: setTeamMemberName, onSetTeamMemberBirthYear: setTeamMemberName, onSetTeamMemberUniversityId: setTeamMemberUniversityId, onSetTeamMemberProfile: setTeamMemberProfile)
                                       : Container(),
                                   // 버튼
                                   teamMemberCount == 2
@@ -213,6 +233,7 @@ class _MeetCreateTeamInputState extends State<MeetCreateTeamInput> {
                                             state.addTeamCount();
                                             setState(() {
                                               teamMemberCount = state.teamCount;
+                                              teamMemberList.add(GhostFriend());
                                             });
                                           // _ShowModalBottomSheet(context, friendsList);
                                         },
@@ -559,14 +580,27 @@ class MemberCardViewNoVote extends StatefulWidget {
   late BuildContext context;
   late MeetState state;
   late bool isMyself;
-  final void Function() onRemoveFriend;
+  final void Function(int memberIndex) onRemoveFriend;
+
+  late int memberIndex;
+  final void Function(int memberIndex, String name) onSetTeamMemberName;
+  final void Function(int memberIndex, String birthYear) onSetTeamMemberBirthYear;
+  final void Function(int memberIndex, int universityId) onSetTeamMemberUniversityId;
+  final void Function(int memberIndex, String profile) onSetTeamMemberProfile;
+  String name = '';
+  String profileImageUrl = 'DEFAULT';
 
   MemberCardViewNoVote({
     super.key,
     required this.context,
     required this.state,
     required this.isMyself,
-    required this.onRemoveFriend
+    required this.onRemoveFriend,
+    required this.memberIndex,
+    required this.onSetTeamMemberName,
+    required this.onSetTeamMemberBirthYear,
+    required this.onSetTeamMemberUniversityId,
+    required this.onSetTeamMemberProfile
   });
 
   @override
@@ -622,20 +656,26 @@ class _MemberCardViewNoVoteState extends State<MemberCardViewNoVote> {
 
   Future<void> _pickImage() async {
     final pickedFile = await ImagePicker().pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      _selectedImage = File(pickedFile.path);
+    }
+    String url = 'DEFAULT';
+    url = await widget.context.read<MeetCubit>().uploadProfileImage(_selectedImage!, widget.state.userResponse.personalInfo?.id ?? 0, widget.memberIndex.toString());
+
     // AnalyticsUtil.logEvent("내정보_설정_프로필사진터치");
     if (pickedFile != null) {
       setState(() {
-        _selectedImage = File(pickedFile.path);
-        widget.context.read<MeetCubit>().uploadProfileImage(_selectedImage!, widget.state.userResponse); // TODO.
         // AnalyticsUtil.logEvent("내정보_설정_프로필사진변경");
+        widget.profileImageUrl = url;
+        widget.onSetTeamMemberProfile(widget.memberIndex, url);
         isSelectImage = true;
-        widget.context.read<MeetCubit>().setProfileImage(_selectedImage!); // TODO.
+        widget.context.read<MeetCubit>().setProfileImage(_selectedImage!);
       });
     }
   }
 
   // 학과 입력
-  void _typeOnTypeAhead() { // ver.3
+  void _typeOnTypeAhead() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!_typeAheadController.text.isEmpty) {
         setState(() {
@@ -653,6 +693,7 @@ class _MemberCardViewNoVoteState extends State<MemberCardViewNoVote> {
   void _setUniversity(University university) {
     _setUniversityDepartment(university.department);
     this.university = university;
+    widget.onSetTeamMemberUniversityId(widget.memberIndex, university.id);
   }
   void _setUniversityDepartment(String name) {
     universityDepartment = name;
@@ -704,7 +745,7 @@ class _MemberCardViewNoVoteState extends State<MemberCardViewNoVote> {
                               ))
                               : ClipOval(
                             child: Container(
-                            color: Colors.grey,
+                            color: Colors.grey.shade200,
                               width: SizeConfig.defaultSize * 9,
                               height: SizeConfig.defaultSize * 9,
                               alignment: Alignment.center,
@@ -720,16 +761,18 @@ class _MemberCardViewNoVoteState extends State<MemberCardViewNoVote> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          SizedBox( // TODO : 이름 textField View(V)
-                            width: SizeConfig.screenWidth * 0.42,
+                          SizedBox(
+                            width: SizeConfig.screenWidth * 0.5,
                             height: SizeConfig.defaultSize * 5,
                             child: TextField(
                               controller: _NameController,
                               maxLength: 7,
                               onChanged: (value) {
                                 setState(() {
-                                  // widget.state.teamName = value; // TODO.
-                                  // widget.handleTeamNameChanged(value); // TODO.
+                                  widget.name = value;
+                                  widget.onSetTeamMemberName(widget.memberIndex, value);
+                                  // widget.state.teamName = value;
+                                  // widget.handleTeamNameChanged(value);
                                 });
                               },
                               decoration: InputDecoration(
@@ -741,39 +784,40 @@ class _MemberCardViewNoVoteState extends State<MemberCardViewNoVote> {
                               ),
                             ),
                           ),
-                          if (!widget.isMyself) // TODO : 삭제 버튼 View(V)
-                            GestureDetector(
-                              onTap: () {},
-                              child: PopupMenuButton<String>(
-                                icon: Icon(Icons.more_horiz_rounded, color: Colors.grey.shade300,),
-                                color: Colors.white,
-                                surfaceTintColor: Colors.white,
-                                padding: EdgeInsets.zero,
-                                onSelected: (value) {
-                                  // 팝업 메뉴에서 선택된 값 처리
-                                  if (value == 'remove') {
-                                    widget.onRemoveFriend();
-                                  }
-                                  // AnalyticsUtil.logEvent("과팅_팀만들기_카드_더보기_삭제_터치", properties: {
-                                  //   'nickname': userResponse.personalInfo?.nickname ?? "닉네임없음",
-                                  //   'birthYear': userResponse.personalInfo?.birthYear.toString().substring(2,4)??"??",
-                                  //   'verification': userResponse.personalInfo?.verification.isVerificationSuccess.toString() ?? "false"
-                                  // });
-                                },
-                                itemBuilder: (BuildContext context) {
-                                  return [
-                                    PopupMenuItem<String>(
-                                      value: 'remove',
-                                      child: Text("삭제하기", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.5)),
-                                    ),
-                                  ];
-                                },
-                              ),
-                            ),
+
+                          // if (!widget.isMyself)
+                          //   GestureDetector(
+                          //     onTap: () {},
+                          //     child: PopupMenuButton<String>(
+                          //       icon: Icon(Icons.more_horiz_rounded, color: Colors.grey.shade300,),
+                          //       color: Colors.white,
+                          //       surfaceTintColor: Colors.white,
+                          //       padding: EdgeInsets.zero,
+                          //       onSelected: (value) {
+                          //         // 팝업 메뉴에서 선택된 값 처리
+                          //         if (value == 'remove') {
+                          //           widget.onRemoveFriend(widget.memberIndex);
+                          //         }
+                          //         // AnalyticsUtil.logEvent("과팅_팀만들기_카드_더보기_삭제_터치", properties: {
+                          //         //   'nickname': userResponse.personalInfo?.nickname ?? "닉네임없음",
+                          //         //   'birthYear': userResponse.personalInfo?.birthYear.toString().substring(2,4)??"??",
+                          //         //   'verification': userResponse.personalInfo?.verification.isVerificationSuccess.toString() ?? "false"
+                          //         // });
+                          //       },
+                          //       itemBuilder: (BuildContext context) {
+                          //         return [
+                          //           PopupMenuItem<String>(
+                          //             value: 'remove',
+                          //             child: Text("삭제하기", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.5)),
+                          //           ),
+                          //         ];
+                          //       },
+                          //     ),
+                          //   ),
                         ],
                       ),
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           SizedBox(
                             width: SizeConfig.screenWidth * 0.4,
@@ -783,12 +827,13 @@ class _MemberCardViewNoVoteState extends State<MemberCardViewNoVote> {
                               maxLength: 2,
                               onChanged: (value) {
                                 setState(() {
-                                  // widget.state.teamName = value; // TODO.
-                                  // widget.handleTeamNameChanged(value); // TODO.
+                                  widget.onSetTeamMemberBirthYear(widget.memberIndex, value);
+                                  // widget.state.teamName = value;
+                                  // widget.handleTeamNameChanged(value);
                                 });
                               },
                               decoration: InputDecoration(
-                                hintText: "(ex. 02) 친구가 태어난 연도",
+                                hintText: "ex. 04 / 03 / 00",
                                 hintStyle: TextStyle(fontSize: SizeConfig.defaultSize * 1.4, color: Colors.grey.shade500),
                                 contentPadding: EdgeInsets.zero,
                                 enabledBorder: const UnderlineInputBorder(borderSide: BorderSide(width: 0.6)),
@@ -851,7 +896,6 @@ class _MemberCardViewNoVoteState extends State<MemberCardViewNoVote> {
                   }
                   return universityFinder.getDepartmentSuggestions(universityName, pattern);
                 },
-
                 itemBuilder: (context, suggestion) {
                   return ListTile(
                     leading: const Icon(Icons.school),
@@ -859,7 +903,6 @@ class _MemberCardViewNoVoteState extends State<MemberCardViewNoVote> {
                     subtitle: Text('${suggestion['name']}'),
                   );
                 },
-
                 // 추천 text를 눌렀을 때 일어나는 액션 (밑의 코드는 ProductPage로 넘어감)
                 onSuggestionSelected: (suggestion) {
                   if (isSelectedOnTypeAhead == false) {
@@ -1099,7 +1142,6 @@ class _CreateTeamBottomSectionState extends State<_CreateTeamBottomSection> {
                                           TextButton(
                                               onPressed: () {
                                                 List<Location> newCities = newCitiesData.map((cityData) => Location(id: cityData["id"], name: cityData["name"])).toList();
-                                                // context.read<MeetCubit>().pressedCitiesAddButton(newCities);
                                                 widget.onSetCities(newCities);
                                                 Navigator.pop(dialogContext);
                                               },

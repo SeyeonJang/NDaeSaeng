@@ -36,7 +36,9 @@ class MeetIntro extends StatelessWidget {
                       ],
                     ),
                   )
-                : state.myTeams.length < 1 ? MakeTeamButton(ancestorContext: context) : SeeMyTeamButton(ancestorContext: context, teamId: state.myTeams[0].id,);
+                : MakeTeamButton(ancestorContext: context);
+            // TODO : 아래꺼로 고치기
+                // : state.myTeams.length < 1 ? MakeTeamButton(ancestorContext: context) : SeeMyTeamButton(ancestorContext: context, teamId: state.myTeams[0].id,);
           }
         )
     );
@@ -386,7 +388,6 @@ class MakeTeamButton extends StatelessWidget {
               if (value == null) return;
               await ancestorContext.read<MeetCubit>().createNewTeam(value);
             });
-
             ancestorContext.read<MeetCubit>().initMeetIntro();
           },
           child: Column(

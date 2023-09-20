@@ -3,8 +3,6 @@ import 'package:dart_flutter/src/domain/entity/type/student.dart';
 import 'package:dart_flutter/src/domain/entity/type/team.dart';
 import 'package:dart_flutter/src/domain/entity/university.dart';
 import 'package:dart_flutter/src/domain/entity/location.dart';
-import 'package:dart_flutter/src/domain/entity/user.dart';
-import 'package:dart_flutter/src/domain/mapper/meet_user_mapper.dart';
 import 'package:dart_flutter/src/domain/mapper/student_mapper.dart';
 
 class MeetTeam implements Team {
