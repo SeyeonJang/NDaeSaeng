@@ -58,9 +58,9 @@ class _MeetBoardState extends State<MeetBoard> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                         SizedBox(height: SizeConfig.defaultSize * 5,),
-                      Text("팀을 만들어야 이성을 볼 수 있어요! 👀", style: TextStyle(fontSize: SizeConfig.defaultSize * 2.5),),
-                        SizedBox(height: SizeConfig.defaultSize * 5,),
-                      Text("왼쪽 홈에서 간단하게 팀을 만들어보아요!", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.8),),
+                      Text("팀을 만들어야 이성을 볼 수 있어요! 👀", style: TextStyle(fontSize: SizeConfig.defaultSize * 2),),
+                        SizedBox(height: SizeConfig.defaultSize * 2,),
+                      Text("왼쪽 홈에서 간단하게 팀을 만들어보아요!", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.6),),
                     ],
                   ),
                 ),
