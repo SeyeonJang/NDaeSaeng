@@ -82,7 +82,6 @@ class _MyPageViewState extends State<MyPageView> {
   }
 
   void halt() {
-    print("앱을 강제 종료합니다.");
     if (Platform.isIOS) {
       exit(0);
     } else {
@@ -91,7 +90,6 @@ class _MyPageViewState extends State<MyPageView> {
   }
 
   void restart() {
-    print("앱을 재시작합니다.");
     Restart.restartApp();
   }
 
@@ -170,7 +168,6 @@ class _MyPageViewState extends State<MyPageView> {
         Center(
           child: GestureDetector(
             onTap: () {
-              print('지금 상태는 $isSelectImage');
               _pickImage();
             },
             child: ClipOval(
@@ -193,9 +190,9 @@ class _MyPageViewState extends State<MyPageView> {
                     : ClipOval(
                       child: BlocBuilder<MyPagesCubit, MyPagesState>(
                       builder: (context, state) {
-                        if (profileImageUrl == "DEFAULT" || !profileImageUrl.startsWith("https://"))
+                        if (profileImageUrl == "DEFAULT" || !profileImageUrl.startsWith("https://")) {
                           return Image.asset('assets/images/profile-mockup2.png', width: SizeConfig.defaultSize * 12, fit: BoxFit.cover,);
-                        else {
+                        } else {
                           return state.profileImageFile.path==''
                               ? Image.network(profileImageUrl,
                               width: SizeConfig.defaultSize * 12,
@@ -233,7 +230,7 @@ class _MyPageViewState extends State<MyPageView> {
         //     width: SizeConfig.screenWidth,
         //     height: SizeConfig.defaultSize * 15.5,
         //     decoration: BoxDecoration(
-        //       color: Color(0xff7C83FD),
+        //       color: const Color(0xff7C83FD),
         //       borderRadius: BorderRadius.circular(10),
         //     ),
         //     child: Padding(
@@ -285,7 +282,7 @@ class _MyPageViewState extends State<MyPageView> {
         //                     child: Row(
         //                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
         //                       children: [
-        //                         Container(
+        //                         SizedBox(
         //                             width: SizeConfig.screenWidth * 0.53,
         //                             child: Text(
         //                               "${widget.state.titleVotes[i].question.content}", style: TextStyle(
@@ -316,17 +313,14 @@ class _MyPageViewState extends State<MyPageView> {
         //                 if (context.read<MyPagesCubit>().state.isLoading) {
         //                   return;
         //                 }
-        //
         //                 await context.read<MyPagesCubit>().getAllVotes();
-        //                 print("UI get - ${widget.state.myAllVotes}");
-        //
         //                 showModalBottomSheet(
         //                     context: context,
         //                     builder: (BuildContext modalContext) {
         //                       return Container(
         //                         width: SizeConfig.screenWidth,
         //                         height: SizeConfig.screenHeight,
-        //                         decoration: BoxDecoration(
+        //                         decoration: const BoxDecoration(
         //                             color: Colors.white,
         //                             borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10))),
         //                         child: Column(
@@ -351,7 +345,7 @@ class _MyPageViewState extends State<MyPageView> {
         //                               child: Row(
         //                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
         //                                 children: [
-        //                                   Container(
+        //                                   SizedBox(
         //                                       width: SizeConfig.screenWidth * 0.6,
         //                                       child: Text(
         //                                         "투표명", style: TextStyle(
@@ -393,7 +387,7 @@ class _MyPageViewState extends State<MyPageView> {
         //                                           child: Row(
         //                                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
         //                                             children: [
-        //                                               Container(
+        //                                               SizedBox(
         //                                                 width: SizeConfig.screenWidth * 0.66,
         //                                                 child: Text(
         //                                                   "${widget.state.myAllVotes[j].question.content}", style: TextStyle(
@@ -426,7 +420,6 @@ class _MyPageViewState extends State<MyPageView> {
         //                       );
         //                     }
         //                 );
-        //                 print("내 대표 투표의 개수 ${widget.state.titleVotes.length+1}");
         //               },
         //               child: Container(
         //                 width: SizeConfig.screenWidth,
@@ -436,7 +429,7 @@ class _MyPageViewState extends State<MyPageView> {
         //                   borderRadius: BorderRadius.circular(8),
         //                 ),
         //                 alignment: Alignment.center,
-        //                 child: Text("눌러서 프로필 채우기", style: TextStyle(color: Color(0xff7C83FD), fontWeight: FontWeight.w500, fontSize: SizeConfig.defaultSize * 1.4),)
+        //                 child: Text("눌러서 프로필 채우기", style: TextStyle(color: const Color(0xff7C83FD), fontWeight: FontWeight.w500, fontSize: SizeConfig.defaultSize * 1.4),)
         //               ),
         //             )
         //         ],
@@ -530,7 +523,6 @@ class _MyPageViewState extends State<MyPageView> {
               ),
               onSelectedItemChanged: (index) {
                 setState(() => mbtiIndex1 = index);
-                print('Selected item: ${mbti1}');
               },
             ),
           ),
@@ -560,7 +552,6 @@ class _MyPageViewState extends State<MyPageView> {
               ),
               onSelectedItemChanged: (index) {
                 setState(() => mbtiIndex2 = index);
-                print('Selected item: ${mbti2}');
               },
             ),
           ),
@@ -590,7 +581,6 @@ class _MyPageViewState extends State<MyPageView> {
               ),
               onSelectedItemChanged: (index) {
                 setState(() => mbtiIndex3 = index);
-                print('Selected item: ${mbti3}');
               },
             ),
           ),
@@ -620,7 +610,6 @@ class _MyPageViewState extends State<MyPageView> {
               ),
               onSelectedItemChanged: (index) {
                 setState(() => mbtiIndex4 = index);
-                print('Selected item: ${mbti4}');
               },
             ),
           ),
@@ -666,7 +655,7 @@ class _MyPageViewState extends State<MyPageView> {
                                   hintText: "바꿀 닉네임을 작성해주세요!",
                                   hintStyle: TextStyle(fontSize: SizeConfig.defaultSize * 1.4),
                                   contentPadding: EdgeInsets.zero,
-                                  enabledBorder: UnderlineInputBorder(borderSide: BorderSide(width: 0.6)),
+                                  enabledBorder: const UnderlineInputBorder(borderSide: BorderSide(width: 0.6)),
                                 ),
                               ),
                             ],
@@ -691,7 +680,7 @@ class _MyPageViewState extends State<MyPageView> {
                                 Navigator.pop(dialogContext);
                                 AnalyticsUtil.logEvent("내정보_설정_닉네임변경_완료");
                               },
-                                child: Text('완료', style: TextStyle(color: Color(0xff7C83FD)))
+                                child: const Text('완료', style: TextStyle(color: Color(0xff7C83FD)))
                             ),
                           ],
                         ),
@@ -714,7 +703,7 @@ class _MyPageViewState extends State<MyPageView> {
                 style: TextStyle(
                   fontWeight: FontWeight.w500,
                   fontSize: getFlexibleSize(target: 16),
-                  color: Color(0xff7C83FD)
+                  color: const Color(0xff7C83FD)
                 ),
               ),
             ],
@@ -768,7 +757,6 @@ class _MyPageViewState extends State<MyPageView> {
 
   void shareContent(BuildContext context, String myCode) {
     Share.share('[엔대생] 엔대생에서 내가 널 칭찬 대상으로 투표하고 싶어! 앱에 들어와줘!\n내 코드는 $myCode 야. 나를 친구 추가하고 같이하자!\nhttps://dart.page.link/TG78\n\n내 코드 : $myCode');
-    print("셰어");
   }
 
   @override
@@ -802,7 +790,7 @@ class _MyPageViewState extends State<MyPageView> {
                         );
                       },
                       child: Text("스토어에서 엔대생 리뷰 작성하기",
-                          style: TextStyle(fontSize: SizeConfig.defaultSize * 1.4, color: Color(0xff7C83FD))),
+                          style: TextStyle(fontSize: SizeConfig.defaultSize * 1.4, color: const Color(0xff7C83FD))),
                     ),
                     TextButton(
                       onPressed: () {
@@ -810,7 +798,7 @@ class _MyPageViewState extends State<MyPageView> {
                         shareContent(context, inviteCode);
                       },
                       child: Text("엔대생 링크 공유하기",
-                          style: TextStyle(fontSize: SizeConfig.defaultSize * 1.4, color: Color(0xff7C83FD))),
+                          style: TextStyle(fontSize: SizeConfig.defaultSize * 1.4, color: const Color(0xff7C83FD))),
                     ),
                     SizedBox(height: SizeConfig.defaultSize * 1.5,),
                   ])),
@@ -824,7 +812,7 @@ class _MyPageViewState extends State<MyPageView> {
                 const DtFlexSpacer(10),
                 Container(
                   alignment: Alignment.centerLeft,
-                  padding: EdgeInsets.only(left: 0),
+                  padding: const EdgeInsets.only(left: 0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -872,8 +860,8 @@ class _MyPageViewState extends State<MyPageView> {
                                               restart();
                                             } : null,
                                             child: textController.text == '회원탈퇴를 원해요'
-                                                ? Text('탈퇴', style: TextStyle(color: Color(0xff7C83FD)))
-                                                : Text('탈퇴', style: TextStyle(color: Colors.grey,))
+                                                ? const Text('탈퇴', style: TextStyle(color: Color(0xff7C83FD)))
+                                                : const Text('탈퇴', style: TextStyle(color: Colors.grey,))
                                         ),
                                       ],
                                     ),
@@ -956,7 +944,7 @@ class _MyPageViewState extends State<MyPageView> {
                   Navigator.push(context, MaterialPageRoute(builder: (context) => const MyTos1()));
                 },
                 child: Text("이용약관",
-                    style: TextStyle(fontSize: SizeConfig.defaultSize * 1.4, color: Color(0xff7C83FD))),
+                    style: TextStyle(fontSize: SizeConfig.defaultSize * 1.4, color: const Color(0xff7C83FD))),
               ),
               TextButton(
                 onPressed: () {
@@ -964,7 +952,7 @@ class _MyPageViewState extends State<MyPageView> {
                   Navigator.push(context, MaterialPageRoute(builder: (context) => const MyTos2()));
                 },
                 child: Text("개인정보 처리방침",
-                    style: TextStyle(fontSize: SizeConfig.defaultSize * 1.4, color: Color(0xff7C83FD))),
+                    style: TextStyle(fontSize: SizeConfig.defaultSize * 1.4, color: const Color(0xff7C83FD))),
               ),
               TextButton(
                 onPressed: () {
@@ -981,7 +969,7 @@ class _MyPageViewState extends State<MyPageView> {
                   // );
                 },
                 child: Text("건의하기",
-                    style: TextStyle(fontSize: SizeConfig.defaultSize * 1.4, color: Color(0xff7C83FD))),
+                    style: TextStyle(fontSize: SizeConfig.defaultSize * 1.4, color: const Color(0xff7C83FD))),
               ),
               TextButton(
                 onPressed: () {
@@ -998,7 +986,7 @@ class _MyPageViewState extends State<MyPageView> {
                 //   );
                 },
                 child: Text("1:1 문의",
-                    style: TextStyle(fontSize: SizeConfig.defaultSize * 1.4, color: Color(0xff7C83FD))),
+                    style: TextStyle(fontSize: SizeConfig.defaultSize * 1.4, color: const Color(0xff7C83FD))),
               ),
 
                   const DtDivider(),

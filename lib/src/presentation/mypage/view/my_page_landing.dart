@@ -304,7 +304,7 @@ class _MyPageLandingViewState extends State<MyPageLandingView> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text("지금 학생증 인증하면 프로필배지를 추가해드려요!", style: TextStyle(
+                      Text(" 지금 학생증 인증하면 팀에 인증 배지를 추가해드려요!", style: TextStyle(
                           fontSize: SizeConfig.defaultSize * 1.4
                       ),),
                       Icon(
@@ -1174,7 +1174,7 @@ class _openAddFriendsState extends State<openAddFriends> {
                                   SizedBox(height: SizeConfig.defaultSize * 0.5),
                                   Padding(
                                     padding: EdgeInsets.only(left: SizeConfig.defaultSize * 0.5),
-                                    child: Text("친구를 추가하면 더 재밌게 게임할 수 있어요!",
+                                    child: Text("친구를 추가하면 과팅을 같이 할 수 있어요!",
                                         style: TextStyle(
                                           color: Colors.grey,
                                           fontSize: SizeConfig.defaultSize * 1.5,
