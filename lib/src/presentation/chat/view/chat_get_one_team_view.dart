@@ -22,7 +22,7 @@ class ChatGetOneTeamView extends StatelessWidget { // Component
             builder: (context) => BlocProvider<ChatCubit>(
               create: (_) => ChatCubit(), // Replace with your MeetCubit instantiation.
               // child: ChatResponseGetDetail(teamId: 8187,),
-              child: ChatResponseGetDetail(teamId: proposal.requestingTeam.id,),
+              child: ChatResponseGetDetail(teamId: proposal.requestingTeam.id, proposalId: proposal.proposalId,),
             ),
           ),
         );

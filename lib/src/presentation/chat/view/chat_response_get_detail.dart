@@ -11,8 +11,9 @@ import '../viewmodel/state/chat_state.dart';
 
 class ChatResponseGetDetail extends StatelessWidget {
   int teamId;
+  int proposalId;
 
-  ChatResponseGetDetail({super.key, required this.teamId});
+  ChatResponseGetDetail({super.key, required this.teamId, required this.proposalId});
 
   @override
   Widget build(BuildContext context) {
@@ -166,7 +167,7 @@ class ChatResponseGetDetail extends StatelessWidget {
                                               GestureDetector(
                                                 onTap: () {
                                                   Navigator.pop(modalContext, true);
-                                                  context.read<ChatCubit>().rejectChatProposal(blindDateTeamDetail.id);
+                                                  context.read<ChatCubit>().rejectChatProposal(proposalId);
                                                   showDialog<String>(
                                                       context: modalContext,
                                                       builder: (BuildContext dialogContext) {
@@ -293,7 +294,7 @@ class ChatResponseGetDetail extends StatelessWidget {
                                                 showDialog<String>(
                                                     context: modalContext,
                                                     builder: (BuildContext dialogContext) {
-                                                      context.read<ChatCubit>().acceptChatProposal(blindDateTeamDetail.id);
+                                                      context.read<ChatCubit>().acceptChatProposal(proposalId);
                                                       Future.delayed(Duration(seconds: 2), () {
                                                         Navigator.pop(dialogContext);
                                                       });
