@@ -386,9 +386,9 @@ class MakeTeamButton extends StatelessWidget {
                 ))
                 .then((value) async {
               if (value == null) return;
+              ancestorContext.read<MeetCubit>().initMeetIntro();
               await ancestorContext.read<MeetCubit>().createNewTeam(value);
             });
-            ancestorContext.read<MeetCubit>().initMeetIntro();
           },
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
