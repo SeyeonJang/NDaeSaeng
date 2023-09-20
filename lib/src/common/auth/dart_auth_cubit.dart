@@ -133,7 +133,7 @@ class DartAuthCubit extends HydratedCubit<DartAuthState> {
 
       String userId = userResponse.personalInfo!.id.toString();
       AnalyticsUtil.setUserId(userId);
-      if (userResponse.personalInfo?.name == null || userResponse.personalInfo?.name == "(알수없음)") {
+      if (userResponse.university == null) {
         PushNotificationUtil.setUserId(userId);
         state.setStep(AuthStep.signup);
       } else {
