@@ -1,6 +1,8 @@
 import 'package:dart_flutter/src/domain/entity/location.dart';
 import 'package:dart_flutter/src/domain/entity/type/blind_date_user.dart';
+import 'package:dart_flutter/src/domain/entity/type/student.dart';
 import 'package:dart_flutter/src/domain/entity/type/team.dart';
+import 'package:dart_flutter/src/domain/mapper/student_mapper.dart';
 
 class BlindDateTeam implements Team {
   final int id;
@@ -9,7 +11,7 @@ class BlindDateTeam implements Team {
   final List<Location> regions;
   final String universityName;
   final bool isCertifiedTeam;
-  final List<BlindDateUser> teamUsers;
+  final List<Student> teamUsers;
 
   BlindDateTeam(
       {required this.id,
@@ -106,6 +108,6 @@ class BlindDateTeam implements Team {
 
   @override
   List<BlindDateUser> getTeamUsers() {
-    return teamUsers;
+    return teamUsers.map((user) => StudentMapper.toBlindDateUser(user)).toList();
   }
 }

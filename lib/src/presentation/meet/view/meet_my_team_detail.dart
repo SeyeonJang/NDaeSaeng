@@ -1,6 +1,7 @@
 import 'package:dart_flutter/res/config/size_config.dart';
 import 'package:dart_flutter/src/common/util/toast_util.dart';
 import 'package:dart_flutter/src/domain/entity/meet_team.dart';
+import 'package:dart_flutter/src/domain/mapper/student_mapper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -59,7 +60,7 @@ class MeetMyTeamDetail extends StatelessWidget {
                               ...List.generate(blindDateTeamDetail.teamUsers.length, (index) {
                                 return Column(
                                   children: [
-                                    MeetOneMemberCardview(userResponse: blindDateTeamDetail.teamUsers[index]),
+                                    MeetOneMemberCardview(userResponse: StudentMapper.toBlindDateUserDetail(blindDateTeamDetail.teamUsers[index])),
                                     SizedBox(height: SizeConfig.defaultSize),
                                   ],
                                 );

@@ -1,6 +1,7 @@
 import 'package:dart_flutter/src/domain/entity/user.dart';
 import 'package:dart_flutter/src/domain/entity/type/blind_date_user.dart';
 
+@Deprecated("StudnetMapper로 대체")
 class MeetUserMapper {
   static BlindDateUser toBlindDateUser(User user) {
     return BlindDateUser(

@@ -1,9 +1,11 @@
 import 'package:dart_flutter/src/domain/entity/type/blind_date_user.dart';
+import 'package:dart_flutter/src/domain/entity/type/student.dart';
 import 'package:dart_flutter/src/domain/entity/type/team.dart';
 import 'package:dart_flutter/src/domain/entity/university.dart';
 import 'package:dart_flutter/src/domain/entity/location.dart';
 import 'package:dart_flutter/src/domain/entity/user.dart';
 import 'package:dart_flutter/src/domain/mapper/meet_user_mapper.dart';
+import 'package:dart_flutter/src/domain/mapper/student_mapper.dart';
 
 class MeetTeam implements Team {
   final int id;
@@ -11,7 +13,7 @@ class MeetTeam implements Team {
   final University? university;
   final List<Location> locations;
   final bool canMatchWithSameUniversity;
-  final List<User> members;
+  final List<Student> members;
 
   MeetTeam({
     required this.id,
@@ -42,8 +44,8 @@ class MeetTeam implements Team {
     double birthYear = 0;
     int count = 0;
     for (int i=0; i<members.length; i++) {
-      birthYear += members[i].personalInfo?.birthYear ?? 0;
-      if (members[i].personalInfo?.birthYear == null) continue;
+      birthYear += members[i].getBirthYear() ?? 0;
+      if (members[i].getBirthYear() == null) continue;
       count += 1;
     }
     return birthYear / count;
@@ -62,14 +64,14 @@ class MeetTeam implements Team {
   @override
   bool getIsCertifiedTeam() {
     for (int i=0; i<members.length; i++) {
-      if (members[i].personalInfo?.verification.isVerificationSuccess ?? false) return true;
+      if (members[i].getIsCertifiedUser() ?? false) return true;
     }
     return false;
   }
 
   @override
   List<BlindDateUser> getTeamUsers() {
-    return members.map((user) => MeetUserMapper.toBlindDateUser(user)).toList();
+    return members.map((user) => StudentMapper.toBlindDateUser(user)).toList();
   }
 
   @override

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../res/config/size_config.dart';
 import '../../../common/util/toast_util.dart';
+import '../../../domain/mapper/student_mapper.dart';
 import '../../component/meet_one_member_cardview.dart';
 import '../viewmodel/meet_cubit.dart';
 import '../viewmodel/state/meet_state.dart';
@@ -63,7 +64,7 @@ class MeetOtherTeamDetail extends StatelessWidget {
                           ...List.generate(blindDateTeamDetail.teamUsers.length, (index) {
                             return Column(
                               children: [
-                                MeetOneMemberCardviewNoVote(userResponse: blindDateTeamDetail.teamUsers[index], university: blindDateTeamDetail.universityName,),
+                                MeetOneMemberCardviewNoVote(userResponse:StudentMapper.toBlindDateUserDetail(blindDateTeamDetail.teamUsers[index]), university: blindDateTeamDetail.universityName,),
                                 SizedBox(height: SizeConfig.defaultSize * 1.5),
                               ],
                             );

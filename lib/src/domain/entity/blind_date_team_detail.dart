@@ -1,8 +1,10 @@
 import 'package:dart_flutter/src/domain/entity/location.dart';
 import 'package:dart_flutter/src/domain/entity/type/blind_date_user.dart';
 import 'package:dart_flutter/src/domain/entity/type/blind_date_user_detail.dart';
+import 'package:dart_flutter/src/domain/entity/type/student.dart';
 import 'package:dart_flutter/src/domain/entity/type/team.dart';
 import 'package:dart_flutter/src/domain/mapper/blind_date_user_mapper.dart';
+import 'package:dart_flutter/src/domain/mapper/student_mapper.dart';
 
 class BlindDateTeamDetail implements Team {
   final int id;
@@ -11,7 +13,7 @@ class BlindDateTeamDetail implements Team {
   final List<Location> regions;
   final String universityName;
   final bool isCertifiedTeam;
-  final List<BlindDateUserDetail> teamUsers;
+  final List<Student> teamUsers;
   final bool proposalStatus;
 
   BlindDateTeamDetail(
@@ -113,6 +115,6 @@ class BlindDateTeamDetail implements Team {
 
   @override
   List<BlindDateUser> getTeamUsers() {
-    return teamUsers.map((user) => BlindDateUserMapper.toBlindDateUser(user)).toList();
+    return teamUsers.map((user) => StudentMapper.toBlindDateUser(user)).toList();
   }
 }
