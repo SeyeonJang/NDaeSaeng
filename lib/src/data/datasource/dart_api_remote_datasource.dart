@@ -347,11 +347,11 @@ class DartApiRemoteDataSource {
 
   // proposal: 제안 수락/거절 (patch)
   static Future<ProposalResponseDto> patchProposal(int proposalId, String proposalStatus) async {
-    const path = '/v1/users/me/propsals';
+    const path = '/v1/users/me/proposals';
     final pathUrl = "$path/$proposalId";
     final body = {"proposalStatus": proposalStatus};
 
-    final response = await _httpUtil.request().patch(path, data: body);
+    final response = await _httpUtil.request().patch(pathUrl, data: body);
     return ProposalResponseDto.fromJson(response.data);
   }
 
