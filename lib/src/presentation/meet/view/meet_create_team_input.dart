@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:dart_flutter/res/config/size_config.dart';
 import 'package:dart_flutter/src/common/util/analytics_util.dart';
+import 'package:dart_flutter/src/common/util/toast_util.dart';
 import 'package:dart_flutter/src/common/util/university_finder.dart';
 import 'package:dart_flutter/src/domain/entity/ghost_friend.dart';
 import 'package:dart_flutter/src/domain/entity/location.dart';
@@ -50,13 +51,7 @@ class _MeetCreateTeamInputState extends State<MeetCreateTeamInput> {
     state.minusTeamCount();
     setState(() {
       teamMemberCount = state.teamCount;
-      print("삭제합니다");
-      print(memberIndex);
-
-      print(teamMemberList.toString());
       teamMemberList.removeAt(memberIndex);
-      print(teamMemberList.toString());
-
     });
   }
 
@@ -82,10 +77,13 @@ class _MeetCreateTeamInputState extends State<MeetCreateTeamInput> {
     int birthYearInt = int.parse(birthYear);
     if (birthYearInt < 70) {  // 70을 기준으로 년도 반환
       birthYearInt += 2000;
+    } else {
+      birthYearInt += 1900;
     }
-    birthYearInt += 1900;
     setState(() {
       teamMemberList[memberIndex].birthYear = birthYearInt;
+      print('0000000');
+      print(birthYearInt);
     });
   }
 
@@ -122,32 +120,32 @@ class _MeetCreateTeamInputState extends State<MeetCreateTeamInput> {
   Widget build(BuildContext context) {
     Future<bool> _onBackKey() async {
       return await showDialog(
-          context: context,
-          builder: (BuildContext sheetContext) {
-            return GestureDetector(
-              child: AlertDialog(
-                backgroundColor: Colors.white,
-                surfaceTintColor: Colors.white,
-                title: Text("팀 만들기를 종료하시겠어요?", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.8),),
-                actions: [
-                  TextButton(
-                    onPressed: () {
-                      Navigator.pop(sheetContext);
-                    },
-                    child: const Text('취소', style: TextStyle(color: Color(0xffFF5C58))),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      Navigator.pop(context, false);
-                      widget.onFinish();
-                    },
-                    child: const Text('끝내기', style: TextStyle(color: Color(0xffFF5C58))),
-                  )
-                ],
-              ),
-            );
-          }
+        context: context,
+        builder: (BuildContext sheetContext) {
+          return GestureDetector(
+            child: AlertDialog(
+              backgroundColor: Colors.white,
+              surfaceTintColor: Colors.white,
+              title: Text("팀 만들기를 종료하시겠어요?", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.8),),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(sheetContext);
+                  },
+                  child: const Text('취소', style: TextStyle(color: Color(0xffFF5C58))),
+                ),
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context, false);
+                    widget.onFinish();
+                  },
+                  child: const Text('끝내기', style: TextStyle(color: Color(0xffFF5C58))),
+                )
+              ],
+            ),
           );
+        }
+        );
     };
 
     return WillPopScope(
@@ -218,11 +216,11 @@ class _MeetCreateTeamInputState extends State<MeetCreateTeamInput> {
                                   // MemberCardView(userResponse: state.userResponse, state: state, isMyself: true, onRemoveFriend: removeFriendFromMyTeam),
                                   // 친구1
                                   teamMemberCount >= 1
-                                      ? MemberCardViewNoVote(context: widget.ancestorContext, state: state, isMyself: false, onRemoveFriend: removeFriendFromMyTeam, memberIndex: 0, onSetTeamMemberName: setTeamMemberName, onSetTeamMemberBirthYear: setTeamMemberName, onSetTeamMemberUniversityId: setTeamMemberUniversityId, onSetTeamMemberProfile: setTeamMemberProfile,)
+                                      ? MemberCardViewNoVote(context: widget.ancestorContext, state: state, isMyself: false, onRemoveFriend: removeFriendFromMyTeam, memberIndex: 0, onSetTeamMemberName: setTeamMemberName, onSetTeamMemberBirthYear: setTeamMemberbirthYear, onSetTeamMemberUniversityId: setTeamMemberUniversityId, onSetTeamMemberProfile: setTeamMemberProfile,)
                                       : Container(),
                                   // 친구2
                                   teamMemberCount == 2
-                                      ? MemberCardViewNoVote(context: widget.ancestorContext, state: state, isMyself: false, onRemoveFriend: removeFriendFromMyTeam, memberIndex: 1, onSetTeamMemberName: setTeamMemberName, onSetTeamMemberBirthYear: setTeamMemberName, onSetTeamMemberUniversityId: setTeamMemberUniversityId, onSetTeamMemberProfile: setTeamMemberProfile)
+                                      ? MemberCardViewNoVote(context: widget.ancestorContext, state: state, isMyself: false, onRemoveFriend: removeFriendFromMyTeam, memberIndex: 1, onSetTeamMemberName: setTeamMemberName, onSetTeamMemberBirthYear: setTeamMemberbirthYear, onSetTeamMemberUniversityId: setTeamMemberUniversityId, onSetTeamMemberProfile: setTeamMemberProfile)
                                       : Container(),
                                   // 버튼
                                   teamMemberCount == 2
@@ -520,33 +518,31 @@ class MemberCardView extends StatelessWidget {
                               ],
                             ),
                           ),
-                          Container(
-                            child: Row( // 2층
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                SizedBox(width: SizeConfig.defaultSize * 0.5,),
-                                    SizedBox(
-                                width: SizeConfig.screenWidth * 0.56,
-                                child: GestureDetector(
-                                  onTap: () {
-                                    AnalyticsUtil.logEvent("과팅_팀만들기_카드_학부_터치", properties: {
-                                      'department': userResponse.university?.department ?? "알수없음"
-                                    });
-                                  },
-                                  child: Text(
-                                    userResponse.university?.department ?? "??학부",
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: SizeConfig.defaultSize * 1.6,
-                                      color: Colors.black,
-                                      overflow: TextOverflow.ellipsis,
+                          Row( // 2층
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              SizedBox(width: SizeConfig.defaultSize * 0.5,),
+                                  SizedBox(
+                              width: SizeConfig.screenWidth * 0.56,
+                              child: GestureDetector(
+                                onTap: () {
+                                  AnalyticsUtil.logEvent("과팅_팀만들기_카드_학부_터치", properties: {
+                                    'department': userResponse.university?.department ?? "알수없음"
+                                  });
+                                },
+                                child: Text(
+                                  userResponse.university?.department ?? "??학부",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: SizeConfig.defaultSize * 1.6,
+                                    color: Colors.black,
+                                    overflow: TextOverflow.ellipsis,
 
-                                    ),
                                   ),
                                 ),
-                                    ),
-                              ],
-                            ),
+                              ),
+                                  ),
+                            ],
                           ),
                         ],
                       ),
@@ -617,16 +613,7 @@ class _MemberCardViewNoVoteState extends State<MemberCardViewNoVote> {
 
   // textField 생년
   late TextEditingController _controller;
-  void onTeamNameChanged(String value) {
-    (value); // Callback to parent widget
-    widget.state.teamName = value;
-  }
-
   late TextEditingController _NameController;
-  // void onTeamNameChanged(String value) {
-  //   (value); // Callback to parent widget
-  //   widget.state.teamName = value;
-  // }
 
   @override
   void initState() {
@@ -723,18 +710,11 @@ class _MemberCardViewNoVoteState extends State<MemberCardViewNoVote> {
                 children: [
                   GestureDetector( // TODO : 프로필 사진 View(V)
                     onTap: () {
-                      print('지금 상태는 $isSelectImage');
                       _pickImage();
                     },
                     child: ClipOval(
                       clipBehavior: Clip.antiAlias,
                       child: Container(
-                        // decoration: BoxDecoration( // 이미지 겉에 테두리 효과주는 코드
-                        //   gradient: LinearGradient(
-                        //       colors: [Color(0xff7C83FD), Color(0xff7C83FD)]),
-                        //   borderRadius: BorderRadius.circular(32),
-                        // ),
-
                           child: isSelectImage
                               ? ClipOval(
                               child: Image.file( // 이미지 파일에서 고르는 코드
@@ -771,8 +751,6 @@ class _MemberCardViewNoVoteState extends State<MemberCardViewNoVote> {
                                 setState(() {
                                   widget.name = value;
                                   widget.onSetTeamMemberName(widget.memberIndex, value);
-                                  // widget.state.teamName = value;
-                                  // widget.handleTeamNameChanged(value);
                                 });
                               },
                               decoration: InputDecoration(
@@ -828,8 +806,6 @@ class _MemberCardViewNoVoteState extends State<MemberCardViewNoVote> {
                               onChanged: (value) {
                                 setState(() {
                                   widget.onSetTeamMemberBirthYear(widget.memberIndex, value);
-                                  // widget.state.teamName = value;
-                                  // widget.handleTeamNameChanged(value);
                                 });
                               },
                               decoration: InputDecoration(
@@ -1212,10 +1188,30 @@ class _CreateTeamBottomSectionState extends State<_CreateTeamBottomSection> {
                     "toggle": meetTeam.canMatchWithSameUniversity,
                     "university": meetTeam.university?.name ?? "알수없음",
                   });
-                  if ((meetTeam.members.length == 1 || meetTeam.members.length == 2) && meetTeam.name != '' && meetTeam.locations.isNotEmpty) {
-                    widget.onFinish();
-                    Navigator.pop(widget.ancestorContext, meetTeam);
+
+                  if (meetTeam.members.length == 1) {
+                    if (meetTeam.members[0].getName().isNotEmpty && meetTeam.members[0].getBirthYear().toString().isNotEmpty && meetTeam.members[0].getUniversityId().toString().isNotEmpty && meetTeam.name != '' && meetTeam.locations.isNotEmpty) {
+                      widget.onFinish();
+                      Navigator.pop(widget.ancestorContext, meetTeam);
+                    } else {
+                      ToastUtil.showMeetToast('모든 정보를 기입해주세요!', 1);
+                    }
+                  } else if (meetTeam.members.length == 2) {
+                    if (meetTeam.members[0].getName().isNotEmpty && meetTeam.members[0].getBirthYear().toString().isNotEmpty && meetTeam.members[0].getUniversityId().toString().isNotEmpty
+                        && meetTeam.members[1].getName().isNotEmpty && meetTeam.members[1].getBirthYear().toString().isNotEmpty && meetTeam.members[1].getUniversityId().toString().isNotEmpty
+                        &&  meetTeam.name != '' && meetTeam.locations.isNotEmpty) {
+                      widget.onFinish();
+                      Navigator.pop(widget.ancestorContext, meetTeam);
+                    } else {
+                      ToastUtil.showMeetToast('모든 정보를 기입해주세요!', 1);
+                    }
+                  } else {
+                    ToastUtil.showMeetToast('팀원을 추가해주세요!', 1);
                   }
+                  // if ((meetTeam.members.length == 1 || meetTeam.members.length == 2) && meetTeam.name != '' && meetTeam.locations.isNotEmpty) {
+                  //   widget.onFinish();
+                  //   Navigator.pop(widget.ancestorContext, meetTeam);
+                  // }
                 },
                 child: Container(
                   height: SizeConfig.defaultSize * 6,

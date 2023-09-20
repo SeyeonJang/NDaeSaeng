@@ -84,4 +84,9 @@ class _FriendDto {
     data['profileImageUrl'] = this.profileImageUrl;
     return data;
   }
+
+  @override
+  String toString() {
+    return '_FriendDto{name: $name, birthyear: $birthyear, universityId: $universityId, profileImageUrl: $profileImageUrl}';
+  }
 }
