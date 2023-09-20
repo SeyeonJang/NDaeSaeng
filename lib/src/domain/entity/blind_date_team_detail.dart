@@ -4,7 +4,7 @@ import 'package:dart_flutter/src/domain/entity/type/blind_date_user_detail.dart'
 import 'package:dart_flutter/src/domain/entity/type/team.dart';
 import 'package:dart_flutter/src/domain/mapper/blind_date_user_mapper.dart';
 
-class BlindDateTeamDetail extends Team {
+class BlindDateTeamDetail implements Team {
   final int id;
   final String name;
   final double averageBirthYear;

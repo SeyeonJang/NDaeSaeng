@@ -5,7 +5,7 @@ import 'package:dart_flutter/src/domain/entity/location.dart';
 import 'package:dart_flutter/src/domain/entity/user.dart';
 import 'package:dart_flutter/src/domain/mapper/meet_user_mapper.dart';
 
-class MeetTeam extends Team {
+class MeetTeam implements Team {
   final int id;
   final String name;
   final University? university;
