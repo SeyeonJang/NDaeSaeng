@@ -363,15 +363,30 @@ class MakeTeamButton extends StatelessWidget {
         child: GestureDetector(
           onTap: () async {
             AnalyticsUtil.logEvent('홈_팀만들기버튼_터치');
-            await Navigator.push(context, PageTransition(type: PageTransitionType.rightToLeftJoined, child: MeetCreateTeamInput(
-              onFinish: () {
-                // context.read<MeetCubit>().initMeetIntro();
-              },
-              state: context.read<MeetCubit>().state,
-            ), childCurrent: this)).then((value) async {
+            // await Navigator.push(context, PageTransition(type: PageTransitionType.rightToLeftJoined, child: MeetCreateTeamInput(
+            //   onFinish: () {
+            //     // context.read<MeetCubit>().initMeetIntro();
+            //   },
+            //   state: context.read<MeetCubit>().state,
+            // ), childCurrent: this)).then((value) async {
+            //   if (value == null) return;
+            //   await context.read<MeetCubit>().createNewTeam(value);
+            // });
+            await Navigator.push(context,
+                MaterialPageRoute(
+                  builder: (buildContext) => BlocProvider<MeetCubit>(
+                    create: (_) => MeetCubit(),
+                    child: MeetCreateTeamInput(
+                        onFinish: () { },
+                        state: context.read<MeetCubit>().state
+                    ),
+                  ),
+                ))
+                .then((value) async {
               if (value == null) return;
               await context.read<MeetCubit>().createNewTeam(value);
             });
+
             context.read<MeetCubit>().initMeetIntro();
           },
           child: Column(
