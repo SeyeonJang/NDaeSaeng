@@ -1,9 +1,12 @@
+import 'dart:io';
+
 import 'package:dart_flutter/src/domain/entity/location.dart';
 import 'package:dart_flutter/src/domain/entity/meet_team.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:dart_flutter/src/domain/entity/user.dart';
 
 import '../../../../domain/entity/blind_date_team.dart';
+import '../../../../domain/entity/university.dart';
 
 @JsonSerializable()
 class MeetState {
@@ -33,6 +36,9 @@ class MeetState {
   late int nowTeamId;
   late bool pickedTeam;
   late bool proposalStatus;
+  // meet - createTeamInput
+  late List<University> universities;
+  late File profileImageFile;
 
   MeetState ({
     required this.meetPageState,
@@ -54,7 +60,9 @@ class MeetState {
     required this.blindDateTeams,
     required this.nowTeamId,
     required this.pickedTeam,
-    required this.proposalStatus
+    required this.proposalStatus,
+    required this.universities,
+    required this.profileImageFile
   });
 
   MeetState.init() { // 초기값 설정
@@ -82,6 +90,10 @@ class MeetState {
     nowTeamId = 0;
     pickedTeam = false;
     proposalStatus = true;
+    universities = [
+      University(id: 0, name: '', department: '')
+    ];
+    profileImageFile = File('');
   }
 
   MeetState copy() => MeetState(
@@ -104,7 +116,9 @@ class MeetState {
     blindDateTeams: blindDateTeams,
     nowTeamId: nowTeamId,
     pickedTeam: pickedTeam,
-    proposalStatus: proposalStatus
+    proposalStatus: proposalStatus,
+    universities: universities,
+    profileImageFile: profileImageFile
   );
 
   void setAll(MeetState state) {
@@ -127,6 +141,8 @@ class MeetState {
       nowTeamId = state.nowTeamId;
       pickedTeam = state.pickedTeam;
       proposalStatus = state.proposalStatus;
+      universities = state.universities;
+      profileImageFile = state.profileImageFile;
   }
 
   MeetState setProposalStatus(bool proposalStatus) {
@@ -154,6 +170,14 @@ class MeetState {
 
   void setTeamCount(int teamCount) {
     this.teamCount = teamCount;
+  }
+
+  void addTeamCount() {
+    this.teamCount += 1;
+  }
+
+  void minusTeamCount() {
+    this.teamCount -= 1;
   }
 
   void setIsLoading(bool isLoading) {

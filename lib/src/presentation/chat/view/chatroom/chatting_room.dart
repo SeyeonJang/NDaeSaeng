@@ -9,7 +9,7 @@ import 'package:dart_flutter/src/common/util/analytics_util.dart';
 import 'package:dart_flutter/src/domain/entity/chat_room_detail.dart';
 import 'package:dart_flutter/src/domain/entity/type/blind_date_user_detail.dart';
 import 'package:dart_flutter/src/domain/entity/user.dart';
-import 'package:dart_flutter/src/presentation/chat/view/chat_profile.dart';
+import 'package:dart_flutter/src/presentation/chat/view/chatroom/chat_profile.dart';
 import 'package:dart_flutter/src/presentation/chat/viewmodel/state/chatting_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

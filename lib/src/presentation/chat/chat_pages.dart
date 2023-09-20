@@ -71,8 +71,8 @@ class _ChatPagesState extends State<ChatPages> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         _TapBarButton(name: "실시간 채팅", targetPage: 0, nowPage: _page, onTapNavigation: _onTapNavigation),
-                        // _TapBarButton(name: "받은 요청", targetPage: 1, nowPage: _page, onTapNavigation: _onTapNavigation),
-                        // _TapBarButton(name: "보낸 요청", targetPage: 2, nowPage: _page, onTapNavigation: _onTapNavigation),
+                        _TapBarButton(name: "받은 호감", targetPage: 1, nowPage: _page, onTapNavigation: _onTapNavigation),
+                        _TapBarButton(name: "보낸 호감", targetPage: 2, nowPage: _page, onTapNavigation: _onTapNavigation),
                       ],
                     ),
                   ),
@@ -89,8 +89,14 @@ class _ChatPagesState extends State<ChatPages> {
                   create: (context) => ChatCubit()..initChat(),
                   child: const ChatRealTime()
                 ),
-                // ChatResponseGet(),
-                // ChatResponseSend(),
+                BlocProvider<ChatCubit>(
+                    create: (context) => ChatCubit()..initResponseGet(),
+                    child: const ChatResponseGet()
+                ),
+                BlocProvider<ChatCubit>(
+                    create: (context) => ChatCubit()..initResponseSend(),
+                    child: const ChatResponseSend()
+                ),
               ],
             ),
           ),
@@ -111,7 +117,7 @@ class _TapBarButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
         onTap: () {
-          // AnalyticsUtil.logEvent("상단탭_선택", properties: {"탭 이름": name});
+          AnalyticsUtil.logEvent("상단탭_선택", properties: {"탭 이름": name});
           onTapNavigation(targetPage);
         },
         child: Container(

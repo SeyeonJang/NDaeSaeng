@@ -305,8 +305,6 @@ class _TopSectionInviteFriendState extends State<_TopSectionInviteFriend> {
                                                     myCodeCopy)); // 클립보드에 복사되었어요 <- 메시지 자동으로 Android에서 뜸 TODO : iOS는 확인하고 복사멘트 띄우기
                                               },
                                               style: ElevatedButton.styleFrom(
-                                                primary: Colors.white,
-                                                onPrimary: Color(0xffFE6059),
                                                 textStyle: TextStyle(
                                                   color: Color(0xffFE6059),
                                                 ),
@@ -628,7 +626,6 @@ class _BodySectionState extends State<_BodySection> {
     return blindDateTeam;
   }
 
-  // @override
   @override
   Widget build(BuildContext context) {
     return RefreshIndicator(
@@ -655,30 +652,20 @@ class _BodySectionState extends State<_BodySection> {
                   padding: EdgeInsets.symmetric(horizontal: SizeConfig.defaultSize * 1, vertical: SizeConfig.defaultSize),
                   child: Column(
                     children: [
-                      // widget.pagingController.itemList?.length == 0 // OtherTeam
-
-                      // widget.meetState.blindDateTeams.length == 0 // OtherTeam
-                      //   ? Text("이성 팀이 아직 없어요!")
-                      //   :
                       RefreshIndicator(
                           onRefresh: () async => widget.pagingController.refresh(),
                           child: Container(
-
-                            // height: widget.meetState.friends.isEmpty || widget.meetState.filteredFriends.isEmpty || widget.meetState.myTeams.length==0
-                            //     ? SizeConfig.screenHeight * 0.7
-                            //     : SizeConfig.screenHeight * 0.6,
                             height: SizeConfig.screenHeight * 0.9,
-
                             child: PagedListView<int, BlindDateTeam>(
                               pagingController: widget.pagingController,
                               builderDelegate: PagedChildBuilderDelegate<BlindDateTeam>(
                                   itemBuilder: (context, blindDateTeam, index) {
                                     return widget.pagingController.itemList?.length == 0
-                                        ? Text("이성 팀이 아직 없어요!")
+                                        ? const Text("이성 팀이 아직 없어요!")
                                         : Column(
                                       children: [
                                         SizedBox(height: SizeConfig.defaultSize * 0.6,),
-                                        MeetOneTeamCardview(team: blindDateTeam, isMyTeam: false, myTeamCount: widget.meetState.myTeams.length,)
+                                        MeetOneTeamCardview(team: blindDateTeam, isMyTeam: false, myTeamCount: widget.meetState.myTeams.length, myTeamId: nowTeam.id,)
                                       ],
                                     );
                                   },

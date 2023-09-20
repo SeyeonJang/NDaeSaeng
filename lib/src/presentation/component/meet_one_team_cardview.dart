@@ -12,8 +12,9 @@ class MeetOneTeamCardview extends StatelessWidget {
   final BlindDateTeam team;
   final bool isMyTeam;
   final int myTeamCount;
+  final int myTeamId;
 
-  const MeetOneTeamCardview({super.key, required this.team, required this.isMyTeam, required this.myTeamCount});
+  const MeetOneTeamCardview({Key? key, required this.team, required this.isMyTeam, required this.myTeamCount, required this.myTeamId});
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -40,7 +41,7 @@ class MeetOneTeamCardview extends StatelessWidget {
               MaterialPageRoute(
                 builder: (context) => BlocProvider<MeetCubit>(
                   create: (_) => MeetCubit(),
-                  child: MeetOtherTeamDetail(teamId: team.id),
+                  child: MeetOtherTeamDetail(teamId: team.id, myTeamId: myTeamId,),
                 ),
               ),
             );
