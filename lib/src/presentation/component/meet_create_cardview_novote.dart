@@ -1,7 +1,5 @@
 import 'package:dart_flutter/src/common/util/analytics_util.dart';
-import 'package:dart_flutter/src/domain/entity/meet_team.dart';
 import 'package:flutter/material.dart';
-import 'package:dart_flutter/src/domain/entity/user.dart';
 import '../../../res/config/size_config.dart';
 import '../../domain/entity/type/blind_date_user_detail.dart';
 
@@ -26,7 +24,7 @@ class MeetCreateCardviewNovote extends StatelessWidget {
             color: Colors.grey.shade300,
             spreadRadius: 1,
             blurRadius: 2.0,
-            offset: Offset(0,1), // changes position of shadow
+            offset: const Offset(0,1), // changes position of shadow
           ),
         ],
       ),
@@ -62,13 +60,13 @@ class MeetCreateCardviewNovote extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Container(
+                          SizedBox(
                             height: SizeConfig.defaultSize * 2.5,
                             child: Row( // 위층 (이름 ~ 년생)
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                Container(
+                                SizedBox(
                                   width: SizeConfig.defaultSize * 21,
                                   height: SizeConfig.defaultSize * 3.3,
                                   child: Row(
@@ -114,13 +112,13 @@ class MeetCreateCardviewNovote extends StatelessWidget {
                               ],
                             ),
                           ),
-                          Container(
+                          SizedBox(
                             height: SizeConfig.defaultSize * 2.5,
                             child: Row( // 2층
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
                                 SizedBox(width: SizeConfig.defaultSize * 0.5,),
-                                Container(
+                                SizedBox(
                                   width: SizeConfig.screenWidth * 0.55,
                                   child: GestureDetector(
                                     onTap: () {
@@ -143,14 +141,14 @@ class MeetCreateCardviewNovote extends StatelessWidget {
                               ],
                             ),
                           ),
-                          Container(
+                          SizedBox(
                             width: SizeConfig.defaultSize * 22,
                             height: SizeConfig.defaultSize * 2.5,
                             child: Row( // 2층
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
-                                SizedBox(width: SizeConfig.defaultSize * 0.5,),
-                                Container(
+                                  SizedBox(width: SizeConfig.defaultSize * 0.5,),
+                                SizedBox(
                                   width: SizeConfig.screenWidth * 0.55,
                                   child: GestureDetector(
                                     onTap: () {
@@ -222,7 +220,7 @@ class VoteView extends StatelessWidget { // 받은 투표 있을 때
           height: SizeConfig.defaultSize * 3.5,
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(8),
-              color: Color(0xffFF5C58)
+              color: const Color(0xffFF5C58)
           ),
           alignment: Alignment.center,
           child: Padding(
@@ -276,7 +274,7 @@ class NoVoteView extends StatelessWidget { // 받은 투표 없을 때
           ),
           alignment: Alignment.center,
           child: Text("아직 받은 투표를 프로필에 넣지 않았어요!", style: TextStyle(
-              color: Color(0xffFF5C58),
+              color: const Color(0xffFF5C58),
               fontSize: SizeConfig.defaultSize * 1.3
           ),)
       ),

@@ -1,12 +1,10 @@
 import 'package:dart_flutter/res/config/size_config.dart';
 import 'package:dart_flutter/src/common/util/analytics_util.dart';
-import 'package:dart_flutter/src/presentation/meet/view/meet_create_team.dart';
 import 'package:dart_flutter/src/presentation/meet/view/meet_create_team_input.dart';
 import 'package:dart_flutter/src/presentation/meet/viewmodel/meet_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:page_transition/page_transition.dart';
 import '../viewmodel/state/meet_state.dart';
 
 class MeetIntro extends StatelessWidget {
@@ -40,7 +38,7 @@ class MeetIntro extends StatelessWidget {
                       ],
                     ),
                   )
-                : MakeTeamButton();
+                : MakeTeamButton(ancestorContext: context);
           }
         )
     );
@@ -349,8 +347,11 @@ class BodySection extends StatelessWidget {
 }
 
 class MakeTeamButton extends StatelessWidget {
-  const MakeTeamButton({
+  BuildContext ancestorContext;
+
+  MakeTeamButton({
     super.key,
+    required this.ancestorContext
   });
 
   @override
@@ -372,22 +373,23 @@ class MakeTeamButton extends StatelessWidget {
             //   if (value == null) return;
             //   await context.read<MeetCubit>().createNewTeam(value);
             // });
-            await Navigator.push(context,
+            await Navigator.push(ancestorContext,
                 MaterialPageRoute(
-                  builder: (buildContext) => BlocProvider<MeetCubit>(
+                  builder: (context) => BlocProvider<MeetCubit>(
                     create: (_) => MeetCubit(),
                     child: MeetCreateTeamInput(
                         onFinish: () { },
-                        state: context.read<MeetCubit>().state
+                        state: ancestorContext.read<MeetCubit>().state,
+                        ancestorContext: ancestorContext,
                     ),
                   ),
                 ))
                 .then((value) async {
               if (value == null) return;
-              await context.read<MeetCubit>().createNewTeam(value);
+              await ancestorContext.read<MeetCubit>().createNewTeam(value);
             });
 
-            context.read<MeetCubit>().initMeetIntro();
+            ancestorContext.read<MeetCubit>().initMeetIntro();
           },
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
