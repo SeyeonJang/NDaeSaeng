@@ -4,6 +4,8 @@ import 'package:dart_flutter/src/common/util/toast_util.dart';
 import 'package:dart_flutter/src/presentation/chat/chat_pages.dart';
 import 'package:dart_flutter/src/presentation/chat/viewmodel/chat_cubit.dart';
 import 'package:dart_flutter/src/presentation/meet/view/meet_board.dart';
+import 'package:dart_flutter/src/presentation/meet/view/meet_intro.dart';
+import 'package:dart_flutter/src/presentation/meet/view/meet_standby.dart';
 import 'package:dart_flutter/src/presentation/meet/viewmodel/meet_cubit.dart';
 import 'package:dart_flutter/src/presentation/mypage/mypages.dart';
 import 'package:dart_flutter/src/presentation/mypage/viewmodel/mypages_cubit.dart';
@@ -32,16 +34,21 @@ class _DartPageViewState extends State<DartPageView> {
       _page = page;
       _pageController.jumpToPage(page); // 페이지 전환
       if (page == 0) {
-        AnalyticsUtil.logEvent('하단 탭 터치_투표');
+        // AnalyticsUtil.logEvent('하단 탭 터치_투표');
+        AnalyticsUtil.logEvent('하단 탭 터치_홈');
       } else if (page == 1) {
-        AnalyticsUtil.logEvent('하단 탭 터치_받은투표');
-      } else if (page == 2) {
+        // AnalyticsUtil.logEvent('하단 탭 터치_받은투표');
         AnalyticsUtil.logEvent('하단 탭 터치_과팅');
-      } else if (page == 3) {
+      } else if (page == 2) {
+        // AnalyticsUtil.logEvent('하단 탭 터치_과팅');
         AnalyticsUtil.logEvent('하단 탭 터치_채팅');
-      } else if (page == 4) {
+      } else if (page == 3) {
+        // AnalyticsUtil.logEvent('하단 탭 터치_채팅');
         AnalyticsUtil.logEvent('하단 탭 터치_내정보');
       }
+      // else if (page == 4) {
+      //   AnalyticsUtil.logEvent('하단 탭 터치_내정보');
+      // }
     });
   }
 
@@ -57,7 +64,7 @@ class _DartPageViewState extends State<DartPageView> {
           return Future.value(false);
         }
         return Future.value(true);
-      case 1 || 2 || 3 || 4:
+      case 1 || 2 || 3:
         _onTapNavigation(0);
         return Future.value(false);
       default:
@@ -66,13 +73,17 @@ class _DartPageViewState extends State<DartPageView> {
   }
 
   final _tabs = [
-    BlocProvider<VoteCubit>(
-      create: (context) => VoteCubit()..initVotes(),
-      child: const VotePages(),
-    ),
-    BlocProvider<VoteListCubit>(
-      create: (context) => VoteListCubit()..initVotes(),
-      child: const VoteListPages(),
+    // BlocProvider<VoteCubit>(
+    //   create: (context) => VoteCubit()..initVotes(),
+    //   child: const VotePages(),
+    // ),
+    // BlocProvider<VoteListCubit>(
+    //   create: (context) => VoteListCubit()..initVotes(),
+    //   child: const VoteListPages(),
+    // ),
+    BlocProvider<MeetCubit>(
+      create: (context) => MeetCubit()..initMeetIntro(),
+      child: const MeetIntro(),
     ),
     BlocProvider<MeetCubit>(
       create: (context) => MeetCubit()..initMeet(),
@@ -115,28 +126,39 @@ class _DartPageViewState extends State<DartPageView> {
         type: BottomNavigationBarType.fixed,
         backgroundColor: Colors.white,
         selectedFontSize: SizeConfig.defaultSize * 1.15,
-        selectedItemColor: _page == 2 || _page == 3 ? Color(0xffFE6059) : Color(0xff7C83FD),
+        // selectedItemColor: Color(0xffFE6059),
+        selectedItemColor: _page == 3 ? Color(0xff7C83FD) : Color(0xffFE6059),
         unselectedFontSize: SizeConfig.defaultSize * 1.1,
         unselectedItemColor: Colors.grey.shade400,
         items: [
-          BottomNavigationBarItem(
-            icon: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Icon(Icons.play_arrow_rounded, size: SizeConfig.defaultSize * 3.7),
-              ],
-            ),
-            label: "투표",
-          ),
+          // BottomNavigationBarItem(
+          //   icon: Column(
+          //     mainAxisAlignment: MainAxisAlignment.start,
+          //     children: [
+          //       Icon(Icons.play_arrow_rounded, size: SizeConfig.defaultSize * 3.7),
+          //     ],
+          //   ),
+          //   label: "투표",
+          // ),
+          // BottomNavigationBarItem(
+          //   icon: Column(
+          //     mainAxisAlignment: MainAxisAlignment.spaceAround,
+          //     children: [
+          //       Icon(Icons.notifications_rounded, size: SizeConfig.defaultSize * 2.8),
+          //       SizedBox(height: SizeConfig.defaultSize * 0.4)
+          //     ],
+          //   ),
+          //   label: "받은 투표",
+          // ),
           BottomNavigationBarItem(
             icon: Column(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                Icon(Icons.notifications_rounded, size: SizeConfig.defaultSize * 2.8),
-                SizedBox(height: SizeConfig.defaultSize * 0.4)
+                Icon(Icons.home_filled, size: SizeConfig.defaultSize * 2.6),
+                SizedBox(height: SizeConfig.defaultSize * 0.4),
               ],
             ),
-            label: "받은 투표",
+            label: "홈",
           ),
           BottomNavigationBarItem(
             icon: Column(

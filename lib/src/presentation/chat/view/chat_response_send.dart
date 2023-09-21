@@ -4,6 +4,7 @@ import 'package:dart_flutter/src/domain/entity/proposal.dart';
 import 'package:dart_flutter/src/domain/entity/type/blind_date_user.dart';
 import 'package:dart_flutter/src/presentation/chat/view/chat_send_one_team_view.dart';
 import 'package:dart_flutter/src/presentation/chat/viewmodel/chat_cubit.dart';
+import 'package:dart_flutter/src/presentation/component/meet_progress_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../res/config/size_config.dart';
@@ -14,18 +15,22 @@ class ChatResponseSend extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ChatCubit, ChatState>(
-      builder: (context, state) {
-        return Scaffold(
-          backgroundColor: Colors.grey.shade50,
-          body: state.requestedList.length == 0
-              ? const _NoResponseSendView()
-              : Padding(
+    return Stack(
+      children: [
+
+      BlocBuilder<ChatCubit, ChatState>(
+        builder: (context, state) {
+          if (!state.isLoading) {
+            return Scaffold(
+              backgroundColor: Colors.grey.shade50,
+              body: state.requestedList.length == 0
+                  ? const _NoResponseSendView()
+                  : Padding(
                   padding: EdgeInsets.all(SizeConfig.defaultSize),
                   child: Column(
                       children: [
                         // for (int i=0; i<1; i++)
-                        for (int i=0; i<state.receivedList.length; i++)
+                        for (int i = 0; i < state.receivedList.length; i++)
                           Column(
                             children: [
                               ChatSendOneTeamView(chatState: state, proposal: state.receivedList[i],),
@@ -36,8 +41,21 @@ class ChatResponseSend extends StatelessWidget {
                             ],
                           ),
                       ])),
-        );
-      }
+            );
+          }
+          return const SizedBox.shrink();
+        }
+      ),
+
+        // 로딩 화면
+        BlocBuilder<ChatCubit, ChatState>(builder: (context, state) {
+          const String text = "보낸 호감을 불러오는 중입니다 . . .";
+          if (state.isLoading) {
+            return const MeetProgressIndicatorWithMessage(text: text);
+          }
+          return const SizedBox.shrink();
+        }),
+      ],
     );
   }
 }

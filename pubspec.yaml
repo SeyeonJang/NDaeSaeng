@@ -88,6 +88,8 @@ dependencies:
   firebase_analytics: ^10.4.4
   supabase_flutter: ^1.10.11
   shared_preferences: ^2.2.0
+  sqflite: ^2.3.0
+  path: ^1.8.3
 
 dev_dependencies:
   flutter_test:
@@ -114,6 +116,7 @@ flutter:
   # images에 추가된 모든 이미지를 프로젝트 코드에서 사용할 수 있도록
   assets:
     - assets/images/
+    - assets/dbs/
 
   # To add assets to your application, add an assets section, like this:
   # assets:

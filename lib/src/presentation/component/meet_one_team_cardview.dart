@@ -14,7 +14,7 @@ class MeetOneTeamCardview extends StatelessWidget {
   final int myTeamCount;
   final int myTeamId;
 
-  const MeetOneTeamCardview({super.key, required this.team, required this.isMyTeam, required this.myTeamCount, required this.myTeamId});
+  const MeetOneTeamCardview({Key? key, required this.team, required this.isMyTeam, required this.myTeamCount, required this.myTeamId});
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -120,9 +120,9 @@ class MeetOneTeamCardview extends StatelessWidget {
                                 shape: BoxShape.circle,
                               ),
                               child: Center(
-                                child: team.teamUsers[i].profileImageUrl == "DEFAULT" || team.teamUsers[i].profileImageUrl.startsWith("https://")
+                                child: team.teamUsers[i].getProfileImageUrl() == "DEFAULT" || team.teamUsers[i].getProfileImageUrl().startsWith("https://")
                                   ? Image.asset('assets/images/profile-mockup3.png', width: SizeConfig.defaultSize * 4, height: SizeConfig.defaultSize * 4, fit: BoxFit.cover,)
-                                  : Image.network(team.teamUsers[i].profileImageUrl, width: SizeConfig.defaultSize * 4, height: SizeConfig.defaultSize * 4, fit: BoxFit.cover,)
+                                  : Image.network(team.teamUsers[i].getProfileImageUrl(), width: SizeConfig.defaultSize * 4, height: SizeConfig.defaultSize * 4, fit: BoxFit.cover,)
                               ),
                             ),
                           ),
@@ -146,7 +146,7 @@ class MeetOneTeamCardview extends StatelessWidget {
                         ),
                         Container(
                           width: SizeConfig.defaultSize * 24,
-                          child: Text(team.teamUsers.map((user) => user.department).toSet().fold('', (previousValue, element) => previousValue.isEmpty ? element : '$previousValue & $element'),
+                          child: Text(team.teamUsers.map((user) => user.getDepartment()).toSet().fold('', (previousValue, element) => previousValue.isEmpty ? element : '$previousValue & $element'),
                             style: TextStyle(fontSize: SizeConfig.defaultSize * 1.3, overflow: TextOverflow.ellipsis, color: Color(0xffFE6059), fontWeight: FontWeight.w600),),
                         )
                       ],

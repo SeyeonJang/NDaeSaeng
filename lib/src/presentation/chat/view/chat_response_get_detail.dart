@@ -1,6 +1,8 @@
 import 'package:dart_flutter/src/domain/entity/blind_date_team_detail.dart';
+import 'package:dart_flutter/src/domain/mapper/student_mapper.dart';
 import 'package:dart_flutter/src/presentation/chat/viewmodel/chat_cubit.dart';
 import 'package:dart_flutter/src/presentation/component/meet_one_member_cardview_novote.dart';
+import 'package:dart_flutter/src/presentation/component/meet_progress_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../res/config/size_config.dart';
@@ -10,8 +12,9 @@ import '../viewmodel/state/chat_state.dart';
 
 class ChatResponseGetDetail extends StatelessWidget {
   int teamId;
+  int proposalId;
 
-  ChatResponseGetDetail({super.key, required this.teamId});
+  ChatResponseGetDetail({super.key, required this.teamId, required this.proposalId});
 
   @override
   Widget build(BuildContext context) {
@@ -26,12 +29,10 @@ class ChatResponseGetDetail extends StatelessWidget {
                   width: SizeConfig.screenWidth,
                   height: SizeConfig.screenHeight,
                   color: Colors.white,
-                  child: Column(
+                  child: const Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        CircularProgressIndicator(color: Color(0xffFE6059)),
-                          SizedBox(height: SizeConfig.defaultSize * 5,),
-                        Text("팀 정보를 불러오고 있어요 . . .", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.8),)
+                        MeetProgressIndicatorWithMessage(text: "팀 정보를 불러오고 있어요 . . ."),
                       ],
                     ),
                 ),
@@ -59,7 +60,7 @@ class ChatResponseGetDetail extends StatelessWidget {
                           ...List.generate(blindDateTeamDetail.teamUsers.length, (index) {
                             return Column(
                               children: [
-                                MeetOneMemberCardviewNoVote(userResponse: blindDateTeamDetail.teamUsers[index], university: blindDateTeamDetail.universityName,),
+                                MeetOneMemberCardviewNoVote(userResponse: StudentMapper.toBlindDateUserDetail(blindDateTeamDetail.teamUsers[index]), university: blindDateTeamDetail.universityName,),
                                 SizedBox(height: SizeConfig.defaultSize * 1.5),
                               ],
                             );
@@ -165,7 +166,7 @@ class ChatResponseGetDetail extends StatelessWidget {
                                               GestureDetector(
                                                 onTap: () {
                                                   Navigator.pop(modalContext, true);
-                                                  context.read<ChatCubit>().rejectChatProposal(blindDateTeamDetail.id);
+                                                  context.read<ChatCubit>().rejectChatProposal(proposalId);
                                                   showDialog<String>(
                                                       context: modalContext,
                                                       builder: (BuildContext dialogContext) {
@@ -292,7 +293,7 @@ class ChatResponseGetDetail extends StatelessWidget {
                                                 showDialog<String>(
                                                     context: modalContext,
                                                     builder: (BuildContext dialogContext) {
-                                                      context.read<ChatCubit>().acceptChatProposal(blindDateTeamDetail.id);
+                                                      context.read<ChatCubit>().acceptChatProposal(proposalId);
                                                       Future.delayed(Duration(seconds: 2), () {
                                                         Navigator.pop(dialogContext);
                                                       });
