@@ -1,7 +1,3 @@
-import 'package:dart_flutter/src/domain/entity/blind_date_team.dart';
-import 'package:dart_flutter/src/domain/entity/location.dart';
-import 'package:dart_flutter/src/domain/entity/proposal.dart';
-import 'package:dart_flutter/src/domain/entity/type/blind_date_user.dart';
 import 'package:dart_flutter/src/presentation/chat/view/chat_send_one_team_view.dart';
 import 'package:dart_flutter/src/presentation/chat/viewmodel/chat_cubit.dart';
 import 'package:dart_flutter/src/presentation/component/meet_progress_indicator.dart';
@@ -30,10 +26,10 @@ class ChatResponseSend extends StatelessWidget {
                   child: Column(
                       children: [
                         // for (int i=0; i<1; i++)
-                        for (int i = 0; i < state.receivedList.length; i++)
+                        for (int i = 0; i < state.requestedList.length; i++)
                           Column(
                             children: [
-                              ChatSendOneTeamView(chatState: state, proposal: state.receivedList[i],),
+                              ChatSendOneTeamView(chatState: state, proposal: state.requestedList[i],),
                               // ChatSendOneTeamView(chatState: state, proposal: Proposal(proposalId: 1, createdTime: DateTime.now(),
                               //   requestingTeam: BlindDateTeam(id: 0, name: '요이하', averageBirthYear: 2012.3333, regions: [Location(id: 1, name: '서울')], universityName: '보낸대학교', isCertifiedTeam: true , teamUsers: [BlindDateUser(id: 1, name: '이번', profileImageUrl: 'DEFAULT', department: '무슨학과')]),
                               //   requestedTeam: BlindDateTeam(id: 0, name: '하이요', averageBirthYear: 2002.3333, regions: [Location(id: 0, name: '인천')], universityName: '받은대학교', isCertifiedTeam: true , teamUsers: [BlindDateUser(id: 0, name: '일번', profileImageUrl: 'DEFAULT', department: '무슨학과'), BlindDateUser(id: 2, name: '삼번', profileImageUrl: 'DEFAULT', department: '무슨무슨학과')]),),),
