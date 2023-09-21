@@ -18,7 +18,8 @@ class MeetMyTeamDetail extends StatelessWidget {
     return BlocBuilder<MeetCubit, MeetState>(
         builder: (context, state) {
           return FutureBuilder<BlindDateTeamDetail>(
-              future: context.read<MeetCubit>().getBlindDateTeam(teamId),
+              // future: context.read<MeetCubit>().getBlindDateTeam(teamId),
+              future: context.read<MeetCubit>().getMyTeam(teamId.toString()),
               builder: (context, futureState) {
                 if (futureState.connectionState == ConnectionState.waiting) {
                   return Scaffold(

@@ -5,6 +5,7 @@ import 'package:dart_flutter/src/data/model/proposal_request_dto.dart';
 import 'package:dart_flutter/src/domain/entity/blind_date_team.dart';
 import 'package:dart_flutter/src/domain/entity/location.dart';
 import 'package:dart_flutter/src/domain/entity/meet_team.dart';
+import 'package:dart_flutter/src/domain/mapper/team_mapper.dart';
 import 'package:dart_flutter/src/domain/use_case/ghost_use_case.dart';
 import 'package:dart_flutter/src/domain/use_case/meet_use_case.dart';
 import 'package:dart_flutter/src/domain/use_case/university_use_case.dart';
@@ -255,6 +256,11 @@ class MeetCubit extends Cubit<MeetState> {
     MeetTeam newMeetTeam = await _meetUseCase.getTeam(teamId);
     state.setMyTeam(newMeetTeam);
     return newMeetTeam;
+  }
+
+  Future<BlindDateTeamDetail> getMyTeam(String teamId) async {
+    MeetTeam newMeetTeam = await _meetUseCase.getTeam(teamId);
+    return TeamMapper.toBlindDateTeamDetail(newMeetTeam);
   }
 
   Future<void> getMyTeams({bool put = true}) async {
