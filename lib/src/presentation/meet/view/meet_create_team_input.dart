@@ -236,7 +236,7 @@ class _MeetCreateTeamInputState extends State<MeetCreateTeamInput> {
                                             AnalyticsUtil.logEvent("과팅_팀만들기_팀원추가하기버튼_터치");
                                             state.addTeamCount();
                                             setState(() {
-                                              teamMemberCount = state.teamCount;
+                                              teamMemberCount = teamMemberCount + 1;
                                               teamMemberList.add(GhostFriend());
                                             });
                                           // _ShowModalBottomSheet(context, friendsList);
