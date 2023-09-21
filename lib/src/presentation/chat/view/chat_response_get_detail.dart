@@ -17,7 +17,7 @@ class ChatResponseGetDetail extends StatelessWidget {
   ChatResponseGetDetail({super.key, required this.teamId, required this.proposalId});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext contextTop) {
     return BlocBuilder<ChatCubit, ChatState>(
       builder: (context, state) {
         return FutureBuilder<BlindDateTeamDetail>(
@@ -172,6 +172,7 @@ class ChatResponseGetDetail extends StatelessWidget {
                                                       builder: (BuildContext dialogContext) {
                                                         Future.delayed(Duration(seconds: 2), () {
                                                           Navigator.pop(dialogContext);
+                                                          Navigator.pop(contextTop);
                                                         });
                                                         return AlertDialog(
                                                           surfaceTintColor: Colors.white,
@@ -296,6 +297,7 @@ class ChatResponseGetDetail extends StatelessWidget {
                                                       context.read<ChatCubit>().acceptChatProposal(proposalId);
                                                       Future.delayed(Duration(seconds: 2), () {
                                                         Navigator.pop(dialogContext);
+                                                        Navigator.pop(contextTop);
                                                       });
                                                       return AlertDialog(
                                                         surfaceTintColor: Colors.white,
