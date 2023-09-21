@@ -39,7 +39,7 @@ class _MeetCreateTeamInputState extends State<MeetCreateTeamInput> {
   @override
   void initState() {
     super.initState();
-    // AnalyticsUtil.logEvent("과팅_팀만들기_접속");
+    AnalyticsUtil.logEvent("홈_팀만들기_접속");
     state = widget.state;
     teamMemberList = [];
     teamMemberCount = 0;
@@ -156,7 +156,7 @@ class _MeetCreateTeamInputState extends State<MeetCreateTeamInput> {
 
     return WillPopScope(
       onWillPop: () async {
-        AnalyticsUtil.logEvent("과팅_팀만들기_뒤로가기_윌팝스코프");
+        AnalyticsUtil.logEvent("홈_팀만들기_뒤로가기_윌팝스코프");
         // return _onBackKey();
         await _onBackKey();
         Navigator.pop(context, true);
@@ -192,7 +192,7 @@ class _MeetCreateTeamInputState extends State<MeetCreateTeamInput> {
                             children: [
                               IconButton(
                                   onPressed: () async {
-                                    AnalyticsUtil.logEvent("과팅_팀만들기_뒤로가기_터치");
+                                    AnalyticsUtil.logEvent("홈_팀만들기_뒤로가기_터치");
                                     await _onBackKey();
                                     Navigator.pop(context, true);
                                   },
@@ -233,7 +233,7 @@ class _MeetCreateTeamInputState extends State<MeetCreateTeamInput> {
                                       ? Container()
                                       : InkWell( // 팀원 추가하기 버튼 *******
                                         onTap: () {
-                                            AnalyticsUtil.logEvent("과팅_팀만들기_팀원추가하기버튼_터치");
+                                            AnalyticsUtil.logEvent("홈_팀만들기_팀원추가하기버튼_터치");
                                             state.addTeamCount();
                                             setState(() {
                                               teamMemberCount = teamMemberCount + 1;
@@ -316,7 +316,7 @@ class _CreateTeamTopSectionState extends State<_CreateTeamTopSection> {
           children: [
             GestureDetector(
               onTap: () {
-                AnalyticsUtil.logEvent("과팅_팀만들기_학교_터치");
+                // AnalyticsUtil.logEvent("홈_팀만들기_학교_터치");
               },
               child: Row(children: [
                 Text("학교",
@@ -337,7 +337,7 @@ class _CreateTeamTopSectionState extends State<_CreateTeamTopSection> {
               SizedBox(height: SizeConfig.defaultSize * 0.5),
             GestureDetector(
               onTap: () {
-                AnalyticsUtil.logEvent("과팅_팀만들기_팀명_터치");
+                // AnalyticsUtil.logEvent("홈_팀만들기_팀명_터치");
               },
               child: Row(children: [
                 Text("팀명",
@@ -353,6 +353,9 @@ class _CreateTeamTopSectionState extends State<_CreateTeamTopSection> {
                       maxLength: 7,
                       onChanged: (value) {
                         setState(() {
+                          AnalyticsUtil.logEvent("홈_팀만들기_팀명_입력", properties: {
+                            '팀명': value
+                          });
                           widget.state.teamName = value;
                           widget.handleTeamNameChanged(value);
                         });
@@ -419,7 +422,7 @@ class MemberCardView extends StatelessWidget {
                     children: [
                       GestureDetector(
                         onTap: () {
-                          AnalyticsUtil.logEvent("과팅_팀만들기_카드_프사_터치");
+                          AnalyticsUtil.logEvent("홈_팀만들기_카드_프사_터치");
                         },
                         child: profileImageUrl == "DEFAULT"
                             ? ClipOval(
@@ -451,7 +454,7 @@ class MemberCardView extends StatelessWidget {
                                     children: [
                                       GestureDetector(
                                         onTap: () {
-                                          AnalyticsUtil.logEvent("과팅_팀만들기_카드_정보_터치", properties: {
+                                          AnalyticsUtil.logEvent("홈_팀만들기_카드_정보_터치", properties: {
                                             'nickname': userResponse.personalInfo?.nickname ?? "닉네임없음",
                                             'birthYear': userResponse.personalInfo?.birthYear.toString().substring(2,4)??"??",
                                             'verification': userResponse.personalInfo?.verification.isVerificationSuccess.toString() ?? "false"
@@ -667,6 +670,9 @@ class _MemberCardViewNoVoteState extends State<MemberCardViewNoVote> {
         isSelectImage = true;
         widget.context.read<MeetCubit>().setProfileImage(_selectedImage!);
       });
+      AnalyticsUtil.logEvent('홈_팀만들기_친구사진입력', properties: {
+        '친구 인덱스': widget.memberIndex
+      });
     }
   }
 
@@ -683,7 +689,7 @@ class _MemberCardViewNoVoteState extends State<MemberCardViewNoVote> {
   void _selectOnTypeAhead() {
     setState(() {
       isSelectedOnTypeAhead = true;
-      // AnalyticsUtil.logEvent("회원가입_학과_선택");
+      AnalyticsUtil.logEvent("홈_팀만들기_친구학과선택");
     });
   }
   void _setUniversity(University university) {
@@ -717,8 +723,11 @@ class _MemberCardViewNoVoteState extends State<MemberCardViewNoVote> {
             children: [
               Row(
                 children: [
-                  GestureDetector( // TODO : 프로필 사진 View(V)
+                  GestureDetector(
                     onTap: () {
+                      AnalyticsUtil.logEvent('홈_팀만들기_친구사진입력터치', properties: {
+                        '친구 인덱스': widget.memberIndex
+                      });
                       _pickImage();
                     },
                     child: ClipOval(
@@ -760,6 +769,9 @@ class _MemberCardViewNoVoteState extends State<MemberCardViewNoVote> {
                                 setState(() {
                                   widget.name = value;
                                   widget.onSetTeamMemberName(widget.memberIndex, value);
+                                });
+                                AnalyticsUtil.logEvent("홈_팀만들기_친구이름입력", properties: {
+                                  '친구 인덱스': widget.memberIndex
                                 });
                               },
                               decoration: InputDecoration(
@@ -816,6 +828,10 @@ class _MemberCardViewNoVoteState extends State<MemberCardViewNoVote> {
                               onChanged: (value) {
                                 setState(() {
                                   widget.onSetTeamMemberBirthYear(widget.memberIndex, value);
+                                });
+                                AnalyticsUtil.logEvent("홈_팀만들기_친구생년입력", properties: {
+                                  '친구 인덱스': widget.memberIndex,
+                                  '친구 생년': value
                                 });
                               },
                               decoration: InputDecoration(
@@ -1054,7 +1070,7 @@ class _CreateTeamBottomSectionState extends State<_CreateTeamBottomSection> {
                         fontSize: SizeConfig.defaultSize * 1.6),),
                     TextButton(
                         onPressed: () {
-                          AnalyticsUtil.logEvent("과팅_팀만들기_만나고싶은지역버튼_터치");
+                          AnalyticsUtil.logEvent("홈_팀만들기_만나고싶은지역버튼_터치");
                           List<Map<String, dynamic>> citiesData = [];
                           for (int i = 0; i < widget.serverLocations.length; i++) {
                             citiesData.add({"id": widget.serverLocations[i].id, "name": widget.serverLocations[i].name, "isChecked": false});
@@ -1099,7 +1115,7 @@ class _CreateTeamBottomSectionState extends State<_CreateTeamBottomSection> {
                                                               favorite['isChecked'] = val;
                                                             });
                                                             if (favorite['isChecked']) {
-                                                              AnalyticsUtil.logEvent("과팅_팀만들기_만나고싶은지역_지역선택", properties: {
+                                                              AnalyticsUtil.logEvent("홈_팀만들기_만나고싶은지역_지역선택", properties: {
                                                                 'id': favorite['id'] ?? '알수없음',
                                                                 'regieon': favorite['name'] ?? '알수없음'
                                                               });
@@ -1176,7 +1192,7 @@ class _CreateTeamBottomSectionState extends State<_CreateTeamBottomSection> {
                       inactiveTrackColor: Colors.grey.shade200,
                       onChanged: (bool value) {
                         setState(() {
-                          AnalyticsUtil.logEvent("과팅_팀만들기_우리학교사람들에게보이지않기_토글", properties: {
+                          AnalyticsUtil.logEvent("홈_팀만들기_우리학교사람들에게보이지않기_토글", properties: {
                             "toggle": value.toString()
                           });
                           light = value;
@@ -1191,19 +1207,16 @@ class _CreateTeamBottomSectionState extends State<_CreateTeamBottomSection> {
               SizedBox(height: SizeConfig.defaultSize * 0.3,),
               GestureDetector(
                 onTap: () async {
-                  // AnalyticsUtil.logEvent("과팅_팀만들기_팀만들기버튼_터치", properties: {
-                  //   "teamId": meetTeam.id,
-                  //   "teamName": meetTeam.name,
-                  //   "teamLocationsCount": meetTeam.locations.length,
-                  //   "teamMembersCount": meetTeam.members.length + 1,
-                  //   "toggle": meetTeam.canMatchWithSameUniversity,
-                  //   "university": meetTeam.university?.name ?? "알수없음",
-                  // });
+                  AnalyticsUtil.logEvent("t", properties: {
+                    "teamId": meetTeam.id,
+                    "teamName": meetTeam.name,
+                    "teamLocationsCount": meetTeam.locations.length,
+                    "teamMembersCount": meetTeam.members.length + 1,
+                    "toggle": meetTeam.canMatchWithSameUniversity,
+                    "university": meetTeam.university?.name ?? "알수없음",
+                  });
 
                   if (meetTeam.members.length == 1) {
-                    print('친구가 1명입니다.');
-                    print('팀명: ${meetTeam.name}, 지역: ${meetTeam.locations.toString()}');
-                    print('name: ${meetTeam.members[0].getName()}, birthYear: ${meetTeam.members[0].getBirthYear()}, universityId: ${meetTeam.members[0].getUniversityId()}');
                     if (meetTeam.members[0].getName().isNotEmpty && meetTeam.members[0].getBirthYear() != 0 && meetTeam.members[0].getUniversityId() != 0 && meetTeam.name != '' && meetTeam.locations.isNotEmpty) {
                       widget.onFinish();
                       Navigator.pop(widget.ancestorContext, meetTeam);
@@ -1211,10 +1224,6 @@ class _CreateTeamBottomSectionState extends State<_CreateTeamBottomSection> {
                       ToastUtil.showMeetToast('모든 정보를 기입해주세요!', 1);
                     }
                   } else if (meetTeam.members.length == 2) {
-                    print('친구가 2명입니다.');
-                    print('팀명: ${meetTeam.name}, 지역: ${meetTeam.locations.toString()}');
-                    print('0번 name: ${meetTeam.members[0].getName()}, birthYear: ${meetTeam.members[0].getBirthYear()}, universityId: ${meetTeam.members[0].getUniversityId()}');
-                    print('1번 name: ${meetTeam.members[1].getName()}, birthYear: ${meetTeam.members[1].getBirthYear()}, universityId: ${meetTeam.members[1].getUniversityId()}');
                     if (meetTeam.members[0].getName().isNotEmpty && meetTeam.members[0].getBirthYear() != 0 && meetTeam.members[0].getUniversityId() != 0
                         && meetTeam.members[1].getName().isNotEmpty && meetTeam.members[1].getBirthYear() != 0 && meetTeam.members[1].getUniversityId() != 0
                         &&  meetTeam.name != '' && meetTeam.locations.isNotEmpty) {
