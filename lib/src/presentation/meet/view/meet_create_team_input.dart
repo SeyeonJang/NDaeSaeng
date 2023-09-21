@@ -74,6 +74,12 @@ class _MeetCreateTeamInputState extends State<MeetCreateTeamInput> {
   }
 
   void setTeamMemberbirthYear(int memberIndex, String birthYear) {
+    if (birthYear.isEmpty) {
+      setState(() {
+        teamMemberList[memberIndex].birthYear = 0;
+      });
+      return;
+    }
     int birthYearInt = int.parse(birthYear);
     if (birthYearInt < 70) {  // 70을 기준으로 년도 반환
       birthYearInt += 2000;
@@ -82,8 +88,6 @@ class _MeetCreateTeamInputState extends State<MeetCreateTeamInput> {
     }
     setState(() {
       teamMemberList[memberIndex].birthYear = birthYearInt;
-      print('0000000');
-      print(birthYearInt);
     });
   }
 
@@ -805,7 +809,8 @@ class _MemberCardViewNoVoteState extends State<MemberCardViewNoVote> {
                           SizedBox(
                             width: SizeConfig.screenWidth * 0.4,
                             height: SizeConfig.defaultSize * 5,
-                            child: TextField( // TODO : textField View(V)
+                            child: TextField(
+                              keyboardType: TextInputType.number,
                               controller: _controller,
                               maxLength: 2,
                               onChanged: (value) {
@@ -1009,6 +1014,7 @@ class _CreateTeamBottomSection extends StatefulWidget {
 class _CreateTeamBottomSectionState extends State<_CreateTeamBottomSection> {
   bool light = false;
   late MeetTeam meetTeam;
+  bool isButtonOn = false;
 
   @override
   void initState() {
@@ -1171,7 +1177,7 @@ class _CreateTeamBottomSectionState extends State<_CreateTeamBottomSection> {
                       onChanged: (bool value) {
                         setState(() {
                           AnalyticsUtil.logEvent("과팅_팀만들기_우리학교사람들에게보이지않기_토글", properties: {
-                            "toggle": value
+                            "toggle": value.toString()
                           });
                           light = value;
                           widget.state.setIsChecked(value);
@@ -1185,25 +1191,32 @@ class _CreateTeamBottomSectionState extends State<_CreateTeamBottomSection> {
               SizedBox(height: SizeConfig.defaultSize * 0.3,),
               GestureDetector(
                 onTap: () async {
-                  AnalyticsUtil.logEvent("과팅_팀만들기_팀만들기버튼_터치", properties: {
-                    "teamId": meetTeam.id,
-                    "teamName": meetTeam.name,
-                    "teamLocationsCount": meetTeam.locations.length,
-                    "teamMembersCount": meetTeam.members.length + 1,
-                    "toggle": meetTeam.canMatchWithSameUniversity,
-                    "university": meetTeam.university?.name ?? "알수없음",
-                  });
+                  // AnalyticsUtil.logEvent("과팅_팀만들기_팀만들기버튼_터치", properties: {
+                  //   "teamId": meetTeam.id,
+                  //   "teamName": meetTeam.name,
+                  //   "teamLocationsCount": meetTeam.locations.length,
+                  //   "teamMembersCount": meetTeam.members.length + 1,
+                  //   "toggle": meetTeam.canMatchWithSameUniversity,
+                  //   "university": meetTeam.university?.name ?? "알수없음",
+                  // });
 
                   if (meetTeam.members.length == 1) {
-                    if (meetTeam.members[0].getName().isNotEmpty && meetTeam.members[0].getBirthYear().toString().isNotEmpty && meetTeam.members[0].getUniversityId().toString().isNotEmpty && meetTeam.name != '' && meetTeam.locations.isNotEmpty) {
+                    print('친구가 1명입니다.');
+                    print('팀명: ${meetTeam.name}, 지역: ${meetTeam.locations.toString()}');
+                    print('name: ${meetTeam.members[0].getName()}, birthYear: ${meetTeam.members[0].getBirthYear()}, universityId: ${meetTeam.members[0].getUniversityId()}');
+                    if (meetTeam.members[0].getName().isNotEmpty && meetTeam.members[0].getBirthYear() != 0 && meetTeam.members[0].getUniversityId() != 0 && meetTeam.name != '' && meetTeam.locations.isNotEmpty) {
                       widget.onFinish();
                       Navigator.pop(widget.ancestorContext, meetTeam);
                     } else {
                       ToastUtil.showMeetToast('모든 정보를 기입해주세요!', 1);
                     }
                   } else if (meetTeam.members.length == 2) {
-                    if (meetTeam.members[0].getName().isNotEmpty && meetTeam.members[0].getBirthYear().toString().isNotEmpty && meetTeam.members[0].getUniversityId().toString().isNotEmpty
-                        && meetTeam.members[1].getName().isNotEmpty && meetTeam.members[1].getBirthYear().toString().isNotEmpty && meetTeam.members[1].getUniversityId().toString().isNotEmpty
+                    print('친구가 2명입니다.');
+                    print('팀명: ${meetTeam.name}, 지역: ${meetTeam.locations.toString()}');
+                    print('0번 name: ${meetTeam.members[0].getName()}, birthYear: ${meetTeam.members[0].getBirthYear()}, universityId: ${meetTeam.members[0].getUniversityId()}');
+                    print('1번 name: ${meetTeam.members[1].getName()}, birthYear: ${meetTeam.members[1].getBirthYear()}, universityId: ${meetTeam.members[1].getUniversityId()}');
+                    if (meetTeam.members[0].getName().isNotEmpty && meetTeam.members[0].getBirthYear() != 0 && meetTeam.members[0].getUniversityId() != 0
+                        && meetTeam.members[1].getName().isNotEmpty && meetTeam.members[1].getBirthYear() != 0 && meetTeam.members[1].getUniversityId() != 0
                         &&  meetTeam.name != '' && meetTeam.locations.isNotEmpty) {
                       widget.onFinish();
                       Navigator.pop(widget.ancestorContext, meetTeam);
@@ -1213,17 +1226,15 @@ class _CreateTeamBottomSectionState extends State<_CreateTeamBottomSection> {
                   } else {
                     ToastUtil.showMeetToast('팀원을 추가해주세요!', 1);
                   }
-                  // if ((meetTeam.members.length == 1 || meetTeam.members.length == 2) && meetTeam.name != '' && meetTeam.locations.isNotEmpty) {
-                  //   widget.onFinish();
-                  //   Navigator.pop(widget.ancestorContext, meetTeam);
-                  // }
                 },
                 child: Container(
                   height: SizeConfig.defaultSize * 6,
                   width: SizeConfig.screenHeight,
                   decoration: BoxDecoration(
-                    color:((meetTeam.members.length == 1 || meetTeam.members.length == 2) && meetTeam.name != '' && meetTeam.locations.isNotEmpty)
-                        ? const Color(0xffFF5C58) : const Color(0xffddddddd),
+                    color: (meetTeam.members.length == 1 && meetTeam.members[0].getName().isNotEmpty && meetTeam.members[0].getBirthYear() != 0 && meetTeam.members[0].getUniversityId() != 0 && meetTeam.name != '' && meetTeam.locations.isNotEmpty
+                    || meetTeam.members.length == 2 && meetTeam.members[0].getName().isNotEmpty && meetTeam.members[0].getBirthYear() != 0 && meetTeam.members[0].getUniversityId() != 0
+                            && meetTeam.members[1].getName().isNotEmpty && meetTeam.members[1].getBirthYear() != 0 && meetTeam.members[1].getUniversityId() != 0
+                            &&  meetTeam.name != '' && meetTeam.locations.isNotEmpty) ? const Color(0xffFF5C58) : const Color(0xffdddddd),
                     borderRadius: BorderRadius.circular(10),
                   ),
                   alignment: Alignment.center,
