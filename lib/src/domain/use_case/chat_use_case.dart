@@ -32,10 +32,9 @@ class ChatUseCase {
     await _proposalRepository.requestChat(myTeamId, targetTeamId);
   }
 
-  Future<Proposal> acceptChatProposal(int proposalId) async {
-    var proposal = await _proposalRepository.acceptChatProposal(proposalId);
+  Future<void> acceptChatProposal(int proposalId) async {
+    // var proposal = await _proposalRepository.acceptChatProposal(proposalId);
     await _chatRepository.createChatRoom(proposalId);
-    return proposal;
   }
 
   Future<Proposal> rejectChatProposal(int proposalId) async {

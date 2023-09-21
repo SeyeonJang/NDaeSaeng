@@ -33,7 +33,7 @@ class MeetProgressIndicatorWithMessage extends StatelessWidget {
           ),
           const MeetProgressIndicator(),
           SizedBox(height: SizeConfig.defaultSize * 4),
-          Text(text),
+          Text(text, style: TextStyle(fontSize: SizeConfig.defaultSize * 1.8)),
           SizedBox(
             height: SizeConfig.defaultSize,
           ),

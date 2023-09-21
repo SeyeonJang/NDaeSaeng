@@ -292,12 +292,11 @@ class DartApiRemoteDataSource {
   }
 
   // team: 팀 생성하기
-  static Future<MeetTeamResponseDto> postTeam(MeetTeamRequestDto teamRequestDto) async {
+  static Future<void> postTeam(MeetTeamRequestDto teamRequestDto) async {
     const path = '/v1/teams';
     final body = teamRequestDto.toJson();
 
     final response = await _httpUtil.request().post(path, data: body);
-    return MeetTeamResponseDto.fromJson(response.data);
   }
 
   // team: 내 팀 삭제하기
@@ -399,7 +398,7 @@ class DartApiRemoteDataSource {
     final path = '/v1/chat/rooms';
     final body = {"proposalId": proposalId};
 
-    await _httpUtil.request().get(path, data: body);
+    await _httpUtil.request().post(path, data: body);
   }
 
   static String _getPathFromUrl(String url) {

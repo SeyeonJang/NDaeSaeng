@@ -16,9 +16,9 @@ class MeetTeamRequestDto {
     isVisibleToSameUniversity = json['isVisibleToSameUniversity'];
     teamRegionIds = json['regionIds'].cast<int>();
     teamUserIds = json['userIds'].cast<int>();
-    if (json['friends'] != null) {
+    if (json['singleTeamFriends'] != null) {
       friends = <_FriendDto>[];
-      json['friends'].forEach((v) {
+      json['singleTeamFriends'].forEach((v) {
         friends!.add(_FriendDto.fromJson(v));
       });
     }
@@ -30,7 +30,7 @@ class MeetTeamRequestDto {
     data['isVisibleToSameUniversity'] = isVisibleToSameUniversity;
     data['regionIds'] = teamRegionIds;
     data['userIds'] = teamUserIds;
-    data['friends'] = friends;
+    data['singleTeamFriends'] = friends;
     return data;
   }
 
@@ -78,10 +78,17 @@ class _FriendDto {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['nickname'] = this.name;
-    data['birthYear'] = this.birthyear;
+    // data['nickname'] = this.name;
+    data['nickname'] = "최현식";
+    // data['birthYear'] = this.birthyear;
+    data['birthYear'] = 2000;
     data['universityId'] = this.universityId;
     data['profileImageUrl'] = this.profileImageUrl;
     return data;
+  }
+
+  @override
+  String toString() {
+    return '_FriendDto{name: $name, birthyear: $birthyear, universityId: $universityId, profileImageUrl: $profileImageUrl}';
   }
 }
