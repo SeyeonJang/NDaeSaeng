@@ -84,7 +84,8 @@ class _LoginPageState extends State<LoginPage> {
       // ),
       bottomNavigationBar: Container( // 로그인 버튼
         // color: Color(0xff7C83FD),
-        height: SizeConfig.screenHeight * 0.18,
+        // height: SizeConfig.screenHeight * 0.18,
+        height: SizeConfig.screenHeight * 0.22,
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,

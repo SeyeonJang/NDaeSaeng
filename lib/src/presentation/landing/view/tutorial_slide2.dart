@@ -262,14 +262,80 @@ class _TutorialSlideState extends State<TutorialSlide2> with TickerProviderState
             Container(
               child: Column(
                 children: [
-                  SizedBox(height: SizeConfig.defaultSize * 6,),
+                  SizedBox(height: SizeConfig.screenHeight * 0.1,),
 
-                  GestureDetector(onTap: () {AnalyticsUtil.logEvent("온보딩_첫번째_예시프로필1터치");}, child: MeetView(questionName: ['첫 인상이 좋았던', '귀여워서 밥 사주고 싶은 사람', '누구보다 공감을 잘 해주는'], count: ['30+','20+','5+'],)),
-                  SizedBox(height: SizeConfig.defaultSize),
-                  GestureDetector(onTap: () {AnalyticsUtil.logEvent("온보딩_첫번째_예시프로필2터치");}, child: MeetView2(questionName: ['운동하는 모습이 멋있는 갓생러', '우리 학과 수석으로 들어왔을 것 같은 사람', '너 T야? 큐티?'], count: ['20+','5+','5+'],)),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: SizeConfig.defaultSize * 3),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                          SizedBox(height: SizeConfig.defaultSize * 2,),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Container(
+                              width: SizeConfig.defaultSize * 22,
+                              height: SizeConfig.defaultSize * 5,
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                color: const Color(0xffFE6059),
+                                borderRadius: BorderRadius.circular(13),
+                              ),
+                              child: Text("친구가 앱에 없어도 👀", style: TextStyle(
+                                fontSize: SizeConfig.defaultSize * 2,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.white,
+                              ),),
+                            )
+                          ],
+                        ),
+                          SizedBox(height: SizeConfig.defaultSize * 3,),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Container(
+                              width: SizeConfig.defaultSize * 21,
+                              height: SizeConfig.defaultSize * 5,
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                color: const Color(0xffFE6059),
+                                borderRadius: BorderRadius.circular(13),
+                              ),
+                              child: Text("친구 정보로 팀 만들고", style: TextStyle(
+                                fontSize: SizeConfig.defaultSize * 2,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.white,
+                              ),),
+                            )
+                          ],
+                        ),
+                          SizedBox(height: SizeConfig.defaultSize * 3,),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Container(
+                              width: SizeConfig.defaultSize * 21,
+                              height: SizeConfig.defaultSize * 5,
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                color: const Color(0xffFE6059),
+                                borderRadius: BorderRadius.circular(13),
+                              ),
+                              child: Text("바로 과팅 시작! 🥰❤️", style: TextStyle(
+                                fontSize: SizeConfig.defaultSize * 2,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.white,
+                              ),),
+                            )
+                          ],
+                        ),
+                        SizedBox(height: SizeConfig.defaultSize * 2,),
+                      ],
+                    )
+                  ),
 
-                  SizedBox(height: SizeConfig.defaultSize * 5,),
-                  Text("엔대생에서 인증된 대학생들과 과팅해요!", style: TextStyle(fontSize: SizeConfig.defaultSize * 2, fontWeight: FontWeight.w600),),
+                  SizedBox(height: SizeConfig.screenHeight * 0.1,),
+                  Text("엔대생에서 N명의 대학생들과 과팅해요!", style: TextStyle(fontSize: SizeConfig.defaultSize * 2, fontWeight: FontWeight.w600),),
                   SizedBox(height: SizeConfig.defaultSize * 2,),
                   Text("엔대생에서는 학생증 인증을 통해 인증된", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.5, fontWeight: FontWeight.w500),),
                   SizedBox(height: SizeConfig.defaultSize * 0.3),
@@ -278,159 +344,205 @@ class _TutorialSlideState extends State<TutorialSlide2> with TickerProviderState
               )
             ),
             Container(
-              color: Colors.white,
-              child: Center(
                 child: Column(
                   children: [
-                    SizedBox(height: SizeConfig.defaultSize * 6,),
-                    SlideTransition(
-                      position: _animation,
-                      child: Image.asset(
-                        'assets/images/contacts.png',
-                        width: SizeConfig.defaultSize * 25,
-                      ),
-                    ),
-                    SizedBox(height: SizeConfig.defaultSize * 5,),
-                    GestureDetector(
-                      onTap: () {
-                        AnalyticsUtil.logEvent("온보딩_두번째_예시질문터치");
-                      },
-                      child: AnimatedBuilder(
-                        animation: _fadeAnimation,
-                        builder: (context, child) {
-                          return Opacity(
-                            opacity: _fadeAnimation.value,
-                            child: Text(
-                              questions[currentIndex],
-                              style: TextStyle(fontSize: SizeConfig.defaultSize * 2.5, fontWeight: FontWeight.w500),
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                    SizedBox(height: SizeConfig.defaultSize * 9,),
-                    Text("내 친구들과 이미지게임을 즐겨요!", style: TextStyle(fontSize: SizeConfig.defaultSize * 2, fontWeight: FontWeight.w600),),
-                    SizedBox(height: SizeConfig.defaultSize * 2,),
-                    RichText(
-                        text: TextSpan(
-                            style: TextStyle(fontSize: SizeConfig.defaultSize * 1.5, fontWeight: FontWeight.w500),
-                            children: <TextSpan>[
-                              TextSpan(text: "엔대생에서는 ", style: TextStyle(color: Colors.black)),
-                              TextSpan(text: "긍정적인 질문", style: TextStyle(color: Colors.black, fontWeight: FontWeight.w500)),
-                              TextSpan(text: "에 대해", style: TextStyle(color: Colors.black)),
-                            ]
-                        )
-                    ),
-                    SizedBox(height: SizeConfig.defaultSize * 0.3),
-                    RichText(
-                        text: TextSpan(
-                            style: TextStyle(fontSize: SizeConfig.defaultSize * 1.5, fontWeight: FontWeight.w500),
-                            children: <TextSpan>[
-                              TextSpan(text: "내 친구들을 ", style: TextStyle(color: Colors.black)),
-                              TextSpan(text: "투표", style: TextStyle(color: Color(0xff7C83FD))),
-                              TextSpan(text: "할 수 있어요!", style: TextStyle(color: Colors.black)),
-                            ]
-                        )
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            Container(
-              color: Colors.white,
-              child: Center(
-                child: Column(
-                  children: [
-                    SizedBox(height: SizeConfig.defaultSize * 6,),
-                    FadeTransition(
-                      opacity: _fadeInOutAnimation,
-                      child: VoteFriend(admissionYear: "23", gender: "여", question: "6번째 뉴진스 멤버", datetime: "10초 전", index: 0),
-                    ), SizedBox(height: SizeConfig.defaultSize * 1.6),
-                    FadeTransition(
-                      opacity: _fadeInOutAnimation2,
-                      child: VoteFriend(admissionYear: "21", gender: "남", question: "모임에 꼭 있어야 하는", datetime: "1분 전", index: 1),
-                    ), SizedBox(height: SizeConfig.defaultSize * 1.6),
-                    FadeTransition(
-                      opacity: _fadeInOutAnimation3,
-                      child: VoteFriend(admissionYear: "22", gender: "여", question: "OO와의 2023 ... 여름이었다", datetime: "5분 전", index: 2),
-                    ), SizedBox(height: SizeConfig.defaultSize * 1.6),
-                    FadeTransition(
-                      opacity: _fadeInOutAnimation4,
-                      child: VoteFriend(admissionYear: "20", gender: "남", question: "디올 엠베서더 할 것 같은 사람", datetime: "10분 전", index: 3,),
-                    ), SizedBox(height: SizeConfig.defaultSize * 1.6),
-                    FadeTransition(
-                      opacity: _fadeInOutAnimation5,
-                      child: VoteFriend(admissionYear: "23", gender: "남", question: "OOO 갓생 폼 미쳤다", datetime: "30분 전", index: 4,),
-                    ), SizedBox(height: SizeConfig.defaultSize * 1.6),
+                    SizedBox(height: SizeConfig.screenHeight * 0.1,),
 
-                    SizedBox(height: SizeConfig.defaultSize * 1),
-                    Text("쌓이는 알림, 더해가는 즐거움!", style: TextStyle(fontSize: SizeConfig.defaultSize * 2, fontWeight: FontWeight.w600),),
-                    SizedBox(height: SizeConfig.defaultSize * 2),
-                    RichText(
-                        text: TextSpan(
-                            style: TextStyle(fontSize: SizeConfig.defaultSize * 1.5, fontWeight: FontWeight.w500),
-                            children: <TextSpan>[
-                              TextSpan(text: "내가 투표받으면 ", style: TextStyle(color: Colors.black)),
-                              TextSpan(text: "알림", style: TextStyle(color: Color(0xff7C83FD), fontWeight: FontWeight.w500)),
-                              TextSpan(text: "이 와요!", style: TextStyle(color: Colors.black)),
-                            ]
+                    Padding(
+                        padding: EdgeInsets.symmetric(horizontal: SizeConfig.defaultSize * 3),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                              SizedBox(height: SizeConfig.defaultSize * 2,),
+                            Container(
+                              width: SizeConfig.screenWidth, 
+                              child: Expanded(child: Image.asset('assets/images/meet_intro.png'))),
+                              SizedBox(height: SizeConfig.defaultSize * 2,),
+                          ],
                         )
                     ),
-                    SizedBox(height: SizeConfig.defaultSize * 0.3),
-                    Text("친구들도 내가 보낸 투표를 봐요!", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.5, fontWeight: FontWeight.w500),),
+
+                      SizedBox(height: SizeConfig.screenHeight * 0.1,),
+                    Text("팀 정보는 최소한으로 초간단!", style: TextStyle(fontSize: SizeConfig.defaultSize * 2, fontWeight: FontWeight.w600),),
+                      SizedBox(height: SizeConfig.defaultSize * 2,),
+                    Text("팀원이 앱에 없어도", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.5, fontWeight: FontWeight.w500),),
+                      SizedBox(height: SizeConfig.defaultSize * 0.3),
+                    Text("내가 팀명, 지역, 팀원만 입력하면 끝!", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.5, fontWeight: FontWeight.w500),),
                   ],
-                ),
-              ),
+                )
             ),
-            Container(
-              color: Colors.white,
-              child: Center(
-                child: Column(
-                  children: [
-                    SizedBox(height: SizeConfig.defaultSize * 12,),
-                    Container(
-                      child: AnimatedBuilder(
-                        animation: _letterAnimationController,
-                        builder: (context, child) {
-                          return Transform.scale(
-                            scale: _letterAnimation.value,
-                            child: Column(
-                              mainAxisAlignment:
-                              MainAxisAlignment.spaceBetween,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                GestureDetector(
-                                  onTap: () {
-                                    AnalyticsUtil.logEvent("온보딩_네번째_아이콘터치");
-                                  },
-                                  child: Image.asset(
-                                    'assets/images/letter.png',
-                                    // color: Colors.indigo,
-                                    width: SizeConfig.defaultSize * 33,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                    SizedBox(height: SizeConfig.defaultSize * 3,),
-                    Text("누가 나에게 관심을 갖고 있는지 궁금하다면?", style: TextStyle(fontSize: SizeConfig.defaultSize * 2, fontWeight: FontWeight.w600),),
-                    SizedBox(height: SizeConfig.defaultSize * 2,),
-                    Text("나를 향한 투표들이 기다리고 있어요!", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.5, fontWeight: FontWeight.w500),),
-                    SizedBox(height: SizeConfig.defaultSize * 0.3),
-                    Text("친구들과 즐기러 가볼까요?", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.5, fontWeight: FontWeight.w500),),
-                  ],
-                ),
-              ),
-            ),
+            // Container(
+            //   child: Column(
+            //     children: [
+            //       SizedBox(height: SizeConfig.defaultSize * 6,),
+            //
+            //       GestureDetector(onTap: () {AnalyticsUtil.logEvent("온보딩_첫번째_예시프로필1터치");}, child: MeetView(questionName: ['첫 인상이 좋았던', '귀여워서 밥 사주고 싶은 사람', '누구보다 공감을 잘 해주는'], count: ['30+','20+','5+'],)),
+            //       SizedBox(height: SizeConfig.defaultSize),
+            //       GestureDetector(onTap: () {AnalyticsUtil.logEvent("온보딩_첫번째_예시프로필2터치");}, child: MeetView2(questionName: ['운동하는 모습이 멋있는 갓생러', '우리 학과 수석으로 들어왔을 것 같은 사람', '너 T야? 큐티?'], count: ['20+','5+','5+'],)),
+            //
+            //       SizedBox(height: SizeConfig.defaultSize * 5,),
+            //       Text("엔대생에서 인증된 대학생들과 과팅해요!", style: TextStyle(fontSize: SizeConfig.defaultSize * 2, fontWeight: FontWeight.w600),),
+            //       SizedBox(height: SizeConfig.defaultSize * 2,),
+            //       Text("엔대생에서는 학생증 인증을 통해 인증된", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.5, fontWeight: FontWeight.w500),),
+            //       SizedBox(height: SizeConfig.defaultSize * 0.3),
+            //       Text("다양한 학교, 학과의 대학생들과 연결돼요!", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.5, fontWeight: FontWeight.w500),),
+            //     ],
+            //   )
+            // ),
+            // Container(
+            //   color: Colors.white,
+            //   child: Center(
+            //     child: Column(
+            //       children: [
+            //         SizedBox(height: SizeConfig.defaultSize * 6,),
+            //         SlideTransition(
+            //           position: _animation,
+            //           child: Image.asset(
+            //             'assets/images/contacts.png',
+            //             width: SizeConfig.defaultSize * 25,
+            //           ),
+            //         ),
+            //         SizedBox(height: SizeConfig.defaultSize * 5,),
+            //         GestureDetector(
+            //           onTap: () {
+            //             AnalyticsUtil.logEvent("온보딩_두번째_예시질문터치");
+            //           },
+            //           child: AnimatedBuilder(
+            //             animation: _fadeAnimation,
+            //             builder: (context, child) {
+            //               return Opacity(
+            //                 opacity: _fadeAnimation.value,
+            //                 child: Text(
+            //                   questions[currentIndex],
+            //                   style: TextStyle(fontSize: SizeConfig.defaultSize * 2.5, fontWeight: FontWeight.w500),
+            //                 ),
+            //               );
+            //             },
+            //           ),
+            //         ),
+            //         SizedBox(height: SizeConfig.defaultSize * 9,),
+            //         Text("내 친구들과 이미지게임을 즐겨요!", style: TextStyle(fontSize: SizeConfig.defaultSize * 2, fontWeight: FontWeight.w600),),
+            //         SizedBox(height: SizeConfig.defaultSize * 2,),
+            //         RichText(
+            //             text: TextSpan(
+            //                 style: TextStyle(fontSize: SizeConfig.defaultSize * 1.5, fontWeight: FontWeight.w500),
+            //                 children: <TextSpan>[
+            //                   TextSpan(text: "엔대생에서는 ", style: TextStyle(color: Colors.black)),
+            //                   TextSpan(text: "긍정적인 질문", style: TextStyle(color: Colors.black, fontWeight: FontWeight.w500)),
+            //                   TextSpan(text: "에 대해", style: TextStyle(color: Colors.black)),
+            //                 ]
+            //             )
+            //         ),
+            //         SizedBox(height: SizeConfig.defaultSize * 0.3),
+            //         RichText(
+            //             text: TextSpan(
+            //                 style: TextStyle(fontSize: SizeConfig.defaultSize * 1.5, fontWeight: FontWeight.w500),
+            //                 children: <TextSpan>[
+            //                   TextSpan(text: "내 친구들을 ", style: TextStyle(color: Colors.black)),
+            //                   TextSpan(text: "투표", style: TextStyle(color: Color(0xff7C83FD))),
+            //                   TextSpan(text: "할 수 있어요!", style: TextStyle(color: Colors.black)),
+            //                 ]
+            //             )
+            //         ),
+            //       ],
+            //     ),
+            //   ),
+            // ),
+            // Container(
+            //   color: Colors.white,
+            //   child: Center(
+            //     child: Column(
+            //       children: [
+            //         SizedBox(height: SizeConfig.defaultSize * 6,),
+            //         FadeTransition(
+            //           opacity: _fadeInOutAnimation,
+            //           child: VoteFriend(admissionYear: "23", gender: "여", question: "6번째 뉴진스 멤버", datetime: "10초 전", index: 0),
+            //         ), SizedBox(height: SizeConfig.defaultSize * 1.6),
+            //         FadeTransition(
+            //           opacity: _fadeInOutAnimation2,
+            //           child: VoteFriend(admissionYear: "21", gender: "남", question: "모임에 꼭 있어야 하는", datetime: "1분 전", index: 1),
+            //         ), SizedBox(height: SizeConfig.defaultSize * 1.6),
+            //         FadeTransition(
+            //           opacity: _fadeInOutAnimation3,
+            //           child: VoteFriend(admissionYear: "22", gender: "여", question: "OO와의 2023 ... 여름이었다", datetime: "5분 전", index: 2),
+            //         ), SizedBox(height: SizeConfig.defaultSize * 1.6),
+            //         FadeTransition(
+            //           opacity: _fadeInOutAnimation4,
+            //           child: VoteFriend(admissionYear: "20", gender: "남", question: "디올 엠베서더 할 것 같은 사람", datetime: "10분 전", index: 3,),
+            //         ), SizedBox(height: SizeConfig.defaultSize * 1.6),
+            //         FadeTransition(
+            //           opacity: _fadeInOutAnimation5,
+            //           child: VoteFriend(admissionYear: "23", gender: "남", question: "OOO 갓생 폼 미쳤다", datetime: "30분 전", index: 4,),
+            //         ), SizedBox(height: SizeConfig.defaultSize * 1.6),
+            //
+            //         SizedBox(height: SizeConfig.defaultSize * 1),
+            //         Text("쌓이는 알림, 더해가는 즐거움!", style: TextStyle(fontSize: SizeConfig.defaultSize * 2, fontWeight: FontWeight.w600),),
+            //         SizedBox(height: SizeConfig.defaultSize * 2),
+            //         RichText(
+            //             text: TextSpan(
+            //                 style: TextStyle(fontSize: SizeConfig.defaultSize * 1.5, fontWeight: FontWeight.w500),
+            //                 children: <TextSpan>[
+            //                   TextSpan(text: "내가 투표받으면 ", style: TextStyle(color: Colors.black)),
+            //                   TextSpan(text: "알림", style: TextStyle(color: Color(0xff7C83FD), fontWeight: FontWeight.w500)),
+            //                   TextSpan(text: "이 와요!", style: TextStyle(color: Colors.black)),
+            //                 ]
+            //             )
+            //         ),
+            //         SizedBox(height: SizeConfig.defaultSize * 0.3),
+            //         Text("친구들도 내가 보낸 투표를 봐요!", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.5, fontWeight: FontWeight.w500),),
+            //       ],
+            //     ),
+            //   ),
+            // ),
+            // Container(
+            //   color: Colors.white,
+            //   child: Center(
+            //     child: Column(
+            //       children: [
+            //         SizedBox(height: SizeConfig.defaultSize * 12,),
+            //         Container(
+            //           child: AnimatedBuilder(
+            //             animation: _letterAnimationController,
+            //             builder: (context, child) {
+            //               return Transform.scale(
+            //                 scale: _letterAnimation.value,
+            //                 child: Column(
+            //                   mainAxisAlignment:
+            //                   MainAxisAlignment.spaceBetween,
+            //                   crossAxisAlignment: CrossAxisAlignment.center,
+            //                   children: [
+            //                     GestureDetector(
+            //                       onTap: () {
+            //                         AnalyticsUtil.logEvent("온보딩_네번째_아이콘터치");
+            //                       },
+            //                       child: Image.asset(
+            //                         'assets/images/letter.png',
+            //                         // color: Colors.indigo,
+            //                         width: SizeConfig.defaultSize * 33,
+            //                       ),
+            //                     ),
+            //                   ],
+            //                 ),
+            //               );
+            //             },
+            //           ),
+            //         ),
+            //         SizedBox(height: SizeConfig.defaultSize * 3,),
+            //         Text("누가 나에게 관심을 갖고 있는지 궁금하다면?", style: TextStyle(fontSize: SizeConfig.defaultSize * 2, fontWeight: FontWeight.w600),),
+            //         SizedBox(height: SizeConfig.defaultSize * 2,),
+            //         Text("나를 향한 투표들이 기다리고 있어요!", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.5, fontWeight: FontWeight.w500),),
+            //         SizedBox(height: SizeConfig.defaultSize * 0.3),
+            //         Text("친구들과 즐기러 가볼까요?", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.5, fontWeight: FontWeight.w500),),
+            //       ],
+            //     ),
+            //   ),
+            // ),
           ],
         ),
       ),
       bottomSheet: Container(
         padding: EdgeInsets.only(left: SizeConfig.defaultSize * 2, right: SizeConfig.defaultSize * 2, bottom: SizeConfig.defaultSize * 2.5),
-        height: SizeConfig.screenHeight * 0.03,
+        height: SizeConfig.screenHeight * 0.02,
         color: Colors.white,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -440,7 +552,7 @@ class _TutorialSlideState extends State<TutorialSlide2> with TickerProviderState
                     controller: _pageController,
                     count: 4,
                     effect: WormEffect(
-                        activeDotColor: Color(0xff7C83FD),
+                        activeDotColor: Color(0xffFE6059),
                         dotColor: Colors.grey.shade200,
                         dotHeight: SizeConfig.defaultSize,
                         dotWidth: SizeConfig.defaultSize,
