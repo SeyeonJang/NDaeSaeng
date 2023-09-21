@@ -93,18 +93,18 @@ class ChatProfile extends StatelessWidget {
               ),
                 SizedBox(height: SizeConfig.defaultSize * 3,),
 
-              SizedBox(
-                height: SizeConfig.defaultSize * 12.5,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    for (int i = 0; i < 3; i++)
-                      profile.profileQuestionResponses.length > i
-                          ? VoteView(profile.profileQuestionResponses[i].question.content ?? "(알수없음)", profile.profileQuestionResponses[i].count)
-                          : const NoVoteView(),
-                  ],
-                ),
-              ),
+              // SizedBox(
+              //   height: SizeConfig.defaultSize * 12.5,
+              //   child: Column(
+              //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //     children: [
+              //       for (int i = 0; i < 3; i++)
+              //         profile.profileQuestionResponses.length > i
+              //             ? VoteView(profile.profileQuestionResponses[i].question.content ?? "(알수없음)", profile.profileQuestionResponses[i].count)
+              //             : const NoVoteView(),
+              //     ],
+              //   ),
+              // ),
                 SizedBox(height: SizeConfig.defaultSize * 12),
 
               Column(

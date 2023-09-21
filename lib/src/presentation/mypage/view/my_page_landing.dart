@@ -5,7 +5,6 @@ import 'package:dart_flutter/src/domain/entity/user.dart';
 import 'package:dart_flutter/src/presentation/mypage/view/student_vertification.dart';
 import 'package:dart_flutter/src/presentation/mypage/viewmodel/mypages_cubit.dart';
 import 'package:dart_flutter/src/presentation/mypage/viewmodel/state/mypages_state.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -72,7 +71,7 @@ class _MyPageLandingViewState extends State<MyPageLandingView> {
               horizontal: SizeConfig.defaultSize * 0.5),
           child: Container(
             decoration: BoxDecoration(
-              color: Color(0xff7C83FD),
+              color: const Color(0xff7C83FD),
               borderRadius: BorderRadius.circular(13),
               // boxShadow: [ // Boxshadow 필요하면 쓰기
               //   BoxShadow(
@@ -101,10 +100,9 @@ class _MyPageLandingViewState extends State<MyPageLandingView> {
                           child: ClipOval(
                             child: BlocBuilder<MyPagesCubit, MyPagesState>(
                               builder: (context, state) {
-                                if (profileImageUrl == "DEFAULT" || !profileImageUrl.startsWith("https://"))
+                                if (profileImageUrl == "DEFAULT" || !profileImageUrl.startsWith("https://")) {
                                   return Image.asset('assets/images/profile-mockup3.png', width: SizeConfig.defaultSize * 5.7, fit: BoxFit.cover,);
-                                else {
-                                  print('${state.profileImageFile.path} dddsdsdsdsd');
+                                } else {
                                   return state.profileImageFile.path==''
                                       ? Image.network(profileImageUrl,
                                       width: SizeConfig.defaultSize * 5.7,
@@ -203,7 +201,7 @@ class _MyPageLandingViewState extends State<MyPageLandingView> {
                                       builder: (context, state) {
                                         String university = state.userResponse.university?.name??'#####학교';
                                         String department = state.userResponse.university?.department??'######학과';
-                                        return Container(
+                                        return SizedBox(
                                           width: SizeConfig.screenWidth * 0.67,
                                           child: Row(
                                             children: [
@@ -242,7 +240,7 @@ class _MyPageLandingViewState extends State<MyPageLandingView> {
                     SizedBox(height: SizeConfig.defaultSize * 0.7,),
                     Container( // 포인트 ~ (아래층)
                       padding: EdgeInsets.only(left: SizeConfig.defaultSize * 1.4, right: SizeConfig.defaultSize * 1.4, top: SizeConfig.defaultSize * 1.1, bottom: SizeConfig.defaultSize * 1.1),
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.all(Radius.circular(5)),
                       ),
@@ -297,17 +295,17 @@ class _MyPageLandingViewState extends State<MyPageLandingView> {
                 decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(10),
-                    border: Border.all(width: 1.3, color: Color(0xff7C83FD))
+                    border: Border.all(width: 1.3, color: const Color(0xff7C83FD))
                 ),
                 child: Padding(
                   padding: EdgeInsets.only(left: SizeConfig.defaultSize * 1.5, right: SizeConfig.defaultSize * 1.5),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text("지금 학생증 인증하면 프로필배지를 추가해드려요!", style: TextStyle(
+                      Text(" 지금 학생증 인증하면 팀에 인증 배지를 추가해드려요!", style: TextStyle(
                           fontSize: SizeConfig.defaultSize * 1.4
                       ),),
-                      Icon(
+                      const Icon(
                         Icons.arrow_right_alt_rounded, color: Color(0xff7C83FD)
                       )
                     ],
@@ -319,84 +317,78 @@ class _MyPageLandingViewState extends State<MyPageLandingView> {
 
         SizedBox(height: SizeConfig.defaultSize),
 
-        Container(
-          // height: SizeConfig.defaultSize * 130,
-          child: Padding(
-              padding: EdgeInsets.symmetric(
-                  vertical: SizeConfig.defaultSize,
-                  horizontal: SizeConfig.defaultSize * 1.1),
-              child: Column(
-                children: [
-                  Padding(
-                    padding: EdgeInsets.only(left: SizeConfig.defaultSize * 0.2, right: SizeConfig.defaultSize * 0.2),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text("내 친구",
-                          style: TextStyle(
-                            fontWeight: FontWeight.w700,
-                            fontSize: SizeConfig.defaultSize * 1.7,
-                            color: Color(0xff7C83FD)
-                          ),),
-                        BlocBuilder<MyPagesCubit, MyPagesState>(
-                            builder: (context, state) {
-                              return openAddFriends(myCode: state.userResponse.personalInfo?.recommendationCode ?? '내 코드가 없어요!');
-                            }),
-                      ],
-                    ),
+        Padding(
+            padding: EdgeInsets.symmetric(
+                vertical: SizeConfig.defaultSize,
+                horizontal: SizeConfig.defaultSize * 1.1),
+            child: Column(
+              children: [
+                Padding(
+                  padding: EdgeInsets.only(left: SizeConfig.defaultSize * 0.2, right: SizeConfig.defaultSize * 0.2),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text("내 친구",
+                        style: TextStyle(
+                          fontWeight: FontWeight.w700,
+                          fontSize: SizeConfig.defaultSize * 1.7,
+                          color: const Color(0xff7C83FD)
+                        ),),
+                      BlocBuilder<MyPagesCubit, MyPagesState>(
+                          builder: (context, state) {
+                            return openAddFriends(myCode: state.userResponse.personalInfo?.recommendationCode ?? '내 코드가 없어요!');
+                          }),
+                    ],
                   ),
-                  SizedBox(height: SizeConfig.defaultSize * 1.5,),
-                  BlocBuilder<MyPagesCubit,MyPagesState>(
-                      builder: (context, state) {
-                        final friends = state.friends;
-                        final user = state.userResponse;
-                        return MyFriends(friends: friends, count: friends.length, userResponse: user);
-                      }
-                  ),
-                ],
-              )
-          ),
+                ),
+                SizedBox(height: SizeConfig.defaultSize * 1.5,),
+                BlocBuilder<MyPagesCubit,MyPagesState>(
+                    builder: (context, state) {
+                      final friends = state.friends;
+                      final user = state.userResponse;
+                      return MyFriends(friends: friends, count: friends.length, userResponse: user);
+                    }
+                ),
+              ],
+            )
         ),
 
         Container( // 구분선
-          padding: EdgeInsets.only(top: 0, bottom: 0, left: 0, right: 0,),
+          padding: const EdgeInsets.only(top: 0, bottom: 0, left: 0, right: 0,),
           height: SizeConfig.defaultSize * 2,
           color: Colors.grey.withOpacity(0.1),
         ),
 
         SizedBox(height: SizeConfig.defaultSize * 2,),
-        Container(
-          // height: SizeConfig.defaultSize * 130,
-          child: Padding(
-            padding: EdgeInsets.symmetric(
-                vertical: SizeConfig.defaultSize,
-                horizontal: SizeConfig.defaultSize * 1.1),
-            child: Column(
-                children: [
-                  Padding(
-                    padding: EdgeInsets.only(left: SizeConfig.defaultSize * 0.2, right: SizeConfig.defaultSize * 0.2),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text("알 수도 있는 친구",
-                          style: TextStyle(
-                            fontWeight: FontWeight.w700,
-                            fontSize: SizeConfig.defaultSize * 1.7,
-                            color: Color(0xff7C83FD)
-                          ),),
-                      ],
-                    ),
+        Padding(
+          padding: EdgeInsets.symmetric(
+              vertical: SizeConfig.defaultSize,
+              horizontal: SizeConfig.defaultSize * 1.1),
+          child: Column(
+              children: [
+                Padding(
+                  padding: EdgeInsets.only(left: SizeConfig.defaultSize * 0.2, right: SizeConfig.defaultSize * 0.2),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text("알 수도 있는 친구",
+                        style: TextStyle(
+                          fontWeight: FontWeight.w700,
+                          fontSize: SizeConfig.defaultSize * 1.7,
+                          color: const Color(0xff7C83FD)
+                        ),),
+                    ],
                   ),
-                  SizedBox(height: SizeConfig.defaultSize * 2 ,),
-                  BlocBuilder<MyPagesCubit,MyPagesState>(
-                      builder: (context, state) {
-                        final friends = state.newFriends;
-                        final user = state.userResponse;
-                        return NewFriends(friends: friends, count: friends.length, userResponse: user,);
-                      }
-                  ),
-                ],
-            ),
+                ),
+                SizedBox(height: SizeConfig.defaultSize * 2 ,),
+                BlocBuilder<MyPagesCubit,MyPagesState>(
+                    builder: (context, state) {
+                      final friends = state.newFriends;
+                      final user = state.userResponse;
+                      return NewFriends(friends: friends, count: friends.length, userResponse: user,);
+                    }
+                ),
+              ],
           ),
         ),
 
@@ -506,7 +498,7 @@ class _FriendComponentState extends State<FriendComponent> {
       toastLength: Toast.LENGTH_SHORT,
       gravity: ToastGravity.BOTTOM,
       timeInSecForIosWeb: 1,
-      backgroundColor: Color(0xff7C83FD),
+      backgroundColor: const Color(0xff7C83FD),
       textColor: Colors.white,
       fontSize: SizeConfig.defaultSize * 1.6,
     );
@@ -532,7 +524,7 @@ class _FriendComponentState extends State<FriendComponent> {
                   "친구 학과": widget.friend.university!.department
                 });
               },
-              child: Container(
+              child: SizedBox(
                 width: SizeConfig.screenWidth * 0.7,
                 child: Row(
                   children: [
@@ -703,8 +695,8 @@ class _FriendComponentState extends State<FriendComponent> {
           ],
         ),
         SizedBox(height: SizeConfig.defaultSize * 0.1,),
-        Divider(
-          color: Color(0xffddddddd),
+        const Divider(
+          color: Color(0xffdddddd),
         ),
       ],
     );
@@ -755,7 +747,7 @@ class _NotFriendComponentState extends State<NotFriendComponent> {
                   "친구 학과": widget.friend.university!.department
                 });
               },
-              child: Container(
+              child: SizedBox(
                 width: SizeConfig.screenWidth * 0.54,
                 child: Row(
                   children: [
@@ -891,7 +883,7 @@ class _NotFriendComponentState extends State<NotFriendComponent> {
                 }
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: Color(0xff7C83FD),
+                backgroundColor: const Color(0xff7C83FD),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(15), // 모서리 둥글기 설정
                 ),
@@ -905,8 +897,8 @@ class _NotFriendComponentState extends State<NotFriendComponent> {
           ],
         ),
         SizedBox(height: SizeConfig.defaultSize * 0.1,),
-        Divider(
-          color: Color(0xffddddddd),
+        const Divider(
+          color: Color(0xffdddddd),
         ),
       ],
     );
@@ -966,7 +958,6 @@ class _openAddFriendsState extends State<openAddFriends> {
 
   void shareContent(BuildContext context, String myCode) {
     Share.share('[엔대생] 엔대생에서 내가 널 칭찬 대상으로 투표하고 싶어! 앱에 들어와줘!\n내 코드는 $myCode 야. 나를 친구 추가하고 같이하자!\nhttps://dart.page.link/TG78\n\n내 코드 : $myCode');
-    print("셰어");
   }
 
   @override
@@ -976,7 +967,7 @@ class _openAddFriendsState extends State<openAddFriends> {
         AnalyticsUtil.logEvent("내정보_마이_코드로추가버튼");
         showModalBottomSheet(
             context: context,
-            shape: RoundedRectangleBorder(
+            shape: const RoundedRectangleBorder(
               borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
             ),
             backgroundColor: Colors.white,
@@ -988,7 +979,7 @@ class _openAddFriendsState extends State<openAddFriends> {
                   return Container(
                     height: SizeConfig.screenHeight * 0.8,
                     width: SizeConfig.screenWidth,
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10))),
                     child: SingleChildScrollView(
@@ -1070,9 +1061,7 @@ class _openAddFriendsState extends State<openAddFriends> {
                                             Clipboard.setData(ClipboardData(text: myCodeCopy)); // 클립보드에 복사되었어요 <- 메시지 자동으로 Android에서 뜸 TODO : iOS는 확인하고 복사멘트 띄우기
                                           },
                                           style: ElevatedButton.styleFrom(
-                                            primary: Colors.white,
-                                            onPrimary: Color(0xff7C83FD),
-                                            textStyle: TextStyle(
+                                            textStyle: const TextStyle(
                                               color: Color(0xff7C83FD),
                                             ),
                                             shape: RoundedRectangleBorder(
@@ -1121,9 +1110,9 @@ class _openAddFriendsState extends State<openAddFriends> {
                                 height: SizeConfig.defaultSize * 5.5,
                                 alignment: Alignment.center,
                                 decoration: BoxDecoration(
-                                    color: Color(0xff7C83FD),
+                                    color: const Color(0xff7C83FD),
                                     border: Border.all(
-                                      color: Color(0xff7C83FD),
+                                      color: const Color(0xff7C83FD),
                                     ),
                                     borderRadius: BorderRadius.circular(15)),
                                 child: Text(
@@ -1174,7 +1163,7 @@ class _openAddFriendsState extends State<openAddFriends> {
                                   SizedBox(height: SizeConfig.defaultSize * 0.5),
                                   Padding(
                                     padding: EdgeInsets.only(left: SizeConfig.defaultSize * 0.5),
-                                    child: Text("친구를 추가하면 더 재밌게 게임할 수 있어요!",
+                                    child: Text("친구를 추가하면 과팅을 같이 할 수 있어요!",
                                         style: TextStyle(
                                           color: Colors.grey,
                                           fontSize: SizeConfig.defaultSize * 1.5,
@@ -1205,10 +1194,10 @@ class _openAddFriendsState extends State<openAddFriends> {
                                             contentPadding: EdgeInsets.symmetric(
                                                 vertical: SizeConfig.defaultSize * 1.5, horizontal: SizeConfig.defaultSize * 1.5),
                                             enabledBorder: OutlineInputBorder(
-                                              borderRadius: BorderRadius.all(Radius.circular(15.0)),
+                                              borderRadius: const BorderRadius.all(Radius.circular(15.0)),
                                               borderSide: BorderSide(color: Colors.grey.shade300, width: 1.5),
                                             ),
-                                            focusedBorder: OutlineInputBorder(
+                                            focusedBorder: const OutlineInputBorder(
                                               borderRadius: BorderRadius.all(Radius.circular(10.0)),
                                               borderSide: BorderSide(color: Color(0xff7C83FD)),
                                             ),
@@ -1217,7 +1206,7 @@ class _openAddFriendsState extends State<openAddFriends> {
                                       ),
                                       ElevatedButton( // 친구 추가 버튼
                                         style: ElevatedButton.styleFrom(
-                                          backgroundColor: widget.disabledFunctions ? Colors.grey.shade400 : Color(0xff7C83FD),
+                                          backgroundColor: widget.disabledFunctions ? Colors.grey.shade400 : const Color(0xff7C83FD),
                                           shape: RoundedRectangleBorder(
                                             borderRadius: BorderRadius.circular(15), // 모서리 둥글기 설정
                                           ),
@@ -1225,7 +1214,6 @@ class _openAddFriendsState extends State<openAddFriends> {
                                         ),
                                         onPressed: () async {
                                           if (widget.disabledFunctions) {
-                                            print("우씨");
                                             return;
                                           }
                                           String friendCodeConfirm = "";
@@ -1234,8 +1222,6 @@ class _openAddFriendsState extends State<openAddFriends> {
                                             friendCodeConfirm = "나";
                                           }
                                           else {
-                                            print("friendCode $friendCode");
-                                            // try {
                                             try {
                                               thisState(() {
                                                 setState(() {
@@ -1293,9 +1279,9 @@ class _openAddFriendsState extends State<openAddFriends> {
           height: SizeConfig.defaultSize * 3.5,
           alignment: Alignment.center,
           decoration: BoxDecoration(
-              color: Color(0xff7C83FD),
+              color: const Color(0xff7C83FD),
               border: Border.all(
-                color: Color(0xff7C83FD),
+                color: const Color(0xff7C83FD),
               ),
               borderRadius: BorderRadius.circular(10)),
           child: Padding(
