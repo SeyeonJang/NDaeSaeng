@@ -12,6 +12,7 @@ class MeetIntro extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    AnalyticsUtil.logEvent('홈_접속');
     return Scaffold(
       backgroundColor: Colors.white,
       body: const SingleChildScrollView(
@@ -374,15 +375,7 @@ class MakeTeamButton extends StatelessWidget {
         child: GestureDetector(
           onTap: () async {
             AnalyticsUtil.logEvent('홈_팀만들기버튼_터치');
-            // await Navigator.push(context, PageTransition(type: PageTransitionType.rightToLeftJoined, child: MeetCreateTeamInput(
-            //   onFinish: () {
-            //     // context.read<MeetCubit>().initMeetIntro();
-            //   },
-            //   state: context.read<MeetCubit>().state,
-            // ), childCurrent: this)).then((value) async {
-            //   if (value == null) return;
-            //   await context.read<MeetCubit>().createNewTeam(value);
-            // });
+
             await Navigator.push(ancestorContext,
                 MaterialPageRoute(
                   builder: (context) => BlocProvider<MeetCubit>(
@@ -458,6 +451,8 @@ class SeeMyTeamButton extends StatelessWidget {
         padding: EdgeInsets.symmetric(horizontal: SizeConfig.defaultSize * 2, vertical: SizeConfig.defaultSize),
         child: GestureDetector( // 내 팀 보기 버튼 *******
           onTap: () {
+            AnalyticsUtil.logEvent('홈_내팀보기버튼_터치');
+
             Navigator.push(
               ancestorContext,
               MaterialPageRoute(
