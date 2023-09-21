@@ -53,7 +53,7 @@ class ChatGetOneTeamView extends StatelessWidget { // Component
                   Row(
                     children: [
                       Text(proposal.requestingTeam.name, style: TextStyle(fontSize: SizeConfig.defaultSize * 1.6, fontWeight: FontWeight.w600),),
-                      Text("  ${(2023-proposal.requestingTeam.averageBirthYear+1).toString().substring(0,4)}세", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.6),)
+                      Text("  ${proposal.requestingTeam.averageBirthYear.toStringAsFixed(1)}세", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.6),)
                     ],
                   ),
                   Text(proposal.requestedTeam.name, style: TextStyle(fontSize: SizeConfig.defaultSize * 1.4),),

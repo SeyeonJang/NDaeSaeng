@@ -1,3 +1,4 @@
+import 'package:dart_flutter/src/common/util/year_to_age_util.dart';
 import 'package:dart_flutter/src/domain/entity/proposal.dart';
 import 'package:flutter/material.dart';
 import '../../../../res/config/size_config.dart';
@@ -11,6 +12,7 @@ class ChatSendOneTeamView extends StatelessWidget { // Component
 
   @override
   Widget build(BuildContext context) {
+
     return GestureDetector(
       onTap: () {},
       child: Container(
@@ -39,7 +41,7 @@ class ChatSendOneTeamView extends StatelessWidget { // Component
                   Row(
                     children: [
                       Text(proposal.requestedTeam.name, style: TextStyle(fontSize: SizeConfig.defaultSize * 1.6, fontWeight: FontWeight.w600),),
-                      Text("  ${(2023-proposal.requestedTeam.averageBirthYear+1).toString().substring(0,4)}세", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.6),)
+                      Text("  ${proposal.requestedTeam.averageBirthYear.toStringAsFixed(1)}세", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.6),)
                     ],
                   ),
                   Text(proposal.requestingTeam.name, style: TextStyle(fontSize: SizeConfig.defaultSize * 1.4),),
