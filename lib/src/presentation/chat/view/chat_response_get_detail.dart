@@ -1,3 +1,4 @@
+import 'package:dart_flutter/src/common/util/analytics_util.dart';
 import 'package:dart_flutter/src/domain/entity/blind_date_team_detail.dart';
 import 'package:dart_flutter/src/domain/mapper/student_mapper.dart';
 import 'package:dart_flutter/src/presentation/chat/viewmodel/chat_cubit.dart';
@@ -85,6 +86,7 @@ class ChatResponseGetDetail extends StatelessWidget {
                           children: [
                             GestureDetector( // 거절
                               onTap: () {
+                                AnalyticsUtil.logEvent('채팅_받은호감_상세조회_거절버튼');
                                 showDialog(
                                     context: context,
                                     builder: (BuildContext modalContext) {
@@ -150,6 +152,7 @@ class ChatResponseGetDetail extends StatelessWidget {
                                               Expanded(
                                                 child: GestureDetector(
                                                   onTap: () {
+                                                    AnalyticsUtil.logEvent('채팅_받은호감_상세조회_거절버튼_취소');
                                                     Navigator.pop(modalContext, false);
                                                   },
                                                   child: Container(
@@ -165,6 +168,7 @@ class ChatResponseGetDetail extends StatelessWidget {
                                               SizedBox(width: SizeConfig.defaultSize,),
                                               GestureDetector(
                                                 onTap: () {
+                                                  AnalyticsUtil.logEvent('채팅_받은호감_상세조회_거절버튼_거절');
                                                   Navigator.pop(modalContext, true);
                                                   context.read<ChatCubit>().rejectChatProposal(proposalId);
                                                   showDialog<String>(
@@ -216,6 +220,7 @@ class ChatResponseGetDetail extends StatelessWidget {
 
                             GestureDetector(
                               onTap: () {
+                                AnalyticsUtil.logEvent('채팅_받은호감_상세조회_수락버튼');
                                 showDialog(
                                   context: context,
                                   builder: (BuildContext modalContext) {
@@ -274,6 +279,7 @@ class ChatResponseGetDetail extends StatelessWidget {
                                             Expanded(
                                               child: GestureDetector(
                                                 onTap: () {
+                                                  AnalyticsUtil.logEvent('채팅_받은호감_상세조회_수락버튼_취소');
                                                   Navigator.pop(modalContext, false);
                                                 },
                                                 child: Container(
@@ -289,6 +295,7 @@ class ChatResponseGetDetail extends StatelessWidget {
                                               SizedBox(width: SizeConfig.defaultSize,),
                                             GestureDetector(
                                               onTap: () {
+                                                AnalyticsUtil.logEvent('채팅_받은호감_상세조회_수락버튼_수락');
                                                 Navigator.pop(modalContext, true);
                                                 showDialog<String>(
                                                     context: modalContext,

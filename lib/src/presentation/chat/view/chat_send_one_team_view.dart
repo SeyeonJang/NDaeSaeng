@@ -1,3 +1,4 @@
+import 'package:dart_flutter/src/common/util/analytics_util.dart';
 import 'package:dart_flutter/src/domain/entity/proposal.dart';
 import 'package:flutter/material.dart';
 import '../../../../res/config/size_config.dart';
@@ -13,7 +14,9 @@ class ChatSendOneTeamView extends StatelessWidget { // Component
   Widget build(BuildContext context) {
 
     return GestureDetector(
-      onTap: () {},
+      onTap: () {
+        AnalyticsUtil.logEvent('채팅_보낸호감_카드터치');
+      },
       child: Container(
         width: SizeConfig.screenWidth,
         height: SizeConfig.defaultSize * 9.8,

@@ -1,3 +1,4 @@
+import 'package:dart_flutter/src/common/util/analytics_util.dart';
 import 'package:dart_flutter/src/domain/entity/proposal.dart';
 import 'package:dart_flutter/src/presentation/chat/view/chat_response_get_detail.dart';
 import 'package:dart_flutter/src/presentation/chat/viewmodel/chat_cubit.dart';
@@ -16,6 +17,7 @@ class ChatGetOneTeamView extends StatelessWidget { // Component
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
+        AnalyticsUtil.logEvent('채팅_받은호감_카드터치');
         Navigator.push(
           context,
           MaterialPageRoute(
