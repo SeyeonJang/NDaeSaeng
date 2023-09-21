@@ -5,17 +5,17 @@ import 'package:dart_flutter/src/domain/entity/blind_date_team_detail.dart';
 class BlindDateTeamDetailDto {
   int? id;
   String? name;
-  double? averageBirthYear;
+  double? averageAge;
   List<TeamRegion>? regions;
   String? universityName;
   bool? isCertifiedTeam;
   List<BlindDateUserDetailDto>? teamUsers;
-  bool? proposalStatus; // TODO : 최현식
+  bool? proposalStatus;
 
   BlindDateTeamDetailDto(
       {this.id,
         this.name,
-        this.averageBirthYear,
+        this.averageAge,
         this.regions,
         this.universityName,
         this.isCertifiedTeam,
@@ -25,19 +25,19 @@ class BlindDateTeamDetailDto {
     return BlindDateTeamDetail(
         id: id ?? 0,
         name: name ?? "(알수없음)",
-        averageBirthYear: averageBirthYear ?? 1950.0,
+        averageAge: averageAge ?? 0.0,
         regions: regions?.map((region) => region.newLocation()).toList() ?? [],
         universityName: universityName ?? "(알수없음)",
         isCertifiedTeam: isCertifiedTeam ?? false,
         teamUsers: teamUsers?.map((user) => user.newBlindDateUserDetail()).toList() ?? [],
-        proposalStatus: proposalStatus ?? true, // TODO : 최현식
+        proposalStatus: proposalStatus ?? false,
     );
   }
 
   BlindDateTeamDetailDto.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];
-    averageBirthYear = json['averageBirthYear'];
+    averageAge = json['averageAge'];
     if (json['regions'] != null) {
       regions = <TeamRegion>[];
       json['regions'].forEach((v) {
@@ -52,13 +52,14 @@ class BlindDateTeamDetailDto {
         teamUsers!.add(BlindDateUserDetailDto.fromJson(v));
       });
     }
+    proposalStatus = json['isAlreadyProposalTeam'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = Map<String, dynamic>();
     data['id'] = id;
     data['name'] = name;
-    data['averageBirthYear'] = averageBirthYear;
+    data['averageBirthYear'] = averageAge;
     if (regions != null) {
       data['regions'] = regions!.map((v) => v.toJson()).toList();
     }
@@ -67,11 +68,12 @@ class BlindDateTeamDetailDto {
     if (teamUsers != null) {
       data['teamUsers'] = teamUsers!.map((v) => v.toJson()).toList();
     }
+    data['isAlreadyProposalTeam'] = proposalStatus ?? false;
     return data;
   }
 
   @override
   String toString() {
-    return 'BlindDateTeamDetailResponse{id: $id, name: $name, averageBirthYear: $averageBirthYear, regions: $regions, universityName: $universityName, isCertifiedTeam: $isCertifiedTeam, teamUsers: $teamUsers}';
+    return 'BlindDateTeamDetailResponse{id: $id, name: $name, averageBirthYear: $averageAge, regions: $regions, universityName: $universityName, isCertifiedTeam: $isCertifiedTeam, teamUsers: $teamUsers}';
   }
 }

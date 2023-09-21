@@ -639,7 +639,7 @@ class _BodySectionState extends State<_BodySection> {
     BlindDateTeam blindDateTeam = BlindDateTeam(
         id: nowTeam.getId(),
         name: nowTeam.getName(),
-        averageBirthYear: nowTeam.getAverageBirthYear(),
+        averageBirthYear: nowTeam.getAverageAge(),
         regions: nowTeam.getRegions(),
         universityName: nowTeam.getUniversityName(),
         isCertifiedTeam: nowTeam.getIsCertifiedTeam(),

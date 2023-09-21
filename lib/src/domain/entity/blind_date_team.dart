@@ -87,7 +87,7 @@ class BlindDateTeam implements Team {
   }
 
   @override
-  double getAverageBirthYear() {
+  double getAverageAge() {
     return averageBirthYear;
   }
 

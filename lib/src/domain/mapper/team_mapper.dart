@@ -7,7 +7,7 @@ class TeamMapper {
     return BlindDateTeamDetail(
       id: team.getId(),
       name: team.getName(),
-      averageBirthYear: team.getAverageBirthYear(),
+      averageAge: team.getAverageAge(),
       regions: team.getRegions(),
       universityName: team.getUniversityName(),
       isCertifiedTeam: team.getIsCertifiedTeam(),

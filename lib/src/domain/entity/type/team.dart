@@ -5,7 +5,7 @@ import 'package:dart_flutter/src/domain/entity/type/student.dart';
 abstract interface class Team {
   int getId();
   String getName();
-  double getAverageBirthYear();
+  double getAverageAge();
   List<Location> getRegions();
   String getUniversityName();
   bool getIsCertifiedTeam();
