@@ -107,7 +107,7 @@ class MeetOtherTeamDetail extends StatelessWidget {
                         // ),
                         SizedBox(height: SizeConfig.defaultSize,),
 
-                        state.proposalStatus == false
+                        state.proposalStatus == false || blindDateTeamDetail.proposalStatus == true
                           ? Container(
                             width: SizeConfig.screenWidth,
                             height: SizeConfig.defaultSize * 5.5,

@@ -36,6 +36,7 @@ class MeetState {
   late int nowTeamId;
   late bool pickedTeam;
   late bool proposalStatus;
+  late bool IsAlreadyProposalTeam;
   // meet - createTeamInput
   late List<University> universities;
   late File profileImageFile;
