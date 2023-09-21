@@ -121,9 +121,11 @@ class _ChattingRoomState extends State<ChattingRoom> {
     List<Message> newMessages = await BlocProvider.of<ChattingCubit>(context).fetchMoreMessages(widget.chatRoomDetail.id, page);
     page += 1;
     chatController.loadMoreData(newMessages);
-    if (page != 0) AnalyticsUtil.logEvent('채팅_채팅방_이전메시지불러오기(페이지네이션)', properties: {
+    if (page != 0) {
+      AnalyticsUtil.logEvent('채팅_채팅방_이전메시지불러오기(페이지네이션)', properties: {
       '불러온 페이지 인덱스' : page
     });
+    }
   }
 
   @override
@@ -389,7 +391,7 @@ class _ChattingRoomState extends State<ChattingRoom> {
               bodyStyle: TextStyle(color: Colors.white),
               titleStyle: TextStyle(color: Colors.white),
             ),
-            color: Color(0xffFF5C58),
+            color: const Color(0xffFF5C58),
           ),
           inComingChatBubbleConfig: ChatBubble( // 상대방 채팅
             linkPreviewConfig: const LinkPreviewConfiguration(

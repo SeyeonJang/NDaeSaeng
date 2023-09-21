@@ -5,7 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../res/config/size_config.dart';
 import '../../../common/util/toast_util.dart';
 import '../../../domain/mapper/student_mapper.dart';
-import '../../component/meet_one_member_cardview.dart';
 import '../viewmodel/meet_cubit.dart';
 import '../viewmodel/state/meet_state.dart';
 
@@ -31,7 +30,7 @@ class MeetOtherTeamDetail extends StatelessWidget {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        CircularProgressIndicator(color: Color(0xffFE6059)),
+                        const CircularProgressIndicator(color: Color(0xffFE6059)),
                           SizedBox(height: SizeConfig.defaultSize * 5,),
                         Text("팀 정보를 불러오고 있어요 . . .", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.8),)
                       ],
@@ -165,9 +164,9 @@ class MeetOtherTeamDetail extends StatelessWidget {
                                                     text: TextSpan(
                                                         style: TextStyle(fontSize: SizeConfig.defaultSize * 1.8, fontWeight: FontWeight.w500),
                                                         children: <TextSpan>[
-                                                          TextSpan(text: "지금 바로 ", style: TextStyle(color: Colors.black)),
-                                                          TextSpan(text: "\'${blindDateTeamDetail.name}\'", style: TextStyle(color: Color(0xffFF5C58), fontWeight: FontWeight.w600)),
-                                                          TextSpan(text: "에게", style: TextStyle(color: Colors.black)),
+                                                          const TextSpan(text: "지금 바로 ", style: TextStyle(color: Colors.black)),
+                                                          TextSpan(text: "\'${blindDateTeamDetail.name}\'", style: const TextStyle(color: Color(0xffFF5C58), fontWeight: FontWeight.w600)),
+                                                          const TextSpan(text: "에게", style: TextStyle(color: Colors.black)),
                                                         ]
                                                     )
                                                 ),
@@ -240,7 +239,7 @@ class MeetOtherTeamDetail extends StatelessWidget {
                                                 borderRadius: BorderRadius.circular(10),
                                                 color: Colors.grey.shade200,
                                               ),
-                                              child: Center(child: Text("취소")),
+                                              child: const Center(child: Text("취소")),
                                             ),
                                           ),
                                         ),
@@ -252,13 +251,13 @@ class MeetOtherTeamDetail extends StatelessWidget {
                                             showDialog<String>(
                                                 context: modalContext,
                                                 builder: (BuildContext dialogContext) {
-                                                  Future.delayed(Duration(seconds: 2), () {
+                                                  Future.delayed(const Duration(seconds: 2), () {
                                                     Navigator.pop(dialogContext);
                                                   });
                                                   return AlertDialog(
                                                     surfaceTintColor: Colors.white,
-                                                    title: Container(alignment: Alignment.center, child: Text('내 호감이 성공적으로 전달됐어요!', style: TextStyle(fontSize: SizeConfig.defaultSize * 1.5, fontWeight: FontWeight.w600, color: Color(0xffFF5C58)),)),
-                                                    content: Container(alignment: Alignment.center, height: SizeConfig.defaultSize * 4, child: Text('곧 상대의 채팅 수락 결과를 알려드릴게요!',)),
+                                                    title: Container(alignment: Alignment.center, child: Text('내 호감이 성공적으로 전달됐어요!', style: TextStyle(fontSize: SizeConfig.defaultSize * 1.5, fontWeight: FontWeight.w600, color: const Color(0xffFF5C58)),)),
+                                                    content: Container(alignment: Alignment.center, height: SizeConfig.defaultSize * 4, child: const Text('곧 상대의 채팅 수락 결과를 알려드릴게요!',)),
                                                   );
                                                 }
                                             );
@@ -268,9 +267,9 @@ class MeetOtherTeamDetail extends StatelessWidget {
                                             width: SizeConfig.defaultSize * 20,
                                             decoration: BoxDecoration(
                                               borderRadius: BorderRadius.circular(10),
-                                              color: Color(0xffFF5C58),
+                                              color: const Color(0xffFF5C58),
                                             ),
-                                            child: Center(child: Text("호감 보내기", style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600),)),
+                                            child: const Center(child: Text("호감 보내기", style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600),)),
                                             // TODO : 포인트 재개하면 복구하기
                                             // child: Center(child: Text("500 포인트로 채팅 요청", style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600),)),
                                           ),
@@ -285,7 +284,7 @@ class MeetOtherTeamDetail extends StatelessWidget {
                             width: SizeConfig.screenWidth,
                             height: SizeConfig.defaultSize * 5.5,
                             decoration: BoxDecoration(
-                              color: Color(0xffFE6059),
+                              color: const Color(0xffFE6059),
                               borderRadius: BorderRadius.circular(10),
                             ),
                             child: Center(
@@ -322,7 +321,7 @@ class MeetOtherTeamDetail extends StatelessWidget {
                 ),
               );
             } else {
-              return Text("데이터 정보가 없습니다.");
+              return const Text("데이터 정보가 없습니다.");
             }
           }
         );
