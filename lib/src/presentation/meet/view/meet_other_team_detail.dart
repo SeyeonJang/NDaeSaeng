@@ -364,7 +364,7 @@ class _TopBarSection extends StatelessWidget {
               ),
               Row(
                 children: [
-                  Text("${(2023-team.averageAge+1 > 0 ? 2023-team.averageAge+1 : team.averageAge).toStringAsFixed(1)}세", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.7),),
+                  Text("${(team.averageAge > 1000 ? 2023-team.averageAge+1 : team.averageAge).toStringAsFixed(1)}세", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.7),),
                   PopupMenuButton<String>(
                     icon: Icon(Icons.more_horiz_rounded, color: Colors.grey.shade300,),
                     padding: EdgeInsets.zero,
