@@ -262,77 +262,9 @@ class _TutorialSlideState extends State<TutorialSlide2> with TickerProviderState
             Container(
               child: Column(
                 children: [
-                  SizedBox(height: SizeConfig.screenHeight * 0.1,),
+                  SizedBox(height: SizeConfig.screenHeight * 0.08,),
 
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: SizeConfig.defaultSize * 3),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                          SizedBox(height: SizeConfig.defaultSize * 2,),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Container(
-                              width: SizeConfig.defaultSize * 22,
-                              height: SizeConfig.defaultSize * 5,
-                              alignment: Alignment.center,
-                              decoration: BoxDecoration(
-                                color: const Color(0xffFE6059),
-                                borderRadius: BorderRadius.circular(13),
-                              ),
-                              child: Text("친구가 앱에 없어도 👀", style: TextStyle(
-                                fontSize: SizeConfig.defaultSize * 2,
-                                fontWeight: FontWeight.w600,
-                                color: Colors.white,
-                              ),),
-                            )
-                          ],
-                        ),
-                          SizedBox(height: SizeConfig.defaultSize * 3,),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Container(
-                              width: SizeConfig.defaultSize * 21,
-                              height: SizeConfig.defaultSize * 5,
-                              alignment: Alignment.center,
-                              decoration: BoxDecoration(
-                                color: const Color(0xffFE6059),
-                                borderRadius: BorderRadius.circular(13),
-                              ),
-                              child: Text("친구 정보로 팀 만들고", style: TextStyle(
-                                fontSize: SizeConfig.defaultSize * 2,
-                                fontWeight: FontWeight.w600,
-                                color: Colors.white,
-                              ),),
-                            )
-                          ],
-                        ),
-                          SizedBox(height: SizeConfig.defaultSize * 3,),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Container(
-                              width: SizeConfig.defaultSize * 21,
-                              height: SizeConfig.defaultSize * 5,
-                              alignment: Alignment.center,
-                              decoration: BoxDecoration(
-                                color: const Color(0xffFE6059),
-                                borderRadius: BorderRadius.circular(13),
-                              ),
-                              child: Text("바로 과팅 시작! 🥰❤️", style: TextStyle(
-                                fontSize: SizeConfig.defaultSize * 2,
-                                fontWeight: FontWeight.w600,
-                                color: Colors.white,
-                              ),),
-                            )
-                          ],
-                        ),
-                        SizedBox(height: SizeConfig.defaultSize * 2,),
-                      ],
-                    )
-                  ),
+                  const MeetIntro1(),
 
                   SizedBox(height: SizeConfig.screenHeight * 0.1,),
                   Text("엔대생에서 N명의 대학생들과 과팅해요!", style: TextStyle(fontSize: SizeConfig.defaultSize * 2, fontWeight: FontWeight.w600),),
@@ -346,28 +278,110 @@ class _TutorialSlideState extends State<TutorialSlide2> with TickerProviderState
             Container(
                 child: Column(
                   children: [
-                    SizedBox(height: SizeConfig.screenHeight * 0.1,),
+                    SizedBox(height: SizeConfig.screenHeight * 0.08,),
+
+                    const MeetIntro2(),
+
+                      SizedBox(height: SizeConfig.screenHeight * 0.1,),
+                    Text("팀 정보는 최소한으로 초간단!", style: TextStyle(fontSize: SizeConfig.defaultSize * 2, fontWeight: FontWeight.w600),),
+                      SizedBox(height: SizeConfig.defaultSize * 2,),
+                    Text("내 친구가 엔대생 앱에 가입하지 않았어도", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.5, fontWeight: FontWeight.w500),),
+                      SizedBox(height: SizeConfig.defaultSize * 0.3),
+                    Text("내가 팀명, 지역, 팀원만 입력하면 끝!", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.5, fontWeight: FontWeight.w500),),
+                  ],
+                )
+            ),
+            Container(
+                child: Column(
+                  children: [
+                    SizedBox(height: SizeConfig.screenHeight * 0.08,),
 
                     Padding(
                         padding: EdgeInsets.symmetric(horizontal: SizeConfig.defaultSize * 3),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                              SizedBox(height: SizeConfig.defaultSize * 2,),
+                            SizedBox(height: SizeConfig.defaultSize * 11.5,),
                             Container(
-                              width: SizeConfig.screenWidth, 
-                              child: Expanded(child: Image.asset('assets/images/meet_intro.png'))),
-                              SizedBox(height: SizeConfig.defaultSize * 2,),
+                                width: SizeConfig.screenWidth,
+                                child: Expanded(
+                                    child: Container(
+                                        child: Image.asset('assets/images/likesend.png')))),
+                            SizedBox(height: SizeConfig.defaultSize * 5,),
+                          ],
+                        )
+                    ),
+
+                    SizedBox(height: SizeConfig.screenHeight * 0.1,),
+                    Text("내 마음에 들면? 호감 보내기!", style: TextStyle(fontSize: SizeConfig.defaultSize * 2, fontWeight: FontWeight.w600),),
+                    SizedBox(height: SizeConfig.defaultSize * 2,),
+                    Text("둘러보다가 내 마음에 들면 👀", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.5, fontWeight: FontWeight.w500),),
+                    SizedBox(height: SizeConfig.defaultSize * 0.3),
+                    Text("바로 호감을 보내서 어필해요!", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.5, fontWeight: FontWeight.w500),),
+                  ],
+                )
+            ),
+            Container(
+                child: Column(
+                  children: [
+                    SizedBox(height: SizeConfig.screenHeight * 0.08,),
+
+                    Padding(
+                        padding: EdgeInsets.symmetric(horizontal: SizeConfig.defaultSize * 3),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            SizedBox(height: SizeConfig.defaultSize * 9,),
+                            Container(
+                                width: SizeConfig.screenWidth,
+                                child: Expanded(
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                      children: [
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.start,
+                                          children: [
+                                            Container(
+                                              width: SizeConfig.defaultSize * 25,
+                                              height: SizeConfig.defaultSize * 6,
+                                              alignment: Alignment.center,
+                                              decoration: BoxDecoration(
+                                                color: Colors.grey.shade100,
+                                                borderRadius: const BorderRadius.only(topLeft: Radius.circular(13), topRight: Radius.circular(13), bottomRight: Radius.circular(13)),
+                                              ),
+                                              child: const Text("안녕하세요! 저희는 OOOO학과\n학생들이에요! 대화해보고 싶어요! ☺️"),
+                                            ),
+                                          ],
+                                        ),
+                                          SizedBox(height: SizeConfig.defaultSize * 3,),
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.end,
+                                          children: [
+                                            Container(
+                                              width: SizeConfig.defaultSize * 27.2,
+                                              height: SizeConfig.defaultSize * 3.2,
+                                              alignment: Alignment.center,
+                                              decoration: const BoxDecoration(
+                                                color: Color(0xffFE6059),
+                                                borderRadius: BorderRadius.only(topLeft: Radius.circular(13), topRight: Radius.circular(13), bottomLeft: Radius.circular(13)),
+                                              ),
+                                              child: const Text("안녕하세요! 저희도 대화해보고 싶어요! 😊", style: TextStyle(color: Colors.white),),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),),),
+                            SizedBox(height: SizeConfig.defaultSize * 4,),
                           ],
                         )
                     ),
 
                       SizedBox(height: SizeConfig.screenHeight * 0.1,),
-                    Text("팀 정보는 최소한으로 초간단!", style: TextStyle(fontSize: SizeConfig.defaultSize * 2, fontWeight: FontWeight.w600),),
+                    Text("이성 팀과 바로 채팅 시작!", style: TextStyle(fontSize: SizeConfig.defaultSize * 2, fontWeight: FontWeight.w600),),
                       SizedBox(height: SizeConfig.defaultSize * 2,),
-                    Text("팀원이 앱에 없어도", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.5, fontWeight: FontWeight.w500),),
+                    Text("내 호감을 상대가 수락하거나", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.5, fontWeight: FontWeight.w500),),
                       SizedBox(height: SizeConfig.defaultSize * 0.3),
-                    Text("내가 팀명, 지역, 팀원만 입력하면 끝!", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.5, fontWeight: FontWeight.w500),),
+                    Text("상대가 나한테 호감을 보내오면 채팅해요!", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.5, fontWeight: FontWeight.w500),),
                   ],
                 )
             ),
@@ -564,6 +578,117 @@ class _TutorialSlideState extends State<TutorialSlide2> with TickerProviderState
           ],
         ),
       ),
+    );
+  }
+}
+
+class MeetIntro2 extends StatelessWidget {
+  const MeetIntro2({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+        padding: EdgeInsets.symmetric(horizontal: SizeConfig.defaultSize * 3),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+              SizedBox(height: SizeConfig.defaultSize * 4,),
+            Container(
+              width: SizeConfig.screenWidth,
+              child: Expanded(
+                  child: Container(
+                      decoration: BoxDecoration(
+                        color: const Color(0xffFE6059),
+                        borderRadius: BorderRadius.circular(13),
+                      ),
+                      child: Padding(
+                        padding: EdgeInsets.all(SizeConfig.defaultSize),
+                        child: Image.asset('assets/images/meet_intro.png'),
+                      )))),
+              SizedBox(height: SizeConfig.defaultSize * 3.7,),
+          ],
+        )
+    );
+  }
+}
+
+class MeetIntro1 extends StatelessWidget {
+  const MeetIntro1({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: SizeConfig.defaultSize * 3),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+            SizedBox(height: SizeConfig.defaultSize * 2,),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Container(
+                width: SizeConfig.defaultSize * 22,
+                height: SizeConfig.defaultSize * 5,
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  color: const Color(0xffFE6059),
+                  borderRadius: BorderRadius.circular(13),
+                ),
+                child: Text("친구가 앱에 없어도 👀", style: TextStyle(
+                  fontSize: SizeConfig.defaultSize * 2,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.white,
+                ),),
+              )
+            ],
+          ),
+            SizedBox(height: SizeConfig.defaultSize * 3,),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Container(
+                width: SizeConfig.defaultSize * 21,
+                height: SizeConfig.defaultSize * 5,
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  color: const Color(0xffFE6059),
+                  borderRadius: BorderRadius.circular(13),
+                ),
+                child: Text("친구 정보로 팀 만들고", style: TextStyle(
+                  fontSize: SizeConfig.defaultSize * 2,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.white,
+                ),),
+              )
+            ],
+          ),
+            SizedBox(height: SizeConfig.defaultSize * 3,),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Container(
+                width: SizeConfig.defaultSize * 21,
+                height: SizeConfig.defaultSize * 5,
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  color: const Color(0xffFE6059),
+                  borderRadius: BorderRadius.circular(13),
+                ),
+                child: Text("바로 과팅 시작! 🥰❤️", style: TextStyle(
+                  fontSize: SizeConfig.defaultSize * 2,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.white,
+                ),),
+              )
+            ],
+          ),
+          SizedBox(height: SizeConfig.defaultSize * 2,),
+        ],
+      )
     );
   }
 }
