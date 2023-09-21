@@ -148,7 +148,7 @@ class _TopBarSection extends StatelessWidget {
                                   await ancestorContext.read<MeetCubit>().removeTeam(team.id.toString());
                                   ToastUtil.showMeetToast("팀을 삭제했어요!", 0);
                                   Navigator.pop(dialogContext);
-                                  Navigator.pop(context);
+                                  Navigator.pop(context, true);
                                   ancestorContext.read<MeetCubit>().initMeet();
                                 },
                                 child: const Text('삭제', style: TextStyle(color: Color(0xffFF5C58)),),

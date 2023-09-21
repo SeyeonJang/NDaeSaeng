@@ -119,7 +119,7 @@ class MeetCreateCardviewNovote extends StatelessWidget {
                               children: [
                                 SizedBox(width: SizeConfig.defaultSize * 0.5,),
                                 SizedBox(
-                                  width: SizeConfig.screenWidth * 0.55,
+                                  width: SizeConfig.screenWidth * 0.45,
                                   child: GestureDetector(
                                     onTap: () {
                                       AnalyticsUtil.logEvent("과팅_팀만들기_카드_학교_터치", properties: {
@@ -149,7 +149,7 @@ class MeetCreateCardviewNovote extends StatelessWidget {
                               children: [
                                   SizedBox(width: SizeConfig.defaultSize * 0.5,),
                                 SizedBox(
-                                  width: SizeConfig.screenWidth * 0.55,
+                                  width: SizeConfig.screenWidth * 0.45,
                                   child: GestureDetector(
                                     onTap: () {
                                       AnalyticsUtil.logEvent("과팅_팀만들기_카드_학부_터치", properties: {

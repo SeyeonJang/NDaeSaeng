@@ -4,7 +4,6 @@ import 'package:dart_flutter/src/presentation/meet/view/meet_create_team_input.d
 import 'package:dart_flutter/src/presentation/meet/view/meet_my_team_detail.dart';
 import 'package:dart_flutter/src/presentation/meet/viewmodel/meet_cubit.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../viewmodel/state/meet_state.dart';
 
@@ -30,15 +29,13 @@ class MeetIntro extends StatelessWidget {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        CircularProgressIndicator(color: Colors.grey, ),
+                        const CircularProgressIndicator(color: Colors.grey, ),
                           SizedBox(width: SizeConfig.defaultSize * 2),
                         Text("내 정보를 불러오고 있어요!", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.7),),
                       ],
                     ),
                   )
-                : MakeTeamButton(ancestorContext: context);
-            // TODO : 아래꺼로 고치기
-                // : state.myTeams.length < 1 ? MakeTeamButton(ancestorContext: context) : SeeMyTeamButton(ancestorContext: context, teamId: state.myTeams[0].id,);
+                : state.myTeams.length < 1 ? MakeTeamButton(ancestorContext: context) : SeeMyTeamButton(ancestorContext: context, teamId: state.myTeams[0].id,);
           }
         )
     );
@@ -66,7 +63,7 @@ class BodySection extends StatelessWidget {
                 height: SizeConfig.defaultSize * 5,
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
-                  color: Color(0xffFE6059),
+                  color: const Color(0xffFE6059),
                   borderRadius: BorderRadius.circular(13),
                 ),
                 child: Text("친구가 앱에 없어도 👀", style: TextStyle(
@@ -86,7 +83,7 @@ class BodySection extends StatelessWidget {
                 height: SizeConfig.defaultSize * 5,
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
-                  color: Color(0xffFE6059),
+                  color: const Color(0xffFE6059),
                   borderRadius: BorderRadius.circular(13),
                 ),
                 child: Text("친구 정보로 팀 만들고", style: TextStyle(
@@ -106,7 +103,7 @@ class BodySection extends StatelessWidget {
                 height: SizeConfig.defaultSize * 5,
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
-                  color: Color(0xffFE6059),
+                  color: const Color(0xffFE6059),
                   borderRadius: BorderRadius.circular(13),
                 ),
                 child: Text("바로 과팅 시작! 🥰❤️", style: TextStyle(
@@ -139,7 +136,7 @@ class BodySection extends StatelessWidget {
             child: Container(
               width: SizeConfig.defaultSize * 2.8, // 원의 너비
               height: SizeConfig.defaultSize * 2.8, // 원의 높이
-              color: Color(0xffFE6059), // 빨간색 배경
+              color: const Color(0xffFE6059), // 빨간색 배경
               child: Center(
                 child: Text('1', style: TextStyle(
                     color: Colors.white, // 흰색 텍스트
@@ -167,7 +164,12 @@ class BodySection extends StatelessWidget {
                 children: [
                   Expanded(
                       child: Container(
-                        // TODO : 1번 사진
+                          decoration: BoxDecoration(
+                            // color: Colors.white,
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                          alignment: Alignment.center,
+                          child: Image.asset('assets/images/meet_intro.png')
                       )
                   ),
                   SizedBox(height: SizeConfig.defaultSize),
@@ -221,7 +223,15 @@ class BodySection extends StatelessWidget {
                 children: [
                   Expanded(
                     child: Container(
-                      // TODO : 2번 사진
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        alignment: Alignment.center,
+                        child: Padding(
+                          padding: EdgeInsets.all(SizeConfig.defaultSize),
+                          child: Image.asset('assets/images/likesend.png'),
+                        )
                     )
                   ),
                     SizedBox(height: SizeConfig.defaultSize),
@@ -356,7 +366,7 @@ class MakeTeamButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: SizeConfig.screenWidth,
       height: SizeConfig.defaultSize * 12,
       child: Padding(
@@ -386,9 +396,9 @@ class MakeTeamButton extends StatelessWidget {
                 ))
                 .then((value) async {
               if (value == null) return;
+              ancestorContext.read<MeetCubit>().initMeetIntro();
               await ancestorContext.read<MeetCubit>().createNewTeam(value);
             });
-            ancestorContext.read<MeetCubit>().initMeetIntro();
           },
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -405,7 +415,7 @@ class MakeTeamButton extends StatelessWidget {
                         color: Colors.grey.shade300,
                         spreadRadius: 1,
                         blurRadius: 2.0,
-                        offset: Offset(0,1), // changes position of shadow
+                        offset: const Offset(0,1), // changes position of shadow
                       ),
                     ],
                   ),
@@ -415,7 +425,7 @@ class MakeTeamButton extends StatelessWidget {
                       fontWeight: FontWeight.w600
                   ),)
               ),
-              Text("위 버튼을 눌러 팀 만들고 바로 과팅 시작하기", style: TextStyle(
+              const Text("위 버튼을 눌러 팀 만들고 바로 과팅 시작하기", style: TextStyle(
                 fontWeight: FontWeight.w100,
                 color: Colors.grey
               ),)
@@ -431,7 +441,7 @@ class SeeMyTeamButton extends StatelessWidget {
   final BuildContext ancestorContext;
   final int teamId;
 
-  SeeMyTeamButton({
+  const SeeMyTeamButton({
     super.key,
     required this.ancestorContext,
     required this.teamId
@@ -456,7 +466,10 @@ class SeeMyTeamButton extends StatelessWidget {
                   child: MeetMyTeamDetail(teamId: teamId,),
                 ),
               ),
-            );
+            ).then((value) async {
+              if (value == null) return;
+              ancestorContext.read<MeetCubit>().initMeetIntro();
+            });
           },
           child: Container(
             width: SizeConfig.screenWidth,
