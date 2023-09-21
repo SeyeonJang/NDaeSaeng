@@ -117,7 +117,7 @@ class _TapBarButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
         onTap: () {
-          AnalyticsUtil.logEvent("상단탭_선택", properties: {"탭 이름": name});
+          AnalyticsUtil.logEvent("채팅_상단탭_선택", properties: {"탭 이름": name});
           onTapNavigation(targetPage);
         },
         child: Container(
@@ -142,7 +142,7 @@ class _TapBarButton extends StatelessWidget {
                     ? const Color(0xffFF5C58)
                     : Colors.grey)),
           ),
-        )
+        ),
     );
   }
 }

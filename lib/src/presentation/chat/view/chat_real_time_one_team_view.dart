@@ -13,11 +13,12 @@ import '../../../../res/config/size_config.dart';
 import 'chatroom/chatting_room.dart';
 
 class ChatRealTimeOneTeamView extends StatefulWidget { // Component
+  final bool isLoading;
   final BuildContext ancestorContext;
   final ChatState chatState;
   final ChatRoom matchedTeams;
 
-  const ChatRealTimeOneTeamView({super.key, required this.ancestorContext, required this.chatState, required this.matchedTeams});
+  const ChatRealTimeOneTeamView({super.key, required this.isLoading, required this.ancestorContext, required this.chatState, required this.matchedTeams});
 
   @override
   State<ChatRealTimeOneTeamView> createState() => _ChatRealTimeOneTeamViewState();
@@ -58,7 +59,7 @@ class _ChatRealTimeOneTeamViewState extends State<ChatRealTimeOneTeamView> {
           '우리 팀 학교': widget.matchedTeams.myTeam.universityName,
           '우리 팀 평균나이': widget.matchedTeams.myTeam.averageBirthYear
         });
-        if (_isTapped == true) {
+        if (_isTapped == true || widget.isLoading) {
           return;
         }
         setState(() {
