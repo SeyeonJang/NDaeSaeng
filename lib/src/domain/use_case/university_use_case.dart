@@ -8,4 +8,8 @@ class UniversityUseCase {
   Future<List<University>> getUniversities() {
     return _dartUniversityRepository.getUniversities();
   }
+
+  Future<List<University>> getUniversityByName(String name) {
+    return _dartUniversityRepository.getUniversitiesByName(name);
+  }
 }

@@ -1,5 +1,8 @@
 
-class BlindDateUser {
+import 'package:dart_flutter/src/domain/entity/title_vote.dart';
+import 'package:dart_flutter/src/domain/entity/type/student.dart';
+
+class BlindDateUser implements Student {
   final int id;
   final String name;
   final String profileImageUrl;
@@ -21,6 +24,7 @@ class BlindDateUser {
     );
   }
 
+  @override
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = Map<String, dynamic>();
     data['id'] = id;
@@ -33,5 +37,50 @@ class BlindDateUser {
   @override
   String toString() {
     return 'BlindDateUser{id: $id, name: $name, profileImageUrl: $profileImageUrl, department: $department}';
+  }
+
+  @override
+  int getBirthYear() {
+    return 0;
+  }
+
+  @override
+  String getDepartment() {
+    return department;
+  }
+
+  @override
+  int getId() {
+    return id;
+  }
+
+  @override
+  String getName() {
+    return name;
+  }
+
+  @override
+  String getProfileImageUrl() {
+    return profileImageUrl;
+  }
+
+  @override
+  List<TitleVote> getTitleVotes() {
+    return [];
+  }
+
+  @override
+  bool getIsCertifiedUser() {
+    return false;
+  }
+
+  @override
+  String getUniversityName() {
+    return "(알수없음)";
+  }
+
+  @override
+  int getUniversityId() {
+    return 0;
   }
 }

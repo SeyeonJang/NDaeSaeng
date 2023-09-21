@@ -1,8 +1,13 @@
+import 'dart:io';
+
+import 'package:dart_flutter/src/common/util/toast_util.dart';
 import 'package:dart_flutter/src/data/model/proposal_request_dto.dart';
 import 'package:dart_flutter/src/domain/entity/blind_date_team.dart';
 import 'package:dart_flutter/src/domain/entity/location.dart';
 import 'package:dart_flutter/src/domain/entity/meet_team.dart';
+import 'package:dart_flutter/src/domain/use_case/ghost_use_case.dart';
 import 'package:dart_flutter/src/domain/use_case/meet_use_case.dart';
+import 'package:dart_flutter/src/domain/use_case/university_use_case.dart';
 import 'package:dart_flutter/src/presentation/meet/viewmodel/state/meet_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:dart_flutter/src/domain/entity/user.dart';
@@ -11,6 +16,7 @@ import 'package:dart_flutter/src/domain/use_case/friend_use_case.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import '../../../common/util/analytics_util.dart';
 import '../../../domain/entity/blind_date_team_detail.dart';
+import '../../../domain/entity/university.dart';
 
 class MeetCubit extends Cubit<MeetState> {
 
@@ -18,6 +24,8 @@ class MeetCubit extends Cubit<MeetState> {
   static final UserUseCase _userUseCase = UserUseCase();
   static final FriendUseCase _friendUseCase = FriendUseCase();
   static final MeetUseCase _meetUseCase = MeetUseCase();
+  static final UniversityUseCase _universityUseCase = UniversityUseCase();
+  static final GhostUseCase _ghostUseCase = GhostUseCase();
   bool _initialized = false;
 
   // pagination
@@ -35,10 +43,11 @@ class MeetCubit extends Cubit<MeetState> {
 
     User userResponse = await _userUseCase.myInfo();
     state.setMyInfo(userResponse);
-    List<User> friends = await _friendUseCase.getMyFriends();
-    state.setMyFriends(friends);
-    List<User> newFriends = await _friendUseCase.getRecommendedFriends();
-    state.setRecommendedFriends(newFriends);
+    // TODO : 친구와 과팅 나갈 때 복구
+    // List<User> friends = await _friendUseCase.getMyFriends();
+    // state.setMyFriends(friends);
+    // List<User> newFriends = await _friendUseCase.getRecommendedFriends();
+    // state.setRecommendedFriends(newFriends);
 
     List<Location> locations = await _meetUseCase.getLocations();
     state.setServerLocations(locations);
@@ -59,6 +68,44 @@ class MeetCubit extends Cubit<MeetState> {
     emit(state.copy());
     print("test: ${state.getMyTeam()}");
   }
+
+  void initMeetIntro() async {
+    state.setIsLoading(true);
+    emit(state.copy());
+
+    User userResponse = await _userUseCase.myInfo();
+    state.setMyInfo(userResponse);
+    // TODO : Location, University 지우고 create init할 때 진행시키기
+    List<Location> locations = await _meetUseCase.getLocations();
+    state.setServerLocations(locations);
+    List<University> universities = await _universityUseCase.getUniversityByName(state.userResponse.university?.name ?? '');
+    state.universities = universities;
+
+    await getMyTeams(put: false);
+    if (!state.pickedTeam && state.myTeams.isNotEmpty) {
+      state.setMyTeam(state.myTeams[0]);
+    }
+
+    state.setIsLoading(false);
+    emit(state.copy());
+  }
+
+  void getUniversitiesList() async {
+    state.setIsLoading(true);
+    emit(state.copy());
+    print("0909090909");
+    print(state.isLoading);
+
+    List<University> universities = await _universityUseCase.getUniversities();
+    state.universities = universities;
+
+    state.setIsLoading(false);
+    print("0909090909");
+    print(state.isLoading);
+    emit(state.copy());
+  }
+
+  List<University> get getUniversities => state.universities;
 
   void initCreateTeam() async {
     state.setIsLoading(true);
@@ -200,11 +247,8 @@ class MeetCubit extends Cubit<MeetState> {
   }
 
   Future<void> createNewTeam(MeetTeam meetTeam) async {
-    var myTeam = await _meetUseCase.createNewTeam(meetTeam);
-    state.addMyTeam(myTeam);
+    await _meetUseCase.createNewTeam(meetTeam);
     emit(state.copy());
-    print("============================== 팀 추가 완료");
-    print(state.toString());
   }
 
   Future<MeetTeam> setTeam(String teamId) async {
@@ -331,5 +375,25 @@ class MeetCubit extends Cubit<MeetState> {
       state.isLoading = false;
       emit(state.copy());
     }
+  }
+
+  // 이미지 업로드 (CreateTeam w/ NoVote)
+  Future<String> uploadProfileImage(File file, int userId, String name) async {
+    String url = 'DEFAULT';
+    try {
+      ToastUtil.showToast('사진을 업로드하고 있어요!');
+      url = await _ghostUseCase.uploadProfileImage(userId.toString(), name, file);
+      // await _userUseCase.uploadProfileImage(file, userResponse); // TODO : 이미지 업로드 useCase
+      ToastUtil.showToast('사진 업로드가 완료됐어요!');
+    } catch (e) {
+      ToastUtil.showToast('사진 업로드 중 오류가 발생했습니다.');
+      print('사진 업로드 중 오류: $e');
+    }
+    return url;
+  }
+
+  void setProfileImage(File file) {
+    state.profileImageFile = file;
+    emit(state.copy());
   }
 }

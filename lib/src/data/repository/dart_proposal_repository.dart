@@ -16,7 +16,7 @@ class DartProposalRepository implements ProposalRepository {
     await DartApiRemoteDataSource.postProposal(proposalRequestDto);
   }
 
-  /// 제안 수락이후 채팅방 생성에 대한 책임이 Client에 있으므로 반드시 this.createChatRoom 을 연계할 것
+  @Deprecated("요청수락 대신 채팅룸 생성을 통해 암묵적 수락 진행!")
   @override
   Future<Proposal> acceptChatProposal(int proposalId) async {
     return (await DartApiRemoteDataSource.patchProposal(proposalId, PROPOSAL_ACCEPT)).newProposal();

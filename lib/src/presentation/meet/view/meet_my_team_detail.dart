@@ -1,11 +1,10 @@
 import 'package:dart_flutter/res/config/size_config.dart';
 import 'package:dart_flutter/src/common/util/toast_util.dart';
-import 'package:dart_flutter/src/domain/entity/meet_team.dart';
+import 'package:dart_flutter/src/domain/mapper/student_mapper.dart';
+import 'package:dart_flutter/src/presentation/component/meet_one_member_cardview_novote.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import '../../../domain/entity/blind_date_team_detail.dart';
-import '../../component/meet_one_member_cardview.dart';
 import '../viewmodel/meet_cubit.dart';
 import '../viewmodel/state/meet_state.dart';
 
@@ -59,7 +58,8 @@ class MeetMyTeamDetail extends StatelessWidget {
                               ...List.generate(blindDateTeamDetail.teamUsers.length, (index) {
                                 return Column(
                                   children: [
-                                    MeetOneMemberCardview(userResponse: blindDateTeamDetail.teamUsers[index]),
+                                    // MeetOneMemberCardview(userResponse: StudentMapper.toBlindDateUserDetail(blindDateTeamDetail.teamUsers[index])),
+                                      MeetOneMemberCardviewNoVote(userResponse: StudentMapper.toBlindDateUserDetail(blindDateTeamDetail.teamUsers[index]), university: blindDateTeamDetail.universityName,),
                                     SizedBox(height: SizeConfig.defaultSize),
                                   ],
                                 );
@@ -148,7 +148,7 @@ class _TopBarSection extends StatelessWidget {
                                   await ancestorContext.read<MeetCubit>().removeTeam(team.id.toString());
                                   ToastUtil.showMeetToast("팀을 삭제했어요!", 0);
                                   Navigator.pop(dialogContext);
-                                  Navigator.pop(context);
+                                  Navigator.pop(context, true);
                                   ancestorContext.read<MeetCubit>().initMeet();
                                 },
                                 child: const Text('삭제', style: TextStyle(color: Color(0xffFF5C58)),),

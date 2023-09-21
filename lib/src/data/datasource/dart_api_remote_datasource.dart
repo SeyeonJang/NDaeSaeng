@@ -292,12 +292,11 @@ class DartApiRemoteDataSource {
   }
 
   // team: 팀 생성하기
-  static Future<MeetTeamResponseDto> postTeam(MeetTeamRequestDto teamRequestDto) async {
+  static Future<void> postTeam(MeetTeamRequestDto teamRequestDto) async {
     const path = '/v1/teams';
     final body = teamRequestDto.toJson();
 
     final response = await _httpUtil.request().post(path, data: body);
-    return MeetTeamResponseDto.fromJson(response.data);
   }
 
   // team: 내 팀 삭제하기
@@ -347,17 +346,17 @@ class DartApiRemoteDataSource {
 
   // proposal: 제안 수락/거절 (patch)
   static Future<ProposalResponseDto> patchProposal(int proposalId, String proposalStatus) async {
-    const path = '/v1/users/me/propsals';
+    const path = '/v1/users/me/proposals';
     final pathUrl = "$path/$proposalId";
     final body = {"proposalStatus": proposalStatus};
 
-    final response = await _httpUtil.request().patch(path, data: body);
+    final response = await _httpUtil.request().patch(pathUrl, data: body);
     return ProposalResponseDto.fromJson(response.data);
   }
 
   // proposal: 내가 보낸/받은 제안 확인
   static Future<List<ProposalResponseDto>> getProposalList(bool received) async {
-    const path = '/v1/users/me/proposals?type=received';
+    const path = '/v1/users/me/proposals';
     final String type = received ? "received" : "sent";
     final pathUrl = "$path?type=$type";
     final List jsonResponse = (await _httpUtil.request().get(pathUrl)).data;
@@ -399,7 +398,7 @@ class DartApiRemoteDataSource {
     final path = '/v1/chat/rooms';
     final body = {"proposalId": proposalId};
 
-    await _httpUtil.request().get(path, data: body);
+    await _httpUtil.request().post(path, data: body);
   }
 
   static String _getPathFromUrl(String url) {

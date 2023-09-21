@@ -71,12 +71,7 @@ class DartUserRepositoryImpl implements UserRepository {
     await SupabaseRemoteDatasource.uploadFileToStorage(PROFILE_STORAGE_NAME, userId, file);
     await Future.delayed(const Duration(seconds: 1));
 
-    String url = getProfileImageUrl(userId);
-    UserRequestDto userRequestDto = UserRequestDto(
-      profileImageUrl: url,
-    );
-
-    return url;
+    return getProfileImageUrl(userId);
   }
 
   @override

@@ -612,7 +612,7 @@ class _BottomSection extends StatelessWidget {
                                                           Text(context.read<MeetCubit>().state.myTeams[i].name=='' ? '아직 팀명이 없어요!' : context.read<MeetCubit>().state.myTeams[i].name),
                                                           Row(
                                                             children: [
-                                                              Text(context.read<MeetCubit>().state.myTeams[i].members.map((member) => member.personalInfo!.name).join(', ')),
+                                                              Text(context.read<MeetCubit>().state.myTeams[i].members.map((member) => member.getName()).join(', ')),
                                                               PopupMenuButton<String>(
                                                                 icon: Icon(Icons.more_horiz_rounded, color: Colors.grey.shade300,),
                                                                 color: Colors.white,

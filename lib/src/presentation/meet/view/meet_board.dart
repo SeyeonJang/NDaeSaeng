@@ -47,7 +47,25 @@ class _MeetBoardState extends State<MeetBoard> {
         print("친구 수 : ${state.friends.length}, 과팅 같이 나갈 수 있는 친구 수 : ${filteredFriends.length}, 팀 개수 : ${state.myTeams.length}");
         PagingController<int, BlindDateTeam> pagingController = context.read<MeetCubit>().pagingController;
 
-        return (state.isLoading)
+        return state.myTeams.length < 1
+            ? Scaffold(
+                appBar: AppBar(),
+                body: Container(
+                  width: SizeConfig.screenWidth,
+                  height: SizeConfig.screenHeight,
+                  color: Colors.white,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                        SizedBox(height: SizeConfig.defaultSize * 5,),
+                      Text("팀을 만들어야 이성을 볼 수 있어요! 👀", style: TextStyle(fontSize: SizeConfig.defaultSize * 2),),
+                        SizedBox(height: SizeConfig.defaultSize * 2,),
+                      Text("왼쪽 홈에서 간단하게 팀을 만들어보아요!", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.6),),
+                    ],
+                  ),
+                ),
+              )
+            : (state.isLoading)
           ? Scaffold(
               appBar: AppBar(),
               body: Container(
@@ -626,7 +644,6 @@ class _BodySectionState extends State<_BodySection> {
     return blindDateTeam;
   }
 
-  // @override
   @override
   Widget build(BuildContext context) {
     return RefreshIndicator(
@@ -653,26 +670,16 @@ class _BodySectionState extends State<_BodySection> {
                   padding: EdgeInsets.symmetric(horizontal: SizeConfig.defaultSize * 1, vertical: SizeConfig.defaultSize),
                   child: Column(
                     children: [
-                      // widget.pagingController.itemList?.length == 0 // OtherTeam
-
-                      // widget.meetState.blindDateTeams.length == 0 // OtherTeam
-                      //   ? Text("이성 팀이 아직 없어요!")
-                      //   :
                       RefreshIndicator(
                           onRefresh: () async => widget.pagingController.refresh(),
                           child: Container(
-
-                            // height: widget.meetState.friends.isEmpty || widget.meetState.filteredFriends.isEmpty || widget.meetState.myTeams.length==0
-                            //     ? SizeConfig.screenHeight * 0.7
-                            //     : SizeConfig.screenHeight * 0.6,
                             height: SizeConfig.screenHeight * 0.9,
-
                             child: PagedListView<int, BlindDateTeam>(
                               pagingController: widget.pagingController,
                               builderDelegate: PagedChildBuilderDelegate<BlindDateTeam>(
                                   itemBuilder: (context, blindDateTeam, index) {
                                     return widget.pagingController.itemList?.length == 0
-                                        ? Text("이성 팀이 아직 없어요!")
+                                        ? const Text("이성 팀이 아직 없어요!")
                                         : Column(
                                       children: [
                                         SizedBox(height: SizeConfig.defaultSize * 0.6,),

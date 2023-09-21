@@ -7,9 +7,9 @@ import '../model/meet_team_request_dto.dart';
 
 class DartMeetRepository implements MeetRepository {
   @override
-  Future<MeetTeam> createNewTeam(MeetTeam meetTeam) async {
+  Future<void> createNewTeam(MeetTeam meetTeam) async {
     var teamRequestDto = MeetTeamRequestDto.fromMeetTeam(meetTeam);
-    return (await DartApiRemoteDataSource.postTeam(teamRequestDto)).newMeetTeam();
+    await DartApiRemoteDataSource.postTeam(teamRequestDto);
   }
 
   @override
