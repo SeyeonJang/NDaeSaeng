@@ -15,14 +15,4 @@ class TeamMapper {
       proposalStatus: false,
     );
   }
-
-
-  // {required this.id,
-  // required this.name,
-  // required this.averageBirthYear,
-  // required this.regions,
-  // required this.universityName,
-  // required this.isCertifiedTeam,
-  // required this.teamUsers,
-  // required this.proposalStatus});
 }
