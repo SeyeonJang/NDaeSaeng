@@ -676,20 +676,20 @@ class _BodySectionState extends State<_BodySection> {
                     RefreshIndicator(
                         onRefresh: () async => widget.pagingController.refresh(),
                         child: SizedBox(
-                          height: SizeConfig.screenHeight * 0.9,
+                          height: SizeConfig.screenHeight,
+                          // height: SizeConfig.screenHeight * 0.9, // TODO : 상단탭 보여주면 이거로 복구
                           child: PagedListView<int, BlindDateTeam>(
                             pagingController: widget.pagingController,
                             builderDelegate: PagedChildBuilderDelegate<BlindDateTeam>(
-                                itemBuilder: (context, blindDateTeam, index) {
-                                  return widget.pagingController.itemList?.length == 0
-                                      ? const Text("이성 팀이 아직 없어요!")
-                                      : Column(
-                                    children: [
-                                      SizedBox(height: SizeConfig.defaultSize * 0.6,),
-                                      MeetOneTeamCardview(team: blindDateTeam, isMyTeam: false, myTeamCount: widget.meetState.myTeams.length, myTeamId: nowTeam.id,)
-                                    ],
-                                  );
-                                },
+                              itemBuilder: (context, blindDateTeam, index) {
+                                return widget.pagingController.itemList?.length == 0
+                                    ? const Text("이성 팀이 아직 없어요!")
+                                    : Column(
+                                        children: [
+                                          SizedBox(height: SizeConfig.defaultSize * 0.6,),
+                                          MeetOneTeamCardview(team: blindDateTeam, isMyTeam: false, myTeamCount: widget.meetState.myTeams.length, myTeamId: nowTeam.id,)
+                                        ]);
+                              },
                             ),
                           ),
                         ),
