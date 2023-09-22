@@ -78,10 +78,8 @@ class _FriendDto {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    // data['nickname'] = this.name;
-    data['nickname'] = "최현식";
-    // data['birthYear'] = this.birthyear;
-    data['birthYear'] = 2000;
+    data['nickname'] = this.name;
+    data['birthYear'] = this.birthyear;
     data['universityId'] = this.universityId;
     data['profileImageUrl'] = this.profileImageUrl;
     return data;

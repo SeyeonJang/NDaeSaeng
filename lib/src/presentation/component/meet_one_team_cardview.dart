@@ -77,7 +77,7 @@ class MeetOneTeamCardview extends StatelessWidget {
                   Row(
                     children: [
                       Text(team.name, style: TextStyle(fontSize: SizeConfig.defaultSize * 1.6, fontWeight: FontWeight.w600),),
-                      Text("  ${(2023-team.averageBirthYear+1).toStringAsFixed(1)}세", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.45),)
+                      Text("  ${(team.averageBirthYear > 1000 ? 2023-team.averageBirthYear+1 : team.averageBirthYear).toStringAsFixed(1)}세", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.45),)
                     ],
                   ),
                   Container(

@@ -1,4 +1,5 @@
 import 'package:dart_flutter/res/config/size_config.dart';
+import 'package:dart_flutter/src/common/util/analytics_util.dart';
 import 'package:dart_flutter/src/common/util/toast_util.dart';
 import 'package:dart_flutter/src/domain/mapper/student_mapper.dart';
 import 'package:dart_flutter/src/presentation/component/meet_one_member_cardview_novote.dart';
@@ -18,6 +19,7 @@ class MeetMyTeamDetail extends StatelessWidget {
     return BlocBuilder<MeetCubit, MeetState>(
         builder: (context, state) {
           return FutureBuilder<BlindDateTeamDetail>(
+              // future: context.read<MeetCubit>().getMyTeam(teamId.toString()),
               future: context.read<MeetCubit>().getBlindDateTeam(teamId),
               builder: (context, futureState) {
                 if (futureState.connectionState == ConnectionState.waiting) {
@@ -29,7 +31,7 @@ class MeetMyTeamDetail extends StatelessWidget {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          CircularProgressIndicator(color: Color(0xffFE6059)),
+                          const CircularProgressIndicator(color: Color(0xffFE6059)),
                           SizedBox(height: SizeConfig.defaultSize * 5,),
                           Text("팀 정보를 불러오고 있어요 . . .", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.8),)
                         ],
@@ -70,7 +72,7 @@ class MeetMyTeamDetail extends StatelessWidget {
                     ),
                   );
                 } else {
-                  return Text("데이터 정보가 없습니다.");
+                  return const Text("데이터 정보가 없습니다.");
                 }
               }
           );
@@ -115,21 +117,25 @@ class _TopBarSection extends StatelessWidget {
               ),
               Row(
                 children: [
-                  Text("${(2023-team.averageBirthYear+1).toStringAsFixed(1)}세", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.7),),
+                  Text("${(team.averageAge > 1000 ? 2023-team.averageAge+1 : team.averageAge).toStringAsFixed(1)}세", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.7),),
                   PopupMenuButton<String>(
                     icon: Icon(Icons.more_horiz_rounded, color: Colors.grey.shade300,),
                     color: Colors.white,
                     surfaceTintColor: Colors.white,
                     onSelected: (value) {
-                      // AnalyticsUtil.logEvent("과팅_대기_내팀보기_내팀_더보기_터치", properties: {
-                      //   "teamName": context.read<MeetCubit>().state.myTeams[i].name,
-                      //   "members": context.read<MeetCubit>().state.myTeams[i].members.length,
-                      // });
+                      AnalyticsUtil.logEvent("홈_내팀보기_내팀_더보기_터치", properties: {
+                        'teamId': team.id,
+                        "teamName": team.name,
+                        "members": team.teamUsers.toString(),
+                        'teamUnivName': team.universityName
+                      });
                       if (value == 'delete') {
-                        // AnalyticsUtil.logEvent("과팅_대기_내팀보기_내팀_더보기_삭제_터치", properties: {
-                        //   "teamName": context.read<MeetCubit>().state.myTeams[i].name,
-                        //   "members": context.read<MeetCubit>().state.myTeams[i].members.length,
-                        // });
+                        AnalyticsUtil.logEvent("홈_내팀보기_내팀_더보기_삭제_터치", properties: {
+                          'teamId': team.id,
+                          "teamName": team.name,
+                          "members": team.teamUsers.toString(),
+                          'teamUnivName': team.universityName
+                        });
                         showDialog<String>(
                           context: context,
                           builder: (BuildContext dialogContext) => AlertDialog(
@@ -183,7 +189,7 @@ class _TopBarSection extends StatelessWidget {
                 Text(team.universityName, style: TextStyle(
                   fontSize: SizeConfig.defaultSize * 1.7,),
                 ),
-                Text("       "),
+                const Text("       "),
                 Expanded(
                   child: Container(
                     alignment: Alignment.centerRight,

@@ -8,7 +8,7 @@ import 'package:dart_flutter/src/domain/mapper/student_mapper.dart';
 class BlindDateTeamDetail implements Team {
   final int id;
   final String name;
-  final double averageBirthYear;
+  final double averageAge;
   final List<Location> regions;
   final String universityName;
   final bool isCertifiedTeam;
@@ -18,7 +18,7 @@ class BlindDateTeamDetail implements Team {
   BlindDateTeamDetail(
       {required this.id,
        required this.name,
-       required this.averageBirthYear,
+       required this.averageAge,
        required this.regions,
        required this.universityName,
        required this.isCertifiedTeam,
@@ -28,7 +28,7 @@ class BlindDateTeamDetail implements Team {
   factory BlindDateTeamDetail.fromJson(Map<String, dynamic> json) {
     final int parsedId = json['id'];
     final String parsedName = json['name'];
-    final double parsedAverageBirthYear = json['averageBirthYear'];
+    final double parsedAverageAge = json['averageAge'];
 
     List<Location> parsedRegions = [];
     if (json['regions'] != null) {
@@ -52,7 +52,7 @@ class BlindDateTeamDetail implements Team {
     return BlindDateTeamDetail(
         id:parsedId ,
         name:parsedName ,
-        averageBirthYear:parsedAverageBirthYear ,
+        averageAge:parsedAverageAge ,
         regions :parsedRegions ,
         universityName :parsedUniversityName ,
         isCertifiedTeam :parsedIsCertifiedTeam ,
@@ -65,7 +65,7 @@ class BlindDateTeamDetail implements Team {
     final Map<String, dynamic> data = Map<String, dynamic>();
     data['id'] = id;
     data['name'] = name;
-    data['averageBirthYear'] = averageBirthYear;
+    data['averageAge'] = averageAge;
     if (regions.isNotEmpty) {
       data['regions'] = regions.map((v) => v.toJson()).toList();
     }
@@ -79,7 +79,7 @@ class BlindDateTeamDetail implements Team {
 
   @override
   String toString() {
-    return 'BlindDateTeamDetailResponse{id: $id, name: $name, averageBirthYear: $averageBirthYear, regions: $regions, universityName: $universityName, isCertifiedTeam: $isCertifiedTeam, teamUsers: $teamUsers}';
+    return 'BlindDateTeamDetailResponse{id: $id, name: $name, averageAge: $averageAge, regions: $regions, universityName: $universityName, isCertifiedTeam: $isCertifiedTeam, teamUsers: $teamUsers}';
   }
 
   @override
@@ -93,8 +93,8 @@ class BlindDateTeamDetail implements Team {
   }
 
   @override
-  double getAverageBirthYear() {
-    return averageBirthYear;
+  double getAverageAge() {
+    return averageAge;
   }
 
   @override

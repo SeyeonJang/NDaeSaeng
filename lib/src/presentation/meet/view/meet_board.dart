@@ -47,7 +47,7 @@ class _MeetBoardState extends State<MeetBoard> {
         print("친구 수 : ${state.friends.length}, 과팅 같이 나갈 수 있는 친구 수 : ${filteredFriends.length}, 팀 개수 : ${state.myTeams.length}");
         PagingController<int, BlindDateTeam> pagingController = context.read<MeetCubit>().pagingController;
 
-        return state.myTeams.length < 1
+        return (state.isLoading)
             ? Scaffold(
                 appBar: AppBar(),
                 body: Container(
@@ -57,28 +57,35 @@ class _MeetBoardState extends State<MeetBoard> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                        SizedBox(height: SizeConfig.defaultSize * 5,),
-                      Text("팀을 만들어야 이성을 볼 수 있어요! 👀", style: TextStyle(fontSize: SizeConfig.defaultSize * 2),),
-                        SizedBox(height: SizeConfig.defaultSize * 2,),
-                      Text("왼쪽 홈에서 간단하게 팀을 만들어보아요!", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.6),),
+                      const CircularProgressIndicator(color: Color(0xffFE6059)),
+                      SizedBox(height: SizeConfig.defaultSize * 5,),
+                      Text("이성 팀을 불러오고 있어요 . . . 🥰", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.8),)
                     ],
                   ),
                 ),
               )
-            : (state.isLoading)
+            : state.myTeams.isEmpty
           ? Scaffold(
               appBar: AppBar(),
-              body: Container(
-                width: SizeConfig.screenWidth,
-                height: SizeConfig.screenHeight,
-                color: Colors.white,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    CircularProgressIndicator(color: Color(0xffFE6059)),
-                    SizedBox(height: SizeConfig.defaultSize * 5,),
-                    Text("이성 팀을 불러오고 있어요 . . . 🥰", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.8),)
-                  ],
+              body: GestureDetector(
+                onTap: () {
+                  AnalyticsUtil.logEvent('과팅_목록_팀없을때_화면터치');
+                },
+                child: Container(
+                  width: SizeConfig.screenWidth,
+                  height: SizeConfig.screenHeight,
+                  color: Colors.white,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Image.asset('assets/images/heart.png', width: SizeConfig.screenWidth * 0.7,),
+                      SizedBox(height: SizeConfig.defaultSize * 7,),
+                      Text("팀을 만들어야 이성을 볼 수 있어요! 👀", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.8),),
+                      SizedBox(height: SizeConfig.defaultSize * 1.5,),
+                      Text("왼쪽 홈에서 간단하게 팀을 만들어보아요!", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.5),),
+                      SizedBox(height: SizeConfig.defaultSize * 10,),
+                    ],
+                  ),
                 ),
               ),
             )
@@ -180,7 +187,7 @@ class _TopSectionMakeTeam extends StatelessWidget { // 팀 X 과팅 나갈 친�
               width: SizeConfig.screenWidth,
               height: SizeConfig.defaultSize * 5,
               decoration: BoxDecoration(
-                color: Color(0xffFE6059),
+                color: const Color(0xffFE6059),
                 borderRadius: BorderRadius.circular(10)),
               child: Center(
                 child: Text("우리 학교 친구와 과팅 팀 만들기", style: TextStyle(
@@ -235,7 +242,7 @@ class _TopSectionInviteFriendState extends State<_TopSectionInviteFriend> {
                         return Container(
                           width: SizeConfig.screenWidth,
                           height: SizeConfig.screenHeight * 0.8,
-                          decoration: BoxDecoration(
+                          decoration: const BoxDecoration(
                               color: Colors.white,
                               borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10))),
                           child: SingleChildScrollView(
@@ -323,7 +330,7 @@ class _TopSectionInviteFriendState extends State<_TopSectionInviteFriend> {
                                                     myCodeCopy)); // 클립보드에 복사되었어요 <- 메시지 자동으로 Android에서 뜸 TODO : iOS는 확인하고 복사멘트 띄우기
                                               },
                                               style: ElevatedButton.styleFrom(
-                                                textStyle: TextStyle(
+                                                textStyle: const TextStyle(
                                                   color: Color(0xffFE6059),
                                                 ),
                                                 // backgroundColor: Color(0xff7C83FD),
@@ -372,10 +379,10 @@ class _TopSectionInviteFriendState extends State<_TopSectionInviteFriend> {
                                       height: SizeConfig.defaultSize * 5.5,
                                       alignment: Alignment.center,
                                       decoration: BoxDecoration(
-                                          color: Color(0xffFE6059),
+                                          color: const Color(0xffFE6059),
                                           // color: Colors.white,
                                           border: Border.all(
-                                            color: Color(0xffFE6059),
+                                            color: const Color(0xffFE6059),
                                           ),
                                           borderRadius: BorderRadius.circular(15)),
                                       child: Text(
@@ -457,10 +464,10 @@ class _TopSectionInviteFriendState extends State<_TopSectionInviteFriend> {
                                                   contentPadding: EdgeInsets.symmetric(
                                                       vertical: SizeConfig.defaultSize * 1.5, horizontal: SizeConfig.defaultSize * 1.5),
                                                   enabledBorder: OutlineInputBorder(
-                                                    borderRadius: BorderRadius.all(Radius.circular(15.0)),
+                                                    borderRadius: const BorderRadius.all(Radius.circular(15.0)),
                                                     borderSide: BorderSide(color: Colors.grey.shade300, width: 1.5),
                                                   ),
-                                                  focusedBorder: OutlineInputBorder(
+                                                  focusedBorder: const OutlineInputBorder(
                                                     borderRadius: BorderRadius.all(Radius.circular(10.0)),
                                                     borderSide: BorderSide(color: Color(0xffFE6059)),
                                                   ),
@@ -469,7 +476,7 @@ class _TopSectionInviteFriendState extends State<_TopSectionInviteFriend> {
                                             ),
                                             ElevatedButton( // 친구 추가 버튼
                                               style: ElevatedButton.styleFrom(
-                                                backgroundColor: widget.meetState.isLoading ? Colors.grey.shade400 : Color(0xffFE6059),
+                                                backgroundColor: widget.meetState.isLoading ? Colors.grey.shade400 : const Color(0xffFE6059),
                                                 shape: RoundedRectangleBorder(
                                                   borderRadius: BorderRadius.circular(15), // 모서리 둥글기 설정
                                                 ),
@@ -485,7 +492,6 @@ class _TopSectionInviteFriendState extends State<_TopSectionInviteFriend> {
                                                   ToastUtil.itsMyCodeToast("나는 친구로 추가할 수 없어요!");
                                                   friendCodeConfirm = "나";
                                                 } else {
-                                                  print("friendCode $friendCode");
                                                   try {
                                                     thisState(() {
                                                       setState(() {
@@ -495,8 +501,6 @@ class _TopSectionInviteFriendState extends State<_TopSectionInviteFriend> {
 
                                                     // 실제 친구 추가 동작
                                                     await BlocProvider.of<MeetCubit>(context).pressedFriendCodeAddButton(friendCode);
-                                                    print(context.toString());
-
                                                     ToastUtil.showAddFriendToast("친구가 추가되었어요!");
                                                     friendCodeConfirm = "정상";
                                                     Navigator.pop(context);
@@ -541,7 +545,7 @@ class _TopSectionInviteFriendState extends State<_TopSectionInviteFriend> {
                                             style: TextStyle(
                                                 fontWeight: FontWeight.w700,
                                                 fontSize: SizeConfig.defaultSize * 1.9,
-                                                color: Color(0xffFE6059)
+                                                color: const Color(0xffFE6059)
                                             ),),
                                         ],
                                       ),
@@ -581,7 +585,7 @@ class _TopSectionInviteFriendState extends State<_TopSectionInviteFriend> {
               width: SizeConfig.screenWidth,
               height: SizeConfig.defaultSize * 5,
               decoration: BoxDecoration(
-                  color: Color(0xffFE6059),
+                  color: const Color(0xffFE6059),
                   borderRadius: BorderRadius.circular(10)),
               child: Center(
                 child: Text("한 명 초대하고 10초만에 과팅 등록하기", style: TextStyle(
@@ -635,7 +639,7 @@ class _BodySectionState extends State<_BodySection> {
     BlindDateTeam blindDateTeam = BlindDateTeam(
         id: nowTeam.getId(),
         name: nowTeam.getName(),
-        averageBirthYear: nowTeam.getAverageBirthYear(),
+        averageBirthYear: nowTeam.getAverageAge(),
         regions: nowTeam.getRegions(),
         universityName: nowTeam.getUniversityName(),
         isCertifiedTeam: nowTeam.getIsCertifiedTeam(),
@@ -663,39 +667,36 @@ class _BodySectionState extends State<_BodySection> {
           //   ),
           Flexible(
             child: SingleChildScrollView(
-              physics: AlwaysScrollableScrollPhysics(),
+              physics: const AlwaysScrollableScrollPhysics(),
               controller: _scrollController,
-              child: Container(
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: SizeConfig.defaultSize * 1, vertical: SizeConfig.defaultSize),
-                  child: Column(
-                    children: [
-                      RefreshIndicator(
-                          onRefresh: () async => widget.pagingController.refresh(),
-                          child: Container(
-                            height: SizeConfig.screenHeight * 0.9,
-                            child: PagedListView<int, BlindDateTeam>(
-                              pagingController: widget.pagingController,
-                              builderDelegate: PagedChildBuilderDelegate<BlindDateTeam>(
-                                  itemBuilder: (context, blindDateTeam, index) {
-                                    return widget.pagingController.itemList?.length == 0
-                                        ? const Text("이성 팀이 아직 없어요!")
-                                        : Column(
-                                      children: [
-                                        SizedBox(height: SizeConfig.defaultSize * 0.6,),
-                                        MeetOneTeamCardview(team: blindDateTeam, isMyTeam: false, myTeamCount: widget.meetState.myTeams.length, myTeamId: nowTeam.id,)
-                                      ],
-                                    );
-                                  },
-                              ),
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: SizeConfig.defaultSize * 1, vertical: SizeConfig.defaultSize),
+                child: Column(
+                  children: [
+                    RefreshIndicator(
+                        onRefresh: () async => widget.pagingController.refresh(),
+                        child: SizedBox(
+                          height: SizeConfig.screenHeight * 0.9,
+                          child: PagedListView<int, BlindDateTeam>(
+                            pagingController: widget.pagingController,
+                            builderDelegate: PagedChildBuilderDelegate<BlindDateTeam>(
+                              itemBuilder: (context, blindDateTeam, index) {
+                                return widget.pagingController.itemList?.length == 0
+                                    ? const Text("이성 팀이 아직 없어요!")
+                                    : Column(
+                                        children: [
+                                          SizedBox(height: SizeConfig.defaultSize * 0.6,),
+                                          MeetOneTeamCardview(team: blindDateTeam, isMyTeam: false, myTeamCount: widget.meetState.myTeams.length, myTeamId: nowTeam.id,)
+                                        ]);
+                              },
                             ),
                           ),
                         ),
-                        // if (!(widget.meetState.friends.isEmpty || widget.meetState.filteredFriends.isEmpty || widget.meetState.myTeams.length==0))
-                        //   SizedBox(height: SizeConfig.defaultSize * 30)
-                    ],
-                  )
-                ),
+                      ),
+                      // if (!(widget.meetState.friends.isEmpty || widget.meetState.filteredFriends.isEmpty || widget.meetState.myTeams.length==0))
+                      //   SizedBox(height: SizeConfig.defaultSize * 30)
+                  ],
+                )
               ),
             ),
           ),
@@ -847,7 +848,7 @@ class NotFriendComponent extends StatelessWidget {
                 //   "친구 학과": friend.university!.department
                 // });
               },
-              child: Container(
+              child: SizedBox(
                 width: SizeConfig.screenWidth * 0.52,
                 child: Row(
                   children: [
@@ -936,7 +937,7 @@ class NotFriendComponent extends StatelessWidget {
                 Navigator.pop(context);
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: Color(0xffFE6059),
+                backgroundColor: const Color(0xffFE6059),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(15), // 모서리 둥글기 설정
                 ),
@@ -950,8 +951,8 @@ class NotFriendComponent extends StatelessWidget {
           ],
         ),
         SizedBox(height: SizeConfig.defaultSize * 0.1,),
-        Divider(
-          color: Color(0xffddddddd),
+        const Divider(
+          color: Color(0xffdddddd),
         ),
       ],
     );

@@ -1,7 +1,3 @@
-import 'package:dart_flutter/src/domain/entity/blind_date_team.dart';
-import 'package:dart_flutter/src/domain/entity/location.dart';
-import 'package:dart_flutter/src/domain/entity/proposal.dart';
-import 'package:dart_flutter/src/domain/entity/type/blind_date_user.dart';
 import 'package:dart_flutter/src/presentation/chat/view/chat_get_one_team_view.dart';
 import 'package:dart_flutter/src/presentation/chat/viewmodel/chat_cubit.dart';
 import 'package:dart_flutter/src/presentation/chat/viewmodel/state/chat_state.dart';

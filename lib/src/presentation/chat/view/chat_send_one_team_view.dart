@@ -1,3 +1,4 @@
+import 'package:dart_flutter/src/common/util/analytics_util.dart';
 import 'package:dart_flutter/src/domain/entity/proposal.dart';
 import 'package:flutter/material.dart';
 import '../../../../res/config/size_config.dart';
@@ -11,8 +12,11 @@ class ChatSendOneTeamView extends StatelessWidget { // Component
 
   @override
   Widget build(BuildContext context) {
+
     return GestureDetector(
-      onTap: () {},
+      onTap: () {
+        AnalyticsUtil.logEvent('채팅_보낸호감_카드터치');
+      },
       child: Container(
         width: SizeConfig.screenWidth,
         height: SizeConfig.defaultSize * 9.8,
@@ -24,7 +28,7 @@ class ChatSendOneTeamView extends StatelessWidget { // Component
               color: Colors.grey.shade300,
               spreadRadius: 0,
               blurRadius: 2.0,
-              offset: Offset(0,2), // changes position of shadow
+              offset: const Offset(0,2), // changes position of shadow
             ),
           ],
         ),
@@ -39,7 +43,7 @@ class ChatSendOneTeamView extends StatelessWidget { // Component
                   Row(
                     children: [
                       Text(proposal.requestedTeam.name, style: TextStyle(fontSize: SizeConfig.defaultSize * 1.6, fontWeight: FontWeight.w600),),
-                      Text("  ${(2023-proposal.requestedTeam.averageBirthYear+1).toString().substring(0,4)}세", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.6),)
+                      Text("  ${proposal.requestedTeam.averageBirthYear.toStringAsFixed(1)}세", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.6),)
                     ],
                   ),
                   Text(proposal.requestingTeam.name, style: TextStyle(fontSize: SizeConfig.defaultSize * 1.4),),
@@ -49,13 +53,13 @@ class ChatSendOneTeamView extends StatelessWidget { // Component
 
               Row( // 아래층
                 children: [
-                  Container(
+                  SizedBox(
                     width: SizeConfig.defaultSize * 12,
                     child: Stack(
                       children: [
                         Container( // 버리는 사진
                           width: SizeConfig.defaultSize * 4,
-                          decoration: BoxDecoration(
+                          decoration: const BoxDecoration(
                             shape: BoxShape.circle,
                           ),
                           child: Center(
@@ -71,7 +75,7 @@ class ChatSendOneTeamView extends StatelessWidget { // Component
                             left: i * SizeConfig.defaultSize * 3,
                             child: Container(
                               width: SizeConfig.defaultSize * 4,
-                              decoration: BoxDecoration(
+                              decoration: const BoxDecoration(
                                 shape: BoxShape.circle,
                               ),
                               child: Center(
@@ -104,7 +108,7 @@ class ChatSendOneTeamView extends StatelessWidget { // Component
                               child: Text(proposal.requestedTeam.teamUsers.map((user) => user.getDepartment()).toSet().fold('', (previousValue, element) => previousValue.isEmpty ? element : '$previousValue & $element'),
                                 style: TextStyle(fontSize: SizeConfig.defaultSize * 1.4, overflow: TextOverflow.ellipsis),),
                             ),
-                            Text("${proposal.createdTime.month}/${proposal.createdTime.day} 보냄", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.4, color: Color(0xff7C83FD)),)
+                            Text("${proposal.createdTime.month}/${proposal.createdTime.day} 보냄", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.4, color: const Color(0xff7C83FD)),)
                           ],
                         )
                       ],

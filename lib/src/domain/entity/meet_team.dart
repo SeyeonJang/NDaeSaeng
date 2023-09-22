@@ -38,7 +38,7 @@ class MeetTeam implements Team {
   }
 
   @override
-  double getAverageBirthYear() {
+  double getAverageAge() {
     double birthYear = 0;
     int count = 0;
     for (int i=0; i<members.length; i++) {

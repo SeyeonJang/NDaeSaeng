@@ -105,7 +105,8 @@ class _DartPageViewState extends State<DartPageView> {
       backgroundColor: Colors.white,
 
       body: Padding(
-        padding: EdgeInsets.only(top: SizeConfig.defaultSize * 6.5),
+        padding: EdgeInsets.only(top: _page != 1 ? SizeConfig.defaultSize * 6.5 : 0),
+        // padding: EdgeInsets.only(top: SizeConfig.defaultSize * 6.5),
         child: WillPopScope(
           onWillPop: _onWillPop,
           child: _tabs[_page]

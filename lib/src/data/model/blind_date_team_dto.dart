@@ -5,7 +5,7 @@ import 'package:dart_flutter/src/domain/entity/blind_date_team.dart';
 class BlindDateTeamDto {
   int? id;
   String? name;
-  double? averageBirthYear;
+  double? averageAge;
   List<TeamRegion>? regions;
   String? universityName;
   bool? isCertifiedTeam;
@@ -14,7 +14,7 @@ class BlindDateTeamDto {
   BlindDateTeamDto(
       {this.id,
         this.name,
-        this.averageBirthYear,
+        this.averageAge,
         this.regions,
         this.universityName,
         this.isCertifiedTeam,
@@ -24,7 +24,7 @@ class BlindDateTeamDto {
     return BlindDateTeam(
         id: id ?? 0,
         name: name ?? "(알수없음)",
-        averageBirthYear: averageBirthYear ?? 1950.0,
+        averageBirthYear: averageAge ?? 1950.0,
         regions: regions?.map((region) => region.newLocation()).toList() ?? [],
         universityName: universityName ?? "(알수없음)",
         isCertifiedTeam: isCertifiedTeam ?? false,
@@ -35,7 +35,7 @@ class BlindDateTeamDto {
   BlindDateTeamDto.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];
-    averageBirthYear = json['averageBirthYear'];
+    averageAge = json['averageAge'];
     if (json['regions'] != null) {
       regions = <TeamRegion>[];
       json['regions'].forEach((v) {
@@ -56,7 +56,7 @@ class BlindDateTeamDto {
     final Map<String, dynamic> data = Map<String, dynamic>();
     data['id'] = id;
     data['name'] = name;
-    data['averageBirthYear'] = averageBirthYear;
+    data['averageAge'] = averageAge;
     if (regions != null) {
       data['regions'] = regions!.map((v) => v.toJson()).toList();
     }
@@ -70,6 +70,6 @@ class BlindDateTeamDto {
 
   @override
   String toString() {
-    return 'BlindDateTeamResponse{id: $id, name: $name, averageBirthYear: $averageBirthYear, regions: $regions, universityName: $universityName, isCertifiedTeam: $isCertifiedTeam, teamUsers: $teamUsers}';
+    return 'BlindDateTeamResponse{id: $id, name: $name, averageAge: $averageAge, regions: $regions, universityName: $universityName, isCertifiedTeam: $isCertifiedTeam, teamUsers: $teamUsers}';
   }
 }

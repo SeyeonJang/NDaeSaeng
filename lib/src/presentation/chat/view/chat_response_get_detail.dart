@@ -1,3 +1,4 @@
+import 'package:dart_flutter/src/common/util/analytics_util.dart';
 import 'package:dart_flutter/src/domain/entity/blind_date_team_detail.dart';
 import 'package:dart_flutter/src/domain/mapper/student_mapper.dart';
 import 'package:dart_flutter/src/presentation/chat/viewmodel/chat_cubit.dart';
@@ -85,6 +86,7 @@ class ChatResponseGetDetail extends StatelessWidget {
                           children: [
                             GestureDetector( // 거절
                               onTap: () {
+                                AnalyticsUtil.logEvent('채팅_받은호감_상세조회_거절버튼');
                                 showDialog(
                                     context: context,
                                     builder: (BuildContext modalContext) {
@@ -106,8 +108,8 @@ class ChatResponseGetDetail extends StatelessWidget {
                                                           text: TextSpan(
                                                               style: TextStyle(fontSize: SizeConfig.defaultSize * 1.8, fontWeight: FontWeight.w500),
                                                               children: <TextSpan>[
-                                                                TextSpan(text: "\'${blindDateTeamDetail.name}\'", style: TextStyle(color: Color(0xffFF5C58), fontWeight: FontWeight.w600)),
-                                                                TextSpan(text: "의 호감을", style: TextStyle(color: Colors.black)),
+                                                                TextSpan(text: "\'${blindDateTeamDetail.name}\'", style: const TextStyle(color: Color(0xffFF5C58), fontWeight: FontWeight.w600)),
+                                                                const TextSpan(text: "의 호감을", style: TextStyle(color: Colors.black)),
                                                               ]
                                                           )
                                                       ),
@@ -150,6 +152,7 @@ class ChatResponseGetDetail extends StatelessWidget {
                                               Expanded(
                                                 child: GestureDetector(
                                                   onTap: () {
+                                                    AnalyticsUtil.logEvent('채팅_받은호감_상세조회_거절버튼_취소');
                                                     Navigator.pop(modalContext, false);
                                                   },
                                                   child: Container(
@@ -158,26 +161,27 @@ class ChatResponseGetDetail extends StatelessWidget {
                                                       borderRadius: BorderRadius.circular(10),
                                                       color: Colors.grey.shade200,
                                                     ),
-                                                    child: Center(child: Text("취소")),
+                                                    child: const Center(child: Text("취소")),
                                                   ),
                                                 ),
                                               ),
                                               SizedBox(width: SizeConfig.defaultSize,),
                                               GestureDetector(
                                                 onTap: () {
+                                                  AnalyticsUtil.logEvent('채팅_받은호감_상세조회_거절버튼_거절');
                                                   Navigator.pop(modalContext, true);
                                                   context.read<ChatCubit>().rejectChatProposal(proposalId);
                                                   showDialog<String>(
                                                       context: modalContext,
                                                       builder: (BuildContext dialogContext) {
-                                                        Future.delayed(Duration(seconds: 2), () {
+                                                        Future.delayed(const Duration(seconds: 2), () {
                                                           Navigator.pop(dialogContext);
                                                           Navigator.pop(contextTop);
                                                         });
                                                         return AlertDialog(
                                                           surfaceTintColor: Colors.white,
-                                                          title: Container(alignment: Alignment.center, child: Text('호감을 거절했어요!', style: TextStyle(fontSize: SizeConfig.defaultSize * 1.5, fontWeight: FontWeight.w600, color: Color(0xffFF5C58)),)),
-                                                          content: Container(alignment: Alignment.center, height: SizeConfig.defaultSize * 4, child: Text('받은 요청 목록에서도 보이지 않아요!',)),
+                                                          title: Container(alignment: Alignment.center, child: Text('호감을 거절했어요!', style: TextStyle(fontSize: SizeConfig.defaultSize * 1.5, fontWeight: FontWeight.w600, color: const Color(0xffFF5C58)),)),
+                                                          content: Container(alignment: Alignment.center, height: SizeConfig.defaultSize * 4, child: const Text('받은 요청 목록에서도 보이지 않아요!',)),
                                                         );
                                                       }
                                                   );
@@ -187,9 +191,9 @@ class ChatResponseGetDetail extends StatelessWidget {
                                                   width: SizeConfig.defaultSize * 10,
                                                   decoration: BoxDecoration(
                                                     borderRadius: BorderRadius.circular(10),
-                                                    color: Color(0xffFF5C58),
+                                                    color: const Color(0xffFF5C58),
                                                   ),
-                                                  child: Center(child: Text("거절하기", style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600),)),
+                                                  child: const Center(child: Text("거절하기", style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600),)),
                                                 ),
                                               ),
                                             ],
@@ -217,6 +221,7 @@ class ChatResponseGetDetail extends StatelessWidget {
 
                             GestureDetector(
                               onTap: () {
+                                AnalyticsUtil.logEvent('채팅_받은호감_상세조회_수락버튼');
                                 showDialog(
                                   context: context,
                                   builder: (BuildContext modalContext) {
@@ -238,8 +243,8 @@ class ChatResponseGetDetail extends StatelessWidget {
                                                         text: TextSpan(
                                                             style: TextStyle(fontSize: SizeConfig.defaultSize * 1.8, fontWeight: FontWeight.w500),
                                                             children: <TextSpan>[
-                                                              TextSpan(text: "\'${blindDateTeamDetail.name}\'", style: TextStyle(color: Color(0xffFF5C58), fontWeight: FontWeight.w600)),
-                                                              TextSpan(text: "의 호감을", style: TextStyle(color: Colors.black)),
+                                                              TextSpan(text: "\'${blindDateTeamDetail.name}\'", style: const TextStyle(color: Color(0xffFF5C58), fontWeight: FontWeight.w600)),
+                                                              const TextSpan(text: "의 호감을", style: TextStyle(color: Colors.black)),
                                                             ]
                                                         )
                                                     ),
@@ -275,6 +280,7 @@ class ChatResponseGetDetail extends StatelessWidget {
                                             Expanded(
                                               child: GestureDetector(
                                                 onTap: () {
+                                                  AnalyticsUtil.logEvent('채팅_받은호감_상세조회_수락버튼_취소');
                                                   Navigator.pop(modalContext, false);
                                                 },
                                                 child: Container(
@@ -283,26 +289,27 @@ class ChatResponseGetDetail extends StatelessWidget {
                                                     borderRadius: BorderRadius.circular(10),
                                                     color: Colors.grey.shade200,
                                                   ),
-                                                  child: Center(child: Text("취소")),
+                                                  child: const Center(child: Text("취소")),
                                                 ),
                                               ),
                                             ),
                                               SizedBox(width: SizeConfig.defaultSize,),
                                             GestureDetector(
                                               onTap: () {
+                                                AnalyticsUtil.logEvent('채팅_받은호감_상세조회_수락버튼_수락');
                                                 Navigator.pop(modalContext, true);
                                                 showDialog<String>(
                                                     context: modalContext,
                                                     builder: (BuildContext dialogContext) {
                                                       context.read<ChatCubit>().acceptChatProposal(proposalId);
-                                                      Future.delayed(Duration(seconds: 2), () {
+                                                      Future.delayed(const Duration(seconds: 2), () {
                                                         Navigator.pop(dialogContext);
                                                         Navigator.pop(contextTop);
                                                       });
                                                       return AlertDialog(
                                                         surfaceTintColor: Colors.white,
-                                                        title: Container(alignment: Alignment.center, child: Text('호감이 성공적으로 수락됐어요!', style: TextStyle(fontSize: SizeConfig.defaultSize * 1.5, fontWeight: FontWeight.w600, color: Color(0xffFF5C58)),)),
-                                                        content: Container(alignment: Alignment.center, height: SizeConfig.defaultSize * 4, child: Text('채팅방 목록을 확인하고 대화를 시작햬보세요!',)),
+                                                        title: Container(alignment: Alignment.center, child: Text('호감이 성공적으로 수락됐어요!', style: TextStyle(fontSize: SizeConfig.defaultSize * 1.5, fontWeight: FontWeight.w600, color: const Color(0xffFF5C58)),)),
+                                                        content: Container(alignment: Alignment.center, height: SizeConfig.defaultSize * 4, child: const Text('채팅방 목록을 확인하고 대화를 시작햬보세요!',)),
                                                       );
                                                     }
                                                 );
@@ -312,9 +319,9 @@ class ChatResponseGetDetail extends StatelessWidget {
                                                 width: SizeConfig.defaultSize * 20,
                                                 decoration: BoxDecoration(
                                                   borderRadius: BorderRadius.circular(10),
-                                                  color: Color(0xffFF5C58),
+                                                  color: const Color(0xffFF5C58),
                                                 ),
-                                                child: Center(child: Text("호감 수락하기", style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600),)),
+                                                child: const Center(child: Text("호감 수락하기", style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600),)),
                                               ),
                                             ),
                                           ],
@@ -327,7 +334,7 @@ class ChatResponseGetDetail extends StatelessWidget {
                                 width: SizeConfig.screenWidth * 0.63,
                                 height: SizeConfig.defaultSize * 5.5,
                                 decoration: BoxDecoration(
-                                  color: Color(0xffFE6059),
+                                  color: const Color(0xffFE6059),
                                   borderRadius: BorderRadius.circular(10),
                                 ),
                                 child: Center(
@@ -348,7 +355,7 @@ class ChatResponseGetDetail extends StatelessWidget {
                 ),
               );
             } else {
-              return Text("데이터 정보가 없습니다.");
+              return const Text("데이터 정보가 없습니다.");
             }
           }
         );
@@ -391,7 +398,7 @@ class _TopBarSection extends StatelessWidget {
               ),
               Row(
                 children: [
-                  Text("${(2023-team.averageBirthYear+1).toStringAsFixed(1)}세", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.7),),
+                  Text("${(team.averageAge > 1000 ? 2023-team.averageAge+1 : team.averageAge).toStringAsFixed(1)}세", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.7),),
                   PopupMenuButton<String>(
                     icon: Icon(Icons.more_horiz_rounded, color: Colors.grey.shade300,),
                     padding: EdgeInsets.zero,

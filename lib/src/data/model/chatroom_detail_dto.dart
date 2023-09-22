@@ -78,7 +78,7 @@ class ChatroomDetailDto {
     return BlindDateTeamDetail(
       id: rq?._teamId ?? 0,
       name: rq?._name ?? "(알수없음)",
-      averageBirthYear: averageYear,
+      averageAge: averageYear,
       regions: rq?._teamRegions?.map((region) => region.newLocation()).toList() ?? [],
       universityName: rq?._university?._name ?? "(알수없음)",
       isCertifiedTeam: rq?._isStudentIdCardVerified ?? false,
