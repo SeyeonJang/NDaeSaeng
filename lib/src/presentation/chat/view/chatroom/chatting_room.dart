@@ -167,7 +167,7 @@ class _ChattingRoomState extends State<ChattingRoom> {
                         ],
                       ),
                         SizedBox(height: SizeConfig.defaultSize * 1.6,),
-                      Text("${(2023-widget.chatRoomDetail.otherTeam.averageAge+1).toString().substring(0,4)}세"),
+                      Text("${(widget.chatRoomDetail.otherTeam.averageAge > 1000 ? 2023-widget.chatRoomDetail.otherTeam.averageAge+1 : widget.chatRoomDetail.otherTeam.averageAge).toStringAsFixed(1)}세"),
                         SizedBox(height: SizeConfig.defaultSize * 0.3,),
                       Text("여기서 만나요! 🤚🏻 ${widget.chatRoomDetail.otherTeam.regions.map((location) => location.name).join(' ')}", style: TextStyle(
                         fontSize: SizeConfig.defaultSize * 1.2
