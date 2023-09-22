@@ -34,20 +34,31 @@ class StandbyLoading extends StatelessWidget {
             ),
             BlocBuilder<StandbyCubit, StandbyState>(
               builder: (context, state) {
-                // 내 정보를 분석툴에 저장
-                print(state.userResponse.toString());
-                AnalyticsUtil.setUserInformation(state.userResponse.toAnalytics());
+                // 회원정보 로딩이 완료된 후에 페이지를 넘긴다
+                if (!state.isLoading) {
+                  // 내 정보를 분석툴에 저장
+                  print(state.userResponse.toString());
+                  AnalyticsUtil.setUserInformation(state.userResponse.toAnalytics());
 
-                WidgetsBinding.instance.addPostFrameCallback((_) {
-                  Navigator.pushAndRemoveUntil(
-                      context, MaterialPageRoute(builder: (context) => DartPageView(initialPage: 2,)), (route) => false);
-                });
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => DartPageView(
+                                  initialPage: 2,
+                                )),
+                        (route) => false);
+                  });
+                }
 
+                // 로딩 동그라미
                 return const Center(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      CircularProgressIndicator(color: Colors.white,),
+                      CircularProgressIndicator(
+                        color: Colors.white,
+                      ),
                     ],
                   ),
                 );
