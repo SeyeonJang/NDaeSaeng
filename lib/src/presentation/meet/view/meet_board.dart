@@ -677,17 +677,31 @@ class _BodySectionState extends State<_BodySection> {
                         onRefresh: () async => widget.pagingController.refresh(),
                         child: SizedBox(
                           height: SizeConfig.screenHeight * 0.9,
-                          child: PagedListView<int, BlindDateTeam>(
-                            pagingController: widget.pagingController,
-                            builderDelegate: PagedChildBuilderDelegate<BlindDateTeam>(
-                              itemBuilder: (context, blindDateTeam, index) {
-                                return widget.pagingController.itemList?.length == 0
-                                    ? const Text("이성 팀이 아직 없어요!")
-                                    : Column(
-                                        children: [
-                                          SizedBox(height: SizeConfig.defaultSize * 0.6,),
-                                          MeetOneTeamCardview(team: blindDateTeam, isMyTeam: false, myTeamCount: widget.meetState.myTeams.length, myTeamId: nowTeam.id,)
-                                        ]);
+                          child: widget.pagingController.itemList?.length == 0 || widget.pagingController.itemList == null
+                              ? Center(
+                                child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: [
+                                      Image.asset('assets/images/hearts.png', width: SizeConfig.screenWidth * 0.55 ,),
+                                        SizedBox(height: SizeConfig.defaultSize * 5,),
+                                      Text("이성 팀이 아직 없어요!", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.8),),
+                                        SizedBox(height: SizeConfig.defaultSize,),
+                                      Text("기다리는 동안 다른 친구들을 앱에 초대해보세요!", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.8),),
+                                        SizedBox(height: SizeConfig.defaultSize * 3,),
+                                      Text("친구가 내 이상형을 데려올지도 👀", style: TextStyle(color: Colors.grey, fontSize: SizeConfig.defaultSize * 1.5),),
+                                    ],
+                                ),
+                              )
+                              : PagedListView<int, BlindDateTeam>(
+                                pagingController: widget.pagingController,
+                                builderDelegate: PagedChildBuilderDelegate<BlindDateTeam>(
+                                itemBuilder: (context, blindDateTeam, index) {
+                                return Column(
+                                  children: [
+                                    SizedBox(height: SizeConfig.defaultSize * 0.6,),
+                                    MeetOneTeamCardview(team: blindDateTeam, isMyTeam: false, myTeamCount: widget.meetState.myTeams.length, myTeamId: nowTeam.id,)
+                                  ]);
                               },
                             ),
                           ),
