@@ -47,45 +47,45 @@ class _MeetBoardState extends State<MeetBoard> {
         print("친구 수 : ${state.friends.length}, 과팅 같이 나갈 수 있는 친구 수 : ${filteredFriends.length}, 팀 개수 : ${state.myTeams.length}");
         PagingController<int, BlindDateTeam> pagingController = context.read<MeetCubit>().pagingController;
 
-        return state.myTeams.isEmpty
+        return (state.isLoading)
             ? Scaffold(
                 appBar: AppBar(),
-                body: GestureDetector(
-                  onTap: () {
-                    AnalyticsUtil.logEvent('과팅_목록_팀없을때_화면터치');
-                  },
-                  child: Container(
-                    width: SizeConfig.screenWidth,
-                    height: SizeConfig.screenHeight,
-                    color: Colors.white,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Image.asset('assets/images/heart.png', width: SizeConfig.screenWidth * 0.7,),
-                          SizedBox(height: SizeConfig.defaultSize * 7,),
-                        Text("팀을 만들어야 이성을 볼 수 있어요! 👀", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.8),),
-                          SizedBox(height: SizeConfig.defaultSize * 1.5,),
-                        Text("왼쪽 홈에서 간단하게 팀을 만들어보아요!", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.5),),
-                          SizedBox(height: SizeConfig.defaultSize * 10,),
-                      ],
-                    ),
+                body: Container(
+                  width: SizeConfig.screenWidth,
+                  height: SizeConfig.screenHeight,
+                  color: Colors.white,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const CircularProgressIndicator(color: Color(0xffFE6059)),
+                      SizedBox(height: SizeConfig.defaultSize * 5,),
+                      Text("이성 팀을 불러오고 있어요 . . . 🥰", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.8),)
+                    ],
                   ),
                 ),
               )
-            : (state.isLoading)
+            : state.myTeams.isEmpty
           ? Scaffold(
               appBar: AppBar(),
-              body: Container(
-                width: SizeConfig.screenWidth,
-                height: SizeConfig.screenHeight,
-                color: Colors.white,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const CircularProgressIndicator(color: Color(0xffFE6059)),
-                      SizedBox(height: SizeConfig.defaultSize * 5,),
-                    Text("이성 팀을 불러오고 있어요 . . . 🥰", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.8),)
-                  ],
+              body: GestureDetector(
+                onTap: () {
+                  AnalyticsUtil.logEvent('과팅_목록_팀없을때_화면터치');
+                },
+                child: Container(
+                  width: SizeConfig.screenWidth,
+                  height: SizeConfig.screenHeight,
+                  color: Colors.white,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Image.asset('assets/images/heart.png', width: SizeConfig.screenWidth * 0.7,),
+                      SizedBox(height: SizeConfig.defaultSize * 7,),
+                      Text("팀을 만들어야 이성을 볼 수 있어요! 👀", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.8),),
+                      SizedBox(height: SizeConfig.defaultSize * 1.5,),
+                      Text("왼쪽 홈에서 간단하게 팀을 만들어보아요!", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.5),),
+                      SizedBox(height: SizeConfig.defaultSize * 10,),
+                    ],
+                  ),
                 ),
               ),
             )
