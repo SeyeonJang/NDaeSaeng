@@ -676,8 +676,7 @@ class _BodySectionState extends State<_BodySection> {
                     RefreshIndicator(
                         onRefresh: () async => widget.pagingController.refresh(),
                         child: SizedBox(
-                          height: SizeConfig.screenHeight,
-                          // height: SizeConfig.screenHeight * 0.9, // TODO : 상단탭 보여주면 이거로 복구
+                          height: SizeConfig.screenHeight * 0.9,
                           child: PagedListView<int, BlindDateTeam>(
                             pagingController: widget.pagingController,
                             builderDelegate: PagedChildBuilderDelegate<BlindDateTeam>(
