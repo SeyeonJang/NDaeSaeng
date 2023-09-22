@@ -93,8 +93,8 @@ class MeetOneMemberCardviewNoVote extends StatelessWidget {
                                               ),),
                                             SizedBox(width: SizeConfig.defaultSize * 0.3),
 
-                                            // if (userResponse.isCertifiedUser)
-                                            //   Image.asset("assets/images/check.png", width: SizeConfig.defaultSize * 1.3),
+                                            if (userResponse.isCertifiedUser)
+                                              Image.asset("assets/images/check.png", width: SizeConfig.defaultSize * 1.3),
 
                                             SizedBox(width: SizeConfig.defaultSize * 0.5),
                                             Text(
