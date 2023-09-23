@@ -307,9 +307,8 @@ class _TutorialSlideState extends State<TutorialSlide2> with TickerProviderState
                           SizedBox(height: SizeConfig.defaultSize * 11.5,),
                           Container(
                               width: SizeConfig.screenWidth,
-                              child: Expanded(
-                                  child: Container(
-                                      child: Image.asset('assets/images/likesend.png')))),
+                              child: Container(
+                                  child: Image.asset('assets/images/likesend.png'))),
                           SizedBox(height: SizeConfig.defaultSize * 5,),
                         ],
                       )
@@ -338,43 +337,42 @@ class _TutorialSlideState extends State<TutorialSlide2> with TickerProviderState
                           SizedBox(height: SizeConfig.defaultSize * 9,),
                           Container(
                               width: SizeConfig.screenWidth,
-                              child: Expanded(
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                children: [
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
-                                      Row(
-                                        mainAxisAlignment: MainAxisAlignment.start,
-                                        children: [
-                                          Container(
-                                            width: SizeConfig.defaultSize * 25,
-                                            height: SizeConfig.defaultSize * 6,
-                                            alignment: Alignment.center,
-                                            decoration: BoxDecoration(
-                                              color: Colors.grey.shade100,
-                                              borderRadius: const BorderRadius.only(topLeft: Radius.circular(13), topRight: Radius.circular(13), bottomRight: Radius.circular(13)),
-                                            ),
-                                            child: const Text("안녕하세요! 저희는 OOOO학과\n학생들이에요! 대화해보고 싶어요! ☺️"),
-                                          ),
-                                        ],
-                                      ),
-                                        SizedBox(height: SizeConfig.defaultSize * 3,),
-                                      Row(
-                                        mainAxisAlignment: MainAxisAlignment.end,
-                                        children: [
-                                          Container(
-                                            width: SizeConfig.defaultSize * 27.2,
-                                            height: SizeConfig.defaultSize * 3.2,
-                                            alignment: Alignment.center,
-                                            decoration: const BoxDecoration(
-                                              color: Color(0xffFE6059),
-                                              borderRadius: BorderRadius.only(topLeft: Radius.circular(13), topRight: Radius.circular(13), bottomLeft: Radius.circular(13)),
-                                            ),
-                                            child: const Text("안녕하세요! 저희도 대화해보고 싶어요! 😊", style: TextStyle(color: Colors.white),),
-                                          ),
-                                        ],
+                                      Container(
+                                        width: SizeConfig.defaultSize * 25,
+                                        height: SizeConfig.defaultSize * 6,
+                                        alignment: Alignment.center,
+                                        decoration: BoxDecoration(
+                                          color: Colors.grey.shade100,
+                                          borderRadius: const BorderRadius.only(topLeft: Radius.circular(13), topRight: Radius.circular(13), bottomRight: Radius.circular(13)),
+                                        ),
+                                        child: const Text("안녕하세요! 저희는 OOOO학과\n학생들이에요! 대화해보고 싶어요! ☺️"),
                                       ),
                                     ],
-                                  ),),),
+                                  ),
+                                    SizedBox(height: SizeConfig.defaultSize * 3,),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      Container(
+                                        width: SizeConfig.defaultSize * 27.2,
+                                        height: SizeConfig.defaultSize * 3.2,
+                                        alignment: Alignment.center,
+                                        decoration: const BoxDecoration(
+                                          color: Color(0xffFE6059),
+                                          borderRadius: BorderRadius.only(topLeft: Radius.circular(13), topRight: Radius.circular(13), bottomLeft: Radius.circular(13)),
+                                        ),
+                                        child: const Text("안녕하세요! 저희도 대화해보고 싶어요! 😊", style: TextStyle(color: Colors.white),),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),),
                           SizedBox(height: SizeConfig.defaultSize * 4,),
                         ],
                       )
@@ -601,16 +599,15 @@ class MeetIntro2 extends StatelessWidget {
               SizedBox(height: SizeConfig.defaultSize * 4,),
             Container(
               width: SizeConfig.screenWidth,
-              child: Expanded(
-                  child: Container(
-                      decoration: BoxDecoration(
-                        color: const Color(0xffFE6059),
-                        borderRadius: BorderRadius.circular(13),
-                      ),
-                      child: Padding(
-                        padding: EdgeInsets.all(SizeConfig.defaultSize),
-                        child: Image.asset('assets/images/meet_intro.png'),
-                      )))),
+              child: Container(
+                  decoration: BoxDecoration(
+                    color: const Color(0xffFE6059),
+                    borderRadius: BorderRadius.circular(13),
+                  ),
+                  child: Padding(
+                    padding: EdgeInsets.all(SizeConfig.defaultSize),
+                    child: Image.asset('assets/images/meet_intro.png'),
+                  ))),
               SizedBox(height: SizeConfig.defaultSize * 3.7,),
           ],
         )

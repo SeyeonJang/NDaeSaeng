@@ -241,58 +241,56 @@ class _ChattingRoomState extends State<ChattingRoom> {
                 ),),
               ),
               for (int i=0; i<widget.chatRoomDetail.myTeam.teamUsers.length; i++)
-                Expanded(
-                  child: ListTile(
-                    onTap: () {
-                      var chatMyTeam = widget.chatRoomDetail.myTeam;
-                      AnalyticsUtil.logEvent('채팅_채팅방_우리팀프로필터치', properties: {
-                        '터치한 팀원 ID': chatMyTeam.teamUsers[i].getId(),
-                        '터치한 팀원 학교': chatMyTeam.universityName,
-                        '터치한 팀원 학과': chatMyTeam.teamUsers[i].getDepartment(),
-                        '터치한 팀원 프로필 URL': chatMyTeam.teamUsers[i].getProfileImageUrl(),
-                        '터치한 팀원 생년': chatMyTeam.teamUsers[i].getBirthYear()
-                      });
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => ChatProfile(university: chatMyTeam.universityName, profile: StudentMapper.toBlindDateUserDetail(chatMyTeam.teamUsers[i]))));
-                    },
-                    title: Row(
-                      children: [
-                        Row(
-                          children: [
-                            ClipOval(
-                                child: widget.chatRoomDetail.myTeam.teamUsers[i].getProfileImageUrl() == 'DEFAULT' || !widget.chatRoomDetail.myTeam.teamUsers[i].getProfileImageUrl().startsWith('https://')
-                                    ? Image.asset(
-                                    'assets/images/profile-mockup3.png',
-                                    width: SizeConfig.defaultSize * 3.7, // 이미지 크기
-                                    height: SizeConfig.defaultSize * 3.7
-                                )
-                                    : Image.network(widget.chatRoomDetail.myTeam.teamUsers[i].getProfileImageUrl(),
-                                  width: SizeConfig.defaultSize * 3.7,
-                                  height: SizeConfig.defaultSize * 3.7,
-                                  fit: BoxFit.cover,)
-                            ),
-                              SizedBox(width: SizeConfig.defaultSize * 1.3),
-                            (widget.chatRoomDetail.myTeam.teamUsers[i].getId() == (widget.user.personalInfo?.id ?? 'DEFAULT'))
-                            ? Text(widget.chatRoomDetail.myTeam.teamUsers[i].getName() == 'DEFAULT' ? '닉네임없음' : "${widget.chatRoomDetail.myTeam.teamUsers[i].getName()} (나)", style: TextStyle(
-                                fontSize: SizeConfig.defaultSize * 1.5
-                              ))
-                            : Text(widget.chatRoomDetail.myTeam.teamUsers[i].getName() == 'DEFAULT' ? '닉네임없음' : widget.chatRoomDetail.myTeam.teamUsers[i].getName(), style: TextStyle(
-                              fontSize: SizeConfig.defaultSize * 1.5
-                            ),),
-                          ],
-                        ),
-                          SizedBox(width: SizeConfig.defaultSize * 4),
-                        Expanded(
-                          child: Container(
-                            alignment: Alignment.centerRight,
-                            child: Text(widget.chatRoomDetail.myTeam.teamUsers[i].getDepartment(), style: TextStyle(
-                              fontSize: SizeConfig.defaultSize * 1.2,
-                              overflow: TextOverflow.ellipsis,
-                              color: Colors.grey
-                            ),),
+                ListTile(
+                  onTap: () {
+                    var chatMyTeam = widget.chatRoomDetail.myTeam;
+                    AnalyticsUtil.logEvent('채팅_채팅방_우리팀프로필터치', properties: {
+                      '터치한 팀원 ID': chatMyTeam.teamUsers[i].getId(),
+                      '터치한 팀원 학교': chatMyTeam.universityName,
+                      '터치한 팀원 학과': chatMyTeam.teamUsers[i].getDepartment(),
+                      '터치한 팀원 프로필 URL': chatMyTeam.teamUsers[i].getProfileImageUrl(),
+                      '터치한 팀원 생년': chatMyTeam.teamUsers[i].getBirthYear()
+                    });
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => ChatProfile(university: chatMyTeam.universityName, profile: StudentMapper.toBlindDateUserDetail(chatMyTeam.teamUsers[i]))));
+                  },
+                  title: Row(
+                    children: [
+                      Row(
+                        children: [
+                          ClipOval(
+                              child: widget.chatRoomDetail.myTeam.teamUsers[i].getProfileImageUrl() == 'DEFAULT' || !widget.chatRoomDetail.myTeam.teamUsers[i].getProfileImageUrl().startsWith('https://')
+                                  ? Image.asset(
+                                  'assets/images/profile-mockup3.png',
+                                  width: SizeConfig.defaultSize * 3.7, // 이미지 크기
+                                  height: SizeConfig.defaultSize * 3.7
+                              )
+                                  : Image.network(widget.chatRoomDetail.myTeam.teamUsers[i].getProfileImageUrl(),
+                                width: SizeConfig.defaultSize * 3.7,
+                                height: SizeConfig.defaultSize * 3.7,
+                                fit: BoxFit.cover,)
                           ),
-                        )
-                      ],
-                    ),
+                            SizedBox(width: SizeConfig.defaultSize * 1.3),
+                          (widget.chatRoomDetail.myTeam.teamUsers[i].getId() == (widget.user.personalInfo?.id ?? 'DEFAULT'))
+                          ? Text(widget.chatRoomDetail.myTeam.teamUsers[i].getName() == 'DEFAULT' ? '닉네임없음' : "${widget.chatRoomDetail.myTeam.teamUsers[i].getName()} (나)", style: TextStyle(
+                              fontSize: SizeConfig.defaultSize * 1.5
+                            ))
+                          : Text(widget.chatRoomDetail.myTeam.teamUsers[i].getName() == 'DEFAULT' ? '닉네임없음' : widget.chatRoomDetail.myTeam.teamUsers[i].getName(), style: TextStyle(
+                            fontSize: SizeConfig.defaultSize * 1.5
+                          ),),
+                        ],
+                      ),
+                        SizedBox(width: SizeConfig.defaultSize * 4),
+                      Expanded(
+                        child: Container(
+                          alignment: Alignment.centerRight,
+                          child: Text(widget.chatRoomDetail.myTeam.teamUsers[i].getDepartment(), style: TextStyle(
+                            fontSize: SizeConfig.defaultSize * 1.2,
+                            overflow: TextOverflow.ellipsis,
+                            color: Colors.grey
+                          ),),
+                        ),
+                      )
+                    ],
                   ),
                 ),
               const ListTile(),
