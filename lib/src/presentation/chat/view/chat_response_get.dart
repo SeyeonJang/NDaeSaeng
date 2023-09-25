@@ -6,12 +6,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../res/config/size_config.dart';
 
-class ChatResponseGet extends StatelessWidget {
+class ChatResponseGet extends StatefulWidget {
   // 받은 요청
   const ChatResponseGet({super.key});
 
   @override
+  State<ChatResponseGet> createState() => _ChatResponseGetState();
+}
+
+class _ChatResponseGetState extends State<ChatResponseGet> with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
+
+  @override
   Widget build(BuildContext context) {
+    super.build(context);
+
     return Stack(
       children: [
         BlocBuilder<ChatCubit, ChatState>(

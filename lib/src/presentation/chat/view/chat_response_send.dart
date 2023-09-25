@@ -6,11 +6,21 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../res/config/size_config.dart';
 import '../viewmodel/state/chat_state.dart';
 
-class ChatResponseSend extends StatelessWidget {
+class ChatResponseSend extends StatefulWidget {
   const ChatResponseSend({super.key});
 
   @override
+  State<ChatResponseSend> createState() => _ChatResponseSendState();
+}
+
+class _ChatResponseSendState extends State<ChatResponseSend> with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
+
+  @override
   Widget build(BuildContext context) {
+    super.build(context);
+
     return Stack(
       children: [
 
