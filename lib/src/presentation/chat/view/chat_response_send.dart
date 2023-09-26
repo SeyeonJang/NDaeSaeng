@@ -6,11 +6,21 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../res/config/size_config.dart';
 import '../viewmodel/state/chat_state.dart';
 
-class ChatResponseSend extends StatelessWidget {
+class ChatResponseSend extends StatefulWidget {
   const ChatResponseSend({super.key});
 
   @override
+  State<ChatResponseSend> createState() => _ChatResponseSendState();
+}
+
+class _ChatResponseSendState extends State<ChatResponseSend> with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
+
+  @override
   Widget build(BuildContext context) {
+    super.build(context);
+
     return Stack(
       children: [
 
@@ -20,23 +30,37 @@ class ChatResponseSend extends StatelessWidget {
             return Scaffold(
               backgroundColor: Colors.grey.shade50,
               body: state.requestedList.length == 0
-                  ? const _NoResponseSendView()
+                  ? RefreshIndicator(
+                      onRefresh: () async {
+                        context.read<ChatCubit>().initResponseSend();
+                      },
+                      child: const SingleChildScrollView(
+                        physics: AlwaysScrollableScrollPhysics(),
+                        child: _NoResponseSendView()
+                      ),
+                  )
                   : Padding(
-                  padding: EdgeInsets.all(SizeConfig.defaultSize),
-                  child: Column(
-                      children: [
-                        // for (int i=0; i<1; i++)
-                        for (int i = 0; i < state.requestedList.length; i++)
-                          Column(
-                            children: [
-                              ChatSendOneTeamView(chatState: state, proposal: state.requestedList[i],),
-                              // ChatSendOneTeamView(chatState: state, proposal: Proposal(proposalId: 1, createdTime: DateTime.now(),
-                              //   requestingTeam: BlindDateTeam(id: 0, name: '요이하', averageBirthYear: 2012.3333, regions: [Location(id: 1, name: '서울')], universityName: '보낸대학교', isCertifiedTeam: true , teamUsers: [BlindDateUser(id: 1, name: '이번', profileImageUrl: 'DEFAULT', department: '무슨학과')]),
-                              //   requestedTeam: BlindDateTeam(id: 0, name: '하이요', averageBirthYear: 2002.3333, regions: [Location(id: 0, name: '인천')], universityName: '받은대학교', isCertifiedTeam: true , teamUsers: [BlindDateUser(id: 0, name: '일번', profileImageUrl: 'DEFAULT', department: '무슨학과'), BlindDateUser(id: 2, name: '삼번', profileImageUrl: 'DEFAULT', department: '무슨무슨학과')]),),),
-                              SizedBox(height: SizeConfig.defaultSize * 1.5,)
-                            ],
-                          ),
-                      ])),
+                      padding: EdgeInsets.all(SizeConfig.defaultSize),
+                      child: RefreshIndicator(
+                        onRefresh: () async {
+                          context.read<ChatCubit>().initResponseSend();
+                        },
+                        child: SingleChildScrollView(
+                          physics: const AlwaysScrollableScrollPhysics(),
+                          child: Column(
+                              children: [
+                                for (int i = 0; i < state.requestedList.length; i++)
+                                  Column(
+                                    children: [
+                                      ChatSendOneTeamView(chatState: state, proposal: state.requestedList[i],),
+                                      SizedBox(height: SizeConfig.defaultSize * 1.5,)
+                                    ],
+                                  ),
+                                if (state.requestedList.length < 5)
+                                  SizedBox(height: SizeConfig.defaultSize * 30)
+                              ]),
+                        ),
+                      )),
             );
           }
           return const SizedBox.shrink();
@@ -105,6 +129,7 @@ class _NoResponseSendViewState extends State<_NoResponseSendView> with SingleTic
   @override
   Widget build(BuildContext context) {
     return Container(
+      height: SizeConfig.screenHeight * 0.75,
       color: Colors.white,
       child: Center(
         child: Column(
