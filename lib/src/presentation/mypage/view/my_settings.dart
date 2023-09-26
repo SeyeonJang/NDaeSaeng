@@ -175,7 +175,7 @@ class _MyPageViewState extends State<MyPageView> {
               child: Container(
                   // decoration: BoxDecoration( // 이미지 겉에 테두리 효과주는 코드
                   //   gradient: LinearGradient(
-                  //       colors: [Color(0xff7C83FD), Color(0xff7C83FD)]),
+                  //       colors: [Color(0xffFE6059), Color(0xffFE6059)]),
                   //   borderRadius: BorderRadius.circular(32),
                   // ),
 
@@ -221,7 +221,7 @@ class _MyPageViewState extends State<MyPageView> {
         SizedBox(
           width: SizeConfig.defaultSize * 3,
           height: SizeConfig.defaultSize * 3,
-          child: widget.state.isLoading ? const CircularProgressIndicator(color: Color(0xff7C83FD)) : null,
+          child: widget.state.isLoading ? const CircularProgressIndicator(color: Color(0xffFE6059)) : null,
         ),
 
         // Padding( // 받은 투표 프로필 (TitleVotes)
@@ -230,7 +230,7 @@ class _MyPageViewState extends State<MyPageView> {
         //     width: SizeConfig.screenWidth,
         //     height: SizeConfig.defaultSize * 15.5,
         //     decoration: BoxDecoration(
-        //       color: const Color(0xff7C83FD),
+        //       color: const Color(0xffFE6059),
         //       borderRadius: BorderRadius.circular(10),
         //     ),
         //     child: Padding(
@@ -253,7 +253,7 @@ class _MyPageViewState extends State<MyPageView> {
         //                         onPressed: () {
         //                           Navigator.pop(dialogContext, '취소');
         //                         },
-        //                         child: const Text('취소', style: TextStyle(color: Color(0xff7C83FD)),),
+        //                         child: const Text('취소', style: TextStyle(color: Color(0xffFE6059)),),
         //                       ),
         //                       TextButton(
         //                         onPressed: () {
@@ -263,7 +263,7 @@ class _MyPageViewState extends State<MyPageView> {
         //                           context.read<MyPagesCubit>().refreshMyInfo();
         //                           Navigator.pop(dialogContext, '삭제');
         //                         },
-        //                         child: const Text('삭제', style: TextStyle(color: Color(0xff7C83FD)),),
+        //                         child: const Text('삭제', style: TextStyle(color: Color(0xffFE6059)),),
         //                       ),
         //                     ],
         //                   ),
@@ -429,7 +429,7 @@ class _MyPageViewState extends State<MyPageView> {
         //                   borderRadius: BorderRadius.circular(8),
         //                 ),
         //                 alignment: Alignment.center,
-        //                 child: Text("눌러서 프로필 채우기", style: TextStyle(color: const Color(0xff7C83FD), fontWeight: FontWeight.w500, fontSize: SizeConfig.defaultSize * 1.4),)
+        //                 child: Text("눌러서 프로필 채우기", style: TextStyle(color: const Color(0xffFE6059), fontWeight: FontWeight.w500, fontSize: SizeConfig.defaultSize * 1.4),)
         //               ),
         //             )
         //         ],
@@ -669,7 +669,7 @@ class _MyPageViewState extends State<MyPageView> {
                                 Navigator.pop(dialogContext, '취소');
                               },
                               child: const Text('취소',
-                                style: TextStyle(color: Color(0xff7C83FD)),),
+                                style: TextStyle(color: Color(0xffFE6059)),),
                             ),
                             TextButton(
                               onPressed: () {
@@ -680,7 +680,7 @@ class _MyPageViewState extends State<MyPageView> {
                                 Navigator.pop(dialogContext);
                                 AnalyticsUtil.logEvent("내정보_설정_닉네임변경_완료");
                               },
-                                child: const Text('완료', style: TextStyle(color: Color(0xff7C83FD)))
+                                child: const Text('완료', style: TextStyle(color: Color(0xffFE6059)))
                             ),
                           ],
                         ),
@@ -703,7 +703,7 @@ class _MyPageViewState extends State<MyPageView> {
                 style: TextStyle(
                   fontWeight: FontWeight.w500,
                   fontSize: getFlexibleSize(target: 16),
-                  color: const Color(0xff7C83FD)
+                  color: const Color(0xffFE6059)
                 ),
               ),
             ],
@@ -790,7 +790,7 @@ class _MyPageViewState extends State<MyPageView> {
                         );
                       },
                       child: Text("스토어에서 엔대생 리뷰 작성하기",
-                          style: TextStyle(fontSize: SizeConfig.defaultSize * 1.4, color: const Color(0xff7C83FD))),
+                          style: TextStyle(fontSize: SizeConfig.defaultSize * 1.4, color: const Color(0xffFE6059))),
                     ),
                     TextButton(
                       onPressed: () {
@@ -798,7 +798,7 @@ class _MyPageViewState extends State<MyPageView> {
                         shareContent(context, inviteCode);
                       },
                       child: Text("엔대생 링크 공유하기",
-                          style: TextStyle(fontSize: SizeConfig.defaultSize * 1.4, color: const Color(0xff7C83FD))),
+                          style: TextStyle(fontSize: SizeConfig.defaultSize * 1.4, color: const Color(0xffFE6059))),
                     ),
                     SizedBox(height: SizeConfig.defaultSize * 1.5,),
                   ])),
@@ -848,7 +848,7 @@ class _MyPageViewState extends State<MyPageView> {
                                             AnalyticsUtil.logEvent("내정보_설정_회원탈퇴_취소");
                                             Navigator.pop(dialogContext, '아니요');
                                           },
-                                          child: const Text('아니요', style: TextStyle(color: Color(0xff7C83FD)),),
+                                          child: const Text('아니요', style: TextStyle(color: Color(0xffFE6059)),),
                                         ),
                                         TextButton(
                                             onPressed: textController.text == '회원탈퇴를 원해요' ? () async {
@@ -860,7 +860,7 @@ class _MyPageViewState extends State<MyPageView> {
                                               restart();
                                             } : null,
                                             child: textController.text == '회원탈퇴를 원해요'
-                                                ? const Text('탈퇴', style: TextStyle(color: Color(0xff7C83FD)))
+                                                ? const Text('탈퇴', style: TextStyle(color: Color(0xffFE6059)))
                                                 : const Text('탈퇴', style: TextStyle(color: Colors.grey,))
                                         ),
                                       ],
@@ -895,7 +895,7 @@ class _MyPageViewState extends State<MyPageView> {
                                       AnalyticsUtil.logEvent("내정보_설정_로그아웃_취소");
                                       Navigator.pop(dialogContext, '아니요');
                                     },
-                                    child: const Text('아니요', style: TextStyle(color: Color(0xff7C83FD)),),
+                                    child: const Text('아니요', style: TextStyle(color: Color(0xffFE6059)),),
                                   ),
                                   TextButton(
                                     onPressed: () async {
@@ -906,7 +906,7 @@ class _MyPageViewState extends State<MyPageView> {
                                       await Future.delayed(const Duration(seconds: 2));
                                       restart();
                                     },
-                                    child: const Text('네', style: TextStyle(color: Color(0xff7C83FD)),),
+                                    child: const Text('네', style: TextStyle(color: Color(0xffFE6059)),),
                                   ),
                                 ],
                               ),
@@ -944,7 +944,7 @@ class _MyPageViewState extends State<MyPageView> {
                   Navigator.push(context, MaterialPageRoute(builder: (context) => const MyTos1()));
                 },
                 child: Text("이용약관",
-                    style: TextStyle(fontSize: SizeConfig.defaultSize * 1.4, color: const Color(0xff7C83FD))),
+                    style: TextStyle(fontSize: SizeConfig.defaultSize * 1.4, color: const Color(0xffFE6059))),
               ),
               TextButton(
                 onPressed: () {
@@ -952,7 +952,7 @@ class _MyPageViewState extends State<MyPageView> {
                   Navigator.push(context, MaterialPageRoute(builder: (context) => const MyTos2()));
                 },
                 child: Text("개인정보 처리방침",
-                    style: TextStyle(fontSize: SizeConfig.defaultSize * 1.4, color: const Color(0xff7C83FD))),
+                    style: TextStyle(fontSize: SizeConfig.defaultSize * 1.4, color: const Color(0xffFE6059))),
               ),
               TextButton(
                 onPressed: () {
@@ -969,7 +969,7 @@ class _MyPageViewState extends State<MyPageView> {
                   // );
                 },
                 child: Text("건의하기",
-                    style: TextStyle(fontSize: SizeConfig.defaultSize * 1.4, color: const Color(0xff7C83FD))),
+                    style: TextStyle(fontSize: SizeConfig.defaultSize * 1.4, color: const Color(0xffFE6059))),
               ),
               TextButton(
                 onPressed: () {
@@ -986,7 +986,7 @@ class _MyPageViewState extends State<MyPageView> {
                 //   );
                 },
                 child: Text("1:1 문의",
-                    style: TextStyle(fontSize: SizeConfig.defaultSize * 1.4, color: const Color(0xff7C83FD))),
+                    style: TextStyle(fontSize: SizeConfig.defaultSize * 1.4, color: const Color(0xffFE6059))),
               ),
 
                   const DtDivider(),

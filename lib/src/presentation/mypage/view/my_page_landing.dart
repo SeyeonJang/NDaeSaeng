@@ -71,8 +71,9 @@ class _MyPageLandingViewState extends State<MyPageLandingView> {
               horizontal: SizeConfig.defaultSize * 0.5),
           child: Container(
             decoration: BoxDecoration(
-              color: const Color(0xff7C83FD),
+              color: Colors.white,
               borderRadius: BorderRadius.circular(13),
+              border: Border.all(width: 1.3, color: Color(0xffFE6059))
               // boxShadow: [ // Boxshadow 필요하면 쓰기
               //   BoxShadow(
               //     color: Colors.grey.withOpacity(0.2),
@@ -147,14 +148,14 @@ class _MyPageLandingViewState extends State<MyPageLandingView> {
                                               style: TextStyle(
                                                 fontWeight: FontWeight.w700,
                                                 fontSize: SizeConfig.defaultSize * 2,
-                                                color: Colors.white,
+                                                color: Colors.black,
                                               ),),
                                             SizedBox(width: SizeConfig.defaultSize * 0.5),
                                             Text(admissionNumber,
                                               style: TextStyle(
                                                 fontWeight: FontWeight.w500,
                                                 fontSize: SizeConfig.defaultSize * 1.5,
-                                                color: Colors.white,
+                                                color: Colors.black,
                                               ),),
                                             if (widget.userResponse.personalInfo?.verification.isVerificationSuccess ?? false)
                                               Row(
@@ -168,7 +169,7 @@ class _MyPageLandingViewState extends State<MyPageLandingView> {
                                       }
                                   ),
                                   IconButton(
-                                    icon: const Icon(Icons.settings, color: Colors.white,),
+                                    icon: const Icon(Icons.settings, color: Colors.black,),
                                     onPressed: () async {
                                       AnalyticsUtil.logEvent("내정보_마이_설정버튼");
                                       BlocProvider.of<MyPagesCubit>(context).refreshMyInfo();
@@ -211,7 +212,7 @@ class _MyPageLandingViewState extends State<MyPageLandingView> {
                                                 style: TextStyle(
                                                     fontWeight: FontWeight.w500,
                                                     fontSize: SizeConfig.defaultSize * 1.3,
-                                                    color: Colors.white
+                                                    color: Colors.black
                                                 ),
                                               ),
                                               SizedBox(width: SizeConfig.defaultSize * 0.5,),
@@ -220,7 +221,7 @@ class _MyPageLandingViewState extends State<MyPageLandingView> {
                                                 style: TextStyle(
                                                     fontWeight: FontWeight.w500,
                                                     fontSize: SizeConfig.defaultSize * 1.3,
-                                                    color: Colors.white,
+                                                    color: Colors.black,
                                                   overflow: TextOverflow.ellipsis
                                                 ),
                                               ),
@@ -240,8 +241,9 @@ class _MyPageLandingViewState extends State<MyPageLandingView> {
                     SizedBox(height: SizeConfig.defaultSize * 0.7,),
                     Container( // 포인트 ~ (아래층)
                       padding: EdgeInsets.only(left: SizeConfig.defaultSize * 1.4, right: SizeConfig.defaultSize * 1.4, top: SizeConfig.defaultSize * 1.1, bottom: SizeConfig.defaultSize * 1.1),
-                      decoration: const BoxDecoration(
-                        color: Colors.white,
+                      decoration: BoxDecoration(
+                        // color: Color(0xffFE6059).withOpacity(0.1),
+                        color: Colors.grey.shade100,
                         borderRadius: BorderRadius.all(Radius.circular(5)),
                       ),
                       alignment: Alignment.center,
@@ -295,7 +297,7 @@ class _MyPageLandingViewState extends State<MyPageLandingView> {
                 decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(10),
-                    border: Border.all(width: 1.3, color: const Color(0xff7C83FD))
+                    border: Border.all(width: 1.3, color: const Color(0xffFE6059))
                 ),
                 child: Padding(
                   padding: EdgeInsets.only(left: SizeConfig.defaultSize * 1.5, right: SizeConfig.defaultSize * 1.5),
@@ -306,7 +308,7 @@ class _MyPageLandingViewState extends State<MyPageLandingView> {
                           fontSize: SizeConfig.defaultSize * 1.4
                       ),),
                       const Icon(
-                        Icons.arrow_right_alt_rounded, color: Color(0xff7C83FD)
+                        Icons.arrow_right_alt_rounded, color: Color(0xffFE6059)
                       )
                     ],
                   ),
@@ -332,7 +334,7 @@ class _MyPageLandingViewState extends State<MyPageLandingView> {
                         style: TextStyle(
                           fontWeight: FontWeight.w700,
                           fontSize: SizeConfig.defaultSize * 1.7,
-                          color: const Color(0xff7C83FD)
+                          color: const Color(0xffFE6059)
                         ),),
                       BlocBuilder<MyPagesCubit, MyPagesState>(
                           builder: (context, state) {
@@ -375,7 +377,7 @@ class _MyPageLandingViewState extends State<MyPageLandingView> {
                         style: TextStyle(
                           fontWeight: FontWeight.w700,
                           fontSize: SizeConfig.defaultSize * 1.7,
-                          color: const Color(0xff7C83FD)
+                          color: const Color(0xffFE6059)
                         ),),
                     ],
                   ),
@@ -498,7 +500,7 @@ class _FriendComponentState extends State<FriendComponent> {
       toastLength: Toast.LENGTH_SHORT,
       gravity: ToastGravity.BOTTOM,
       timeInSecForIosWeb: 1,
-      backgroundColor: const Color(0xff7C83FD),
+      backgroundColor: const Color(0xffFE6059),
       textColor: Colors.white,
       fontSize: SizeConfig.defaultSize * 1.6,
     );
@@ -624,7 +626,7 @@ class _FriendComponentState extends State<FriendComponent> {
                             Navigator.pop(context, '취소');
                             AnalyticsUtil.logEvent("내정보_마이_내친구신고_취소");
                           },
-                          child: const Text('취소', style: TextStyle(color: Color(0xff7C83FD)),),
+                          child: const Text('취소', style: TextStyle(color: Color(0xffFE6059)),),
                         ),
                         TextButton(
                           onPressed: () => {
@@ -633,7 +635,7 @@ class _FriendComponentState extends State<FriendComponent> {
                             ToastUtil.showToast("사용자가 신고되었어요!"),
                             // TODO : 신고 기능 (서버 연결)
                           },
-                          child: const Text('신고', style: TextStyle(color: Color(0xff7C83FD)),),
+                          child: const Text('신고', style: TextStyle(color: Color(0xffFE6059)),),
                         ),
                       ],
                     ),
@@ -659,7 +661,7 @@ class _FriendComponentState extends State<FriendComponent> {
                                 AnalyticsUtil.logEvent("내정보_마이_내친구삭제_취소");
                                 Navigator.pop(dialogContext, '취소');
                               },
-                              child: const Text('취소', style: TextStyle(color: Color(0xff7C83FD)),),
+                              child: const Text('취소', style: TextStyle(color: Color(0xffFE6059)),),
                             ),
                             TextButton(
                               onPressed: () {
@@ -668,7 +670,7 @@ class _FriendComponentState extends State<FriendComponent> {
                                 // BlocProvider.of<MyPagesCubit>(context).pressedFriendDeleteButton(friend);
                                 Navigator.pop(dialogContext); // 팝업 창을 닫는 로직 추가
                               },
-                              child: const Text('삭제', style: TextStyle(color: Color(0xff7C83FD)),),
+                              child: const Text('삭제', style: TextStyle(color: Color(0xffFE6059)),),
                             ),
                           ],
                         ),
@@ -847,7 +849,7 @@ class _NotFriendComponentState extends State<NotFriendComponent> {
                             AnalyticsUtil.logEvent("내정보_마이_알수도있는친구더보기_신고_취소");
                             Navigator.pop(context, '취소');
                           },
-                          child: const Text('취소', style: TextStyle(color: Color(0xff7C83FD)),),
+                          child: const Text('취소', style: TextStyle(color: Color(0xffFE6059)),),
                         ),
                         TextButton(
                           onPressed: () => {
@@ -856,7 +858,7 @@ class _NotFriendComponentState extends State<NotFriendComponent> {
                             ToastUtil.showToast("사용자가 신고되었어요!"),
                             // TODO : 신고 기능 (서버 연결)
                           },
-                          child: const Text('신고', style: TextStyle(color: Color(0xff7C83FD)),),
+                          child: const Text('신고', style: TextStyle(color: Color(0xffFE6059)),),
                         ),
                       ],
                     ),
@@ -883,7 +885,7 @@ class _NotFriendComponentState extends State<NotFriendComponent> {
                 }
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xff7C83FD),
+                backgroundColor: const Color(0xffFE6059),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(15), // 모서리 둥글기 설정
                 ),
@@ -1021,7 +1023,7 @@ class _openAddFriendsState extends State<openAddFriends> {
                           SizedBox(
                             width: SizeConfig.defaultSize * 3,
                             height: SizeConfig.defaultSize * 3,
-                            child: widget.disabledFunctions ? const CircularProgressIndicator(color: Color(0xff7C83FD)) : null,
+                            child: widget.disabledFunctions ? const CircularProgressIndicator(color: Color(0xffFE6059)) : null,
                           ),
                           Padding(
                             padding: EdgeInsets.only(left: SizeConfig.defaultSize * 2, right: SizeConfig.defaultSize),
@@ -1062,7 +1064,7 @@ class _openAddFriendsState extends State<openAddFriends> {
                                           },
                                           style: ElevatedButton.styleFrom(
                                             textStyle: const TextStyle(
-                                              color: Color(0xff7C83FD),
+                                              color: Color(0xffFE6059),
                                             ),
                                             shape: RoundedRectangleBorder(
                                               borderRadius: BorderRadius.circular(15), // 모서리 둥글기 설정
@@ -1110,9 +1112,9 @@ class _openAddFriendsState extends State<openAddFriends> {
                                 height: SizeConfig.defaultSize * 5.5,
                                 alignment: Alignment.center,
                                 decoration: BoxDecoration(
-                                    color: const Color(0xff7C83FD),
+                                    color: const Color(0xffFE6059),
                                     border: Border.all(
-                                      color: const Color(0xff7C83FD),
+                                      color: const Color(0xffFE6059),
                                     ),
                                     borderRadius: BorderRadius.circular(15)),
                                 child: Text(
@@ -1199,14 +1201,14 @@ class _openAddFriendsState extends State<openAddFriends> {
                                             ),
                                             focusedBorder: const OutlineInputBorder(
                                               borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                                              borderSide: BorderSide(color: Color(0xff7C83FD)),
+                                              borderSide: BorderSide(color: Color(0xffFE6059)),
                                             ),
                                           ),
                                         ),
                                       ),
                                       ElevatedButton( // 친구 추가 버튼
                                         style: ElevatedButton.styleFrom(
-                                          backgroundColor: widget.disabledFunctions ? Colors.grey.shade400 : const Color(0xff7C83FD),
+                                          backgroundColor: widget.disabledFunctions ? Colors.grey.shade400 : const Color(0xffFE6059),
                                           shape: RoundedRectangleBorder(
                                             borderRadius: BorderRadius.circular(15), // 모서리 둥글기 설정
                                           ),
@@ -1279,9 +1281,9 @@ class _openAddFriendsState extends State<openAddFriends> {
           height: SizeConfig.defaultSize * 3.5,
           alignment: Alignment.center,
           decoration: BoxDecoration(
-              color: const Color(0xff7C83FD),
+              color: const Color(0xffFE6059),
               border: Border.all(
-                color: const Color(0xff7C83FD),
+                color: const Color(0xffFE6059),
               ),
               borderRadius: BorderRadius.circular(10)),
           child: Padding(
