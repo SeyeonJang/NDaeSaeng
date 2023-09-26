@@ -119,10 +119,12 @@ class MeetOneTeamCardview extends StatelessWidget {
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
                               ),
-                              child: Center(
-                                child: team.teamUsers[i].getProfileImageUrl() == "DEFAULT" || team.teamUsers[i].getProfileImageUrl().startsWith("https://")
-                                  ? Image.asset('assets/images/profile-mockup3.png', width: SizeConfig.defaultSize * 4, height: SizeConfig.defaultSize * 4, fit: BoxFit.cover,)
-                                  : Image.network(team.teamUsers[i].getProfileImageUrl(), width: SizeConfig.defaultSize * 4, height: SizeConfig.defaultSize * 4, fit: BoxFit.cover,)
+                              child: ClipOval(
+                                child: Center(
+                                  child: team.teamUsers[i].getProfileImageUrl() == "DEFAULT" || !team.teamUsers[i].getProfileImageUrl().startsWith("https://")
+                                    ? Image.asset('assets/images/profile-mockup3.png', width: SizeConfig.defaultSize * 4, height: SizeConfig.defaultSize * 4, fit: BoxFit.cover,)
+                                    : Image.network(team.teamUsers[i].getProfileImageUrl(), width: SizeConfig.defaultSize * 4, height: SizeConfig.defaultSize * 4, fit: BoxFit.cover,)
+                                ),
                               ),
                             ),
                           ),
