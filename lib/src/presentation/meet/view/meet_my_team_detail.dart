@@ -12,7 +12,7 @@ import '../viewmodel/state/meet_state.dart';
 class MeetMyTeamDetail extends StatelessWidget {
   final int teamId;
 
-  MeetMyTeamDetail({super.key, required this.teamId});
+  const MeetMyTeamDetail({super.key, required this.teamId});
 
   @override
   Widget build(BuildContext context) {
