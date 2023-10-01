@@ -4,7 +4,6 @@ import 'package:dart_flutter/src/domain/entity/chat_room_detail.dart';
 import 'package:dart_flutter/src/presentation/chat/viewmodel/state/chatting_cubit.dart';
 import 'package:intl/intl.dart';
 import 'package:dart_flutter/src/domain/entity/chat_room.dart';
-import 'package:dart_flutter/src/presentation/chat/view/chating_room.dart';
 import 'package:dart_flutter/src/presentation/chat/viewmodel/chat_cubit.dart';
 import 'package:dart_flutter/src/presentation/chat/viewmodel/state/chat_state.dart';
 import 'package:flutter/material.dart';
@@ -118,14 +117,15 @@ class _ChatRealTimeOneTeamViewState extends State<ChatRealTimeOneTeamView> {
                         Text(widget.matchedTeams.otherTeam.universityName,
                           style: TextStyle(fontSize: SizeConfig.defaultSize, fontWeight: FontWeight.w300, overflow: TextOverflow.ellipsis),),
                         const Text(" "),
-                        if (widget.matchedTeams.otherTeam.isCertifiedTeam ?? false)
+                        if (widget.matchedTeams.otherTeam.isCertifiedTeam)
                           Image.asset("assets/images/check.png", width: SizeConfig.defaultSize),
                       ],
                     ),
                   ],
                 ),
-                Text(widget.matchedTeams.myTeam.name ?? '(알 수 없음)', style: TextStyle(
-                  fontSize: SizeConfig.defaultSize * 1.2
+                Text(widget.matchedTeams.myTeam.name,
+                  style: TextStyle(
+                    fontSize: SizeConfig.defaultSize * 1.2
                 ),)
                 ],
               ),

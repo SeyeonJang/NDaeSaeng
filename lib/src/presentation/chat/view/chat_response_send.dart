@@ -29,7 +29,7 @@ class _ChatResponseSendState extends State<ChatResponseSend> with AutomaticKeepA
           if (!state.isLoading) {
             return Scaffold(
               backgroundColor: Colors.grey.shade50,
-              body: state.requestedList.length == 0
+              body: state.requestedList.isEmpty
                   ? RefreshIndicator(
                       onRefresh: () async {
                         context.read<ChatCubit>().initResponseSend();
