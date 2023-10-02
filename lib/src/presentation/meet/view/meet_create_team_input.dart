@@ -1207,7 +1207,7 @@ class _CreateTeamBottomSectionState extends State<_CreateTeamBottomSection> {
               SizedBox(height: SizeConfig.defaultSize * 0.3,),
               GestureDetector(
                 onTap: () async {
-                  AnalyticsUtil.logEvent("t", properties: {
+                  AnalyticsUtil.logEvent("홈_팀만들기_팀만들기버튼_터치", properties: {
                     "teamId": meetTeam.id,
                     "teamName": meetTeam.name,
                     "teamLocationsCount": meetTeam.locations.length,
