@@ -14,42 +14,28 @@ class MyPagesCubit extends Cubit<MyPagesState> {
 
   MyPagesCubit() : super(MyPagesState.init());
 
-  // 유저 정보, 친구 정보
   void initPages() async {
     state.setIsLoading(true);
     emit(state.copy());
 
-    // 초기값 설정
     User userResponse = await _userUseCase.myInfo();
     state.setUserResponse(userResponse);
-
-    _userUseCase.setTitleVotes(userResponse.titleVotes);
-    state.setTitleVotes(userResponse.titleVotes);
-
     List<User> friends = await _friendUseCase.getMyFriends();
     state.setMyFriends(friends);
     List<User> newFriends = await _friendUseCase.getRecommendedFriends();
     state.setRecommendedFriends(newFriends);
-    getMyTitleVote();
-    getAllVotes();
-
     String appVersion = await getAppVersion();
     state.setAppVersion(appVersion);
 
+    // _userUseCase.setTitleVotes(userResponse.titleVotes); // TODO : 투표 프로필 재개 시 복구하기
+    // state.setTitleVotes(userResponse.titleVotes);
+    // getMyTitleVote(); // TODO : 투표 프로필 재개 시 복구하기
+    // getAllVotes(); // TODO : 투표 프로필 재개 시 복구하기
+
     state.setIsLoading(false);
     emit(state.copy());
-    print("mypage init 끝");
   }
 
-  // 기존 코드
-  // Future<void> pressedFriendAddButton(User friend) async {
-  //   await _friendUseCase.addFriend(friend);
-  //   state.addFriend(friend);
-  //   state.newFriends = (await _friendUseCase.getRecommendedFriends(put: true)).toSet();
-  //   emit(state.copy());
-  // }
-
-  // 변경 코드
   Future<void> pressedFriendAddButton(User friend) async {
     // UI 상에서 먼저 작동
     state.addFriend(friend);
@@ -97,16 +83,16 @@ class MyPagesCubit extends Cubit<MyPagesState> {
     emit(state.copy());
 
     _userUseCase.cleanUpUserResponseCache();
-     User userResponse = await _userUseCase.myInfo();
-     state.setUserResponse(userResponse);
+    User userResponse = await _userUseCase.myInfo();
+    state.setUserResponse(userResponse);
     List<User> friends = await _friendUseCase.getMyFriends();
     state.setMyFriends(friends);
     List<User> newFriends = await _friendUseCase.getRecommendedFriends();
     state.setRecommendedFriends(newFriends);
-     getMyTitleVote();
+    // getMyTitleVote(); // TODO : 투표 프로필 재개 시 복구하기
 
-     state.setIsLoading(false);
-     emit(state.copy());
+    state.setIsLoading(false);
+    emit(state.copy());
   }
 
   void uploadProfileImage(File file, User userResponse) async {
@@ -134,13 +120,6 @@ class MyPagesCubit extends Cubit<MyPagesState> {
   void setProfileImage(File file) {
     state.profileImageFile = file;
     emit(state.copy());
-  }
-
-  void setMyLandPage() {
-    state.setMyLandPage(true);
-    final newState = state.copy();
-    print(newState);
-    emit(newState);
   }
 
   void addTitleVote(TitleVote titleVote, User user) async {
