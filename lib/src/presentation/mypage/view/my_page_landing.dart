@@ -142,6 +142,7 @@ class _MyPageLandingViewState extends State<MyPageLandingView> {
                                         String name = state.userResponse.personalInfo?.name ?? "###";
                                         String admissionNumber = "${state.userResponse.personalInfo?.admissionYear.toString().substring(2,4)??"##"}학번";
                                         return Row(
+                                          crossAxisAlignment: CrossAxisAlignment.center,
                                           children: [
                                             SizedBox(width: SizeConfig.defaultSize * 0.5,),
                                             Text(name,
@@ -160,8 +161,8 @@ class _MyPageLandingViewState extends State<MyPageLandingView> {
                                             if (widget.userResponse.personalInfo?.verification.isVerificationSuccess ?? false)
                                               Row(
                                                 children: [
-                                                  SizedBox(width: SizeConfig.defaultSize * 0.6),
-                                                  Image.asset("assets/images/check_me.png", width: SizeConfig.defaultSize * 1.2),
+                                                  SizedBox(width: SizeConfig.defaultSize * 0.5),
+                                                  Image.asset("assets/images/check.png", width: SizeConfig.defaultSize * 1.4),
                                                 ],
                                               )
                                           ]
