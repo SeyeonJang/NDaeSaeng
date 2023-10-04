@@ -35,6 +35,7 @@ class _MeetCreateTeamInputState extends State<MeetCreateTeamInput> {
   late int teamMemberCount;
   late List<Location> cities;
   late bool canMatchWithSameUniversity;
+  late ScrollController scrollController;
 
   @override
   void initState() {
@@ -45,6 +46,7 @@ class _MeetCreateTeamInputState extends State<MeetCreateTeamInput> {
     teamMemberCount = 0;
     cities = [];
     canMatchWithSameUniversity = false;
+    scrollController = ScrollController();
   }
 
   void removeFriendFromMyTeam(int memberIndex) {
@@ -210,6 +212,7 @@ class _MeetCreateTeamInputState extends State<MeetCreateTeamInput> {
                           child: Padding(
                             padding: EdgeInsets.symmetric(horizontal: SizeConfig.defaultSize * 1.3),
                             child: SingleChildScrollView(
+                              controller: scrollController,
                               child: Column(
                                 children: [
                                   _CreateTeamTopSection(userResponse: state.userResponse, handleTeamNameChanged: handleTeamNameChanged, state: state),
@@ -865,6 +868,7 @@ class _MemberCardViewNoVoteState extends State<MemberCardViewNoVote> {
                 ),
                 // 학과 찾기
                 textFieldConfiguration: TextFieldConfiguration(
+                    scrollPadding: EdgeInsets.only(bottom: SizeConfig.defaultSize * 90),
                     controller: _typeAheadController,
                     autofocus: false, // 키보드 자동으로 올라오는 거
                     style: DefaultTextStyle.of(context)
