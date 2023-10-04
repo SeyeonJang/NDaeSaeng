@@ -21,7 +21,7 @@ class ChatRealTime extends StatelessWidget {
           if (!state.isLoading) {
             return Column(
               children: [
-                state.myChatRooms.length == 0
+                state.myChatRooms.isEmpty
                     ? const Expanded(child: Center(child: _NoChatView())) // TODO : 채팅 없을 때 뷰 잘 보이는지 확인하기
                     : SingleChildScrollView(
                         child: Padding(

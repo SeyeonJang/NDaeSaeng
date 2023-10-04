@@ -36,7 +36,7 @@ class MeetIntro extends StatelessWidget {
                       ],
                     ),
                   )
-                : state.myTeams.length < 1 ? MakeTeamButton(ancestorContext: context) : SeeMyTeamButton(ancestorContext: context, teamId: state.myTeams[0].id,);
+                : state.myTeams.isEmpty ? MakeTeamButton(ancestorContext: context) : SeeMyTeamButton(ancestorContext: context, teamId: state.myTeams[0].id,);
           }
         )
     );
@@ -350,9 +350,9 @@ class BodySection extends StatelessWidget {
             ),
           ),
             SizedBox(height: SizeConfig.defaultSize * 5),
-          Container(width: SizeConfig.screenWidth, child: Text("추가 Tip 1.\n내정보 탭에서 학생증 인증을 하면 팀애 인증 배지가 붙어요!", style: TextStyle(color: Colors.grey), textAlign: TextAlign.left,)),
+          SizedBox(width: SizeConfig.screenWidth, child: const Text("추가 Tip 1.\n내정보 탭에서 학생증 인증을 하면 팀애 인증 배지가 붙어요!", style: TextStyle(color: Colors.grey), textAlign: TextAlign.left,)),
             SizedBox(height: SizeConfig.defaultSize,),
-          Text("추가 Tip 2.\n상대에게 보이는 내 사진과 닉네임을 내정보 탭 - 설정에서 바꿀 수 있어요!", style: TextStyle(color: Colors.grey),),
+          const Text("추가 Tip 2.\n상대에게 보이는 내 사진과 닉네임을 내정보 탭 - 설정에서 바꿀 수 있어요!", style: TextStyle(color: Colors.grey),),
             SizedBox(height: SizeConfig.defaultSize * 3,),
         ],
       ),
@@ -483,114 +483,6 @@ class SeeMyTeamButton extends StatelessWidget {
             child: Text("내 팀 보기", style: TextStyle(color: Colors.white, fontSize: SizeConfig.defaultSize * 2, fontWeight: FontWeight.w600)),
           ),
         ),
-      ),
-    );
-  }
-}
-
-class _MiddleSection extends StatelessWidget {
-  const _MiddleSection({
-    super.key,
-  });
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.all(SizeConfig.defaultSize),
-      child: Column(
-        children: [
-          Container(alignment: Alignment.centerLeft,
-              child: Padding(
-                padding: EdgeInsets.only(left: SizeConfig.defaultSize * 1.3),
-                child: Text("이전 시즌 후기", style: TextStyle(fontWeight: FontWeight.w600, fontSize: SizeConfig.defaultSize * 1.5),),
-              )
-          ),
-            SizedBox(height: SizeConfig.defaultSize * 2),
-          Container( // 후기1
-            alignment: Alignment.centerLeft,
-            child: Padding(
-              padding: EdgeInsets.only(left: SizeConfig.defaultSize * 1.3),
-              child: Container(alignment: Alignment.center,
-                width: SizeConfig.screenWidth * 0.8,
-                  decoration: BoxDecoration(
-                    color: const Color(0xffFE6059).withOpacity(0.06),
-                    borderRadius: const BorderRadius.only(topLeft: Radius.circular(15), topRight: Radius.circular(15), bottomLeft: Radius.zero, bottomRight: Radius.circular(15)),
-                  ),
-                child: Padding(
-                  padding: EdgeInsets.all(SizeConfig.defaultSize * 1.2),
-                  child: Text("매칭 전에 간단하게 상대 팀 정보를 볼 수 있다는 게\n독특하고 신기했어요!", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.4),),
-                )
-              ),
-            ),
-          ),
-            SizedBox(height: SizeConfig.defaultSize),
-          Container( // 후기2
-            alignment: Alignment.centerRight,
-            child: Padding(
-              padding: EdgeInsets.only(left: SizeConfig.defaultSize * 1.3),
-              child: Container(alignment: Alignment.center,
-                  width: SizeConfig.screenWidth * 0.8,
-                  decoration: BoxDecoration(
-                    color: const Color(0xffFE6059).withOpacity(0.06),
-                    borderRadius: const BorderRadius.only(topLeft: Radius.circular(15), topRight: Radius.circular(15), bottomLeft: Radius.circular(15), bottomRight: Radius.zero),
-                  ),
-                  child: Padding(
-                    padding: EdgeInsets.all(SizeConfig.defaultSize * 1.4),
-                    child: Text("제가 프로필을 적은 양 만큼 관심도가 높아지는 것\n같아서 재밌었어요! 매칭도 성공했어요 :)", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.4)),
-                  )
-              ),
-            ),
-          ),
-            SizedBox(height: SizeConfig.defaultSize),
-          Container( // 후기3
-            alignment: Alignment.centerLeft,
-            child: Padding(
-              padding: EdgeInsets.only(left: SizeConfig.defaultSize * 1.3),
-              child: Container(alignment: Alignment.center,
-                  width: SizeConfig.screenWidth * 0.8,
-                  decoration: BoxDecoration(
-                    color: const Color(0xffFE6059).withOpacity(0.06),
-                    borderRadius: const BorderRadius.only(topLeft: Radius.circular(15), topRight: Radius.circular(15), bottomLeft: Radius.zero, bottomRight: Radius.circular(15)),
-                  ),
-                  child: Padding(
-                    padding: EdgeInsets.all(SizeConfig.defaultSize * 1.2),
-                    child: Text("팀 개수의 제한이나 매칭 횟수 제한이 없어서 좋아요!\n친구들이랑 과팅하면서 더 친해졌어요ㅎㅎ!", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.4),),
-                  )
-              ),
-            ),
-          ),
-            SizedBox(height: SizeConfig.defaultSize * 4),
-
-          Container(alignment: Alignment.centerLeft,
-              child: Padding(
-                padding: EdgeInsets.only(left: SizeConfig.defaultSize * 1.3),
-                child: Text("매칭 잘 되는 Tip", style: TextStyle(fontWeight: FontWeight.w600, fontSize: SizeConfig.defaultSize * 1.5),),
-              )
-          ),
-            SizedBox(height: SizeConfig.defaultSize * 1.5),
-          Container( // 매칭 잘 되는 팁
-            alignment: Alignment.center,
-            child: Container(alignment: Alignment.centerLeft,
-                width: SizeConfig.screenWidth * 0.9,
-                height: SizeConfig.defaultSize * 13,
-                decoration: BoxDecoration(
-                  color: Colors.grey.shade50,
-                  borderRadius: const BorderRadius.all(Radius.circular(13)),
-                ),
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: SizeConfig.defaultSize * 1.5, vertical: SizeConfig.defaultSize * 1.5),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(" ∙   ‘내정보' 탭에서 받은 투표 중 3개를 프로필에 넣어요!\n     이성에게 나를 더 어필할 수 있어요!", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.4),),
-                      Text(" ∙   ‘내정보' 탭에서 프로필 사진을 추가해요!", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.4),),
-                      Text(" ∙   과팅에 같이 참여하고 싶은 친구들을 초대해요!", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.4),),
-                    ],
-                  )
-                )
-            ),
-          ),
-        ],
       ),
     );
   }

@@ -1,4 +1,3 @@
-import 'package:dart_flutter/src/common/util/analytics_util.dart';
 import 'package:dart_flutter/src/presentation/mypage/view/my_page_landing.dart';
 import 'package:dart_flutter/src/presentation/mypage/viewmodel/mypages_cubit.dart';
 import 'package:dart_flutter/src/presentation/mypage/viewmodel/state/mypages_state.dart';
@@ -16,8 +15,9 @@ class _MyPagesState extends State<MyPages> with AutomaticKeepAliveClientMixin {
   @override
   // bool get wantKeepAlive => true;
   bool get wantKeepAlive {
-    if (context.read<MyPagesCubit>().state.friends.length < 4)
+    if (context.read<MyPagesCubit>().state.friends.length < 4) {
       return false;
+    }
     return true;
   }
 

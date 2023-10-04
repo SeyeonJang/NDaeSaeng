@@ -73,7 +73,7 @@ class _MyPageLandingViewState extends State<MyPageLandingView> {
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(13),
-              border: Border.all(width: 1.3, color: Color(0xffFE6059))
+              border: Border.all(width: 1.3, color: const Color(0xffFE6059))
               // boxShadow: [ // Boxshadow 필요하면 쓰기
               //   BoxShadow(
               //     color: Colors.grey.withOpacity(0.2),
@@ -173,7 +173,7 @@ class _MyPageLandingViewState extends State<MyPageLandingView> {
                                     onPressed: () async {
                                       AnalyticsUtil.logEvent("내정보_마이_설정버튼");
                                       BlocProvider.of<MyPagesCubit>(context).refreshMyInfo();
-                                      final _profileImage = await Navigator.push(
+                                      final profileImage = await Navigator.push(
                                         context,
                                         MaterialPageRoute(
                                           builder: (_) => BlocProvider.value(
@@ -184,7 +184,7 @@ class _MyPageLandingViewState extends State<MyPageLandingView> {
                                           ),
                                         ),
                                       );
-                                      BlocProvider.of<MyPagesCubit>(context).setProfileImage(_profileImage);
+                                      BlocProvider.of<MyPagesCubit>(context).setProfileImage(profileImage);
 
                                       PaintingBinding.instance.imageCache.clear();
                                       BlocProvider.of<MyPagesCubit>(context).refreshMyInfo();
@@ -244,7 +244,7 @@ class _MyPageLandingViewState extends State<MyPageLandingView> {
                       decoration: BoxDecoration(
                         // color: Color(0xffFE6059).withOpacity(0.1),
                         color: Colors.grey.shade100,
-                        borderRadius: BorderRadius.all(Radius.circular(5)),
+                        borderRadius: const BorderRadius.all(Radius.circular(5)),
                       ),
                       alignment: Alignment.center,
                       child: Row(
@@ -413,20 +413,13 @@ class MyFriends extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // var  iterator = friends.iterator;
-    // while (iterator.moveNext()) {
-    //   iterator.current;
-    //   friends.remove(iterator.current);
-    // }
     var friendsList = friends.toList();
 
     return BlocBuilder<MyPagesCubit,MyPagesState>(
       builder: (context, state) {
         return Column(
           children: [
-            // for (var i = friends.iterator ; ; i.moveNext() )
-            //     FriendComponent(false, i.current, count),
-            for (int i = 0; i < this.count; i++)
+            for (int i = 0; i < count; i++)
               FriendComponent(false, friendsList[i], count, userResponse),
           ],
         );
@@ -449,17 +442,10 @@ class NewFriends extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // var  iterator = friends.iterator;
-    // while (iterator.moveNext()) {
-    //   iterator.current;
-    //   friends.remove(iterator.current);
-    // }
     var friendsList = friends.toList();
 
     return Column(
       children: [
-        // for (var i = friends.iterator ; ; i.moveNext() )
-        //   FriendComponent(false, i.current, count),
         for (int i = 0; i < count; i++)
           NotFriendComponent(true, friendsList[i], userResponse),
       ],
@@ -468,17 +454,12 @@ class NewFriends extends StatelessWidget {
 }
 
 class FriendComponent extends StatefulWidget {
-  late bool isAdd;
-  late User friend;
-  late int count;
-  late User userResponse;
+  final bool isAdd;
+  final User friend;
+  final int count;
+  final User userResponse;
 
-  FriendComponent(bool isAdd, User friend, int count, User userResponse, {super.key}) {
-    this.isAdd = isAdd;
-    this.friend = friend;
-    this.count = count;
-    this.userResponse = userResponse;
-  }
+  const FriendComponent(this.isAdd, this.friend, this.count, this.userResponse, {super.key});
 
   @override
   State<FriendComponent> createState() => _FriendComponentState();
@@ -589,13 +570,11 @@ class _FriendComponentState extends State<FriendComponent> {
                             ],
                           ),
                           SizedBox(height: SizeConfig.defaultSize * 0.4,),
-                          Container(
-                            child: Text("  ${widget.friend.university!.name} ${widget.friend.university?.department}", style: TextStyle(
-                              fontSize: SizeConfig.defaultSize * 1.3,
-                              fontWeight: FontWeight.w500,
-                              overflow: TextOverflow.ellipsis,
-                            )),
-                          ),
+                          Text("  ${widget.friend.university!.name} ${widget.friend.university?.department}", style: TextStyle(
+                            fontSize: SizeConfig.defaultSize * 1.3,
+                            fontWeight: FontWeight.w500,
+                            overflow: TextOverflow.ellipsis,
+                          )),
                         ],
                       ),
                     )
@@ -706,15 +685,11 @@ class _FriendComponentState extends State<FriendComponent> {
 }
 
 class NotFriendComponent extends StatefulWidget {
-  late bool isAdd;
-  late User friend;
-  late User userResponse;
+  final bool isAdd;
+  final User friend;
+  final User userResponse;
 
-  NotFriendComponent(bool isAdd, User friend, User userResponse, {super.key}) {
-    this.isAdd = isAdd;
-    this.friend = friend;
-    this.userResponse = userResponse;
-  }
+  const NotFriendComponent(this.isAdd, this.friend, this.userResponse, {super.key});
 
   @override
   State<NotFriendComponent> createState() => _NotFriendComponentState();
@@ -812,13 +787,11 @@ class _NotFriendComponentState extends State<NotFriendComponent> {
                             ],
                           ),
                           SizedBox(height: SizeConfig.defaultSize * 0.4,),
-                          Container(
-                              child: Text("  ${widget.friend.university!.name} ${widget.friend.university?.department}", style: TextStyle(
-                              fontSize: SizeConfig.defaultSize * 1.3,
-                              fontWeight: FontWeight.w500,
-                              overflow: TextOverflow.ellipsis,
+                          Text("  ${widget.friend.university!.name} ${widget.friend.university?.department}", style: TextStyle(
+                          fontSize: SizeConfig.defaultSize * 1.3,
+                          fontWeight: FontWeight.w500,
+                          overflow: TextOverflow.ellipsis,
                             )),
-                          ),
                         ],
                       ),
                     )

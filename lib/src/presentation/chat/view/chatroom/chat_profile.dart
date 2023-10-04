@@ -87,7 +87,7 @@ class ChatProfile extends StatelessWidget {
                     ),),
                   ),
                     SizedBox(width: SizeConfig.defaultSize * 0.5,),
-                  if (profile.isCertifiedUser ?? false)
+                  if (profile.isCertifiedUser)
                     Image.asset("assets/images/check.png", width: SizeConfig.defaultSize * 1.5),
                 ],
               ),

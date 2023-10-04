@@ -12,7 +12,7 @@ class ChooseMajor extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Center(
@@ -63,7 +63,7 @@ class _ScaffoldBodyState extends State<ScaffoldBody> {
   // }
   void _typeOnTypeAhead() { // ver.3
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (!_typeAheadController.text.isEmpty) {
+      if (_typeAheadController.text.isNotEmpty) {
         setState(() {
           isSelectedOnTypeAhead = false;
         });
@@ -110,7 +110,7 @@ class _ScaffoldBodyState extends State<ScaffoldBody> {
                 padding: EdgeInsets.all(SizeConfig.defaultSize * 2),
                 child: TypeAheadField(
                   noItemsFoundBuilder: (context) {
-                    return Padding(
+                    return const Padding(
                       padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
                       child: Text(
                         "학과를 입력해주세요!",
@@ -118,7 +118,7 @@ class _ScaffoldBodyState extends State<ScaffoldBody> {
                       ),
                     );
                   },
-                  suggestionsBoxDecoration: SuggestionsBoxDecoration( // 목록 배경색
+                  suggestionsBoxDecoration: const SuggestionsBoxDecoration( // 목록 배경색
                     color: Colors.white,
                     elevation: 2.0,
                   ),
@@ -131,7 +131,7 @@ class _ScaffoldBodyState extends State<ScaffoldBody> {
                           .copyWith(fontStyle: FontStyle.normal,
                           fontSize: getFlexibleSize(target: 15),
                           fontWeight: FontWeight.w400,
-                          color: isSelectedOnTypeAhead ? Color(0xff7C83FD) : Colors.black),
+                          color: isSelectedOnTypeAhead ? const Color(0xff7C83FD) : Colors.black),
                       decoration: InputDecoration(
                           enabledBorder: OutlineInputBorder(
                             borderSide: BorderSide(
@@ -139,13 +139,13 @@ class _ScaffoldBodyState extends State<ScaffoldBody> {
                               width: 2.0,
                             ),
                           ),
-                          focusedBorder: OutlineInputBorder(
+                          focusedBorder: const OutlineInputBorder(
                             borderSide: BorderSide(
                               color: Color(0xff7C83FD), // 테두리 색상
                               width: 2.0,
                             ),
                           ),
-                          prefixIcon: Icon(Icons.school_rounded, color: Color(0xff7C83FD),),
+                          prefixIcon: const Icon(Icons.school_rounded, color: Color(0xff7C83FD),),
                           hintText: "학과 이름")),
 
                   suggestionsCallback: (pattern) {
@@ -159,7 +159,7 @@ class _ScaffoldBodyState extends State<ScaffoldBody> {
 
                   itemBuilder: (context, suggestion) {
                     return ListTile(
-                      leading: Icon(Icons.school),
+                      leading: const Icon(Icons.school),
                       title: Text(suggestion['department']),
                       subtitle: Text('${suggestion['name']}'),
                     );
@@ -176,7 +176,7 @@ class _ScaffoldBodyState extends State<ScaffoldBody> {
                 ),
               )),
           SizedBox( height: SizeConfig.defaultSize * 10, ),
-          Container(
+          SizedBox(
             width: SizeConfig.screenWidth * 0.9,
             height: SizeConfig.defaultSize * 5,
             child: isSelectedOnTypeAhead
@@ -186,7 +186,7 @@ class _ScaffoldBodyState extends State<ScaffoldBody> {
                   if (isSelectedOnTypeAhead) {BlocProvider.of<SignupCubit>(context).stepDepartment(university);}
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Color(0xff7C83FD),
+                  backgroundColor: const Color(0xff7C83FD),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(15), // 모서리 둥글기 설정
                   ),
@@ -200,7 +200,6 @@ class _ScaffoldBodyState extends State<ScaffoldBody> {
                   }
                 },
                 style: ElevatedButton.styleFrom(
-                  primary: Colors.white,
                   backgroundColor: Colors.grey[200],
                 ),
                 child: Text("학과를 선택해주세요", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.7, fontWeight: FontWeight.w600, color: Colors.black38),)

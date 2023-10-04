@@ -5,20 +5,16 @@ import 'package:dart_flutter/src/presentation/chat/chat_pages.dart';
 import 'package:dart_flutter/src/presentation/chat/viewmodel/chat_cubit.dart';
 import 'package:dart_flutter/src/presentation/meet/view/meet_board.dart';
 import 'package:dart_flutter/src/presentation/meet/view/meet_intro.dart';
-import 'package:dart_flutter/src/presentation/meet/view/meet_standby.dart';
 import 'package:dart_flutter/src/presentation/meet/viewmodel/meet_cubit.dart';
 import 'package:dart_flutter/src/presentation/mypage/mypages.dart';
 import 'package:dart_flutter/src/presentation/mypage/viewmodel/mypages_cubit.dart';
-import 'package:dart_flutter/src/presentation/vote/vimemodel/vote_cubit.dart';
-import 'package:dart_flutter/src/presentation/vote/vote_pages.dart';
-import 'package:dart_flutter/src/presentation/vote_list/viewmodel/vote_list_cubit.dart';
-import 'package:dart_flutter/src/presentation/vote_list/vote_list_pages.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class DartPageView extends StatefulWidget {
   final int initialPage;
-  DartPageView({Key? key, this.initialPage = 0}) : super(key: key);
+
+  const DartPageView({Key? key, this.initialPage = 0}) : super(key: key);
 
   @override
   State<DartPageView> createState() => _DartPageViewState();
@@ -34,16 +30,12 @@ class _DartPageViewState extends State<DartPageView> {
       _page = page;
       _pageController.jumpToPage(page); // 페이지 전환
       if (page == 0) {
-        // AnalyticsUtil.logEvent('하단 탭 터치_투표');
         AnalyticsUtil.logEvent('하단 탭 터치_홈');
       } else if (page == 1) {
-        // AnalyticsUtil.logEvent('하단 탭 터치_받은투표');
         AnalyticsUtil.logEvent('하단 탭 터치_과팅');
       } else if (page == 2) {
-        // AnalyticsUtil.logEvent('하단 탭 터치_과팅');
         AnalyticsUtil.logEvent('하단 탭 터치_채팅');
       } else if (page == 3) {
-        // AnalyticsUtil.logEvent('하단 탭 터치_채팅');
         AnalyticsUtil.logEvent('하단 탭 터치_내정보');
       }
       // else if (page == 4) {
@@ -56,7 +48,7 @@ class _DartPageViewState extends State<DartPageView> {
     DateTime now = DateTime.now();
 
     switch (_page) {
-      case 0:  // Vote
+      case 0:
         if (currentBackPressTime == null || now.difference(currentBackPressTime!) > const Duration(seconds: 2)) {
           currentBackPressTime = now;
           const msg = "'뒤로가기'를 한 번 더 누르면 종료됩니다.";
@@ -127,7 +119,7 @@ class _DartPageViewState extends State<DartPageView> {
         type: BottomNavigationBarType.fixed,
         backgroundColor: Colors.white,
         selectedFontSize: SizeConfig.defaultSize * 1.15,
-        selectedItemColor: Color(0xffFE6059),
+        selectedItemColor: const Color(0xffFE6059),
         // selectedItemColor: _page == 3 ? Color(0xff7C83FD) : Color(0xffFE6059),
         unselectedFontSize: SizeConfig.defaultSize * 1.1,
         unselectedItemColor: Colors.grey.shade400,

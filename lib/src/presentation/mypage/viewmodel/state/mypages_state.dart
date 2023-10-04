@@ -1,7 +1,5 @@
 import 'dart:io';
-
 import 'package:dart_flutter/src/domain/entity/user.dart';
-
 import '../../../../domain/entity/title_vote.dart';
 
 class MyPagesState {
@@ -9,7 +7,6 @@ class MyPagesState {
   late User userResponse;
   late Set<User> friends;
   late Set<User> newFriends;
-  late int newFriendId;
   late bool isMyLandPage;
   late bool isVertificateUploaded;
   late File profileImageFile;
@@ -23,7 +20,6 @@ class MyPagesState {
     required this.isMyLandPage,
     required this.friends,
     required this.newFriends,
-    required this.newFriendId,
     required this.isVertificateUploaded,
     required this.profileImageFile,
     required this.titleVotes,
@@ -40,7 +36,6 @@ class MyPagesState {
     );
     friends = {};
     newFriends = {};
-    newFriendId = 0;
     isMyLandPage = true;
     isVertificateUploaded = false;
     profileImageFile = File('');
@@ -55,7 +50,6 @@ class MyPagesState {
         userResponse: userResponse,
         friends: friends,
         newFriends: newFriends,
-        newFriendId: newFriendId,
         isVertificateUploaded: isVertificateUploaded,
         profileImageFile: profileImageFile,
         titleVotes: titleVotes,
@@ -87,14 +81,7 @@ class MyPagesState {
     return this;
   }
 
-  MyPagesState setFriendId(int friendId) {
-    this.newFriendId = friendId;
-    return this;
-  }
-
   MyPagesState setMyAllVotes(List<TitleVote> myAllVotes) {
-    // this.myAllVotes = myAllVotes.where((vote) => !titleVotes.contains(vote)).toList();
-    // this.myAllVotes = myAllVotes.where((vote) => vote.question.questionId != ( )).toList();
 
     this.myAllVotes = myAllVotes.where((vote) {
       for (var titleVote in titleVotes) {
@@ -108,9 +95,6 @@ class MyPagesState {
     // 내림차순 정렬
     this.myAllVotes.sort((a, b) => b.count.compareTo(a.count));
 
-    // myAllVotes = myAllVotes.where((vote) {
-    //   return !titleVotes.any((titleVote) => titleVote.question.questionId == vote.question.questionId);
-    // }).toList();
     return this;
   }
 

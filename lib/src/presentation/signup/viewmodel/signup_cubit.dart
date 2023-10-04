@@ -1,10 +1,8 @@
-
 import 'package:dart_flutter/src/domain/entity/university.dart';
 import 'package:dart_flutter/src/domain/use_case/university_use_case.dart';
 import 'package:dart_flutter/src/domain/use_case/user_use_case.dart';
 import 'package:dart_flutter/src/presentation/signup/viewmodel/state/signup_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import '../../../domain/entity/user_request.dart';
 
 class SignupCubit extends Cubit<SignupState> {
@@ -35,10 +33,7 @@ class SignupCubit extends Cubit<SignupState> {
   }
 
   void stepDepartment(University university) {
-    // state.inputState.tempUnivDepartment = univDepartment;
-    // state.inputState.univId = _findUniversityId(state.universities, state.inputState.tempUnivName!, state.inputState.tempUnivDepartment!);
     state.inputState.univId = university.id;
-    print (state.inputState.univId);
     state.signupStep = SignupStep.admissionNumber;
     emit(state.copy());
   }
@@ -78,23 +73,11 @@ class SignupCubit extends Cubit<SignupState> {
 
   void stepPhone(String phone) async {
     state.inputState.phone = phone;
-    print("phone : $phone");
-
-    // await _authRepository.requestSns(SnsRequest(phone: phone));
-
-    // state.signupStep = SignupStep.validatePhone;
     state.signupStep = SignupStep.gender;
     emit(state.copy());
   }
 
   Future<String> stepValidatePhone(String validateCode) async {
-    // bool result = await _authRepository.requestValidateSns(SnsVerifyingRequest(code: validateCode));
-    // if (!result) {  // 전화번호 인증 실패
-    //   state.signupStep = SignupStep.phone;
-    //   emit(state.copy());
-    //   return "번호 인증에 실패하였습니다.";  // TODO UI로 표현하기
-    // }
-
     state.signupStep = SignupStep.gender;
     emit(state.copy());
     return '';
@@ -122,9 +105,4 @@ class SignupCubit extends Cubit<SignupState> {
   Future<void> _signupRequest(UserRequest userRequest) async {
     await _userUseCase.signup(userRequest);
   }
-
-  // @override
-  // void onChange(Change<SignupState> change) {
-  //   super.onChange(change);
-  // }
 }

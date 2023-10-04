@@ -22,7 +22,7 @@ class MeetCreateTeamInput extends StatefulWidget {
   final MeetState state;
   final BuildContext ancestorContext;
 
-  MeetCreateTeamInput({super.key, required this.onFinish, required this.state, required this.ancestorContext});
+  const MeetCreateTeamInput({super.key, required this.onFinish, required this.state, required this.ancestorContext});
 
   @override
   State<MeetCreateTeamInput> createState() => _MeetCreateTeamInputState();
@@ -124,7 +124,7 @@ class _MeetCreateTeamInputState extends State<MeetCreateTeamInput> {
   Widget build(BuildContext context) {
     bool isKeyboardVisible = MediaQuery.of(context).viewInsets.bottom > 0;
 
-    Future<bool> _onBackKey() async {
+    Future<bool> onBackKey() async {
       return await showDialog(
         context: context,
         builder: (BuildContext sheetContext) {
@@ -152,13 +152,13 @@ class _MeetCreateTeamInputState extends State<MeetCreateTeamInput> {
           );
         }
         );
-    };
+    }
 
     return WillPopScope(
       onWillPop: () async {
         AnalyticsUtil.logEvent("홈_팀만들기_뒤로가기_윌팝스코프");
-        // return _onBackKey();
-        await _onBackKey();
+        await onBackKey();
+        // if (context.mounted) Navigator.pop(context, true);
         Navigator.pop(context, true);
         return true;
       },
@@ -193,7 +193,8 @@ class _MeetCreateTeamInputState extends State<MeetCreateTeamInput> {
                               IconButton(
                                   onPressed: () async {
                                     AnalyticsUtil.logEvent("홈_팀만들기_뒤로가기_터치");
-                                    await _onBackKey();
+                                    await onBackKey();
+                                    // if (context.mounted) Navigator.pop(context, true);
                                     Navigator.pop(context, true);
                                   },
                                   icon: Icon(Icons.arrow_back_ios_new_rounded,
@@ -293,7 +294,7 @@ class _CreateTeamTopSectionState extends State<_CreateTeamTopSection> {
   late TextEditingController _controller;
 
   void onTeamNameChanged(String value) {
-    (value); // Callback to parent widget
+    (value);
     widget.state.teamName = value;
   }
 
@@ -326,7 +327,7 @@ class _CreateTeamTopSectionState extends State<_CreateTeamTopSection> {
                         color: Colors.grey
                     )),
                 SizedBox(width: SizeConfig.defaultSize,),
-                Text("${widget.userResponse.university?.name ?? '학교를 불러오지 못 했어요'}",
+                Text(widget.userResponse.university?.name ?? '학교를 불러오지 못 했어요',
                     style: TextStyle(
                         fontWeight: FontWeight.w400,
                         fontSize: SizeConfig.defaultSize * 1.6,
@@ -465,7 +466,7 @@ class MemberCardView extends StatelessWidget {
                                                 SizedBox(width: SizeConfig.defaultSize * 0.5,),
                                               Text(
                                                 userResponse.personalInfo?.nickname == 'DEFAULT'
-                                                    ? ('${userResponse.personalInfo?.name}' ?? '친구 이름')
+                                                    ? '${userResponse.personalInfo?.name}'
                                                     : (userResponse.personalInfo?.nickname ?? '친구 닉네임'),
                                                 style: TextStyle(
                                                   fontWeight: FontWeight.w500,
@@ -625,15 +626,13 @@ class _MemberCardViewNoVoteState extends State<MemberCardViewNoVote> {
 
   // textField 생년
   late TextEditingController _controller;
-  late TextEditingController _NameController;
+  late TextEditingController _nameController;
 
   @override
   void initState() {
     super.initState();
-    // 이름
-    _NameController = TextEditingController();
-    // 생년
-    _controller = TextEditingController();
+    _nameController = TextEditingController(); // 이름
+    _controller = TextEditingController(); // 생년
     // 학과
     List<University> universities = widget.state.universities;
     universityFinder = UniversityFinder(universities: universities);
@@ -646,7 +645,7 @@ class _MemberCardViewNoVoteState extends State<MemberCardViewNoVote> {
   void dispose() {
     super.dispose();
     _controller.dispose();
-    _NameController.dispose();
+    _nameController.dispose();
   }
 
   // 프로필 사진
@@ -679,7 +678,7 @@ class _MemberCardViewNoVoteState extends State<MemberCardViewNoVote> {
   // 학과 입력
   void _typeOnTypeAhead() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (!_typeAheadController.text.isEmpty) {
+      if (_typeAheadController.text.isNotEmpty) {
         setState(() {
           isSelectedOnTypeAhead = false;
         });
@@ -763,7 +762,7 @@ class _MemberCardViewNoVoteState extends State<MemberCardViewNoVote> {
                             width: SizeConfig.screenWidth * 0.5,
                             height: SizeConfig.defaultSize * 5,
                             child: TextField(
-                              controller: _NameController,
+                              controller: _nameController,
                               maxLength: 7,
                               onChanged: (value) {
                                 setState(() {
@@ -926,7 +925,7 @@ class VoteView extends StatelessWidget { // 받은 투표 있을 때
   final int count;
 
   const VoteView(
-    this.questionName, this.count
+    this.questionName, this.count, {super.key}
   );
 
   @override

@@ -8,7 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../res/config/size_config.dart';
 import '../../../common/util/toast_util.dart';
-import '../../component/meet_one_member_cardview.dart';
 import '../viewmodel/state/chat_state.dart';
 
 class ChatResponseGetDetail extends StatelessWidget {
@@ -108,7 +107,7 @@ class ChatResponseGetDetail extends StatelessWidget {
                                                           text: TextSpan(
                                                               style: TextStyle(fontSize: SizeConfig.defaultSize * 1.8, fontWeight: FontWeight.w500),
                                                               children: <TextSpan>[
-                                                                TextSpan(text: "\'${blindDateTeamDetail.name}\'", style: const TextStyle(color: Color(0xffFF5C58), fontWeight: FontWeight.w600)),
+                                                                TextSpan(text: "'${blindDateTeamDetail.name}'", style: const TextStyle(color: Color(0xffFF5C58), fontWeight: FontWeight.w600)),
                                                                 const TextSpan(text: "의 호감을", style: TextStyle(color: Colors.black)),
                                                               ]
                                                           )
@@ -243,7 +242,7 @@ class ChatResponseGetDetail extends StatelessWidget {
                                                         text: TextSpan(
                                                             style: TextStyle(fontSize: SizeConfig.defaultSize * 1.8, fontWeight: FontWeight.w500),
                                                             children: <TextSpan>[
-                                                              TextSpan(text: "\'${blindDateTeamDetail.name}\'", style: const TextStyle(color: Color(0xffFF5C58), fontWeight: FontWeight.w600)),
+                                                              TextSpan(text: "'${blindDateTeamDetail.name}'", style: const TextStyle(color: Color(0xffFF5C58), fontWeight: FontWeight.w600)),
                                                               const TextSpan(text: "의 호감을", style: TextStyle(color: Colors.black)),
                                                             ]
                                                         )

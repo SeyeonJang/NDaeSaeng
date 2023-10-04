@@ -24,7 +24,7 @@ import '../../../../res/config/size_config.dart';
 class MySettings extends StatelessWidget {
   final User userResponse;
 
-  MySettings({super.key, required this.userResponse});
+  const MySettings({super.key, required this.userResponse});
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +53,7 @@ class MyPageView extends StatefulWidget {
   final User userResponse;
   final MyPagesState state;
 
-  MyPageView({super.key, required this.userResponse, required this.state});
+  const MyPageView({super.key, required this.userResponse, required this.state});
 
   static final _defaultPadding = EdgeInsets.all(getFlexibleSize(target: 20));
 
@@ -507,6 +507,12 @@ class _MyPageViewState extends State<MyPageView> {
               selectionOverlay: CupertinoPickerDefaultSelectionOverlay(
                 background: CupertinoColors.systemIndigo.withOpacity(0.3),
               ),
+              scrollController: FixedExtentScrollController(
+                initialItem: 0, // 몇 번째 인덱스가 제일 먼저 나올지
+              ),
+              onSelectedItemChanged: (index) {
+                setState(() => mbtiIndex1 = index);
+              },
               children: List.generate(mbti1.length, (index) {
                 final isSelected = mbtiIndex1 == index;
                 final item = mbti1[index];
@@ -518,12 +524,6 @@ class _MyPageViewState extends State<MyPageView> {
                           color: color, fontSize: SizeConfig.defaultSize * 3)),
                 );
               }),
-              scrollController: FixedExtentScrollController(
-                initialItem: 0, // 몇 번째 인덱스가 제일 먼저 나올지
-              ),
-              onSelectedItemChanged: (index) {
-                setState(() => mbtiIndex1 = index);
-              },
             ),
           ),
           SizedBox(
@@ -536,6 +536,12 @@ class _MyPageViewState extends State<MyPageView> {
               selectionOverlay: CupertinoPickerDefaultSelectionOverlay(
                 background: CupertinoColors.systemIndigo.withOpacity(0.3),
               ),
+              scrollController: FixedExtentScrollController(
+                initialItem: 0, // 몇 번째 인덱스가 제일 먼저 나올지
+              ),
+              onSelectedItemChanged: (index) {
+                setState(() => mbtiIndex2 = index);
+              },
               children: List.generate(mbti2.length, (index) {
                 final isSelected = mbtiIndex2 == index;
                 final item = mbti2[index];
@@ -547,12 +553,6 @@ class _MyPageViewState extends State<MyPageView> {
                           color: color, fontSize: SizeConfig.defaultSize * 3)),
                 );
               }),
-              scrollController: FixedExtentScrollController(
-                initialItem: 0, // 몇 번째 인덱스가 제일 먼저 나올지
-              ),
-              onSelectedItemChanged: (index) {
-                setState(() => mbtiIndex2 = index);
-              },
             ),
           ),
           SizedBox(
@@ -565,6 +565,12 @@ class _MyPageViewState extends State<MyPageView> {
               selectionOverlay: CupertinoPickerDefaultSelectionOverlay(
                 background: CupertinoColors.systemIndigo.withOpacity(0.3),
               ),
+              scrollController: FixedExtentScrollController(
+                initialItem: 0, // 몇 번째 인덱스가 제일 먼저 나올지
+              ),
+              onSelectedItemChanged: (index) {
+                setState(() => mbtiIndex3 = index);
+              },
               children: List.generate(mbti3.length, (index) {
                 final isSelected = mbtiIndex3 == index;
                 final item = mbti3[index];
@@ -576,12 +582,6 @@ class _MyPageViewState extends State<MyPageView> {
                           color: color, fontSize: SizeConfig.defaultSize * 3)),
                 );
               }),
-              scrollController: FixedExtentScrollController(
-                initialItem: 0, // 몇 번째 인덱스가 제일 먼저 나올지
-              ),
-              onSelectedItemChanged: (index) {
-                setState(() => mbtiIndex3 = index);
-              },
             ),
           ),
           SizedBox(
@@ -594,6 +594,12 @@ class _MyPageViewState extends State<MyPageView> {
               selectionOverlay: CupertinoPickerDefaultSelectionOverlay(
                 background: CupertinoColors.systemIndigo.withOpacity(0.3),
               ),
+              scrollController: FixedExtentScrollController(
+                initialItem: 0, // 몇 번째 인덱스가 제일 먼저 나올지
+              ),
+              onSelectedItemChanged: (index) {
+                setState(() => mbtiIndex4 = index);
+              },
               children: List.generate(mbti4.length, (index) {
                 final isSelected = mbtiIndex4 == index;
                 final item = mbti4[index];
@@ -605,12 +611,6 @@ class _MyPageViewState extends State<MyPageView> {
                           color: color, fontSize: SizeConfig.defaultSize * 3)),
                 );
               }),
-              scrollController: FixedExtentScrollController(
-                initialItem: 0, // 몇 번째 인덱스가 제일 먼저 나올지
-              ),
-              onSelectedItemChanged: (index) {
-                setState(() => mbtiIndex4 = index);
-              },
             ),
           ),
         ],
@@ -627,7 +627,7 @@ class _MyPageViewState extends State<MyPageView> {
             AnalyticsUtil.logEvent("내정보_설정_내정보", properties: {
               "회원 정보 타입": title, "회원 정보 내용": value
             });
-            TextEditingController _textController = TextEditingController();
+            TextEditingController textController = TextEditingController();
             showDialog<String>(
                 context: context,
                 builder: (BuildContext dialogContext) {
@@ -646,7 +646,7 @@ class _MyPageViewState extends State<MyPageView> {
                                 textAlign: TextAlign.start,),
                               const Text('닉네임은 최대 7글자예요!'),
                               TextField(
-                                controller: _textController,
+                                controller: textController,
                                 maxLength: 7,
                                 onChanged: (text) {
                                   setState(() {}); // Rebuild the AlertDialog when text changes
@@ -673,7 +673,7 @@ class _MyPageViewState extends State<MyPageView> {
                             ),
                             TextButton(
                               onPressed: () {
-                                var nick = _textController.text;
+                                var nick = textController.text;
                                 setNickname(nick);
 
                                 BlocProvider.of<MyPagesCubit>(context).patchMyInfo(widget.userResponse);
@@ -725,7 +725,6 @@ class _MyPageViewState extends State<MyPageView> {
               });
             }
             if (title == "초대코드") {
-              String myCodeCopy = value;
               Clipboard.setData(ClipboardData(text: value));
               ToastUtil.showToast("내 코드가 복사되었어요!");
               AnalyticsUtil.logEvent("내정보_설정_내코드터치");
