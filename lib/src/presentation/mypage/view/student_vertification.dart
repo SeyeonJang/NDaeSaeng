@@ -147,7 +147,7 @@ class _VertificationViewState extends State<VertificationView> with SingleTicker
                                       // color: Colors.indigo,
                                       height: SizeConfig.defaultSize * 30,
                                     ),
-                                    const Text("이름, 학교, 학번이 모두 나오게 업로드해주세요!", style: TextStyle(color: Color(0xff7C83FD))),
+                                    const Text("이름, 학교, 학번이 모두 나오게 업로드해주세요!", style: TextStyle(color: Color(0xffFF5C58))),
                                     SizedBox(height: SizeConfig.defaultSize * 4),
                                   ],
                                 ),
@@ -203,7 +203,7 @@ class _VertificationViewState extends State<VertificationView> with SingleTicker
                                                 });
                                               },
                                               style: ElevatedButton.styleFrom(
-                                                backgroundColor: const Color(0xff7C83FD),
+                                                backgroundColor: const Color(0xffFF5C58),
                                                 shape: RoundedRectangleBorder(
                                                   borderRadius: BorderRadius.circular(15), // 모서리 둥글기 설정
                                                 ),
@@ -270,13 +270,13 @@ class _VertificationViewState extends State<VertificationView> with SingleTicker
                                         ),
                                         focusedBorder: const OutlineInputBorder(
                                           borderSide: BorderSide(
-                                            color: Color(0xff7C83FD), // 테두리 색상
+                                            color: Color(0xffFF5C58), // 테두리 색상
                                             width: 2.0,
                                           ),
                                         ),
                                         prefixIcon: const Icon(
                                           Icons.person_rounded,
-                                          color: Color(0xff7C83FD),
+                                          color: Color(0xffFF5C58),
                                         ),
                                         hintText: "본인확인을 위한 실명을 입력해주세요!"));
   }
@@ -294,7 +294,7 @@ class _VertificationViewState extends State<VertificationView> with SingleTicker
                                       decoration: BoxDecoration(
                                           color: Colors.white,
                                           borderRadius: BorderRadius.circular(10),
-                                          border: Border.all(width: 1.5, color: const Color(0xff7C83FD))),
+                                          border: Border.all(width: 1.5, color: const Color(0xffFF5C58))),
                                       child: Center(
                                           child: Text("갤러리에서 사진 업로드",
                                               style: TextStyle(
@@ -316,7 +316,7 @@ class _VertificationViewState extends State<VertificationView> with SingleTicker
                                       width: SizeConfig.screenWidth,
                                       height: SizeConfig.defaultSize * 6,
                                       decoration: BoxDecoration(
-                                        color: const Color(0xff7C83FD),
+                                        color: const Color(0xffFF5C58),
                                         borderRadius: BorderRadius.circular(10),
                                       ),
                                       child: Center(
@@ -430,10 +430,26 @@ class _VerificationPageInformationButton extends StatelessWidget {
         },
         style: TextButton.styleFrom(
             backgroundColor: Colors.white, surfaceTintColor: Colors.white),
-        child: Text(
-          "학생증 인증은 왜 필요한가요?",
-          style: TextStyle(color: Colors.grey, fontSize: SizeConfig.defaultSize * 1.4),
-        ));
+        child:
+
+        RichText(
+          text: TextSpan(
+            children: [
+              WidgetSpan(
+                child: Icon(Icons.info_outline, size: SizeConfig.defaultSize * 1.5, color: Colors.grey),
+              ),
+              TextSpan(
+                text: " 학생증 인증은 왜 필요한가요?",
+                style: TextStyle(color: Colors.grey, fontSize: SizeConfig.defaultSize * 1.4),
+              ),
+            ],
+          ),
+        )
+        // Text(
+        //   "학생증 인증은 왜 필요한가요?",
+        //   style: TextStyle(color: Colors.grey, fontSize: SizeConfig.defaultSize * 1.4),
+        // ),
+    );
   }
 }
 
