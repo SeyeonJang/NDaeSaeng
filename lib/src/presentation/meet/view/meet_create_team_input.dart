@@ -1206,32 +1206,42 @@ class _CreateTeamBottomSectionState extends State<_CreateTeamBottomSection> {
               SizedBox(height: SizeConfig.defaultSize * 0.3,),
               GestureDetector(
                 onTap: () async {
-                  AnalyticsUtil.logEvent("홈_팀만들기_팀만들기버튼_터치", properties: {
-                    "teamId": meetTeam.id,
-                    "teamName": meetTeam.name,
-                    "teamLocationsCount": meetTeam.locations.length,
-                    "teamMembersCount": meetTeam.members.length + 1,
-                    "toggle": meetTeam.canMatchWithSameUniversity,
-                    "university": meetTeam.university?.name ?? "알수없음",
-                  });
-
                   if (meetTeam.members.length == 1) {
                     if (meetTeam.members[0].getName().isNotEmpty && meetTeam.members[0].getBirthYear() != 0 && meetTeam.members[0].getUniversityId() != 0 && meetTeam.name != '' && meetTeam.locations.isNotEmpty) {
+                      AnalyticsUtil.logEvent("홈_팀만들기_팀만들기버튼_터치(생성)", properties: {
+                        "teamId": meetTeam.id,
+                        "teamName": meetTeam.name,
+                        "teamLocationsCount": meetTeam.locations.length,
+                        "teamMembersCount": meetTeam.members.length + 1,
+                        "toggle": meetTeam.canMatchWithSameUniversity,
+                        "university": meetTeam.university?.name ?? "알수없음",
+                      });
                       widget.onFinish();
                       Navigator.pop(widget.ancestorContext, meetTeam);
                     } else {
+                      AnalyticsUtil.logEvent("홈_팀만들기_팀만들기버튼_터치(미생성)");
                       ToastUtil.showMeetToast('모든 정보를 기입해주세요!', 1);
                     }
                   } else if (meetTeam.members.length == 2) {
                     if (meetTeam.members[0].getName().isNotEmpty && meetTeam.members[0].getBirthYear() != 0 && meetTeam.members[0].getUniversityId() != 0
                         && meetTeam.members[1].getName().isNotEmpty && meetTeam.members[1].getBirthYear() != 0 && meetTeam.members[1].getUniversityId() != 0
                         &&  meetTeam.name != '' && meetTeam.locations.isNotEmpty) {
+                      AnalyticsUtil.logEvent("홈_팀만들기_팀만들기버튼_터치(생성)", properties: {
+                        "teamId": meetTeam.id,
+                        "teamName": meetTeam.name,
+                        "teamLocationsCount": meetTeam.locations.length,
+                        "teamMembersCount": meetTeam.members.length + 1,
+                        "toggle": meetTeam.canMatchWithSameUniversity,
+                        "university": meetTeam.university?.name ?? "알수없음",
+                      });
                       widget.onFinish();
                       Navigator.pop(widget.ancestorContext, meetTeam);
                     } else {
+                      AnalyticsUtil.logEvent("홈_팀만들기_팀만들기버튼_터치(미생성)");
                       ToastUtil.showMeetToast('모든 정보를 기입해주세요!', 1);
                     }
                   } else {
+                    AnalyticsUtil.logEvent("홈_팀만들기_팀만들기버튼_터치(미생성)");
                     ToastUtil.showMeetToast('팀원을 추가해주세요!', 1);
                   }
                 },
