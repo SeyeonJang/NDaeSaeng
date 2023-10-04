@@ -1,10 +1,8 @@
 import 'dart:io';
-
 import 'package:dart_flutter/src/domain/entity/location.dart';
 import 'package:dart_flutter/src/domain/entity/meet_team.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:dart_flutter/src/domain/entity/user.dart';
-
 import '../../../../domain/entity/blind_date_team.dart';
 import '../../../../domain/entity/university.dart';
 
@@ -12,7 +10,6 @@ import '../../../../domain/entity/university.dart';
 class MeetState {
   late MeetStateEnum meetPageState;
   late List<Location> serverLocations;
-  // meet - standby
   late User userResponse;
   // meet - createTeam
   late bool isLoading;
@@ -23,7 +20,6 @@ class MeetState {
   late Set<User> teamMembers;
   late Set<Location> cities;
   late List<MeetTeam> myTeams;
-  // late MeetTeam newTeam;
 
   late MeetTeam? myTeam; // todo : change to not lazy init
   late String teamName;
@@ -36,7 +32,6 @@ class MeetState {
   late int nowTeamId;
   late bool pickedTeam;
   late bool proposalStatus;
-  late bool IsAlreadyProposalTeam;
   // meet - createTeamInput
   late List<University> universities;
   late File profileImageFile;
@@ -174,11 +169,11 @@ class MeetState {
   }
 
   void addTeamCount() {
-    this.teamCount += 1;
+    teamCount += 1;
   }
 
   void minusTeamCount() {
-    this.teamCount -= 1;
+    teamCount -= 1;
   }
 
   void setIsLoading(bool isLoading) {
@@ -226,11 +221,9 @@ class MeetState {
 
   void setMyTeam(MeetTeam team) {
     myTeam = team;
-    print("setMyTeam");
   }
 
   MeetTeam? getMyTeam() {
-    print("getMyTeam");
     return myTeam;
   }
 
@@ -256,22 +249,16 @@ class MeetState {
 
   void addTeamMember(User friend) {
     teamMembers.add(friend);
-    // int friendIndex = filteredFriends.indexWhere((f) => f == friend);
-    //     if (friendIndex != -1) {
-    //   filteredFriends.removeAt(friendIndex);
-    // }
-
     print("state - friend 추가 {$friend}");
-    print("state - 팀 멤버에는 친구 추가 ${teamMembers}");
-    print("state - 필터링 친구에는 친구 삭제 ${filteredFriends}");
+    print("state - 팀 멤버에는 친구 추가 $teamMembers");
+    print("state - 필터링 친구에는 친구 삭제 $filteredFriends");
   }
 
   void deleteTeamMember(User friend) {
-    // filteredFriends.add(friend);
     teamMembers.remove(friend);
     print("state - friend 삭제 {$friend}");
-    print("state - 필터링 친구에는 친구 추가 ${filteredFriends}");
-    print("state - 팀 멤버에는 친구 삭제 ${teamMembers}");
+    print("state - 필터링 친구에는 친구 추가 $filteredFriends");
+    print("state - 팀 멤버에는 친구 삭제 $teamMembers");
   }
 
   MeetState setBlindDateTeams(List<BlindDateTeam> blindDateTeams) {
@@ -286,8 +273,7 @@ class MeetState {
 
   @override
   String toString() {
-    // return 'MeetState{meetPageState: $meetPageState, userResponse: $userResponse, isLoading: $isLoading, isMemberOneAdded: $isMemberOneAdded, isMemberTwoAdded: $isMemberTwoAdded, friends: $friends, filteredFriends: $filteredFriends, teamMembers: $teamMembers, cities: $cities, myTeams: $myTeams, teamName: $teamName, isChecked: $isChecked}';
-    return 'MyTeams: ${myTeams}';
+    return 'MyTeams: $myTeams';
   }
 }
 

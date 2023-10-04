@@ -99,7 +99,7 @@ class ChatSendOneTeamView extends StatelessWidget { // Component
                           children: [
                             Text("${proposal.requestedTeam.universityName} ",
                               style: TextStyle(fontSize: SizeConfig.defaultSize * 1.4, fontWeight: FontWeight.w600),),
-                            if (proposal.requestedTeam.isCertifiedTeam ?? false)
+                            if (proposal.requestedTeam.isCertifiedTeam)
                               Image.asset("assets/images/check.png", width: SizeConfig.defaultSize * 1.2),
                           ],
                         ),

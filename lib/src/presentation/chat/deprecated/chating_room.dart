@@ -1,10 +1,9 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_chat_ui/flutter_chat_ui.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 
+
+@Deprecated('ChattingRoom으로 대체')
 class ChatingRoom extends StatefulWidget {
   const ChatingRoom({super.key});
 
@@ -13,7 +12,7 @@ class ChatingRoom extends StatefulWidget {
 }
 
 class _ChatingRoomState extends State<ChatingRoom> {
-  List<types.Message> _messages = [];
+  final List<types.Message> _messages = [];
   final _user = const types.User(id: '2245');
 
   @override

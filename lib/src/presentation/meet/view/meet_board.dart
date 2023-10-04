@@ -724,7 +724,7 @@ class _TopSection extends StatefulWidget {
   final MeetState ancestorState;
   final BuildContext context;
 
-  _TopSection({
+  const _TopSection({
     super.key,
     required this.ancestorState,
     required this.context
@@ -832,10 +832,7 @@ class NotFriendComponent extends StatelessWidget {
   late bool isAdd;
   late User friend;
 
-  NotFriendComponent(bool isAdd, User friend, {super.key}) {
-    this.isAdd = isAdd;
-    this.friend = friend;
-  }
+  NotFriendComponent(this.isAdd, this.friend, {super.key});
 
   void pressedAddButton(BuildContext context, int userId) async {
     await BlocProvider.of<MeetCubit>(context).pressedFriendAddButton(friend);
@@ -871,15 +868,13 @@ class NotFriendComponent extends StatelessWidget {
                       fontWeight: FontWeight.w600,
                     )),
                     Flexible(
-                      child: Container(
-                        child: Text("  ${friend.personalInfo!.admissionYear
-                            .toString().substring(2, 4)}학번∙${friend.university
-                            ?.department}", style: TextStyle(
-                          fontSize: SizeConfig.defaultSize * 1.3,
-                          fontWeight: FontWeight.w500,
-                          overflow: TextOverflow.ellipsis,
-                        )),
-                      ),
+                      child: Text("  ${friend.personalInfo!.admissionYear
+                          .toString().substring(2, 4)}학번∙${friend.university
+                          ?.department}", style: TextStyle(
+                        fontSize: SizeConfig.defaultSize * 1.3,
+                        fontWeight: FontWeight.w500,
+                        overflow: TextOverflow.ellipsis,
+                      )),
                     ),
                   ],
                 ),

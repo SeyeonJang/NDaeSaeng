@@ -17,8 +17,8 @@ class ChooseGender extends StatefulWidget {
 
 class _ChooseGenderState extends State<ChooseGender> {
   List<Widget> genders = <Widget>[
-    Text('남성'),
-    Text('여성'),
+    const Text('남성'),
+    const Text('여성'),
   ];
   final List<bool> _selectedGender = List.generate(2, (_) => false);
   bool vertical = false;
@@ -58,13 +58,12 @@ class _ChooseGenderState extends State<ChooseGender> {
                   AnalyticsUtil.logEvent("회원가입_성별_선택", properties: {
                     "성별": selectedGender=="FEMALE" ? "여자" : "남자"
                   });
-                  print("$index, ${_selectedGender[index]}, $selectedGender");
                 },
                 borderRadius: const BorderRadius.all(Radius.circular(8)),
-                selectedBorderColor: Color(0xff7C83FD),
+                selectedBorderColor: const Color(0xff7C83FD),
                 selectedColor: Colors.white,
-                fillColor: Color(0xff7C83FD).withOpacity(0.8),
-                color: Color(0xff7C83FD),
+                fillColor: const Color(0xff7C83FD).withOpacity(0.8),
+                color: const Color(0xff7C83FD),
                 constraints: BoxConstraints(
                   minHeight: SizeConfig.screenHeight * 0.2,
                   minWidth: SizeConfig.screenWidth * 0.4,
@@ -103,27 +102,27 @@ class _ChooseGenderState extends State<ChooseGender> {
                     TextButton(
                       onPressed: () {
                         AnalyticsUtil.logEvent("회원가입_성별_이용약관");
-                        Navigator.push(context, MaterialPageRoute(builder: (_) => Tos1()));
+                        Navigator.push(context, MaterialPageRoute(builder: (_) => const Tos1()));
                       },
                       style: TextButton.styleFrom(
                         minimumSize: Size.zero,
                         padding: EdgeInsets.symmetric(vertical: SizeConfig.defaultSize * 1.2),
                         tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                       ),
-                      child: Text(" 이용약관 ", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.3, color: Color(0xff7C83FD))),
+                      child: Text(" 이용약관 ", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.3, color: const Color(0xff7C83FD))),
                     ),
                     Text("및", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.3)),
                     TextButton(
                       onPressed: () {
                         AnalyticsUtil.logEvent("회원가입_성별_개인정보");
-                        Navigator.push(context, MaterialPageRoute(builder: (_) => Tos2()));
+                        Navigator.push(context, MaterialPageRoute(builder: (_) => const Tos2()));
                       },
                       style: TextButton.styleFrom(
                         minimumSize: Size.zero,
                         padding: EdgeInsets.zero,
                         tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                       ),
-                      child: Text(" 개인정보 처리방침", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.3, color: Color(0xff7C83FD))),
+                      child: Text(" 개인정보 처리방침", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.3, color: const Color(0xff7C83FD))),
                     ),
                     Text("에 동의하시면 계속 진행해주세요.", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.3)),
                   ]
@@ -133,7 +132,7 @@ class _ChooseGenderState extends State<ChooseGender> {
                 height: SizeConfig.defaultSize * 5,
               ),
 
-              Container(
+              SizedBox(
                 width: SizeConfig.screenWidth * 0.9,
                 height: SizeConfig.defaultSize * 5,
                 child: _selectedGender.contains(true)
@@ -144,7 +143,7 @@ class _ChooseGenderState extends State<ChooseGender> {
                       BlocProvider.of<DartAuthCubit>(context).doneSignup();
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Color(0xff7C83FD),
+                      backgroundColor: const Color(0xff7C83FD),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(15), // 모서리 둥글기 설정
                       ),
@@ -154,7 +153,6 @@ class _ChooseGenderState extends State<ChooseGender> {
                     : ElevatedButton(
                     onPressed: () {},
                     style: ElevatedButton.styleFrom(
-                      primary: Colors.white,
                       backgroundColor: Colors.grey[200],
                     ),
                     child: Text("성별을 선택해주세요", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.7, fontWeight: FontWeight.w600, color: Colors.black38),)
@@ -166,68 +164,3 @@ class _ChooseGenderState extends State<ChooseGender> {
     );
   }
 }
-//
-// class ScaffoldBody extends StatelessWidget {
-//   const ScaffoldBody({
-//     super.key,
-//   });
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     const List<Widget> genders = <Widget>[
-//       Text('남성'),
-//       Text('여성'),
-//     ];
-//     final List<bool> _selectedGender = List.generate(2, (_) => false);
-//     bool vertical = false;
-//
-//     return Column(
-//       children: [
-//         const SizedBox(
-//           height: 100,
-//         ),
-//         const Text("성별 선택", style: TextStyle(fontSize: 25)),
-//         const SizedBox( height: 140, ),
-//
-//         ToggleButtons(
-//           direction: Axis.horizontal,
-//           onPressed: (int index) {
-//             super.setState(() {
-//               _selectedGender[index] != !_selectedGender[index];
-//             });
-//           },
-//           borderRadius: const BorderRadius.all(Radius.circular(8)),
-//           selectedBorderColor: Colors.red[700],
-//           selectedColor: Colors.white,
-//           fillColor: Colors.red[200],
-//           color: Colors.red[400],
-//           constraints: const BoxConstraints(
-//             minHeight: 40.0,
-//             minWidth: 80.0,
-//           ),
-//           isSelected: _selectedGender,
-//           children: [
-//             Text("여자"),
-//             Text("남자"),
-//           ],
-//           // children: [genders],
-//         ),
-//
-//         const SizedBox( height: 100, ),
-//         ElevatedButton( // 버튼
-//           onPressed: () {
-//             BlocProvider.of<SignupCubit>(context).stepGender("M");
-//             BlocProvider.of<AuthCubit>(context).doneSignup();
-//             Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const DartPageView()), (route)=>false);
-//           }, // 임시용
-//           // onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => 2-1())), // animation은 나중에 추가 + 2-1로 가야함
-//           // style: ButtonStyle(
-//           //   foregroundColor: MaterialStateProperty.resolveWith(getColorText), // textcolor
-//           //   backgroundColor: MaterialStateProperty.resolveWith(getColor), // backcolor
-//           // ),
-//           child: const Text("다음으로"),
-//         ),
-//       ],
-//     );
-//   }
-// }

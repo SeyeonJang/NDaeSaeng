@@ -9,7 +9,6 @@ class ChattingCubit extends Cubit<ChatState> {
 
   Future<List<Message>> fetchMoreMessages(int chatRoomId, int pageKey) async {
     final newMessages = (await _chatUseCase.getChatMessages(chatRoomId, page: pageKey)).content?.toList() ?? [];
-    print('chatRoomId: ${state.chatRoomId}');
     List<Message> msg = [];
     for (int i=0; i<newMessages.length; i++) {
       msg.add(

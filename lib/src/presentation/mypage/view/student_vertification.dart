@@ -51,11 +51,11 @@ class _VertificationViewState extends State<VertificationView> with SingleTicker
     super.initState();
     _controller = AnimationController(
       vsync: this,
-      duration: Duration(seconds: 2),
+      duration: const Duration(seconds: 2),
     );
     _animation = Tween<Offset>(
-      begin: Offset(0,0.15),
-      end: Offset(0,0),
+      begin: const Offset(0,0.15),
+      end: const Offset(0,0),
     ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
     _controller.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
@@ -88,7 +88,7 @@ class _VertificationViewState extends State<VertificationView> with SingleTicker
   // String get vertification => widget.userResponse.user?.verification ?? 'DEFAULT';
 
   // 이름 텍스트 입력
-  TextEditingController _nameController = TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
   bool isNameValid = false;
   String errorMessage = '';
 
@@ -118,14 +118,13 @@ class _VertificationViewState extends State<VertificationView> with SingleTicker
                             onPressed: () {
                               // AnalyticsUtil.logEvent("내정보_설정_뒤로가기버튼");
                               Navigator.pop(context);
-                              print(widget.userResponse.personalInfo!.verification.isNotVerifiedYet || widget.userResponse.personalInfo!.verification.isVerificationFailed ?? false);
                               AnalyticsUtil.logEvent("학생증인증_뒤로가기");
                             },
                             icon: Icon(Icons.arrow_back_ios_new_rounded,
                                 size: SizeConfig.defaultSize * 2)),
                       ]), SizedBox(height: SizeConfig.defaultSize * 2,),
 
-                      widget.userResponse.personalInfo!.verification.isNotVerifiedYet || widget.userResponse.personalInfo!.verification.isVerificationFailed ?? false
+                      widget.userResponse.personalInfo!.verification.isNotVerifiedYet || widget.userResponse.personalInfo!.verification.isVerificationFailed
                         ? Column(
                           children: [
                             Text("지금 학생증 인증하면", style: TextStyle(
@@ -159,7 +158,7 @@ class _VertificationViewState extends State<VertificationView> with SingleTicker
                     ],
                   ),
 
-                  widget.userResponse.personalInfo!.verification.isNotVerifiedYet || widget.userResponse.personalInfo!.verification.isVerificationFailed ?? false // 사진이 서버에 올라갔는가
+                  widget.userResponse.personalInfo!.verification.isNotVerifiedYet || widget.userResponse.personalInfo!.verification.isVerificationFailed
                     ? (isUploaded == false // 사진업로드를 했는가
                     ? Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -172,7 +171,7 @@ class _VertificationViewState extends State<VertificationView> with SingleTicker
                             // color: Colors.indigo,
                             height: SizeConfig.defaultSize * 30,
                           ),
-                          Text("이름, 학교, 학번이 모두 나오게 업로드해주세요!", style: TextStyle(color: Color(0xff7C83FD))),
+                          const Text("이름, 학교, 학번이 모두 나오게 업로드해주세요!", style: TextStyle(color: Color(0xff7C83FD))),
 
 
                           // SlideTransition( // 카메라 애니메이션
@@ -204,9 +203,9 @@ class _VertificationViewState extends State<VertificationView> with SingleTicker
                                         child: ListBody(
                                           children: <Widget>[
                                             SizedBox(height: SizeConfig.defaultSize,),
-                                            Center(child: Text('엔대생 앱 안에서의 원활한 활동을 위해',)),
-                                            Center(child: Text('학생증 인증으로 본인인증을 하고 있어요!')),
-                                            Center(child: Text('지금 바로 학생증으로 본인인증 해보세요!')),
+                                            const Center(child: Text('엔대생 앱 안에서의 원활한 활동을 위해',)),
+                                            const Center(child: Text('학생증 인증으로 본인인증을 하고 있어요!')),
+                                            const Center(child: Text('지금 바로 학생증으로 본인인증 해보세요!')),
                                             SizedBox(height: SizeConfig.defaultSize * 2.2,),
                                             Center(child: Text('학생증 인증은 최대 2~3일 소요될 수 있으며', style: TextStyle(
                                                 fontSize: SizeConfig.defaultSize * 1.2
@@ -235,7 +234,7 @@ class _VertificationViewState extends State<VertificationView> with SingleTicker
                               width: SizeConfig.screenWidth,
                               height: SizeConfig.defaultSize * 6,
                               decoration: BoxDecoration(
-                                color: Color(0xff7C83FD),
+                                color: const Color(0xff7C83FD),
                                 borderRadius: BorderRadius.circular(10),
                               ),
                               child: Center(child: Text("사진 촬영하기", style: TextStyle(fontWeight: FontWeight.w600, fontSize: SizeConfig.defaultSize * 2, color: Colors.white),)),
@@ -253,7 +252,7 @@ class _VertificationViewState extends State<VertificationView> with SingleTicker
                               decoration: BoxDecoration(
                                   color: Colors.white,
                                   borderRadius: BorderRadius.circular(10),
-                                  border: Border.all(width: 1.5, color: Color(0xff7C83FD))
+                                  border: Border.all(width: 1.5, color: const Color(0xff7C83FD))
                               ),
                               child: Center(child: Text("갤러리에서 사진 업로드", style: TextStyle(fontWeight: FontWeight.w500, fontSize: SizeConfig.defaultSize * 2, color: Colors.black))),
                             ),
@@ -275,18 +274,18 @@ class _VertificationViewState extends State<VertificationView> with SingleTicker
                                     width: 2.0,
                                   ),
                                 ),
-                                focusedBorder: OutlineInputBorder(
+                                focusedBorder: const OutlineInputBorder(
                                   borderSide: BorderSide(
                                     color: Color(0xff7C83FD), // 테두리 색상
                                     width: 2.0,
                                   ),
                                 ),
-                                prefixIcon: Icon(Icons.person_rounded, color: Color(0xff7C83FD),),
+                                prefixIcon: const Icon(Icons.person_rounded, color: Color(0xff7C83FD),),
                                 hintText: "본인확인을 위한 실명을 입력해주세요!")),
                         SizedBox(height: SizeConfig.defaultSize * 2,),
                         ClipRRect(
                             borderRadius: BorderRadius.circular(16),
-                            child: Container(
+                            child: SizedBox(
                                 width: SizeConfig.screenWidth * 0.9,
                                 height: SizeConfig.screenWidth * 0.9,
                                 // child: Image.asset('/assets/images/profile-mockup3.png', fit: BoxFit.fill,)
@@ -300,21 +299,19 @@ class _VertificationViewState extends State<VertificationView> with SingleTicker
                         GestureDetector(
                           onTap: () {
                           },
-                          child: Container(
+                          child: SizedBox(
                             width: SizeConfig.screenWidth,
                             height: SizeConfig.defaultSize * 6,
                             child: isNameValid
                                 ? ElevatedButton(
                                 onPressed: () {
                                   AnalyticsUtil.logEvent("학생증인증_제출");
-                                  print("변경 전 ${widget.userResponse.personalInfo?.verification}");
                                   PersonalInfo updatedInfo = widget.userResponse.personalInfo!.copyWith(verification: IdCardVerificationStatus.VERIFICATION_IN_PROGRESS);
                                   BlocProvider.of<MyPagesCubit>(context).uploadIdCardImage(_image!, widget.userResponse, _nameController.text);
                                   widget.userResponse.personalInfo = updatedInfo; // 상위 위젯 상태 업데이트
-                                  print("변경 후 ${widget.userResponse.personalInfo?.verification}");
                                 },
                                 style: ElevatedButton.styleFrom(
-                                  backgroundColor: Color(0xff7C83FD),
+                                  backgroundColor: const Color(0xff7C83FD),
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(15), // 모서리 둥글기 설정
                                   ),
@@ -334,37 +331,35 @@ class _VertificationViewState extends State<VertificationView> with SingleTicker
                       )
                       : Flexible( // 인증 후
                         child: Center(
-                          child: Container(
-                            child: Column( // 애니메이션 가운데층
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                SlideTransition(
-                                  position: _animation,
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      AnalyticsUtil.logEvent("학생증인증_세번째화면_아이콘터치");
-                                    },
-                                    child: Image.asset(
-                                      'assets/images/magnifier.png',
-                                      width: SizeConfig.defaultSize * 33,
-                                    ),
+                          child: Column( // 애니메이션 가운데층
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              SlideTransition(
+                                position: _animation,
+                                child: GestureDetector(
+                                  onTap: () {
+                                    AnalyticsUtil.logEvent("학생증인증_세번째화면_아이콘터치");
+                                  },
+                                  child: Image.asset(
+                                    'assets/images/magnifier.png',
+                                    width: SizeConfig.defaultSize * 33,
                                   ),
                                 ),
-                                SizedBox(height: SizeConfig.screenHeight * 0.15),
-                                Column(
-                                    children: [
-                                      Text("학생증을 확인중이에요!", style: TextStyle(
-                                        fontSize: SizeConfig.defaultSize * 2.2,
-                                      )),
-                                      SizedBox(height: SizeConfig.defaultSize * 1,),
-                                      Text("인증이 되면 알려드릴게요!", style: TextStyle(
-                                          fontSize: SizeConfig.defaultSize * 2.2
-                                      ))
-                                    ]
-                                ),
-                                SizedBox(height: SizeConfig.screenHeight * 0.03),
-                              ],
-                            ),
+                              ),
+                              SizedBox(height: SizeConfig.screenHeight * 0.15),
+                              Column(
+                                  children: [
+                                    Text("학생증을 확인중이에요!", style: TextStyle(
+                                      fontSize: SizeConfig.defaultSize * 2.2,
+                                    )),
+                                    SizedBox(height: SizeConfig.defaultSize * 1,),
+                                    Text("인증이 되면 알려드릴게요!", style: TextStyle(
+                                        fontSize: SizeConfig.defaultSize * 2.2
+                                    ))
+                                  ]
+                              ),
+                              SizedBox(height: SizeConfig.screenHeight * 0.03),
+                            ],
                           ),
                         )
                       )

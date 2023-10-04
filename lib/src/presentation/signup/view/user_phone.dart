@@ -5,7 +5,7 @@ import '../../../../res/config/size_config.dart';
 
 class UserPhone extends StatefulWidget {
 
-  UserPhone({super.key});
+  const UserPhone({super.key});
 
   @override
   State<UserPhone> createState() => _UserPhoneState();
@@ -33,25 +33,13 @@ class _UserPhoneState extends State<UserPhone> {
       backgroundColor: Colors.white,
       body: Center(
         child: Column(
-          // mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            SizedBox(
-              height: SizeConfig.screenHeight * 0.15,
-            ),
-            // BlocBuilder<SignupCubit, SignupState>(
-            //   builder: (context, state) {
-            //     return Text('환영해요! ${state.inputState.name!}님', style: TextStyle(fontSize: SizeConfig.defaultSize * 1.5));
-            //   },
-            // ),
+              SizedBox(height: SizeConfig.screenHeight * 0.15,),
             Text("전화번호를 입력해주세요!", style: TextStyle(fontSize: SizeConfig.defaultSize * 2.7, fontWeight: FontWeight.w700)),
-            SizedBox(
-              height: SizeConfig.defaultSize * 1.5,
-            ),
+              SizedBox(height: SizeConfig.defaultSize * 1.5,),
             Text("이후 변경할 수 없어요! 신중히 입력해주세요!",
                 style: TextStyle(fontSize: SizeConfig.defaultSize * 1.2, color: Colors.grey)),
-            SizedBox(
-              height: SizeConfig.defaultSize * 10,
-            ),
+              SizedBox(height: SizeConfig.defaultSize * 10,),
 
             SizedBox(
               width: SizeConfig.screenWidth * 0.9,
@@ -59,33 +47,27 @@ class _UserPhoneState extends State<UserPhone> {
                   decoration: InputDecoration(
                       enabledBorder: OutlineInputBorder(
                         borderSide: BorderSide(
-                          color: Colors.grey.shade200, // 테두리 색상
+                          color: Colors.grey.shade200,
                           width: 2.0,
                         ),
                       ),
-                      focusedBorder: OutlineInputBorder(
+                      focusedBorder: const OutlineInputBorder(
                         borderSide: BorderSide(
-                          color: Color(0xff7C83FD), // 테두리 색상
+                          color: Color(0xff7C83FD),
                           width: 2.0,
                         ),
                       ),
-                      prefixIcon: Icon(Icons.person_rounded, color: Color(0xff7C83FD),),
+                      prefixIcon: const Icon(Icons.person_rounded, color: Color(0xff7C83FD),),
                       hintText: "010xxxxoooo 형식으로 입력해주세요!",
                       errorText: phoneErrorMessage,),
                 onSaved: (String? value) {},
                 onChanged: (_) => _checkPhoneValidity(),
-                // 유효성 검사 필요 ********************* (수정 안 됨)
-                // validator: (String? value) {
-                //   return (value == null || !value.contains('-')) ? "전화번호는 010-0000-0000 형식이어야 해요!" : null;
-                // },
                 controller: _phoneController,
               ),
             ),
-            SizedBox(
-              height: SizeConfig.defaultSize * 10,
-            ),
+              SizedBox(height: SizeConfig.defaultSize * 10,),
 
-            Container(
+            SizedBox(
               width: SizeConfig.screenWidth * 0.9,
               height: SizeConfig.defaultSize * 5,
               child: isPhoneValid
@@ -94,9 +76,9 @@ class _UserPhoneState extends State<UserPhone> {
                     BlocProvider.of<SignupCubit>(context).stepPhone(_phoneController.text);
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Color(0xff7C83FD),
+                    backgroundColor: const Color(0xff7C83FD),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15), // 모서리 둥글기 설정
+                      borderRadius: BorderRadius.circular(15),
                     ),
                   ),
                   child: Text("다음으로", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.7, fontWeight: FontWeight.w600, color: Colors.white),)

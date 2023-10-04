@@ -1,8 +1,7 @@
 import 'package:dart_flutter/src/common/util/analytics_util.dart';
-import 'package:dart_flutter/src/presentation/meet/view/meet_standby.dart';
+import 'package:dart_flutter/src/presentation/meet/deprecated/meet_standby.dart';
 import 'package:dart_flutter/src/presentation/meet/viewmodel/meet_cubit.dart';
 import 'package:dart_flutter/src/presentation/meet/viewmodel/state/meet_state.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -17,11 +16,6 @@ class _MeetPage2State extends State<MeetPage2> with AutomaticKeepAliveClientMixi
   @override
   bool get wantKeepAlive {
     return true;
-    // print("weeeeeeeeeeeeewwwwweeeeeeeeeeeeeeee");
-    // print(context.read<MeetCubit>().state.friends.length);
-    // if (context.read<MeetCubit>().state.friends.length < 2)
-    //   return false;
-    // return true;
   }
 
   @override
