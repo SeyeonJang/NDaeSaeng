@@ -42,10 +42,10 @@ class _SignupPagesState extends State<SignupPages> {
             }
             if (state.signupStep.isName) {
               AnalyticsUtil.logEvent("회원가입_이름_접속");
-              return UserName();
+              return const UserName();
             }
             if (state.signupStep.isPhone) {
-              return UserPhone();
+              return const UserPhone();
             }
             if (state.signupStep.isValidatePhone) {
               return CertNum();

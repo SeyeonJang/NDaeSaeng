@@ -1,18 +1,93 @@
+import 'dart:io';
+import 'package:dart_flutter/src/common/util/toast_util.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+import '../../../common/util/analytics_util.dart';
+import 'package:dart_flutter/src/data/model/proposal_request_dto.dart';
+import 'package:dart_flutter/src/domain/entity/blind_date_team.dart';
 import 'package:dart_flutter/src/domain/entity/location.dart';
 import 'package:dart_flutter/src/domain/entity/meet_team.dart';
-import 'package:dart_flutter/src/domain/use_case/meet_use_case.dart';
-import 'package:dart_flutter/src/presentation/meet/viewmodel/state/meet_state.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:dart_flutter/src/domain/entity/user.dart';
+import '../../../domain/entity/blind_date_team_detail.dart';
+import '../../../domain/entity/university.dart';
+import 'package:dart_flutter/src/domain/mapper/team_mapper.dart';
+import 'package:dart_flutter/src/domain/use_case/ghost_use_case.dart';
+import 'package:dart_flutter/src/domain/use_case/meet_use_case.dart';
 import 'package:dart_flutter/src/domain/use_case/user_use_case.dart';
 import 'package:dart_flutter/src/domain/use_case/friend_use_case.dart';
+import 'package:dart_flutter/src/domain/use_case/university_use_case.dart';
+import 'package:dart_flutter/src/presentation/meet/viewmodel/state/meet_state.dart';
 
 class MeetCubit extends Cubit<MeetState> {
+
   MeetCubit() : super(MeetState.init());
   static final UserUseCase _userUseCase = UserUseCase();
   static final FriendUseCase _friendUseCase = FriendUseCase();
   static final MeetUseCase _meetUseCase = MeetUseCase();
+  static final UniversityUseCase _universityUseCase = UniversityUseCase();
+  static final GhostUseCase _ghostUseCase = GhostUseCase();
   bool _initialized = false;
+
+  // pagination
+  static const int NUMBER_OF_POSTS_PER_REQUEST = 10;
+  final PagingController<int, BlindDateTeam> pagingController = PagingController(firstPageKey: 0);
+
+  void initMeet({MeetTeam? initPickedTeam}) async {
+    state.setIsLoading(true);
+    emit(state.copy());
+
+    state.setIsLoading(false);
+    emit(state.copy());
+    state.setIsLoading(true);
+    emit(state.copy());
+
+    User userResponse = await _userUseCase.myInfo();
+    state.setMyInfo(userResponse);
+    // TODO : 친구와 과팅 나갈 때 복구
+    // List<User> friends = await _friendUseCase.getMyFriends();
+    // state.setMyFriends(friends);
+    // List<User> newFriends = await _friendUseCase.getRecommendedFriends();
+    // state.setRecommendedFriends(newFriends);
+
+    List<Location> locations = await _meetUseCase.getLocations();
+    state.setServerLocations(locations);
+
+    // Pagination<BlindDateTeam> paginationBlindTeams = await _meetUseCase.getBlindDateTeams(page:0, targetLocationId: 0);
+    // _numberOfPostsPerRequest = paginationBlindTeams.numberOfElements ?? 10;
+
+    // List<BlindDateTeam> blindDateTeams = paginationBlindTeams.content ?? [];
+    // state.setBlindDateTeams(blindDateTeams);
+
+    await getMyTeams(put: false);
+    if (!state.pickedTeam && state.myTeams.isNotEmpty) {
+      state.setMyTeam(state.myTeams[0]);
+    }
+    if (initPickedTeam != null) setPickedTeam(initPickedTeam);
+
+    state.setIsLoading(false);
+    emit(state.copy());
+    print("test: ${state.getMyTeam()}");
+  }
+
+  void initMeetIntro() async {
+    state.setIsLoading(true);
+    emit(state.copy());
+
+    User userResponse = await _userUseCase.myInfo();
+    state.setMyInfo(userResponse);
+    List<Location> locations = await _meetUseCase.getLocations();
+    state.setServerLocations(locations);
+    List<University> universities = await _universityUseCase.getUniversityByName(state.userResponse.university?.name ?? '');
+    state.universities = universities;
+
+    await getMyTeams(put: false);
+    if (!state.pickedTeam && state.myTeams.isNotEmpty) {
+      state.setMyTeam(state.myTeams[0]);
+    }
+
+    state.setIsLoading(false);
+    emit(state.copy());
+  }
 
   void initState() async {
     print(_initialized);
@@ -35,7 +110,6 @@ class MeetCubit extends Cubit<MeetState> {
 
     state.setIsMemberOneAdded(false);
     state.setIsMemberTwoAdded(false);
-    print("${state.isMemberOneAdded} 랑 ${state.isMemberTwoAdded}");
 
     List<Location> locations = await _meetUseCase.getLocations();
     print(locations.toString());
@@ -44,13 +118,54 @@ class MeetCubit extends Cubit<MeetState> {
     state.setIsLoading(false);
     emit(state.copy());
     print("meet init 끝");
-    // state.meetPageState = MeetStateEnum.landing;
   }
 
-  void initFrom(MeetState meetState) {
-    state.setAll(meetState);
+  Future<void> fetchPage(int pageKey) async {
+    try {
+      final newTeams = (await _meetUseCase.getBlindDateTeams(page: pageKey, size: NUMBER_OF_POSTS_PER_REQUEST)).content ?? [];
+      final isLastPage = newTeams.length < NUMBER_OF_POSTS_PER_REQUEST;
+      if (isLastPage) {
+        pagingController.appendLastPage(newTeams);
+      } else {
+        final nextPageKey = pageKey + 1;
+        AnalyticsUtil.logEvent('과팅_목록_이성 팀 불러오기(페이지네이션)', properties: {
+          '새로 불러온 페이지 인덱스': nextPageKey
+        });
+        // await Future.delayed(Duration(seconds: 1));
+        pagingController.appendPage(newTeams, nextPageKey);
+      }
+    } catch (error) {
+      pagingController.error = error;
+    }
+  }
+
+  Future<BlindDateTeamDetail> getBlindDateTeam(int id) async {
+    return await _meetUseCase.getBlindDateTeam(id);
+  }
+
+  void pressedOneTeam(int teamId) {
+    state.setTeamId(teamId);
     emit(state.copy());
   }
+
+  void setMyTeam(MeetTeam myTeam) {
+    state.setMyTeam(myTeam);
+    emit(state.copy());
+  }
+
+  void setPickedTeam(MeetTeam myTeam) {
+    state.setPickedTeam(true);
+    setMyTeam(myTeam);
+  }
+
+  void postProposal(int requestingTeamId, int requestedTeamId) async {
+    ProposalRequestDto newProposal = ProposalRequestDto(requestingTeamId: requestingTeamId, requestedTeamId: requestedTeamId);
+    _meetUseCase.postProposal(newProposal);
+    state.setProposalStatus(false);
+    emit(state.copy());
+  }
+
+  // =================================================================
 
   void pressedMemberAddButton(User friend) { // TODO : User friend 파라미터로 친구 정보 받아와서 teamMembers 친구 목록에 넣기
     state.setIsLoading(true);
@@ -90,11 +205,8 @@ class MeetCubit extends Cubit<MeetState> {
   }
 
   Future<void> createNewTeam(MeetTeam meetTeam) async {
-    var myTeam = await _meetUseCase.createNewTeam(meetTeam);
-    state.addMyTeam(myTeam);
+    await _meetUseCase.createNewTeam(meetTeam);
     emit(state.copy());
-    print("============================== 팀 추가 완료");
-    print(state.toString());
   }
 
   Future<MeetTeam> setTeam(String teamId) async {
@@ -103,9 +215,15 @@ class MeetCubit extends Cubit<MeetState> {
     return newMeetTeam;
   }
 
+  Future<BlindDateTeamDetail> getMyTeam(String teamId) async {
+    MeetTeam newMeetTeam = await _meetUseCase.getTeam(teamId);
+    return TeamMapper.toBlindDateTeamDetail(newMeetTeam);
+  }
+
   Future<void> getMyTeams({bool put = true}) async {
     List<MeetTeam> myTeams = await _meetUseCase.getMyTeams();
     state.setMyTeams(myTeams);
+    // state.setMyTeam(myTeams[0]);
     if (put) emit(state.copy());
     print("팀 목록 ${state.myTeams}");
   }
@@ -120,7 +238,7 @@ class MeetCubit extends Cubit<MeetState> {
     _meetUseCase.updateMyTeam(meetTeam);
   }
 
-  void refreshMeetPage() async {
+  void refreshMeetPage() async { // TODO : refresh 수정
     state.setIsLoading(true);
     emit(state.copy());
 
@@ -128,8 +246,11 @@ class MeetCubit extends Cubit<MeetState> {
     state.setMyInfo(userResponse);
     List<User> friends = await _friendUseCase.getMyFriends();
     state.setMyFriends(friends);
+
     await getMyTeams();
-    await fetchTeamCount();
+    if (!state.pickedTeam && state.myTeams.isNotEmpty) {
+      state.setMyTeam(state.myTeams[0]);
+    }
 
     state.setIsLoading(false);
     emit(state.copy());
@@ -138,7 +259,6 @@ class MeetCubit extends Cubit<MeetState> {
   void setMyFilteredFriends(List<User> filteredFriends) {
     state.setMyFilteredFriends(filteredFriends);
     emit(state.copy());
-    print("cubit - set Filtered Friends 끝 ${filteredFriends}");
   }
 
   Future<int> fetchTeamCount({bool put = true}) async {
@@ -212,5 +332,25 @@ class MeetCubit extends Cubit<MeetState> {
       state.isLoading = false;
       emit(state.copy());
     }
+  }
+
+  // 이미지 업로드 (CreateTeam w/ NoVote)
+  Future<String> uploadProfileImage(File file, int userId, String name) async {
+    String url = 'DEFAULT';
+    try {
+      ToastUtil.showToast('사진을 업로드하고 있어요!');
+      url = await _ghostUseCase.uploadProfileImage(userId.toString(), name, file);
+      // await _userUseCase.uploadProfileImage(file, userResponse); // TODO : 이미지 업로드 useCase
+      ToastUtil.showToast('사진 업로드가 완료됐어요!');
+    } catch (e) {
+      ToastUtil.showToast('사진 업로드 중 오류가 발생했습니다.');
+      print('사진 업로드 중 오류: $e');
+    }
+    return url;
+  }
+
+  void setProfileImage(File file) {
+    state.profileImageFile = file;
+    emit(state.copy());
   }
 }

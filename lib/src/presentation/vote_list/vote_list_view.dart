@@ -4,10 +4,14 @@ import 'package:dart_flutter/src/common/util/timeago_util.dart';
 import 'package:dart_flutter/src/domain/entity/vote_response.dart';
 import 'package:dart_flutter/src/presentation/vote_list/viewmodel/state/vote_list_state.dart';
 import 'package:dart_flutter/src/presentation/vote_list/viewmodel/vote_list_cubit.dart';
+import 'package:dart_flutter/src/presentation/vote_list/vote_detail_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+
+import '../../domain/entity/user.dart';
+import '../../domain/entity/vote_detail.dart';
 
 class VoteListView extends StatefulWidget {
   const VoteListView({Key? key}) : super(key: key);
@@ -171,39 +175,6 @@ class _VoteListViewState extends State<VoteListView> with SingleTickerProviderSt
       ),
     );
   }
-
-  ListView makeList(List<VoteResponse> snapshot) {
-    SchedulerBinding.instance!.addPostFrameCallback((_) {
-      _scrollController
-          .jumpTo(_scrollController.position.maxScrollExtent);
-    });
-
-    return ListView.builder(
-      controller: _scrollController,
-      reverse: true,
-      shrinkWrap: true,
-      itemBuilder: (context, index) {
-        var vote = snapshot[index];
-        var timeago = TimeagoUtil().format(vote.pickedTime!);
-        var visited = BlocProvider.of<VoteListCubit>(context).isVisited(vote.voteId!);
-        return Column(
-          children: [
-            dart(
-              voteId: vote.voteId!,
-              admissionYear: vote.pickingUser?.user?.admissionYear.toString() ?? "XXXX",
-              gender: vote.pickingUser?.user?.gender ?? "",
-              question: vote.question!.content ?? "(알수없음)",
-              datetime: timeago,
-              isVisited: visited,
-              questionId: vote.question!.questionId!
-            ),
-            SizedBox(height: SizeConfig.defaultSize * 1.4),
-          ],
-        );
-      },
-      itemCount: snapshot.length,
-    );
-  }
 }
 
 class dart extends StatelessWidget {
@@ -244,7 +215,10 @@ class dart extends StatelessWidget {
           "투표한 사람 학번": admissionYear.substring(2,4),
           "투표한 시간": datetime
         });
-        BlocProvider.of<VoteListCubit>(context).pressedVoteInList(voteId);
+        Future<VoteDetail> vote = BlocProvider.of<VoteListCubit>(context).getVote(voteId);
+        User userMe = context.read<VoteListCubit>().state.userMe;
+
+        Navigator.push(context, MaterialPageRoute(builder: (context) => VoteDetailView(voteDetail: vote, me: userMe)));
       },
       child: Container(
         padding: EdgeInsets.all(SizeConfig.defaultSize * 1),

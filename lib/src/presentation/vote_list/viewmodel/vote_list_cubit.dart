@@ -21,7 +21,6 @@ class VoteListCubit extends HydratedCubit<VoteListState> {
     state.setIsLoading(true);
     emit(state.copy());
 
-    state.isDetailPage = false;
     Pagination<VoteResponse> paginationResponse = await _voteUseCase.getVotes(page: 0);
     _numberOfPostsPerRequest = paginationResponse.numberOfElements ?? 10;
     List<VoteResponse> votes = paginationResponse.content ?? [];
@@ -35,18 +34,6 @@ class VoteListCubit extends HydratedCubit<VoteListState> {
 
   void firstTime() {
     state.firstTime();
-    emit(state.copy());
-  }
-
-  /// 투표 리스트에서 투표를 클릭하여 상세페이지를 확인
-  void pressedVoteInList(int voteId) {
-    state.setIsDetailPage(true).setVoteId(voteId).visitByVoteId(voteId);
-    emit(state.copy());
-  }
-
-  /// 상세페이지에서 목록페이지로 돌아감
-  void backToVoteList() {
-    state.setIsDetailPage(false);
     emit(state.copy());
   }
 

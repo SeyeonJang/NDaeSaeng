@@ -21,7 +21,7 @@ import 'package:dart_flutter/src/common/util/analytics_util.dart';
 
     @override
     Widget build(BuildContext context) {
-      return Scaffold(
+      return const Scaffold(
           backgroundColor: Colors.white,
           body: Center(
             child: ScaffoldBody(),
@@ -75,7 +75,7 @@ class _ScaffoldBodyState extends State<ScaffoldBody> {
             height: SizeConfig.defaultSize * 10,
           ),
 
-          Container(
+          SizedBox(
             height: SizeConfig.screenHeight * 0.4,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -91,16 +91,8 @@ class _ScaffoldBodyState extends State<ScaffoldBody> {
                         backgroundColor: Colors.white,
                         itemExtent: SizeConfig.defaultSize * 5,
                         selectionOverlay: CupertinoPickerDefaultSelectionOverlay(
-                          background: Color(0xff7C83FD).withOpacity(0.2),
+                          background: const Color(0xff7C83FD).withOpacity(0.2),
                         ),
-                        children: List.generate(ScaffoldBody.adminNumItems.length, (index) {
-                          final isSelected = ScaffoldBody.adminIndex == index;
-                          final item = ScaffoldBody.adminNumItems[index];
-                          final color = isSelected ? Color(0xff7C83FD) : CupertinoColors.black;
-                          return Center(
-                            child: Text(item,style: TextStyle(color: color, fontSize: SizeConfig.defaultSize * 3)),
-                          );
-                        }),
                         scrollController: FixedExtentScrollController(
                           initialItem: 0, // 몇 번째 인덱스가 제일 먼저 나올지
                         ),
@@ -109,17 +101,24 @@ class _ScaffoldBodyState extends State<ScaffoldBody> {
                             '학번': ScaffoldBody.ageIndex,
                           });
                           setState(() => ScaffoldBody.adminIndex = index);
-                          print('Selected item: ${ScaffoldBody.adminNumItems}');
                         },
+                        children: List.generate(ScaffoldBody.adminNumItems.length, (index) {
+                          final isSelected = ScaffoldBody.adminIndex == index;
+                          final item = ScaffoldBody.adminNumItems[index];
+                          final color = isSelected ? const Color(0xff7C83FD) : CupertinoColors.black;
+                          return Center(
+                            child: Text(item,style: TextStyle(color: color, fontSize: SizeConfig.defaultSize * 3)),
+                          );
+                        }),
                       ),
                     ),
                     SizedBox(height: SizeConfig.defaultSize * 2,),
                     Text(
-                      ScaffoldBody.adminNumItems[ScaffoldBody.adminIndex]+" 학번",
+                      "${ScaffoldBody.adminNumItems[ScaffoldBody.adminIndex]} 학번",
                       style: TextStyle(
                           fontSize: SizeConfig.defaultSize * 2.2,
                           fontWeight: FontWeight.w600,
-                          color: Color(0xff7C83FD),
+                          color: const Color(0xff7C83FD),
                       ),
                     ),
                   ],
@@ -135,16 +134,8 @@ class _ScaffoldBodyState extends State<ScaffoldBody> {
                         backgroundColor: Colors.white,
                         itemExtent: SizeConfig.defaultSize * 5,
                         selectionOverlay: CupertinoPickerDefaultSelectionOverlay(
-                          background: Color(0xff7C83FD).withOpacity(0.2),
+                          background: const Color(0xff7C83FD).withOpacity(0.2),
                         ),
-                        children: List.generate(ScaffoldBody.ageItems.length, (index) {
-                          final isSelected = ScaffoldBody.ageIndex == index;
-                          final item = ScaffoldBody.ageItems[index];
-                          final color = isSelected ? Color(0xff7C83FD) :CupertinoColors.black;
-                          return Center(
-                            child: Text(item,style: TextStyle(color: color, fontSize: SizeConfig.defaultSize * 3)),
-                          );
-                        }),
                         scrollController: FixedExtentScrollController(
                           initialItem: 0, // 몇 번째 인덱스가 제일 먼저 나올지
                         ),
@@ -153,17 +144,24 @@ class _ScaffoldBodyState extends State<ScaffoldBody> {
                             '나이': ScaffoldBody.ageIndex,
                           });
                           setState(() => ScaffoldBody.ageIndex = index);
-                          print('Selected item: ${ScaffoldBody.ageItems}');
                         },
+                        children: List.generate(ScaffoldBody.ageItems.length, (index) {
+                          final isSelected = ScaffoldBody.ageIndex == index;
+                          final item = ScaffoldBody.ageItems[index];
+                          final color = isSelected ? const Color(0xff7C83FD) :CupertinoColors.black;
+                          return Center(
+                            child: Text(item,style: TextStyle(color: color, fontSize: SizeConfig.defaultSize * 3)),
+                          );
+                        }),
                       ),
                     ),
                     SizedBox(height: SizeConfig.defaultSize * 2,),
                     Text(
-                      ScaffoldBody.ageItems[ScaffoldBody.ageIndex]+" 년생",
+                      "${ScaffoldBody.ageItems[ScaffoldBody.ageIndex]} 년생",
                       style: TextStyle(
                           fontSize: SizeConfig.defaultSize * 2.2,
                           fontWeight: FontWeight.w600,
-                          color: Color(0xff7C83FD)
+                          color: const Color(0xff7C83FD)
                       ),
                     ),
                   ],
@@ -176,7 +174,7 @@ class _ScaffoldBodyState extends State<ScaffoldBody> {
             height: SizeConfig.defaultSize * 5,
           ),
 
-          Container(
+          SizedBox(
             width: SizeConfig.screenWidth * 0.9,
             height: SizeConfig.defaultSize * 5,
             child: ScaffoldBody.ageIndex != 0 && ScaffoldBody.adminIndex != 0
@@ -189,7 +187,7 @@ class _ScaffoldBodyState extends State<ScaffoldBody> {
                   );
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Color(0xff7C83FD),
+                  backgroundColor: const Color(0xff7C83FD),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(15), // 모서리 둥글기 설정
                   ),
@@ -199,7 +197,6 @@ class _ScaffoldBodyState extends State<ScaffoldBody> {
               : ElevatedButton(
                 onPressed: () {},
                 style: ElevatedButton.styleFrom(
-                  primary: Colors.white,
                   backgroundColor: Colors.grey[200],
                 ),
                 child: Text("학번과 나이를 모두 선택해주세요", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.7, fontWeight: FontWeight.w600, color: Colors.black38),)

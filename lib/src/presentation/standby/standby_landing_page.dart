@@ -13,6 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:flutter/services.dart';
 
+@Deprecated("사용되지않음")
 class StandbyLandingPage extends StatefulWidget {
   const StandbyLandingPage({
     super.key,
@@ -1789,6 +1790,14 @@ class _openAddFriendsState extends State<openAddFriends> {
               border: Border.all(
                 color: Color(0xff7C83FD),
               ),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.2),
+                  spreadRadius: 5,
+                  blurRadius: 5,
+                  offset: Offset(0,1), // changes position of shadow
+                ),
+              ],
               borderRadius: BorderRadius.circular(15)),
           child: Text(
             "선택지에 친구 넣기",
