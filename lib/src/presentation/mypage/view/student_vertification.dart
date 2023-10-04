@@ -256,79 +256,74 @@ class _VertificationViewState extends State<VertificationView> with SingleTicker
 
   TextFormField _VerificationNameInputField() {
     return TextFormField(
-                                    controller: _nameController,
-                                    onChanged: (_) => _checkNameValidity(),
-                                    inputFormatters: [
-                                      LengthLimitingTextInputFormatter(4),
-                                    ],
-                                    decoration: InputDecoration(
-                                        enabledBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: Colors.grey.shade200, // 테두리 색상
-                                            width: 2.0,
-                                          ),
-                                        ),
-                                        focusedBorder: const OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: Color(0xffFF5C58), // 테두리 색상
-                                            width: 2.0,
-                                          ),
-                                        ),
-                                        prefixIcon: const Icon(
-                                          Icons.person_rounded,
-                                          color: Color(0xffFF5C58),
-                                        ),
-                                        hintText: "본인확인을 위한 실명을 입력해주세요!"));
+        controller: _nameController,
+        onChanged: (_) => _checkNameValidity(),
+        inputFormatters: [
+          LengthLimitingTextInputFormatter(4),
+        ],
+        decoration: InputDecoration(
+            enabledBorder: OutlineInputBorder(
+              borderSide: BorderSide(
+                color: Colors.grey.shade200, // 테두리 색상
+                width: 2.0,
+              ),
+            ),
+            focusedBorder: const OutlineInputBorder(
+              borderSide: BorderSide(
+                color: Color(0xffFF5C58), // 테두리 색상
+                width: 2.0,
+              ),
+            ),
+            prefixIcon: const Icon(
+              Icons.person_rounded,
+              color: Color(0xffFF5C58),
+            ),
+            hintText: "본인확인을 위한 실명을 입력해주세요!"));
   }
 
   GestureDetector _VerificationGalleryButton() {
     return GestureDetector(
-                                    onTap: () {
-                                      getImage(ImageSource.gallery);
-                                      isUploaded = true;
-                                      AnalyticsUtil.logEvent("학생증인증_갤러리업로드");
-                                    },
-                                    child: Container(
-                                      width: SizeConfig.screenWidth,
-                                      height: SizeConfig.defaultSize * 6,
-                                      decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          borderRadius: BorderRadius.circular(10),
-                                          border: Border.all(width: 1.5, color: const Color(0xffFF5C58))),
-                                      child: Center(
-                                          child: Text("갤러리에서 사진 업로드",
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.w500,
-                                                  fontSize: SizeConfig.defaultSize * 2,
-                                                  color: Colors.black))),
-                                    ),
-                                  );
+      onTap: () {
+        getImage(ImageSource.gallery);
+        isUploaded = true;
+        AnalyticsUtil.logEvent("학생증인증_갤러리업로드");
+      },
+      child: Container(
+        width: SizeConfig.screenWidth,
+        height: SizeConfig.defaultSize * 6,
+        decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(width: 1.5, color: const Color(0xffFF5C58))),
+        child: Center(
+            child: Text("갤러리에서 사진 업로드",
+                style:
+                    TextStyle(fontWeight: FontWeight.w500, fontSize: SizeConfig.defaultSize * 2, color: Colors.black))),
+      ),
+    );
   }
 
   GestureDetector _VerificationCameraButton() {
     return GestureDetector(
-                                    onTap: () {
-                                      getImage(ImageSource.camera);
-                                      isUploaded = true;
-                                      AnalyticsUtil.logEvent("학생증인증_카메라업로드");
-                                    },
-                                    child: Container(
-                                      width: SizeConfig.screenWidth,
-                                      height: SizeConfig.defaultSize * 6,
-                                      decoration: BoxDecoration(
-                                        color: const Color(0xffFF5C58),
-                                        borderRadius: BorderRadius.circular(10),
-                                      ),
-                                      child: Center(
-                                          child: Text(
-                                        "사진 촬영하기",
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.w600,
-                                            fontSize: SizeConfig.defaultSize * 2,
-                                            color: Colors.white),
-                                      )),
-                                    ),
-                                  );
+      onTap: () {
+        getImage(ImageSource.camera);
+        isUploaded = true;
+        AnalyticsUtil.logEvent("학생증인증_카메라업로드");
+      },
+      child: Container(
+        width: SizeConfig.screenWidth,
+        height: SizeConfig.defaultSize * 6,
+        decoration: BoxDecoration(
+          color: const Color(0xffFF5C58),
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Center(
+            child: Text(
+          "사진 촬영하기",
+          style: TextStyle(fontWeight: FontWeight.w600, fontSize: SizeConfig.defaultSize * 2, color: Colors.white),
+        )),
+      ),
+    );
   }
 }
 
