@@ -24,7 +24,7 @@ import '../../../../res/config/size_config.dart';
 class MySettings extends StatelessWidget {
   final User userResponse;
 
-  MySettings({super.key, required this.userResponse});
+  const MySettings({super.key, required this.userResponse});
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +53,7 @@ class MyPageView extends StatefulWidget {
   final User userResponse;
   final MyPagesState state;
 
-  MyPageView({super.key, required this.userResponse, required this.state});
+  const MyPageView({super.key, required this.userResponse, required this.state});
 
   static final _defaultPadding = EdgeInsets.all(getFlexibleSize(target: 20));
 
@@ -82,7 +82,6 @@ class _MyPageViewState extends State<MyPageView> {
   }
 
   void halt() {
-    print("앱을 강제 종료합니다.");
     if (Platform.isIOS) {
       exit(0);
     } else {
@@ -91,7 +90,6 @@ class _MyPageViewState extends State<MyPageView> {
   }
 
   void restart() {
-    print("앱을 재시작합니다.");
     Restart.restartApp();
   }
 
@@ -170,7 +168,6 @@ class _MyPageViewState extends State<MyPageView> {
         Center(
           child: GestureDetector(
             onTap: () {
-              print('지금 상태는 $isSelectImage');
               _pickImage();
             },
             child: ClipOval(
@@ -178,7 +175,7 @@ class _MyPageViewState extends State<MyPageView> {
               child: Container(
                   // decoration: BoxDecoration( // 이미지 겉에 테두리 효과주는 코드
                   //   gradient: LinearGradient(
-                  //       colors: [Color(0xff7C83FD), Color(0xff7C83FD)]),
+                  //       colors: [Color(0xffFE6059), Color(0xffFE6059)]),
                   //   borderRadius: BorderRadius.circular(32),
                   // ),
 
@@ -193,9 +190,9 @@ class _MyPageViewState extends State<MyPageView> {
                     : ClipOval(
                       child: BlocBuilder<MyPagesCubit, MyPagesState>(
                       builder: (context, state) {
-                        if (profileImageUrl == "DEFAULT" || !profileImageUrl.startsWith("https://"))
+                        if (profileImageUrl == "DEFAULT" || !profileImageUrl.startsWith("https://")) {
                           return Image.asset('assets/images/profile-mockup2.png', width: SizeConfig.defaultSize * 12, fit: BoxFit.cover,);
-                        else {
+                        } else {
                           return state.profileImageFile.path==''
                               ? Image.network(profileImageUrl,
                               width: SizeConfig.defaultSize * 12,
@@ -224,226 +221,222 @@ class _MyPageViewState extends State<MyPageView> {
         SizedBox(
           width: SizeConfig.defaultSize * 3,
           height: SizeConfig.defaultSize * 3,
-          child: widget.state.isLoading ? const CircularProgressIndicator(color: Color(0xff7C83FD)) : null,
+          child: widget.state.isLoading ? const CircularProgressIndicator(color: Color(0xffFE6059)) : null,
         ),
 
-        Padding( // 받은 투표 프로필 (TitleVotes)
-          padding: EdgeInsets.symmetric(horizontal: SizeConfig.defaultSize * 1.3),
-          child: Container(
-            width: SizeConfig.screenWidth,
-            height: SizeConfig.defaultSize * 15.5,
-            decoration: BoxDecoration(
-              color: Color(0xff7C83FD),
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Padding(
-              padding: EdgeInsets.all(SizeConfig.defaultSize * 0.9),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  for (int i=0; i<widget.state.titleVotes.length; i++) // TitleVote 있을 때
-                    GestureDetector(
-                      onTap: () {
-                        showDialog<String>(
-                          context: context,
-                          builder: (BuildContext dialogContext) => AlertDialog(
-                            title: const Text('내 투표를 삭제하시겠어요?'),
-                            content: Text('삭제할 투표 : ${widget.state.titleVotes[i].question.content}'),
-                            backgroundColor: Colors.white,
-                            surfaceTintColor: Colors.white,
-                            actions: <Widget>[
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.pop(dialogContext, '취소');
-                                },
-                                child: const Text('취소', style: TextStyle(color: Color(0xff7C83FD)),),
-                              ),
-                              TextButton(
-                                onPressed: () {
-                                  if (context.read<MyPagesCubit>().state.isLoading == true) {
-                                    return;
-                                  }                                  context.read<MyPagesCubit>().removeTitleVote(widget.state.titleVotes[i].question.questionId!, widget.userResponse); // TitleVote 삭제
-                                  context.read<MyPagesCubit>().refreshMyInfo();
-                                  Navigator.pop(dialogContext, '삭제');
-                                },
-                                child: const Text('삭제', style: TextStyle(color: Color(0xff7C83FD)),),
-                              ),
-                            ],
-                          ),
-                        );
-                      },
-                      child: Container(
-                          width: SizeConfig.screenWidth,
-                          height: SizeConfig.defaultSize * 4,
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          alignment: Alignment.center,
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(horizontal: SizeConfig.defaultSize * 2),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Container(
-                                    width: SizeConfig.screenWidth * 0.53,
-                                    child: Text(
-                                      "${widget.state.titleVotes[i].question.content}", style: TextStyle(
-                                        fontSize: SizeConfig.defaultSize * 1.6,
-                                        color: Colors.black,
-                                        overflow: TextOverflow.ellipsis
-                                    ),)
-                                ),
-                                widget.state.titleVotes[i].count < 5
-                                    ? Text(" ", style: TextStyle(
-                                    fontSize: SizeConfig.defaultSize * 1.6,
-                                    color: Colors.black,
-                                    overflow: TextOverflow.ellipsis
-                                ),)
-                                    : Text("${(widget.state.titleVotes[i].count~/5)*5}+", style: TextStyle(
-                                    fontSize: SizeConfig.defaultSize * 1.6,
-                                    color: Colors.black,
-                                    overflow: TextOverflow.ellipsis
-                                ),)
-                              ],
-                            ),
-                          )
-                      ),
-                    ),
-                  for (int i=0; i<3-widget.state.titleVotes.length; i++) // TitleVote 없을 때
-                    GestureDetector(
-                      onTap: () async {
-                        if (context.read<MyPagesCubit>().state.isLoading) {
-                          return;
-                        }
-
-                        await context.read<MyPagesCubit>().getAllVotes();
-                        print("UI get - ${widget.state.myAllVotes}");
-
-                        showModalBottomSheet(
-                            context: context,
-                            builder: (BuildContext modalContext) {
-                              return Container(
-                                width: SizeConfig.screenWidth,
-                                height: SizeConfig.screenHeight,
-                                decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10))),
-                                child: Column(
-                                  children: [
-                                    Container(
-                                        width: SizeConfig.screenWidth,
-                                        height: SizeConfig.defaultSize * 5,
-                                        alignment: Alignment.center,
-                                        child: Container(
-                                          width: SizeConfig.screenWidth * 0.2,
-                                          height: SizeConfig.defaultSize * 0.4,
-                                          color: Colors.black,
-                                        )
-                                    ),
-                                      SizedBox(height: SizeConfig.defaultSize,),
-                                    Text("투표를 눌러서 내 프로필에 넣어보세요!", style: TextStyle(
-                                      fontSize: SizeConfig.defaultSize * 1.6
-                                    ),),
-                                      SizedBox(height: SizeConfig.defaultSize * 2,),
-                                    Padding(
-                                      padding: EdgeInsets.symmetric(vertical: SizeConfig.defaultSize * 0.8, horizontal: SizeConfig.defaultSize * 3),
-                                      child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Container(
-                                              width: SizeConfig.screenWidth * 0.6,
-                                              child: Text(
-                                                "투표명", style: TextStyle(
-                                                  fontSize: SizeConfig.defaultSize * 1.8,
-                                                  color: Colors.black,
-                                                  overflow: TextOverflow.ellipsis,
-                                                  fontWeight: FontWeight.w600
-                                              ),)
-                                          ),
-                                          Text("받은 개수", style: TextStyle(
-                                              fontSize: SizeConfig.defaultSize * 1.8,
-                                              color: Colors.black,
-                                              overflow: TextOverflow.ellipsis,
-                                              fontWeight: FontWeight.w600
-                                          ),)
-                                        ],
-                                      ),
-                                    ),
-                                      SizedBox(height: SizeConfig.defaultSize),
-                                      Container(
-                                        width: SizeConfig.screenWidth,
-                                        height: SizeConfig.defaultSize * 0.2,
-                                        color: Colors.grey.shade300,
-                                      ),
-
-                                      Flexible(
-                                        child: SingleChildScrollView(
-                                          child: Column(
-                                            children: [
-                                              for (int j=0; j<widget.state.myAllVotes.length; j++) // (MyAllVotes의 개수만큼 반복)
-                                                GestureDetector(
-                                                onTap: () {
-                                                  context.read<MyPagesCubit>().addTitleVote(widget.state.myAllVotes[j], widget.userResponse); // add
-                                                  context.read<MyPagesCubit>().refreshMyInfo();
-                                                  Navigator.pop(modalContext);
-                                                },
-                                                child: Padding(
-                                                  padding: EdgeInsets.symmetric(vertical: SizeConfig.defaultSize * 1.2, horizontal: SizeConfig.defaultSize * 3),
-                                                  child: Row(
-                                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                    children: [
-                                                      Container(
-                                                        width: SizeConfig.screenWidth * 0.66,
-                                                        child: Text(
-                                                          "${widget.state.myAllVotes[j].question.content}", style: TextStyle(
-                                                          fontSize: SizeConfig.defaultSize * 1.8,
-                                                          color: Colors.black,
-                                                          overflow: TextOverflow.ellipsis
-                                                        ),)
-                                                      ),
-                                                      widget.state.myAllVotes[j].count < 5
-                                                          ? Text("${widget.state.myAllVotes[j].count}", style: TextStyle(
-                                                          fontSize: SizeConfig.defaultSize * 1.8,
-                                                          color: Colors.black,
-                                                          overflow: TextOverflow.ellipsis
-                                                          ),)
-                                                          : Text("${(widget.state.myAllVotes[j].count~/5)*5}+", style: TextStyle(
-                                                          fontSize: SizeConfig.defaultSize * 1.8,
-                                                          color: Colors.black,
-                                                          overflow: TextOverflow.ellipsis
-                                                          ),)
-                                                    ],
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      )
-                                  ],
-                                )
-                              );
-                            }
-                        );
-                        print("내 대표 투표의 개수 ${widget.state.titleVotes.length+1}");
-                      },
-                      child: Container(
-                        width: SizeConfig.screenWidth,
-                        height: SizeConfig.defaultSize * 4,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        alignment: Alignment.center,
-                        child: Text("눌러서 프로필 채우기", style: TextStyle(color: Color(0xff7C83FD), fontWeight: FontWeight.w500, fontSize: SizeConfig.defaultSize * 1.4),)
-                      ),
-                    )
-                ],
-              ),
-            ),
-          ),
-        ),
+        // Padding( // 받은 투표 프로필 (TitleVotes)
+        //   padding: EdgeInsets.symmetric(horizontal: SizeConfig.defaultSize * 1.3),
+        //   child: Container(
+        //     width: SizeConfig.screenWidth,
+        //     height: SizeConfig.defaultSize * 15.5,
+        //     decoration: BoxDecoration(
+        //       color: const Color(0xffFE6059),
+        //       borderRadius: BorderRadius.circular(10),
+        //     ),
+        //     child: Padding(
+        //       padding: EdgeInsets.all(SizeConfig.defaultSize * 0.9),
+        //       child: Column(
+        //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        //         children: [
+        //           for (int i=0; i<widget.state.titleVotes.length; i++) // TitleVote 있을 때
+        //             GestureDetector(
+        //               onTap: () {
+        //                 showDialog<String>(
+        //                   context: context,
+        //                   builder: (BuildContext dialogContext) => AlertDialog(
+        //                     title: const Text('내 투표를 삭제하시겠어요?'),
+        //                     content: Text('삭제할 투표 : ${widget.state.titleVotes[i].question.content}'),
+        //                     backgroundColor: Colors.white,
+        //                     surfaceTintColor: Colors.white,
+        //                     actions: <Widget>[
+        //                       TextButton(
+        //                         onPressed: () {
+        //                           Navigator.pop(dialogContext, '취소');
+        //                         },
+        //                         child: const Text('취소', style: TextStyle(color: Color(0xffFE6059)),),
+        //                       ),
+        //                       TextButton(
+        //                         onPressed: () {
+        //                           if (context.read<MyPagesCubit>().state.isLoading == true) {
+        //                             return;
+        //                           }                                  context.read<MyPagesCubit>().removeTitleVote(widget.state.titleVotes[i].question.questionId!, widget.userResponse); // TitleVote 삭제
+        //                           context.read<MyPagesCubit>().refreshMyInfo();
+        //                           Navigator.pop(dialogContext, '삭제');
+        //                         },
+        //                         child: const Text('삭제', style: TextStyle(color: Color(0xffFE6059)),),
+        //                       ),
+        //                     ],
+        //                   ),
+        //                 );
+        //               },
+        //               child: Container(
+        //                   width: SizeConfig.screenWidth,
+        //                   height: SizeConfig.defaultSize * 4,
+        //                   decoration: BoxDecoration(
+        //                     color: Colors.white,
+        //                     borderRadius: BorderRadius.circular(8),
+        //                   ),
+        //                   alignment: Alignment.center,
+        //                   child: Padding(
+        //                     padding: EdgeInsets.symmetric(horizontal: SizeConfig.defaultSize * 2),
+        //                     child: Row(
+        //                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        //                       children: [
+        //                         SizedBox(
+        //                             width: SizeConfig.screenWidth * 0.53,
+        //                             child: Text(
+        //                               "${widget.state.titleVotes[i].question.content}", style: TextStyle(
+        //                                 fontSize: SizeConfig.defaultSize * 1.6,
+        //                                 color: Colors.black,
+        //                                 overflow: TextOverflow.ellipsis
+        //                             ),)
+        //                         ),
+        //                         widget.state.titleVotes[i].count < 5
+        //                             ? Text(" ", style: TextStyle(
+        //                             fontSize: SizeConfig.defaultSize * 1.6,
+        //                             color: Colors.black,
+        //                             overflow: TextOverflow.ellipsis
+        //                         ),)
+        //                             : Text("${(widget.state.titleVotes[i].count~/5)*5}+", style: TextStyle(
+        //                             fontSize: SizeConfig.defaultSize * 1.6,
+        //                             color: Colors.black,
+        //                             overflow: TextOverflow.ellipsis
+        //                         ),)
+        //                       ],
+        //                     ),
+        //                   )
+        //               ),
+        //             ),
+        //           for (int i=0; i<3-widget.state.titleVotes.length; i++) // TitleVote 없을 때
+        //             GestureDetector(
+        //               onTap: () async {
+        //                 if (context.read<MyPagesCubit>().state.isLoading) {
+        //                   return;
+        //                 }
+        //                 await context.read<MyPagesCubit>().getAllVotes();
+        //                 showModalBottomSheet(
+        //                     context: context,
+        //                     builder: (BuildContext modalContext) {
+        //                       return Container(
+        //                         width: SizeConfig.screenWidth,
+        //                         height: SizeConfig.screenHeight,
+        //                         decoration: const BoxDecoration(
+        //                             color: Colors.white,
+        //                             borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10))),
+        //                         child: Column(
+        //                           children: [
+        //                             Container(
+        //                                 width: SizeConfig.screenWidth,
+        //                                 height: SizeConfig.defaultSize * 5,
+        //                                 alignment: Alignment.center,
+        //                                 child: Container(
+        //                                   width: SizeConfig.screenWidth * 0.2,
+        //                                   height: SizeConfig.defaultSize * 0.4,
+        //                                   color: Colors.black,
+        //                                 )
+        //                             ),
+        //                               SizedBox(height: SizeConfig.defaultSize,),
+        //                             Text("투표를 눌러서 내 프로필에 넣어보세요!", style: TextStyle(
+        //                               fontSize: SizeConfig.defaultSize * 1.6
+        //                             ),),
+        //                               SizedBox(height: SizeConfig.defaultSize * 2,),
+        //                             Padding(
+        //                               padding: EdgeInsets.symmetric(vertical: SizeConfig.defaultSize * 0.8, horizontal: SizeConfig.defaultSize * 3),
+        //                               child: Row(
+        //                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        //                                 children: [
+        //                                   SizedBox(
+        //                                       width: SizeConfig.screenWidth * 0.6,
+        //                                       child: Text(
+        //                                         "투표명", style: TextStyle(
+        //                                           fontSize: SizeConfig.defaultSize * 1.8,
+        //                                           color: Colors.black,
+        //                                           overflow: TextOverflow.ellipsis,
+        //                                           fontWeight: FontWeight.w600
+        //                                       ),)
+        //                                   ),
+        //                                   Text("받은 개수", style: TextStyle(
+        //                                       fontSize: SizeConfig.defaultSize * 1.8,
+        //                                       color: Colors.black,
+        //                                       overflow: TextOverflow.ellipsis,
+        //                                       fontWeight: FontWeight.w600
+        //                                   ),)
+        //                                 ],
+        //                               ),
+        //                             ),
+        //                               SizedBox(height: SizeConfig.defaultSize),
+        //                               Container(
+        //                                 width: SizeConfig.screenWidth,
+        //                                 height: SizeConfig.defaultSize * 0.2,
+        //                                 color: Colors.grey.shade300,
+        //                               ),
+        //
+        //                               Flexible(
+        //                                 child: SingleChildScrollView(
+        //                                   child: Column(
+        //                                     children: [
+        //                                       for (int j=0; j<widget.state.myAllVotes.length; j++) // (MyAllVotes의 개수만큼 반복)
+        //                                         GestureDetector(
+        //                                         onTap: () {
+        //                                           context.read<MyPagesCubit>().addTitleVote(widget.state.myAllVotes[j], widget.userResponse); // add
+        //                                           context.read<MyPagesCubit>().refreshMyInfo();
+        //                                           Navigator.pop(modalContext);
+        //                                         },
+        //                                         child: Padding(
+        //                                           padding: EdgeInsets.symmetric(vertical: SizeConfig.defaultSize * 1.2, horizontal: SizeConfig.defaultSize * 3),
+        //                                           child: Row(
+        //                                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        //                                             children: [
+        //                                               SizedBox(
+        //                                                 width: SizeConfig.screenWidth * 0.66,
+        //                                                 child: Text(
+        //                                                   "${widget.state.myAllVotes[j].question.content}", style: TextStyle(
+        //                                                   fontSize: SizeConfig.defaultSize * 1.8,
+        //                                                   color: Colors.black,
+        //                                                   overflow: TextOverflow.ellipsis
+        //                                                 ),)
+        //                                               ),
+        //                                               widget.state.myAllVotes[j].count < 5
+        //                                                   ? Text("${widget.state.myAllVotes[j].count}", style: TextStyle(
+        //                                                   fontSize: SizeConfig.defaultSize * 1.8,
+        //                                                   color: Colors.black,
+        //                                                   overflow: TextOverflow.ellipsis
+        //                                                   ),)
+        //                                                   : Text("${(widget.state.myAllVotes[j].count~/5)*5}+", style: TextStyle(
+        //                                                   fontSize: SizeConfig.defaultSize * 1.8,
+        //                                                   color: Colors.black,
+        //                                                   overflow: TextOverflow.ellipsis
+        //                                                   ),)
+        //                                             ],
+        //                                           ),
+        //                                         ),
+        //                                       ),
+        //                                     ],
+        //                                   ),
+        //                                 ),
+        //                               )
+        //                           ],
+        //                         )
+        //                       );
+        //                     }
+        //                 );
+        //               },
+        //               child: Container(
+        //                 width: SizeConfig.screenWidth,
+        //                 height: SizeConfig.defaultSize * 4,
+        //                 decoration: BoxDecoration(
+        //                   color: Colors.white,
+        //                   borderRadius: BorderRadius.circular(8),
+        //                 ),
+        //                 alignment: Alignment.center,
+        //                 child: Text("눌러서 프로필 채우기", style: TextStyle(color: const Color(0xffFE6059), fontWeight: FontWeight.w500, fontSize: SizeConfig.defaultSize * 1.4),)
+        //               ),
+        //             )
+        //         ],
+        //       ),
+        //     ),
+        //   ),
+        // ),
 
         const DtFlexSpacer(15),
         Padding(
@@ -514,6 +507,12 @@ class _MyPageViewState extends State<MyPageView> {
               selectionOverlay: CupertinoPickerDefaultSelectionOverlay(
                 background: CupertinoColors.systemIndigo.withOpacity(0.3),
               ),
+              scrollController: FixedExtentScrollController(
+                initialItem: 0, // 몇 번째 인덱스가 제일 먼저 나올지
+              ),
+              onSelectedItemChanged: (index) {
+                setState(() => mbtiIndex1 = index);
+              },
               children: List.generate(mbti1.length, (index) {
                 final isSelected = mbtiIndex1 == index;
                 final item = mbti1[index];
@@ -525,13 +524,6 @@ class _MyPageViewState extends State<MyPageView> {
                           color: color, fontSize: SizeConfig.defaultSize * 3)),
                 );
               }),
-              scrollController: FixedExtentScrollController(
-                initialItem: 0, // 몇 번째 인덱스가 제일 먼저 나올지
-              ),
-              onSelectedItemChanged: (index) {
-                setState(() => mbtiIndex1 = index);
-                print('Selected item: ${mbti1}');
-              },
             ),
           ),
           SizedBox(
@@ -544,6 +536,12 @@ class _MyPageViewState extends State<MyPageView> {
               selectionOverlay: CupertinoPickerDefaultSelectionOverlay(
                 background: CupertinoColors.systemIndigo.withOpacity(0.3),
               ),
+              scrollController: FixedExtentScrollController(
+                initialItem: 0, // 몇 번째 인덱스가 제일 먼저 나올지
+              ),
+              onSelectedItemChanged: (index) {
+                setState(() => mbtiIndex2 = index);
+              },
               children: List.generate(mbti2.length, (index) {
                 final isSelected = mbtiIndex2 == index;
                 final item = mbti2[index];
@@ -555,13 +553,6 @@ class _MyPageViewState extends State<MyPageView> {
                           color: color, fontSize: SizeConfig.defaultSize * 3)),
                 );
               }),
-              scrollController: FixedExtentScrollController(
-                initialItem: 0, // 몇 번째 인덱스가 제일 먼저 나올지
-              ),
-              onSelectedItemChanged: (index) {
-                setState(() => mbtiIndex2 = index);
-                print('Selected item: ${mbti2}');
-              },
             ),
           ),
           SizedBox(
@@ -574,6 +565,12 @@ class _MyPageViewState extends State<MyPageView> {
               selectionOverlay: CupertinoPickerDefaultSelectionOverlay(
                 background: CupertinoColors.systemIndigo.withOpacity(0.3),
               ),
+              scrollController: FixedExtentScrollController(
+                initialItem: 0, // 몇 번째 인덱스가 제일 먼저 나올지
+              ),
+              onSelectedItemChanged: (index) {
+                setState(() => mbtiIndex3 = index);
+              },
               children: List.generate(mbti3.length, (index) {
                 final isSelected = mbtiIndex3 == index;
                 final item = mbti3[index];
@@ -585,13 +582,6 @@ class _MyPageViewState extends State<MyPageView> {
                           color: color, fontSize: SizeConfig.defaultSize * 3)),
                 );
               }),
-              scrollController: FixedExtentScrollController(
-                initialItem: 0, // 몇 번째 인덱스가 제일 먼저 나올지
-              ),
-              onSelectedItemChanged: (index) {
-                setState(() => mbtiIndex3 = index);
-                print('Selected item: ${mbti3}');
-              },
             ),
           ),
           SizedBox(
@@ -604,6 +594,12 @@ class _MyPageViewState extends State<MyPageView> {
               selectionOverlay: CupertinoPickerDefaultSelectionOverlay(
                 background: CupertinoColors.systemIndigo.withOpacity(0.3),
               ),
+              scrollController: FixedExtentScrollController(
+                initialItem: 0, // 몇 번째 인덱스가 제일 먼저 나올지
+              ),
+              onSelectedItemChanged: (index) {
+                setState(() => mbtiIndex4 = index);
+              },
               children: List.generate(mbti4.length, (index) {
                 final isSelected = mbtiIndex4 == index;
                 final item = mbti4[index];
@@ -615,13 +611,6 @@ class _MyPageViewState extends State<MyPageView> {
                           color: color, fontSize: SizeConfig.defaultSize * 3)),
                 );
               }),
-              scrollController: FixedExtentScrollController(
-                initialItem: 0, // 몇 번째 인덱스가 제일 먼저 나올지
-              ),
-              onSelectedItemChanged: (index) {
-                setState(() => mbtiIndex4 = index);
-                print('Selected item: ${mbti4}');
-              },
             ),
           ),
         ],
@@ -638,7 +627,7 @@ class _MyPageViewState extends State<MyPageView> {
             AnalyticsUtil.logEvent("내정보_설정_내정보", properties: {
               "회원 정보 타입": title, "회원 정보 내용": value
             });
-            TextEditingController _textController = TextEditingController();
+            TextEditingController textController = TextEditingController();
             showDialog<String>(
                 context: context,
                 builder: (BuildContext dialogContext) {
@@ -655,10 +644,10 @@ class _MyPageViewState extends State<MyPageView> {
                               Text('바꾸고 싶은 닉네임을 입력해주세요!', style: TextStyle(
                                   fontSize: SizeConfig.defaultSize * 1.4),
                                 textAlign: TextAlign.start,),
-                              const Text('닉네임은 최대 10글자예요!'),
+                              const Text('닉네임은 최대 7글자예요!'),
                               TextField(
-                                controller: _textController,
-                                maxLength: 10,
+                                controller: textController,
+                                maxLength: 7,
                                 onChanged: (text) {
                                   setState(() {}); // Rebuild the AlertDialog when text changes
                                 },
@@ -666,7 +655,7 @@ class _MyPageViewState extends State<MyPageView> {
                                   hintText: "바꿀 닉네임을 작성해주세요!",
                                   hintStyle: TextStyle(fontSize: SizeConfig.defaultSize * 1.4),
                                   contentPadding: EdgeInsets.zero,
-                                  enabledBorder: UnderlineInputBorder(borderSide: BorderSide(width: 0.6)),
+                                  enabledBorder: const UnderlineInputBorder(borderSide: BorderSide(width: 0.6)),
                                 ),
                               ),
                             ],
@@ -680,18 +669,18 @@ class _MyPageViewState extends State<MyPageView> {
                                 Navigator.pop(dialogContext, '취소');
                               },
                               child: const Text('취소',
-                                style: TextStyle(color: Color(0xff7C83FD)),),
+                                style: TextStyle(color: Color(0xffFE6059)),),
                             ),
                             TextButton(
                               onPressed: () {
-                                var nick = _textController.text;
+                                var nick = textController.text;
                                 setNickname(nick);
 
                                 BlocProvider.of<MyPagesCubit>(context).patchMyInfo(widget.userResponse);
                                 Navigator.pop(dialogContext);
                                 AnalyticsUtil.logEvent("내정보_설정_닉네임변경_완료");
                               },
-                                child: Text('완료', style: TextStyle(color: Color(0xff7C83FD)))
+                                child: const Text('완료', style: TextStyle(color: Color(0xffFE6059)))
                             ),
                           ],
                         ),
@@ -714,7 +703,7 @@ class _MyPageViewState extends State<MyPageView> {
                 style: TextStyle(
                   fontWeight: FontWeight.w500,
                   fontSize: getFlexibleSize(target: 16),
-                  color: Color(0xff7C83FD)
+                  color: const Color(0xffFE6059)
                 ),
               ),
             ],
@@ -736,7 +725,6 @@ class _MyPageViewState extends State<MyPageView> {
               });
             }
             if (title == "초대코드") {
-              String myCodeCopy = value;
               Clipboard.setData(ClipboardData(text: value));
               ToastUtil.showToast("내 코드가 복사되었어요!");
               AnalyticsUtil.logEvent("내정보_설정_내코드터치");
@@ -768,7 +756,6 @@ class _MyPageViewState extends State<MyPageView> {
 
   void shareContent(BuildContext context, String myCode) {
     Share.share('[엔대생] 엔대생에서 내가 널 칭찬 대상으로 투표하고 싶어! 앱에 들어와줘!\n내 코드는 $myCode 야. 나를 친구 추가하고 같이하자!\nhttps://dart.page.link/TG78\n\n내 코드 : $myCode');
-    print("셰어");
   }
 
   @override
@@ -802,7 +789,7 @@ class _MyPageViewState extends State<MyPageView> {
                         );
                       },
                       child: Text("스토어에서 엔대생 리뷰 작성하기",
-                          style: TextStyle(fontSize: SizeConfig.defaultSize * 1.4, color: Color(0xff7C83FD))),
+                          style: TextStyle(fontSize: SizeConfig.defaultSize * 1.4, color: const Color(0xffFE6059))),
                     ),
                     TextButton(
                       onPressed: () {
@@ -810,7 +797,7 @@ class _MyPageViewState extends State<MyPageView> {
                         shareContent(context, inviteCode);
                       },
                       child: Text("엔대생 링크 공유하기",
-                          style: TextStyle(fontSize: SizeConfig.defaultSize * 1.4, color: Color(0xff7C83FD))),
+                          style: TextStyle(fontSize: SizeConfig.defaultSize * 1.4, color: const Color(0xffFE6059))),
                     ),
                     SizedBox(height: SizeConfig.defaultSize * 1.5,),
                   ])),
@@ -824,7 +811,7 @@ class _MyPageViewState extends State<MyPageView> {
                 const DtFlexSpacer(10),
                 Container(
                   alignment: Alignment.centerLeft,
-                  padding: EdgeInsets.only(left: 0),
+                  padding: const EdgeInsets.only(left: 0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -860,7 +847,7 @@ class _MyPageViewState extends State<MyPageView> {
                                             AnalyticsUtil.logEvent("내정보_설정_회원탈퇴_취소");
                                             Navigator.pop(dialogContext, '아니요');
                                           },
-                                          child: const Text('아니요', style: TextStyle(color: Color(0xff7C83FD)),),
+                                          child: const Text('아니요', style: TextStyle(color: Color(0xffFE6059)),),
                                         ),
                                         TextButton(
                                             onPressed: textController.text == '회원탈퇴를 원해요' ? () async {
@@ -872,8 +859,8 @@ class _MyPageViewState extends State<MyPageView> {
                                               restart();
                                             } : null,
                                             child: textController.text == '회원탈퇴를 원해요'
-                                                ? Text('탈퇴', style: TextStyle(color: Color(0xff7C83FD)))
-                                                : Text('탈퇴', style: TextStyle(color: Colors.grey,))
+                                                ? const Text('탈퇴', style: TextStyle(color: Color(0xffFE6059)))
+                                                : const Text('탈퇴', style: TextStyle(color: Colors.grey,))
                                         ),
                                       ],
                                     ),
@@ -907,7 +894,7 @@ class _MyPageViewState extends State<MyPageView> {
                                       AnalyticsUtil.logEvent("내정보_설정_로그아웃_취소");
                                       Navigator.pop(dialogContext, '아니요');
                                     },
-                                    child: const Text('아니요', style: TextStyle(color: Color(0xff7C83FD)),),
+                                    child: const Text('아니요', style: TextStyle(color: Color(0xffFE6059)),),
                                   ),
                                   TextButton(
                                     onPressed: () async {
@@ -918,7 +905,7 @@ class _MyPageViewState extends State<MyPageView> {
                                       await Future.delayed(const Duration(seconds: 2));
                                       restart();
                                     },
-                                    child: const Text('네', style: TextStyle(color: Color(0xff7C83FD)),),
+                                    child: const Text('네', style: TextStyle(color: Color(0xffFE6059)),),
                                   ),
                                 ],
                               ),
@@ -956,7 +943,7 @@ class _MyPageViewState extends State<MyPageView> {
                   Navigator.push(context, MaterialPageRoute(builder: (context) => const MyTos1()));
                 },
                 child: Text("이용약관",
-                    style: TextStyle(fontSize: SizeConfig.defaultSize * 1.4, color: Color(0xff7C83FD))),
+                    style: TextStyle(fontSize: SizeConfig.defaultSize * 1.4, color: const Color(0xffFE6059))),
               ),
               TextButton(
                 onPressed: () {
@@ -964,7 +951,7 @@ class _MyPageViewState extends State<MyPageView> {
                   Navigator.push(context, MaterialPageRoute(builder: (context) => const MyTos2()));
                 },
                 child: Text("개인정보 처리방침",
-                    style: TextStyle(fontSize: SizeConfig.defaultSize * 1.4, color: Color(0xff7C83FD))),
+                    style: TextStyle(fontSize: SizeConfig.defaultSize * 1.4, color: const Color(0xffFE6059))),
               ),
               TextButton(
                 onPressed: () {
@@ -981,7 +968,7 @@ class _MyPageViewState extends State<MyPageView> {
                   // );
                 },
                 child: Text("건의하기",
-                    style: TextStyle(fontSize: SizeConfig.defaultSize * 1.4, color: Color(0xff7C83FD))),
+                    style: TextStyle(fontSize: SizeConfig.defaultSize * 1.4, color: const Color(0xffFE6059))),
               ),
               TextButton(
                 onPressed: () {
@@ -998,9 +985,20 @@ class _MyPageViewState extends State<MyPageView> {
                 //   );
                 },
                 child: Text("1:1 문의",
-                    style: TextStyle(fontSize: SizeConfig.defaultSize * 1.4, color: Color(0xff7C83FD))),
+                    style: TextStyle(fontSize: SizeConfig.defaultSize * 1.4, color: const Color(0xffFE6059))),
               ),
-            ]),
+
+                  const DtDivider(),
+                  const DtFlexSpacer(20),
+                 Container(
+                   alignment: Alignment.center,
+                  child: Text("엔대생 v${context.read<MyPagesCubit>().state.appVersion}",
+                      style: TextStyle(fontSize: SizeConfig.defaultSize * 1.2, color: Colors.grey)),
+                 ),
+                  const DtFlexSpacer(20),
+
+                  ],
+            ),
           ),
         ],
       ),

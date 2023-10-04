@@ -16,6 +16,35 @@ class ToastUtil {
     );
   }
 
+  static void showMeetToast(String message, int gravity) {
+    ToastGravity toastGravity;
+
+    switch (gravity) {
+      case 0:
+        toastGravity = ToastGravity.TOP;
+        break;
+      case 1:
+        toastGravity = ToastGravity.CENTER;
+        break;
+      case 2:
+        toastGravity = ToastGravity.BOTTOM;
+        break;
+      default:
+        toastGravity = ToastGravity.BOTTOM; // 기본값은 BOTTOM으로 설정
+        break;
+    }
+
+    Fluttertoast.showToast(
+        msg: message,
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: toastGravity,
+        timeInSecForIosWeb: 1,
+        backgroundColor: const Color(0xffFE6059),
+        textColor: Colors.white,
+        fontSize: 16.0
+    );
+  }
+
   static void showCopyToast(String message) {
     Fluttertoast.showToast(
       msg: message,

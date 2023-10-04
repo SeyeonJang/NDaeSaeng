@@ -1,11 +1,9 @@
 import 'dart:io';
-
 import 'package:dart_flutter/src/common/auth/dart_auth_cubit.dart';
 import 'package:dart_flutter/src/common/auth/state/dart_auth_state.dart';
 import 'package:dart_flutter/src/common/util/analytics_util.dart';
 import 'package:dart_flutter/src/presentation/landing/view/land_page.dart';
 import 'package:dart_flutter/src/presentation/signup/signup_pages.dart';
-import 'package:dart_flutter/src/presentation/landing/view/tutorial_slide.dart';
 import 'package:dart_flutter/src/presentation/signup/viewmodel/signup_cubit.dart';
 import 'package:dart_flutter/src/presentation/standby/standby_loading.dart';
 import 'package:dart_flutter/src/presentation/standby/viewmodel/standby_cubit.dart';
@@ -56,6 +54,7 @@ class _LandPagesState extends State<LandPages> {
                   TextButton(
                     child: const Text('업데이트'),
                     onPressed: () {
+                      AnalyticsUtil.logEvent('업데이트_버튼터치');
                       bool isAppleUser = Platform.isIOS;
                       if (isAppleUser) {
                         launchUrl(Uri.parse("https://apps.apple.com/us/app/dart/id6451335598"));

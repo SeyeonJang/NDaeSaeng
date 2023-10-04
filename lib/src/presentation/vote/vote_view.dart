@@ -1,6 +1,8 @@
+import 'package:contacts_service/contacts_service.dart';
 import 'package:dart_flutter/res/config/size_config.dart';
 import 'package:dart_flutter/src/common/util/analytics_util.dart';
-import 'package:dart_flutter/src/domain/entity/friend.dart';
+import 'package:dart_flutter/src/common/util/toast_util.dart';
+import 'package:dart_flutter/src/domain/entity/contact_friend.dart';
 import 'package:dart_flutter/src/domain/entity/question.dart';
 import 'package:dart_flutter/src/domain/entity/user.dart';
 import 'package:dart_flutter/src/domain/entity/vote_request.dart';
@@ -9,6 +11,7 @@ import 'package:dart_flutter/src/presentation/vote/vimemodel/vote_cubit.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class VoteView extends StatefulWidget {
   const VoteView({Key? key}) : super(key: key);
@@ -21,18 +24,98 @@ class _VoteViewState extends State<VoteView> with SingleTickerProviderStateMixin
   bool _isUp = true;
   late AnimationController _controller;
   late Animation<Offset> _animation;
+  late PermissionStatus _status = PermissionStatus.denied;
+  late List<Contact> contacts = [];
+  late List<ContactFriend> contactFriends = [];
+
+  String contactNameBuilder(String? familyName, String? givenName) {
+    String result = "";
+    if (familyName != null && familyName.isNotEmpty && familyName != 'null') {
+      result += familyName;
+    }
+    if (givenName != null && givenName.isNotEmpty && familyName != 'null') {
+      result += givenName;
+    }
+    return result;
+  }
+
+  // 연락처 제공 동의
+  Future<void> getPermission() async {
+    _status = await Permission.contacts.status;
+
+    if (_status.isGranted) { //연락처 권한 줬는지 여부
+      contacts = await ContactsService.getContacts();
+      for (int i=0; i<contacts.length; i++) {
+        contactFriends.add(ContactFriend(name: contactNameBuilder(contacts[i].familyName, contacts[i].givenName), phoneNumber: contacts[i].phones?[0].value ?? '010-xxxx-xxxx'));
+      }
+      context.read<VoteCubit>().state.setContacts(contactFriends);
+    } else if (_status.isDenied) {
+        await Permission.contacts.request();
+        PermissionStatus status2 = await Permission.contacts.status;
+        if (status2.isGranted) {
+          AnalyticsUtil.logEvent('투표_세부_주소록동의_동의');
+          contacts = await ContactsService.getContacts();
+            for (int i=0; i<contacts.length; i++) {
+              contactFriends.add(ContactFriend(name: contactNameBuilder(contacts[i].familyName, contacts[i].givenName), phoneNumber: contacts[i].phones?[0].value ?? '010-xxxx-xxxx'));
+            }
+            if (contactFriends.isNotEmpty) {
+              context.read<VoteCubit>().state.setContacts(contactFriends);
+              context.read<VoteCubit>().refresh();
+            } else {
+              ToastUtil.showToast("연락처를 받아오는 데 실패했어요!");
+            }
+            context.read<VoteCubit>().refresh();
+        } else if (status2.isDenied) {
+          AnalyticsUtil.logEvent('투표_세부_주소록동의_거절');
+          ToastUtil.showToast("연락처 제공을 동의해야\n더 많은 친구들과 앱을 즐겨요!");
+        }
+    }
+    // 아이폰의 경우 OS가 금지하는 경우도 있고 (status.isRestricted) 안드로이드의 경우 아예 앱 설정에서 꺼놓은 경우 (status.isPermanentlyDenied) 도 있음
+    if (_status.isPermanentlyDenied || _status.isRestricted) {
+      openAppSettings();
+    }
+  }
+
+  // // 연락처 모달 오픈
+  // Future<void> showModal() async {
+  //   showDialog(
+  //     context: context,
+  //     builder: (context) {
+  //       return Dialog(
+  //         child: ListView.builder(
+  //           itemCount: _contacts?.length,
+  //           itemBuilder: (BuildContext context, int index) {
+  //             Contact c = _contacts!.elementAt(index);
+  //             var userName = c.displayName;
+  //             var phoneNumber = c.phones?.first.value;
+  //             return TextButton(
+  //               onPressed: () {
+  //                 _phoneNumberController.text = phoneNumber.toString();
+  //                 Navigator.of(context).pop();
+  //               },
+  //               child: Text(userName ?? ""),
+  //             );
+  //           },
+  //         ),
+  //       );
+  //     },
+  //   );
+  // }
 
   @override
   void initState() {
-    super.initState();
+    Future.delayed(Duration.zero, () async => {
+        await getPermission()
+    });    // getPermission().then((_) => {})
+
     _controller = AnimationController(
       vsync: this,
-      duration: Duration(seconds: 1),
+      duration: const Duration(seconds: 1),
     );
 
     _animation = Tween<Offset>(
-      begin: Offset(0,0.15),
-      end: Offset(0,0),
+      begin: const Offset(0,0.15),
+      end: const Offset(0,0),
     ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
 
     _controller.addStatusListener((status) {
@@ -46,6 +129,7 @@ class _VoteViewState extends State<VoteView> with SingleTickerProviderStateMixin
     });
 
     _controller.forward();
+    super.initState();
   }
 
   @override
@@ -78,19 +162,31 @@ class _VoteViewState extends State<VoteView> with SingleTickerProviderStateMixin
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      // body: Padding(
-      //   padding: EdgeInsets.symmetric(horizontal: SizeConfig.defaultSize * 5, vertical: SizeConfig.defaultSize * 2),
         body: Center(
           child: BlocBuilder<VoteCubit, VoteState>(
             builder: (context, state) {
               Question question = state.questions[state.voteIterator];
               List<User> shuffledFriends = state.getShuffleFriends();
-              User friend1 = shuffledFriends[0];
-              User friend2 = shuffledFriends[1];
-              User friend3 = shuffledFriends[2];
-              User friend4 = shuffledFriends[3];
+              List<ContactFriend> shuffledContacts = state.getShuffleContacts();
 
-              // print(state.votes.toString());
+              late User friend1;
+              late User friend2;
+              late User friend3;
+
+              if (shuffledFriends.length >= 1) {
+                friend1 = shuffledFriends[0];
+              }
+              if (shuffledFriends.length >= 2) {
+                friend2 = shuffledFriends[1];
+              }
+              if (shuffledFriends.length >= 3) {
+                friend3 = shuffledFriends[2];
+              }
+
+              // User friend1 = shuffledFriends[0];
+              // User friend2 = shuffledFriends[1];
+              // User friend3 = shuffledFriends[2];
+              // User friend4 = shuffledFriends[3];
 
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -120,9 +216,14 @@ class _VoteViewState extends State<VoteView> with SingleTickerProviderStateMixin
                     // ),
                     child: SlideTransition(
                       position: _animation,
-                      child: Image.asset(
-                        'assets/images/contacts.png',
-                        width: SizeConfig.defaultSize * 22,
+                      child: Container(
+                          width: SizeConfig.defaultSize * 22,
+                          height: SizeConfig.defaultSize * 22,
+                          child: question.icon == null ?
+                          Image.asset(
+                            'assets/images/contacts.png',
+                            width: SizeConfig.defaultSize * 22,
+                          ) : Center(child: Text(question.icon!, style: TextStyle(fontSize: SizeConfig.defaultSize * 15)))
                       ),
                     ),
                   ),
@@ -141,7 +242,7 @@ class _VoteViewState extends State<VoteView> with SingleTickerProviderStateMixin
                     ),
                   ),
                   SizedBox(height: SizeConfig.screenHeight * 0.04,),
-                  Container(
+                  SizedBox(
                     width: SizeConfig.screenWidth * 0.83,
                     height: SizeConfig.defaultSize * 18,
                     child: Column(
@@ -149,65 +250,61 @@ class _VoteViewState extends State<VoteView> with SingleTickerProviderStateMixin
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            ChoiceFriendButton(
-                                userId: friend1.personalInfo!.id, name: friend1.personalInfo!.name ?? "XXX", enterYear: friend1.personalInfo!.admissionYear.toString().substring(2,4) ?? "00", department: friend1.university?.department ?? "XXXX학과",
+                            shuffledFriends.length >= 1
+                              ? ChoiceFriendButton(
+                                  userId: friend1.personalInfo!.id, name: friend1.personalInfo!.name, enterYear: friend1.personalInfo!.admissionYear.toString().substring(2,4), department: friend1.university?.department ?? "XXXX학과",
+                                  questionId: question.questionId!,
+                                  firstUserId: friend1.personalInfo!.id,
+                                  secondUserId: shuffledFriends.length >= 2 ? friend2.personalInfo!.id : 0,
+                                  thirdUserId: shuffledFriends.length >= 3 ? friend3.personalInfo!.id : 0,
+                                  fourthUserId: 0,
+                                  voteIndex: state.voteIterator,
+                                  question: question.content!,
+                                  gender: friend1.personalInfo!.gender,
+                                  school: friend1.university!.name,
+                                  disabledFunction: state.isLoading,
+                                  profileImageUrl: friend1.personalInfo!.profileImageUrl,
+                                )
+                              : (_status.isGranted ? ContactsButton(state: state, contactPerson: shuffledContacts.length == 0 ? ContactFriend(name: '(알수없음)', phoneNumber: '010-xxxx-xxxx') : shuffledContacts[0], question: question.content!,) : NoContactsButton()),
+                            shuffledFriends.length >= 2
+                              ? ChoiceFriendButton(
+                                userId: friend2.personalInfo!.id, name: friend2.personalInfo!.name, enterYear: friend2.personalInfo!.admissionYear.toString().substring(2,4), department: friend2.university?.department ?? "XXXX학과",
                                 questionId: question.questionId!,
                                 firstUserId: friend1.personalInfo!.id,
                                 secondUserId: friend2.personalInfo!.id,
-                                thirdUserId: friend3.personalInfo!.id,
-                                fourthUserId: friend4.personalInfo!.id,
+                                thirdUserId: shuffledFriends.length >= 3 ? friend3.personalInfo!.id : 0,
+                                fourthUserId: 0,
                                 voteIndex: state.voteIterator,
                                 question: question.content!,
-                                gender: friend1.personalInfo!.gender!,
+                                gender: friend1.personalInfo!.gender,
                                 school: friend1.university!.name,
                                 disabledFunction: state.isLoading,
-                                profileImageUrl: friend1.personalInfo!.profileImageUrl ?? "DEFAULT",
-                            ),
-                            ChoiceFriendButton(userId: friend2.personalInfo!.id, name: friend2.personalInfo!.name ?? "XXX", enterYear: friend2.personalInfo!.admissionYear.toString().substring(2,4) ?? "00", department: friend2.university?.department ?? "XXXX학과",
-                                questionId: question.questionId!,
-                                firstUserId: friend1.personalInfo!.id,
-                                secondUserId: friend2.personalInfo!.id,
-                                thirdUserId: friend3.personalInfo!.id,
-                                fourthUserId: friend4.personalInfo!.id,
-                                voteIndex: state.voteIterator,
-                                question: question.content!,
-                                gender: friend2.personalInfo!.gender!,
-                                school: friend2.university!.name,
-                                disabledFunction: state.isLoading,
-                                profileImageUrl: friend2.personalInfo!.profileImageUrl ?? "DEFAULT",
-                            ),
+                                profileImageUrl: friend1.personalInfo!.profileImageUrl,
+                                )
+                              : (_status.isGranted ? ContactsButton(state: state, contactPerson: shuffledContacts.length < 1 ? ContactFriend(name: '(알수없음)', phoneNumber: '010-xxxx-xxxx') : shuffledContacts[1], question: question.content!) : NoContactsButton()),
                           ],
                         ),
                         SizedBox(height: SizeConfig.defaultSize,),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            ChoiceFriendButton(userId: friend3.personalInfo!.id, name: friend3.personalInfo!.name ?? "XXX", enterYear: friend3.personalInfo!.admissionYear.toString().substring(2,4) ?? "00", department: friend3.university?.department ?? "XXXX학과",
-                                questionId: question.questionId!,
-                                firstUserId: friend1.personalInfo!.id,
-                                secondUserId: friend2.personalInfo!.id,
-                                thirdUserId: friend3.personalInfo!.id,
-                                fourthUserId: friend4.personalInfo!.id,
-                                voteIndex: state.voteIterator,
-                                question: question.content!,
-                                gender: friend3.personalInfo!.gender!,
-                                school: friend3.university!.name,
-                                disabledFunction: state.isLoading,
-                                profileImageUrl: friend3.personalInfo!.profileImageUrl ?? "DEFAULT",
-                            ),
-                            ChoiceFriendButton(userId: friend4.personalInfo!.id, name: friend4.personalInfo!.name ?? "XXX", enterYear: friend4.personalInfo!.admissionYear.toString().substring(2,4) ?? "00", department: friend4.university?.department ?? "XXXX학과",
-                                questionId: question.questionId!,
-                                firstUserId: friend1.personalInfo!.id,
-                                secondUserId: friend2.personalInfo!.id,
-                                thirdUserId: friend3.personalInfo!.id,
-                                fourthUserId: friend4.personalInfo!.id,
-                                voteIndex: state.voteIterator,
-                                question: question.content!,
-                                gender: friend4.personalInfo!.gender!,
-                                school: friend4.university!.name,
-                                disabledFunction: state.isLoading,
-                                profileImageUrl: friend4.personalInfo!.profileImageUrl ?? "DEFAULT",
-                            ),
+                            shuffledFriends.length >= 3
+                              ? ChoiceFriendButton(
+                                  userId: friend3.personalInfo!.id, name: friend3.personalInfo!.name, enterYear: friend3.personalInfo!.admissionYear.toString().substring(2,4), department: friend3.university?.department ?? "XXXX학과",
+                                  questionId: question.questionId!,
+                                  firstUserId: friend1.personalInfo!.id,
+                                  secondUserId: friend2.personalInfo!.id,
+                                  thirdUserId: friend3.personalInfo!.id,
+                                  fourthUserId: 0,
+                                  voteIndex: state.voteIterator,
+                                  question: question.content!,
+                                  gender: friend1.personalInfo!.gender,
+                                  school: friend1.university!.name,
+                                  disabledFunction: state.isLoading,
+                                  profileImageUrl: friend1.personalInfo!.profileImageUrl,
+                               )
+                              : (_status.isGranted ? ContactsButton(state: state, contactPerson: shuffledContacts.length < 2 ? ContactFriend(name: '(알수없음)', phoneNumber: '010-xxxx-xxxx'): shuffledContacts[2], question: question.content!) : NoContactsButton()),
+                            _status.isGranted ? ContactsButton(state: state, contactPerson: shuffledContacts.length < 3 ? ContactFriend(name: '(알수없음)', phoneNumber: '010-xxxx-xxxx') : shuffledContacts[3], question: question.content!) : NoContactsButton()
                           ],
                         ),
                       ],
@@ -232,8 +329,8 @@ class _VoteViewState extends State<VoteView> with SingleTickerProviderStateMixin
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Icon(CupertinoIcons.shuffle, size: SizeConfig.defaultSize * 2, color: Color(0xff7C83FD),),
-                          Text("  셔플", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.8, fontWeight: FontWeight.w600, color: Color(0xff7C83FD))),
+                          Icon(CupertinoIcons.shuffle, size: SizeConfig.defaultSize * 2, color: const Color(0xff7C83FD),),
+                          Text("  셔플", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.8, fontWeight: FontWeight.w600, color: const Color(0xff7C83FD))),
                           // IconButton(
                           //     onPressed: () {
                           //       // TODO 스킵 기능 기획 후 작성 필요
@@ -281,7 +378,7 @@ class _VoteStoryBarState extends State<VoteStoryBar> {
                 return Row(
                   children: [
                     for (var i = 0; i <= widget.voteIterator; i++) ...[
-                      Expanded(child: Container(height: SizeConfig.defaultSize * 0.4, color: Color(0xff7C83FD),)),
+                      Expanded(child: Container(height: SizeConfig.defaultSize * 0.4, color: const Color(0xff7C83FD),)),
                       const SizedBox(width: 2,),
                     ],
                     for (var i = widget.voteIterator; i < widget.maxVoteIterator - 1; i++) ...[
@@ -294,6 +391,165 @@ class _VoteStoryBarState extends State<VoteStoryBar> {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class NoContactsButton extends StatefulWidget {
+
+  NoContactsButton({super.key});
+
+  @override
+  State<NoContactsButton> createState() => _NoContactsButtonState();
+}
+
+class _NoContactsButtonState extends State<NoContactsButton> {
+  late PermissionStatus _status = PermissionStatus.denied;
+  late List<Contact> contacts = [];
+  late List<ContactFriend> contactFriends = [];
+
+  String contactNameBuilder(String? familyName, String? givenName) {
+    String result = "";
+    if (familyName != null && familyName.isNotEmpty && familyName != 'null') {
+      result += familyName;
+    }
+    if (givenName != null && givenName.isNotEmpty && familyName != 'null') {
+      result += givenName;
+    }
+    return result;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: SizeConfig.screenWidth * 0.4,
+      height: SizeConfig.defaultSize * 8.2,
+      color: Colors.white,
+      child: ElevatedButton(
+        onPressed: () async {
+          _status = await Permission.contacts.request();
+          if (_status.isGranted) {
+            AnalyticsUtil.logEvent('투표_세부_주소록동의버튼_주소록동의_동의');
+            contacts = await ContactsService.getContacts(withThumbnails: false);
+              for (int i=0; i<contacts.length; i++) {
+                contactFriends.add(ContactFriend(name: contactNameBuilder(contacts[i].familyName, contacts[i].givenName), phoneNumber: contacts[i].phones?[0].value ?? '010-xxxx-xxxx'));
+              }
+              if (contactFriends.isNotEmpty) {
+                context.read<VoteCubit>().state.setContacts(contactFriends);
+                context.read<VoteCubit>().refresh();
+              } else {
+                ToastUtil.showToast("연락처를 받아오는 데 실패했어요!");
+              }
+          } else if (_status.isDenied) {
+            AnalyticsUtil.logEvent('투표_세부_주소록동의버튼_주소록동의_거절');
+            ToastUtil.showToast("연락처 제공을 동의해야\n더 많은 친구들과 앱을 즐겨요!");
+          }
+
+          if (_status.isPermanentlyDenied || _status.isRestricted) {
+            openAppSettings();
+          }
+        },
+        style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.white,   // background color
+            foregroundColor: const Color(0xff7C83FD), // text color
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(15), // 모서리 둥글기 설정
+            ),
+            surfaceTintColor: const Color(0xff7C83FD).withOpacity(0.1),
+            // surfaceTintColor: Color(0xff7C83FD).withOpacity(0.1),
+            padding: EdgeInsets.all(SizeConfig.defaultSize * 1)
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            ClipOval(
+              child: Image.asset('assets/images/profile-mockup2.png', width: SizeConfig.defaultSize * 2.8, fit: BoxFit.cover,)),
+              SizedBox(height: SizeConfig.defaultSize),
+            Text('연락처에서 선택하기', style: TextStyle(fontSize: SizeConfig.defaultSize * 1.6, fontWeight: FontWeight.w600),)
+          ],
+        )
+      ),
+    );
+  }
+}
+
+class ContactsButton extends StatelessWidget {
+  ContactFriend? contactPerson;
+  VoteState state;
+  String question;
+
+  ContactsButton({super.key, required this.contactPerson, required this.state, required this.question});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: SizeConfig.screenWidth * 0.4,
+      height: SizeConfig.defaultSize * 8.2,
+      color: Colors.white,
+      child: ElevatedButton(
+          onPressed: () {
+            AnalyticsUtil.logEvent('투표_세부_주소록친구_터치', properties: {
+              '질문': question
+            });
+            showDialog(
+                context: context,
+                builder: (BuildContext sheetContext) {
+                  return GestureDetector(
+                    child: AlertDialog(
+                      backgroundColor: Colors.white,
+                      surfaceTintColor: Colors.white,
+                      title: Text("엔대생이 익명으로 보내드려요!", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.8, fontWeight: FontWeight.w600), textAlign: TextAlign.center,),
+                      content: const Text("'전송'을 누르면 엔대생이 직접\n내 친구에게 초대메시지를 보내요! 💌\n\n질문까지 담아서 익명으로 보내드린답니다-!\n적극적으로 메시지를 보내보세요! 😊", textAlign: TextAlign.center,),
+                      actions: [
+                        TextButton(
+                          onPressed: () {
+                            if (state.isLoading) return;
+                            context.read<VoteCubit>().nextVoteWithContact();
+                            Navigator.pop(sheetContext);
+                            AnalyticsUtil.logEvent('투표_세부_주소록친구_넘어가기터치', properties: {
+                              '질문': question
+                            });
+
+                          },
+                          child: const Text('넘어가기', style: TextStyle(color: Colors.grey)),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            AnalyticsUtil.logEvent('투표_세부_주소록친구_메시지전송터치', properties: {
+                              '질문': question
+                            });
+                            Navigator.pop(sheetContext);
+                            context.read<VoteCubit>().inviteGuest(contactPerson?.name ?? '(알수없음)', contactPerson?.phoneNumber ?? '010-xxxx-xxxx', question);
+                            context.read<VoteCubit>().nextVoteWithContact();
+                            ToastUtil.showToast("익명으로 메시지가 전송되었어요!");
+                          },
+                          child: const Text('전송', style: TextStyle(color: const Color(0xff7C83FD))),
+                        )
+                      ],
+                    ),
+                  );
+                }
+            );
+          },
+          style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.white,   // background color
+              foregroundColor: const Color(0xff7C83FD), // text color
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(15), // 모서리 둥글기 설정
+              ),
+              surfaceTintColor: const Color(0xff7C83FD).withOpacity(0.1),
+              padding: EdgeInsets.all(SizeConfig.defaultSize * 1)
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ClipOval(
+                  child: Image.asset('assets/images/profile-mockup2.png', width: SizeConfig.defaultSize * 3, fit: BoxFit.cover,)),
+                SizedBox(height: SizeConfig.defaultSize * 0.5),
+              Text(contactPerson?.name ?? '(알수없음)', style: TextStyle(fontSize: SizeConfig.defaultSize * 1.8, overflow: TextOverflow.ellipsis),)
+            ],
+          )
       ),
     );
   }
@@ -350,7 +606,7 @@ class _ChoiceFriendButtonState extends State<ChoiceFriendButton> {
   Widget build(BuildContext context) {
 
     Color backgroundColor = Colors.white;
-    Color textColor = Color(0xff7C83FD);
+    Color textColor = const Color(0xff7C83FD);
     void _onVoteButtonPressed() {
       // 버튼이 눌린 상태일 때 색상 변경
       setState(() {
@@ -400,14 +656,12 @@ class _ChoiceFriendButtonState extends State<ChoiceFriendButton> {
           _onVoteButtonPressed();
         },
         style: ElevatedButton.styleFrom( // TODO : 터치한 버튼은 색 변하게 하려고 했는데 구현 못함
-          primary: Colors.white,
-          onPrimary: Color(0xff7C83FD),
           backgroundColor: Colors.white,   // background color
-          foregroundColor: Color(0xff7C83FD), // text color
+          foregroundColor: const Color(0xff7C83FD), // text color
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(15), // 모서리 둥글기 설정
           ),
-            surfaceTintColor: Color(0xff7C83FD).withOpacity(0.1),
+            surfaceTintColor: const Color(0xff7C83FD).withOpacity(0.1),
             // surfaceTintColor: Color(0xff7C83FD).withOpacity(0.1),
           padding: EdgeInsets.all(SizeConfig.defaultSize * 1)
         ),

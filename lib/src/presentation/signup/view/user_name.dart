@@ -4,14 +4,16 @@ import 'package:dart_flutter/src/presentation/signup/viewmodel/signup_cubit.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-// #1-5 이름 입력
 class UserName extends StatefulWidget {
+
+  const UserName({super.key});
+
   @override
   _UserNameState createState() => _UserNameState();
 }
 
 class _UserNameState extends State<UserName> {
-  TextEditingController _nameController = TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
   bool isNameValid = false;
   String errorMessage = '';
 
@@ -30,20 +32,13 @@ class _UserNameState extends State<UserName> {
       resizeToAvoidBottomInset: false,
       body: Center(
         child: Column(
-          // mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            SizedBox(
-              height: SizeConfig.screenHeight * 0.15,
-            ),
+              SizedBox(height: SizeConfig.screenHeight * 0.15,),
             Text("이름을 입력해주세요!", style: TextStyle(fontSize: SizeConfig.defaultSize * 2.7, fontWeight: FontWeight.w700)),
-            SizedBox(
-              height: SizeConfig.defaultSize * 1.5,
-            ),
+              SizedBox(height: SizeConfig.defaultSize * 1.5,),
             Text("이후 변경할 수 없어요! 신중히 입력해주세요!",
                 style: TextStyle(fontSize: SizeConfig.defaultSize * 1.2, color: Colors.grey)),
-            SizedBox(
-              height: SizeConfig.defaultSize * 10,
-            ),
+              SizedBox(height: SizeConfig.defaultSize * 10,),
 
             SizedBox( // 입력 공간 Textfield
                 width: SizeConfig.screenWidth * 0.9,
@@ -59,13 +54,13 @@ class _UserNameState extends State<UserName> {
                                 width: 2.0,
                               ),
                             ),
-                            focusedBorder: OutlineInputBorder(
+                            focusedBorder: const OutlineInputBorder(
                               borderSide: BorderSide(
                                 color: Color(0xff7C83FD), // 테두리 색상
                                 width: 2.0,
                               ),
                             ),
-                            prefixIcon: Icon(Icons.person_rounded, color: Color(0xff7C83FD),),
+                            prefixIcon: const Icon(Icons.person_rounded, color: Color(0xff7C83FD),),
                             hintText: "이름(본명)을 입력해주세요!")),
                     SizedBox(height: SizeConfig.defaultSize * 0.8), // 에러 메시지와 입력 필드 사이의 간격 조정
                     Container(
@@ -80,10 +75,8 @@ class _UserNameState extends State<UserName> {
                   ],
                 ),
                 ),
+              SizedBox(height: SizeConfig.defaultSize * 10,),
             SizedBox(
-              height: SizeConfig.defaultSize * 10,
-            ),
-            Container(
               width: SizeConfig.screenWidth * 0.9,
               height: SizeConfig.defaultSize * 5,
               child: isNameValid
@@ -93,7 +86,7 @@ class _UserNameState extends State<UserName> {
                     BlocProvider.of<SignupCubit>(context).stepName(_nameController.text);
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Color(0xff7C83FD),
+                    backgroundColor: const Color(0xff7C83FD),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(15), // 모서리 둥글기 설정
                     ),

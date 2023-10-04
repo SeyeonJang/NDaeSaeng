@@ -1,3 +1,4 @@
+import 'package:dart_flutter/src/common/util/nickname_dict_util.dart';
 import 'package:dart_flutter/src/domain/entity/type/IdCardVerificationStatus.dart';
 
 import '../../domain/entity/personal_info.dart';
@@ -60,7 +61,7 @@ class PersonalInfoDto {
   PersonalInfo newUser() {
     return PersonalInfo(
         id: id ?? 0,
-        name: name ?? "(알수없음)",
+        name: name ?? NicknameDictUtil.getRandomNickname(maxLength: 4),
         nickname: nickname ?? "",
         profileImageUrl: profileImageUrl ?? "DEFAULT",
         verification: IdCardVerificationStatus.fromValue(studentIdCardVerificationStatus),

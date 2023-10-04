@@ -1,5 +1,4 @@
 import 'package:dart_flutter/src/data/repository/dart_friend_repository_impl.dart';
-import 'package:dart_flutter/src/domain/entity/friend.dart';
 import 'package:dart_flutter/src/domain/entity/user.dart';
 import 'package:dart_flutter/src/domain/repository/friend_repository.dart';
 

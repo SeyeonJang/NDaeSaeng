@@ -1,7 +1,14 @@
 import 'dart:convert';
 
 import 'package:dart_flutter/res/environment/app_environment.dart';
+import 'package:dart_flutter/src/common/chat/message_sub.dart';
 import 'package:dart_flutter/src/common/pagination/pagination.dart';
+import 'package:dart_flutter/src/data/model/guest_invite_message_request.dart';
+import 'package:dart_flutter/src/data/model/chatroom_detail_dto.dart';
+import 'package:dart_flutter/src/data/model/chatroom_dto.dart';
+import 'package:dart_flutter/src/data/model/proposal_response_dto.dart';
+import 'package:dart_flutter/src/data/model/blind_date_team_detail_dto.dart';
+import 'package:dart_flutter/src/data/model/blind_date_team_dto.dart';
 import 'package:dart_flutter/src/data/model/question_dto.dart';
 import 'package:dart_flutter/src/data/model/meet_team_request_dto.dart';
 import 'package:dart_flutter/src/data/model/title_vote_dto.dart';
@@ -17,6 +24,7 @@ import '../../data/model/vote_request_dto.dart';
 
 import '../../data/model/vote_response_dto.dart';
 import '../model/meet_team_response_dto.dart';
+import '../model/proposal_request_dto.dart';
 import '../model/type/team_region.dart';
 
 class DartApiRemoteDataSource {
@@ -169,6 +177,14 @@ class DartApiRemoteDataSource {
     return response.data;
   }
 
+  // Friend: 주소록 친구에게 투표 문자 보내기
+  static Future<void> postGuestInviteMessage(GuestInviteMessageRequest inviteRequest) async {
+    const path = '/v1/guests';
+    final body = inviteRequest.toJson();
+
+    final response = await _httpUtil.request().post(path, data: body);
+  }
+
   // vote: 새로운 투표들을 받기
   static Future<List<QuestionDto>> getNewQuestions() async {
     const path = '/v1/questions';
@@ -250,14 +266,14 @@ class DartApiRemoteDataSource {
     return regions;
   }
 
-  // meet: 전체 신청 팀 수 조회
+  // team: 전체 신청 팀 수 조회
   static Future<int> getTeamCount() async {
     const path = '/v1/teams/count';
     final response = await _httpUtil.request().get(path);
     return response.data;
   }
 
-  // meet: 내 팀 목록 조회
+  // team: 내 팀 목록 조회
   static Future<List<MeetTeamResponseDto>> getMyTeams() async {
     const path = '/v1/users/me/teams';
     final response = await _httpUtil.request().get(path);
@@ -266,7 +282,7 @@ class DartApiRemoteDataSource {
     return teamResponses;
   }
 
-  // meet: 팀 상세 조회
+  // team: 내 팀 상세 조회
   static Future<MeetTeamResponseDto> getTeam(String teamId) async {
     const path = '/v1/users/me/teams';
     final pathUrl = "$path/$teamId";
@@ -275,16 +291,15 @@ class DartApiRemoteDataSource {
     return MeetTeamResponseDto.fromJson(response.data);
   }
 
-  // meet: 팀 생성하기
-  static Future<MeetTeamResponseDto> postTeam(MeetTeamRequestDto teamRequestDto) async {
+  // team: 팀 생성하기
+  static Future<void> postTeam(MeetTeamRequestDto teamRequestDto) async {
     const path = '/v1/teams';
     final body = teamRequestDto.toJson();
 
     final response = await _httpUtil.request().post(path, data: body);
-    return MeetTeamResponseDto.fromJson(response.data);
   }
 
-  // meet: 팀 삭제하기
+  // team: 내 팀 삭제하기
   static Future<void> deleteTeam(String teamId) async {
     const path = '/v1/users/me/teams';
     final pathUrl = "$path/$teamId";
@@ -292,13 +307,98 @@ class DartApiRemoteDataSource {
     final response = await _httpUtil.request().delete(pathUrl);
   }
 
-  // meet: 팀 정보 업데이트
+  // team: 내 팀 정보 업데이트
   static Future<MeetTeamResponseDto> putTeam(MeetTeamRequestDto teamRequestDto) async {
     const path = '/v1/users/me/teams';
     final body = teamRequestDto.toJson();
 
     final response = await _httpUtil.request().put(path, data: body);
     return MeetTeamResponseDto.fromJson(response.data);
+  }
+
+  // team: 과팅 팀 리스트 조회하기
+  static Future<Pagination<BlindDateTeamDto>> getBlindDateTeams({int page = 0, int size = 10, int regionId = 0}) async {
+    const path = '/v1/teams';
+    final pathUrl = "$path?regionId=$regionId&page=$page&size=$size";
+
+    final response = await _httpUtil.request().get(pathUrl);
+
+    Pagination<BlindDateTeamDto> pagination = Pagination.fromJson(response.data, (item) => BlindDateTeamDto.fromJson(item));
+    return pagination;
+  }
+
+  // team: 과팅 팀 상세 조회하기
+  static Future<BlindDateTeamDetailDto> getBlindDateTeamDetail(int teamId) async {
+    const path = '/v1/teams';
+    final pathUrl = "$path/$teamId";
+
+    final response = await _httpUtil.request().get(pathUrl);
+    return BlindDateTeamDetailDto.fromJson(response.data);
+  }
+
+  // proposal: 제안 보내기 (채팅 요청)
+  static Future<void> postProposal(ProposalRequestDto proposalRequest) async {
+    const path = '/v1/proposals';
+    final body = proposalRequest.toJson();
+
+    final response = await _httpUtil.request().post(path, data: body);
+  }
+
+  // proposal: 제안 수락/거절 (patch)
+  static Future<ProposalResponseDto> patchProposal(int proposalId, String proposalStatus) async {
+    const path = '/v1/users/me/proposals';
+    final pathUrl = "$path/$proposalId";
+    final body = {"proposalStatus": proposalStatus};
+
+    final response = await _httpUtil.request().patch(pathUrl, data: body);
+    return ProposalResponseDto.fromJson(response.data);
+  }
+
+  // proposal: 내가 보낸/받은 제안 확인
+  static Future<List<ProposalResponseDto>> getProposalList(bool received) async {
+    const path = '/v1/users/me/proposals';
+    final String type = received ? "received" : "sent";
+    final pathUrl = "$path?type=$type";
+    final List jsonResponse = (await _httpUtil.request().get(pathUrl)).data;
+    List<ProposalResponseDto> proposalResponses = jsonResponse.map((proposal) => ProposalResponseDto.fromJson(proposal)).toList();
+    return proposalResponses;
+  }
+
+  // chat: 채팅방 목록 확인
+  static Future<List<ChatroomDto>> getChatroomList() async {
+    const path = '/v1/users/me/chat/rooms';
+    final List jsonResponse = (await _httpUtil.request().get(path)).data;
+
+    List<ChatroomDto> responses = jsonResponse.map((chatroom) => ChatroomDto.fromJson(chatroom)).toList();
+    return responses;
+  }
+
+  // chat: 채팅방 상세조회
+  static Future<ChatroomDetailDto> getChatroomDetail(int chatroomId) async {
+    const path = '/v1/users/me/chat/rooms';
+    final pathUrl = '$path/$chatroomId';
+
+    final response = (await _httpUtil.request().get(pathUrl)).data;
+
+    return ChatroomDetailDto.fromJson(response);
+  }
+
+  // chat: 채팅 기록 가져오기
+  static Future<Pagination<MessageSub>> getChatMessageList(final int chatRoomId, {final int page = 0}) async {
+    final path = '/v1/chat/rooms/$chatRoomId/messages';
+    final params = {"page": page};
+
+    final response = await _httpUtil.request().get(path, queryParameters: params);
+    Pagination<MessageSub> pagination = Pagination.fromJson(response.data, (msg) => MessageSub.fromJson(msg));
+    return pagination;
+  }
+
+  // chat: 채팅방 생성 (제안 수락시 이어지는 로직)
+  static Future<void> postChatRoom(final int proposalId) async {
+    final path = '/v1/chat/rooms';
+    final body = {"proposalId": proposalId};
+
+    await _httpUtil.request().post(path, data: body);
   }
 
   static String _getPathFromUrl(String url) {

@@ -7,7 +7,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import '../../../common/util/university_finder.dart';
 
-// #1-2 학교 선택
 class ChooseSchool extends StatefulWidget {
   const ChooseSchool({Key? key}) : super(key: key);
 
@@ -18,13 +17,11 @@ class ChooseSchool extends StatefulWidget {
 class _ChooseSchoolState extends State<ChooseSchool> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Center(
-          child: Container(
-            child: ScaffoldBody(),
-          ),
+          child: ScaffoldBody(),
         ),
       ),
     );
@@ -48,7 +45,7 @@ class _ScaffoldBodyState extends State<ScaffoldBody> {
 
   void _typeOnTypeAhead() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (!_typeAheadController.text.isEmpty) {
+      if (_typeAheadController.text.isNotEmpty) {
         setState(() {
           isSelectedOnTypeAhead = false;
         });
@@ -82,18 +79,12 @@ class _ScaffoldBodyState extends State<ScaffoldBody> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        SizedBox(
-          height: SizeConfig.screenHeight * 0.15,
-        ),
+          SizedBox(height: SizeConfig.screenHeight * 0.15,),
         Text("학교를 선택해주세요!", style: TextStyle(fontSize: SizeConfig.defaultSize * 2.7, fontWeight: FontWeight.w700)),
-        SizedBox(
-          height: SizeConfig.defaultSize * 1.5,
-        ),
+          SizedBox(height: SizeConfig.defaultSize * 1.5,),
         Text("이후 변경할 수 없어요! 신중히 선택해주세요!",
             style: TextStyle(fontSize: SizeConfig.defaultSize * 1.2, color: Colors.grey)),
-        SizedBox(
-          height: SizeConfig.defaultSize * 10,
-        ),
+          SizedBox(height: SizeConfig.defaultSize * 10,),
         SingleChildScrollView(
           child: Padding(
             padding: EdgeInsets.all(SizeConfig.defaultSize * 2),
@@ -121,18 +112,18 @@ class _ScaffoldBodyState extends State<ScaffoldBody> {
                     fontStyle: FontStyle.normal,
                     fontSize: getFlexibleSize(target: 15),
                     fontWeight: FontWeight.w400,
-                    color: isSelectedOnTypeAhead ? Color(0xff7C83FD) : Colors.black),
+                    color: isSelectedOnTypeAhead ? const Color(0xff7C83FD) : Colors.black),
                 textAlignVertical: TextAlignVertical.center,
                 decoration: InputDecoration(
                     enabledBorder: OutlineInputBorder(
                       borderSide: BorderSide(
-                        color: Colors.grey.shade200, // 테두리 색상
+                        color: Colors.grey.shade200,
                         width: 2.0,
                       ),
                     ),
                     focusedBorder: const OutlineInputBorder(
                       borderSide: BorderSide(
-                      color: Color(0xff7C83FD), // 테두리 색상
+                      color: Color(0xff7C83FD),
                       width: 2.0,
                       ),
                     ),
@@ -150,7 +141,7 @@ class _ScaffoldBodyState extends State<ScaffoldBody> {
 
             itemBuilder: (context, suggestion) {
                 return ListTile(
-                  leading: Icon(Icons.school),
+                  leading: const Icon(Icons.school),
                   title: Text(suggestion['name']),
                 );
             },
@@ -164,10 +155,8 @@ class _ScaffoldBodyState extends State<ScaffoldBody> {
             },
           ),
         )),
+          SizedBox(height: SizeConfig.defaultSize * 10,),
         SizedBox(
-          height: SizeConfig.defaultSize * 10,
-        ),
-        Container(
           width: SizeConfig.screenWidth * 0.9,
           height: SizeConfig.defaultSize * 5,
           child: isSelectedOnTypeAhead
@@ -177,7 +166,7 @@ class _ScaffoldBodyState extends State<ScaffoldBody> {
                   if (isSelectedOnTypeAhead) {BlocProvider.of<SignupCubit>(context).stepSchool(universityName);}
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Color(0xff7C83FD),
+                  backgroundColor: const Color(0xff7C83FD),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(15), // 모서리 둥글기 설정
                   ),
@@ -187,7 +176,6 @@ class _ScaffoldBodyState extends State<ScaffoldBody> {
               : ElevatedButton(
                 onPressed: () {},
                 style: ElevatedButton.styleFrom(
-                  primary: Colors.white,
                   backgroundColor: Colors.grey[200],
                 ),
                 child: Text("학교를 선택해주세요", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.7, fontWeight: FontWeight.w600, color: Colors.black38),)
