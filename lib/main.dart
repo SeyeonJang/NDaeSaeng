@@ -1,9 +1,11 @@
+import 'package:appsflyer_sdk/appsflyer_sdk.dart';
 import 'package:dart_flutter/res/environment/app_environment.dart';
 import 'package:dart_flutter/res/theme/app_theme.dart';
 import 'package:dart_flutter/res/config/size_config.dart';
 import 'package:dart_flutter/src/common/auth/dart_auth_cubit.dart';
 import 'package:dart_flutter/src/common/auth/state/dart_auth_state.dart';
 import 'package:dart_flutter/src/common/util/analytics_util.dart';
+import 'package:dart_flutter/src/common/util/appsflyer_util.dart';
 import 'package:dart_flutter/src/common/util/push_notification_util.dart';
 import 'package:dart_flutter/src/common/util/timeago_util.dart';
 import 'package:dart_flutter/src/common/util/toast_util.dart';
@@ -35,6 +37,7 @@ void main() async {
   PushNotificationUtil.init();
   await Supabase.initialize(url: AppEnvironment.getEnv.getSupabaseUrl(), anonKey: AppEnvironment.getEnv.getSupabaseApiKey());
   HydratedBloc.storage = await HydratedStorage.build(storageDirectory: await getTemporaryDirectory());
+  AppsflyerUtil.init();
 
   runApp(BlocProvider(
       create: (BuildContext context) => DartAuthCubit()..appVersionCheck()..setLandPage(),
