@@ -802,6 +802,57 @@ class _MyPageViewState extends State<MyPageView> {
                     SizedBox(height: SizeConfig.defaultSize * 1.5,),
                   ])),
 
+
+          const DtDivider(),
+          Container(
+            alignment: Alignment.centerLeft,
+            padding: EdgeInsets.only(left: SizeConfig.defaultSize * 2),
+            child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(height: SizeConfig.defaultSize * 1.5,),
+
+              TextButton(
+                onPressed: () {
+                  AnalyticsUtil.logEvent("내정보_설정_건의하기");
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => const MyOpinion()));
+                  // launchUrl(
+                  //   Uri(
+                  //     scheme: 'https',
+                  //     host: 'tally.so',
+                  //     path:
+                  //     'r/mYR270',
+                  //   ),
+                  //   mode: LaunchMode.inAppWebView,
+                  // );
+                },
+                child: Text("건의하기",
+                    style: TextStyle(fontSize: SizeConfig.defaultSize * 1.4, color: const Color(0xffFE6059))),
+              ),
+              TextButton(
+                onPressed: () {
+                  AnalyticsUtil.logEvent("내정보_설정_1대1");
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => const MyAsk()));
+                //   launchUrl(
+                //     Uri(
+                //       scheme: 'https',
+                //       host: 'tally.so',
+                //       path:
+                //       'r/wzNV5E',
+                //     ),
+                //     mode: LaunchMode.inAppWebView,
+                //   );
+                },
+                child: Text("1:1 문의",
+                    style: TextStyle(fontSize: SizeConfig.defaultSize * 1.4, color: const Color(0xffFE6059))),
+              ),
+
+              ],
+            ),
+          ),
+          const DtFlexSpacer(15),
+
           const DtDivider(),
           Padding(
             // padding: MyPageView._defaultPadding,
@@ -816,13 +867,30 @@ class _MyPageViewState extends State<MyPageView> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       TextButton(
+                        onPressed: () {
+                          AnalyticsUtil.logEvent("내정보_설정_이용약관");
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => const MyTos1()));
+                        },
+                        child: Text("이용약관",
+                            style: TextStyle(fontSize: SizeConfig.defaultSize * 1.4, color: Colors.grey),
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          AnalyticsUtil.logEvent("내정보_설정_개인정보처리방침");
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => const MyTos2()));
+                        },
+                        child: Text("개인정보 처리방침",
+                            style: TextStyle(fontSize: SizeConfig.defaultSize * 1.4, color: Colors.grey)),
+                      ),
+                      TextButton(
                           onPressed: () async {
                             AnalyticsUtil.logEvent("내정보_설정_회원탈퇴버튼");
                             TextEditingController textController = TextEditingController();
                             showDialog<String>(
-                              context: context,
-                              builder: (BuildContext dialogContext) {
-                                return StatefulBuilder(
+                                context: context,
+                                builder: (BuildContext dialogContext) {
+                                  return StatefulBuilder(
                                     builder: (statefulContext, setState) => AlertDialog(
                                       title: Text('앱을 회원탈퇴 하시겠어요?', style: TextStyle(fontSize: SizeConfig.defaultSize * 2), textAlign: TextAlign.center,),
                                       content: Column(
@@ -864,142 +932,81 @@ class _MyPageViewState extends State<MyPageView> {
                                         ),
                                       ],
                                     ),
-                                );
-                              }
+                                  );
+                                }
                             );
                           },
                           child: Text(
                             "회원탈퇴",
                             textAlign: TextAlign.start,
                             style: TextStyle(
-                              fontWeight: FontWeight.w500,
-                              fontSize: getFlexibleSize(target: 14),
-                              color: Colors.grey
+                                fontWeight: FontWeight.w500,
+                                fontSize: getFlexibleSize(target: 14),
+                                color: Colors.grey
                             ),
                           )),
                       const DtFlexSpacer(2),
                       TextButton(
-                          onPressed: () {
-                            AnalyticsUtil.logEvent("내정보_설정_로그아웃버튼");
-                            showDialog<String>(
-                              context: context,
-                              builder: (BuildContext dialogContext) => AlertDialog(
-                                title: Text('로그아웃을 하시겠어요?', style: TextStyle(fontSize: SizeConfig.defaultSize * 2),),
-                                // content: const Text('사용자를 신고하면 Dart에서 빠르게 신고 처리를 해드려요!'),
-                                backgroundColor: Colors.white,
-                                surfaceTintColor: Colors.white,
-                                actions: <Widget>[
-                                  TextButton(
-                                    onPressed: () {
-                                      AnalyticsUtil.logEvent("내정보_설정_로그아웃_취소");
-                                      Navigator.pop(dialogContext, '아니요');
-                                    },
-                                    child: const Text('아니요', style: TextStyle(color: Color(0xffFE6059)),),
-                                  ),
-                                  TextButton(
-                                    onPressed: () async {
-                                      AnalyticsUtil.logEvent("내정보_설정_로그아웃_로그아웃확정");
-                                      Navigator.pop(dialogContext);
-                                      ToastUtil.showToast("로그아웃이 완료되었습니다.\n잠시후 앱이 종료됩니다.");
-                                      BlocProvider.of<DartAuthCubit>(context).kakaoLogout();
-                                      await Future.delayed(const Duration(seconds: 2));
-                                      restart();
-                                    },
-                                    child: const Text('네', style: TextStyle(color: Color(0xffFE6059)),),
-                                  ),
-                                ],
-                              ),
-                            );
-                          },
+                        onPressed: () {
+                          AnalyticsUtil.logEvent("내정보_설정_로그아웃버튼");
+                          showDialog<String>(
+                            context: context,
+                            builder: (BuildContext dialogContext) => AlertDialog(
+                              title: Text('로그아웃을 하시겠어요?', style: TextStyle(fontSize: SizeConfig.defaultSize * 2),),
+                              // content: const Text('사용자를 신고하면 Dart에서 빠르게 신고 처리를 해드려요!'),
+                              backgroundColor: Colors.white,
+                              surfaceTintColor: Colors.white,
+                              actions: <Widget>[
+                                TextButton(
+                                  onPressed: () {
+                                    AnalyticsUtil.logEvent("내정보_설정_로그아웃_취소");
+                                    Navigator.pop(dialogContext, '아니요');
+                                  },
+                                  child: const Text('아니요', style: TextStyle(color: Color(0xffFE6059)),),
+                                ),
+                                TextButton(
+                                  onPressed: () async {
+                                    AnalyticsUtil.logEvent("내정보_설정_로그아웃_로그아웃확정");
+                                    Navigator.pop(dialogContext);
+                                    ToastUtil.showToast("로그아웃이 완료되었습니다.\n잠시후 앱이 종료됩니다.");
+                                    BlocProvider.of<DartAuthCubit>(context).kakaoLogout();
+                                    await Future.delayed(const Duration(seconds: 2));
+                                    restart();
+                                  },
+                                  child: const Text('네', style: TextStyle(color: Color(0xffFE6059)),),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
                         child: Text("로그아웃",
-                            textAlign: TextAlign.start,
-                            style: TextStyle(
+                          textAlign: TextAlign.start,
+                          style: TextStyle(
                               fontWeight: FontWeight.w500,
                               fontSize: getFlexibleSize(target: 14),
-                                color: Colors.grey
+                              color: Colors.grey
 
-                            ),
                           ),
+                        ),
                       ),
                     ],
                   ),
                 ),
                 const DtFlexSpacer(10),
+
+
               ],
             ),
           ),
+
           const DtDivider(),
+          const DtFlexSpacer(20),
           Container(
-            alignment: Alignment.centerLeft,
-            padding: EdgeInsets.only(left: SizeConfig.defaultSize * 2),
-            child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(height: SizeConfig.defaultSize * 1.5,),
-              TextButton(
-                onPressed: () {
-                  AnalyticsUtil.logEvent("내정보_설정_이용약관");
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => const MyTos1()));
-                },
-                child: Text("이용약관",
-                    style: TextStyle(fontSize: SizeConfig.defaultSize * 1.4, color: const Color(0xffFE6059))),
-              ),
-              TextButton(
-                onPressed: () {
-                  AnalyticsUtil.logEvent("내정보_설정_개인정보처리방침");
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => const MyTos2()));
-                },
-                child: Text("개인정보 처리방침",
-                    style: TextStyle(fontSize: SizeConfig.defaultSize * 1.4, color: const Color(0xffFE6059))),
-              ),
-              TextButton(
-                onPressed: () {
-                  AnalyticsUtil.logEvent("내정보_설정_건의하기");
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => const MyOpinion()));
-                  // launchUrl(
-                  //   Uri(
-                  //     scheme: 'https',
-                  //     host: 'tally.so',
-                  //     path:
-                  //     'r/mYR270',
-                  //   ),
-                  //   mode: LaunchMode.inAppWebView,
-                  // );
-                },
-                child: Text("건의하기",
-                    style: TextStyle(fontSize: SizeConfig.defaultSize * 1.4, color: const Color(0xffFE6059))),
-              ),
-              TextButton(
-                onPressed: () {
-                  AnalyticsUtil.logEvent("내정보_설정_1대1");
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => const MyAsk()));
-                //   launchUrl(
-                //     Uri(
-                //       scheme: 'https',
-                //       host: 'tally.so',
-                //       path:
-                //       'r/wzNV5E',
-                //     ),
-                //     mode: LaunchMode.inAppWebView,
-                //   );
-                },
-                child: Text("1:1 문의",
-                    style: TextStyle(fontSize: SizeConfig.defaultSize * 1.4, color: const Color(0xffFE6059))),
-              ),
-
-                  const DtDivider(),
-                  const DtFlexSpacer(20),
-                 Container(
-                   alignment: Alignment.center,
-                  child: Text("엔대생 v${context.read<MyPagesCubit>().state.appVersion}",
-                      style: TextStyle(fontSize: SizeConfig.defaultSize * 1.2, color: Colors.grey)),
-                 ),
-                  const DtFlexSpacer(20),
-
-                  ],
-            ),
+            alignment: Alignment.center,
+            child: Text("엔대생 v${context.read<MyPagesCubit>().state.appVersion}",
+                style: TextStyle(fontSize: SizeConfig.defaultSize * 1.2, color: Colors.grey)),
           ),
+          const DtFlexSpacer(20),
         ],
       ),
     );
