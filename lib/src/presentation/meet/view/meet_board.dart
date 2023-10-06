@@ -110,7 +110,7 @@ class _MeetBoardState extends State<MeetBoard> {
               ),
             )
           : Scaffold(
-              backgroundColor: Colors.grey.shade50,
+              backgroundColor: Colors.grey.shade200,
 
               // TODO : 팀 바꾸거나 CTA 버튼 필요할 때 복구하기
               // appBar: AppBar(
@@ -719,7 +719,7 @@ class _BodySectionState extends State<_BodySection> {
                                 )
                                 : Column(
                                   children: [
-                                    SizedBox(height: SizeConfig.defaultSize * 0.6,),
+                                    SizedBox(height: SizeConfig.defaultSize * 0.7,),
                                     MeetOneTeamCardview(team: blindDateTeam, isMyTeam: false, myTeamCount: widget.meetState.myTeams.length, myTeamId: nowTeam.id,)
                                   ]);
                               },
