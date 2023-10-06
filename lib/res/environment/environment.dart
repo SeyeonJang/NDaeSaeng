@@ -6,4 +6,6 @@ abstract class Environment {
   String getAmplitudeKey();
   String getSupabaseUrl();
   String getSupabaseApiKey();
+  String getAppsflyerApiKey();
+  String getAppsflyerAppId();
 }
