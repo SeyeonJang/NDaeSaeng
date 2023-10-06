@@ -1253,14 +1253,14 @@ class _CreateTeamBottomSectionState extends State<_CreateTeamBottomSection> {
                   height: SizeConfig.defaultSize * 6,
                   width: SizeConfig.screenHeight,
                   decoration: BoxDecoration(
-                    color: (meetTeam.members.length == 1 && meetTeam.members[0].getName().isNotEmpty && meetTeam.members[0].getBirthYear() != 0 && meetTeam.members[0].getUniversityId() != 0 && meetTeam.name != '' && meetTeam.locations.isNotEmpty
-                    || meetTeam.members.length == 2 && meetTeam.members[0].getName().isNotEmpty && meetTeam.members[0].getBirthYear() != 0 && meetTeam.members[0].getUniversityId() != 0
-                            && meetTeam.members[1].getName().isNotEmpty && meetTeam.members[1].getBirthYear() != 0 && meetTeam.members[1].getUniversityId() != 0
-                            &&  meetTeam.name != '' && meetTeam.locations.isNotEmpty) ? const Color(0xffFF5C58) : const Color(0xffdddddd),
+                    color: (meetTeam.members.length==1 && meetTeam.members[0].canCreateTeam() && meetTeam.name != '' && meetTeam.locations.isNotEmpty
+                        || meetTeam.members.length==2 && meetTeam.members[0].canCreateTeam() && meetTeam.members[1].canCreateTeam()) ? const Color(0xffFF5c58) : const Color(0xffdddddd),
                     borderRadius: BorderRadius.circular(10),
                   ),
                   alignment: Alignment.center,
-                  child: Text("팀 만들기", style: TextStyle(
+                  child: Text((meetTeam.members.length==1 && meetTeam.members[0].canCreateTeam() && meetTeam.name != '' && meetTeam.locations.isNotEmpty
+                      || meetTeam.members.length==2 && meetTeam.members[0].canCreateTeam() && meetTeam.members[1].canCreateTeam()) ? "팀 만들기" : "팀명, 팀원을 입력해주세요",
+                      style: TextStyle(
                       color: Colors.white,
                       fontSize: SizeConfig.defaultSize * 2,
                       fontWeight: FontWeight.w600
