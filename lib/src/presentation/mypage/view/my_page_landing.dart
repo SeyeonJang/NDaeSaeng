@@ -73,7 +73,8 @@ class _MyPageLandingViewState extends State<MyPageLandingView> {
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(13),
-              border: Border.all(width: 1.3, color: const Color(0xffFE6059))
+              border: Border.all(width: 1.3, color: const Color(0xff2F4858))
+    // border: Border.all(width: 1.3, color: const Color(0xffFE6059))
               // boxShadow: [ // Boxshadow 필요하면 쓰기
               //   BoxShadow(
               //     color: Colors.grey.withOpacity(0.2),
@@ -294,23 +295,27 @@ class _MyPageLandingViewState extends State<MyPageLandingView> {
                   horizontal: SizeConfig.defaultSize * 0.5),
               child: Container(
                 width: SizeConfig.screenWidth,
-                height: SizeConfig.defaultSize * 4.8,
+                height: SizeConfig.defaultSize * 6.8,
                 decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: const Color(0xff2F4858),
                     borderRadius: BorderRadius.circular(10),
-                    border: Border.all(width: 1.3, color: const Color(0xffFE6059))
+                    // border: Border.all(width: 1.3, color: const Color(0xffFE6059))
                 ),
                 child: Padding(
-                  padding: EdgeInsets.only(left: SizeConfig.defaultSize * 1.5, right: SizeConfig.defaultSize * 1.5),
+                  padding: EdgeInsets.only(left: SizeConfig.defaultSize * 2.0, right: SizeConfig.defaultSize * 1.5),
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Text(" 지금 학생증 인증하면 팀에 인증 배지를 추가해드려요!", style: TextStyle(
-                          fontSize: SizeConfig.defaultSize * 1.4
-                      ),),
-                      const Icon(
-                        Icons.arrow_right_alt_rounded, color: Color(0xffFE6059)
-                      )
+                      Icon(Icons.check_circle, size: SizeConfig.defaultSize * 3, color: Colors.blue),
+                      SizedBox(width: SizeConfig.defaultSize * 2,),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text("학생증 제출하고 팀에 인증 배지를 추가해요!", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.4, color: Colors.white),),
+                          Text("학생증 인증하기  >", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.6, fontWeight: FontWeight.w600, color: Colors.white),),
+                        ],
+                      ),
                     ],
                   ),
                 ),

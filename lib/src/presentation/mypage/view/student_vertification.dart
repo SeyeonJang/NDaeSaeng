@@ -203,7 +203,7 @@ class _VertificationViewState extends State<VertificationView> with SingleTicker
                                                 });
                                               },
                                               style: ElevatedButton.styleFrom(
-                                                backgroundColor: const Color(0xffFF5C58),
+                                                backgroundColor: const Color(0xff2F4858),
                                                 shape: RoundedRectangleBorder(
                                                   borderRadius: BorderRadius.circular(15), // 모서리 둥글기 설정
                                                 ),
@@ -270,13 +270,13 @@ class _VertificationViewState extends State<VertificationView> with SingleTicker
             ),
             focusedBorder: const OutlineInputBorder(
               borderSide: BorderSide(
-                color: Color(0xffFF5C58), // 테두리 색상
+                color: Color(0xff2F4858), // 테두리 색상
                 width: 2.0,
               ),
             ),
             prefixIcon: const Icon(
               Icons.person_rounded,
-              color: Color(0xffFF5C58),
+              color: Color(0xff2F4858),
             ),
             hintText: "본인확인을 위한 실명을 입력해주세요!"));
   }
@@ -294,7 +294,7 @@ class _VertificationViewState extends State<VertificationView> with SingleTicker
         decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(10),
-            border: Border.all(width: 1.5, color: const Color(0xffFF5C58))),
+            border: Border.all(width: 1.5, color: const Color(0xff2F4858))),
         child: Center(
             child: Text("갤러리에서 사진 업로드",
                 style:
@@ -314,7 +314,7 @@ class _VertificationViewState extends State<VertificationView> with SingleTicker
         width: SizeConfig.screenWidth,
         height: SizeConfig.defaultSize * 6,
         decoration: BoxDecoration(
-          color: const Color(0xffFF5C58),
+          color: const Color(0xff2F4858),
           borderRadius: BorderRadius.circular(10),
         ),
         child: Center(
