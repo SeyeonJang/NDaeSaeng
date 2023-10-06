@@ -313,7 +313,12 @@ class _MyPageLandingViewState extends State<MyPageLandingView> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text("학생증 제출하고 팀에 인증 배지를 추가해요!", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.4, color: Colors.white),),
-                          Text("학생증 인증하기  >", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.6, fontWeight: FontWeight.w600, color: Colors.white),),
+                          Row(
+                            children: [
+                              Text("학생증 인증하기 ", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.6, fontWeight: FontWeight.w600, color: Colors.white),),
+                              Icon(Icons.arrow_forward_ios, color: Colors.white, size: SizeConfig.defaultSize * 1.25,)
+                            ],
+                          ),
                         ],
                       ),
                     ],
