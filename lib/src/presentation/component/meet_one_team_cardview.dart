@@ -55,7 +55,7 @@ class MeetOneTeamCardview extends StatelessWidget {
           borderRadius: BorderRadius.circular(10),
           color: Colors.white,
           border: Border.all(
-            color: isMyTeam ? Color(0xffFE6059) : Colors.white,
+            color: isMyTeam ? const Color(0xffFE6059) : Colors.white,
           ),
           // boxShadow: [
           //   BoxShadow(
@@ -100,13 +100,13 @@ class MeetOneTeamCardview extends StatelessWidget {
               Row( // 아래층
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Container(
+                  SizedBox(
                     width: SizeConfig.defaultSize * 12,
                     child: Stack(
                       children: [
                         Container( // 버리는 사진
                           width: SizeConfig.defaultSize * 4,
-                          decoration: BoxDecoration(
+                          decoration: const BoxDecoration(
                             shape: BoxShape.circle,
                           ),
                           child: Center(
@@ -122,7 +122,7 @@ class MeetOneTeamCardview extends StatelessWidget {
                             left: i * SizeConfig.defaultSize * 3,
                             child: Container(
                               width: SizeConfig.defaultSize * 4.5,
-                              decoration: BoxDecoration(
+                              decoration: const BoxDecoration(
                                 shape: BoxShape.circle,
                               ),
                               child: ClipOval(
@@ -147,17 +147,17 @@ class MeetOneTeamCardview extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Text(team.universityName,
-                              style: TextStyle(fontSize: SizeConfig.defaultSize * 1.5, fontWeight: FontWeight.w600),),
-                            Text(" "),
+                              style: TextStyle(fontSize: SizeConfig.defaultSize * 1.5, fontWeight: FontWeight.w600, overflow: TextOverflow.ellipsis),),
+                            const Text(" "),
                             if (team.isCertifiedTeam)
                               Image.asset("assets/images/check.png", width: SizeConfig.defaultSize * 1.3),
                           ],
                         ),
                           SizedBox(height: SizeConfig.defaultSize * 0.3,),
-                        Container(
+                        SizedBox(
                           width: SizeConfig.defaultSize * 24,
                           child: Text(team.teamUsers.map((user) => user.getDepartment()).toSet().fold('', (previousValue, element) => previousValue.isEmpty ? element : '$previousValue & $element'),
-                            style: TextStyle(fontSize: SizeConfig.defaultSize * 1.3, overflow: TextOverflow.ellipsis, color: Color(0xffFE6059), fontWeight: FontWeight.w600),),
+                            style: TextStyle(fontSize: SizeConfig.defaultSize * 1.3, overflow: TextOverflow.ellipsis, color: const Color(0xffFE6059), fontWeight: FontWeight.w600),),
                         )
                       ],
                     ),

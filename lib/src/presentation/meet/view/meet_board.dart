@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:dart_flutter/res/config/size_config.dart';
 import 'package:dart_flutter/src/common/util/analytics_util.dart';
 import 'package:dart_flutter/src/common/util/toast_util.dart';
@@ -115,7 +113,7 @@ class _MeetBoardState extends State<MeetBoard> {
           //   )
 
           : Scaffold(
-              backgroundColor: Colors.grey.shade200,
+              backgroundColor: Colors.grey.shade200.withOpacity(0.7),
 
               // TODO : 팀 바꾸거나 CTA 버튼 필요할 때 복구하기
               // appBar: AppBar(
@@ -646,7 +644,7 @@ class _BodySection extends StatefulWidget {
 class _BodySectionState extends State<_BodySection> {
   late MeetCubit meetCubit;
   final ScrollController _scrollController = ScrollController();
-  late MeetTeam nowTeam = widget.meetState.myTeam ?? widget.meetState.myTeams.first;
+  late MeetTeam nowTeam = widget.meetState.myTeam ?? (widget.meetState.myTeams.firstOrNull ?? MeetTeam(id: 0, name: '', university: null, locations: [], canMatchWithSameUniversity: true, members: []));
 
   @override
   void initState() {
