@@ -23,16 +23,36 @@ class MeetBoard extends StatefulWidget {
 }
 
 class _MeetBoardState extends State<MeetBoard> {
+  late MeetCubit meetCubit;
+  late PagingController<int, BlindDateTeam> pagingController;
+
+  void onPageRequested(int pageKey) {
+    if (mounted) {
+      meetCubit.fetchPage(pageKey);
+    }
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    meetCubit = context.read<MeetCubit>();
+  }
+
   @override
   void initState() {
     super.initState();
-    context.read<MeetCubit>().pagingController.addPageRequestListener((pageKey) => context.read<MeetCubit>().fetchPage(pageKey));
-    SchedulerBinding.instance.addPostFrameCallback((_) => context.read<MeetCubit>().initMeet());
+    meetCubit = context.read<MeetCubit>();
+    pagingController = meetCubit.pagingController;
+
+    if (mounted) {
+      pagingController.addPageRequestListener(onPageRequested);
+      SchedulerBinding.instance.addPostFrameCallback((_) => meetCubit.initMeet());
+    }
   }
 
   @override
   void dispose() {
-    context.read<MeetCubit>().pagingController.dispose();
+    pagingController.removePageRequestListener(onPageRequested);
     super.dispose();
   }
 
@@ -45,7 +65,7 @@ class _MeetBoardState extends State<MeetBoard> {
             friend.personalInfo?.gender == state.userResponse.personalInfo?.gender
         ).toList();
         print("친구 수 : ${state.friends.length}, 과팅 같이 나갈 수 있는 친구 수 : ${filteredFriends.length}, 팀 개수 : ${state.myTeams.length}");
-        PagingController<int, BlindDateTeam> pagingController = context.read<MeetCubit>().pagingController;
+        // PagingController<int, BlindDateTeam> pagingController = context.read<MeetCubit>().pagingController;
 
         return (state.isLoading)
             ? Scaffold(
