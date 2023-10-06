@@ -122,7 +122,7 @@ class _DartPageViewState extends State<DartPageView> {
         type: BottomNavigationBarType.fixed,
         backgroundColor: Colors.white,
         selectedFontSize: SizeConfig.defaultSize * 1.15,
-        selectedItemColor: const Color(0xffFE6059),
+        selectedItemColor: Color(0xffFE6059).withOpacity(0.8),
         // selectedItemColor: _page == 3 ? Color(0xff7C83FD) : Color(0xffFE6059),
         unselectedFontSize: SizeConfig.defaultSize * 1.1,
         unselectedItemColor: Colors.grey.shade400,
