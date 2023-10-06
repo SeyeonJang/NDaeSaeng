@@ -84,33 +84,36 @@ class _MeetBoardState extends State<MeetBoard> {
                   ),
                 ),
               )
-            : state.myTeams.isEmpty
-          ? Scaffold(
-              appBar: AppBar(),
-              body: GestureDetector(
-                onTap: () {
-                  AnalyticsUtil.logEvent('과팅_목록_팀없을때_화면터치');
-                },
-                child: Container(
-                  width: SizeConfig.screenWidth,
-                  height: SizeConfig.screenHeight,
-                  color: Colors.white,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Image.asset('assets/images/heart.png', width: SizeConfig.screenWidth * 0.7,),
-                      SizedBox(height: SizeConfig.defaultSize * 7,),
-                      Text("팀을 만들어야 이성을 볼 수 있어요! 👀", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.8),),
-                      SizedBox(height: SizeConfig.defaultSize * 1.5,),
-                      Text("왼쪽 홈에서 간단하게 팀을 만들어보아요!", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.5),),
-                      SizedBox(height: SizeConfig.defaultSize * 10,),
-                    ],
-                  ),
-                ),
-              ),
-            )
+
+          // // 아직 팀을 생성하지 않은 경우에 볼 수 없다는 멘트가 나오던 페이지
+          //   : state.myTeams.isEmpty
+          // ? Scaffold(
+          //     appBar: AppBar(),
+          //     body: GestureDetector(
+          //       onTap: () {
+          //         AnalyticsUtil.logEvent('과팅_목록_팀없을때_화면터치');
+          //       },
+          //       child: Container(
+          //         width: SizeConfig.screenWidth,
+          //         height: SizeConfig.screenHeight,
+          //         color: Colors.white,
+          //         child: Column(
+          //           mainAxisAlignment: MainAxisAlignment.center,
+          //           children: [
+          //             Image.asset('assets/images/heart.png', width: SizeConfig.screenWidth * 0.7,),
+          //             SizedBox(height: SizeConfig.defaultSize * 7,),
+          //             Text("팀을 만들어야 이성을 볼 수 있어요! 👀", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.8),),
+          //             SizedBox(height: SizeConfig.defaultSize * 1.5,),
+          //             Text("왼쪽 홈에서 간단하게 팀을 만들어보아요!", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.5),),
+          //             SizedBox(height: SizeConfig.defaultSize * 10,),
+          //           ],
+          //         ),
+          //       ),
+          //     ),
+          //   )
+
           : Scaffold(
-              backgroundColor: Colors.grey.shade50,
+              backgroundColor: Colors.grey.shade200.withOpacity(0.7),
 
               // TODO : 팀 바꾸거나 CTA 버튼 필요할 때 복구하기
               // appBar: AppBar(
@@ -641,7 +644,7 @@ class _BodySection extends StatefulWidget {
 class _BodySectionState extends State<_BodySection> {
   late MeetCubit meetCubit;
   final ScrollController _scrollController = ScrollController();
-  late MeetTeam nowTeam = widget.meetState.myTeam ?? widget.meetState.myTeams.first;
+  late MeetTeam nowTeam = widget.meetState.myTeam ?? (widget.meetState.myTeams.firstOrNull ?? MeetTeam(id: 0, name: '', university: null, locations: [], canMatchWithSameUniversity: true, members: []));
 
   @override
   void initState() {
@@ -719,7 +722,7 @@ class _BodySectionState extends State<_BodySection> {
                                 )
                                 : Column(
                                   children: [
-                                    SizedBox(height: SizeConfig.defaultSize * 0.6,),
+                                    SizedBox(height: SizeConfig.defaultSize * 0.7,),
                                     MeetOneTeamCardview(team: blindDateTeam, isMyTeam: false, myTeamCount: widget.meetState.myTeams.length, myTeamId: nowTeam.id,)
                                   ]);
                               },

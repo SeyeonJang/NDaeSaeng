@@ -50,13 +50,13 @@ class BodySection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: SizeConfig.defaultSize * 2.5, vertical: SizeConfig.defaultSize * 2.5),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-            SizedBox(height: SizeConfig.defaultSize * 2,),
-          Row(
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+          SizedBox(height: SizeConfig.defaultSize * 2,),
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: SizeConfig.defaultSize * 2.5),
+          child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Container(
@@ -75,8 +75,11 @@ class BodySection extends StatelessWidget {
               )
             ],
           ),
-            SizedBox(height: SizeConfig.defaultSize * 0.9,),
-          Row(
+        ),
+          SizedBox(height: SizeConfig.defaultSize * 0.9,),
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: SizeConfig.defaultSize * 2.5),
+          child: Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               Container(
@@ -95,8 +98,11 @@ class BodySection extends StatelessWidget {
               )
             ],
           ),
-            SizedBox(height: SizeConfig.defaultSize * 0.9,),
-          Row(
+        ),
+          SizedBox(height: SizeConfig.defaultSize * 0.9,),
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: SizeConfig.defaultSize * 2.5),
+          child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Container(
@@ -115,247 +121,257 @@ class BodySection extends StatelessWidget {
               )
             ],
           ),
-            SizedBox(height: SizeConfig.defaultSize * 5,),
-          SizedBox(
-            height: SizeConfig.defaultSize * 4,
-            child: const Row(
+        ),
+          SizedBox(height: SizeConfig.defaultSize * 5,),
+        SizedBox(
+          height: SizeConfig.defaultSize * 4,
+          child: const Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text("only   ", style: TextStyle(color: Colors.grey),),
+              VerticalDivider(
+                thickness: 1,
+                color: Colors.grey,
+              ),
+              Text("   3단계", style: TextStyle(color: Colors.grey))
+            ],
+          ),
+        ),
+          SizedBox(height: SizeConfig.defaultSize * 5,),
+
+        Container(
+          color: const Color(0xffFE6059).withOpacity(0.1),
+          height: SizeConfig.defaultSize * 30,
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: SizeConfig.defaultSize * 2.5, vertical: SizeConfig.defaultSize * 2.5),
+            child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Text("only   ", style: TextStyle(color: Colors.grey),),
-                VerticalDivider(
-                  thickness: 1,
-                  color: Colors.grey,
-                ),
-                Text("   3단계", style: TextStyle(color: Colors.grey))
-              ],
-            ),
-          ),
-            SizedBox(height: SizeConfig.defaultSize * 5,),
-
-          ClipOval(
-            child: Container(
-              width: SizeConfig.defaultSize * 2.8, // 원의 너비
-              height: SizeConfig.defaultSize * 2.8, // 원의 높이
-              color: const Color(0xffFE6059), // 빨간색 배경
-              child: Center(
-                child: Text('1', style: TextStyle(
-                    color: Colors.white, // 흰색 텍스트
-                    fontWeight: FontWeight.bold,
-                    fontSize: SizeConfig.defaultSize * 1.7 // 텍스트 크기
-                  ),
-                ),
-              ),
-            ),
-          ),
-            SizedBox(height: SizeConfig.defaultSize * 3,),
-          Container( // 1번 내용
-            width: SizeConfig.screenWidth,
-            height: SizeConfig.defaultSize * 20,
-            decoration: BoxDecoration(
-              border: Border.all(
-                color: Colors.white,
-              ),
-              color: Colors.grey.shade50,
-              borderRadius: BorderRadius.circular(13),
-            ),
-            child: Padding(
-              padding: EdgeInsets.all(SizeConfig.defaultSize),
-              child: Column(
-                children: [
-                  Expanded(
+                Row(
+                  children: [
+                    ClipOval(
                       child: Container(
-                          decoration: BoxDecoration(
-                            // color: Colors.white,
-                            borderRadius: BorderRadius.circular(5),
+                        width: SizeConfig.defaultSize * 2.8,
+                        height: SizeConfig.defaultSize * 2.8,
+                        color: const Color(0xffFE6059),
+                        child: Center(
+                          child: Text('1', style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: SizeConfig.defaultSize * 1.6
+                            ),
                           ),
-                          alignment: Alignment.center,
-                          child: Image.asset('assets/images/meet_intro.png')
-                      )
-                  ),
-                  SizedBox(height: SizeConfig.defaultSize),
-                  Container(
-                      width: SizeConfig.screenWidth,
-                      height: SizeConfig.defaultSize * 3.5,
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(5),
-                      ),
-                      child: const Text("팀명, 만나고 싶은 지역, 팀원 정보를 입력한다", style: TextStyle(
-                          fontWeight: FontWeight.w500
-                      ),)
-                  )
-                ],
-              ),
-            ),
-          ),
-            SizedBox(height: SizeConfig.defaultSize * 3,),
-
-          ClipOval(
-            child: Container(
-              width: SizeConfig.defaultSize * 2.8, // 원의 너비
-              height: SizeConfig.defaultSize * 2.8, // 원의 높이
-              color: const Color(0xffFE6059), // 빨간색 배경
-              child: Center(
-                child: Text('2', style: TextStyle(
-                    color: Colors.white, // 흰색 텍스트
-                    fontWeight: FontWeight.bold,
-                    fontSize: SizeConfig.defaultSize * 1.7 // 텍스트 크기
-                ),
-                ),
-              ),
-            ),
-          ),
-            SizedBox(height: SizeConfig.defaultSize * 3,),
-          Container( // 2번 내용
-            width: SizeConfig.screenWidth,
-            height: SizeConfig.defaultSize * 20,
-            decoration: BoxDecoration(
-              border: Border.all(
-                color: Colors.white,
-              ),
-              color: Colors.grey.shade50,
-              borderRadius: BorderRadius.circular(13),
-            ),
-            child: Padding(
-              padding: EdgeInsets.all(SizeConfig.defaultSize),
-              child: Column(
-                children: [
-                  Expanded(
-                    child: Container(
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(5),
-                        ),
-                        alignment: Alignment.center,
-                        child: Padding(
-                          padding: EdgeInsets.all(SizeConfig.defaultSize),
-                          child: Image.asset('assets/images/likesend.png'),
-                        )
-                    )
-                  ),
-                    SizedBox(height: SizeConfig.defaultSize),
-                  Container(
-                      width: SizeConfig.screenWidth,
-                      height: SizeConfig.defaultSize * 3.5,
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(5),
-                      ),
-                      child: const Text("마음에 드는 팀에게 호감을 보낸다", style: TextStyle(
-                        fontWeight: FontWeight.w500
-                      ),)
-                  )
-                ],
-              ),
-            ),
-          ),
-            SizedBox(height: SizeConfig.defaultSize * 3,),
-
-          ClipOval(
-            child: Container(
-              width: SizeConfig.defaultSize * 2.8, // 원의 너비
-              height: SizeConfig.defaultSize * 2.8, // 원의 높이
-              color: const Color(0xffFE6059), // 빨간색 배경
-              child: Center(
-                child: Text('3', style: TextStyle(
-                    color: Colors.white, // 흰색 텍스트
-                    fontWeight: FontWeight.bold,
-                    fontSize: SizeConfig.defaultSize * 1.7 // 텍스트 크기
-                ),
-                ),
-              ),
-            ),
-          ),
-            SizedBox(height: SizeConfig.defaultSize * 3,),
-          Container( // 3번 내용
-            width: SizeConfig.screenWidth,
-            height: SizeConfig.defaultSize * 20,
-            decoration: BoxDecoration(
-              border: Border.all(
-                color: Colors.white,
-              ),
-              color: Colors.grey.shade50,
-              borderRadius: BorderRadius.circular(13),
-            ),
-            child: Padding(
-              padding: EdgeInsets.all(SizeConfig.defaultSize),
-              child: Column(
-                children: [
-                  Expanded(
-                    child: Container(
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(5),
-                      ),
-                      child: Padding(
-                        padding: EdgeInsets.all(SizeConfig.defaultSize * 1.1),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Container(
-                                  width: SizeConfig.defaultSize * 25,
-                                  height: SizeConfig.defaultSize * 6,
-                                  alignment: Alignment.center,
-                                  decoration: BoxDecoration(
-                                    color: Colors.grey.shade100,
-                                    borderRadius: const BorderRadius.only(topLeft: Radius.circular(13), topRight: Radius.circular(13), bottomRight: Radius.circular(13)),
-                                  ),
-                                  child: const Text("안녕하세요! 저희는 OOOO학과\n학생들이에요! 대화해보고 싶어요! ☺️"),
-                                ),
-                              ],
-                            ),
-                               SizedBox(height: SizeConfig.defaultSize,),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                Container(
-                                  width: SizeConfig.defaultSize * 27.2,
-                                  height: SizeConfig.defaultSize * 3.2,
-                                  alignment: Alignment.center,
-                                  decoration: const BoxDecoration(
-                                    color: Color(0xffFE6059),
-                                    borderRadius: BorderRadius.only(topLeft: Radius.circular(13), topRight: Radius.circular(13), bottomLeft: Radius.circular(13)),
-                                  ),
-                                  child: const Text("안녕하세요! 저희도 대화해보고 싶어요! 😊", style: TextStyle(color: Colors.white),),
-                                ),
-                              ],
-                            ),
-                          ],
                         ),
                       ),
                     ),
-                  ),
-                    SizedBox(height: SizeConfig.defaultSize,),
-                  Container(
-                    width: SizeConfig.screenWidth,
-                    height: SizeConfig.defaultSize * 3.5,
-                    alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(5),
-                      ),
-                    child: const Text("상대 팀도 호감을 수락하면 채팅 시작!", style: TextStyle(
+                      SizedBox(width: SizeConfig.defaultSize * 1.5,),
+                    Text("팀명, 만나고 싶은 지역, 팀원 정보를 입력한다", style: TextStyle(
+                        fontSize: SizeConfig.defaultSize * 1.6,
                         fontWeight: FontWeight.w500
                     ),)
-                  )
-                ],
-              ),
+                  ],
+                ),
+                  SizedBox(height: SizeConfig.defaultSize * 3,),
+                Container(color: Colors.grey.shade100, child: Image.asset('assets/images/meet_intro.png',))
+              ],
             ),
           ),
-            SizedBox(height: SizeConfig.defaultSize * 5),
-          SizedBox(width: SizeConfig.screenWidth, child: const Text("추가 Tip 1.\n내정보 탭에서 학생증 인증을 하면 팀에 인증 배지가 붙어요!", style: TextStyle(color: Colors.grey), textAlign: TextAlign.left,)),
-            SizedBox(height: SizeConfig.defaultSize,),
-          const Text("추가 Tip 2.\n상대에게 보이는 내 사진과 닉네임을 내정보 탭 - 설정에서 바꿀 수 있어요!", style: TextStyle(color: Colors.grey),),
-            SizedBox(height: SizeConfig.defaultSize * 3,),
-        ],
-      ),
+        ),
+          // SizedBox(height: SizeConfig.defaultSize * 5,),
+
+        Container(
+          height: SizeConfig.defaultSize * 30,
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: SizeConfig.defaultSize * 2.5, vertical: SizeConfig.defaultSize * 2.5),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Row(
+                  children: [
+                    ClipOval(
+                      child: Container(
+                        width: SizeConfig.defaultSize * 2.8,
+                        height: SizeConfig.defaultSize * 2.8,
+                        color: const Color(0xffFE6059),
+                        child: Center(
+                          child: Text('2', style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: SizeConfig.defaultSize * 1.6
+                          ),
+                          ),
+                        ),
+                      ),
+                    ),
+                      SizedBox(width: SizeConfig.defaultSize * 1.5,),
+                    Text("마음에 드는 팀에게 호감을 보낸다", style: TextStyle(
+                        fontSize: SizeConfig.defaultSize * 1.6,
+                        fontWeight: FontWeight.w500
+                    ),)
+                  ],
+                ),
+                  SizedBox(height: SizeConfig.defaultSize * 3,),
+                Image.asset('assets/images/likesend.png',)
+              ],
+            ),
+          ),
+        ),
+
+        Container(
+          color: const Color(0xffFE6059).withOpacity(0.1),
+          height: SizeConfig.defaultSize * 30,
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: SizeConfig.defaultSize * 2.5, vertical: SizeConfig.defaultSize * 2.5),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Row(
+                  children: [
+                    ClipOval(
+                      child: Container(
+                        width: SizeConfig.defaultSize * 2.8,
+                        height: SizeConfig.defaultSize * 2.8,
+                        color: const Color(0xffFE6059),
+                        child: Center(
+                          child: Text('3', style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: SizeConfig.defaultSize * 1.7
+                          ),
+                          ),
+                        ),
+                      ),
+                    ),
+                      SizedBox(width: SizeConfig.defaultSize * 1.5,),
+                    Text("상대 팀도 호감을 수락하면 채팅 시작!", style: TextStyle(
+                        fontSize: SizeConfig.defaultSize * 1.6,
+                        fontWeight: FontWeight.w500
+                    ),)
+                  ],
+                ),
+                  SizedBox(height: SizeConfig.defaultSize * 3,),
+                Container(
+                  height: SizeConfig.defaultSize * 17,
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                  child: Padding(
+                    padding: EdgeInsets.all(SizeConfig.defaultSize * 1.6),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Container(
+                              width: SizeConfig.defaultSize * 26,
+                              height: SizeConfig.defaultSize * 6,
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                color: Colors.grey.shade100,
+                                borderRadius: const BorderRadius.only(topLeft: Radius.circular(13), topRight: Radius.circular(13), bottomRight: Radius.circular(13)),
+                              ),
+                              child: const Text("안녕하세요! 저희는 OOOO학과\n학생들이에요! 대화해보고 싶어요! ☺️"),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: SizeConfig.defaultSize,),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Container(
+                              width: SizeConfig.defaultSize * 28,
+                              height: SizeConfig.defaultSize * 3.5,
+                              alignment: Alignment.center,
+                              decoration: const BoxDecoration(
+                                color: Color(0xffFE6059),
+                                borderRadius: BorderRadius.only(topLeft: Radius.circular(13), topRight: Radius.circular(13), bottomLeft: Radius.circular(13)),
+                              ),
+                              child: const Text("안녕하세요! 저희도 대화해보고 싶어요! 😊", style: TextStyle(color: Colors.white),),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+
+          SizedBox(height: SizeConfig.defaultSize * 4),
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: SizeConfig.defaultSize * 2.5),
+          child: Container(
+            alignment: Alignment.centerLeft,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text("인기 많은 팀이 되고 싶은가요?", style: TextStyle(
+                  fontSize: SizeConfig.defaultSize * 1.6,
+                  fontWeight: FontWeight.w500),),
+                  SizedBox(height: SizeConfig.defaultSize * 2,),
+
+                Text("Tip 1.", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.6, color: Colors.grey),),
+                  SizedBox(height: SizeConfig.defaultSize,),
+                RichText(
+                    textAlign: TextAlign.left,
+                    text: const TextSpan(
+                        style: TextStyle(color: Colors.grey),
+                        children: <TextSpan>[
+                          TextSpan(text: "내정보 탭에서 "),
+                          TextSpan(text: "학생증 인증", style: TextStyle(color: Colors.black)),
+                          TextSpan(text: "을 하면 팀에 인증 배지가 붙어요!",),
+                        ]
+                    )
+                ),
+                // const Text("내정보 탭에서 학생증 인증을 하면 팀에 인증 배지가 붙어요!", style: TextStyle(color: Colors.grey), textAlign: TextAlign.left,),
+                  SizedBox(height: SizeConfig.defaultSize * 1.5,),
+
+                Text("Tip 2.", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.6, color: Colors.grey),),
+                  SizedBox(height: SizeConfig.defaultSize,),
+                RichText(
+                    textAlign: TextAlign.left,
+                    text: const TextSpan(
+                        style: TextStyle(color: Colors.grey),
+                        children: <TextSpan>[
+                          TextSpan(text: "상대에게 보이는 "),
+                          TextSpan(text: "내 사진과 닉네임", style: TextStyle(color: Colors.black)),
+                          TextSpan(text: "을 ",),
+                          TextSpan(text: "내정보 탭 - 설정", style: TextStyle(color: Colors.black)),
+                          TextSpan(text: " 바꿀 수 있어요!",),
+                        ]
+                    )
+                ),
+                // const Text("상대에게 보이는 내 사진과 닉네임을 내정보 탭 - 설정에서 바꿀 수 있어요!", style: TextStyle(color: Colors.grey), textAlign: TextAlign.left,),
+                  SizedBox(height: SizeConfig.defaultSize * 1.5,),
+
+                Text("Tip 3.", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.6, color: Colors.grey),),
+                SizedBox(height: SizeConfig.defaultSize,),
+                RichText(
+                    textAlign: TextAlign.left,
+                    text: const TextSpan(
+                        style: TextStyle(color: Colors.grey),
+                        children: <TextSpan>[
+                          TextSpan(text: "팀을 만들 때 "),
+                          TextSpan(text: "친구 사진", style: TextStyle(color: Colors.black)),
+                          TextSpan(text: "을 추가하면 호감 받을 확률 UP!",),
+                        ]
+                    )
+                ),
+                // const Text("팀을 만들 때 친구 사진을 추가하면 호감 받을 확률 UP!", style: TextStyle(color: Colors.grey), textAlign: TextAlign.left,),
+                SizedBox(height: SizeConfig.defaultSize * 1.5,),
+
+                SizedBox(height: SizeConfig.defaultSize * 3,),
+              ],
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

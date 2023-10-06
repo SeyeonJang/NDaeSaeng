@@ -49,26 +49,27 @@ class MeetOneTeamCardview extends StatelessWidget {
         }
       },
       child: Container(
-        width: SizeConfig.screenWidth,
-        height: SizeConfig.defaultSize * 9.8,
+        width: SizeConfig.screenWidth * 0.92,
+        height: SizeConfig.defaultSize * 11.5,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
           color: Colors.white,
           border: Border.all(
-            color: isMyTeam ? Color(0xffFE6059) : Colors.white,
+            color: isMyTeam ? const Color(0xffFE6059) : Colors.white,
           ),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.shade300,
-              spreadRadius: 0,
-              blurRadius: 2.0,
-              offset: Offset(0,2), // changes position of shadow
-            ),
-          ],
+          // boxShadow: [
+          //   BoxShadow(
+          //     color: Colors.grey.shade300,
+          //     spreadRadius: 0,
+          //     blurRadius: 2.0,
+          //     offset: Offset(0,2), // changes position of shadow
+          //   ),
+          // ],
         ),
         child: Padding( // Container 내부 패딩
           padding: EdgeInsets.symmetric(vertical: SizeConfig.defaultSize * 1.2, horizontal: SizeConfig.defaultSize * 1.5),
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               Row( // 위층
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -76,38 +77,43 @@ class MeetOneTeamCardview extends StatelessWidget {
                 children: [
                   Row(
                     children: [
-                      Text(team.name, style: TextStyle(fontSize: SizeConfig.defaultSize * 1.6, fontWeight: FontWeight.w600),),
-                      Text("  ${(team.averageBirthYear > 1000 ? 2023-team.averageBirthYear+1 : team.averageBirthYear).toStringAsFixed(1)}세", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.45),)
+                      Text(team.name, style: TextStyle(fontSize: SizeConfig.defaultSize * 1.7, fontWeight: FontWeight.w600),),
+                      Text("  ${(team.averageBirthYear > 1000 ? 2023-team.averageBirthYear+1 : team.averageBirthYear).toStringAsFixed(1)}세", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.5),)
                     ],
                   ),
-                  Container(
-                    width: SizeConfig.screenWidth * 0.3,
-                    // color: Colors.red,
-                    alignment: Alignment.centerRight,
-                    child: Text(team.regions.map((location) => location.name).join(' '),
-                      style: TextStyle(fontSize: SizeConfig.defaultSize * 1.4, overflow: TextOverflow.ellipsis, color: Colors.grey),
-                      maxLines: 1,)
+                  Expanded(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Text(team.regions.map((location) => location.name).join(' '),
+                          style: TextStyle(fontSize: SizeConfig.defaultSize * 1.5, overflow: TextOverflow.ellipsis, color: Colors.grey),
+                          maxLines: 1,),
+                          SizedBox(width: SizeConfig.defaultSize * 0.2,),
+                        Icon(Icons.arrow_forward_ios_rounded, color: Colors.grey, size: SizeConfig.defaultSize * 1.5,),
+                      ],
+                    )
                   ),
                 ],
               ),
               SizedBox(height: SizeConfig.defaultSize * 1,),
 
               Row( // 아래층
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Container(
+                  SizedBox(
                     width: SizeConfig.defaultSize * 12,
                     child: Stack(
                       children: [
                         Container( // 버리는 사진
                           width: SizeConfig.defaultSize * 4,
-                          decoration: BoxDecoration(
+                          decoration: const BoxDecoration(
                             shape: BoxShape.circle,
                           ),
                           child: Center(
                             child: Image.asset(
                               'assets/images/profile-mockup3.png',
-                              width: SizeConfig.defaultSize * 4, // 이미지 크기
-                              height: SizeConfig.defaultSize * 4,
+                              width: SizeConfig.defaultSize * 4.5, // 이미지 크기
+                              height: SizeConfig.defaultSize * 4.5,
                             ),
                           ),
                         ),
@@ -115,15 +121,15 @@ class MeetOneTeamCardview extends StatelessWidget {
                           Positioned(
                             left: i * SizeConfig.defaultSize * 3,
                             child: Container(
-                              width: SizeConfig.defaultSize * 4,
-                              decoration: BoxDecoration(
+                              width: SizeConfig.defaultSize * 4.5,
+                              decoration: const BoxDecoration(
                                 shape: BoxShape.circle,
                               ),
                               child: ClipOval(
                                 child: Center(
                                   child: team.teamUsers[i].getProfileImageUrl() == "DEFAULT" || !team.teamUsers[i].getProfileImageUrl().startsWith("https://")
-                                    ? Image.asset('assets/images/profile-mockup3.png', width: SizeConfig.defaultSize * 4, height: SizeConfig.defaultSize * 4, fit: BoxFit.cover,)
-                                    : Image.network(team.teamUsers[i].getProfileImageUrl(), width: SizeConfig.defaultSize * 4, height: SizeConfig.defaultSize * 4, fit: BoxFit.cover,)
+                                    ? Image.asset('assets/images/profile-mockup3.png', width: SizeConfig.defaultSize * 4.5, height: SizeConfig.defaultSize * 4.5, fit: BoxFit.cover,)
+                                    : Image.network(team.teamUsers[i].getProfileImageUrl(), width: SizeConfig.defaultSize * 4.5, height: SizeConfig.defaultSize * 4.5, fit: BoxFit.cover,)
                                 ),
                               ),
                             ),
@@ -131,6 +137,7 @@ class MeetOneTeamCardview extends StatelessWidget {
                       ],
                     ),
                   ),
+                    SizedBox(width: SizeConfig.defaultSize,),
                   Expanded(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -140,16 +147,17 @@ class MeetOneTeamCardview extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Text(team.universityName,
-                              style: TextStyle(fontSize: SizeConfig.defaultSize * 1.4, fontWeight: FontWeight.w600),),
-                            Text(" "),
+                              style: TextStyle(fontSize: SizeConfig.defaultSize * 1.5, fontWeight: FontWeight.w600, overflow: TextOverflow.ellipsis),),
+                            const Text(" "),
                             if (team.isCertifiedTeam)
                               Image.asset("assets/images/check.png", width: SizeConfig.defaultSize * 1.3),
                           ],
                         ),
-                        Container(
+                          SizedBox(height: SizeConfig.defaultSize * 0.3,),
+                        SizedBox(
                           width: SizeConfig.defaultSize * 24,
                           child: Text(team.teamUsers.map((user) => user.getDepartment()).toSet().fold('', (previousValue, element) => previousValue.isEmpty ? element : '$previousValue & $element'),
-                            style: TextStyle(fontSize: SizeConfig.defaultSize * 1.3, overflow: TextOverflow.ellipsis, color: Color(0xffFE6059), fontWeight: FontWeight.w600),),
+                            style: TextStyle(fontSize: SizeConfig.defaultSize * 1.3, overflow: TextOverflow.ellipsis, color: const Color(0xffFE6059), fontWeight: FontWeight.w600),),
                         )
                       ],
                     ),

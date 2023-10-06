@@ -3,6 +3,8 @@ import 'package:dart_flutter/src/common/util/analytics_util.dart';
 import 'package:dart_flutter/src/common/util/toast_util.dart';
 import 'package:dart_flutter/src/presentation/chat/chat_pages.dart';
 import 'package:dart_flutter/src/presentation/chat/viewmodel/chat_cubit.dart';
+import 'package:dart_flutter/src/presentation/meet/meet_intro_pages.dart';
+import 'package:dart_flutter/src/presentation/meet/meet_pages.dart';
 import 'package:dart_flutter/src/presentation/meet/view/meet_board.dart';
 import 'package:dart_flutter/src/presentation/meet/view/meet_intro.dart';
 import 'package:dart_flutter/src/presentation/meet/viewmodel/meet_cubit.dart';
@@ -75,11 +77,12 @@ class _DartPageViewState extends State<DartPageView> {
     // ),
     BlocProvider<MeetCubit>(
       create: (context) => MeetCubit()..initMeetIntro(),
-      child: const MeetIntro(),
+      // child: const MeetIntro(),
+      child: const MeetIntroPages(),
     ),
     BlocProvider<MeetCubit>(
       create: (context) => MeetCubit()..initMeet(),
-      child: const MeetBoard(),
+      child: const MeetPages(),
     ),
     BlocProvider<ChatCubit>(
         create: (context) => ChatCubit(),
@@ -119,7 +122,7 @@ class _DartPageViewState extends State<DartPageView> {
         type: BottomNavigationBarType.fixed,
         backgroundColor: Colors.white,
         selectedFontSize: SizeConfig.defaultSize * 1.15,
-        selectedItemColor: const Color(0xffFE6059),
+        selectedItemColor: Color(0xffFE6059).withOpacity(0.8),
         // selectedItemColor: _page == 3 ? Color(0xff7C83FD) : Color(0xffFE6059),
         unselectedFontSize: SizeConfig.defaultSize * 1.1,
         unselectedItemColor: Colors.grey.shade400,

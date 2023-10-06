@@ -111,4 +111,10 @@ class BlindDateUserDetail implements Student {
   int getUniversityId() {
     return 0;
   }
+
+  @override
+  bool canCreateTeam() {
+    // TODO: implement canCreateTeam
+    throw UnimplementedError();
+  }
 }
