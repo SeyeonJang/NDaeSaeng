@@ -52,32 +52,34 @@ class _MyPagesState extends State<MyPages> with AutomaticKeepAliveClientMixin {
           ),
         ),
 
-        Stack(
-        children: [
-          BlocBuilder<MyPagesCubit, MyPagesState>(
-              builder: (context, state) {
-                if (state.isMyLandPage) {
-                  return const MyPageLanding();
+        Expanded(
+          child: Stack(
+          children: [
+            BlocBuilder<MyPagesCubit, MyPagesState>(
+                builder: (context, state) {
+                  if (state.isMyLandPage) {
+                    return const MyPageLanding();
+                  }
+                  return SafeArea(child: Center(child: Text(state.toString())));
                 }
-                return SafeArea(child: Center(child: Text(state.toString())));
-              }
-          ),
-          BlocBuilder<MyPagesCubit, MyPagesState>(
-            builder: (context, state) {
-              if (state.isLoading) {
-                return const Center(child: CircularProgressIndicator());
-              }
-              return const SizedBox();
-            },
-          ),
+            ),
+            BlocBuilder<MyPagesCubit, MyPagesState>(
+              builder: (context, state) {
+                if (state.isLoading) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+                return const SizedBox();
+              },
+            ),
 
-          // BlocBuilder<MyPagesCubit, MyPagesState>(
-          //   builder: (context, state) {
-          //       return SafeArea(child: Text(state.toString()));
-          //   },
-          // ),
-        ]
+            // BlocBuilder<MyPagesCubit, MyPagesState>(
+            //   builder: (context, state) {
+            //       return SafeArea(child: Text(state.toString()));
+            //   },
+            // ),
+          ]
       ),
+        ),
       ],
     );
   }
