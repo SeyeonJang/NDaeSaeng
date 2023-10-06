@@ -113,4 +113,10 @@ class User implements Student {
   int getUniversityId() {
     return university?.id ?? 0;
   }
+
+  @override
+  bool canCreateTeam() {
+    // TODO: implement canCreateTeam
+    throw UnimplementedError();
+  }
 }
