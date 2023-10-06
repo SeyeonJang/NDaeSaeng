@@ -4,6 +4,8 @@ import 'package:dart_flutter/src/presentation/mypage/viewmodel/state/mypages_sta
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../res/config/size_config.dart';
+
 class MyPages extends StatefulWidget {
   const MyPages({Key? key}) : super(key: key);
 
@@ -25,7 +27,32 @@ class _MyPagesState extends State<MyPages> with AutomaticKeepAliveClientMixin {
   Widget build(BuildContext context) {
     super.build(context);
 
-    return Stack(
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: EdgeInsets.only(
+              left: SizeConfig.defaultSize * 1, right: SizeConfig.defaultSize * 1, top: SizeConfig.defaultSize),
+          child: Container(
+            width: SizeConfig.screenWidth * 0.7,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  child: Row(
+                    children: [
+                      SizedBox(width: SizeConfig.defaultSize,),
+                      Text("내정보", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.8, fontWeight: FontWeight.w600),),
+                    ],
+                  ),
+                ),
+                SizedBox(height: SizeConfig.defaultSize * 1,),
+              ],
+            ),
+          ),
+        ),
+
+        Stack(
         children: [
           BlocBuilder<MyPagesCubit, MyPagesState>(
               builder: (context, state) {
@@ -50,6 +77,8 @@ class _MyPagesState extends State<MyPages> with AutomaticKeepAliveClientMixin {
           //   },
           // ),
         ]
+      ),
+      ],
     );
   }
 }

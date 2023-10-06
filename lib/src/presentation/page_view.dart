@@ -3,6 +3,8 @@ import 'package:dart_flutter/src/common/util/analytics_util.dart';
 import 'package:dart_flutter/src/common/util/toast_util.dart';
 import 'package:dart_flutter/src/presentation/chat/chat_pages.dart';
 import 'package:dart_flutter/src/presentation/chat/viewmodel/chat_cubit.dart';
+import 'package:dart_flutter/src/presentation/meet/meet_intro_pages.dart';
+import 'package:dart_flutter/src/presentation/meet/meet_pages.dart';
 import 'package:dart_flutter/src/presentation/meet/view/meet_board.dart';
 import 'package:dart_flutter/src/presentation/meet/view/meet_intro.dart';
 import 'package:dart_flutter/src/presentation/meet/viewmodel/meet_cubit.dart';
@@ -75,11 +77,12 @@ class _DartPageViewState extends State<DartPageView> {
     // ),
     BlocProvider<MeetCubit>(
       create: (context) => MeetCubit()..initMeetIntro(),
-      child: const MeetIntro(),
+      // child: const MeetIntro(),
+      child: const MeetIntroPages(),
     ),
     BlocProvider<MeetCubit>(
       create: (context) => MeetCubit()..initMeet(),
-      child: const MeetBoard(),
+      child: const MeetPages(),
     ),
     BlocProvider<ChatCubit>(
         create: (context) => ChatCubit(),

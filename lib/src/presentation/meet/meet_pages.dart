@@ -1,44 +1,41 @@
-import 'package:dart_flutter/src/common/util/analytics_util.dart';
-import 'package:dart_flutter/src/presentation/meet/deprecated/meet_standby.dart';
-import 'package:dart_flutter/src/presentation/meet/viewmodel/meet_cubit.dart';
-import 'package:dart_flutter/src/presentation/meet/viewmodel/state/meet_state.dart';
+import 'package:dart_flutter/res/config/size_config.dart';
+import 'package:dart_flutter/src/presentation/meet/view/meet_board.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
-class MeetPage2 extends StatefulWidget {
-  const MeetPage2({Key? key}) : super(key: key);
-
-  @override
-  State<MeetPage2> createState() => _MeetPage2State();
-}
-
-class _MeetPage2State extends State<MeetPage2> with AutomaticKeepAliveClientMixin {
-  @override
-  bool get wantKeepAlive {
-    return true;
-  }
+class MeetPages extends StatelessWidget {
+  const MeetPages({super.key});
 
   @override
   Widget build(BuildContext context) {
-    super.build(context);
+    return SafeArea(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: EdgeInsets.only(left: SizeConfig.defaultSize * 1, right: SizeConfig.defaultSize * 1, top: SizeConfig.defaultSize),
+            child: Container(
+              width: SizeConfig.screenWidth * 0.7,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    child: Row(
+                      children: [
+                        SizedBox(width: SizeConfig.defaultSize,),
+                        Text("과팅", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.8, fontWeight: FontWeight.w600),),
+                        SizedBox(height: SizeConfig.defaultSize * 3.5,),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
 
-    return Stack(
-      children: [
-        BlocBuilder<MeetCubit, MeetState>(
-          builder: (context, state) {
-            AnalyticsUtil.logEvent('과팅_대기_접속');
-            return const MeetStandby();
-          }
-        ),
-        BlocBuilder<MeetCubit, MeetState>(
-            builder: (context, state) {
-              if (state.isLoading) {
-                return const Center(child: CircularProgressIndicator());
-              }
-              return const SizedBox.shrink();
-            }
-        ),
-      ],
+          const Expanded(child: MeetBoard()),
+          
+        ],
+      ),
     );
   }
 }
