@@ -3,6 +3,7 @@ import 'package:dart_flutter/src/common/util/analytics_util.dart';
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
+@Deprecated("tutorial_slide2로 대체됨")
 class TutorialSlide extends StatefulWidget {
   final VoidCallback onTutorialFinished;
 

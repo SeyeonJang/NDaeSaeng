@@ -142,6 +142,7 @@ class _MyPageLandingViewState extends State<MyPageLandingView> {
                                         String name = state.userResponse.personalInfo?.name ?? "###";
                                         String admissionNumber = "${state.userResponse.personalInfo?.admissionYear.toString().substring(2,4)??"##"}학번";
                                         return Row(
+                                          crossAxisAlignment: CrossAxisAlignment.center,
                                           children: [
                                             SizedBox(width: SizeConfig.defaultSize * 0.5,),
                                             Text(name,
@@ -160,8 +161,8 @@ class _MyPageLandingViewState extends State<MyPageLandingView> {
                                             if (widget.userResponse.personalInfo?.verification.isVerificationSuccess ?? false)
                                               Row(
                                                 children: [
-                                                  SizedBox(width: SizeConfig.defaultSize * 0.6),
-                                                  Image.asset("assets/images/check_me.png", width: SizeConfig.defaultSize * 1.2),
+                                                  SizedBox(width: SizeConfig.defaultSize * 0.5),
+                                                  Image.asset("assets/images/check.png", width: SizeConfig.defaultSize * 1.4),
                                                 ],
                                               )
                                           ]
@@ -932,7 +933,8 @@ class _openAddFriendsState extends State<openAddFriends> {
   }
 
   void shareContent(BuildContext context, String myCode) {
-    Share.share('[엔대생] 엔대생에서 내가 널 칭찬 대상으로 투표하고 싶어! 앱에 들어와줘!\n내 코드는 $myCode 야. 나를 친구 추가하고 같이하자!\nhttps://dart.page.link/TG78\n\n내 코드 : $myCode');
+    // Share.share('[엔대생] 엔대생에서 내가 널 칭찬 대상으로 투표하고 싶어! 앱에 들어와줘!\n내 코드는 $myCode 야. 나를 친구 추가하고 같이하자!\nhttps://dart.page.link/TG78\n\n내 코드 : $myCode');
+    Share.share('[엔대생] 대학생을 위한 네트워킹 플랫폼 엔대생! 앱에 들어와서 우리같이 과팅하자!\n https://dart.page.link/TG78\n\n내 코드 : $myCode');
   }
 
   @override

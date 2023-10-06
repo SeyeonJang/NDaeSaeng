@@ -3,6 +3,9 @@ import 'package:dart_flutter/src/common/util/analytics_util.dart';
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
+import '../static/visited_tutorial_slide.dart';
+
+@Deprecated("tutorial_slide3로 대체됨")
 class TutorialSlide2 extends StatefulWidget {
   final VoidCallback onTutorialFinished;
 
@@ -47,6 +50,9 @@ class _TutorialSlideState extends State<TutorialSlide2> with TickerProviderState
 
     _pageController.addListener(() {
       int currentPage = _pageController.page!.round();
+      if (VisitedTutorialSlide.isNowIndex(currentPage)) return;  // 임시조치. 엠플리튜드 중복 로깅 발생에 대한 임시조치
+      VisitedTutorialSlide.visit(currentPage);
+
       if (currentPage == 0) {
         AnalyticsUtil.logEvent("온보딩_첫번째_접속");
       } else if (currentPage == 1) {

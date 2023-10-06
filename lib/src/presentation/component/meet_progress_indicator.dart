@@ -17,9 +17,11 @@ class MeetProgressIndicatorWithMessage extends StatelessWidget {
   const MeetProgressIndicatorWithMessage({
     super.key,
     required this.text,
+    this.color = Colors.black
   });
 
   final String text;
+  final Color color;
 
   @override
   Widget build(BuildContext context) {
@@ -33,12 +35,30 @@ class MeetProgressIndicatorWithMessage extends StatelessWidget {
           ),
           const MeetProgressIndicator(),
           SizedBox(height: SizeConfig.defaultSize * 4),
-          Text(text, style: TextStyle(fontSize: SizeConfig.defaultSize * 1.8)),
+          Text(text, style: TextStyle(fontSize: SizeConfig.defaultSize * 1.8, color: color)),
           SizedBox(
             height: SizeConfig.defaultSize,
           ),
         ],
       ),
+    );
+  }
+}
+
+class MeetProgressIndicatorFullScreen extends StatelessWidget {
+  const MeetProgressIndicatorFullScreen({super.key, this.text = "", this.color = Colors.black, this.opacity = 0.5});
+
+  final String text;
+  final Color color;
+  final double opacity;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: SizeConfig.screenWidth,
+      height: SizeConfig.screenHeight,
+      decoration: BoxDecoration(color: Color.fromRGBO(0, 0, 0, opacity)),
+      child: Center(child: MeetProgressIndicatorWithMessage(text: text, color: color,)),
     );
   }
 }

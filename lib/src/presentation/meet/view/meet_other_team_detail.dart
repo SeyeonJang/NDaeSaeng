@@ -1,3 +1,4 @@
+import 'package:dart_flutter/src/common/util/analytics_util.dart';
 import 'package:dart_flutter/src/domain/entity/blind_date_team_detail.dart';
 import 'package:dart_flutter/src/presentation/component/meet_one_member_cardview_novote.dart';
 import 'package:flutter/material.dart';
@@ -108,41 +109,47 @@ class MeetOtherTeamDetail extends StatelessWidget {
                         SizedBox(height: SizeConfig.defaultSize,),
 
                         state.proposalStatus == false || blindDateTeamDetail.proposalStatus == true
-                          ? Container(
-                            width: SizeConfig.screenWidth,
-                            height: SizeConfig.defaultSize * 5.5,
-                            decoration: BoxDecoration(
-                              color: Colors.grey.shade300,
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: Center(
-                                child: Text("이미 채팅 요청을 보냈어요!", style: TextStyle(
-                                    fontSize: SizeConfig.defaultSize * 2,
-                                    fontWeight: FontWeight.w600,
-                                    color: Colors.white
-                                ),)
+                          ? GestureDetector(
+                          onTap: () {
+                            AnalyticsUtil.logEvent('과팅_목록_이성팀상세보기_호감보내기버튼_터치(이미 보낸팀)');
+                          },
+                            child: Container(
+                              width: SizeConfig.screenWidth,
+                              height: SizeConfig.defaultSize * 5.5,
+                              decoration: BoxDecoration(
+                                color: Colors.grey.shade300,
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: Center(
+                                  child: Text("이미 채팅 요청을 보냈어요!", style: TextStyle(
+                                      fontSize: SizeConfig.defaultSize * 2,
+                                      fontWeight: FontWeight.w600,
+                                      color: Colors.white
+                                  ),)
 
-                              // TODO : 포인트 제도 생겼을 때 위 Text 지우고 아래 복구
-                              // child: Row(
-                              //   mainAxisAlignment: MainAxisAlignment.center,
-                              //   children: [
-                              //     Text("2000", style: TextStyle(
-                              //         decoration: TextDecoration.lineThrough,
-                              //         fontSize: SizeConfig.defaultSize * 1.5,
-                              //         fontWeight: FontWeight.w400,
-                              //         color: Colors.white
-                              //     ),),
-                              //     Text(" 500 포인트로 대화 시작하기", style: TextStyle(
-                              //         fontSize: SizeConfig.defaultSize * 2,
-                              //         fontWeight: FontWeight.w600,
-                              //         color: Colors.white
-                              //     ),),
-                              //   ],
-                              // ),
+                                // TODO : 포인트 제도 생겼을 때 위 Text 지우고 아래 복구
+                                // child: Row(
+                                //   mainAxisAlignment: MainAxisAlignment.center,
+                                //   children: [
+                                //     Text("2000", style: TextStyle(
+                                //         decoration: TextDecoration.lineThrough,
+                                //         fontSize: SizeConfig.defaultSize * 1.5,
+                                //         fontWeight: FontWeight.w400,
+                                //         color: Colors.white
+                                //     ),),
+                                //     Text(" 500 포인트로 대화 시작하기", style: TextStyle(
+                                //         fontSize: SizeConfig.defaultSize * 2,
+                                //         fontWeight: FontWeight.w600,
+                                //         color: Colors.white
+                                //     ),),
+                                //   ],
+                                // ),
+                              ),
                             ),
                           )
                           : GestureDetector(
                           onTap: () {
+                            AnalyticsUtil.logEvent('과팅_목록_이성팀상세보기_호감보내기버튼_터치');
                             showDialog(
                               context: context,
                               builder: (BuildContext modalContext) {
@@ -231,6 +238,7 @@ class MeetOtherTeamDetail extends StatelessWidget {
                                         Expanded(
                                           child: GestureDetector(
                                             onTap: () {
+                                              AnalyticsUtil.logEvent('과팅_목록_이성팀상세보기_호감보내기_취소');
                                               Navigator.pop(modalContext, false);
                                             },
                                             child: Container(
@@ -246,6 +254,7 @@ class MeetOtherTeamDetail extends StatelessWidget {
                                           SizedBox(width: SizeConfig.defaultSize,),
                                         GestureDetector(
                                           onTap: () {
+                                            AnalyticsUtil.logEvent('과팅_목록_이성팀상세보기_호감보내기_보내기');
                                             Navigator.pop(modalContext, true);
                                             context.read<MeetCubit>().postProposal(myTeamId, blindDateTeamDetail.id);
                                             showDialog<String>(
@@ -255,8 +264,8 @@ class MeetOtherTeamDetail extends StatelessWidget {
                                                     Navigator.pop(dialogContext);
                                                   });
                                                   return AlertDialog(
-                                                    surfaceTintColor: Colors.white,
-                                                    title: Container(alignment: Alignment.center, child: Text('내 호감이 성공적으로 전달됐어요!', style: TextStyle(fontSize: SizeConfig.defaultSize * 1.5, fontWeight: FontWeight.w600, color: const Color(0xffFF5C58)),)),
+                                                      surfaceTintColor: Colors.white,
+                                                      title: Container(alignment: Alignment.center, child: Text('내 호감이 성공적으로 전달됐어요!', style: TextStyle(fontSize: SizeConfig.defaultSize * 1.5, fontWeight: FontWeight.w600, color: const Color(0xffFF5C58)),)),
                                                     content: Container(alignment: Alignment.center, height: SizeConfig.defaultSize * 4, child: const Text('곧 상대의 채팅 수락 결과를 알려드릴게요!',)),
                                                   );
                                                 }
@@ -372,7 +381,7 @@ class _TopBarSection extends StatelessWidget {
                     surfaceTintColor: Colors.white,
                     onSelected: (value) {
                       if (value == 'report') {
-                        // AnalyticsUtil.logEvent("내정보_마이_내친구더보기_신고");
+                        AnalyticsUtil.logEvent('과팅_목록_이성팀상세보기_더보기_신고하기_버튼터치');
                         showDialog<String>(
                           context: context,
                           builder: (BuildContext context) => AlertDialog(
@@ -384,13 +393,15 @@ class _TopBarSection extends StatelessWidget {
                               TextButton(
                                 onPressed: () {
                                   Navigator.pop(context, '취소');
-                                  // AnalyticsUtil.logEvent("내정보_마이_내친구신고_취소");
+                                  AnalyticsUtil.logEvent('과팅_목록_이성팀상세보기_더보기_신고하기_취소');
                                 },
                                 child: const Text('취소', style: TextStyle(color: Color(0xffFE6059)),),
                               ),
                               TextButton(
                                 onPressed: () => {
-                                  // AnalyticsUtil.logEvent("내정보_마이_내친구신고_신고확정"), // TODO : properties로 신고한 팀 넘기기
+                                  AnalyticsUtil.logEvent('과팅_목록_이성팀상세보기_더보기_신고하기_신고확정', properties: {
+                                    '신고한 팀 ID' : team.id
+                                  }),
                                   Navigator.pop(context, '신고'),
                                   ToastUtil.showMeetToast("사용자가 신고되었어요!", 1),
                                   // TODO : 신고 기능 (서버 연결)

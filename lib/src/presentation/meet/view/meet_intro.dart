@@ -350,7 +350,7 @@ class BodySection extends StatelessWidget {
             ),
           ),
             SizedBox(height: SizeConfig.defaultSize * 5),
-          SizedBox(width: SizeConfig.screenWidth, child: const Text("추가 Tip 1.\n내정보 탭에서 학생증 인증을 하면 팀애 인증 배지가 붙어요!", style: TextStyle(color: Colors.grey), textAlign: TextAlign.left,)),
+          SizedBox(width: SizeConfig.screenWidth, child: const Text("추가 Tip 1.\n내정보 탭에서 학생증 인증을 하면 팀에 인증 배지가 붙어요!", style: TextStyle(color: Colors.grey), textAlign: TextAlign.left,)),
             SizedBox(height: SizeConfig.defaultSize,),
           const Text("추가 Tip 2.\n상대에게 보이는 내 사진과 닉네임을 내정보 탭 - 설정에서 바꿀 수 있어요!", style: TextStyle(color: Colors.grey),),
             SizedBox(height: SizeConfig.defaultSize * 3,),
