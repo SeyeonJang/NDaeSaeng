@@ -697,7 +697,7 @@ class _BodySectionState extends State<_BodySection> {
                           widget.context.read<MeetCubit>().initPageKeyList();
                         },
                         child: SizedBox(
-                          height: SizeConfig.screenHeight * 0.9,
+                          height: SizeConfig.screenHeight * 0.81,
                           child: PagedListView<int, BlindDateTeam>(
                             pagingController: widget.pagingController,
                             builderDelegate: PagedChildBuilderDelegate<BlindDateTeam>(
