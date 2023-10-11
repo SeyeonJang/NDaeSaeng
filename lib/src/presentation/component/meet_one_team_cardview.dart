@@ -71,29 +71,28 @@ class MeetOneTeamCardview extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              Row( // 위층
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Row(
-                    children: [
-                      Text(team.name, style: TextStyle(fontSize: SizeConfig.defaultSize * 1.7, fontWeight: FontWeight.w600),),
-                      Text("  ${(team.averageBirthYear > 1000 ? 2023-team.averageBirthYear+1 : team.averageBirthYear).toStringAsFixed(1)}세", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.5),)
-                    ],
-                  ),
-                  Expanded(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
+              SizedBox(
+                width: SizeConfig.screenWidth,
+                child: Row( // 위층
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Row(
                       children: [
-                        Text(team.regions.map((location) => location.name).join(' '),
-                          style: TextStyle(fontSize: SizeConfig.defaultSize * 1.5, overflow: TextOverflow.ellipsis, color: Colors.grey),
-                          maxLines: 1,),
-                          SizedBox(width: SizeConfig.defaultSize * 0.2,),
-                        Icon(Icons.arrow_forward_ios_rounded, color: Colors.grey, size: SizeConfig.defaultSize * 1.5,),
+                        Text(team.name, style: TextStyle(fontSize: SizeConfig.defaultSize * 1.7, fontWeight: FontWeight.w600),),
+                        Text("  ${(team.averageBirthYear > 1000 ? 2023-team.averageBirthYear+1 : team.averageBirthYear).toStringAsFixed(1)}세", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.4),)
                       ],
-                    )
-                  ),
-                ],
+                    ),
+                    SizedBox(width: SizeConfig.defaultSize * 2.4,),
+                    Expanded(
+                      child: Text(team.regions.map((location) => location.name).join(' '),
+                      style: TextStyle(fontSize: SizeConfig.defaultSize * 1.5, overflow: TextOverflow.ellipsis, color: Colors.grey),
+                      maxLines: 1,
+                      textAlign: TextAlign.end,),),
+                    SizedBox(width: SizeConfig.defaultSize * 0.2,),
+                    Icon(Icons.arrow_forward_ios_rounded, color: Colors.grey, size: SizeConfig.defaultSize * 1.4,),
+                  ],
+                ),
               ),
               SizedBox(height: SizeConfig.defaultSize * 1,),
 
