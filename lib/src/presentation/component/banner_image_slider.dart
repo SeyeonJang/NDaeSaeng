@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 
 class BannerImageSlider extends StatefulWidget {
-  final dynamic bannerList; // List<BannerImage> 또는 Future<List<BannerImage>>를 전달할 수 있도록 dynamic으로 변경
+  final dynamic bannerList; // List<BannerImage> 또는 Future<List<BannerImage>>를 전달할 수 있도록 dynamic으로 변경거
 
   const BannerImageSlider({Key? key, required this.bannerList}) : super(key: key);
 

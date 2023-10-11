@@ -36,3 +36,4 @@ class _WebViewFullScreenState extends State<WebViewFullScreen> {
       ),
     );
   }
+}
