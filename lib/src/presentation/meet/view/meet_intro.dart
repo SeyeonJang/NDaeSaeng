@@ -1,10 +1,13 @@
 import 'package:dart_flutter/res/config/size_config.dart';
 import 'package:dart_flutter/src/common/util/analytics_util.dart';
+import 'package:dart_flutter/src/common/util/push_notification_util.dart';
+import 'package:dart_flutter/src/common/util/toast_util.dart';
 import 'package:dart_flutter/src/presentation/meet/view/meet_create_team_input.dart';
 import 'package:dart_flutter/src/presentation/meet/view/meet_my_team_detail.dart';
 import 'package:dart_flutter/src/presentation/meet/viewmodel/meet_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:permission_handler/permission_handler.dart';
 import '../viewmodel/state/meet_state.dart';
 
 class MeetIntro extends StatelessWidget {
@@ -180,7 +183,7 @@ class BodySection extends StatelessWidget {
         ),
           // SizedBox(height: SizeConfig.defaultSize * 5,),
 
-        Container(
+        SizedBox(
           height: SizeConfig.defaultSize * 30,
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: SizeConfig.defaultSize * 2.5, vertical: SizeConfig.defaultSize * 2.5),
@@ -384,6 +387,25 @@ class MakeTeamButton extends StatelessWidget {
     required this.ancestorContext
   });
 
+  Future<void> checkNotificationPermission() async {
+    var status = await Permission.notification.status;
+    if (status.isDenied || status.isLimited) {
+      var result = await Permission.notification.request(); // 권한이 아직 설정되지 않은 경우 권한 요청 다이얼로그를 표시
+      AnalyticsUtil.logEvent('푸시알림_접속');
+      if (result.isGranted) {
+        ToastUtil.showMeetToast('이성이 호감을 보내면 알려드릴게요!', 1);
+      } else {
+        ToastUtil.showMeetToast('기기 설정에서도 알림을 동의할 수 있어요!', 1);
+      }
+    }
+    else if (status.isPermanentlyDenied || status.isRestricted) {
+      ToastUtil.showMeetToast('알림 동의를 해야 받은 호감, 채팅 알림이 와요!\n설정으로 이동할게요!', 1);
+      await Future.delayed(const Duration(milliseconds: 2100));
+      AnalyticsUtil.logEvent('푸시알림미동의_기기설정_접속');
+      openAppSettings();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -393,6 +415,7 @@ class MakeTeamButton extends StatelessWidget {
         padding: EdgeInsets.symmetric(horizontal: SizeConfig.defaultSize * 2, vertical: SizeConfig.defaultSize),
         child: GestureDetector(
           onTap: () async {
+            await checkNotificationPermission();
             AnalyticsUtil.logEvent('홈_팀만들기버튼_터치');
 
             await Navigator.push(ancestorContext,
@@ -459,6 +482,26 @@ class SeeMyTeamButton extends StatelessWidget {
     required this.teamId
   });
 
+  Future<void> checkNotificationPermission() async {
+    var status = await Permission.notification.status;
+    if (status.isDenied || status.isLimited) {
+      var result = await Permission.notification.request(); // 권한이 아직 설정되지 않은 경우 권한 요청 다이얼로그를 표시
+      AnalyticsUtil.logEvent('푸시알림_접속');
+      if (result.isGranted) {
+        ToastUtil.showMeetToast('이성이 호감을 보내면 알려드릴게요!', 1);
+      } else {
+        ToastUtil.showMeetToast('기기 설정에서도 알림을 동의할 수 있어요!', 1);
+      }
+      ToastUtil.showMeetToast('$status $result', 1);
+    }
+    if (status.isPermanentlyDenied || status.isRestricted) {
+      ToastUtil.showMeetToast('알림 동의를 해야 받은 호감, 채팅 알림이 와요!\n설정으로 이동할게요!', 1);
+      await Future.delayed(const Duration(milliseconds: 2100));
+      AnalyticsUtil.logEvent('푸시알림미동의_기기설정_접속');
+      openAppSettings();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
 
@@ -469,7 +512,8 @@ class SeeMyTeamButton extends StatelessWidget {
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: SizeConfig.defaultSize * 2, vertical: SizeConfig.defaultSize),
         child: GestureDetector( // 내 팀 보기 버튼 *******
-          onTap: () {
+          onTap: () async {
+            await checkNotificationPermission();
             AnalyticsUtil.logEvent('홈_내팀보기버튼_터치');
 
             Navigator.push(
