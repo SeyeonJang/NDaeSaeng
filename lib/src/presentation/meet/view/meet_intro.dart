@@ -492,7 +492,6 @@ class SeeMyTeamButton extends StatelessWidget {
       } else {
         ToastUtil.showMeetToast('기기 설정에서도 알림을 동의할 수 있어요!', 1);
       }
-      ToastUtil.showMeetToast('$status $result', 1);
     }
     if (status.isPermanentlyDenied || status.isRestricted) {
       ToastUtil.showMeetToast('알림 동의를 해야 받은 호감, 채팅 알림이 와요!\n설정으로 이동할게요!', 1);
