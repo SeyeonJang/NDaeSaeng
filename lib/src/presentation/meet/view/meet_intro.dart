@@ -1,5 +1,6 @@
 import 'package:dart_flutter/res/config/size_config.dart';
 import 'package:dart_flutter/src/common/util/analytics_util.dart';
+import 'package:dart_flutter/src/presentation/component/banner_image_slider.dart';
 import 'package:dart_flutter/src/presentation/meet/view/meet_create_team_input.dart';
 import 'package:dart_flutter/src/presentation/meet/view/meet_my_team_detail.dart';
 import 'package:dart_flutter/src/presentation/meet/viewmodel/meet_cubit.dart';
@@ -122,23 +123,25 @@ class BodySection extends StatelessWidget {
             ],
           ),
         ),
-          SizedBox(height: SizeConfig.defaultSize * 5,),
-        SizedBox(
-          height: SizeConfig.defaultSize * 4,
-          child: const Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Text("only   ", style: TextStyle(color: Colors.grey),),
-              VerticalDivider(
-                thickness: 1,
-                color: Colors.grey,
-              ),
-              Text("   3단계", style: TextStyle(color: Colors.grey))
-            ],
+          SizedBox(height: SizeConfig.defaultSize * 2,),
+        Container(
+          width: SizeConfig.screenWidth * 0.95,
+          height: SizeConfig.defaultSize * 12,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(13),
+          ),
+          child: BlocBuilder<MeetCubit, MeetState>(
+            builder: (context, state) {
+              final bannerList = BlocProvider.of<MeetCubit>(context).getBannerList();
+              return BannerImageSlider(
+                bannerList: bannerList,
+              );
+            },
           ),
         ),
-          SizedBox(height: SizeConfig.defaultSize * 5,),
+        SizedBox(
+          height: SizeConfig.defaultSize * 2,
+        ),
 
         Container(
           color: const Color(0xffFE6059).withOpacity(0.1),
