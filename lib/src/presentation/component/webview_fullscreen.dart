@@ -1,5 +1,3 @@
-import 'package:dart_flutter/res/config/size_config.dart';
-import 'package:dart_flutter/src/common/util/analytics_util.dart';
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
@@ -34,11 +32,7 @@ class _WebViewFullScreenState extends State<WebViewFullScreen> {
         ),
       ),
       body: SafeArea(
-        child: Padding(
-          padding: EdgeInsets.all(SizeConfig.defaultSize * 2),
-          child: WebViewWidget(controller: _webViewController),
-        ),
+        child: WebViewWidget(controller: _webViewController),
       ),
     );
   }
-}
