@@ -3,6 +3,7 @@ import 'package:dart_flutter/src/common/util/analytics_util.dart';
 import 'package:dart_flutter/src/presentation/meet/view/meet_create_team_input.dart';
 import 'package:dart_flutter/src/presentation/meet/view/meet_my_team_detail.dart';
 import 'package:dart_flutter/src/presentation/meet/viewmodel/meet_cubit.dart';
+import 'package:dart_flutter/src/presentation/mypage/view/student_vertification.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../viewmodel/state/meet_state.dart';
@@ -15,8 +16,12 @@ class MeetIntro extends StatelessWidget {
     AnalyticsUtil.logEvent('홈_접속');
     return Scaffold(
       backgroundColor: Colors.white,
-      body: const SingleChildScrollView(
-        child: BodySection(),
+      body: SingleChildScrollView(
+        child: BlocBuilder<MeetCubit, MeetState>(
+          builder: (context, state) {
+            return BodySection(state: state,);
+          }
+        ),
       ),
 
       bottomNavigationBar:
@@ -44,8 +49,11 @@ class MeetIntro extends StatelessWidget {
 }
 
 class BodySection extends StatelessWidget {
-  const BodySection({
+  MeetState state;
+
+  BodySection({
     super.key,
+    required this.state
   });
 
   @override
@@ -180,7 +188,7 @@ class BodySection extends StatelessWidget {
         ),
           // SizedBox(height: SizeConfig.defaultSize * 5,),
 
-        Container(
+        SizedBox(
           height: SizeConfig.defaultSize * 30,
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: SizeConfig.defaultSize * 2.5, vertical: SizeConfig.defaultSize * 2.5),
@@ -304,10 +312,11 @@ class BodySection extends StatelessWidget {
         ),
 
           SizedBox(height: SizeConfig.defaultSize * 4),
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: SizeConfig.defaultSize * 2.5),
-          child: Container(
-            alignment: Alignment.centerLeft,
+        Container(
+          width: SizeConfig.screenWidth,
+          alignment: Alignment.centerLeft,
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: SizeConfig.defaultSize * 2.5),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -318,18 +327,55 @@ class BodySection extends StatelessWidget {
 
                 Text("Tip 1.", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.6, color: Colors.grey),),
                   SizedBox(height: SizeConfig.defaultSize,),
-                RichText(
-                    textAlign: TextAlign.left,
-                    text: const TextSpan(
-                        style: TextStyle(color: Colors.grey),
-                        children: <TextSpan>[
-                          TextSpan(text: "내정보 탭에서 "),
-                          TextSpan(text: "학생증 인증", style: TextStyle(color: Colors.black)),
-                          TextSpan(text: "을 하면 팀에 인증 배지가 붙어요!",),
-                        ]
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Column(
+                      children: [
+                          SizedBox(height: SizeConfig.defaultSize * 0.5,),
+                        RichText(
+                            overflow: TextOverflow.ellipsis,
+                            textAlign: TextAlign.left,
+                            text: const TextSpan(
+                                style: TextStyle(color: Colors.grey),
+                                children: <TextSpan>[
+                                  TextSpan(text: "내정보 탭에서 "),
+                                  TextSpan(text: "학생증 인증", style: TextStyle(color: Colors.black)),
+                                  TextSpan(text: "을 하면",),
+                                  TextSpan(text: "\n내 팀에 인증 배지가 붙어요!",),
+                                ]
+                            )
+                        ),
+                      ],
+                    ),
+                    Material(
+                      color: Colors.transparent,
+                      child: InkWell(
+                        onTap: () async {
+                          AnalyticsUtil.logEvent("홈_학생증인증버튼_터치", properties: {
+                            '인증 상태' : state.userResponse.personalInfo?.verification
+                          });
+                          if (!(state.userResponse.personalInfo?.verification.isVerificationSuccess ?? true)) {
+                            await Navigator.push(context, MaterialPageRoute(builder: (_) => StudentVertification(
+                              userResponse: state.userResponse,
+                            )));
+                          }
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: Colors.grey.shade100,
+                          ),
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(horizontal: SizeConfig.defaultSize * 1.5, vertical: SizeConfig.defaultSize),
+                            child: Text((state.userResponse.personalInfo?.verification.isVerificationSuccess ?? false) ? "인증 완료!" : "학생증 인증", style: const TextStyle(color: Colors.black),),
+                          ),
+                        ),
+                      ),
                     )
+                  ],
                 ),
-                // const Text("내정보 탭에서 학생증 인증을 하면 팀에 인증 배지가 붙어요!", style: TextStyle(color: Colors.grey), textAlign: TextAlign.left,),
                   SizedBox(height: SizeConfig.defaultSize * 1.5,),
 
                 Text("Tip 2.", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.6, color: Colors.grey),),
