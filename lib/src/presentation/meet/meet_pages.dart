@@ -21,7 +21,7 @@ class MeetPages extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
-              padding: EdgeInsets.only(left: SizeConfig.defaultSize * 1, right: SizeConfig.defaultSize * 1, top: SizeConfig.defaultSize),
+              padding: EdgeInsets.only(left: SizeConfig.defaultSize * 1, right: SizeConfig.defaultSize * 1, top: SizeConfig.defaultSize * 1.2),
               child: Container(
                 width: SizeConfig.screenWidth * 0.7,
                 child: Column(
@@ -32,10 +32,11 @@ class MeetPages extends StatelessWidget {
                         children: [
                           SizedBox(width: SizeConfig.defaultSize,),
                           Text("과팅", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.8, fontWeight: FontWeight.w600),),
-                          SizedBox(height: SizeConfig.defaultSize * 3.5,),
+                          // SizedBox(height: SizeConfig.defaultSize * 3.5,),
                         ],
                       ),
                     ),
+                    SizedBox(height: SizeConfig.defaultSize * 1,),
                   ],
                 ),
               ),
