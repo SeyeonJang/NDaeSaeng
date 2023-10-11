@@ -6,6 +6,7 @@ import 'package:dart_flutter/src/presentation/meet/view/meet_my_team_detail.dart
 import 'package:dart_flutter/src/presentation/meet/viewmodel/meet_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shimmer/shimmer.dart';
 import '../viewmodel/state/meet_state.dart';
 
 class MeetIntro extends StatelessWidget {
@@ -24,19 +25,25 @@ class MeetIntro extends StatelessWidget {
         BlocBuilder<MeetCubit, MeetState>(
           builder: (context,state) {
             return state.isLoading
-                ? Container(
+                ? Padding(
+                  padding:
+                      EdgeInsets.symmetric(horizontal: SizeConfig.defaultSize * 2, vertical: SizeConfig.defaultSize),
+                  child: Container(
                     width: SizeConfig.screenWidth,
-                    height: SizeConfig.defaultSize * 12,
+                    height: SizeConfig.defaultSize * 6,
                     alignment: Alignment.center,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const CircularProgressIndicator(color: Colors.grey, ),
-                          SizedBox(width: SizeConfig.defaultSize * 2),
-                        Text("내 정보를 불러오고 있어요!", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.7),),
-                      ],
+                    decoration: BoxDecoration(
+                      color: Colors.grey.shade400,
+                      borderRadius: BorderRadius.circular(13),
                     ),
-                  )
+                    child: Shimmer.fromColors(
+                      baseColor: Colors.white,
+                      highlightColor: Colors.grey.shade400,
+                      child: Text("내 정보를 불러오고 있어요!",
+                          style: TextStyle(color: Colors.white, fontSize: SizeConfig.defaultSize * 2, fontWeight: FontWeight.w600)),
+                    ),
+                  ),
+                )
                 : state.myTeams.isEmpty ? MakeTeamButton(ancestorContext: context) : SeeMyTeamButton(ancestorContext: context, teamId: state.myTeams[0].id,);
           }
         )
@@ -465,42 +472,37 @@ class SeeMyTeamButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    return Container(
-      width: SizeConfig.screenWidth,
-      height: SizeConfig.defaultSize * 7.8,
-      color: Colors.grey.shade50,
-      child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: SizeConfig.defaultSize * 2, vertical: SizeConfig.defaultSize),
-        child: GestureDetector( // 내 팀 보기 버튼 *******
-          onTap: () {
-            AnalyticsUtil.logEvent('홈_내팀보기버튼_터치');
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: SizeConfig.defaultSize * 2, vertical: SizeConfig.defaultSize),
+      child: GestureDetector( // 내 팀 보기 버튼 *******
+        onTap: () {
+          AnalyticsUtil.logEvent('홈_내팀보기버튼_터치');
 
-            Navigator.push(
-              ancestorContext,
-              MaterialPageRoute(
-                builder: (context) => BlocProvider<MeetCubit>(
-                  create: (_) => MeetCubit(), // Replace with your MeetCubit instantiation.
-                  child: MeetMyTeamDetail(teamId: teamId,),
-                ),
+          Navigator.push(
+            ancestorContext,
+            MaterialPageRoute(
+              builder: (context) => BlocProvider<MeetCubit>(
+                create: (_) => MeetCubit(), // Replace with your MeetCubit instantiation.
+                child: MeetMyTeamDetail(teamId: teamId,),
               ),
-            ).then((value) async {
-              if (value == null) return;
-              ancestorContext.read<MeetCubit>().initMeetIntro();
-            });
-          },
-          child: Container(
-            width: SizeConfig.screenWidth,
-            height: SizeConfig.defaultSize * 6,
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-              border: Border.all(
-                color: Colors.white,
-              ),
-              color: const Color(0xffFE6059),
-              borderRadius: BorderRadius.circular(13),
             ),
-            child: Text("내 팀 보기", style: TextStyle(color: Colors.white, fontSize: SizeConfig.defaultSize * 2, fontWeight: FontWeight.w600)),
+          ).then((value) async {
+            if (value == null) return;
+            ancestorContext.read<MeetCubit>().initMeetIntro();
+          });
+        },
+        child: Container(
+          width: SizeConfig.screenWidth,
+          height: SizeConfig.defaultSize * 6,
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            border: Border.all(
+              color: Colors.white,
+            ),
+            color: const Color(0xffFE6059),
+            borderRadius: BorderRadius.circular(13),
           ),
+          child: Text("내 팀 보기", style: TextStyle(color: Colors.white, fontSize: SizeConfig.defaultSize * 2, fontWeight: FontWeight.w600)),
         ),
       ),
     );

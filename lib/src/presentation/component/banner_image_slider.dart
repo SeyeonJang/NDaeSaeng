@@ -163,9 +163,9 @@ class _BannerImageSliderState extends State<BannerImageSlider> {
         width: SizeConfig.screenWidth * 0.95,
         height: SizeConfig.defaultSize * 12,
         child: Shimmer.fromColors(
-          baseColor: Colors.grey,
+          baseColor: Colors.grey.shade400,
           highlightColor: Colors.white,
-          child: Expanded(child: Container(color: Colors. grey)),
+          child: Expanded(child: Container(color: Colors. grey.shade400)),
         ),
       );
     }
