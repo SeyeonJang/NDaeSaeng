@@ -1,5 +1,6 @@
 import 'package:dart_flutter/res/config/size_config.dart';
 import 'package:dart_flutter/src/common/util/analytics_util.dart';
+import 'package:dart_flutter/src/domain/entity/user.dart';
 import 'package:dart_flutter/src/presentation/meet/view/meet_create_team_input.dart';
 import 'package:dart_flutter/src/presentation/meet/view/meet_my_team_detail.dart';
 import 'package:dart_flutter/src/presentation/meet/viewmodel/meet_cubit.dart';
@@ -41,7 +42,7 @@ class MeetIntro extends StatelessWidget {
                       ],
                     ),
                   )
-                : state.myTeams.isEmpty ? MakeTeamButton(ancestorContext: context) : SeeMyTeamButton(ancestorContext: context, teamId: state.myTeams[0].id,);
+                : state.myTeams.isEmpty ? MakeTeamButton(ancestorContext: context) : SeeMyTeamButton(ancestorContext: context, teamId: state.myTeams[0].id, userResponse: state.userResponse);
           }
         )
     );
@@ -498,11 +499,13 @@ class MakeTeamButton extends StatelessWidget {
 class SeeMyTeamButton extends StatelessWidget {
   final BuildContext ancestorContext;
   final int teamId;
+  final User userResponse;
 
   const SeeMyTeamButton({
     super.key,
     required this.ancestorContext,
-    required this.teamId
+    required this.teamId,
+    required this.userResponse
   });
 
   @override
@@ -523,7 +526,7 @@ class SeeMyTeamButton extends StatelessWidget {
               MaterialPageRoute(
                 builder: (context) => BlocProvider<MeetCubit>(
                   create: (_) => MeetCubit(), // Replace with your MeetCubit instantiation.
-                  child: MeetMyTeamDetail(teamId: teamId,),
+                  child: MeetMyTeamDetail(teamId: teamId, userResponse: userResponse,),
                 ),
               ),
             ).then((value) async {
