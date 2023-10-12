@@ -463,8 +463,59 @@ class MakeTeamButton extends StatelessWidget {
   //   }
   // }
 
+  bool get isiOS => foundation.defaultTargetPlatform == foundation.TargetPlatform.iOS;
+
   @override
   Widget build(BuildContext context) {
+    Future<void> checkNotificationPermission(BuildContext ancestorContext) async {
+      var status = await Permission.notification.status;
+      if (!status.isGranted) {
+        AnalyticsUtil.logEvent('홈_팀만들기완료_푸시알림미동의_다이얼로그_접속');
+        showDialog(
+            barrierDismissible: true,
+            context: ancestorContext,
+            builder: (BuildContext dialogContext) => AlertDialog(
+              surfaceTintColor: Colors.white,
+              title: Center(
+                  child: Text(
+                    '알림 동의를 해야 받은 호감, 채팅 알림이 와요!',
+                    style: TextStyle(
+                        fontSize: SizeConfig.defaultSize * 1.5,
+                        fontWeight: FontWeight.w500),
+                    textAlign: TextAlign.center,
+                  )
+              ),
+              content: Container(
+                width: SizeConfig.screenWidth * 0.8,
+                height: isiOS ? SizeConfig.screenHeight * 0.4 : SizeConfig.screenHeight * 0.45,
+                child: SingleChildScrollView(
+                  child: ListBody(
+                    children: <Widget>[
+                      Image.asset(isiOS ? 'assets/images/iOS_push_1.png' :'assets/images/AOS_push_1.jpeg'),
+                      SizedBox(height: SizeConfig.defaultSize * 2,),
+                      Image.asset(isiOS ? 'assets/images/iOS_push_2.png' :'assets/images/AOS_push_2.jpeg'),
+                    ],
+                  ),
+                ),
+              ),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () {
+                    AnalyticsUtil.logEvent("홈_팀만들기완료_푸시알림미동의_다이얼로그_기기설정_접속");
+                    openAppSettings();
+                    Navigator.of(ancestorContext).pop();
+                  },
+                  child: Text('설정가기', style: TextStyle(
+                    fontSize: SizeConfig.defaultSize * 1.7,
+                    fontWeight: FontWeight.w600,
+                    color: Color(0xffFE6059)),),
+                ),
+              ],
+            )
+        );
+      }
+    }
+
     return SizedBox(
       width: SizeConfig.screenWidth,
       height: SizeConfig.defaultSize * 12,
@@ -490,6 +541,7 @@ class MakeTeamButton extends StatelessWidget {
               if (value == null) return;
               ancestorContext.read<MeetCubit>().initMeetIntro();
               await ancestorContext.read<MeetCubit>().createNewTeam(value);
+              await checkNotificationPermission(ancestorContext);
             });
           },
           child: Column(
@@ -558,15 +610,14 @@ class SeeMyTeamButton extends StatelessWidget {
       // }
       // if (status.isPermanentlyDenied || status.isRestricted) {
       if (!status.isGranted) {
-        AnalyticsUtil.logEvent('푸시알림미동의_다이얼로그_접속');
-        showDialog(
-          barrierDismissible: false,
+        AnalyticsUtil.logEvent('홈_내팀보기터치_푸시알림미동의_다이얼로그_접속');
+        await showDialog(
+          barrierDismissible: true,
           context: context,
           builder: (BuildContext dialogContext) => AlertDialog(
             surfaceTintColor: Colors.white,
             title: Center(
-              child: Text(
-                '알림 동의를 해야 받은 호감, 채팅 알림이 와요!\n3초 뒤 설정으로 이동할게요!',
+              child: Text('알림 동의를 해야 받은 호감, 채팅 알림이 와요!',
                 style: TextStyle(
                     fontSize: SizeConfig.defaultSize * 1.5,
                     fontWeight: FontWeight.w500),
@@ -586,13 +637,21 @@ class SeeMyTeamButton extends StatelessWidget {
                 ),
               ),
             ),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  AnalyticsUtil.logEvent("홈_내팀보기터치_푸시알림미동의_다이얼로그_기기설정_접속");
+                  openAppSettings();
+                  Navigator.of(context).pop();
+                },
+                child: Text('설정가기', style: TextStyle(
+                    fontSize: SizeConfig.defaultSize * 1.7,
+                    fontWeight: FontWeight.w600,
+                    color: Color(0xffFE6059)),),
+              ),
+            ],
           )
         );
-        // ToastUtil.showMeetToast('알림 동의를 해야 받은 호감, 채팅 알림이 와요!\n설정으로 이동할게요!', 1);
-        await Future.delayed(const Duration(milliseconds: 3000));
-        AnalyticsUtil.logEvent('푸시알림미동의_기기설정_접속');
-        openAppSettings();
-        Navigator.of(context).pop();
       }
     }
 
@@ -623,28 +682,21 @@ class SeeMyTeamButton extends StatelessWidget {
           child:
           Container(
             width: SizeConfig.screenWidth,
-            height:
-            SizeConfig.defaultSize * 6,
-            alignment:
-            Alignment.center,
-            decoration:
-            BoxDecoration(
-              border:
-              Border.all(color:
-              Colors.white),
-              color:
-              const Color(0xffFE6059),
-              borderRadius:
-              BorderRadius.circular(13),
+            height: SizeConfig.defaultSize * 6,
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: Colors.white
+              ),
+              color: const Color(0xffFE6059),
+              borderRadius: BorderRadius.circular(13),
             ),
             child:
             Text("내 팀 보기",
-                style:
-                TextStyle(color:
-                Colors.white, fontSize :
-                SizeConfig.defaultSize *
-                    2, fontWeight :
-                FontWeight.w600)),
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize : SizeConfig.defaultSize * 2,
+                  fontWeight : FontWeight.w600)),
           ),
         ),
       ),
