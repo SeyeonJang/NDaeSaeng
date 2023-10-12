@@ -26,7 +26,7 @@ class MeetOneTeamCardview extends StatelessWidget {
             MaterialPageRoute(
               builder: (context) => BlocProvider<MeetCubit>(
                 create: (_) => MeetCubit(), // Replace with your MeetCubit instantiation.
-                child: MeetMyTeamDetail(teamId: team.id,),
+                // child: MeetMyTeamDetail(teamId: team.id,), // TODO : 과팅 목록에 넣을 거면 인자로 userResponse 추가해야 함
               ),
             ),
           );
