@@ -14,7 +14,7 @@ class ChattingCubit extends Cubit<ChatState> {
       msg.add(
         Message(
           sendBy: newMessages[i].userId.toString(),
-          createdAt: newMessages[i].sendTime,
+          createdAt: newMessages[i].sendTime.add(const Duration(hours: 9)),
           message: newMessages[i].message
         )
       );
