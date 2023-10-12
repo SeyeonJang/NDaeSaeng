@@ -28,8 +28,9 @@ void main() async {
   // 초기화 순서에 유의할 것
   const BUILD_TYPE = String.fromEnvironment('BUILD_TYPE', defaultValue: 'DEFAULT');
   AppEnvironment.setupEnv(BuildType.from(BUILD_TYPE));
-  if (AppEnvironment.buildType == BuildType.dev) ToastUtil.showToast("실행환경: Develop");
-  if (AppEnvironment.buildType == BuildType.stage) ToastUtil.showToast("실행환경: Staging");
+  if (AppEnvironment.buildType.isLocal) ToastUtil.showToast("실행환경: Local");
+  if (AppEnvironment.buildType.isDev) ToastUtil.showToast("실행환경: Develop");
+  if (AppEnvironment.buildType.isStage) ToastUtil.showToast("실행환경: Staging");
   print("실행환경: ${AppEnvironment.getEnv.toString()}");
 
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
@@ -39,7 +40,8 @@ void main() async {
   await Supabase.initialize(url: AppEnvironment.getEnv.getSupabaseUrl(), anonKey: AppEnvironment.getEnv.getSupabaseApiKey());
   HydratedBloc.storage = await HydratedStorage.build(storageDirectory: await getTemporaryDirectory());
   AppsflyerUtil.init();
-  await CrashlyticsUtil.init();
+  if (AppEnvironment.buildType.isProd) { await CrashlyticsUtil.init(enabled: true);}
+  else {await CrashlyticsUtil.init();}
 
   runApp(BlocProvider(
       create: (BuildContext context) => DartAuthCubit()..appVersionCheck()..setLandPage(),
