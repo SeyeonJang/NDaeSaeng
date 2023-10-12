@@ -12,7 +12,7 @@ class MeetIntroPages extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: EdgeInsets.only(left: SizeConfig.defaultSize * 1, right: SizeConfig.defaultSize * 1, top: SizeConfig.defaultSize),
+          padding: EdgeInsets.only(left: SizeConfig.defaultSize, right: SizeConfig.defaultSize),
           child: Container(
             width: SizeConfig.screenWidth * 0.7,
             child: Column(

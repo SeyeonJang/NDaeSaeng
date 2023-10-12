@@ -32,7 +32,7 @@ class _MyPagesState extends State<MyPages> with AutomaticKeepAliveClientMixin {
       children: [
         Padding(
           padding: EdgeInsets.only(
-              left: SizeConfig.defaultSize * 1, right: SizeConfig.defaultSize * 1, top: SizeConfig.defaultSize),
+              left: SizeConfig.defaultSize, right: SizeConfig.defaultSize),
           child: Container(
             width: SizeConfig.screenWidth * 0.7,
             child: Column(
