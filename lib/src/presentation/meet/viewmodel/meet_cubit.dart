@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:dart_flutter/src/common/util/toast_util.dart';
+import 'package:dart_flutter/src/domain/use_case/banner_use_case.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import '../../../common/util/analytics_util.dart';
@@ -26,6 +27,7 @@ class MeetCubit extends Cubit<MeetState> {
   static final MeetUseCase _meetUseCase = MeetUseCase();
   static final UniversityUseCase _universityUseCase = UniversityUseCase();
   static final GhostUseCase _ghostUseCase = GhostUseCase();
+  static final BannerUseCase _bannerUseCase = BannerUseCase();
   bool _initialized = false;
 
   // pagination
@@ -352,5 +354,9 @@ class MeetCubit extends Cubit<MeetState> {
   void setProfileImage(File file) {
     state.profileImageFile = file;
     emit(state.copy());
+  }
+
+  Future<List> getBannerList() async {
+    return _bannerUseCase.getBanners(); // 배너
   }
 }
