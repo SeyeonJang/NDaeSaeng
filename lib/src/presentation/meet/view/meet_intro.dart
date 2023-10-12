@@ -140,8 +140,11 @@ class BodySection extends StatelessWidget {
           child: BlocBuilder<MeetCubit, MeetState>(
             builder: (context, state) {
               final bannerList = BlocProvider.of<MeetCubit>(context).getBannerList();
-              return BannerImageSlider(
-                bannerList: bannerList,
+              return ClipRRect(
+                borderRadius: BorderRadius.circular(15.0),
+                child: BannerImageSlider(
+                  bannerList: bannerList,
+                ),
               );
             },
           ),
