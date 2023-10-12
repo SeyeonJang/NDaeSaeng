@@ -1,4 +1,3 @@
-import 'package:appsflyer_sdk/appsflyer_sdk.dart';
 import 'package:dart_flutter/res/environment/app_environment.dart';
 import 'package:dart_flutter/res/theme/app_theme.dart';
 import 'package:dart_flutter/res/config/size_config.dart';
@@ -6,11 +5,13 @@ import 'package:dart_flutter/src/common/auth/dart_auth_cubit.dart';
 import 'package:dart_flutter/src/common/auth/state/dart_auth_state.dart';
 import 'package:dart_flutter/src/common/util/analytics_util.dart';
 import 'package:dart_flutter/src/common/util/appsflyer_util.dart';
+import 'package:dart_flutter/src/common/util/crashlytics_util.dart';
 import 'package:dart_flutter/src/common/util/push_notification_util.dart';
 import 'package:dart_flutter/src/common/util/timeago_util.dart';
 import 'package:dart_flutter/src/common/util/toast_util.dart';
 import 'package:dart_flutter/src/presentation/landing/land_pages.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
@@ -27,8 +28,9 @@ void main() async {
   // 초기화 순서에 유의할 것
   const BUILD_TYPE = String.fromEnvironment('BUILD_TYPE', defaultValue: 'DEFAULT');
   AppEnvironment.setupEnv(BuildType.from(BUILD_TYPE));
-  if (AppEnvironment.buildType == BuildType.dev) ToastUtil.showToast("실행환경: Develop");
-  if (AppEnvironment.buildType == BuildType.stage) ToastUtil.showToast("실행환경: Staging");
+  if (AppEnvironment.buildType.isLocal) ToastUtil.showToast("실행환경: Local");
+  if (AppEnvironment.buildType.isDev) ToastUtil.showToast("실행환경: Develop");
+  if (AppEnvironment.buildType.isStage) ToastUtil.showToast("실행환경: Staging");
   print("실행환경: ${AppEnvironment.getEnv.toString()}");
 
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
@@ -38,6 +40,8 @@ void main() async {
   await Supabase.initialize(url: AppEnvironment.getEnv.getSupabaseUrl(), anonKey: AppEnvironment.getEnv.getSupabaseApiKey());
   HydratedBloc.storage = await HydratedStorage.build(storageDirectory: await getTemporaryDirectory());
   AppsflyerUtil.init();
+  if (AppEnvironment.buildType.isProd) { await CrashlyticsUtil.init(enabled: true);}
+  else {await CrashlyticsUtil.init();}
 
   runApp(BlocProvider(
       create: (BuildContext context) => DartAuthCubit()..appVersionCheck()..setLandPage(),
@@ -66,7 +70,6 @@ class MyApp extends StatelessWidget {
             if (state.step == AuthStep.login && state.dartAccessToken.length > 20 && DateTime.now().microsecondsSinceEpoch < state.expiredAt.microsecondsSinceEpoch) {
               print("now accessToken: ${state.dartAccessToken}");
               BlocProvider.of<DartAuthCubit>(context).setAccessToken(state.dartAccessToken);
-              return const LandPages();
             }
             return const LandPages();
           },
