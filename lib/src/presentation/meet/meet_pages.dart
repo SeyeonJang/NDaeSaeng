@@ -21,7 +21,7 @@ class MeetPages extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
-              padding: EdgeInsets.only(left: SizeConfig.defaultSize * 1, right: SizeConfig.defaultSize * 1, top: SizeConfig.defaultSize),
+              padding: EdgeInsets.only(left: SizeConfig.defaultSize * 1, right: SizeConfig.defaultSize * 1, top: SizeConfig.defaultSize * 2.1),
               child: Container(
                 width: SizeConfig.screenWidth * 0.7,
                 child: Column(
@@ -64,31 +64,31 @@ class MeetPages extends StatelessWidget {
           ],
         ),
 
-      // 팀을 만들어야 이성을 볼 수 있어요 문구
-      BlocBuilder<MeetCubit, MeetState>(
-        builder: (context, state) {
-            if (state.isLoading || state.myTeams.isNotEmpty) {
-              return const SizedBox.shrink();
-            }
-            return Center(
-            child: Container(
-              color: Colors.black.withOpacity(0.6),
-              height: SizeConfig.screenHeight,
-              width: SizeConfig.screenWidth,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text("팀을 만들어야 이성을 볼 수 있어요! 👀", style: TextStyle(fontSize: SizeConfig.defaultSize * 2.0, color: Colors.white, fontWeight: FontWeight.w700),),
-                  SizedBox(height: SizeConfig.defaultSize * 1.5,),
-                  Text("왼쪽 홈에서 간단하게 팀을 만들어보아요!", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.5, color: Colors.white),),
-                  SizedBox(height: SizeConfig.defaultSize,),
-                ],
+        // 팀을 만들어야 이성을 볼 수 있어요 문구
+        BlocBuilder<MeetCubit, MeetState>(
+          builder: (context, state) {
+              if (state.isLoading || state.myTeams.isNotEmpty) {
+                return const SizedBox.shrink();
+              }
+              return Center(
+              child: Container(
+                color: Colors.black.withOpacity(0.6),
+                height: SizeConfig.screenHeight,
+                width: SizeConfig.screenWidth,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text("팀을 만들어야 이성을 볼 수 있어요! 👀", style: TextStyle(fontSize: SizeConfig.defaultSize * 2.0, color: Colors.white, fontWeight: FontWeight.w700),),
+                    SizedBox(height: SizeConfig.defaultSize * 1.5,),
+                    Text("왼쪽 홈에서 간단하게 팀을 만들어보아요!", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.5, color: Colors.white),),
+                    SizedBox(height: SizeConfig.defaultSize,),
+                  ],
+                ),
               ),
-            ),
-          );
-        }
-      ),
+            );
+          }
+        ),
       ],
       ),
     );

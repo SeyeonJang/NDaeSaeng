@@ -33,11 +33,13 @@ class MeetCubit extends Cubit<MeetState> {
   // pagination
   static const int NUMBER_OF_POSTS_PER_REQUEST = 10;
   final PagingController<int, BlindDateTeam> pagingController = PagingController(firstPageKey: 0);
+  Set<int> pageKeyList = {};
 
   void initMeet({MeetTeam? initPickedTeam}) async {
     state.setIsLoading(true);
     emit(state.copy());
 
+    pageKeyList = {};
     state.setIsLoading(false);
     emit(state.copy());
     state.setIsLoading(true);
@@ -122,22 +124,31 @@ class MeetCubit extends Cubit<MeetState> {
     print("meet init 끝");
   }
 
+  void initPageKeyList() {
+    pageKeyList = {};
+  }
+
   Future<void> fetchPage(int pageKey) async {
-    try {
-      final newTeams = (await _meetUseCase.getBlindDateTeams(page: pageKey, size: NUMBER_OF_POSTS_PER_REQUEST)).content ?? [];
-      final isLastPage = newTeams.length < NUMBER_OF_POSTS_PER_REQUEST;
-      if (isLastPage) {
-        pagingController.appendLastPage(newTeams);
-      } else {
-        final nextPageKey = pageKey + 1;
-        AnalyticsUtil.logEvent('과팅_목록_이성 팀 불러오기(페이지네이션)', properties: {
-          '새로 불러온 페이지 인덱스': nextPageKey
-        });
-        // await Future.delayed(Duration(seconds: 1));
-        pagingController.appendPage(newTeams, nextPageKey);
+    if (!pageKeyList.contains(pageKey)) {
+      print('지금 page : $pageKey번째, pageKeyList : ${pageKeyList.toString()}, hash: ${pageKeyList.hashCode}');
+      try {
+        pageKeyList.add(pageKey);
+        print("지금 page를 add했어요! ${pageKeyList.toString()}");
+        final newTeams = (await _meetUseCase.getBlindDateTeams(page: pageKey, size: NUMBER_OF_POSTS_PER_REQUEST)).content ?? [];
+        final isLastPage = newTeams.length < NUMBER_OF_POSTS_PER_REQUEST;
+        if (isLastPage) {
+          pagingController.appendLastPage(newTeams);
+        } else {
+          final nextPageKey = pageKey + 1;
+          AnalyticsUtil.logEvent('과팅_목록_이성 팀 불러오기(페이지네이션)', properties: {
+            '새로 불러온 페이지 인덱스': nextPageKey
+          });
+          // await Future.delayed(Duration(seconds: 1));
+          pagingController.appendPage(newTeams, nextPageKey);
+        }
+      } catch (error) {
+        pagingController.error = error;
       }
-    } catch (error) {
-      pagingController.error = error;
     }
   }
 

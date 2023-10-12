@@ -13,6 +13,7 @@ import 'package:dart_flutter/src/presentation/landing/land_pages.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
@@ -42,6 +43,14 @@ void main() async {
   AppsflyerUtil.init();
   if (AppEnvironment.buildType.isProd) { await CrashlyticsUtil.init(enabled: true);}
   else {await CrashlyticsUtil.init();}
+
+  SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+    statusBarColor: Colors.white,
+    statusBarBrightness: Brightness.light,
+    statusBarIconBrightness: Brightness.dark,
+    systemNavigationBarColor: Colors.white,
+    systemNavigationBarIconBrightness: Brightness.dark
+  ));
 
   runApp(BlocProvider(
       create: (BuildContext context) => DartAuthCubit()..appVersionCheck()..setLandPage(),

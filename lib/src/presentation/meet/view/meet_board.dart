@@ -58,109 +58,105 @@ class _MeetBoardState extends State<MeetBoard> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<MeetCubit, MeetState>(
-      builder: (context, state) {
-        List<User> filteredFriends = state.friends.where((friend) =>
-        friend.university?.name == state.userResponse.university?.name &&
-            friend.personalInfo?.gender == state.userResponse.personalInfo?.gender
-        ).toList();
-        print("친구 수 : ${state.friends.length}, 과팅 같이 나갈 수 있는 친구 수 : ${filteredFriends.length}, 팀 개수 : ${state.myTeams.length}");
-        // PagingController<int, BlindDateTeam> pagingController = context.read<MeetCubit>().pagingController;
+    // List<User> filteredFriends = state.friends.where((friend) =>
+    // friend.university?.name == state.userResponse.university?.name &&
+    //     friend.personalInfo?.gender == state.userResponse.personalInfo?.gender
+    // ).toList();
+    // print("친구 수 : ${state.friends.length}, 과팅 같이 나갈 수 있는 친구 수 : ${filteredFriends.length}, 팀 개수 : ${state.myTeams.length}");
+    MeetState state = meetCubit.state;
 
-        return (state.isLoading)
-            ? Scaffold(
-                appBar: AppBar(),
-                body: Container(
-                  width: SizeConfig.screenWidth,
-                  height: SizeConfig.screenHeight,
-                  color: Colors.white,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const CircularProgressIndicator(color: Color(0xffFE6059)),
-                      SizedBox(height: SizeConfig.defaultSize * 5,),
-                      Text("이성 팀을 불러오고 있어요 . . . 🥰", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.8),)
-                    ],
-                  ),
-                ),
-              )
+    return (state.isLoading)
+        ? Scaffold(
+          appBar: AppBar(),
+          body: Container(
+            width: SizeConfig.screenWidth,
+            height: SizeConfig.screenHeight,
+            color: Colors.white,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const CircularProgressIndicator(color: Color(0xffFE6059)),
+                SizedBox(height: SizeConfig.defaultSize * 5,),
+                Text("이성 팀을 불러오고 있어요 . . . 🥰", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.8),)
+              ],
+            ),
+          ),
+        )
 
-          // // 아직 팀을 생성하지 않은 경우에 볼 수 없다는 멘트가 나오던 페이지
-          //   : state.myTeams.isEmpty
-          // ? Scaffold(
-          //     appBar: AppBar(),
-          //     body: GestureDetector(
-          //       onTap: () {
-          //         AnalyticsUtil.logEvent('과팅_목록_팀없을때_화면터치');
-          //       },
-          //       child: Container(
-          //         width: SizeConfig.screenWidth,
-          //         height: SizeConfig.screenHeight,
-          //         color: Colors.white,
-          //         child: Column(
-          //           mainAxisAlignment: MainAxisAlignment.center,
-          //           children: [
-          //             Image.asset('assets/images/heart.png', width: SizeConfig.screenWidth * 0.7,),
-          //             SizedBox(height: SizeConfig.defaultSize * 7,),
-          //             Text("팀을 만들어야 이성을 볼 수 있어요! 👀", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.8),),
-          //             SizedBox(height: SizeConfig.defaultSize * 1.5,),
-          //             Text("왼쪽 홈에서 간단하게 팀을 만들어보아요!", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.5),),
-          //             SizedBox(height: SizeConfig.defaultSize * 10,),
-          //           ],
-          //         ),
-          //       ),
-          //     ),
-          //   )
+        // // 아직 팀을 생성하지 않은 경우에 볼 수 없다는 멘트가 나오던 페이지
+        //   : state.myTeams.isEmpty
+        // ? Scaffold(
+        //     appBar: AppBar(),
+        //     body: GestureDetector(
+        //       onTap: () {
+        //         AnalyticsUtil.logEvent('과팅_목록_팀없을때_화면터치');
+        //       },
+        //       child: Container(
+        //         width: SizeConfig.screenWidth,
+        //         height: SizeConfig.screenHeight,
+        //         color: Colors.white,
+        //         child: Column(
+        //           mainAxisAlignment: MainAxisAlignment.center,
+        //           children: [
+        //             Image.asset('assets/images/heart.png', width: SizeConfig.screenWidth * 0.7,),
+        //             SizedBox(height: SizeConfig.defaultSize * 7,),
+        //             Text("팀을 만들어야 이성을 볼 수 있어요! 👀", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.8),),
+        //             SizedBox(height: SizeConfig.defaultSize * 1.5,),
+        //             Text("왼쪽 홈에서 간단하게 팀을 만들어보아요!", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.5),),
+        //             SizedBox(height: SizeConfig.defaultSize * 10,),
+        //           ],
+        //         ),
+        //       ),
+        //     ),
+        //   )
 
-          : Scaffold(
-              backgroundColor: Colors.grey.shade200.withOpacity(0.7),
+        : Scaffold(
+          backgroundColor: Colors.grey.shade200.withOpacity(0.7),
 
-              // TODO : 팀 바꾸거나 CTA 버튼 필요할 때 복구하기
-              // appBar: AppBar(
-              //   toolbarHeight: SizeConfig.defaultSize * 8.5,
-              //   backgroundColor: Colors.white,
-              //   surfaceTintColor: Colors.white,
-              //   title: state.friends.isEmpty || filteredFriends.isEmpty
-              //     ? _TopSectionInviteFriend(meetState: state,)
-              //     : (state.myTeams.length == 0 ? _TopSectionMakeTeam(meetState: state, ancestorContext: context,) : _TopSection(ancestorState: state, context: context,)),
-              // ),
+          // TODO : 팀 바꾸거나 CTA 버튼 필요할 때 복구하기
+          // appBar: AppBar(
+          //   toolbarHeight: SizeConfig.defaultSize * 8.5,
+          //   backgroundColor: Colors.white,
+          //   surfaceTintColor: Colors.white,
+          //   title: state.friends.isEmpty || filteredFriends.isEmpty
+          //     ? _TopSectionInviteFriend(meetState: state,)
+          //     : (state.myTeams.length == 0 ? _TopSectionMakeTeam(meetState: state, ancestorContext: context,) : _TopSection(ancestorState: state, context: context,)),
+          // ),
 
-              body: _BodySection(meetState: state, context: context, pagingController: pagingController,),
+          body: _BodySection(meetState: state, context: context, pagingController: pagingController,),
 
-              // TODO : FloatingActionButton 팀 생성 재개할 때 복구하기
-              // floatingActionButton: filteredFriends.isNotEmpty
-              //     ? FloatingActionButton(
-              //         onPressed: () async {
-              //           // AnalyticsUtil.logEvent("과팅_목록_팀만들기_플로팅버튼_터치");
-              //           if (state.isLoading) {
-              //             ToastUtil.showMeetToast("다시 터치해주세요!", 2);
-              //             return;
-              //           }
-              //           final meetCubit = context.read<MeetCubit>(); // MeetCubit 인스턴스 가져오기
-              //           await Navigator.push(context,
-              //               MaterialPageRoute(
-              //                 builder: (context) => BlocProvider<MeetCubit>(
-              //                   create: (_) => MeetCubit(),
-              //                   child: MeetCreateTeam(
-              //                     onFinish: () { meetCubit.refreshMeetPage(); },
-              //                     state: meetCubit.state
-              //                   ),
-              //                 ),
-              //               ))
-              //               .then((value) async {
-              //                   if (value == null) return;
-              //                   await meetCubit.createNewTeam(value);
-              //               });
-              //           meetCubit.initMeet();
-              //           Navigator.pop(context);
-              //         },
-              //         shape: CircleBorder(),
-              //         child: Icon(Icons.add_rounded),
-              //         backgroundColor: const Color(0xffFE6059),
-              //       )
-              //       : null,
-          );
-      }
+          // TODO : FloatingActionButton 팀 생성 재개할 때 복구하기
+          // floatingActionButton: filteredFriends.isNotEmpty
+          //     ? FloatingActionButton(
+          //         onPressed: () async {
+          //           // AnalyticsUtil.logEvent("과팅_목록_팀만들기_플로팅버튼_터치");
+          //           if (state.isLoading) {
+          //             ToastUtil.showMeetToast("다시 터치해주세요!", 2);
+          //             return;
+          //           }
+          //           final meetCubit = context.read<MeetCubit>(); // MeetCubit 인스턴스 가져오기
+          //           await Navigator.push(context,
+          //               MaterialPageRoute(
+          //                 builder: (context) => BlocProvider<MeetCubit>(
+          //                   create: (_) => MeetCubit(),
+          //                   child: MeetCreateTeam(
+          //                     onFinish: () { meetCubit.refreshMeetPage(); },
+          //                     state: meetCubit.state
+          //                   ),
+          //                 ),
+          //               ))
+          //               .then((value) async {
+          //                   if (value == null) return;
+          //                   await meetCubit.createNewTeam(value);
+          //               });
+          //           meetCubit.initMeet();
+          //           Navigator.pop(context);
+          //         },
+          //         shape: CircleBorder(),
+          //         child: Icon(Icons.add_rounded),
+          //         backgroundColor: const Color(0xffFE6059),
+          //       )
+          //       : null,
     );
   }
 }
@@ -642,7 +638,6 @@ class _BodySection extends StatefulWidget {
 }
 
 class _BodySectionState extends State<_BodySection> {
-  late MeetCubit meetCubit;
   final ScrollController _scrollController = ScrollController();
   late MeetTeam nowTeam = widget.meetState.myTeam ?? (widget.meetState.myTeams.firstOrNull ?? MeetTeam(id: 0, name: '', university: null, locations: [], canMatchWithSameUniversity: true, members: []));
 
@@ -697,14 +692,17 @@ class _BodySectionState extends State<_BodySection> {
                 child: Column(
                   children: [
                     RefreshIndicator(
-                        onRefresh: () async => widget.pagingController.refresh(),
+                        onRefresh: () async {
+                          widget.pagingController.refresh();
+                          widget.context.read<MeetCubit>().initPageKeyList();
+                        },
                         child: SizedBox(
-                          height: SizeConfig.screenHeight * 0.9,
+                          height: SizeConfig.screenHeight * 0.81,
                           child: PagedListView<int, BlindDateTeam>(
                             pagingController: widget.pagingController,
                             builderDelegate: PagedChildBuilderDelegate<BlindDateTeam>(
-                            itemBuilder: (context, blindDateTeam, index) {
-                            return widget.pagingController.itemList?.length == 0 || widget.pagingController.itemList == null
+                            itemBuilder: (_, blindDateTeam, __) {
+                            return widget.pagingController.itemList!.isEmpty || widget.pagingController.itemList == null
                                 ? Center(
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
