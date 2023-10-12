@@ -12,6 +12,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shimmer/shimmer.dart';
 import '../viewmodel/state/meet_state.dart';
+import 'package:flutter/foundation.dart' as foundation;
 
 class MeetIntro extends StatelessWidget {
   const MeetIntro({super.key});
@@ -142,23 +143,19 @@ class BodySection extends StatelessWidget {
           ),
         ),
           SizedBox(height: SizeConfig.defaultSize * 2,),
-        Container(
-          width: SizeConfig.screenWidth * 0.95,
-          height: SizeConfig.defaultSize * 12,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(13),
-          ),
-          child: BlocBuilder<MeetCubit, MeetState>(
-            builder: (context, state) {
-              final bannerList = BlocProvider.of<MeetCubit>(context).getBannerList();
-              return ClipRRect(
-                borderRadius: BorderRadius.circular(15.0),
+        BlocBuilder<MeetCubit, MeetState>(
+          builder: (context, state) {
+            final bannerList = BlocProvider.of<MeetCubit>(context).getBannerList();
+            return Padding(
+              padding: EdgeInsets.symmetric(horizontal: SizeConfig.defaultSize * 2.5),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(13.0),
                 child: BannerImageSlider(
                   bannerList: bannerList,
                 ),
-              );
-            },
-          ),
+              ),
+            );
+          },
         ),
         SizedBox(
           height: SizeConfig.defaultSize * 2,
@@ -446,24 +443,25 @@ class MakeTeamButton extends StatelessWidget {
     required this.ancestorContext
   });
 
-  Future<void> checkNotificationPermission() async {
-    var status = await Permission.notification.status;
-    if (status.isDenied || status.isLimited) {
-      var result = await Permission.notification.request(); // 권한이 아직 설정되지 않은 경우 권한 요청 다이얼로그를 표시
-      AnalyticsUtil.logEvent('푸시알림_접속');
-      if (result.isGranted) {
-        ToastUtil.showMeetToast('이성이 호감을 보내면 알려드릴게요!', 1);
-      } else {
-        ToastUtil.showMeetToast('기기 설정에서도 알림을 동의할 수 있어요!', 1);
-      }
-    }
-    else if (status.isPermanentlyDenied || status.isRestricted) {
-      ToastUtil.showMeetToast('알림 동의를 해야 받은 호감, 채팅 알림이 와요!\n설정으로 이동할게요!', 1);
-      await Future.delayed(const Duration(milliseconds: 2100));
-      AnalyticsUtil.logEvent('푸시알림미동의_기기설정_접속');
-      openAppSettings();
-    }
-  }
+  // Future<void> checkNotificationPermission() async {
+  //   var status = await Permission.notification.status;
+  //   // if (status.isDenied || status.isLimited) {
+  //   //   var result = await Permission.notification.request(); // 권한이 아직 설정되지 않은 경우 권한 요청 다이얼로그를 표시
+  //   //   AnalyticsUtil.logEvent('푸시알림_접속');
+  //   //   if (result.isGranted) {
+  //   //     ToastUtil.showMeetToast('이성이 호감을 보내면 알려드릴게요!', 1);
+  //   //   } else {
+  //   //     ToastUtil.showMeetToast('기기 설정에서도 알림을 동의할 수 있어요!', 1);
+  //   //   }
+  //   // }
+  //   // else if (status.isPermanentlyDenied || status.isRestricted) {
+  //   if (!status.isGranted) {
+  //     ToastUtil.showMeetToast('알림 동의를 해야 받은 호감, 채팅 알림이 와요!\n설정으로 이동할게요!', 1);
+  //     await Future.delayed(const Duration(milliseconds: 2100));
+  //     AnalyticsUtil.logEvent('푸시알림미동의_기기설정_접속');
+  //     openAppSettings();
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -474,7 +472,7 @@ class MakeTeamButton extends StatelessWidget {
         padding: EdgeInsets.symmetric(horizontal: SizeConfig.defaultSize * 2, vertical: SizeConfig.defaultSize),
         child: GestureDetector(
           onTap: () async {
-            await checkNotificationPermission();
+            // await checkNotificationPermission();
             AnalyticsUtil.logEvent('홈_팀만들기버튼_터치');
 
             await Navigator.push(ancestorContext,
@@ -536,34 +534,68 @@ class SeeMyTeamButton extends StatelessWidget {
   final int teamId;
   final User userResponse;
 
-  SeeMyTeamButton({
+  const SeeMyTeamButton({
     super.key,
     required this.ancestorContext,
     required this.teamId,
     required this.userResponse
   });
 
-  Future<void> checkNotificationPermission() async {
-    var status = await Permission.notification.status;
-    if (status.isDenied || status.isLimited) {
-      var result = await Permission.notification.request(); // 권한이 아직 설정되지 않은 경우 권한 요청 다이얼로그를 표시
-      AnalyticsUtil.logEvent('푸시알림_접속');
-      if (result.isGranted) {
-        ToastUtil.showMeetToast('이성이 호감을 보내면 알려드릴게요!', 1);
-      } else {
-        ToastUtil.showMeetToast('기기 설정에서도 알림을 동의할 수 있어요!', 1);
-      }
-    }
-    if (status.isPermanentlyDenied || status.isRestricted) {
-      ToastUtil.showMeetToast('알림 동의를 해야 받은 호감, 채팅 알림이 와요!\n설정으로 이동할게요!', 1);
-      await Future.delayed(const Duration(milliseconds: 2100));
-      AnalyticsUtil.logEvent('푸시알림미동의_기기설정_접속');
-      openAppSettings();
-    }
-  }
+  bool get isiOS => foundation.defaultTargetPlatform == foundation.TargetPlatform.iOS;
 
   @override
   Widget build(BuildContext context) {
+    Future<void> checkNotificationPermission() async {
+      var status = await Permission.notification.status;
+      // if (status.isDenied || status.isLimited) {
+      //   var result = await Permission.notification.request(); // 권한이 아직 설정되지 않은 경우 권한 요청 다이얼로그를 표시
+      //   AnalyticsUtil.logEvent('푸시알림_접속');
+      //   if (result.isGranted) {
+      //     ToastUtil.showMeetToast('이성이 호감을 보내면 알려드릴게요!', 1);
+      //   } else {
+      //     ToastUtil.showMeetToast('기기 설정에서도 알림을 동의할 수 있어요!', 1);
+      //   }
+      // }
+      // if (status.isPermanentlyDenied || status.isRestricted) {
+      if (!status.isGranted) {
+        AnalyticsUtil.logEvent('푸시알림미동의_다이얼로그_접속');
+        showDialog(
+          barrierDismissible: false,
+          context: context,
+          builder: (BuildContext dialogContext) => AlertDialog(
+            surfaceTintColor: Colors.white,
+            title: Center(
+              child: Text(
+                '알림 동의를 해야 받은 호감, 채팅 알림이 와요!\n3초 뒤 설정으로 이동할게요!',
+                style: TextStyle(
+                    fontSize: SizeConfig.defaultSize * 1.5,
+                    fontWeight: FontWeight.w500),
+                textAlign: TextAlign.center,
+              )
+            ),
+            content: Container(
+              width: SizeConfig.screenWidth * 0.8,
+              height: isiOS ? SizeConfig.screenHeight * 0.4 : SizeConfig.screenHeight * 0.45,
+              child: SingleChildScrollView(
+                child: ListBody(
+                  children: <Widget>[
+                    Image.asset(isiOS ? 'assets/images/iOS_push_1.png' :'assets/images/AOS_push_1.jpeg'),
+                      SizedBox(height: SizeConfig.defaultSize * 2,),
+                    Image.asset(isiOS ? 'assets/images/iOS_push_2.png' :'assets/images/AOS_push_2.jpeg'),
+                  ],
+                ),
+              ),
+            ),
+          )
+        );
+        // ToastUtil.showMeetToast('알림 동의를 해야 받은 호감, 채팅 알림이 와요!\n설정으로 이동할게요!', 1);
+        await Future.delayed(const Duration(milliseconds: 3000));
+        AnalyticsUtil.logEvent('푸시알림미동의_기기설정_접속');
+        openAppSettings();
+        Navigator.of(context).pop();
+      }
+    }
+
     return Container(
       width: SizeConfig.screenWidth,
       height: SizeConfig.defaultSize * 7.8,
