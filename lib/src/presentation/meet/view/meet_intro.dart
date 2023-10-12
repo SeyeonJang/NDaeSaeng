@@ -2,12 +2,14 @@ import 'package:dart_flutter/res/config/size_config.dart';
 import 'package:dart_flutter/src/common/util/analytics_util.dart';
 import 'package:dart_flutter/src/common/util/push_notification_util.dart';
 import 'package:dart_flutter/src/common/util/toast_util.dart';
+import 'package:dart_flutter/src/presentation/component/banner_image_slider.dart';
 import 'package:dart_flutter/src/presentation/meet/view/meet_create_team_input.dart';
 import 'package:dart_flutter/src/presentation/meet/view/meet_my_team_detail.dart';
 import 'package:dart_flutter/src/presentation/meet/viewmodel/meet_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:shimmer/shimmer.dart';
 import '../viewmodel/state/meet_state.dart';
 
 class MeetIntro extends StatelessWidget {
@@ -26,19 +28,25 @@ class MeetIntro extends StatelessWidget {
         BlocBuilder<MeetCubit, MeetState>(
           builder: (context,state) {
             return state.isLoading
-                ? Container(
+                ? Padding(
+                  padding:
+                      EdgeInsets.symmetric(horizontal: SizeConfig.defaultSize * 2, vertical: SizeConfig.defaultSize),
+                  child: Container(
                     width: SizeConfig.screenWidth,
-                    height: SizeConfig.defaultSize * 12,
+                    height: SizeConfig.defaultSize * 6,
                     alignment: Alignment.center,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const CircularProgressIndicator(color: Colors.grey, ),
-                          SizedBox(width: SizeConfig.defaultSize * 2),
-                        Text("내 정보를 불러오고 있어요!", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.7),),
-                      ],
+                    decoration: BoxDecoration(
+                      color: Colors.grey.shade400,
+                      borderRadius: BorderRadius.circular(13),
                     ),
-                  )
+                    child: Shimmer.fromColors(
+                      baseColor: Colors.white,
+                      highlightColor: Colors.grey.shade400,
+                      child: Text("내 정보를 불러오고 있어요!",
+                          style: TextStyle(color: Colors.white, fontSize: SizeConfig.defaultSize * 2, fontWeight: FontWeight.w600)),
+                    ),
+                  ),
+                )
                 : state.myTeams.isEmpty ? MakeTeamButton(ancestorContext: context) : SeeMyTeamButton(ancestorContext: context, teamId: state.myTeams[0].id,);
           }
         )
@@ -125,23 +133,28 @@ class BodySection extends StatelessWidget {
             ],
           ),
         ),
-          SizedBox(height: SizeConfig.defaultSize * 5,),
-        SizedBox(
-          height: SizeConfig.defaultSize * 4,
-          child: const Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Text("only   ", style: TextStyle(color: Colors.grey),),
-              VerticalDivider(
-                thickness: 1,
-                color: Colors.grey,
-              ),
-              Text("   3단계", style: TextStyle(color: Colors.grey))
-            ],
+          SizedBox(height: SizeConfig.defaultSize * 2,),
+        Container(
+          width: SizeConfig.screenWidth * 0.95,
+          height: SizeConfig.defaultSize * 12,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(13),
+          ),
+          child: BlocBuilder<MeetCubit, MeetState>(
+            builder: (context, state) {
+              final bannerList = BlocProvider.of<MeetCubit>(context).getBannerList();
+              return ClipRRect(
+                borderRadius: BorderRadius.circular(15.0),
+                child: BannerImageSlider(
+                  bannerList: bannerList,
+                ),
+              );
+            },
           ),
         ),
-          SizedBox(height: SizeConfig.defaultSize * 5,),
+        SizedBox(
+          height: SizeConfig.defaultSize * 2,
+        ),
 
         Container(
           color: const Color(0xffFE6059).withOpacity(0.1),
@@ -515,32 +528,31 @@ class SeeMyTeamButton extends StatelessWidget {
             await checkNotificationPermission();
             AnalyticsUtil.logEvent('홈_내팀보기버튼_터치');
 
-            Navigator.push(
-              ancestorContext,
-              MaterialPageRoute(
-                builder: (context) => BlocProvider<MeetCubit>(
-                  create: (_) => MeetCubit(), // Replace with your MeetCubit instantiation.
-                  child: MeetMyTeamDetail(teamId: teamId,),
-                ),
+          Navigator.push(
+            ancestorContext,
+            MaterialPageRoute(
+              builder: (context) => BlocProvider<MeetCubit>(
+                create: (_) => MeetCubit(), // Replace with your MeetCubit instantiation.
+                child: MeetMyTeamDetail(teamId: teamId,),
               ),
-            ).then((value) async {
-              if (value == null) return;
-              ancestorContext.read<MeetCubit>().initMeetIntro();
-            });
-          },
-          child: Container(
-            width: SizeConfig.screenWidth,
-            height: SizeConfig.defaultSize * 6,
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-              border: Border.all(
-                color: Colors.white,
-              ),
-              color: const Color(0xffFE6059),
-              borderRadius: BorderRadius.circular(13),
             ),
-            child: Text("내 팀 보기", style: TextStyle(color: Colors.white, fontSize: SizeConfig.defaultSize * 2, fontWeight: FontWeight.w600)),
+          ).then((value) async {
+            if (value == null) return;
+            ancestorContext.read<MeetCubit>().initMeetIntro();
+          });
+        },
+        child: Container(
+          width: SizeConfig.screenWidth,
+          height: SizeConfig.defaultSize * 6,
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            border: Border.all(
+              color: Colors.white,
+            ),
+            color: const Color(0xffFE6059),
+            borderRadius: BorderRadius.circular(13),
           ),
+          child: Text("내 팀 보기", style: TextStyle(color: Colors.white, fontSize: SizeConfig.defaultSize * 2, fontWeight: FontWeight.w600)),
         ),
       ),
     );

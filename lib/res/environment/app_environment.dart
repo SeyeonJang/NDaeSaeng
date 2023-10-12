@@ -8,6 +8,11 @@ import 'environment_stage.dart';
 enum BuildType {
   local, dev, stage, prod;
 
+  bool get isLocal => this == local;
+  bool get isDev => this == dev;
+  bool get isStage => this == stage;
+  bool get isProd => this == prod;
+
   static BuildType from(String str) {
     switch (str.toLowerCase()) {
       case 'local':
@@ -26,7 +31,7 @@ enum BuildType {
 abstract class AppEnvironment {
   static late BuildType _buildType;
   static late Environment _environment;
-  static Enum get buildType => _buildType;
+  static BuildType get buildType => _buildType;
 
   static setupEnv(BuildType bt) {
     _buildType = bt;
