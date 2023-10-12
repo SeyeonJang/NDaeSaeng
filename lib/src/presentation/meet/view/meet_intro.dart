@@ -1,7 +1,6 @@
 import 'package:dart_flutter/res/config/size_config.dart';
 import 'package:dart_flutter/src/common/util/analytics_util.dart';
 import 'package:dart_flutter/src/domain/entity/user.dart';
-import 'package:dart_flutter/src/common/util/push_notification_util.dart';
 import 'package:dart_flutter/src/common/util/toast_util.dart';
 import 'package:dart_flutter/src/presentation/component/banner_image_slider.dart';
 import 'package:dart_flutter/src/presentation/meet/view/meet_create_team_input.dart';
@@ -53,7 +52,7 @@ class MeetIntro extends StatelessWidget {
                     ),
                   ),
                 )
-                : state.myTeams.isEmpty ? MakeTeamButton(ancestorContext: context) : SeeMyTeamButton(ancestorContext: context, teamId: state.myTeams[0].id,);
+                : state.myTeams.isEmpty ? MakeTeamButton(ancestorContext: context) : SeeMyTeamButton(ancestorContext: context, teamId: state.myTeams[0].id, userResponse: state.userResponse,);
           }
         )
     );
@@ -537,7 +536,7 @@ class SeeMyTeamButton extends StatelessWidget {
   final int teamId;
   final User userResponse;
 
-  const SeeMyTeamButton({
+  SeeMyTeamButton({
     super.key,
     required this.ancestorContext,
     required this.teamId,
@@ -565,7 +564,6 @@ class SeeMyTeamButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return Container(
       width: SizeConfig.screenWidth,
       height: SizeConfig.defaultSize * 7.8,
@@ -585,24 +583,37 @@ class SeeMyTeamButton extends StatelessWidget {
                   child: MeetMyTeamDetail(teamId: teamId, userResponse: userResponse,),
                 ),
               ),
+            ).then((value) async {
+              if (value == null) return;
+              ancestorContext.read<MeetCubit>().initMeetIntro();
+            });
+          },
+          child:
+          Container(
+            width: SizeConfig.screenWidth,
+            height:
+            SizeConfig.defaultSize * 6,
+            alignment:
+            Alignment.center,
+            decoration:
+            BoxDecoration(
+              border:
+              Border.all(color:
+              Colors.white),
+              color:
+              const Color(0xffFE6059),
+              borderRadius:
+              BorderRadius.circular(13),
             ),
-          ).then((value) async {
-            if (value == null) return;
-            ancestorContext.read<MeetCubit>().initMeetIntro();
-          });
-        },
-        child: Container(
-          width: SizeConfig.screenWidth,
-          height: SizeConfig.defaultSize * 6,
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
-            border: Border.all(
-              color: Colors.white,
-            ),
-            color: const Color(0xffFE6059),
-            borderRadius: BorderRadius.circular(13),
+            child:
+            Text("내 팀 보기",
+                style:
+                TextStyle(color:
+                Colors.white, fontSize :
+                SizeConfig.defaultSize *
+                    2, fontWeight :
+                FontWeight.w600)),
           ),
-          child: Text("내 팀 보기", style: TextStyle(color: Colors.white, fontSize: SizeConfig.defaultSize * 2, fontWeight: FontWeight.w600)),
         ),
       ),
     );
