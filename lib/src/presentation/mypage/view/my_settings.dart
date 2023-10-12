@@ -4,6 +4,7 @@ import 'package:dart_flutter/src/common/util/analytics_util.dart';
 import 'package:dart_flutter/src/common/util/toast_util.dart';
 import 'package:dart_flutter/src/domain/entity/personal_info.dart';
 import 'package:dart_flutter/src/domain/entity/user.dart';
+import 'package:dart_flutter/src/presentation/component/webview_fullscreen.dart';
 import 'package:dart_flutter/src/presentation/mypage/view/my_ask.dart';
 import 'package:dart_flutter/src/presentation/mypage/view/my_opinion.dart';
 import 'package:dart_flutter/src/presentation/mypage/view/my_tos1.dart';
@@ -817,16 +818,7 @@ class _MyPageViewState extends State<MyPageView> {
               TextButton(
                 onPressed: () {
                   AnalyticsUtil.logEvent("내정보_설정_건의하기");
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => const MyOpinion()));
-                  // launchUrl(
-                  //   Uri(
-                  //     scheme: 'https',
-                  //     host: 'tally.so',
-                  //     path:
-                  //     'r/mYR270',
-                  //   ),
-                  //   mode: LaunchMode.inAppWebView,
-                  // );
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => const WebViewFullScreen(url: 'https://tally.so/r/mYR270', title: '건의하기')));
                 },
                 child: Text("건의하기",
                     style: TextStyle(fontSize: SizeConfig.defaultSize * 1.4, color: const Color(0xffFE6059))),
@@ -834,16 +826,7 @@ class _MyPageViewState extends State<MyPageView> {
               TextButton(
                 onPressed: () {
                   AnalyticsUtil.logEvent("내정보_설정_1대1");
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => const MyAsk()));
-                //   launchUrl(
-                //     Uri(
-                //       scheme: 'https',
-                //       host: 'tally.so',
-                //       path:
-                //       'r/wzNV5E',
-                //     ),
-                //     mode: LaunchMode.inAppWebView,
-                //   );
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => const WebViewFullScreen(url: 'https://tally.so/r/wzNV5E', title: '1대1 문의')));
                 },
                 child: Text("1:1 문의",
                     style: TextStyle(fontSize: SizeConfig.defaultSize * 1.4, color: const Color(0xffFE6059))),

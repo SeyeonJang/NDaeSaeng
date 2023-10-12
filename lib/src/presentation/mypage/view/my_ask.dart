@@ -2,6 +2,7 @@ import 'package:dart_flutter/res/config/size_config.dart';
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
+@Deprecated("WebViewFullScreen Widget으로 대체")
 class MyAsk extends StatefulWidget {
   const MyAsk({super.key});
 
