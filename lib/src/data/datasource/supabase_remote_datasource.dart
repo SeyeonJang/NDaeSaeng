@@ -21,4 +21,6 @@ class SupabaseRemoteDatasource {
      }
      return ssadf;
   }
+
+  static get supabase => _supabase;
 }

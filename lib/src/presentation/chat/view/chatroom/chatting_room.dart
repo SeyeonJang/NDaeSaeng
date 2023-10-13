@@ -48,8 +48,8 @@ class _ChattingRoomState extends State<ChattingRoom> {
       chatController.addMessage(
         Message(
           message: msg.content,
-          createdAt: msg.createdTime,
-          // createdAt: msg.createdTime.add(Duration(hours: 9)),
+          // createdAt: msg.createdTime,
+          createdAt: msg.createdTime.add(const Duration(hours: 9)),
           sendBy: msg.senderId.toString(),
         ),
       );

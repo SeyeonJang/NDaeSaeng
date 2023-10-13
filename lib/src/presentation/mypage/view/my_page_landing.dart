@@ -73,7 +73,8 @@ class _MyPageLandingViewState extends State<MyPageLandingView> {
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(13),
-              border: Border.all(width: 1.3, color: const Color(0xffFE6059))
+              border: Border.all(width: 1.3, color: const Color(0xff2F4858))
+    // border: Border.all(width: 1.3, color: const Color(0xffFE6059))
               // boxShadow: [ // Boxshadow 필요하면 쓰기
               //   BoxShadow(
               //     color: Colors.grey.withOpacity(0.2),
@@ -142,6 +143,7 @@ class _MyPageLandingViewState extends State<MyPageLandingView> {
                                         String name = state.userResponse.personalInfo?.name ?? "###";
                                         String admissionNumber = "${state.userResponse.personalInfo?.admissionYear.toString().substring(2,4)??"##"}학번";
                                         return Row(
+                                          crossAxisAlignment: CrossAxisAlignment.center,
                                           children: [
                                             SizedBox(width: SizeConfig.defaultSize * 0.5,),
                                             Text(name,
@@ -160,8 +162,8 @@ class _MyPageLandingViewState extends State<MyPageLandingView> {
                                             if (widget.userResponse.personalInfo?.verification.isVerificationSuccess ?? false)
                                               Row(
                                                 children: [
-                                                  SizedBox(width: SizeConfig.defaultSize * 0.6),
-                                                  Image.asset("assets/images/check_me.png", width: SizeConfig.defaultSize * 1.2),
+                                                  SizedBox(width: SizeConfig.defaultSize * 0.5),
+                                                  Image.asset("assets/images/check.png", width: SizeConfig.defaultSize * 1.4),
                                                 ],
                                               )
                                           ]
@@ -293,23 +295,32 @@ class _MyPageLandingViewState extends State<MyPageLandingView> {
                   horizontal: SizeConfig.defaultSize * 0.5),
               child: Container(
                 width: SizeConfig.screenWidth,
-                height: SizeConfig.defaultSize * 4.8,
+                height: SizeConfig.defaultSize * 6.8,
                 decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: const Color(0xff2F4858),
                     borderRadius: BorderRadius.circular(10),
-                    border: Border.all(width: 1.3, color: const Color(0xffFE6059))
+                    // border: Border.all(width: 1.3, color: const Color(0xffFE6059))
                 ),
                 child: Padding(
-                  padding: EdgeInsets.only(left: SizeConfig.defaultSize * 1.5, right: SizeConfig.defaultSize * 1.5),
+                  padding: EdgeInsets.only(left: SizeConfig.defaultSize * 2.0, right: SizeConfig.defaultSize * 1.5),
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Text(" 지금 학생증 인증하면 팀에 인증 배지를 추가해드려요!", style: TextStyle(
-                          fontSize: SizeConfig.defaultSize * 1.4
-                      ),),
-                      const Icon(
-                        Icons.arrow_right_alt_rounded, color: Color(0xffFE6059)
-                      )
+                      Icon(Icons.check_circle, size: SizeConfig.defaultSize * 3, color: Colors.blue),
+                      SizedBox(width: SizeConfig.defaultSize * 2,),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text("학생증 제출하고 팀에 인증 배지를 추가해요!", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.4, color: Colors.white),),
+                          Row(
+                            children: [
+                              Text("학생증 인증하기 ", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.6, fontWeight: FontWeight.w600, color: Colors.white),),
+                              Icon(Icons.arrow_forward_ios, color: Colors.white, size: SizeConfig.defaultSize * 1.25,)
+                            ],
+                          ),
+                        ],
+                      ),
                     ],
                   ),
                 ),
@@ -932,7 +943,8 @@ class _openAddFriendsState extends State<openAddFriends> {
   }
 
   void shareContent(BuildContext context, String myCode) {
-    Share.share('[엔대생] 엔대생에서 내가 널 칭찬 대상으로 투표하고 싶어! 앱에 들어와줘!\n내 코드는 $myCode 야. 나를 친구 추가하고 같이하자!\nhttps://dart.page.link/TG78\n\n내 코드 : $myCode');
+    // Share.share('[엔대생] 엔대생에서 내가 널 칭찬 대상으로 투표하고 싶어! 앱에 들어와줘!\n내 코드는 $myCode 야. 나를 친구 추가하고 같이하자!\nhttps://dart.page.link/TG78\n\n내 코드 : $myCode');
+    Share.share('[엔대생] 대학생을 위한 네트워킹 플랫폼 엔대생! 앱에 들어와서 우리같이 과팅하자!\n https://dart.page.link/TG78\n\n내 코드 : $myCode');
   }
 
   @override

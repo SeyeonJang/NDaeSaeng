@@ -12,6 +12,7 @@ import 'package:dart_flutter/src/presentation/meet/viewmodel/meet_cubit.dart';
 import 'package:dart_flutter/src/presentation/meet/viewmodel/state/meet_state.dart';
 import 'package:flutter/material.dart';
 import 'package:dart_flutter/src/domain/entity/user.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:image_picker/image_picker.dart';
@@ -35,6 +36,7 @@ class _MeetCreateTeamInputState extends State<MeetCreateTeamInput> {
   late int teamMemberCount;
   late List<Location> cities;
   late bool canMatchWithSameUniversity;
+  late ScrollController scrollController;
 
   @override
   void initState() {
@@ -43,8 +45,12 @@ class _MeetCreateTeamInputState extends State<MeetCreateTeamInput> {
     state = widget.state;
     teamMemberList = [];
     teamMemberCount = 0;
-    cities = [];
+    cities = [
+      Location(id: 1, name: "경기"),
+      Location(id: 6, name: "서울")
+    ];
     canMatchWithSameUniversity = false;
+    scrollController = ScrollController();
   }
 
   void removeFriendFromMyTeam(int memberIndex) {
@@ -210,6 +216,7 @@ class _MeetCreateTeamInputState extends State<MeetCreateTeamInput> {
                           child: Padding(
                             padding: EdgeInsets.symmetric(horizontal: SizeConfig.defaultSize * 1.3),
                             child: SingleChildScrollView(
+                              controller: scrollController,
                               child: Column(
                                 children: [
                                   _CreateTeamTopSection(userResponse: state.userResponse, handleTeamNameChanged: handleTeamNameChanged, state: state),
@@ -250,11 +257,25 @@ class _MeetCreateTeamInputState extends State<MeetCreateTeamInput> {
                                               borderRadius: BorderRadius.circular(8),
                                             ),
                                             alignment: Alignment.center,
-                                            child: Text("+   팀원 추가하기", style: TextStyle(
-                                                fontSize: SizeConfig.defaultSize * 1.6
-                                            ),)
+                                            child:
+
+                                            RichText(
+                                              text: TextSpan(
+                                                children: [
+                                                  WidgetSpan(
+                                                    child: Icon(Icons.add, size: SizeConfig.defaultSize * 1.9, color: Colors.black),
+                                                  ),
+                                                  TextSpan(
+                                                    text: "   팀원 추가하기",
+                                                    style: TextStyle(color: Colors.black, fontSize: SizeConfig.defaultSize * 1.6),
+                                                  ),
+                                                ],
+                                              ),
+                                            )
                                     ),
                                   ),
+                                  SizedBox(height: SizeConfig.defaultSize * 1),
+                                  Text("같은 학교 친구 최소 1명을 추가해야 해요!", style: TextStyle(color: Colors.grey, fontSize: SizeConfig.defaultSize * 1.6)),
                                   SizedBox(
                                     height: isKeyboardVisible ? 100.0 : 0.0, // 키보드가 켜져 있을 때만 SizedBox를 올립니다.
                                   ),
@@ -268,7 +289,16 @@ class _MeetCreateTeamInputState extends State<MeetCreateTeamInput> {
                   ),
                 )
             ),
-            bottomNavigationBar:  _CreateTeamBottomSection(onFinish: widget.onFinish, serverLocations: state.serverLocations, locations: cities, state: state, name: name, ancestorContext: context, onSetCities: setCities, onSetMatch: setCanMatchWithSameUniversity, createNewTeam: createNewTeam),
+            bottomNavigationBar:  _CreateTeamBottomSection(
+                onFinish: widget.onFinish,
+                serverLocations: state.serverLocations,
+                locations: cities,
+                state: state,
+                name: name,
+                ancestorContext: context,
+                onSetCities: setCities,
+                onSetMatch: setCanMatchWithSameUniversity,
+                createNewTeam: createNewTeam),
             ),
       );
   }
@@ -315,63 +345,87 @@ class _CreateTeamTopSectionState extends State<_CreateTeamTopSection> {
       children: [
         Column(
           children: [
-            GestureDetector(
-              onTap: () {
-                // AnalyticsUtil.logEvent("홈_팀만들기_학교_터치");
-              },
-              child: Row(children: [
-                Text("학교",
-                    style: TextStyle(
-                        fontWeight: FontWeight.w400,
-                        fontSize: SizeConfig.defaultSize * 1.6,
-                        color: Colors.grey
-                    )),
-                SizedBox(width: SizeConfig.defaultSize,),
-                Text(widget.userResponse.university?.name ?? '학교를 불러오지 못 했어요',
-                    style: TextStyle(
-                        fontWeight: FontWeight.w400,
-                        fontSize: SizeConfig.defaultSize * 1.6,
-                        color: Colors.grey
-                    ))
-              ]),
-            ),
-              SizedBox(height: SizeConfig.defaultSize * 0.5),
+
+            // // 학교 Display
+            // GestureDetector(
+            //   onTap: () {
+            //     // AnalyticsUtil.logEvent("홈_팀만들기_학교_터치");
+            //   },
+            //   child: Row(children: [
+            //     Text("학교",
+            //         style: TextStyle(
+            //             fontWeight: FontWeight.w400,
+            //             fontSize: SizeConfig.defaultSize * 1.6,
+            //             color: Colors.grey
+            //         )),
+            //     SizedBox(width: SizeConfig.defaultSize,),
+            //     Text(widget.userResponse.university?.name ?? '학교를 불러오지 못 했어요',
+            //         style: TextStyle(
+            //             fontWeight: FontWeight.w400,
+            //             fontSize: SizeConfig.defaultSize * 1.6,
+            //             color: Colors.grey
+            //         ))
+            //   ]),
+            // ),
+            //   SizedBox(height: SizeConfig.defaultSize * 0.5),
+
             GestureDetector(
               onTap: () {
                 // AnalyticsUtil.logEvent("홈_팀만들기_팀명_터치");
               },
-              child: Row(children: [
-                Text("팀명",
-                    style: TextStyle(
-                        fontWeight: FontWeight.w400,
-                        fontSize: SizeConfig.defaultSize * 1.6,
-                        color: Colors.black
-                    )),
-                SizedBox(width: SizeConfig.defaultSize,),
-                Flexible(
-                    child: TextField(
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text("팀명", style: TextStyle(
+                            fontWeight: FontWeight.w400,
+                            fontSize: SizeConfig.defaultSize * 1.6,
+                            color: Colors.black)
+                        ),
+                        const _MeetCreateTeamInformationButton(),
+
+
+
+                  ]),
+
+                  TextFormField(
                       controller: _controller,
                       maxLength: 7,
-                      onChanged: (value) {
-                        setState(() {
-                          AnalyticsUtil.logEvent("홈_팀만들기_팀명_입력", properties: {
-                            '팀명': value
+                        onChanged: (value) {
+                          setState(() {
+                            AnalyticsUtil.logEvent("홈_팀만들기_팀명_입력", properties: {
+                              '팀명': value
+                            });
+                            widget.state.teamName = value;
+                            widget.handleTeamNameChanged(value);
                           });
-                          widget.state.teamName = value;
-                          widget.handleTeamNameChanged(value);
-                        });
-                      },
+                        },
+                      inputFormatters: [
+                        LengthLimitingTextInputFormatter(7),
+                      ],
                       decoration: const InputDecoration(
-                        hintText: "이성에게 보여질 팀명을 입력해주세요!",
-                        contentPadding: EdgeInsets.zero,
-                        enabledBorder: UnderlineInputBorder(borderSide: BorderSide(width: 0.6)),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(10)),
+                            borderSide: BorderSide(
+                              color: Color(0xffFF5C58), // 테두리 색상
+                              width: 1.0,
+                            ),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Color(0xffFF5C58), // 테두리 색상
+                              width: 2.0,
+                            ),
+                          ),
+                          hintText: "팀명을 입력해주세요! (최대 7글자)",
+                          counterText: '',
                       ),
-
-                    )
-                )
-              ]),
+                  ),
+                ],
+              ),
             ),
-              SizedBox(height: SizeConfig.defaultSize),
+              SizedBox(height: SizeConfig.defaultSize * 2),
           ],
         )
       ],
@@ -584,6 +638,76 @@ class MemberCardView extends StatelessWidget {
     );
   }
 }
+
+
+class _MeetCreateTeamInformationButton extends StatelessWidget {
+  const _MeetCreateTeamInformationButton({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return TextButton(
+        onPressed: () {
+          AnalyticsUtil.logEvent("과팅_팀만들기_도움말_터치");
+          showDialog<String>(
+              context: context,
+              builder: (BuildContext dialogContext) => AlertDialog(
+                surfaceTintColor: Colors.white,
+                title: Center(
+                    child: Text(
+                      '과팅 팀을 등록해봐요!',
+                      style: TextStyle(
+                          fontSize: SizeConfig.defaultSize * 1.5,
+                          fontWeight: FontWeight.w500),
+                    )),
+                content: SingleChildScrollView(
+                  child: ListBody(
+                    children: <Widget>[
+                      SizedBox(
+                        height: SizeConfig.defaultSize,
+                      ),
+                      const Center(child: Text('이성에게 보여질 팀명을 입력해주세요.',)),
+                      const Center(child: Text('팀원은 최소 2명! 내 친구 정보를 입력해주세요.')),
+                      const Center(child: Text('친구의 프사, 이름, 년생과 학과만 있으면 되요!')),
+                      SizedBox(
+                        height: SizeConfig.defaultSize * 2.2,
+                      ),
+                      Center(
+                          child: Text(
+                            '',
+                            style: TextStyle(fontSize: SizeConfig.defaultSize * 1.2),
+                          )),
+                      Center(
+                          child: Text(
+                            'Tip. 학생증 인증을 하면 인증뱃지가 추가됩니다',
+                            style: TextStyle(fontSize: SizeConfig.defaultSize * 1.2),
+                          )),
+                    ],
+                  ),
+                ),
+              ));
+        },
+        style: TextButton.styleFrom(
+            backgroundColor: Colors.white, surfaceTintColor: Colors.white),
+        child:
+        RichText(
+          text: TextSpan(
+            children: [
+              WidgetSpan(
+                child: Icon(Icons.info_outline, size: SizeConfig.defaultSize * 1.5, color: Colors.grey),
+              ),
+              TextSpan(
+                text: " 도움말",
+                style: TextStyle(color: Colors.grey, fontSize: SizeConfig.defaultSize * 1.4),
+              ),
+            ],
+          ),
+        )
+    );
+  }
+}
+
 
 class MemberCardViewNoVote extends StatefulWidget {
   late BuildContext context;
@@ -865,6 +989,7 @@ class _MemberCardViewNoVoteState extends State<MemberCardViewNoVote> {
                 ),
                 // 학과 찾기
                 textFieldConfiguration: TextFieldConfiguration(
+                    scrollPadding: EdgeInsets.only(bottom: SizeConfig.defaultSize * 90),
                     controller: _typeAheadController,
                     autofocus: false, // 키보드 자동으로 올라오는 거
                     style: DefaultTextStyle.of(context)
@@ -1046,7 +1171,7 @@ class _CreateTeamBottomSectionState extends State<_CreateTeamBottomSection> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        height: SizeConfig.defaultSize * 21,
+        height: SizeConfig.defaultSize * 22,
         decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(0),
@@ -1162,16 +1287,23 @@ class _CreateTeamBottomSectionState extends State<_CreateTeamBottomSection> {
                         ),
                         child: SizedBox(
                           width: SizeConfig.screenWidth * 0.53,
-                          child: Text(
-                            widget.locations.isEmpty
-                              ? "선택해주세요"
-                              : widget.locations.map((city) => city.name).join(', '),
-                            style: TextStyle(
-                              fontSize: SizeConfig.defaultSize * 1.6,
-                              color: Colors.grey.shade400,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                            textAlign: TextAlign.right,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Text(
+                                widget.locations.isEmpty
+                                  ? "선택해주세요"
+                                  : widget.locations.map((city) => city.name).join(', '),
+                                style: TextStyle(
+                                  fontSize: SizeConfig.defaultSize * 1.6,
+                                  color: Colors.black,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                                textAlign: TextAlign.right,
+                              ),
+                              const Text(" "),
+                              Icon(Icons.edit_rounded, color: const Color(0xffFE6059), size: SizeConfig.defaultSize * 1.8)
+                            ],
                           ),
                         ))
                   ],
@@ -1206,32 +1338,42 @@ class _CreateTeamBottomSectionState extends State<_CreateTeamBottomSection> {
               SizedBox(height: SizeConfig.defaultSize * 0.3,),
               GestureDetector(
                 onTap: () async {
-                  AnalyticsUtil.logEvent("t", properties: {
-                    "teamId": meetTeam.id,
-                    "teamName": meetTeam.name,
-                    "teamLocationsCount": meetTeam.locations.length,
-                    "teamMembersCount": meetTeam.members.length + 1,
-                    "toggle": meetTeam.canMatchWithSameUniversity,
-                    "university": meetTeam.university?.name ?? "알수없음",
-                  });
-
                   if (meetTeam.members.length == 1) {
                     if (meetTeam.members[0].getName().isNotEmpty && meetTeam.members[0].getBirthYear() != 0 && meetTeam.members[0].getUniversityId() != 0 && meetTeam.name != '' && meetTeam.locations.isNotEmpty) {
+                      AnalyticsUtil.logEvent("홈_팀만들기_팀만들기버튼_터치(생성)", properties: {
+                        "teamId": meetTeam.id,
+                        "teamName": meetTeam.name,
+                        "teamLocationsCount": meetTeam.locations.length,
+                        "teamMembersCount": meetTeam.members.length + 1,
+                        "toggle": meetTeam.canMatchWithSameUniversity,
+                        "university": meetTeam.university?.name ?? "알수없음",
+                      });
                       widget.onFinish();
                       Navigator.pop(widget.ancestorContext, meetTeam);
                     } else {
+                      AnalyticsUtil.logEvent("홈_팀만들기_팀만들기버튼_터치(미생성)");
                       ToastUtil.showMeetToast('모든 정보를 기입해주세요!', 1);
                     }
                   } else if (meetTeam.members.length == 2) {
                     if (meetTeam.members[0].getName().isNotEmpty && meetTeam.members[0].getBirthYear() != 0 && meetTeam.members[0].getUniversityId() != 0
                         && meetTeam.members[1].getName().isNotEmpty && meetTeam.members[1].getBirthYear() != 0 && meetTeam.members[1].getUniversityId() != 0
                         &&  meetTeam.name != '' && meetTeam.locations.isNotEmpty) {
+                      AnalyticsUtil.logEvent("홈_팀만들기_팀만들기버튼_터치(생성)", properties: {
+                        "teamId": meetTeam.id,
+                        "teamName": meetTeam.name,
+                        "teamLocationsCount": meetTeam.locations.length,
+                        "teamMembersCount": meetTeam.members.length + 1,
+                        "toggle": meetTeam.canMatchWithSameUniversity,
+                        "university": meetTeam.university?.name ?? "알수없음",
+                      });
                       widget.onFinish();
                       Navigator.pop(widget.ancestorContext, meetTeam);
                     } else {
+                      AnalyticsUtil.logEvent("홈_팀만들기_팀만들기버튼_터치(미생성)");
                       ToastUtil.showMeetToast('모든 정보를 기입해주세요!', 1);
                     }
                   } else {
+                    AnalyticsUtil.logEvent("홈_팀만들기_팀만들기버튼_터치(미생성)");
                     ToastUtil.showMeetToast('팀원을 추가해주세요!', 1);
                   }
                 },
@@ -1239,20 +1381,21 @@ class _CreateTeamBottomSectionState extends State<_CreateTeamBottomSection> {
                   height: SizeConfig.defaultSize * 6,
                   width: SizeConfig.screenHeight,
                   decoration: BoxDecoration(
-                    color: (meetTeam.members.length == 1 && meetTeam.members[0].getName().isNotEmpty && meetTeam.members[0].getBirthYear() != 0 && meetTeam.members[0].getUniversityId() != 0 && meetTeam.name != '' && meetTeam.locations.isNotEmpty
-                    || meetTeam.members.length == 2 && meetTeam.members[0].getName().isNotEmpty && meetTeam.members[0].getBirthYear() != 0 && meetTeam.members[0].getUniversityId() != 0
-                            && meetTeam.members[1].getName().isNotEmpty && meetTeam.members[1].getBirthYear() != 0 && meetTeam.members[1].getUniversityId() != 0
-                            &&  meetTeam.name != '' && meetTeam.locations.isNotEmpty) ? const Color(0xffFF5C58) : const Color(0xffdddddd),
+                    color: (meetTeam.members.length==1 && meetTeam.members[0].canCreateTeam() && meetTeam.name != '' && meetTeam.locations.isNotEmpty
+                        || meetTeam.members.length==2 && meetTeam.members[0].canCreateTeam() && meetTeam.members[1].canCreateTeam()) ? const Color(0xffFF5c58) : const Color(0xffdddddd),
                     borderRadius: BorderRadius.circular(10),
                   ),
                   alignment: Alignment.center,
-                  child: Text("팀 만들기", style: TextStyle(
+                  child: Text((meetTeam.members.length==1 && meetTeam.members[0].canCreateTeam() && meetTeam.name != '' && meetTeam.locations.isNotEmpty
+                      || meetTeam.members.length==2 && meetTeam.members[0].canCreateTeam() && meetTeam.members[1].canCreateTeam()) ? "팀 만들기" : "팀명, 팀원을 입력해주세요",
+                      style: TextStyle(
                       color: Colors.white,
                       fontSize: SizeConfig.defaultSize * 2,
                       fontWeight: FontWeight.w600
                   )),
                 ),
-              )
+              ),
+              SizedBox(height: SizeConfig.defaultSize * 1.7,)
             ],
           ),
         )

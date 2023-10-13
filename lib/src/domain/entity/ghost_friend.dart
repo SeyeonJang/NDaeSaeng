@@ -73,6 +73,15 @@ class GhostFriend implements Student {
   }
 
   @override
+  bool canCreateTeam() {
+    print(toString());
+    if (name == null || birthYear == null || universityId == null) {
+      return false;
+    }
+    return true;
+  }
+
+  @override
   String toString() {
     return 'GhostFriend{name: $name, birthYear: $birthYear, universityId: $universityId, profileImageUrl: $profileImageUrl}';
   }
