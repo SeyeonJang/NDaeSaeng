@@ -78,10 +78,12 @@ class ChatSendOneTeamView extends StatelessWidget { // Component
                               decoration: const BoxDecoration(
                                 shape: BoxShape.circle,
                               ),
-                              child: Center(
-                                  child: proposal.requestedTeam.teamUsers[i].getProfileImageUrl() == "DEFAULT" || proposal.requestedTeam.teamUsers[i].getProfileImageUrl().startsWith("https://")
-                                      ? Image.asset('assets/images/profile-mockup3.png', width: SizeConfig.defaultSize * 4, height: SizeConfig.defaultSize * 4, fit: BoxFit.cover,)
-                                      : Image.network(proposal.requestedTeam.teamUsers[i].getProfileImageUrl(), width: SizeConfig.defaultSize * 4, height: SizeConfig.defaultSize * 4, fit: BoxFit.cover,)
+                              child: ClipOval(
+                                child: Center(
+                                    child: proposal.requestedTeam.teamUsers[i].getProfileImageUrl() == "DEFAULT" || !proposal.requestedTeam.teamUsers[i].getProfileImageUrl().startsWith("https://")
+                                        ? Image.asset('assets/images/profile-mockup3.png', width: SizeConfig.defaultSize * 4, height: SizeConfig.defaultSize * 4, fit: BoxFit.cover,)
+                                        : Image.network(proposal.requestedTeam.teamUsers[i].getProfileImageUrl(), width: SizeConfig.defaultSize * 4, height: SizeConfig.defaultSize * 4, fit: BoxFit.cover,)
+                                ),
                               ),
                             ),
                           ),

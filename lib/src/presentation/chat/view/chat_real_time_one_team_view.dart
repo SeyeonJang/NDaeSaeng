@@ -29,9 +29,9 @@ class _ChatRealTimeOneTeamViewState extends State<ChatRealTimeOneTeamView> {
   @override
   Widget build(BuildContext context) {
     String getTimeDifference(DateTime time) {
-      // final adjustedTime = time.add(Duration(hours: 9));
+      final adjustedTime = time.add(const Duration(hours: 9));
       final now = DateTime.now();
-      final difference = now.difference(time);
+      final difference = now.difference(adjustedTime);
 
       if (difference.inDays > 0) {
         final dateFormat = DateFormat('MM월 dd일');

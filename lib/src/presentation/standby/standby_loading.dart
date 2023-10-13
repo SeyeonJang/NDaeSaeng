@@ -37,7 +37,7 @@ class StandbyLoading extends StatelessWidget {
                 // 회원정보 로딩이 완료된 후에 페이지를 넘긴다
                 if (!state.isLoading) {
                   // 내 정보를 분석툴에 저장
-                  print(state.userResponse.toString());
+                  print("내정보: ${state.userResponse.toString()}");
                   AnalyticsUtil.setUserInformation(state.userResponse.toAnalytics());
 
                   WidgetsBinding.instance.addPostFrameCallback((_) {

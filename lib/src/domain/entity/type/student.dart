@@ -11,4 +11,5 @@ abstract interface class Student {
   int getBirthYear();
   List<TitleVote> getTitleVotes();
   Map<String, dynamic> toJson();
+  bool canCreateTeam();
 }

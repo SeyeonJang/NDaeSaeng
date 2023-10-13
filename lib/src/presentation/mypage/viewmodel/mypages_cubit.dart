@@ -111,8 +111,8 @@ class MyPagesCubit extends Cubit<MyPagesState> {
     return profileImageUrl;
   }
 
-  void uploadIdCardImage(File file, User userResponse, String name) async {
-    _userUseCase.uploadIdCardImage(file, userResponse, name);
+  Future<void> uploadIdCardImage(File file, User userResponse, String name) async {
+    await _userUseCase.uploadIdCardImage(file, userResponse, name);
     state.isVertificateUploaded = true;
     emit(state.copy());
   }

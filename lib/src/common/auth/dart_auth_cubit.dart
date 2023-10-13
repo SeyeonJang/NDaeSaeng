@@ -2,6 +2,7 @@ import 'package:dart_flutter/src/common/auth/state/dart_auth_state.dart';
 import 'package:dart_flutter/src/common/chat/chat_connection.dart';
 import 'package:dart_flutter/src/common/exception/authroization_exception.dart';
 import 'package:dart_flutter/src/common/util/analytics_util.dart';
+import 'package:dart_flutter/src/common/util/crashlytics_util.dart';
 import 'package:dart_flutter/src/common/util/push_notification_util.dart';
 import 'package:dart_flutter/src/common/util/toast_util.dart';
 import 'package:dart_flutter/src/common/util/version_comparator.dart';
@@ -133,6 +134,7 @@ class DartAuthCubit extends HydratedCubit<DartAuthState> {
 
       String userId = userResponse.personalInfo!.id.toString();
       AnalyticsUtil.setUserId(userId);
+      CrashlyticsUtil.setUserId(userId);
       if (userResponse.university == null) {
         PushNotificationUtil.setUserId(userId);
         state.setStep(AuthStep.signup);
@@ -166,6 +168,7 @@ class DartAuthCubit extends HydratedCubit<DartAuthState> {
 
       String userId = userResponse.personalInfo!.id!.toString();
       AnalyticsUtil.setUserId(userId);
+      CrashlyticsUtil.setUserId(userId);
       if (userResponse.university == null) {
         PushNotificationUtil.setUserId(userId);
         state.setStep(AuthStep.signup);

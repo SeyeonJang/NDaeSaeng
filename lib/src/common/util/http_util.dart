@@ -1,6 +1,7 @@
 import 'package:dart_flutter/src/common/exception/custom_exception.dart';
 import 'package:dart_flutter/src/common/exception/service_not_ready_exception.dart';
 import 'package:dart_flutter/src/common/exception/token_expired_exception.dart';
+import 'package:dart_flutter/src/common/exception/token_required_exception.dart';
 import 'package:dio/dio.dart';
 
 class HttpUtil {
@@ -32,6 +33,8 @@ class HttpUtil {
           switch(statusCode) {
             case 401:
               throw TokenExpiredException("토큰이 만료되었습니다.");
+            case 403:
+              throw TokenRequiredException("토큰이 필요한 요청입니다. 토큰값을 넣어주세요.");
             case 500:
               throw CustomException("InternalServerError");
             case 503:

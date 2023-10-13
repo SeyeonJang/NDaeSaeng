@@ -1,8 +1,10 @@
 import 'package:dart_flutter/res/config/size_config.dart';
 import 'package:dart_flutter/src/common/util/analytics_util.dart';
 import 'package:dart_flutter/src/common/util/toast_util.dart';
+import 'package:dart_flutter/src/domain/entity/user.dart';
 import 'package:dart_flutter/src/domain/mapper/student_mapper.dart';
 import 'package:dart_flutter/src/presentation/component/meet_one_member_cardview_novote.dart';
+import 'package:dart_flutter/src/presentation/mypage/view/student_vertification.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../domain/entity/blind_date_team_detail.dart';
@@ -11,8 +13,9 @@ import '../viewmodel/state/meet_state.dart';
 
 class MeetMyTeamDetail extends StatelessWidget {
   final int teamId;
+  final User userResponse;
 
-  const MeetMyTeamDetail({super.key, required this.teamId});
+  const MeetMyTeamDetail({super.key, required this.teamId, required this.userResponse});
 
   @override
   Widget build(BuildContext context) {
@@ -70,6 +73,38 @@ class MeetMyTeamDetail extends StatelessWidget {
                           ),
                         )
                     ),
+                    bottomNavigationBar: !(userResponse.personalInfo?.verification.isVerificationSuccess ?? true)
+                        ? Padding(
+                            padding: EdgeInsets.only(bottom: SizeConfig.defaultSize * 5, left: SizeConfig.defaultSize * 2, right: SizeConfig.defaultSize * 2),
+                            child: Material(
+                              child: InkWell(
+                                onTap: () async {
+                                  AnalyticsUtil.logEvent("홈_내팀보기_학생증인증버튼_터치", properties: {
+                                    '인증 상태' : userResponse.personalInfo?.verification
+                                  });
+                                  if (!(userResponse.personalInfo?.verification.isVerificationSuccess ?? true)) {
+                                    await Navigator.push(context, MaterialPageRoute(builder: (_) => StudentVertification(
+                                      userResponse: userResponse,
+                                    )));
+                                  }
+                                },
+                                child: Container(
+                                  height: SizeConfig.defaultSize * 6,
+                                  decoration: BoxDecoration(
+                                    color: const Color(0xffFE6059),
+                                    borderRadius: BorderRadius.circular(13),
+                                  ),
+                                  alignment: Alignment.center,
+                                  child: Text("학생증 인증하고 인증 배지 얻기", style: TextStyle(
+                                    fontSize: SizeConfig.defaultSize * 1.8,
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.white,
+                                  ),)
+                                ),
+                              ),
+                            ),
+                          )
+                        : const SizedBox()
                   );
                 } else {
                   return const Text("데이터 정보가 없습니다.");
@@ -139,7 +174,8 @@ class _TopBarSection extends StatelessWidget {
                         showDialog<String>(
                           context: context,
                           builder: (BuildContext dialogContext) => AlertDialog(
-                            content: Text('\'${team.name=='' ? '(팀명 없음)' : team.name}\' 팀을 삭제하시겠어요?', style: TextStyle(fontSize: SizeConfig.defaultSize * 1.8),),
+                            title: Text('\'${team.name=='' ? '(팀명 없음)' : team.name}\' 팀을 삭제하시겠어요?', style: TextStyle(fontSize: SizeConfig.defaultSize * 1.8), textAlign: TextAlign.center,),
+                            content: Text("내 팀을 삭제하면 내가 받은 호감과 보낸 호감 내역이 모두 사라져요! 🥺\n( 채팅방은 그대로 남아있어요! )"),
                             backgroundColor: Colors.white,
                             surfaceTintColor: Colors.white,
                             actions: <Widget>[

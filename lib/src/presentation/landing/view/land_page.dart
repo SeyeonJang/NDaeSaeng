@@ -4,7 +4,7 @@ import 'package:dart_flutter/res/config/size_config.dart';
 import 'package:dart_flutter/src/common/auth/dart_auth_cubit.dart';
 import 'package:dart_flutter/src/common/util/analytics_util.dart';
 import 'package:dart_flutter/src/common/util/toast_util.dart';
-import 'package:dart_flutter/src/presentation/landing/view/tutorial_slide2.dart';
+import 'package:dart_flutter/src/presentation/landing/view/tutorial_slide3.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'dart:async';
@@ -53,7 +53,7 @@ class _LoginPageState extends State<LoginPage> {
       body: Container(
         child: Column(
           children: [
-            Expanded(child: TutorialSlide2(onTutorialFinished: () {})),
+            Expanded(child: TutorialSlide3(onTutorialFinished: () {})),
           ],
         ),
       ),
