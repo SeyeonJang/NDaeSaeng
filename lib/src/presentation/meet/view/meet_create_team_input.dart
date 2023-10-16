@@ -17,6 +17,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:image_picker/image_picker.dart';
 import '../../../domain/entity/university.dart';
+import '../../component/webview_fullscreen.dart';
 
 class MeetCreateTeamInput extends StatefulWidget {
   final VoidCallback onFinish;
@@ -650,43 +651,44 @@ class _MeetCreateTeamInformationButton extends StatelessWidget {
     return TextButton(
         onPressed: () {
           AnalyticsUtil.logEvent("과팅_팀만들기_도움말_터치");
-          showDialog<String>(
-              context: context,
-              builder: (BuildContext dialogContext) => AlertDialog(
-                surfaceTintColor: Colors.white,
-                title: Center(
-                    child: Text(
-                      '과팅 팀을 등록해봐요!',
-                      style: TextStyle(
-                          fontSize: SizeConfig.defaultSize * 1.5,
-                          fontWeight: FontWeight.w500),
-                    )),
-                content: SingleChildScrollView(
-                  child: ListBody(
-                    children: <Widget>[
-                      SizedBox(
-                        height: SizeConfig.defaultSize,
-                      ),
-                      const Center(child: Text('이성에게 보여질 팀명을 입력해주세요.',)),
-                      const Center(child: Text('팀원은 최소 2명! 내 친구 정보를 입력해주세요.')),
-                      const Center(child: Text('친구의 프사, 이름, 년생과 학과만 있으면 되요!')),
-                      SizedBox(
-                        height: SizeConfig.defaultSize * 2.2,
-                      ),
-                      Center(
-                          child: Text(
-                            '',
-                            style: TextStyle(fontSize: SizeConfig.defaultSize * 1.2),
-                          )),
-                      Center(
-                          child: Text(
-                            'Tip. 학생증 인증을 하면 인증뱃지가 추가됩니다',
-                            style: TextStyle(fontSize: SizeConfig.defaultSize * 1.2),
-                          )),
-                    ],
-                  ),
-                ),
-              ));
+          Navigator.push(context, MaterialPageRoute(builder: (context) => const WebViewFullScreen(url: 'https://efficacious-ease-5ad.notion.site/76aca6b7945e4db485069f921deb961e?pvs=4', title: '팀 만들기 도움말')));
+          // showDialog<String>(
+          //     context: context,
+          //     builder: (BuildContext dialogContext) => AlertDialog(
+          //       surfaceTintColor: Colors.white,
+          //       title: Center(
+          //           child: Text(
+          //             '과팅 팀을 등록해봐요!',
+          //             style: TextStyle(
+          //                 fontSize: SizeConfig.defaultSize * 1.5,
+          //                 fontWeight: FontWeight.w500),
+          //           )),
+          //       content: SingleChildScrollView(
+          //         child: ListBody(
+          //           children: <Widget>[
+          //             SizedBox(
+          //               height: SizeConfig.defaultSize,
+          //             ),
+          //             const Center(child: Text('이성에게 보여질 팀명을 입력해주세요.',)),
+          //             const Center(child: Text('팀원은 최소 2명! 내 친구 정보를 입력해주세요.')),
+          //             const Center(child: Text('친구의 프사, 이름, 년생과 학과만 있으면 되요!')),
+          //             SizedBox(
+          //               height: SizeConfig.defaultSize * 2.2,
+          //             ),
+          //             Center(
+          //                 child: Text(
+          //                   '',
+          //                   style: TextStyle(fontSize: SizeConfig.defaultSize * 1.2),
+          //                 )),
+          //             Center(
+          //                 child: Text(
+          //                   'Tip. 학생증 인증을 하면 인증뱃지가 추가됩니다',
+          //                   style: TextStyle(fontSize: SizeConfig.defaultSize * 1.2),
+          //                 )),
+          //           ],
+          //         ),
+          //       ),
+          //     ));
         },
         style: TextButton.styleFrom(
             backgroundColor: Colors.white, surfaceTintColor: Colors.white),
