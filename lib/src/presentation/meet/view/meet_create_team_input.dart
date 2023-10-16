@@ -651,7 +651,10 @@ class _MeetCreateTeamInformationButton extends StatelessWidget {
     return TextButton(
         onPressed: () {
           AnalyticsUtil.logEvent("과팅_팀만들기_도움말_터치");
-          Navigator.push(context, MaterialPageRoute(builder: (context) => const WebViewFullScreen(url: 'https://efficacious-ease-5ad.notion.site/76aca6b7945e4db485069f921deb961e?pvs=4', title: '팀 만들기 도움말')));
+          Navigator.push(context, MaterialPageRoute(builder: (context) => const WebViewFullScreen(url: 'https://efficacious-ease-5ad.notion.site/76aca6b7945e4db485069f921deb961e?pvs=4', title: '팀 만들기 도움말')))
+          .then((_) {
+            AnalyticsUtil.logEvent("과팅_팀만들기_도움말_뒤로가기(팀만들기접속)");
+          });
           // showDialog<String>(
           //     context: context,
           //     builder: (BuildContext dialogContext) => AlertDialog(
@@ -690,8 +693,7 @@ class _MeetCreateTeamInformationButton extends StatelessWidget {
           //       ),
           //     ));
         },
-        style: TextButton.styleFrom(
-            backgroundColor: Colors.white, surfaceTintColor: Colors.white),
+        style: TextButton.styleFrom(backgroundColor: Colors.white, surfaceTintColor: Colors.white),
         child:
         RichText(
           text: TextSpan(
