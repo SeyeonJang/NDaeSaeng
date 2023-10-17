@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:math';
 import 'package:dart_flutter/res/config/size_config.dart';
 import 'package:dart_flutter/src/common/util/analytics_util.dart';
 import 'package:dart_flutter/src/common/util/toast_util.dart';
@@ -426,7 +427,7 @@ class _CreateTeamTopSectionState extends State<_CreateTeamTopSection> {
                 ],
               ),
             ),
-              SizedBox(height: SizeConfig.defaultSize * 2),
+              SizedBox(height: SizeConfig.defaultSize),
           ],
         )
       ],
@@ -699,11 +700,11 @@ class _MeetCreateTeamInformationButton extends StatelessWidget {
           text: TextSpan(
             children: [
               WidgetSpan(
-                child: Icon(Icons.info_outline, size: SizeConfig.defaultSize * 1.5, color: Colors.grey),
+                child: Icon(Icons.info_outline, size: SizeConfig.defaultSize * 1.5, color: Color(0xff2F4858)),
               ),
               TextSpan(
                 text: " 도움말",
-                style: TextStyle(color: Colors.grey, fontSize: SizeConfig.defaultSize * 1.4),
+                style: TextStyle(color: Color(0xff2F4858), fontSize: SizeConfig.defaultSize * 1.4),
               ),
             ],
           ),
@@ -755,11 +756,20 @@ class _MemberCardViewNoVoteState extends State<MemberCardViewNoVote> {
   // textField 생년
   late TextEditingController _controller;
   late TextEditingController _nameController;
+  final String _userPostfix = "년생";
+  final FocusNode _focusNode = FocusNode();
 
   @override
   void initState() {
     super.initState();
     _nameController = TextEditingController(); // 이름
+    _focusNode.addListener(() {
+      if (_focusNode.hasFocus) {
+        // Move the cursor before the postfix when the TextField gains focus.
+        _controller.selection =
+            TextSelection.collapsed(offset: max(0, _controller.text.length - _userPostfix.length));
+      }
+    });
     _controller = TextEditingController(); // 생년
     // 학과
     List<University> universities = widget.state.universities;
@@ -774,6 +784,7 @@ class _MemberCardViewNoVoteState extends State<MemberCardViewNoVote> {
     super.dispose();
     _controller.dispose();
     _nameController.dispose();
+    _focusNode.dispose();
   }
 
   // 프로필 사진
@@ -885,29 +896,38 @@ class _MemberCardViewNoVoteState extends State<MemberCardViewNoVote> {
                     children: [
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
+                          Text("이름", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.5),),
+                          SizedBox(width: SizeConfig.defaultSize,),
                           SizedBox(
-                            width: SizeConfig.screenWidth * 0.5,
+                            width: SizeConfig.screenWidth * 0.44,
                             height: SizeConfig.defaultSize * 5,
-                            child: TextField(
-                              controller: _nameController,
-                              maxLength: 7,
-                              onChanged: (value) {
-                                setState(() {
-                                  widget.name = value;
-                                  widget.onSetTeamMemberName(widget.memberIndex, value);
-                                });
-                                AnalyticsUtil.logEvent("홈_팀만들기_친구이름입력", properties: {
-                                  '친구 인덱스': widget.memberIndex
-                                });
-                              },
-                              decoration: InputDecoration(
-                                  hintText: "친구 이름/닉네임",
-                                  hintStyle: TextStyle(fontSize: SizeConfig.defaultSize * 1.4, color: Colors.grey.shade500),
-                                  contentPadding: EdgeInsets.zero,
-                                  enabledBorder: const UnderlineInputBorder(borderSide: BorderSide(width: 0.6)),
-                                  counterText: ''
-                              ),
+                            child: Column(
+                              children: [
+                                SizedBox(height: SizeConfig.defaultSize * 1.3,),
+                                TextField(
+                                  controller: _nameController,
+                                  maxLength: 7,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      widget.name = value;
+                                      widget.onSetTeamMemberName(widget.memberIndex, value);
+                                    });
+                                    AnalyticsUtil.logEvent("홈_팀만들기_친구이름입력", properties: {
+                                      '친구 인덱스': widget.memberIndex
+                                    });
+                                  },
+                                  decoration: InputDecoration(
+                                      isDense: true,
+                                      hintText: "친구 이름/닉네임",
+                                      hintStyle: TextStyle(fontSize: SizeConfig.defaultSize * 1.4, color: Colors.grey.shade500),
+                                      contentPadding: EdgeInsets.only(bottom: SizeConfig.defaultSize),
+                                      enabledBorder: const UnderlineInputBorder(borderSide: BorderSide(width: 0.6)),
+                                      counterText: ''
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
 
@@ -945,39 +965,57 @@ class _MemberCardViewNoVoteState extends State<MemberCardViewNoVote> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
+                          Text("생년", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.5),),
+                          SizedBox(width: SizeConfig.defaultSize,),
                           SizedBox(
-                            width: SizeConfig.screenWidth * 0.4,
+                            width: SizeConfig.screenWidth * 0.44,
                             height: SizeConfig.defaultSize * 5,
-                            child: TextField(
-                              keyboardType: TextInputType.number,
-                              controller: _controller,
-                              maxLength: 2,
-                              onChanged: (value) {
-                                setState(() {
-                                  widget.onSetTeamMemberBirthYear(widget.memberIndex, value);
-                                });
-                                AnalyticsUtil.logEvent("홈_팀만들기_친구생년입력", properties: {
-                                  '친구 인덱스': widget.memberIndex,
-                                  '친구 생년': value
-                                });
-                              },
-                              decoration: InputDecoration(
-                                hintText: "ex. 04 / 03 / 00",
-                                hintStyle: TextStyle(fontSize: SizeConfig.defaultSize * 1.4, color: Colors.grey.shade500),
-                                contentPadding: EdgeInsets.zero,
-                                enabledBorder: const UnderlineInputBorder(borderSide: BorderSide(width: 0.6)),
-                                counterText: ''
-                              ),
-                            ),
+                            child: Column(
+                              children: [
+                                SizedBox(height: SizeConfig.defaultSize * 1.3),
+                                TextField(
+                                  keyboardType: TextInputType.number,
+                                  controller: _controller,
+                                  focusNode: _focusNode,
+                                  maxLength: 2 + _userPostfix.length, // Increase the max length to accommodate the postfix.
+                                  onChanged: (value) {
+                                    if (!value.endsWith(_userPostfix)) {
+                                      // If the value does not end with '_userPostfix', add it.
+                                      value = value + _userPostfix;
+                                      _controller.text = value;
+                                      // Move the cursor before the postfix.
+                                      _controller.selection =
+                                          TextSelection.collapsed(offset: max(0, value.length - _userPostfix.length));
+                                    }
+
+                                    setState(() {
+                                      widget.onSetTeamMemberBirthYear(widget.memberIndex, value.replaceFirst(_userPostfix, '')); // Remove the postfix before storing and sending the birth year.
+                                    });
+
+                                    AnalyticsUtil.logEvent("홈_팀만들기_친구생년입력", properties: {
+                                      '친구 인덱스': widget.memberIndex,
+                                      '친구 생년': value.replaceFirst(_userPostfix, '')
+                                    });
+                                  },
+                                  decoration: InputDecoration(
+                                      isDense: true,
+                                      hintText: "ex. 04",
+                                      hintStyle: TextStyle(fontSize: SizeConfig.defaultSize * 1.4, color: Colors.grey.shade500),
+                                      contentPadding: EdgeInsets.only(bottom: SizeConfig.defaultSize),
+                                      enabledBorder: const UnderlineInputBorder(borderSide: BorderSide(width: 0.6)),
+                                      counterText:''
+                                  ),
+                                ),
+                              ],
+                            )
                           ),
-                          const Text("년생") // TODO : 년생 View(V)
                         ],
                       )
                     ],
                   )
                 ],
               ),
-              TypeAheadField( // TODO : 학과 검색창 View(V)
+              TypeAheadField(
                 noItemsFoundBuilder: (context) {
                   return const Padding(
                     padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
