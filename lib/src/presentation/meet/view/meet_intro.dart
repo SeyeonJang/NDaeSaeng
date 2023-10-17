@@ -1,7 +1,6 @@
 import 'package:dart_flutter/res/config/size_config.dart';
 import 'package:dart_flutter/src/common/util/analytics_util.dart';
 import 'package:dart_flutter/src/domain/entity/user.dart';
-import 'package:dart_flutter/src/common/util/toast_util.dart';
 import 'package:dart_flutter/src/presentation/component/banner_image_slider.dart';
 import 'package:dart_flutter/src/presentation/meet/view/meet_create_team_input.dart';
 import 'package:dart_flutter/src/presentation/meet/view/meet_my_team_detail.dart';
@@ -485,7 +484,7 @@ class MakeTeamButton extends StatelessWidget {
                     textAlign: TextAlign.center,
                   )
               ),
-              content: Container(
+              content: SizedBox(
                 width: SizeConfig.screenWidth * 0.8,
                 height: isiOS ? SizeConfig.screenHeight * 0.4 : SizeConfig.screenHeight * 0.45,
                 child: SingleChildScrollView(
@@ -508,7 +507,7 @@ class MakeTeamButton extends StatelessWidget {
                   child: Text('설정가기', style: TextStyle(
                     fontSize: SizeConfig.defaultSize * 1.7,
                     fontWeight: FontWeight.w600,
-                    color: Color(0xffFE6059)),),
+                    color: const Color(0xffFE6059)),),
                 ),
               ],
             )
@@ -624,7 +623,7 @@ class SeeMyTeamButton extends StatelessWidget {
                 textAlign: TextAlign.center,
               )
             ),
-            content: Container(
+            content: SizedBox(
               width: SizeConfig.screenWidth * 0.8,
               height: isiOS ? SizeConfig.screenHeight * 0.4 : SizeConfig.screenHeight * 0.45,
               child: SingleChildScrollView(
@@ -647,7 +646,7 @@ class SeeMyTeamButton extends StatelessWidget {
                 child: Text('설정가기', style: TextStyle(
                     fontSize: SizeConfig.defaultSize * 1.7,
                     fontWeight: FontWeight.w600,
-                    color: Color(0xffFE6059)),),
+                    color: const Color(0xffFE6059)),),
               ),
             ],
           )
