@@ -14,36 +14,38 @@ class ChatRealTime extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey.shade50,
-      body: Stack(children: [
-        // 채팅 목록
-        BlocBuilder<ChatCubit, ChatState>(builder: (context, state) {
+      body: Stack(
+        children: [
+        BlocBuilder<ChatCubit, ChatState>( // 채팅 화면
+          builder: (context, state) {
           AnalyticsUtil.logEvent('채팅_실시간채팅_목록_접속');
           if (!state.isLoading) {
-            return Column(
-              children: [
-                state.myChatRooms.isEmpty
-                    ? const Expanded(child: Center(child: _NoChatView())) // TODO : 채팅 없을 때 뷰 잘 보이는지 확인하기
-                    : SingleChildScrollView(
-                        child: Padding(
-                        padding: EdgeInsets.all(SizeConfig.defaultSize),
-                        child: Column(
-                          children: [
-                            for (int i = 0; i < state.myChatRooms.length; i++)
-                              Column(
-                                children: [
-                                  ChatRealTimeOneTeamView(
-                                    isLoading: state.isLoading,
-                                    ancestorContext: context,
-                                    chatState: state,
-                                    matchedTeams: state.myChatRooms[i],
-                                  ),
-                                  SizedBox(height: SizeConfig.defaultSize)
-                                ],
-                              ),
-                          ],
-                        ),
-                      )),
-              ], // TODO : pagination
+            return state.myChatRooms.isEmpty
+              ? const Expanded(child: Center(child: _NoChatView()))
+              : Padding(
+                padding: EdgeInsets.all(SizeConfig.defaultSize),
+                child: RefreshIndicator(
+                  onRefresh: () async {
+                    context.read<ChatCubit>().initChat();
+                  },
+                  child: ListView.builder(
+                    padding: EdgeInsets.zero,
+                    itemCount: state.myChatRooms.length,
+                    itemBuilder: (context, index) {
+                      return Column(
+                        children: [
+                          ChatRealTimeOneTeamView(
+                            isLoading: state.isLoading,
+                            ancestorContext: context,
+                            chatState: state,
+                            matchedTeams: state.myChatRooms[index],
+                          ),
+                          SizedBox(height: SizeConfig.defaultSize)
+                        ],
+                      );
+                    },
+                  ),
+                ),
             );
           }
           return const SizedBox.shrink();
