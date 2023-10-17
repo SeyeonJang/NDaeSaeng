@@ -568,9 +568,10 @@ class MakeTeamButton extends StatelessWidget {
                       fontWeight: FontWeight.w600
                   ),)
               ),
-              const Text("위 버튼을 눌러 팀 만들고 바로 과팅 시작하기", style: TextStyle(
-                fontWeight: FontWeight.w100,
-                color: Colors.grey
+              Text(ancestorContext.read<MeetCubit>().state.userResponse.personalInfo?.gender == 'FEMALE' ? "팀을 만들기만 해도 이성 팀에게 호감이 와요!" : "위 버튼을 눌러 팀 만들고 바로 과팅 시작하기",
+                style: const TextStyle(
+                  fontWeight: FontWeight.w100,
+                  color: Colors.grey
               ),)
             ],
           ),
