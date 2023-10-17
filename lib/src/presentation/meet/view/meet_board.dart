@@ -16,7 +16,9 @@ import 'package:dart_flutter/src/domain/entity/user.dart';
 import '../../../domain/entity/meet_team.dart';
 
 class MeetBoard extends StatefulWidget {
-  const MeetBoard({super.key});
+  BuildContext ancestorContext;
+
+  MeetBoard({super.key, required this.ancestorContext});
 
   @override
   State<MeetBoard> createState() => _MeetBoardState();
@@ -35,13 +37,13 @@ class _MeetBoardState extends State<MeetBoard> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    meetCubit = context.read<MeetCubit>();
+    meetCubit = widget.ancestorContext.read<MeetCubit>();
   }
 
   @override
   void initState() {
     super.initState();
-    meetCubit = context.read<MeetCubit>();
+    meetCubit = widget.ancestorContext.read<MeetCubit>();
     pagingController = meetCubit.pagingController;
 
     if (mounted) {
@@ -64,6 +66,7 @@ class _MeetBoardState extends State<MeetBoard> {
     // ).toList();
     // print("친구 수 : ${state.friends.length}, 과팅 같이 나갈 수 있는 친구 수 : ${filteredFriends.length}, 팀 개수 : ${state.myTeams.length}");
     MeetState state = meetCubit.state;
+    print('Board Widget ${state.hashCode}');
 
     return (state.isLoading)
         ? Scaffold(
@@ -697,7 +700,7 @@ class _BodySectionState extends State<_BodySection> {
                           widget.context.read<MeetCubit>().initPageKeyList();
                         },
                         child: SizedBox(
-                          height: SizeConfig.screenHeight * 0.81,
+                          height: SizeConfig.screenHeight * 0.8,
                           child: PagedListView<int, BlindDateTeam>(
                             pagingController: widget.pagingController,
                             builderDelegate: PagedChildBuilderDelegate<BlindDateTeam>(
@@ -720,7 +723,7 @@ class _BodySectionState extends State<_BodySection> {
                                 )
                                 : Column(
                                   children: [
-                                    SizedBox(height: SizeConfig.defaultSize * 0.8,),
+                                    SizedBox(height: SizeConfig.defaultSize * 0.9,),
                                     MeetOneTeamCardview(team: blindDateTeam, isMyTeam: false, myTeamCount: widget.meetState.myTeams.length, myTeamId: nowTeam.id,)
                                   ]);
                               },
