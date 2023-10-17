@@ -28,7 +28,7 @@ class _ChatResponseGetState extends State<ChatResponseGet> with AutomaticKeepAli
           builder: (context, state) {
             if (!state.isLoading) {
               return Scaffold(
-                backgroundColor: Colors.grey.shade50,
+                backgroundColor: Colors.grey.shade100,
                 body: state.receivedList.isEmpty
                     ? RefreshIndicator(
                         onRefresh: () async {
@@ -53,7 +53,7 @@ class _ChatResponseGetState extends State<ChatResponseGet> with AutomaticKeepAli
                                   Column(
                                     children: [
                                       ChatGetOneTeamView(chatState: state, proposal: state.receivedList[i],),
-                                      SizedBox(height: SizeConfig.defaultSize * 1.5,)
+                                      SizedBox(height: SizeConfig.defaultSize * 1.1 ,)
                                     ],
                                   ),
                                 if (state.receivedList.length < 5)
