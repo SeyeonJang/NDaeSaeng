@@ -267,7 +267,7 @@ class _MeetCreateTeamInputState extends State<MeetCreateTeamInput> {
                                                     child: Icon(Icons.add, size: SizeConfig.defaultSize * 1.9, color: Colors.black),
                                                   ),
                                                   TextSpan(
-                                                    text: "   팀원 추가하기",
+                                                    text: "   내 친구 입력하기",
                                                     style: TextStyle(color: Colors.black, fontSize: SizeConfig.defaultSize * 1.6),
                                                   ),
                                                 ],
@@ -276,7 +276,7 @@ class _MeetCreateTeamInputState extends State<MeetCreateTeamInput> {
                                     ),
                                   ),
                                   SizedBox(height: SizeConfig.defaultSize * 1),
-                                  Text("같은 학교 친구 최소 1명을 추가해야 해요!", style: TextStyle(color: Colors.grey, fontSize: SizeConfig.defaultSize * 1.6)),
+                                  Text("같은 학교 친구 최소 1명~2명을 입력하면 돼요!", style: TextStyle(color: Colors.grey, fontSize: SizeConfig.defaultSize * 1.6)),
                                   SizedBox(
                                     height: isKeyboardVisible ? 100.0 : 0.0, // 키보드가 켜져 있을 때만 SizedBox를 올립니다.
                                   ),
