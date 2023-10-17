@@ -1,3 +1,4 @@
+import 'package:dart_flutter/src/common/util/analytics_util.dart';
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
@@ -16,6 +17,7 @@ class _WebViewFullScreenState extends State<WebViewFullScreen> {
   @override
   void initState() {
     super.initState();
+    AnalyticsUtil.logEvent('웹뷰_접속_${widget.title}');
     _webViewController = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..loadRequest(Uri.parse(widget.url));
