@@ -1,7 +1,6 @@
 import 'package:dart_flutter/res/config/size_config.dart';
 import 'package:dart_flutter/src/common/util/analytics_util.dart';
 import 'package:dart_flutter/src/domain/entity/user.dart';
-import 'package:dart_flutter/src/common/util/toast_util.dart';
 import 'package:dart_flutter/src/presentation/component/banner_image_slider.dart';
 import 'package:dart_flutter/src/presentation/meet/view/meet_create_team_input.dart';
 import 'package:dart_flutter/src/presentation/meet/view/meet_my_team_detail.dart';
@@ -485,7 +484,7 @@ class MakeTeamButton extends StatelessWidget {
                     textAlign: TextAlign.center,
                   )
               ),
-              content: Container(
+              content: SizedBox(
                 width: SizeConfig.screenWidth * 0.8,
                 height: isiOS ? SizeConfig.screenHeight * 0.4 : SizeConfig.screenHeight * 0.45,
                 child: SingleChildScrollView(
@@ -508,7 +507,7 @@ class MakeTeamButton extends StatelessWidget {
                   child: Text('설정가기', style: TextStyle(
                     fontSize: SizeConfig.defaultSize * 1.7,
                     fontWeight: FontWeight.w600,
-                    color: Color(0xffFE6059)),),
+                    color: const Color(0xffFE6059)),),
                 ),
               ],
             )
@@ -569,9 +568,10 @@ class MakeTeamButton extends StatelessWidget {
                       fontWeight: FontWeight.w600
                   ),)
               ),
-              const Text("위 버튼을 눌러 팀 만들고 바로 과팅 시작하기", style: TextStyle(
-                fontWeight: FontWeight.w100,
-                color: Colors.grey
+              Text(ancestorContext.read<MeetCubit>().state.userResponse.personalInfo?.gender == 'FEMALE' ? "팀을 만들기만 해도 이성 팀에게 호감이 와요!" : "위 버튼을 눌러 팀 만들고 바로 과팅 시작하기",
+                style: const TextStyle(
+                  fontWeight: FontWeight.w100,
+                  color: Colors.grey
               ),)
             ],
           ),
@@ -624,7 +624,7 @@ class SeeMyTeamButton extends StatelessWidget {
                 textAlign: TextAlign.center,
               )
             ),
-            content: Container(
+            content: SizedBox(
               width: SizeConfig.screenWidth * 0.8,
               height: isiOS ? SizeConfig.screenHeight * 0.4 : SizeConfig.screenHeight * 0.45,
               child: SingleChildScrollView(
@@ -647,7 +647,7 @@ class SeeMyTeamButton extends StatelessWidget {
                 child: Text('설정가기', style: TextStyle(
                     fontSize: SizeConfig.defaultSize * 1.7,
                     fontWeight: FontWeight.w600,
-                    color: Color(0xffFE6059)),),
+                    color: const Color(0xffFE6059)),),
               ),
             ],
           )
