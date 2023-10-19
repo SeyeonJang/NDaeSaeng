@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:math';
 import 'package:dart_flutter/res/config/size_config.dart';
 import 'package:dart_flutter/src/common/util/analytics_util.dart';
 import 'package:dart_flutter/src/common/util/toast_util.dart';
@@ -17,6 +18,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:image_picker/image_picker.dart';
 import '../../../domain/entity/university.dart';
+import '../../component/webview_fullscreen.dart';
 
 class MeetCreateTeamInput extends StatefulWidget {
   final VoidCallback onFinish;
@@ -194,23 +196,29 @@ class _MeetCreateTeamInputState extends State<MeetCreateTeamInput> {
                     child: Column(
                       children: [
                         SizedBox(height: SizeConfig.defaultSize),
-                        Row(mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              IconButton(
-                                  onPressed: () async {
-                                    AnalyticsUtil.logEvent("홈_팀만들기_뒤로가기_터치");
-                                    await onBackKey();
-                                    // if (context.mounted) Navigator.pop(context, true);
-                                    Navigator.pop(context, true);
-                                  },
-                                  icon: Icon(Icons.arrow_back_ios_new_rounded,
-                                      size: SizeConfig.defaultSize * 2)),
-                              Text("과팅 팀 만들기",
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w800,
-                                    fontSize: SizeConfig.defaultSize * 2,
-                                  )),
-                            ]),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Row(mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  IconButton(
+                                      onPressed: () async {
+                                        AnalyticsUtil.logEvent("홈_팀만들기_뒤로가기_터치");
+                                        await onBackKey();
+                                        // if (context.mounted) Navigator.pop(context, true);
+                                        Navigator.pop(context, true);
+                                      },
+                                      icon: Icon(Icons.arrow_back_ios_new_rounded,
+                                          size: SizeConfig.defaultSize * 2)),
+                                  Text("과팅 팀 만들기",
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.w800,
+                                        fontSize: SizeConfig.defaultSize * 2,
+                                      )),
+                                ]),
+                            const _MeetCreateTeamInformationButton()
+                          ],
+                        ),
                         SizedBox(height: SizeConfig.defaultSize * 1.5),
                         Flexible(
                           child: Padding(
@@ -266,7 +274,7 @@ class _MeetCreateTeamInputState extends State<MeetCreateTeamInput> {
                                                     child: Icon(Icons.add, size: SizeConfig.defaultSize * 1.9, color: Colors.black),
                                                   ),
                                                   TextSpan(
-                                                    text: "   팀원 추가하기",
+                                                    text: "   내 친구 입력하기",
                                                     style: TextStyle(color: Colors.black, fontSize: SizeConfig.defaultSize * 1.6),
                                                   ),
                                                 ],
@@ -275,7 +283,7 @@ class _MeetCreateTeamInputState extends State<MeetCreateTeamInput> {
                                     ),
                                   ),
                                   SizedBox(height: SizeConfig.defaultSize * 1),
-                                  Text("같은 학교 친구 최소 1명을 추가해야 해요!", style: TextStyle(color: Colors.grey, fontSize: SizeConfig.defaultSize * 1.6)),
+                                  Text("같은 학교 친구 최소 1명~2명을 입력하면 돼요!", style: TextStyle(color: Colors.grey, fontSize: SizeConfig.defaultSize * 1.6)),
                                   SizedBox(
                                     height: isKeyboardVisible ? 100.0 : 0.0, // 키보드가 켜져 있을 때만 SizedBox를 올립니다.
                                   ),
@@ -383,11 +391,8 @@ class _CreateTeamTopSectionState extends State<_CreateTeamTopSection> {
                             fontSize: SizeConfig.defaultSize * 1.6,
                             color: Colors.black)
                         ),
-                        const _MeetCreateTeamInformationButton(),
-
-
-
                   ]),
+                    SizedBox(height: SizeConfig.defaultSize * 0.9),
 
                   TextFormField(
                       controller: _controller,
@@ -425,7 +430,7 @@ class _CreateTeamTopSectionState extends State<_CreateTeamTopSection> {
                 ],
               ),
             ),
-              SizedBox(height: SizeConfig.defaultSize * 2),
+              SizedBox(height: SizeConfig.defaultSize),
           ],
         )
       ],
@@ -647,64 +652,94 @@ class _MeetCreateTeamInformationButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextButton(
-        onPressed: () {
+    return Padding(
+      padding: const EdgeInsets.only(right: 8.0),
+      child: InkWell(
+        onTap: () {
           AnalyticsUtil.logEvent("과팅_팀만들기_도움말_터치");
-          showDialog<String>(
-              context: context,
-              builder: (BuildContext dialogContext) => AlertDialog(
-                surfaceTintColor: Colors.white,
-                title: Center(
-                    child: Text(
-                      '과팅 팀을 등록해봐요!',
-                      style: TextStyle(
-                          fontSize: SizeConfig.defaultSize * 1.5,
-                          fontWeight: FontWeight.w500),
-                    )),
-                content: SingleChildScrollView(
-                  child: ListBody(
-                    children: <Widget>[
-                      SizedBox(
-                        height: SizeConfig.defaultSize,
-                      ),
-                      const Center(child: Text('이성에게 보여질 팀명을 입력해주세요.',)),
-                      const Center(child: Text('팀원은 최소 2명! 내 친구 정보를 입력해주세요.')),
-                      const Center(child: Text('친구의 프사, 이름, 년생과 학과만 있으면 되요!')),
-                      SizedBox(
-                        height: SizeConfig.defaultSize * 2.2,
-                      ),
-                      Center(
-                          child: Text(
-                            '',
-                            style: TextStyle(fontSize: SizeConfig.defaultSize * 1.2),
-                          )),
-                      Center(
-                          child: Text(
-                            'Tip. 학생증 인증을 하면 인증뱃지가 추가됩니다',
-                            style: TextStyle(fontSize: SizeConfig.defaultSize * 1.2),
-                          )),
-                    ],
-                  ),
-                ),
-              ));
+          Navigator.push(context, MaterialPageRoute(builder: (context) => const WebViewFullScreen(url: 'https://efficacious-ease-5ad.notion.site/76aca6b7945e4db485069f921deb961e?pvs=4', title: '팀 만들기 도움말')))
+          .then((_) {
+            AnalyticsUtil.logEvent("과팅_팀만들기_도움말_뒤로가기(팀만들기접속)");
+          });
         },
-        style: TextButton.styleFrom(
-            backgroundColor: Colors.white, surfaceTintColor: Colors.white),
-        child:
-        RichText(
-          text: TextSpan(
-            children: [
-              WidgetSpan(
-                child: Icon(Icons.info_outline, size: SizeConfig.defaultSize * 1.5, color: Colors.grey),
-              ),
-              TextSpan(
-                text: " 도움말",
-                style: TextStyle(color: Colors.grey, fontSize: SizeConfig.defaultSize * 1.4),
-              ),
-            ],
+        child: Container(
+          decoration: BoxDecoration(
+            color: const Color(0xffFE6059).withOpacity(0.1),
+            borderRadius: const BorderRadius.all(Radius.circular(7)),
           ),
-        )
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: SizeConfig.defaultSize * 0.9, vertical: SizeConfig.defaultSize * 0.75),
+            child: Row(
+              children: [
+                Icon(Icons.info_outline, size: SizeConfig.defaultSize * 1.5, color: const Color(0xffFE6059)),
+                const Text(" 팀 만드는 방법", style: TextStyle(color: Color(0xffFE6059)),),
+              ],
+            ),
+          ),
+        ),
+      ),
     );
+    // return TextButton(
+    //     onPressed: () {
+    //       AnalyticsUtil.logEvent("과팅_팀만들기_도움말_터치");
+    //       Navigator.push(context, MaterialPageRoute(builder: (context) => const WebViewFullScreen(url: 'https://efficacious-ease-5ad.notion.site/76aca6b7945e4db485069f921deb961e?pvs=4', title: '팀 만들기 도움말')))
+    //       .then((_) {
+    //         AnalyticsUtil.logEvent("과팅_팀만들기_도움말_뒤로가기(팀만들기접속)");
+    //       });
+    //       // showDialog<String>(
+    //       //     context: context,
+    //       //     builder: (BuildContext dialogContext) => AlertDialog(
+    //       //       surfaceTintColor: Colors.white,
+    //       //       title: Center(
+    //       //           child: Text(
+    //       //             '과팅 팀을 등록해봐요!',
+    //       //             style: TextStyle(
+    //       //                 fontSize: SizeConfig.defaultSize * 1.5,
+    //       //                 fontWeight: FontWeight.w500),
+    //       //           )),
+    //       //       content: SingleChildScrollView(
+    //       //         child: ListBody(
+    //       //           children: <Widget>[
+    //       //             SizedBox(
+    //       //               height: SizeConfig.defaultSize,
+    //       //             ),
+    //       //             const Center(child: Text('이성에게 보여질 팀명을 입력해주세요.',)),
+    //       //             const Center(child: Text('팀원은 최소 2명! 내 친구 정보를 입력해주세요.')),
+    //       //             const Center(child: Text('친구의 프사, 이름, 년생과 학과만 있으면 되요!')),
+    //       //             SizedBox(
+    //       //               height: SizeConfig.defaultSize * 2.2,
+    //       //             ),
+    //       //             Center(
+    //       //                 child: Text(
+    //       //                   '',
+    //       //                   style: TextStyle(fontSize: SizeConfig.defaultSize * 1.2),
+    //       //                 )),
+    //       //             Center(
+    //       //                 child: Text(
+    //       //                   'Tip. 학생증 인증을 하면 인증뱃지가 추가됩니다',
+    //       //                   style: TextStyle(fontSize: SizeConfig.defaultSize * 1.2),
+    //       //                 )),
+    //       //           ],
+    //       //         ),
+    //       //       ),
+    //       //     ));
+    //     },
+    //     style: TextButton.styleFrom(backgroundColor: Colors.white, surfaceTintColor: Colors.white),
+    //     child:
+    //     RichText(
+    //       text: TextSpan(
+    //         children: [
+    //           WidgetSpan(
+    //             child: Icon(Icons.info_outline, size: SizeConfig.defaultSize * 1.5, color: Color(0xff2F4858)),
+    //           ),
+    //           TextSpan(
+    //             text: " 호감 많이 받는 방법",
+    //             style: TextStyle(color: Color(0xff2F4858), fontSize: SizeConfig.defaultSize * 1.4),
+    //           ),
+    //         ],
+    //       ),
+    //     )
+    // );
   }
 }
 
@@ -751,11 +786,20 @@ class _MemberCardViewNoVoteState extends State<MemberCardViewNoVote> {
   // textField 생년
   late TextEditingController _controller;
   late TextEditingController _nameController;
+  final String _userPostfix = "년생";
+  final FocusNode _focusNode = FocusNode();
 
   @override
   void initState() {
     super.initState();
     _nameController = TextEditingController(); // 이름
+    _focusNode.addListener(() {
+      if (_focusNode.hasFocus) {
+        // Move the cursor before the postfix when the TextField gains focus.
+        _controller.selection =
+            TextSelection.collapsed(offset: max(0, _controller.text.length - _userPostfix.length));
+      }
+    });
     _controller = TextEditingController(); // 생년
     // 학과
     List<University> universities = widget.state.universities;
@@ -770,6 +814,7 @@ class _MemberCardViewNoVoteState extends State<MemberCardViewNoVote> {
     super.dispose();
     _controller.dispose();
     _nameController.dispose();
+    _focusNode.dispose();
   }
 
   // 프로필 사진
@@ -881,29 +926,38 @@ class _MemberCardViewNoVoteState extends State<MemberCardViewNoVote> {
                     children: [
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
+                          Text("이름", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.5),),
+                          SizedBox(width: SizeConfig.defaultSize,),
                           SizedBox(
-                            width: SizeConfig.screenWidth * 0.5,
+                            width: SizeConfig.screenWidth * 0.44,
                             height: SizeConfig.defaultSize * 5,
-                            child: TextField(
-                              controller: _nameController,
-                              maxLength: 7,
-                              onChanged: (value) {
-                                setState(() {
-                                  widget.name = value;
-                                  widget.onSetTeamMemberName(widget.memberIndex, value);
-                                });
-                                AnalyticsUtil.logEvent("홈_팀만들기_친구이름입력", properties: {
-                                  '친구 인덱스': widget.memberIndex
-                                });
-                              },
-                              decoration: InputDecoration(
-                                  hintText: "친구 이름/닉네임",
-                                  hintStyle: TextStyle(fontSize: SizeConfig.defaultSize * 1.4, color: Colors.grey.shade500),
-                                  contentPadding: EdgeInsets.zero,
-                                  enabledBorder: const UnderlineInputBorder(borderSide: BorderSide(width: 0.6)),
-                                  counterText: ''
-                              ),
+                            child: Column(
+                              children: [
+                                SizedBox(height: SizeConfig.defaultSize * 1.3,),
+                                TextField(
+                                  controller: _nameController,
+                                  maxLength: 7,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      widget.name = value;
+                                      widget.onSetTeamMemberName(widget.memberIndex, value);
+                                    });
+                                    AnalyticsUtil.logEvent("홈_팀만들기_친구이름입력", properties: {
+                                      '친구 인덱스': widget.memberIndex
+                                    });
+                                  },
+                                  decoration: InputDecoration(
+                                      isDense: true,
+                                      hintText: "친구 이름/닉네임",
+                                      hintStyle: TextStyle(fontSize: SizeConfig.defaultSize * 1.4, color: Colors.grey.shade500),
+                                      contentPadding: EdgeInsets.only(bottom: SizeConfig.defaultSize),
+                                      enabledBorder: const UnderlineInputBorder(borderSide: BorderSide(width: 0.6)),
+                                      counterText: ''
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
 
@@ -941,39 +995,57 @@ class _MemberCardViewNoVoteState extends State<MemberCardViewNoVote> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
+                          Text("생년", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.5),),
+                          SizedBox(width: SizeConfig.defaultSize,),
                           SizedBox(
-                            width: SizeConfig.screenWidth * 0.4,
+                            width: SizeConfig.screenWidth * 0.44,
                             height: SizeConfig.defaultSize * 5,
-                            child: TextField(
-                              keyboardType: TextInputType.number,
-                              controller: _controller,
-                              maxLength: 2,
-                              onChanged: (value) {
-                                setState(() {
-                                  widget.onSetTeamMemberBirthYear(widget.memberIndex, value);
-                                });
-                                AnalyticsUtil.logEvent("홈_팀만들기_친구생년입력", properties: {
-                                  '친구 인덱스': widget.memberIndex,
-                                  '친구 생년': value
-                                });
-                              },
-                              decoration: InputDecoration(
-                                hintText: "ex. 04 / 03 / 00",
-                                hintStyle: TextStyle(fontSize: SizeConfig.defaultSize * 1.4, color: Colors.grey.shade500),
-                                contentPadding: EdgeInsets.zero,
-                                enabledBorder: const UnderlineInputBorder(borderSide: BorderSide(width: 0.6)),
-                                counterText: ''
-                              ),
-                            ),
+                            child: Column(
+                              children: [
+                                SizedBox(height: SizeConfig.defaultSize * 1.3),
+                                TextField(
+                                  keyboardType: TextInputType.number,
+                                  controller: _controller,
+                                  focusNode: _focusNode,
+                                  maxLength: 2 + _userPostfix.length, // Increase the max length to accommodate the postfix.
+                                  onChanged: (value) {
+                                    if (!value.endsWith(_userPostfix)) {
+                                      // If the value does not end with '_userPostfix', add it.
+                                      value = value + _userPostfix;
+                                      _controller.text = value;
+                                      // Move the cursor before the postfix.
+                                      _controller.selection =
+                                          TextSelection.collapsed(offset: max(0, value.length - _userPostfix.length));
+                                    }
+
+                                    setState(() {
+                                      widget.onSetTeamMemberBirthYear(widget.memberIndex, value.replaceFirst(_userPostfix, '')); // Remove the postfix before storing and sending the birth year.
+                                    });
+
+                                    AnalyticsUtil.logEvent("홈_팀만들기_친구생년입력", properties: {
+                                      '친구 인덱스': widget.memberIndex,
+                                      '친구 생년': value.replaceFirst(_userPostfix, '')
+                                    });
+                                  },
+                                  decoration: InputDecoration(
+                                      isDense: true,
+                                      hintText: "ex. 04",
+                                      hintStyle: TextStyle(fontSize: SizeConfig.defaultSize * 1.4, color: Colors.grey.shade500),
+                                      contentPadding: EdgeInsets.only(bottom: SizeConfig.defaultSize),
+                                      enabledBorder: const UnderlineInputBorder(borderSide: BorderSide(width: 0.6)),
+                                      counterText:''
+                                  ),
+                                ),
+                              ],
+                            )
                           ),
-                          const Text("년생") // TODO : 년생 View(V)
                         ],
                       )
                     ],
                   )
                 ],
               ),
-              TypeAheadField( // TODO : 학과 검색창 View(V)
+              TypeAheadField(
                 noItemsFoundBuilder: (context) {
                   return const Padding(
                     padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),

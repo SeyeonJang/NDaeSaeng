@@ -47,6 +47,8 @@ class MeetCubit extends Cubit<MeetState> {
 
     User userResponse = await _userUseCase.myInfo();
     state.setMyInfo(userResponse);
+    // print('initMeet : userResponse ok | $userResponse');
+
     // TODO : 친구와 과팅 나갈 때 복구
     // List<User> friends = await _friendUseCase.getMyFriends();
     // state.setMyFriends(friends);
@@ -55,6 +57,7 @@ class MeetCubit extends Cubit<MeetState> {
 
     List<Location> locations = await _meetUseCase.getLocations();
     state.setServerLocations(locations);
+    // print('initMeet : locations ok | $locations');
 
     // Pagination<BlindDateTeam> paginationBlindTeams = await _meetUseCase.getBlindDateTeams(page:0, targetLocationId: 0);
     // _numberOfPostsPerRequest = paginationBlindTeams.numberOfElements ?? 10;
@@ -63,14 +66,19 @@ class MeetCubit extends Cubit<MeetState> {
     // state.setBlindDateTeams(blindDateTeams);
 
     await getMyTeams(put: false);
+    // print('initMeet : ${state.hashCode} getMyTeams ok | ${state.myTeams}');
+
     if (!state.pickedTeam && state.myTeams.isNotEmpty) {
       state.setMyTeam(state.myTeams[0]);
     }
     if (initPickedTeam != null) setPickedTeam(initPickedTeam);
+    // print('initMeet : setPickedTeam ok | ${state.myTeams[0]}');
 
     state.setIsLoading(false);
     emit(state.copy());
-    print("test: ${state.getMyTeam()}");
+    // print('initMeet : emit loading ${state.isLoading}');
+    // print('MeetCubit ${state.hashCode}');
+    // print("test: ${state.getMyTeam()}");
   }
 
   void initMeetIntro() async {
