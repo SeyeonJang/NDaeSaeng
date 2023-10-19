@@ -15,6 +15,8 @@ import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:dart_flutter/src/domain/entity/user.dart';
 import '../../../domain/entity/meet_team.dart';
 
+const List<String> list = <String>['최신순', '호감순', '조회순'];
+
 class MeetBoard extends StatefulWidget {
   BuildContext ancestorContext;
 
@@ -643,6 +645,7 @@ class _BodySection extends StatefulWidget {
 class _BodySectionState extends State<_BodySection> {
   final ScrollController _scrollController = ScrollController();
   late MeetTeam nowTeam = widget.meetState.myTeam ?? (widget.meetState.myTeams.firstOrNull ?? MeetTeam(id: 0, name: '', university: null, locations: [], canMatchWithSameUniversity: true, members: []));
+  String dropdownValue = list.first; // TODO : VM 연결
 
   @override
   void initState() {
@@ -686,6 +689,39 @@ class _BodySectionState extends State<_BodySection> {
           //       isMyTeam: true,
           //       myTeamCount: widget.meetState.myTeams.length,),
           //   ),
+          Container(
+            width: SizeConfig.screenWidth,
+            height: SizeConfig.defaultSize * 4,
+            color: Colors.white,
+            child: Padding(
+              padding: EdgeInsets.only(right: SizeConfig.defaultSize * 2, bottom: SizeConfig.defaultSize),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  DropdownButton(
+                    value: dropdownValue,
+                    icon: const Icon(Icons.arrow_drop_down),
+                    iconSize: 24,
+                    elevation: 16,
+                    style: TextStyle(color: Colors.black, fontSize: SizeConfig.defaultSize * 1.5),
+                    underline: Container(),
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        dropdownValue = newValue!;
+                      });
+                    },
+                    items: list.map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
+                  )
+                ],
+              )
+            )
+          ),
           Flexible(
             child: SingleChildScrollView(
               physics: const AlwaysScrollableScrollPhysics(),

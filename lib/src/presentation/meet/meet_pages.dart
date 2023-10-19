@@ -20,7 +20,7 @@ class MeetPages extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Padding(
-                  padding: EdgeInsets.only(left: SizeConfig.defaultSize * 2, right: SizeConfig.defaultSize * 2, top: SizeConfig.defaultSize * 2.5, bottom: SizeConfig.defaultSize * 1.5),
+                  padding: EdgeInsets.only(left: SizeConfig.defaultSize * 2, right: SizeConfig.defaultSize * 2, top: SizeConfig.defaultSize * 2.5),
                   child: SizedBox(
                     width: SizeConfig.screenWidth,
                     child: Text("과팅", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.8, fontWeight: FontWeight.w600),),
