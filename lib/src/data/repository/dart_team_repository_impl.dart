@@ -18,4 +18,36 @@ class DartTeamRepositoryImpl extends BlindDateTeamRepository {
       pageResponse.content?.map((team) => team.newBlindDateTeam()).toList() ?? []
     );
   }
+
+  @override
+  Future<Pagination<BlindDateTeam>> getTeamsMostLiked({int page = 0, int size = 10, int targetLocationId = 0}) async {
+    // dummy
+    Pagination<BlindDateTeamDto> pageResponse = await DartApiRemoteDataSource.getBlindDateTeams(page: page, size: size, regionId: targetLocationId);
+    BlindDateTeam? firstTeam = pageResponse.content?.first.newBlindDateTeam();
+    List<BlindDateTeam> firstTeamList = firstTeam != null ? [firstTeam] : [];
+    return pageResponse.newContent(firstTeamList);
+    // real
+    // Pagination<BlindDateTeamDto> pageResponse = await DartApiRemoteDataSource.getBlindDateTeamsMostLiked(page: page, size: size, regionId: targetLocationId);
+    // return pageResponse.newContent(
+    //   pageResponse.content?.map((team) => team.newBlindDateTeam()).toList() ?? []
+    // );
+  }
+
+  @override
+  Future<Pagination<BlindDateTeam>> getTeamsMostSeen({int page = 0, int size = 10, int targetLocationId = 0}) async {
+    // dummy
+    Pagination<BlindDateTeamDto> pageResponse = await DartApiRemoteDataSource.getBlindDateTeams(page: page, size: size, regionId: targetLocationId);
+    List<BlindDateTeam> firstTwoTeams = [];
+    if (pageResponse.content != null) {
+      for (int i = 0; i < 2 && i < pageResponse.content!.length; i++) {
+        firstTwoTeams.add(pageResponse.content![i].newBlindDateTeam());
+      }
+    }
+    return pageResponse.newContent(firstTwoTeams);
+    // real
+    // Pagination<BlindDateTeamDto> pageResponse = await DartApiRemoteDataSource.getBlindDateTeamsMostSeen(page: page, size: size, regionId: targetLocationId);
+    // return pageResponse.newContent(
+    //   pageResponse.content?.map((team) => team.newBlindDateTeam()).toList() ?? []
+    // );
+  }
 }
