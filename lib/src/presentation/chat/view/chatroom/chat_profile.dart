@@ -109,8 +109,8 @@ class ChatProfile extends StatelessWidget {
 
               Column(
                 children: [
-                  Text("${profile.name=='DEFAULT'?'(닉네임없음)':profile.name}를 친구로 추가해서 투표하고 싶다면"),
-                  const Text("채팅방에서 서로 코드를 공유해요!")
+                  Text("${profile.name=='DEFAULT'?'(닉네임없음)':profile.name}와(과) 과팅 약속을 잡고 싶다면"),
+                  const Text("채팅방에서 날짜와 장소를 정해보아요!")
                 ],
               )
             ],
