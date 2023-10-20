@@ -220,7 +220,7 @@ class _ChattingRoomState extends State<ChattingRoom> {
                           ),),
                         ],
                       ),
-                        SizedBox(width: SizeConfig.defaultSize * 5),
+                        SizedBox(width: SizeConfig.defaultSize * 3),
                       Expanded(
                         child: Container(
                           alignment: Alignment.centerRight,
@@ -279,7 +279,7 @@ class _ChattingRoomState extends State<ChattingRoom> {
                           ),),
                         ],
                       ),
-                        SizedBox(width: SizeConfig.defaultSize * 4),
+                        SizedBox(width: SizeConfig.defaultSize * 3),
                       Expanded(
                         child: Container(
                           alignment: Alignment.centerRight,
