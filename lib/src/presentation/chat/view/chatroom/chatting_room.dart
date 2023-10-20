@@ -398,7 +398,7 @@ class _ChattingRoomState extends State<ChattingRoom> {
               titleStyle: TextStyle(color: Colors.black),
             ),
             textStyle: TextStyle(fontSize: SizeConfig.defaultSize * 1.5, color: Colors.black),
-            senderNameTextStyle: const TextStyle(color: Colors.black),
+            senderNameTextStyle: TextStyle(color: Colors.black, fontSize: SizeConfig.defaultSize * 1.3),
             color: Colors.grey.shade100,
           ),
         ),
