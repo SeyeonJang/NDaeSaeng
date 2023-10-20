@@ -172,7 +172,7 @@ class MeetOtherTeamDetail extends StatelessWidget {
                                                         style: TextStyle(fontSize: SizeConfig.defaultSize * 1.8, fontWeight: FontWeight.w500),
                                                         children: <TextSpan>[
                                                           const TextSpan(text: "지금 바로 ", style: TextStyle(color: Colors.black)),
-                                                          TextSpan(text: "\'${blindDateTeamDetail.name}\'", style: const TextStyle(color: Color(0xffFF5C58), fontWeight: FontWeight.w600)),
+                                                          TextSpan(text: "'${blindDateTeamDetail.name}'", style: const TextStyle(color: Color(0xffFF5C58), fontWeight: FontWeight.w600)),
                                                           const TextSpan(text: "에게", style: TextStyle(color: Colors.black)),
                                                         ]
                                                     )
