@@ -57,6 +57,10 @@ class _BannerImageSliderState extends State<BannerImageSlider> {
       );
     }
 
+    if (_resolvedBannerList?.isEmpty ?? true) {
+      return const SizedBox.shrink();
+    }
+
     return SizedBox(
       height: defaultHeight,
       child: Stack(

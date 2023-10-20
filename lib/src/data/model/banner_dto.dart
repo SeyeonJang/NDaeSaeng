@@ -7,8 +7,9 @@ class BannerImageDto {
   final String? imageUrl;
   final String? linkUrl;
   final String? enabledYn;
+  final Map<String, dynamic>? conditions;
 
-  BannerImageDto({this.id, this.title, this.desc, this.imageUrl, this.linkUrl, this.enabledYn});
+  BannerImageDto({this.id, this.title, this.desc, this.imageUrl, this.linkUrl, this.enabledYn, this.conditions});
 
   static BannerImageDto fromJson(Map<String, dynamic> json) {
     return BannerImageDto(
@@ -17,7 +18,8 @@ class BannerImageDto {
         desc: json['desc'],
         imageUrl: json['image_url'],
         linkUrl: json['link_url'],
-        enabledYn: json['enabled_yn']
+        enabledYn: json['enabled_yn'],
+        conditions: json['conditions']
     );
   }
 
@@ -27,12 +29,13 @@ class BannerImageDto {
         title: title ?? "(알수없음)",
         desc: desc ?? "(알수없음)",
         imageUrl: imageUrl ?? "DEFAULT",
-        linkUrl: linkUrl ?? "DEFAULT"
+        linkUrl: linkUrl ?? "DEFAULT",
+        conditions: conditions ?? {}
     );
   }
 
   @override
   String toString() {
-    return 'BannerImageDto{id: $id, title: $title, desc: $desc, imageUrl: $imageUrl, linkUrl: $linkUrl, enabledYn: $enabledYn}';
+    return 'BannerImageDto{id: $id, title: $title, desc: $desc, imageUrl: $imageUrl, linkUrl: $linkUrl, enabledYn: $enabledYn, conditions: $conditions}';
   }
 }
