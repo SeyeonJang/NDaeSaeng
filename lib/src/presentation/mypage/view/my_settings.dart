@@ -645,10 +645,10 @@ class _MyPageViewState extends State<MyPageView> {
                               Text('바꾸고 싶은 닉네임을 입력해주세요!', style: TextStyle(
                                   fontSize: SizeConfig.defaultSize * 1.4),
                                 textAlign: TextAlign.start,),
-                              const Text('닉네임은 최대 7글자예요!'),
+                              const Text('닉네임은 최대 10글자예요!'),
                               TextField(
                                 controller: textController,
-                                maxLength: 7,
+                                maxLength: 10,
                                 onChanged: (text) {
                                   setState(() {}); // Rebuild the AlertDialog when text changes
                                 },

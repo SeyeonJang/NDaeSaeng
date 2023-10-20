@@ -938,7 +938,7 @@ class _MemberCardViewNoVoteState extends State<MemberCardViewNoVote> {
                                 SizedBox(height: SizeConfig.defaultSize * 1.3,),
                                 TextField(
                                   controller: _nameController,
-                                  maxLength: 7,
+                                  maxLength: 10,
                                   onChanged: (value) {
                                     setState(() {
                                       widget.name = value;
