@@ -242,7 +242,7 @@ class _ChattingRoomState extends State<ChattingRoom> with WidgetsBindingObserver
                           ),),
                         ],
                       ),
-                        SizedBox(width: SizeConfig.defaultSize * 5),
+                        SizedBox(width: SizeConfig.defaultSize * 3),
                       Expanded(
                         child: Container(
                           alignment: Alignment.centerRight,
@@ -301,7 +301,7 @@ class _ChattingRoomState extends State<ChattingRoom> with WidgetsBindingObserver
                           ),),
                         ],
                       ),
-                        SizedBox(width: SizeConfig.defaultSize * 4),
+                        SizedBox(width: SizeConfig.defaultSize * 3),
                       Expanded(
                         child: Container(
                           alignment: Alignment.centerRight,
@@ -420,7 +420,7 @@ class _ChattingRoomState extends State<ChattingRoom> with WidgetsBindingObserver
               titleStyle: TextStyle(color: Colors.black),
             ),
             textStyle: TextStyle(fontSize: SizeConfig.defaultSize * 1.5, color: Colors.black),
-            senderNameTextStyle: const TextStyle(color: Colors.black),
+            senderNameTextStyle: TextStyle(color: Colors.black, fontSize: SizeConfig.defaultSize * 1.3),
             color: Colors.grey.shade100,
           ),
         ),

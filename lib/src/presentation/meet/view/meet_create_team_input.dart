@@ -231,7 +231,7 @@ class _MeetCreateTeamInputState extends State<MeetCreateTeamInput> {
                                   // 나
                                     SizedBox(height: SizeConfig.defaultSize),
                                   MeetCreateCardviewNovote(
-                                      userResponse: BlindDateUserDetail(id: state.userResponse.personalInfo?.id ?? 0, name: state.userResponse.personalInfo?.name ?? '(알수없음)', profileImageUrl: state.userResponse.personalInfo?.profileImageUrl ?? 'DEFAULT', department: state.userResponse.university?.department ?? '(알수없음)', isCertifiedUser: (state.userResponse.personalInfo?.verification.isVerificationSuccess ?? false) ? true : false, birthYear: state.userResponse.personalInfo?.birthYear ?? 0, profileQuestionResponses: state.userResponse.titleVotes),
+                                      userResponse: BlindDateUserDetail(id: state.userResponse.personalInfo?.id ?? 0, name: (state.userResponse.personalInfo?.nickname=='DEFAULT' ? state.userResponse.personalInfo?.name : state.userResponse.personalInfo?.nickname) ?? '(알수없음)', profileImageUrl: state.userResponse.personalInfo?.profileImageUrl ?? 'DEFAULT', department: state.userResponse.university?.department ?? '(알수없음)', isCertifiedUser: (state.userResponse.personalInfo?.verification.isVerificationSuccess ?? false) ? true : false, birthYear: state.userResponse.personalInfo?.birthYear ?? 0, profileQuestionResponses: state.userResponse.titleVotes),
                                       university: state.userResponse.university?.name ?? '(알수없음)'
                                   ),
                                     SizedBox(height: SizeConfig.defaultSize),
@@ -938,7 +938,7 @@ class _MemberCardViewNoVoteState extends State<MemberCardViewNoVote> {
                                 SizedBox(height: SizeConfig.defaultSize * 1.3,),
                                 TextField(
                                   controller: _nameController,
-                                  maxLength: 7,
+                                  maxLength: 10,
                                   onChanged: (value) {
                                     setState(() {
                                       widget.name = value;
