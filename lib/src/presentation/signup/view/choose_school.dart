@@ -1,6 +1,7 @@
 import 'package:dart_flutter/res/config/size_config.dart';
 import 'package:dart_flutter/src/common/util/analytics_util.dart';
 import 'package:dart_flutter/src/domain/entity/university.dart';
+import 'package:dart_flutter/src/presentation/component/webview_fullscreen.dart';
 import 'package:dart_flutter/src/presentation/signup/viewmodel/signup_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -180,7 +181,37 @@ class _ScaffoldBodyState extends State<ScaffoldBody> {
                 ),
                 child: Text("학교를 선택해주세요", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.7, fontWeight: FontWeight.w600, color: Colors.black38),)
               ),
-        )
+        ),
+          SizedBox(height: SizeConfig.defaultSize * 3),
+        Center(
+          child: InkWell(
+            onTap: () {
+              AnalyticsUtil.logEvent("회원가입_학교_도움말터치");
+              Navigator.push(context, MaterialPageRoute(builder: (context) => const WebViewFullScreen(url: 'https://tally.so/r/merode', title: '학교 정보 추가 문의')))
+                  .then((_) {
+                AnalyticsUtil.logEvent("회원가입_학교_도움말_뒤로가기(회원가입_접속)");
+              });
+            },
+            child: Container(
+              width: SizeConfig.defaultSize * 20,
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: Colors.grey.shade100,
+                borderRadius: const BorderRadius.all(Radius.circular(7)),
+              ),
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: SizeConfig.defaultSize * 0.9, vertical: SizeConfig.defaultSize * 0.75),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.info_outline, size: SizeConfig.defaultSize * 1.5, color: Colors.black.withOpacity(0.6)),
+                    Text(" 학교가 검색되지 않아요!", style: TextStyle(color: Colors.black.withOpacity(0.6)),),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
       ],
     );
   }
