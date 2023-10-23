@@ -28,11 +28,26 @@ class MeetBoard extends StatefulWidget {
 
 class _MeetBoardState extends State<MeetBoard> {
   late MeetCubit meetCubit;
-  late PagingController<int, BlindDateTeam> pagingController;
+  // late PagingController<int, BlindDateTeam> pagingControllerRecent;
+  late List<PagingController<int, BlindDateTeam>> pagingControllers;
+  int selected = 0;
 
   void onPageRequested(int pageKey) {
+    print('onPageRequested 최신순');
     if (mounted) {
       meetCubit.fetchPage(pageKey);
+    }
+  }
+  void onPageRequestedLike(int pageKey) {
+    print('onPageRequested 호감순');
+    if (mounted) {
+      meetCubit.fetchPageMostLiked(pageKey);
+    }
+  }
+  void onPageRequestedSeen(int pageKey) {
+    print('onPageRequested 조회순');
+    if (mounted) {
+      meetCubit.fetchPageMostSeen(pageKey);
     }
   }
 
@@ -46,18 +61,46 @@ class _MeetBoardState extends State<MeetBoard> {
   void initState() {
     super.initState();
     meetCubit = widget.ancestorContext.read<MeetCubit>();
-    pagingController = meetCubit.pagingController;
+    pagingControllers = [
+      meetCubit.pagingControllerRecent,
+      meetCubit.pagingControllerLike,
+      meetCubit.pagingControllerSeen
+    ];
+    // pagingControllerRecent = meetCubit.pagingControllerRecent;
 
     if (mounted) {
-      pagingController.addPageRequestListener(onPageRequested);
+      pagingControllers[0].addPageRequestListener(onPageRequested);
+      pagingControllers[1].addPageRequestListener(onPageRequestedLike);
+      pagingControllers[2].addPageRequestListener(onPageRequestedSeen);
+      // pagingControllerRecent.addPageRequestListener(onPageRequested);
       SchedulerBinding.instance.addPostFrameCallback((_) => meetCubit.initMeet());
     }
   }
 
   @override
   void dispose() {
-    pagingController.removePageRequestListener(onPageRequested);
+    pagingControllers[0].removePageRequestListener(onPageRequested);
+    pagingControllers[1].removePageRequestListener(onPageRequestedLike);
+    pagingControllers[2].removePageRequestListener(onPageRequestedSeen);
+    // pagingControllerRecent.removePageRequestListener(onPageRequested);
     super.dispose();
+  }
+
+  void onSortChanged(int index) {
+    if (selected != index) {
+      setState(() {
+        selected = index;
+      });
+      if (selected == 1) {
+        pagingControllers[1].refresh();
+        meetCubit.fetchPageMostLiked(0);
+      }
+      if (selected == 2) {
+        pagingControllers[2].refresh();
+        meetCubit.fetchPageMostSeen(0);
+      }
+    }
+    print('selected : $selected');
   }
 
   @override
@@ -68,7 +111,8 @@ class _MeetBoardState extends State<MeetBoard> {
     // ).toList();
     // print("친구 수 : ${state.friends.length}, 과팅 같이 나갈 수 있는 친구 수 : ${filteredFriends.length}, 팀 개수 : ${state.myTeams.length}");
     MeetState state = meetCubit.state;
-    print('Board Widget ${state.hashCode}');
+    print('Board Widget State ${state.hashCode}');
+    print('Board Widget Cubit ${meetCubit.hashCode}');
 
     return (state.isLoading)
         ? Scaffold(
@@ -128,7 +172,7 @@ class _MeetBoardState extends State<MeetBoard> {
           //     : (state.myTeams.length == 0 ? _TopSectionMakeTeam(meetState: state, ancestorContext: context,) : _TopSection(ancestorState: state, context: context,)),
           // ),
 
-          body: _BodySection(meetState: state, context: context, pagingController: pagingController,),
+          body: _BodySection(meetState: state, context: context, pagingController: pagingControllers[selected], onSortChanged: onSortChanged,),
 
           // TODO : FloatingActionButton 팀 생성 재개할 때 복구하기
           // floatingActionButton: filteredFriends.isNotEmpty
@@ -630,12 +674,14 @@ class _BodySection extends StatefulWidget {
   final MeetState meetState;
   final BuildContext context;
   PagingController<int, BlindDateTeam> pagingController;
+  final Function(int) onSortChanged;
 
   _BodySection({
     super.key,
     required this.meetState,
     required this.context,
-    required this.pagingController
+    required this.pagingController,
+    required this.onSortChanged
   });
 
   @override
@@ -646,6 +692,12 @@ class _BodySectionState extends State<_BodySection> {
   final ScrollController _scrollController = ScrollController();
   late MeetTeam nowTeam = widget.meetState.myTeam ?? (widget.meetState.myTeams.firstOrNull ?? MeetTeam(id: 0, name: '', university: null, locations: [], canMatchWithSameUniversity: true, members: []));
   String dropdownValue = list.first; // TODO : VM 연결
+
+  void onClickSortButton(int selected) {
+    setState(() {
+      widget.onSortChanged(selected);
+    });
+  }
 
   @override
   void initState() {
@@ -674,6 +726,7 @@ class _BodySectionState extends State<_BodySection> {
 
   @override
   Widget build(BuildContext context) {
+    print("현재 pagingController : ${widget.pagingController}");
     return RefreshIndicator(
       onRefresh: () async {
         context.read<MeetCubit>().initMeet();
@@ -708,7 +761,17 @@ class _BodySectionState extends State<_BodySection> {
                     underline: Container(),
                     onChanged: (String? newValue) {
                       setState(() {
+                        AnalyticsUtil.logEvent('과팅_목록_정렬_터치', properties: {
+                          '선택한 정렬' : newValue
+                        });
                         dropdownValue = newValue!;
+                        if (dropdownValue == '호감순') {
+                          onClickSortButton(1);
+                        } else if (dropdownValue == '조회순') {
+                          onClickSortButton(2);
+                        } else if (dropdownValue == '최신순') {
+                          onClickSortButton(0);
+                        }
                       });
                     },
                     items: list.map<DropdownMenuItem<String>>((String value) {
@@ -741,6 +804,9 @@ class _BodySectionState extends State<_BodySection> {
                             pagingController: widget.pagingController,
                             builderDelegate: PagedChildBuilderDelegate<BlindDateTeam>(
                             itemBuilder: (_, blindDateTeam, __) {
+                              print(widget.pagingController);
+                              print("요기요");
+                              print(widget.pagingController.itemList);
                             return widget.pagingController.itemList!.isEmpty || widget.pagingController.itemList == null
                                 ? Center(
                                   child: Column(
@@ -749,7 +815,7 @@ class _BodySectionState extends State<_BodySection> {
                                     children: [
                                       Image.asset('assets/images/hearts.png', width: SizeConfig.screenWidth * 0.55 ,),
                                       SizedBox(height: SizeConfig.defaultSize * 5,),
-                                      Text("이성 팀이 아직 없어요!", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.8),),
+                                      Text("해당하는 팀을 찾을 수 없어요🥺", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.8),),
                                       SizedBox(height: SizeConfig.defaultSize,),
                                       Text("기다리는 동안 다른 친구들을 앱에 초대해보세요!", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.8),),
                                       SizedBox(height: SizeConfig.defaultSize * 3,),
