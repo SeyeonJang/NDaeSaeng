@@ -2,6 +2,7 @@ import 'package:dart_flutter/res/config/size_config.dart';
 import 'package:dart_flutter/src/common/util/analytics_util.dart';
 import 'package:dart_flutter/src/common/util/toast_util.dart';
 import 'package:dart_flutter/src/domain/entity/blind_date_team.dart';
+import 'package:dart_flutter/src/domain/entity/location.dart';
 import 'package:dart_flutter/src/presentation/meet/view/meet_create_team.dart';
 import 'package:dart_flutter/src/presentation/component/meet_one_team_cardview.dart';
 import 'package:dart_flutter/src/presentation/meet/viewmodel/meet_cubit.dart';
@@ -691,7 +692,10 @@ class _BodySection extends StatefulWidget {
 class _BodySectionState extends State<_BodySection> {
   final ScrollController _scrollController = ScrollController();
   late MeetTeam nowTeam = widget.meetState.myTeam ?? (widget.meetState.myTeams.firstOrNull ?? MeetTeam(id: 0, name: '', university: null, locations: [], canMatchWithSameUniversity: true, members: []));
-  String dropdownValue = list.first; // TODO : VM 연결
+  String dropdownValue = list.first;
+  int selectedChipCertificated = 0; // 0: 선택 안 함, 1: 인증 완료한 팀
+  int selectedChipProfileImage = 0;
+  int selectedChipLocation = 0;
 
   void onClickSortButton(int selected) {
     setState(() {
@@ -709,6 +713,8 @@ class _BodySectionState extends State<_BodySection> {
         widget.pagingController.refresh();
       }
     });
+    Location allLocation = Location(id: 0, name: '전지역');
+    widget.meetState.serverLocations.insert(0, allLocation);
   }
 
   BlindDateTeam makeTeam() {
@@ -744,14 +750,211 @@ class _BodySectionState extends State<_BodySection> {
           //   ),
           Container(
             width: SizeConfig.screenWidth,
-            height: SizeConfig.defaultSize * 4,
+            height: SizeConfig.defaultSize * 5,
             color: Colors.white,
             child: Padding(
-              padding: EdgeInsets.only(right: SizeConfig.defaultSize * 2, bottom: SizeConfig.defaultSize),
+              padding: EdgeInsets.only(right: SizeConfig.defaultSize * 2, bottom: SizeConfig.defaultSize, top: SizeConfig.defaultSize),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
+                  InkWell(
+                    onTap: () {
+                      AnalyticsUtil.logEvent("과팅_목록_필터링_터치");
+                      showModalBottomSheet(
+                        context: context,
+                        backgroundColor: Colors.white,
+                        isScrollControlled: true,
+                        builder: (BuildContext _) {
+                          selectedChipLocation = 0; // TODO : 초기화 시 state에서 선택된 거 받아와서 넣고, 선택된 게 없다면 0
+                          selectedChipCertificated = 0;
+                          selectedChipProfileImage = 0;
+                          AnalyticsUtil.logEvent("과팅_목록_필터링_접속");
+                          return StatefulBuilder(
+                            builder: (BuildContext statefulContext, StateSetter thisState) {
+                              ChoiceChip chipGroupLocation(String label, int index) {
+                                return ChoiceChip(
+                                  label: Text(label),
+                                  selected: selectedChipLocation == index,
+                                  onSelected: (selected) {
+                                    thisState(() {
+                                      selectedChipLocation = selected ? index : 0;
+                                    });
+                                  },
+                                  selectedColor: const Color(0xffFE6059),
+                                  backgroundColor: Colors.grey.shade200,
+                                  labelStyle: TextStyle(
+                                    color: selectedChipLocation == index ? Colors.white : Colors.black,
+                                  ),
+                                );
+                              }
+                              ChoiceChip chipGroupCertificated(String label, int index) {
+                                return ChoiceChip(
+                                  label: Text(label),
+                                  selected: selectedChipCertificated == index,
+                                  onSelected: (selected) {
+                                    thisState(() {
+                                      selectedChipCertificated = selected ? index : 0;
+                                    });
+                                  },
+                                  selectedColor: const Color(0xffFE6059),
+                                  backgroundColor: Colors.grey.shade200,
+                                  labelStyle: TextStyle(
+                                    color: selectedChipCertificated == index ? Colors.white : Colors.black,
+                                  ),
+                                );
+                              }
+                              ChoiceChip chipGroupProfileImage(String label, int index) {
+                                return ChoiceChip(
+                                  label: Text(label),
+                                  selected: selectedChipProfileImage == index,
+                                  onSelected: (selected) {
+                                    thisState(() {
+                                      selectedChipProfileImage = selected ? index : 0;
+                                    });
+                                  },
+                                  selectedColor: const Color(0xffFE6059),
+                                  backgroundColor: Colors.grey.shade200,
+                                  labelStyle: TextStyle(
+                                    color: selectedChipProfileImage == index ? Colors.white : Colors.black,
+                                  ),
+                                );
+                              }
+
+                              return Container(
+                                width: SizeConfig.screenWidth,
+                                height: SizeConfig.screenHeight * 0.85,
+                                decoration: const BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.vertical(top: Radius.circular(20))
+                                ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Padding(
+                                      padding: EdgeInsets.only(top: SizeConfig.defaultSize * 2),
+                                      child: Center(
+                                        child: Container(
+                                          width: SizeConfig.screenWidth * 0.2,
+                                          height: SizeConfig.defaultSize * 0.3,
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.all(SizeConfig.defaultSize * 2.5),
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Padding(
+                                            padding: EdgeInsets.only(top: SizeConfig.defaultSize),
+                                            child: Row(
+                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                              children: [
+                                                Text("필터링", style: TextStyle(
+                                                  fontSize: SizeConfig.defaultSize * 2,
+                                                  fontWeight: FontWeight.w600),),
+                                                TextButton(
+                                                  onPressed: () {
+                                                    Navigator.pop(context);
+                                                  },
+                                                  child: Text("적용하기", style: TextStyle(
+                                                    fontSize: SizeConfig.defaultSize * 1.9,
+                                                    color: const Color(0xffFE6059)
+                                                  ),)
+                                                )
+                                              ],
+                                            ),
+                                          ),
+                                          Text("내가 보고 싶은 팀의 특징만 골라보세요!", style: TextStyle(
+                                            fontSize: SizeConfig.defaultSize * 1.6
+                                          ),),
+
+                                          Padding(
+                                            padding: EdgeInsets.only(top: SizeConfig.defaultSize * 4),
+                                            child: Text("지역", style: TextStyle(
+                                              fontSize: SizeConfig.defaultSize * 1.7,
+                                              fontWeight: FontWeight.w600
+                                            ),),
+                                          ),
+                                          Padding(
+                                            padding: EdgeInsets.only(top: SizeConfig.defaultSize * 0.5),
+                                            child: Text("하나만 선택할 수 있어요!", style: TextStyle(
+                                              fontSize: SizeConfig.defaultSize * 1.6,
+                                              color: Colors.grey
+                                            ),),
+                                          ),
+                                          Wrap(
+                                            spacing: 8.0,
+                                            children: widget.meetState.serverLocations.asMap().entries.map<Widget>((entry) {
+                                              int index = entry.key;
+                                              Location location = entry.value;
+                                              return chipGroupLocation(location.name, index);
+                                            }).toList(),
+                                          ),
+
+                                          Padding(
+                                            padding: EdgeInsets.only(top: SizeConfig.defaultSize * 4),
+                                            child: Text("학생증 인증", style: TextStyle(
+                                                fontSize: SizeConfig.defaultSize * 1.7,
+                                                fontWeight: FontWeight.w600
+                                            ),),
+                                          ),
+                                          Padding(
+                                            padding: EdgeInsets.only(top: SizeConfig.defaultSize * 0.5),
+                                            child: Text("인증한 팀은 파란색 배지가 붙어있어요!", style: TextStyle(
+                                                fontSize: SizeConfig.defaultSize * 1.6,
+                                                color: Colors.grey
+                                            ),),
+                                          ),
+                                          Wrap(
+                                            spacing: 8.0,
+                                            children: <Widget>[
+                                              chipGroupCertificated('선택 안 함', 0),
+                                              chipGroupCertificated('인증 완료한 팀만', 1),
+                                            ],
+                                          ),
+
+                                          Padding(
+                                            padding: EdgeInsets.only(top: SizeConfig.defaultSize * 4),
+                                            child: Text("프로필 사진 여부", style: TextStyle(
+                                                fontSize: SizeConfig.defaultSize * 1.7,
+                                                fontWeight: FontWeight.w600
+                                            ),),
+                                          ),
+                                          Padding(
+                                            padding: EdgeInsets.only(top: SizeConfig.defaultSize * 0.5),
+                                            child: Text("팀원 중에 한 명이라도 사진이 있다면 보여요!", style: TextStyle(
+                                                fontSize: SizeConfig.defaultSize * 1.6,
+                                                color: Colors.grey
+                                            ),),
+                                          ),
+                                          Wrap(
+                                            spacing: 8.0,
+                                            children: <Widget>[
+                                              chipGroupProfileImage('선택 안 함', 0),
+                                              chipGroupProfileImage('사진 있는 팀만', 1),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            }
+                          );
+                        }
+                      );
+                    },
+                    child: Row(
+                      children: [
+                        const Text("     ", style: TextStyle(color: Colors.black),),
+                        Icon(Icons.filter_alt_rounded, size: SizeConfig.defaultSize * 1.5, color: Colors.black),
+                        const Text(" 필터링", style: TextStyle(color: Colors.black)),
+                      ],
+                    ),
+                  ),
                   DropdownButton(
                     value: dropdownValue,
                     icon: const Icon(Icons.arrow_drop_down),
