@@ -39,6 +39,8 @@ class _StandbyLoadingState extends State<StandbyLoading> {
     super.initState();
     logoutLeftSeconds = 7;
     logoutTimer = Timer.periodic(const Duration(seconds: 1), onTick);
+
+    BlocProvider.of<DartAuthCubit>(context).verifyTokenExpired();  // 토큰 만료 여부 체크
   }
 
   @override

@@ -73,10 +73,7 @@ class DartAuthCubit extends HydratedCubit<DartAuthState> {
       print(e);
       print(trace);
       if (e.error is AuthorizationException) {
-        cleanUpAuthInformation();
-        ToastUtil.showToast("인증 정보가 만료되었어요 😢");
-        await Future.delayed(const Duration(seconds: 2));
-        Restart.restartApp();
+        await doWhenExpired();
       }
     } catch (e, trace) {
       print("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
@@ -85,6 +82,20 @@ class DartAuthCubit extends HydratedCubit<DartAuthState> {
     }
     ToastUtil.showToast("로그인 요청 실패");
     return false;
+  }
+
+  Future<void> verifyTokenExpired() async {
+    if (state.expiredAt.isAfter(DateTime.now().add(const Duration(days: 1)))) {
+      return;
+    }
+    await doWhenExpired();
+  }
+
+  Future<void> doWhenExpired() async {
+    cleanUpAuthInformation();
+    ToastUtil.showToast("인증 정보가 만료되었어요 😢");
+    await Future.delayed(const Duration(seconds: 2));
+    Restart.restartApp();
   }
 
   void setAccessToken(String accessToken) {
@@ -137,7 +148,7 @@ class DartAuthCubit extends HydratedCubit<DartAuthState> {
       DartAuth dartAuth = await _authUseCase.loginWithKakao(kakaoUser.accessToken);
 
       state
-          .setDartAuth(dartAccessToken: dartAuth.accessToken, expiredAt: DateTime.now().add(const Duration(days: 10)))
+          .setDartAuth(dartAccessToken: dartAuth.accessToken, expiredAt: dartAuth.expiresAt)
           .setSocialAuth(loginType: LoginType.kakao, socialAccessToken: kakaoUser.accessToken);
 
       User userResponse = await _userUseCase.myInfo();
@@ -170,7 +181,7 @@ class DartAuthCubit extends HydratedCubit<DartAuthState> {
       final appleUser = await _authUseCase.loginWithAppleID();
       DartAuth dartAuth = await _authUseCase.loginWithApple(appleUser.identityToken!);
       state
-          .setDartAuth(dartAccessToken: dartAuth.accessToken, expiredAt: DateTime.now().add(const Duration(days: 10)))
+          .setDartAuth(dartAccessToken: dartAuth.accessToken, expiredAt: dartAuth.expiresAt)
           .setSocialAuth(loginType: LoginType.apple, socialAccessToken: appleUser.authorizationCode)
           .setMemo('${appleUser.familyName ?? "오"}${appleUser.givenName ?? "늘"}');
 
