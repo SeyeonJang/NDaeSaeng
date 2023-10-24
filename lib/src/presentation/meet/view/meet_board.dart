@@ -693,6 +693,9 @@ class _BodySectionState extends State<_BodySection> {
   final ScrollController _scrollController = ScrollController();
   late MeetTeam nowTeam = widget.meetState.myTeam ?? (widget.meetState.myTeams.firstOrNull ?? MeetTeam(id: 0, name: '', university: null, locations: [], canMatchWithSameUniversity: true, members: []));
   String dropdownValue = list.first;
+  int certificated = 0;
+  int profileImage = 0;
+  int location = 0;
   int selectedChipCertificated = 0; // 0: 선택 안 함, 1: 인증 완료한 팀
   int selectedChipProfileImage = 0;
   int selectedChipLocation = 0;
@@ -766,9 +769,9 @@ class _BodySectionState extends State<_BodySection> {
                         backgroundColor: Colors.white,
                         isScrollControlled: true,
                         builder: (BuildContext _) {
-                          selectedChipLocation = 0; // TODO : 초기화 시 state에서 선택된 거 받아와서 넣고, 선택된 게 없다면 0
-                          selectedChipCertificated = 0;
-                          selectedChipProfileImage = 0;
+                          selectedChipLocation = location;
+                          selectedChipCertificated = certificated;
+                          selectedChipProfileImage = profileImage;
                           AnalyticsUtil.logEvent("과팅_목록_필터링_접속"); // TODO : build 계속 해서 자꾸 0으로 초기화되고 이거 찍히는데 왜그런지 확인하기
                           return StatefulBuilder(
                             builder: (BuildContext statefulContext, StateSetter thisState) {
@@ -869,6 +872,12 @@ class _BodySectionState extends State<_BodySection> {
                                                 selectedChipLocation!=0 || selectedChipProfileImage!=0 || selectedChipCertificated!=0
                                                   ? TextButton(
                                                     onPressed: () {
+                                                      profileImage = selectedChipProfileImage;
+                                                      certificated = selectedChipCertificated;
+                                                      location = selectedChipLocation;
+                                                      widget.pagingController.refresh();
+                                                      // TODO : pagingController를 불러올 때 매개변수를 바꿔줌
+                                                      print("지역 : $location, 학생증 : $profileImage, 프사 : $certificated");
                                                       AnalyticsUtil.logEvent("과팅_목록_필터링_적용하기_터치"); // TODO : properties
                                                       Navigator.pop(context);
                                                     },
