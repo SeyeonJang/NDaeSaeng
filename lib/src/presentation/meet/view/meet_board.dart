@@ -769,7 +769,7 @@ class _BodySectionState extends State<_BodySection> {
                           selectedChipLocation = 0; // TODO : 초기화 시 state에서 선택된 거 받아와서 넣고, 선택된 게 없다면 0
                           selectedChipCertificated = 0;
                           selectedChipProfileImage = 0;
-                          AnalyticsUtil.logEvent("과팅_목록_필터링_접속");
+                          AnalyticsUtil.logEvent("과팅_목록_필터링_접속"); // TODO : build 계속 해서 자꾸 0으로 초기화되고 이거 찍히는데 왜그런지 확인하기
                           return StatefulBuilder(
                             builder: (BuildContext statefulContext, StateSetter thisState) {
                               ChoiceChip chipGroupLocation(String label, int index) {
@@ -779,6 +779,9 @@ class _BodySectionState extends State<_BodySection> {
                                   onSelected: (selected) {
                                     thisState(() {
                                       selectedChipLocation = selected ? index : 0;
+                                    });
+                                    AnalyticsUtil.logEvent('과팅_목록_필터링_지역선택', properties: {
+                                      '지역번호' : index
                                     });
                                   },
                                   selectedColor: const Color(0xffFE6059),
@@ -796,6 +799,9 @@ class _BodySectionState extends State<_BodySection> {
                                     thisState(() {
                                       selectedChipCertificated = selected ? index : 0;
                                     });
+                                    AnalyticsUtil.logEvent('과팅_목록_필터링_학생증선택', properties: {
+                                      '선택' : selectedChipCertificated == 1 ? '인증 완료한 팀만' : '선택 안 함'
+                                    });
                                   },
                                   selectedColor: const Color(0xffFE6059),
                                   backgroundColor: Colors.grey.shade200,
@@ -811,6 +817,9 @@ class _BodySectionState extends State<_BodySection> {
                                   onSelected: (selected) {
                                     thisState(() {
                                       selectedChipProfileImage = selected ? index : 0;
+                                    });
+                                    AnalyticsUtil.logEvent('과팅_목록_필터링_프로필사진선택', properties: {
+                                      '선택' : selectedChipProfileImage == 1 ? '사진 있는 팀만' : '선택 안 함'
                                     });
                                   },
                                   selectedColor: const Color(0xffFE6059),
@@ -851,18 +860,23 @@ class _BodySectionState extends State<_BodySection> {
                                             child: Row(
                                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                               children: [
-                                                Text("필터링", style: TextStyle(
-                                                  fontSize: SizeConfig.defaultSize * 2,
-                                                  fontWeight: FontWeight.w600),),
-                                                TextButton(
-                                                  onPressed: () {
-                                                    Navigator.pop(context);
-                                                  },
-                                                  child: Text("적용하기", style: TextStyle(
-                                                    fontSize: SizeConfig.defaultSize * 1.9,
-                                                    color: const Color(0xffFE6059)
-                                                  ),)
-                                                )
+                                                Padding(
+                                                  padding: const EdgeInsets.only(top: 25),
+                                                  child: Text("필터링", style: TextStyle(
+                                                    fontSize: SizeConfig.defaultSize * 2,
+                                                    fontWeight: FontWeight.w600),),
+                                                ),
+                                                selectedChipLocation!=0 || selectedChipProfileImage!=0 || selectedChipCertificated!=0
+                                                  ? TextButton(
+                                                    onPressed: () {
+                                                      AnalyticsUtil.logEvent("과팅_목록_필터링_적용하기_터치"); // TODO : properties
+                                                      Navigator.pop(context);
+                                                    },
+                                                    child: Text("적용하기", style: TextStyle(
+                                                        fontSize: SizeConfig.defaultSize * 1.9,
+                                                        color: const Color(0xffFE6059)
+                                                    ),))
+                                                  : const SizedBox()
                                               ],
                                             ),
                                           ),
