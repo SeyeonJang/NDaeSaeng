@@ -1,18 +1,27 @@
 class DartAuth {
-  final String providerId;
   final String accessToken;
+  final String tokenType;
+  final DateTime expiresAt;
+  final String providerType;
+  final String providerId;
 
   DartAuth({
-    required this.providerId,
     required this.accessToken,
+    required this.tokenType,
+    required this.expiresAt,
+    required this.providerType,
+    required this.providerId
   });
 
   DartAuth.from(Map<String, dynamic> json)
-      : providerId = json['providerId'],
-        accessToken = json['jwtToken'];
+      : accessToken = json['jwtToken'],
+        tokenType = json['tokenType'],
+        expiresAt = json['expiresAt'],
+        providerType = json['providerType'],
+        providerId = json['providerId'];
 
   @override
   String toString() {
-    return 'DartAuth{userId: $providerId, accessToken: $accessToken}';
+    return 'DartAuth{accessToken: $accessToken, tokenType: $tokenType, expiresAt: $expiresAt, providerType: $providerType, providerId: $providerId}';
   }
 }

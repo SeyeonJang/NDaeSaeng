@@ -46,6 +46,9 @@ class DartAuthCubit extends HydratedCubit<DartAuthState> {
   }
 
   void appVersionCheck() async {
+    state.setLoading(true);
+    emit(state.copy());
+
     final packageInfo = await PackageInfo.fromPlatform();
     final version = packageInfo.version;
     final buildNumber = packageInfo.buildNumber;
@@ -56,6 +59,9 @@ class DartAuthCubit extends HydratedCubit<DartAuthState> {
     if (!state.appVersionStatus.isLatest) {
       state.appUpdateComment = await _appPlatformUseCase.getUpdateComment();
     }
+
+    print("${state.appVersionStatus} $version $minVer $latestVer}");
+    state.setLoading(false);
     emit(state.copy());
   }
 
@@ -67,14 +73,29 @@ class DartAuthCubit extends HydratedCubit<DartAuthState> {
       print(e);
       print(trace);
       if (e.error is AuthorizationException) {
-        emit(cleanUpAuthInformation());
-        ToastUtil.showToast("인증 정보가 만료되었어요 😢");
-        await Future.delayed(const Duration(seconds: 2));
-        Restart.restartApp();
+        await doWhenExpired();
       }
+    } catch (e, trace) {
+      print("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
+      print(e);
+      print(trace);
     }
     ToastUtil.showToast("로그인 요청 실패");
     return false;
+  }
+
+  Future<void> verifyTokenExpired() async {
+    if (state.expiredAt.isAfter(DateTime.now().add(const Duration(days: 1)))) {
+      return;
+    }
+    await doWhenExpired();
+  }
+
+  Future<void> doWhenExpired() async {
+    cleanUpAuthInformation();
+    ToastUtil.showToast("인증 정보가 만료되었어요 😢");
+    await Future.delayed(const Duration(seconds: 2));
+    Restart.restartApp();
   }
 
   void setAccessToken(String accessToken) {
@@ -83,7 +104,9 @@ class DartAuthCubit extends HydratedCubit<DartAuthState> {
   }
 
   DartAuthState cleanUpAuthInformation() {
-    return state.setStep(AuthStep.land).setSocialAuth(loginType: LoginType.email, socialAccessToken: "").copy();
+    var copy = state.setStep(AuthStep.land).setSocialAuth(loginType: LoginType.email, socialAccessToken: "").copy();
+    emit(copy);
+    return copy;
   }
 
   Future<DartAuthState> kakaoLogout() async {
@@ -97,9 +120,7 @@ class DartAuthCubit extends HydratedCubit<DartAuthState> {
       print('로그아웃 실패: $error');
     }
 
-    var newState = cleanUpAuthInformation();
-    emit(newState);
-    return newState;
+    return cleanUpAuthInformation();
   }
 
   Future<void> kakaoWithdrawal() async {
@@ -113,8 +134,7 @@ class DartAuthCubit extends HydratedCubit<DartAuthState> {
       print('회원탈퇴 실패: $error');
     }
 
-    var newState = cleanUpAuthInformation();
-    emit(newState);
+    cleanUpAuthInformation();
   }
 
   void kakaoLogin() async {
@@ -126,8 +146,9 @@ class DartAuthCubit extends HydratedCubit<DartAuthState> {
     try {
       KakaoUser kakaoUser = await _authUseCase.loginWithKakaoTalk();
       DartAuth dartAuth = await _authUseCase.loginWithKakao(kakaoUser.accessToken);
+
       state
-          .setDartAuth(dartAccessToken: dartAuth.accessToken, expiredAt: DateTime.now().add(const Duration(days: 10)))
+          .setDartAuth(dartAccessToken: dartAuth.accessToken, expiredAt: dartAuth.expiresAt)
           .setSocialAuth(loginType: LoginType.kakao, socialAccessToken: kakaoUser.accessToken);
 
       User userResponse = await _userUseCase.myInfo();
@@ -160,7 +181,7 @@ class DartAuthCubit extends HydratedCubit<DartAuthState> {
       final appleUser = await _authUseCase.loginWithAppleID();
       DartAuth dartAuth = await _authUseCase.loginWithApple(appleUser.identityToken!);
       state
-          .setDartAuth(dartAccessToken: dartAuth.accessToken, expiredAt: DateTime.now().add(const Duration(days: 10)))
+          .setDartAuth(dartAccessToken: dartAuth.accessToken, expiredAt: dartAuth.expiresAt)
           .setSocialAuth(loginType: LoginType.apple, socialAccessToken: appleUser.authorizationCode)
           .setMemo('${appleUser.familyName ?? "오"}${appleUser.givenName ?? "늘"}');
 
