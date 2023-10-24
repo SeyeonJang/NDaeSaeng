@@ -12,15 +12,17 @@ class DartTeamRepositoryImpl extends BlindDateTeamRepository {
   }
 
   @override
-  Future<Pagination<BlindDateTeam>> getTeams({int page = 0, int size = 10, int targetLocationId = 0}) async {
-    Pagination<BlindDateTeamDto> pageResponse = await DartApiRemoteDataSource.getBlindDateTeams(page: page, size: size, regionId: targetLocationId);
+  Future<Pagination<BlindDateTeam>> getTeams({int page = 0, int size = 10, int targetLocationId = 0, bool targetCertificated = false, bool targetProfileImage = false}) async {
+    print('[RepositoryImpl] targetLocationId: $targetLocationId, targetCertificated: $targetCertificated, targetProfileImage: $targetProfileImage');
+    Pagination<BlindDateTeamDto> pageResponse = await DartApiRemoteDataSource.getBlindDateTeams(page: page, size: size, regionId: targetLocationId); // TODO: certificated, profileImage 추가
     return pageResponse.newContent(
       pageResponse.content?.map((team) => team.newBlindDateTeam()).toList() ?? []
     );
   }
 
   @override
-  Future<Pagination<BlindDateTeam>> getTeamsMostLiked({int page = 0, int size = 10, int targetLocationId = 0}) async {
+  Future<Pagination<BlindDateTeam>> getTeamsMostLiked({int page = 0, int size = 10, int targetLocationId = 0, bool targetCertificated = false, bool targetProfileImage = false}) async {
+    print('[RepositoryImpl] targetLocationId: $targetLocationId, targetCertificated: $targetCertificated, targetProfileImage: $targetProfileImage');
     // dummy
     Pagination<BlindDateTeamDto> pageResponse = await DartApiRemoteDataSource.getBlindDateTeams(page: page, size: size, regionId: targetLocationId);
     BlindDateTeam? firstTeam = pageResponse.content?.first.newBlindDateTeam();
@@ -34,7 +36,8 @@ class DartTeamRepositoryImpl extends BlindDateTeamRepository {
   }
 
   @override
-  Future<Pagination<BlindDateTeam>> getTeamsMostSeen({int page = 0, int size = 10, int targetLocationId = 0}) async {
+  Future<Pagination<BlindDateTeam>> getTeamsMostSeen({int page = 0, int size = 10, int targetLocationId = 0, bool targetCertificated = false, bool targetProfileImage = false}) async {
+    print('[RepositoryImpl] targetLocationId: $targetLocationId, targetCertificated: $targetCertificated, targetProfileImage: $targetProfileImage');
     // dummy
     Pagination<BlindDateTeamDto> pageResponse = await DartApiRemoteDataSource.getBlindDateTeams(page: page, size: size, regionId: targetLocationId);
     List<BlindDateTeam> firstTwoTeams = [];
