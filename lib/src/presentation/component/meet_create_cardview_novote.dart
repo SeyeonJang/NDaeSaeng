@@ -84,7 +84,7 @@ class MeetCreateCardviewNovote extends StatelessWidget {
                                             children: [
                                               SizedBox(width: SizeConfig.defaultSize * 0.5,),
                                               Text(
-                                                userResponse.name,
+                                                '${userResponse.name}(나)',
                                                 style: TextStyle(
                                                   fontWeight: FontWeight.w500,
                                                   fontSize: SizeConfig.defaultSize * 1.6,

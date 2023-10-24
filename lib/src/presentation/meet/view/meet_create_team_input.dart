@@ -427,6 +427,30 @@ class _CreateTeamTopSectionState extends State<_CreateTeamTopSection> {
                           counterText: '',
                       ),
                   ),
+
+                  if(_controller.text.isEmpty)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 8.0),
+                      child: Container(
+                        width: SizeConfig.screenWidth,
+                        decoration: BoxDecoration(
+                          color: Colors.grey.shade50,
+                          borderRadius: BorderRadius.circular(13)
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Padding(
+                              padding: EdgeInsets.symmetric(vertical: 8.0),
+                              child: Text("    Tip. 개성있거나 이성의 눈길을 끌만한 이름이 좋아요!"),
+                            ),
+                          const Text("    실제 다른 팀 예시 : 심리사랑꾼들 / 02즈 / 신촌좋아요", style: TextStyle(color: Colors.grey),),
+                            SizedBox(height: SizeConfig.defaultSize),
+                          ],
+                        ),
+                      ),
+                    )
                 ],
               ),
             ),
@@ -876,7 +900,7 @@ class _MemberCardViewNoVoteState extends State<MemberCardViewNoVote> {
       padding: EdgeInsets.symmetric(vertical: SizeConfig.defaultSize * 0.8),
       child: Container( // 카드뷰 시작 *****************
         width: SizeConfig.screenWidth,
-        height: SizeConfig.defaultSize * 20,
+        height: SizeConfig.defaultSize * 23,
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
             border: Border.all(
@@ -887,7 +911,7 @@ class _MemberCardViewNoVoteState extends State<MemberCardViewNoVote> {
         child: Padding(
           padding: EdgeInsets.symmetric(vertical: SizeConfig.defaultSize * 1.2, horizontal: SizeConfig.defaultSize * 1.5),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               Row(
                 children: [
@@ -1084,7 +1108,7 @@ class _MemberCardViewNoVoteState extends State<MemberCardViewNoVote> {
                           ),
                         ),
                         prefixIcon: const Icon(Icons.school_rounded, color: Color(0xff7C83FD),),
-                        hintText: "친구 학과를 입력하고 선택해주세요")),
+                        hintText: "친구 학과를 입력하고 선택해주세요 !")),
 
                 suggestionsCallback: (pattern) {
                   // 입력된 패턴에 기반하여 검색 결과를 반환
@@ -1108,6 +1132,16 @@ class _MemberCardViewNoVoteState extends State<MemberCardViewNoVote> {
                   }
                   _setUniversity(University.fromJson(suggestion));
                 },
+              ),
+              Padding(
+                padding: EdgeInsets.only(top: SizeConfig.defaultSize * 0.1),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.check_rounded, size: SizeConfig.defaultSize * 1.4, color: Colors.black.withOpacity(0.5)),
+                    Text(" 내 친구의 특징 3개만 입력하면 팀이 만들어져요!", style: TextStyle(color: Colors.black.withOpacity(0.5))),
+                  ],
+                ),
               ),
             ]
           ),
