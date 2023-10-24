@@ -32,23 +32,23 @@ class _MeetBoardState extends State<MeetBoard> {
   // late PagingController<int, BlindDateTeam> pagingControllerRecent;
   late List<PagingController<int, BlindDateTeam>> pagingControllers;
   int selected = 0;
+  int targetLocation = 0;
+  bool targetCertificated = false;
+  bool targetProfileImage = false;
 
   void onPageRequested(int pageKey) {
-    print('onPageRequested 최신순');
     if (mounted) {
-      meetCubit.fetchPage(pageKey);
+      meetCubit.fetchPage(pageKey, targetLocation, targetCertificated, targetProfileImage);
     }
   }
   void onPageRequestedLike(int pageKey) {
-    print('onPageRequested 호감순');
     if (mounted) {
-      meetCubit.fetchPageMostLiked(pageKey);
+      meetCubit.fetchPageMostLiked(pageKey, targetLocation, targetCertificated, targetProfileImage);
     }
   }
   void onPageRequestedSeen(int pageKey) {
-    print('onPageRequested 조회순');
     if (mounted) {
-      meetCubit.fetchPageMostSeen(pageKey);
+      meetCubit.fetchPageMostSeen(pageKey, targetLocation, targetCertificated, targetProfileImage);
     }
   }
 
@@ -91,17 +91,49 @@ class _MeetBoardState extends State<MeetBoard> {
     if (selected != index) {
       setState(() {
         selected = index;
+        targetLocation = 0;
+        targetCertificated = false;
+        targetProfileImage = false;
       });
       if (selected == 1) {
         pagingControllers[1].refresh();
-        meetCubit.fetchPageMostLiked(0);
+        meetCubit.fetchPageMostLiked(0, targetLocation, targetCertificated, targetProfileImage);
       }
       if (selected == 2) {
         pagingControllers[2].refresh();
-        meetCubit.fetchPageMostSeen(0);
+        meetCubit.fetchPageMostSeen(0, targetLocation, targetCertificated, targetProfileImage);
       }
     }
     print('selected : $selected');
+  }
+
+  void onFilterChanged(int location, int certificated, int profile) {
+    bool certificatedBool = certificated == 0 ? false : true;
+    bool profileBool = profile == 0 ? false : true;
+
+    if (targetLocation != location) {
+      setState(() {
+        targetLocation = location;
+      });
+    }
+    if (targetCertificated != certificatedBool) {
+      setState(() {
+        targetCertificated = certificatedBool;
+      });
+    }
+    if (targetProfileImage != profileBool) {
+      setState(() {
+        targetProfileImage = profileBool;
+      });
+    }
+
+    if (selected == 0) {
+      pagingControllers[0].refresh();
+    } else if (selected == 1) {
+      pagingControllers[1].refresh();
+    } else if (selected == 2) {
+      pagingControllers[2].refresh();
+    }
   }
 
   @override
@@ -112,9 +144,6 @@ class _MeetBoardState extends State<MeetBoard> {
     // ).toList();
     // print("친구 수 : ${state.friends.length}, 과팅 같이 나갈 수 있는 친구 수 : ${filteredFriends.length}, 팀 개수 : ${state.myTeams.length}");
     MeetState state = meetCubit.state;
-    print('Board Widget State ${state.hashCode}');
-    print('Board Widget Cubit ${meetCubit.hashCode}');
-
     return (state.isLoading)
         ? Scaffold(
           appBar: AppBar(),
@@ -173,7 +202,7 @@ class _MeetBoardState extends State<MeetBoard> {
           //     : (state.myTeams.length == 0 ? _TopSectionMakeTeam(meetState: state, ancestorContext: context,) : _TopSection(ancestorState: state, context: context,)),
           // ),
 
-          body: _BodySection(meetState: state, context: context, pagingController: pagingControllers[selected], onSortChanged: onSortChanged,),
+          body: _BodySection(meetState: state, context: context, pagingController: pagingControllers[selected], onSortChanged: onSortChanged, onFilterChanged: onFilterChanged),
 
           // TODO : FloatingActionButton 팀 생성 재개할 때 복구하기
           // floatingActionButton: filteredFriends.isNotEmpty
@@ -676,13 +705,15 @@ class _BodySection extends StatefulWidget {
   final BuildContext context;
   PagingController<int, BlindDateTeam> pagingController;
   final Function(int) onSortChanged;
+  final Function(int,int,int) onFilterChanged;
 
   _BodySection({
     super.key,
     required this.meetState,
     required this.context,
     required this.pagingController,
-    required this.onSortChanged
+    required this.onSortChanged,
+    required this.onFilterChanged
   });
 
   @override
@@ -870,15 +901,17 @@ class _BodySectionState extends State<_BodySection> {
                                                     fontWeight: FontWeight.w600),),
                                                 ),
                                                 selectedChipLocation!=0 || selectedChipProfileImage!=0 || selectedChipCertificated!=0
+                                                    || ((profileImage!=0||certificated!=0||location!=0)&&selectedChipLocation==0&&selectedChipCertificated==0&&selectedChipProfileImage==0) // 전 선택과 같지 않고 && 모두 0으로 설정될 때
                                                   ? TextButton(
                                                     onPressed: () {
+                                                      AnalyticsUtil.logEvent("과팅_목록_필터링_적용하기_터치"); // TODO : properties
                                                       profileImage = selectedChipProfileImage;
                                                       certificated = selectedChipCertificated;
                                                       location = selectedChipLocation;
-                                                      widget.pagingController.refresh();
-                                                      // TODO : pagingController를 불러올 때 매개변수를 바꿔줌
+                                                      widget.onFilterChanged(location, certificated, profileImage);
                                                       print("지역 : $location, 학생증 : $profileImage, 프사 : $certificated");
-                                                      AnalyticsUtil.logEvent("과팅_목록_필터링_적용하기_터치"); // TODO : properties
+                                                      // widget.pagingController.refresh();
+                                                      // TODO : pagingController를 불러올 때 매개변수를 바꿔줌
                                                       Navigator.pop(context);
                                                     },
                                                     child: Text("적용하기", style: TextStyle(
@@ -909,11 +942,18 @@ class _BodySectionState extends State<_BodySection> {
                                           ),
                                           Wrap(
                                             spacing: 8.0,
-                                            children: widget.meetState.serverLocations.asMap().entries.map<Widget>((entry) {
-                                              int index = entry.key;
-                                              Location location = entry.value;
-                                              return chipGroupLocation(location.name, index);
-                                            }).toList(),
+                                            children: () {
+                                              // "전지역" 항목이 없으면 추가
+                                              if (widget.meetState.serverLocations.isEmpty || widget.meetState.serverLocations[0].id != 0) {
+                                                widget.meetState.serverLocations.insert(0, Location(id: 0, name: '전지역'));
+                                              }
+
+                                              return widget.meetState.serverLocations.asMap().entries.map<Widget>((entry) {
+                                                int index = entry.key;
+                                                Location location = entry.value;
+                                                return chipGroupLocation(location.name, index);
+                                              }).toList();
+                                            }(),
                                           ),
 
                                           Padding(
@@ -1022,7 +1062,6 @@ class _BodySectionState extends State<_BodySection> {
                     RefreshIndicator(
                         onRefresh: () async {
                           widget.pagingController.refresh();
-                          widget.context.read<MeetCubit>().initPageKeyList();
                         },
                         child: SizedBox(
                           height: SizeConfig.screenHeight * 0.8,
@@ -1030,9 +1069,6 @@ class _BodySectionState extends State<_BodySection> {
                             pagingController: widget.pagingController,
                             builderDelegate: PagedChildBuilderDelegate<BlindDateTeam>(
                             itemBuilder: (_, blindDateTeam, __) {
-                              print(widget.pagingController);
-                              print("요기요");
-                              print(widget.pagingController.itemList);
                             return widget.pagingController.itemList!.isEmpty || widget.pagingController.itemList == null
                                 ? Center(
                                   child: Column(
