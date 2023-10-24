@@ -2,6 +2,7 @@ import 'package:dart_flutter/res/config/size_config.dart';
 import 'package:dart_flutter/src/common/util/analytics_util.dart';
 import 'package:dart_flutter/src/common/util/toast_util.dart';
 import 'package:dart_flutter/src/domain/entity/blind_date_team.dart';
+import 'package:dart_flutter/src/domain/entity/location.dart';
 import 'package:dart_flutter/src/presentation/meet/view/meet_create_team.dart';
 import 'package:dart_flutter/src/presentation/component/meet_one_team_cardview.dart';
 import 'package:dart_flutter/src/presentation/meet/viewmodel/meet_cubit.dart';
@@ -15,6 +16,8 @@ import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:dart_flutter/src/domain/entity/user.dart';
 import '../../../domain/entity/meet_team.dart';
 
+const List<String> list = <String>['최신순', '호감순', '조회순'];
+
 class MeetBoard extends StatefulWidget {
   BuildContext ancestorContext;
 
@@ -26,11 +29,26 @@ class MeetBoard extends StatefulWidget {
 
 class _MeetBoardState extends State<MeetBoard> {
   late MeetCubit meetCubit;
-  late PagingController<int, BlindDateTeam> pagingController;
+  // late PagingController<int, BlindDateTeam> pagingControllerRecent;
+  late List<PagingController<int, BlindDateTeam>> pagingControllers;
+  int selected = 0;
+  int targetLocation = 0;
+  bool targetCertificated = false;
+  bool targetProfileImage = false;
 
   void onPageRequested(int pageKey) {
     if (mounted) {
-      meetCubit.fetchPage(pageKey);
+      meetCubit.fetchPage(pageKey, targetLocation, targetCertificated, targetProfileImage);
+    }
+  }
+  void onPageRequestedLike(int pageKey) {
+    if (mounted) {
+      meetCubit.fetchPageMostLiked(pageKey, targetLocation, targetCertificated, targetProfileImage);
+    }
+  }
+  void onPageRequestedSeen(int pageKey) {
+    if (mounted) {
+      meetCubit.fetchPageMostSeen(pageKey, targetLocation, targetCertificated, targetProfileImage);
     }
   }
 
@@ -44,18 +62,78 @@ class _MeetBoardState extends State<MeetBoard> {
   void initState() {
     super.initState();
     meetCubit = widget.ancestorContext.read<MeetCubit>();
-    pagingController = meetCubit.pagingController;
+    pagingControllers = [
+      meetCubit.pagingControllerRecent,
+      meetCubit.pagingControllerLike,
+      meetCubit.pagingControllerSeen
+    ];
+    // pagingControllerRecent = meetCubit.pagingControllerRecent;
 
     if (mounted) {
-      pagingController.addPageRequestListener(onPageRequested);
+      pagingControllers[0].addPageRequestListener(onPageRequested);
+      pagingControllers[1].addPageRequestListener(onPageRequestedLike);
+      pagingControllers[2].addPageRequestListener(onPageRequestedSeen);
+      // pagingControllerRecent.addPageRequestListener(onPageRequested);
       SchedulerBinding.instance.addPostFrameCallback((_) => meetCubit.initMeet());
     }
   }
 
   @override
   void dispose() {
-    pagingController.removePageRequestListener(onPageRequested);
+    pagingControllers[0].removePageRequestListener(onPageRequested);
+    pagingControllers[1].removePageRequestListener(onPageRequestedLike);
+    pagingControllers[2].removePageRequestListener(onPageRequestedSeen);
+    // pagingControllerRecent.removePageRequestListener(onPageRequested);
     super.dispose();
+  }
+
+  void onSortChanged(int index) {
+    if (selected != index) {
+      setState(() {
+        selected = index;
+        targetLocation = 0;
+        targetCertificated = false;
+        targetProfileImage = false;
+      });
+      if (selected == 1) {
+        pagingControllers[1].refresh();
+        meetCubit.fetchPageMostLiked(0, targetLocation, targetCertificated, targetProfileImage);
+      }
+      if (selected == 2) {
+        pagingControllers[2].refresh();
+        meetCubit.fetchPageMostSeen(0, targetLocation, targetCertificated, targetProfileImage);
+      }
+    }
+    print('selected : $selected');
+  }
+
+  void onFilterChanged(int location, int certificated, int profile) {
+    bool certificatedBool = certificated == 0 ? false : true;
+    bool profileBool = profile == 0 ? false : true;
+
+    if (targetLocation != location) {
+      setState(() {
+        targetLocation = location;
+      });
+    }
+    if (targetCertificated != certificatedBool) {
+      setState(() {
+        targetCertificated = certificatedBool;
+      });
+    }
+    if (targetProfileImage != profileBool) {
+      setState(() {
+        targetProfileImage = profileBool;
+      });
+    }
+
+    if (selected == 0) {
+      pagingControllers[0].refresh();
+    } else if (selected == 1) {
+      pagingControllers[1].refresh();
+    } else if (selected == 2) {
+      pagingControllers[2].refresh();
+    }
   }
 
   @override
@@ -66,8 +144,6 @@ class _MeetBoardState extends State<MeetBoard> {
     // ).toList();
     // print("친구 수 : ${state.friends.length}, 과팅 같이 나갈 수 있는 친구 수 : ${filteredFriends.length}, 팀 개수 : ${state.myTeams.length}");
     MeetState state = meetCubit.state;
-    print('Board Widget ${state.hashCode}');
-
     return (state.isLoading)
         ? Scaffold(
           appBar: AppBar(),
@@ -126,7 +202,7 @@ class _MeetBoardState extends State<MeetBoard> {
           //     : (state.myTeams.length == 0 ? _TopSectionMakeTeam(meetState: state, ancestorContext: context,) : _TopSection(ancestorState: state, context: context,)),
           // ),
 
-          body: _BodySection(meetState: state, context: context, pagingController: pagingController,),
+          body: _BodySection(meetState: state, context: context, pagingController: pagingControllers[selected], onSortChanged: onSortChanged, onFilterChanged: onFilterChanged),
 
           // TODO : FloatingActionButton 팀 생성 재개할 때 복구하기
           // floatingActionButton: filteredFriends.isNotEmpty
@@ -628,12 +704,16 @@ class _BodySection extends StatefulWidget {
   final MeetState meetState;
   final BuildContext context;
   PagingController<int, BlindDateTeam> pagingController;
+  final Function(int) onSortChanged;
+  final Function(int,int,int) onFilterChanged;
 
   _BodySection({
     super.key,
     required this.meetState,
     required this.context,
-    required this.pagingController
+    required this.pagingController,
+    required this.onSortChanged,
+    required this.onFilterChanged
   });
 
   @override
@@ -643,6 +723,19 @@ class _BodySection extends StatefulWidget {
 class _BodySectionState extends State<_BodySection> {
   final ScrollController _scrollController = ScrollController();
   late MeetTeam nowTeam = widget.meetState.myTeam ?? (widget.meetState.myTeams.firstOrNull ?? MeetTeam(id: 0, name: '', university: null, locations: [], canMatchWithSameUniversity: true, members: []));
+  String dropdownValue = list.first;
+  int certificated = 0;
+  int profileImage = 0;
+  int location = 0;
+  int selectedChipCertificated = 0; // 0: 선택 안 함, 1: 인증 완료한 팀
+  int selectedChipProfileImage = 0;
+  int selectedChipLocation = 0;
+
+  void onClickSortButton(int selected) {
+    setState(() {
+      widget.onSortChanged(selected);
+    });
+  }
 
   @override
   void initState() {
@@ -654,6 +747,8 @@ class _BodySectionState extends State<_BodySection> {
         widget.pagingController.refresh();
       }
     });
+    Location allLocation = Location(id: 0, name: '전지역');
+    widget.meetState.serverLocations.insert(0, allLocation);
   }
 
   BlindDateTeam makeTeam() {
@@ -671,6 +766,7 @@ class _BodySectionState extends State<_BodySection> {
 
   @override
   Widget build(BuildContext context) {
+    print("현재 pagingController : ${widget.pagingController}");
     return RefreshIndicator(
       onRefresh: () async {
         context.read<MeetCubit>().initMeet();
@@ -686,6 +782,275 @@ class _BodySectionState extends State<_BodySection> {
           //       isMyTeam: true,
           //       myTeamCount: widget.meetState.myTeams.length,),
           //   ),
+          Container(
+            width: SizeConfig.screenWidth,
+            height: SizeConfig.defaultSize * 5,
+            color: Colors.white,
+            child: Padding(
+              padding: EdgeInsets.only(right: SizeConfig.defaultSize * 2, bottom: SizeConfig.defaultSize, top: SizeConfig.defaultSize),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  InkWell(
+                    onTap: () {
+                      AnalyticsUtil.logEvent("과팅_목록_필터링_터치");
+                      showModalBottomSheet(
+                        context: context,
+                        backgroundColor: Colors.white,
+                        isScrollControlled: true,
+                        builder: (BuildContext _) {
+                          selectedChipLocation = location;
+                          selectedChipCertificated = certificated;
+                          selectedChipProfileImage = profileImage;
+                          AnalyticsUtil.logEvent("과팅_목록_필터링_접속"); // TODO : build 계속 해서 자꾸 0으로 초기화되고 이거 찍히는데 왜그런지 확인하기
+                          return StatefulBuilder(
+                            builder: (BuildContext statefulContext, StateSetter thisState) {
+                              ChoiceChip chipGroupLocation(String label, int index) {
+                                return ChoiceChip(
+                                  label: Text(label),
+                                  selected: selectedChipLocation == index,
+                                  onSelected: (selected) {
+                                    thisState(() {
+                                      selectedChipLocation = selected ? index : 0;
+                                    });
+                                    AnalyticsUtil.logEvent('과팅_목록_필터링_지역선택', properties: {
+                                      '지역번호' : index
+                                    });
+                                  },
+                                  selectedColor: const Color(0xffFE6059),
+                                  backgroundColor: Colors.grey.shade200,
+                                  labelStyle: TextStyle(
+                                    color: selectedChipLocation == index ? Colors.white : Colors.black,
+                                  ),
+                                );
+                              }
+                              ChoiceChip chipGroupCertificated(String label, int index) {
+                                return ChoiceChip(
+                                  label: Text(label),
+                                  selected: selectedChipCertificated == index,
+                                  onSelected: (selected) {
+                                    thisState(() {
+                                      selectedChipCertificated = selected ? index : 0;
+                                    });
+                                    AnalyticsUtil.logEvent('과팅_목록_필터링_학생증선택', properties: {
+                                      '선택' : selectedChipCertificated == 1 ? '인증 완료한 팀만' : '선택 안 함'
+                                    });
+                                  },
+                                  selectedColor: const Color(0xffFE6059),
+                                  backgroundColor: Colors.grey.shade200,
+                                  labelStyle: TextStyle(
+                                    color: selectedChipCertificated == index ? Colors.white : Colors.black,
+                                  ),
+                                );
+                              }
+                              ChoiceChip chipGroupProfileImage(String label, int index) {
+                                return ChoiceChip(
+                                  label: Text(label),
+                                  selected: selectedChipProfileImage == index,
+                                  onSelected: (selected) {
+                                    thisState(() {
+                                      selectedChipProfileImage = selected ? index : 0;
+                                    });
+                                    AnalyticsUtil.logEvent('과팅_목록_필터링_프로필사진선택', properties: {
+                                      '선택' : selectedChipProfileImage == 1 ? '사진 있는 팀만' : '선택 안 함'
+                                    });
+                                  },
+                                  selectedColor: const Color(0xffFE6059),
+                                  backgroundColor: Colors.grey.shade200,
+                                  labelStyle: TextStyle(
+                                    color: selectedChipProfileImage == index ? Colors.white : Colors.black,
+                                  ),
+                                );
+                              }
+
+                              return Container(
+                                width: SizeConfig.screenWidth,
+                                height: SizeConfig.screenHeight * 0.85,
+                                decoration: const BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.vertical(top: Radius.circular(20))
+                                ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Padding(
+                                      padding: EdgeInsets.only(top: SizeConfig.defaultSize * 2),
+                                      child: Center(
+                                        child: Container(
+                                          width: SizeConfig.screenWidth * 0.2,
+                                          height: SizeConfig.defaultSize * 0.3,
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.all(SizeConfig.defaultSize * 2.5),
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Padding(
+                                            padding: EdgeInsets.only(top: SizeConfig.defaultSize),
+                                            child: Row(
+                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                              children: [
+                                                Padding(
+                                                  padding: const EdgeInsets.only(top: 25),
+                                                  child: Text("필터링", style: TextStyle(
+                                                    fontSize: SizeConfig.defaultSize * 2,
+                                                    fontWeight: FontWeight.w600),),
+                                                ),
+                                                selectedChipLocation!=0 || selectedChipProfileImage!=0 || selectedChipCertificated!=0
+                                                    || ((profileImage!=0||certificated!=0||location!=0)&&selectedChipLocation==0&&selectedChipCertificated==0&&selectedChipProfileImage==0) // 전 선택과 같지 않고 && 모두 0으로 설정될 때
+                                                  ? TextButton(
+                                                    onPressed: () {
+                                                      AnalyticsUtil.logEvent("과팅_목록_필터링_적용하기_터치"); // TODO : properties
+                                                      profileImage = selectedChipProfileImage;
+                                                      certificated = selectedChipCertificated;
+                                                      location = selectedChipLocation;
+                                                      widget.onFilterChanged(location, certificated, profileImage);
+                                                      print("지역 : $location, 학생증 : $profileImage, 프사 : $certificated");
+                                                      // widget.pagingController.refresh();
+                                                      // TODO : pagingController를 불러올 때 매개변수를 바꿔줌
+                                                      Navigator.pop(context);
+                                                    },
+                                                    child: Text("적용하기", style: TextStyle(
+                                                        fontSize: SizeConfig.defaultSize * 1.9,
+                                                        color: const Color(0xffFE6059)
+                                                    ),))
+                                                  : const SizedBox()
+                                              ],
+                                            ),
+                                          ),
+                                          Text("내가 보고 싶은 팀의 특징만 골라보세요!", style: TextStyle(
+                                            fontSize: SizeConfig.defaultSize * 1.6
+                                          ),),
+
+                                          Padding(
+                                            padding: EdgeInsets.only(top: SizeConfig.defaultSize * 4),
+                                            child: Text("지역", style: TextStyle(
+                                              fontSize: SizeConfig.defaultSize * 1.7,
+                                              fontWeight: FontWeight.w600
+                                            ),),
+                                          ),
+                                          Padding(
+                                            padding: EdgeInsets.only(top: SizeConfig.defaultSize * 0.5),
+                                            child: Text("하나만 선택할 수 있어요!", style: TextStyle(
+                                              fontSize: SizeConfig.defaultSize * 1.6,
+                                              color: Colors.grey
+                                            ),),
+                                          ),
+                                          Wrap(
+                                            spacing: 8.0,
+                                            children: () {
+                                              // "전지역" 항목이 없으면 추가
+                                              if (widget.meetState.serverLocations.isEmpty || widget.meetState.serverLocations[0].id != 0) {
+                                                widget.meetState.serverLocations.insert(0, Location(id: 0, name: '전지역'));
+                                              }
+
+                                              return widget.meetState.serverLocations.asMap().entries.map<Widget>((entry) {
+                                                int index = entry.key;
+                                                Location location = entry.value;
+                                                return chipGroupLocation(location.name, index);
+                                              }).toList();
+                                            }(),
+                                          ),
+
+                                          Padding(
+                                            padding: EdgeInsets.only(top: SizeConfig.defaultSize * 4),
+                                            child: Text("학생증 인증", style: TextStyle(
+                                                fontSize: SizeConfig.defaultSize * 1.7,
+                                                fontWeight: FontWeight.w600
+                                            ),),
+                                          ),
+                                          Padding(
+                                            padding: EdgeInsets.only(top: SizeConfig.defaultSize * 0.5),
+                                            child: Text("인증한 팀은 파란색 배지가 붙어있어요!", style: TextStyle(
+                                                fontSize: SizeConfig.defaultSize * 1.6,
+                                                color: Colors.grey
+                                            ),),
+                                          ),
+                                          Wrap(
+                                            spacing: 8.0,
+                                            children: <Widget>[
+                                              chipGroupCertificated('선택 안 함', 0),
+                                              chipGroupCertificated('인증 완료한 팀만', 1),
+                                            ],
+                                          ),
+
+                                          Padding(
+                                            padding: EdgeInsets.only(top: SizeConfig.defaultSize * 4),
+                                            child: Text("프로필 사진 여부", style: TextStyle(
+                                                fontSize: SizeConfig.defaultSize * 1.7,
+                                                fontWeight: FontWeight.w600
+                                            ),),
+                                          ),
+                                          Padding(
+                                            padding: EdgeInsets.only(top: SizeConfig.defaultSize * 0.5),
+                                            child: Text("팀원 중에 한 명이라도 사진이 있다면 보여요!", style: TextStyle(
+                                                fontSize: SizeConfig.defaultSize * 1.6,
+                                                color: Colors.grey
+                                            ),),
+                                          ),
+                                          Wrap(
+                                            spacing: 8.0,
+                                            children: <Widget>[
+                                              chipGroupProfileImage('선택 안 함', 0),
+                                              chipGroupProfileImage('사진 있는 팀만', 1),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            }
+                          );
+                        }
+                      );
+                    },
+                    child: Row(
+                      children: [
+                        const Text("     ", style: TextStyle(color: Colors.black),),
+                        Icon(Icons.filter_alt_rounded, size: SizeConfig.defaultSize * 1.5, color: Colors.black),
+                        const Text(" 필터링", style: TextStyle(color: Colors.black)),
+                      ],
+                    ),
+                  ),
+                  DropdownButton(
+                    value: dropdownValue,
+                    icon: const Icon(Icons.arrow_drop_down),
+                    iconSize: 24,
+                    elevation: 16,
+                    style: TextStyle(color: Colors.black, fontSize: SizeConfig.defaultSize * 1.5),
+                    underline: Container(),
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        AnalyticsUtil.logEvent('과팅_목록_정렬_터치', properties: {
+                          '선택한 정렬' : newValue
+                        });
+                        dropdownValue = newValue!;
+                        if (dropdownValue == '호감순') {
+                          onClickSortButton(1);
+                        } else if (dropdownValue == '조회순') {
+                          onClickSortButton(2);
+                        } else if (dropdownValue == '최신순') {
+                          onClickSortButton(0);
+                        }
+                      });
+                    },
+                    items: list.map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
+                  )
+                ],
+              )
+            )
+          ),
           Flexible(
             child: SingleChildScrollView(
               physics: const AlwaysScrollableScrollPhysics(),
@@ -697,7 +1062,6 @@ class _BodySectionState extends State<_BodySection> {
                     RefreshIndicator(
                         onRefresh: () async {
                           widget.pagingController.refresh();
-                          widget.context.read<MeetCubit>().initPageKeyList();
                         },
                         child: SizedBox(
                           height: SizeConfig.screenHeight * 0.8,
@@ -713,7 +1077,7 @@ class _BodySectionState extends State<_BodySection> {
                                     children: [
                                       Image.asset('assets/images/hearts.png', width: SizeConfig.screenWidth * 0.55 ,),
                                       SizedBox(height: SizeConfig.defaultSize * 5,),
-                                      Text("이성 팀이 아직 없어요!", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.8),),
+                                      Text("해당하는 팀을 찾을 수 없어요🥺", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.8),),
                                       SizedBox(height: SizeConfig.defaultSize,),
                                       Text("기다리는 동안 다른 친구들을 앱에 초대해보세요!", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.8),),
                                       SizedBox(height: SizeConfig.defaultSize * 3,),
