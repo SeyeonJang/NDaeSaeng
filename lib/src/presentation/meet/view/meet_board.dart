@@ -91,9 +91,6 @@ class _MeetBoardState extends State<MeetBoard> {
     if (selected != index) {
       setState(() {
         selected = index;
-        targetLocation = 0;
-        targetCertificated = false;
-        targetProfileImage = false;
       });
       if (selected == 1) {
         pagingControllers[1].refresh();
@@ -1010,12 +1007,16 @@ class _BodySectionState extends State<_BodySection> {
                         }
                       );
                     },
-                    child: Row(
-                      children: [
-                        const Text("     ", style: TextStyle(color: Colors.black),),
-                        Icon(Icons.filter_alt_rounded, size: SizeConfig.defaultSize * 1.5, color: Colors.black),
-                        const Text(" 필터링", style: TextStyle(color: Colors.black)),
-                      ],
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(vertical: SizeConfig.defaultSize * 0.5),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text("     ", style: TextStyle(color: Colors.black),),
+                          Icon(Icons.filter_alt_rounded, size: SizeConfig.defaultSize * 1.5, color: profileImage!=0||certificated!=0||location!=0 ? const Color(0xffFE6059) : Colors.black),
+                          Text(" 필터링        ", style: TextStyle(color: profileImage!=0||certificated!=0||location!=0 ? const Color(0xffFE6059) : Colors.black)),
+                        ],
+                      ),
                     ),
                   ),
                   DropdownButton(
