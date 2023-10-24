@@ -227,15 +227,25 @@ class _MeetCreateTeamInputState extends State<MeetCreateTeamInput> {
                               controller: scrollController,
                               child: Column(
                                 children: [
+                                    SizedBox(height: SizeConfig.defaultSize),
                                   _CreateTeamTopSection(userResponse: state.userResponse, handleTeamNameChanged: handleTeamNameChanged, state: state),
                                   // 나
+                                    SizedBox(height: SizeConfig.defaultSize * 2),
+                                  Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text("팀원", style: TextStyle(
+                                            fontWeight: FontWeight.w400,
+                                            fontSize: SizeConfig.defaultSize * 1.8,
+                                            color: Colors.black)
+                                        ),
+                                      ]),
                                     SizedBox(height: SizeConfig.defaultSize),
                                   MeetCreateCardviewNovote(
                                       userResponse: BlindDateUserDetail(id: state.userResponse.personalInfo?.id ?? 0, name: (state.userResponse.personalInfo?.nickname=='DEFAULT' ? state.userResponse.personalInfo?.name : state.userResponse.personalInfo?.nickname) ?? '(알수없음)', profileImageUrl: state.userResponse.personalInfo?.profileImageUrl ?? 'DEFAULT', department: state.userResponse.university?.department ?? '(알수없음)', isCertifiedUser: (state.userResponse.personalInfo?.verification.isVerificationSuccess ?? false) ? true : false, birthYear: state.userResponse.personalInfo?.birthYear ?? 0, profileQuestionResponses: state.userResponse.titleVotes),
                                       university: state.userResponse.university?.name ?? '(알수없음)'
                                   ),
                                     SizedBox(height: SizeConfig.defaultSize),
-                                  // MemberCardView(userResponse: state.userResponse, state: state, isMyself: true, onRemoveFriend: removeFriendFromMyTeam),
                                   // 친구1
                                   teamMemberCount >= 1
                                       ? MemberCardViewNoVote(context: widget.ancestorContext, state: state, isMyself: false, onRemoveFriend: removeFriendFromMyTeam, memberIndex: 0, onSetTeamMemberName: setTeamMemberName, onSetTeamMemberBirthYear: setTeamMemberbirthYear, onSetTeamMemberUniversityId: setTeamMemberUniversityId, onSetTeamMemberProfile: setTeamMemberProfile,)
@@ -255,13 +265,12 @@ class _MeetCreateTeamInputState extends State<MeetCreateTeamInput> {
                                               teamMemberCount = teamMemberCount + 1;
                                               teamMemberList.add(GhostFriend());
                                             });
-                                          // _ShowModalBottomSheet(context, friendsList);
                                         },
                                         child: Container(
                                             width: SizeConfig.screenWidth,
                                             height: SizeConfig.defaultSize * 6,
                                             decoration: BoxDecoration(
-                                              color: Colors.grey.shade100,
+                                              color: Color(0xff2F4858),
                                               borderRadius: BorderRadius.circular(8),
                                             ),
                                             alignment: Alignment.center,
@@ -271,11 +280,11 @@ class _MeetCreateTeamInputState extends State<MeetCreateTeamInput> {
                                               text: TextSpan(
                                                 children: [
                                                   WidgetSpan(
-                                                    child: Icon(Icons.add, size: SizeConfig.defaultSize * 1.9, color: Colors.black),
+                                                    child: Icon(Icons.add, size: SizeConfig.defaultSize * 1.9, color: Colors.white),
                                                   ),
                                                   TextSpan(
                                                     text: "   내 친구 입력하기",
-                                                    style: TextStyle(color: Colors.black, fontSize: SizeConfig.defaultSize * 1.6),
+                                                    style: TextStyle(color: Colors.white, fontSize: SizeConfig.defaultSize * 1.6),
                                                   ),
                                                 ],
                                               ),
@@ -283,7 +292,7 @@ class _MeetCreateTeamInputState extends State<MeetCreateTeamInput> {
                                     ),
                                   ),
                                   SizedBox(height: SizeConfig.defaultSize * 1),
-                                  Text("같은 학교 친구 최소 1명~2명을 입력하면 돼요!", style: TextStyle(color: Colors.grey, fontSize: SizeConfig.defaultSize * 1.6)),
+                                  Text("같은 학교 친구 1명만 입력해도 돼요!", style: TextStyle(color: Colors.grey, fontSize: SizeConfig.defaultSize * 1.6)),
                                   SizedBox(
                                     height: isKeyboardVisible ? 100.0 : 0.0, // 키보드가 켜져 있을 때만 SizedBox를 올립니다.
                                   ),
@@ -353,106 +362,76 @@ class _CreateTeamTopSectionState extends State<_CreateTeamTopSection> {
       children: [
         Column(
           children: [
+            Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text("팀명", style: TextStyle(
+                          fontWeight: FontWeight.w400,
+                          fontSize: SizeConfig.defaultSize * 1.8,
+                          color: Colors.black)
+                      ),
+                ]),
+                  SizedBox(height: SizeConfig.defaultSize * 0.9),
 
-            // // 학교 Display
-            // GestureDetector(
-            //   onTap: () {
-            //     // AnalyticsUtil.logEvent("홈_팀만들기_학교_터치");
-            //   },
-            //   child: Row(children: [
-            //     Text("학교",
-            //         style: TextStyle(
-            //             fontWeight: FontWeight.w400,
-            //             fontSize: SizeConfig.defaultSize * 1.6,
-            //             color: Colors.grey
-            //         )),
-            //     SizedBox(width: SizeConfig.defaultSize,),
-            //     Text(widget.userResponse.university?.name ?? '학교를 불러오지 못 했어요',
-            //         style: TextStyle(
-            //             fontWeight: FontWeight.w400,
-            //             fontSize: SizeConfig.defaultSize * 1.6,
-            //             color: Colors.grey
-            //         ))
-            //   ]),
-            // ),
-            //   SizedBox(height: SizeConfig.defaultSize * 0.5),
-
-            GestureDetector(
-              onTap: () {
-                // AnalyticsUtil.logEvent("홈_팀만들기_팀명_터치");
-              },
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text("팀명", style: TextStyle(
-                            fontWeight: FontWeight.w400,
-                            fontSize: SizeConfig.defaultSize * 1.6,
-                            color: Colors.black)
-                        ),
-                  ]),
-                    SizedBox(height: SizeConfig.defaultSize * 0.9),
-
-                  TextFormField(
-                      controller: _controller,
-                      maxLength: 7,
-                        onChanged: (value) {
-                          setState(() {
-                            AnalyticsUtil.logEvent("홈_팀만들기_팀명_입력", properties: {
-                              '팀명': value
-                            });
-                            widget.state.teamName = value;
-                            widget.handleTeamNameChanged(value);
+                TextFormField(
+                    controller: _controller,
+                    maxLength: 7,
+                      onChanged: (value) {
+                        setState(() {
+                          AnalyticsUtil.logEvent("홈_팀만들기_팀명_입력", properties: {
+                            '팀명': value
                           });
-                        },
-                      inputFormatters: [
-                        LengthLimitingTextInputFormatter(7),
-                      ],
-                      decoration: const InputDecoration(
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(10)),
-                            borderSide: BorderSide(
-                              color: Color(0xffFF5C58), // 테두리 색상
-                              width: 1.0,
-                            ),
+                          widget.state.teamName = value;
+                          widget.handleTeamNameChanged(value);
+                        });
+                      },
+                    inputFormatters: [
+                      LengthLimitingTextInputFormatter(7),
+                    ],
+                    decoration: const InputDecoration(
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                          borderSide: BorderSide(
+                            color: Color(0xffFF5C58), // 테두리 색상
+                            width: 1.0,
                           ),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Color(0xffFF5C58), // 테두리 색상
-                              width: 2.0,
-                            ),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Color(0xffFF5C58), // 테두리 색상
+                            width: 2.0,
                           ),
-                          hintText: "팀명을 입력해주세요! (최대 7글자)",
-                          counterText: '',
-                      ),
-                  ),
+                        ),
+                        hintText: "이성의 눈길을 끌만한 이름! (최대 7글자)",
+                        counterText: '',
+                    ),
+                ),
 
-                  if(_controller.text.isEmpty)
-                    Padding(
-                      padding: const EdgeInsets.only(top: 8.0),
-                      child: Container(
-                        width: SizeConfig.screenWidth,
-                        decoration: BoxDecoration(
-                          color: Colors.grey.shade50,
-                          borderRadius: BorderRadius.circular(13)
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const Padding(
-                              padding: EdgeInsets.symmetric(vertical: 8.0),
-                              child: Text("    Tip. 개성있거나 이성의 눈길을 끌만한 이름이 좋아요!"),
-                            ),
-                          const Text("    실제 다른 팀 예시 : 심리사랑꾼들 / 02즈 / 신촌좋아요", style: TextStyle(color: Colors.grey),),
-                            SizedBox(height: SizeConfig.defaultSize),
-                          ],
-                        ),
-                      ),
-                    )
-                ],
-              ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 8.0),
+                  child: Container(
+                    width: SizeConfig.screenWidth,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(13)
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        // const Padding(
+                        //   padding: EdgeInsets.symmetric(vertical: 8.0),
+                        //   child: Text("    Tip. 개성있거나 이성의 눈길을 끌만한 이름이 좋아요!"),
+                        // ),
+                      Text(_controller.text.isEmpty ? "실제 예시 : 심리사랑꾼들 / 02즈 / 신촌좋아요" : " ", style: TextStyle(color: Colors.grey),),
+                        SizedBox(height: SizeConfig.defaultSize * 0.5),
+                      ],
+                    ),
+                  ),
+                )
+              ],
             ),
               SizedBox(height: SizeConfig.defaultSize),
           ],
@@ -1093,7 +1072,7 @@ class _MemberCardViewNoVoteState extends State<MemberCardViewNoVote> {
                         .copyWith(fontStyle: FontStyle.normal,
                         fontSize: getFlexibleSize(target: 15),
                         fontWeight: FontWeight.w400,
-                        color: isSelectedOnTypeAhead ? const Color(0xff7C83FD) : Colors.black),
+                        color: isSelectedOnTypeAhead ? const Color(0xff2F4858) : Colors.black),
                     decoration: InputDecoration(
                         enabledBorder: OutlineInputBorder(
                           borderSide: BorderSide(
@@ -1103,12 +1082,13 @@ class _MemberCardViewNoVoteState extends State<MemberCardViewNoVote> {
                         ),
                         focusedBorder: const OutlineInputBorder(
                           borderSide: BorderSide(
-                            color: Color(0xff7C83FD), // 테두리 색상
+                            color: Color(0xff2F4858), // 테두리 색상
                             width: 2.0,
                           ),
                         ),
-                        prefixIcon: const Icon(Icons.school_rounded, color: Color(0xff7C83FD),),
-                        hintText: "친구 학과를 입력하고 선택해주세요 !")),
+                        prefixIcon: const Icon(Icons.school_rounded, color: Color(0xff2F4858),),
+                        hintText: "친구 학과를 입력하고 선택해주세요 !",
+                        hintStyle: const TextStyle(color: Colors.grey))),
 
                 suggestionsCallback: (pattern) {
                   // 입력된 패턴에 기반하여 검색 결과를 반환
@@ -1133,16 +1113,16 @@ class _MemberCardViewNoVoteState extends State<MemberCardViewNoVote> {
                   _setUniversity(University.fromJson(suggestion));
                 },
               ),
-              Padding(
-                padding: EdgeInsets.only(top: SizeConfig.defaultSize * 0.1),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(Icons.check_rounded, size: SizeConfig.defaultSize * 1.4, color: Colors.black.withOpacity(0.5)),
-                    Text(" 내 친구의 특징 3개만 입력하면 팀이 만들어져요!", style: TextStyle(color: Colors.black.withOpacity(0.5))),
-                  ],
-                ),
-              ),
+              // Padding(
+              //   padding: EdgeInsets.only(top: SizeConfig.defaultSize * 0.1),
+              //   child: Row(
+              //     mainAxisAlignment: MainAxisAlignment.center,
+              //     children: [
+              //       Icon(Icons.check_rounded, size: SizeConfig.defaultSize * 1.4, color: Colors.black.withOpacity(0.5)),
+              //       Text(" 내 친구의 특징 3개만 입력하면 팀이 만들어져요!", style: TextStyle(color: Colors.black.withOpacity(0.5))),
+              //     ],
+              //   ),
+              // ),
             ]
           ),
         ),
