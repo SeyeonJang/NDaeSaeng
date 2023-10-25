@@ -29,7 +29,6 @@ class MeetBoard extends StatefulWidget {
 
 class _MeetBoardState extends State<MeetBoard> {
   late MeetCubit meetCubit;
-  // late PagingController<int, BlindDateTeam> pagingControllerRecent;
   late List<PagingController<int, BlindDateTeam>> pagingControllers;
   int selected = 0;
   int targetLocation = 0;
@@ -61,19 +60,22 @@ class _MeetBoardState extends State<MeetBoard> {
   @override
   void initState() {
     super.initState();
+    targetLocation = 0;
+    targetCertificated = false;
+    targetProfileImage = false;
+
     meetCubit = widget.ancestorContext.read<MeetCubit>();
     pagingControllers = [
       meetCubit.pagingControllerRecent,
       meetCubit.pagingControllerLike,
       meetCubit.pagingControllerSeen
     ];
-    // pagingControllerRecent = meetCubit.pagingControllerRecent;
+    pagingControllers[0].refresh();
 
     if (mounted) {
       pagingControllers[0].addPageRequestListener(onPageRequested);
       pagingControllers[1].addPageRequestListener(onPageRequestedLike);
       pagingControllers[2].addPageRequestListener(onPageRequestedSeen);
-      // pagingControllerRecent.addPageRequestListener(onPageRequested);
       SchedulerBinding.instance.addPostFrameCallback((_) => meetCubit.initMeet());
     }
   }
@@ -83,7 +85,6 @@ class _MeetBoardState extends State<MeetBoard> {
     pagingControllers[0].removePageRequestListener(onPageRequested);
     pagingControllers[1].removePageRequestListener(onPageRequestedLike);
     pagingControllers[2].removePageRequestListener(onPageRequestedSeen);
-    // pagingControllerRecent.removePageRequestListener(onPageRequested);
     super.dispose();
   }
 
