@@ -1062,43 +1062,46 @@ class _BodySectionState extends State<_BodySection> {
                 child: Column(
                   children: [
                     RefreshIndicator(
-                        onRefresh: () async {
-                          widget.pagingController.refresh();
-                        },
-                        child: SizedBox(
-                          height: SizeConfig.screenHeight * 0.8,
-                          child: PagedListView<int, BlindDateTeam>(
-                            pagingController: widget.pagingController,
-                            builderDelegate: PagedChildBuilderDelegate<BlindDateTeam>(
-                            itemBuilder: (_, blindDateTeam, __) {
-                            return widget.pagingController.itemList!.isEmpty || widget.pagingController.itemList == null
-                                ? Center(
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                    children: [
-                                      Image.asset('assets/images/hearts.png', width: SizeConfig.screenWidth * 0.55 ,),
-                                      SizedBox(height: SizeConfig.defaultSize * 5,),
-                                      Text("해당하는 팀을 찾을 수 없어요🥺", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.8),),
-                                      SizedBox(height: SizeConfig.defaultSize,),
-                                      Text("기다리는 동안 다른 친구들을 앱에 초대해보세요!", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.8),),
-                                      SizedBox(height: SizeConfig.defaultSize * 3,),
-                                      Text("친구가 내 이상형을 데려올지도 👀", style: TextStyle(color: Colors.grey, fontSize: SizeConfig.defaultSize * 1.5),),
-                                    ],
-                                  ),
-                                )
-                                : Column(
+                      onRefresh: () async {
+                        widget.pagingController.refresh();
+                      },
+                      child: SizedBox(
+                        height: SizeConfig.screenHeight * 0.8,
+                        child: PagedListView<int, BlindDateTeam>(
+                          pagingController: widget.pagingController,
+                          builderDelegate: PagedChildBuilderDelegate<BlindDateTeam>(
+                          noItemsFoundIndicatorBuilder: (context) {
+                            return Container(
+                              color: Colors.white,
+                              child: Center(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
-                                    SizedBox(height: SizeConfig.defaultSize * 0.9,),
-                                    MeetOneTeamCardview(team: blindDateTeam, isMyTeam: false, myTeamCount: widget.meetState.myTeams.length, myTeamId: nowTeam.id,)
-                                  ]);
-                              },
-                            ),
+                                      SizedBox(height: SizeConfig.defaultSize * 7,),
+                                    Image.asset('assets/images/hearts.png', width: SizeConfig.screenWidth * 0.55),
+                                      SizedBox(height: SizeConfig.defaultSize * 5),
+                                    Text("해당하는 팀을 찾을 수 없어요🥺", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.8)),
+                                      SizedBox(height: SizeConfig.defaultSize),
+                                    Text("기다리는 동안 다른 친구들을 앱에 초대해보세요!", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.8)),
+                                      SizedBox(height: SizeConfig.defaultSize * 3),
+                                    Text("친구가 내 이상형을 데려올지도 👀", style: TextStyle(color: Colors.grey, fontSize: SizeConfig.defaultSize * 1.5)),
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
+                          itemBuilder: (_, blindDateTeam, __) {
+                            return Column(
+                              children: [
+                                SizedBox(height: SizeConfig.defaultSize * 0.9,),
+                                MeetOneTeamCardview(team: blindDateTeam, isMyTeam: false, myTeamCount: widget.meetState.myTeams.length, myTeamId: nowTeam.id,)
+                              ]);
+                          },
                           ),
                         ),
                       ),
-                      // if (!(widget.meetState.friends.isEmpty || widget.meetState.filteredFriends.isEmpty || widget.meetState.myTeams.length==0))
-                      //   SizedBox(height: SizeConfig.defaultSize * 30)
+                    ),
                   ],
                 )
               ),
