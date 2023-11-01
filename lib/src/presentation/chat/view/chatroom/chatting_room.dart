@@ -26,7 +26,7 @@ class ChattingRoom extends StatefulWidget {
   State<ChattingRoom> createState() => _ChattingRoomState();
 }
 
-class _ChattingRoomState extends State<ChattingRoom> {
+class _ChattingRoomState extends State<ChattingRoom> with WidgetsBindingObserver {
   String message = '';
   int page = 0;
   ChatController chatController = ChatController(
@@ -38,10 +38,13 @@ class _ChattingRoomState extends State<ChattingRoom> {
   ChatConnection chatConn = ChatConnection('', 0);
 
   void initConnectionAndSendFirstMessage() async {
+    await _connectChatServer();
+    await loadMoreMessages();
+  }
+
+  Future<void> _connectChatServer() async {
     await chatConn.activate();
     AnalyticsUtil.logEvent('채팅_채팅방_연결');
-
-    await loadMoreMessages();
 
     chatConn.subscribe((frame) {
       MessageSub msg = MessageSub.fromJson(jsonDecode(frame.body ?? jsonEncode(MessageSub(chatRoomId: 0, chatMessageId: 0, senderId: 0, chatMessageType: ChatMessageType.TALK, content: '', createdTime: DateTime.now()).toJson())));
@@ -53,6 +56,7 @@ class _ChattingRoomState extends State<ChattingRoom> {
           sendBy: msg.senderId.toString(),
         ),
       );
+      print("${msg.senderId} : ${msg.content}");
     });
   }
 
@@ -60,6 +64,7 @@ class _ChattingRoomState extends State<ChattingRoom> {
   void initState() {
     AnalyticsUtil.logEvent('채팅_채팅방_접속');
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     chatConn = widget.chatRoomDetail.connection;
 
     initConnectionAndSendFirstMessage();
@@ -96,10 +101,27 @@ class _ChattingRoomState extends State<ChattingRoom> {
   }
 
   @override
+  void didChangeAppLifecycleState(AppLifecycleState state) async {
+    super.didChangeAppLifecycleState(state);
+    if (state == AppLifecycleState.paused) {
+      _disconnectChatRoom();
+    }
+    if (state == AppLifecycleState.resumed) {
+      await _connectChatServer();
+    }
+  }
+
+  @override
   void dispose() {
     super.dispose();
+    WidgetsBinding.instance.removeObserver(this);
+    _disconnectChatRoom();
+  }
+
+  void _disconnectChatRoom() {
     chatConn.deactivate();
     AnalyticsUtil.logEvent('채팅_채팅방_연결제거');
+
   }
 
   void onSendTap(String message, ReplyMessage replyMessage, MessageType messageType) {
@@ -220,7 +242,7 @@ class _ChattingRoomState extends State<ChattingRoom> {
                           ),),
                         ],
                       ),
-                        SizedBox(width: SizeConfig.defaultSize * 5),
+                        SizedBox(width: SizeConfig.defaultSize * 3),
                       Expanded(
                         child: Container(
                           alignment: Alignment.centerRight,
@@ -279,7 +301,7 @@ class _ChattingRoomState extends State<ChattingRoom> {
                           ),),
                         ],
                       ),
-                        SizedBox(width: SizeConfig.defaultSize * 4),
+                        SizedBox(width: SizeConfig.defaultSize * 3),
                       Expanded(
                         child: Container(
                           alignment: Alignment.centerRight,
@@ -398,7 +420,7 @@ class _ChattingRoomState extends State<ChattingRoom> {
               titleStyle: TextStyle(color: Colors.black),
             ),
             textStyle: TextStyle(fontSize: SizeConfig.defaultSize * 1.5, color: Colors.black),
-            senderNameTextStyle: const TextStyle(color: Colors.black),
+            senderNameTextStyle: TextStyle(color: Colors.black, fontSize: SizeConfig.defaultSize * 1.3),
             color: Colors.grey.shade100,
           ),
         ),

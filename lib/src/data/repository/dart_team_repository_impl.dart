@@ -12,10 +12,26 @@ class DartTeamRepositoryImpl extends BlindDateTeamRepository {
   }
 
   @override
-  Future<Pagination<BlindDateTeam>> getTeams({int page = 0, int size = 10, int targetLocationId = 0}) async {
-    Pagination<BlindDateTeamDto> pageResponse = await DartApiRemoteDataSource.getBlindDateTeams(page: page, size: size, regionId: targetLocationId);
+  Future<Pagination<BlindDateTeam>> getTeams({int page = 0, int size = 10, int targetLocationId = 0, bool targetCertificated = false, bool targetProfileImage = false}) async {
+    Pagination<BlindDateTeamDto> pageResponse = await DartApiRemoteDataSource.getBlindDateTeams(page: page, size: size, order: 'LATEST', regionId: targetLocationId, verifiedStudent: targetCertificated, hasProfileImage: targetProfileImage);
     return pageResponse.newContent(
       pageResponse.content?.map((team) => team.newBlindDateTeam()).toList() ?? []
+    );
+  }
+
+  @override
+  Future<Pagination<BlindDateTeam>> getTeamsMostLiked({int page = 0, int size = 10, int targetLocationId = 0, bool targetCertificated = false, bool targetProfileImage = false}) async {
+    Pagination<BlindDateTeamDto> pageResponse = await DartApiRemoteDataSource.getBlindDateTeams(page: page, size: size, order: 'LIKE', regionId: targetLocationId, verifiedStudent: targetCertificated, hasProfileImage: targetProfileImage);
+    return pageResponse.newContent(
+        pageResponse.content?.map((team) => team.newBlindDateTeam()).toList() ?? []
+    );
+  }
+
+  @override
+  Future<Pagination<BlindDateTeam>> getTeamsMostSeen({int page = 0, int size = 10, int targetLocationId = 0, bool targetCertificated = false, bool targetProfileImage = false}) async {
+    Pagination<BlindDateTeamDto> pageResponse = await DartApiRemoteDataSource.getBlindDateTeams(page: page, size: size, order: 'VIEW', regionId: targetLocationId, verifiedStudent: targetCertificated, hasProfileImage: targetProfileImage);
+    return pageResponse.newContent(
+        pageResponse.content?.map((team) => team.newBlindDateTeam()).toList() ?? []
     );
   }
 }

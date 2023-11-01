@@ -52,8 +52,16 @@ class MeetUseCase {
     return _blindDateTeamRepository.getTeam(id);
   }
 
-  Future<Pagination<BlindDateTeam>> getBlindDateTeams({int page = 0, int size = 10, int targetLocationId = 0}) async {
-    return _blindDateTeamRepository.getTeams(page: page, size: size, targetLocationId: targetLocationId);
+  Future<Pagination<BlindDateTeam>> getBlindDateTeams({int page = 0, int size = 10, int targetLocationId = 0, bool targetCertificated = false, bool targetProfileImage = false}) async {
+    return _blindDateTeamRepository.getTeams(page: page, size: size, targetLocationId: targetLocationId, targetCertificated: targetCertificated, targetProfileImage: targetProfileImage);
+  }
+
+  Future<Pagination<BlindDateTeam>> getBlindDateTeamsMostLiked({int page = 0, int size = 10, int targetLocationId = 0, bool targetCertificated = false, bool targetProfileImage = false}) async {
+    return _blindDateTeamRepository.getTeamsMostLiked(page: page, size: size, targetLocationId: targetLocationId, targetCertificated: targetCertificated, targetProfileImage: targetProfileImage);
+  }
+
+  Future<Pagination<BlindDateTeam>> getBlindDateTeamsMostSeen({int page = 0, int size = 10, int targetLocationId = 0, bool targetCertificated = false, bool targetProfileImage = false}) async {
+    return _blindDateTeamRepository.getTeamsMostSeen(page: page, size: size, targetLocationId: targetLocationId, targetCertificated: targetCertificated, targetProfileImage: targetProfileImage);
   }
 
   Future<void> postProposal(ProposalRequestDto proposalRequest) async {

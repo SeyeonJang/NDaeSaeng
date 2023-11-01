@@ -15,7 +15,7 @@ class SupabaseBannerRepository implements BannerRepository {
         .map((data) => BannerImageDto.fromJson(data))
         .toList();
 
-    return dtos
+     return dtos
         .where((dto) => dto.enabledYn != 'n')
         .map((b) => b.toBannerImage())
         .toList();
