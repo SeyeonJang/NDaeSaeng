@@ -99,7 +99,7 @@ class MeetOneMemberCardviewNoVote extends StatelessWidget {
                                             SizedBox(width: SizeConfig.defaultSize * 0.5),
                                             Text(
                                               // "∙ ${userResponse.birthYear.toString().substring(2,4)}년생",
-                                              "∙ ${userResponse.birthYear.toString()}년생",
+                                              "∙ ${userResponse.birthYear.toString().substring(2,)}년생",
                                               style: TextStyle(
                                                 fontWeight: FontWeight.w500,
                                                 fontSize: SizeConfig.defaultSize * 1.6,

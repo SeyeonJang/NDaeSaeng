@@ -32,14 +32,14 @@ class MeetCubit extends Cubit<MeetState> {
 
   // pagination
   static const int NUMBER_OF_POSTS_PER_REQUEST = 10;
-  final PagingController<int, BlindDateTeam> pagingController = PagingController(firstPageKey: 0);
-  Set<int> pageKeyList = {};
+  final PagingController<int, BlindDateTeam> pagingControllerRecent = PagingController(firstPageKey: 0);
+  final PagingController<int, BlindDateTeam> pagingControllerLike = PagingController(firstPageKey: 0);
+  final PagingController<int, BlindDateTeam> pagingControllerSeen = PagingController(firstPageKey: 0);
 
   void initMeet({MeetTeam? initPickedTeam}) async {
     state.setIsLoading(true);
     emit(state.copy());
 
-    pageKeyList = {};
     state.setIsLoading(false);
     emit(state.copy());
     state.setIsLoading(true);
@@ -132,31 +132,64 @@ class MeetCubit extends Cubit<MeetState> {
     print("meet init 끝");
   }
 
-  void initPageKeyList() {
-    pageKeyList = {};
+  Future<void> fetchPage(int pageKey, int targetLocation, bool targetCertificated, bool targetProfileImage) async {
+    try {
+      final newTeams = (await _meetUseCase.getBlindDateTeams(page: pageKey, size: NUMBER_OF_POSTS_PER_REQUEST, targetLocationId: targetLocation, targetCertificated: targetCertificated, targetProfileImage: targetProfileImage)).content ?? [];
+      print(newTeams);
+      final isLastPage = newTeams.length < NUMBER_OF_POSTS_PER_REQUEST;
+      if (isLastPage) {
+        pagingControllerRecent.appendLastPage(newTeams);
+      } else {
+        final nextPageKey = pageKey + 1;
+        AnalyticsUtil.logEvent('과팅_목록_이성 팀 불러오기(페이지네이션)', properties: {
+          '새로 불러온 페이지 인덱스': nextPageKey
+        });
+        // await Future.delayed(Duration(seconds: 1));
+        pagingControllerRecent.appendPage(newTeams, nextPageKey);
+      }
+    } catch (error) {
+      pagingControllerRecent.error = error;
+    }
   }
 
-  Future<void> fetchPage(int pageKey) async {
-    if (!pageKeyList.contains(pageKey)) {
-      print('지금 page : $pageKey번째, pageKeyList : ${pageKeyList.toString()}, hash: ${pageKeyList.hashCode}');
-      try {
-        pageKeyList.add(pageKey);
-        print("지금 page를 add했어요! ${pageKeyList.toString()}");
-        final newTeams = (await _meetUseCase.getBlindDateTeams(page: pageKey, size: NUMBER_OF_POSTS_PER_REQUEST)).content ?? [];
-        final isLastPage = newTeams.length < NUMBER_OF_POSTS_PER_REQUEST;
-        if (isLastPage) {
-          pagingController.appendLastPage(newTeams);
-        } else {
-          final nextPageKey = pageKey + 1;
-          AnalyticsUtil.logEvent('과팅_목록_이성 팀 불러오기(페이지네이션)', properties: {
-            '새로 불러온 페이지 인덱스': nextPageKey
-          });
-          // await Future.delayed(Duration(seconds: 1));
-          pagingController.appendPage(newTeams, nextPageKey);
-        }
-      } catch (error) {
-        pagingController.error = error;
+  Future<void> fetchPageMostLiked(int pageKey, int targetLocation, bool targetCertificated, bool targetProfileImage) async {
+    print('dddd');
+    try {
+      final newTeams = (await _meetUseCase.getBlindDateTeamsMostLiked(page: pageKey, size: NUMBER_OF_POSTS_PER_REQUEST, targetLocationId: targetLocation, targetCertificated: targetCertificated, targetProfileImage: targetProfileImage)).content ?? [];
+      print(newTeams);
+      final isLastPage = newTeams.length < NUMBER_OF_POSTS_PER_REQUEST;
+      if (isLastPage) {
+        pagingControllerLike.appendLastPage(newTeams);
+      } else {
+        final nextPageKey = pageKey + 1;
+        AnalyticsUtil.logEvent('과팅_목록_이성 팀 불러오기(페이지네이션)_호감순', properties: {
+          '새로 불러온 페이지 인덱스': nextPageKey
+        });
+        // await Future.delayed(Duration(seconds: 1));
+        pagingControllerLike.appendPage(newTeams, nextPageKey);
       }
+    } catch (error) {
+      pagingControllerLike.error = error;
+      print(error);
+    }
+  }
+
+  Future<void> fetchPageMostSeen(int pageKey, int targetLocation, bool targetCertificated, bool targetProfileImage) async {
+    try {
+      final newTeams = (await _meetUseCase.getBlindDateTeamsMostSeen(page: pageKey, size: NUMBER_OF_POSTS_PER_REQUEST, targetLocationId: targetLocation, targetCertificated: targetCertificated, targetProfileImage: targetProfileImage)).content ?? [];
+      final isLastPage = newTeams.length < NUMBER_OF_POSTS_PER_REQUEST;
+      if (isLastPage) {
+        pagingControllerSeen.appendLastPage(newTeams);
+      } else {
+        final nextPageKey = pageKey + 1;
+        AnalyticsUtil.logEvent('과팅_목록_이성 팀 불러오기(페이지네이션)_조회순', properties: {
+          '새로 불러온 페이지 인덱스': nextPageKey
+        });
+        pagingControllerSeen.appendPage(newTeams, nextPageKey);
+      }
+    } catch (error) {
+      pagingControllerSeen.error = error;
+      print(error);
     }
   }
 
