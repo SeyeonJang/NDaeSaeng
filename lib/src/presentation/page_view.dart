@@ -3,14 +3,15 @@ import 'package:dart_flutter/src/common/util/analytics_util.dart';
 import 'package:dart_flutter/src/common/util/toast_util.dart';
 import 'package:dart_flutter/src/presentation/chat/chat_pages.dart';
 import 'package:dart_flutter/src/presentation/chat/viewmodel/chat_cubit.dart';
+import 'package:dart_flutter/src/presentation/component/webview_fullscreen.dart';
 import 'package:dart_flutter/src/presentation/meet/meet_intro_pages.dart';
 import 'package:dart_flutter/src/presentation/meet/meet_pages.dart';
-import 'package:dart_flutter/src/presentation/meet/view/meet_board.dart';
-import 'package:dart_flutter/src/presentation/meet/view/meet_intro.dart';
 import 'package:dart_flutter/src/presentation/meet/viewmodel/meet_cubit.dart';
 import 'package:dart_flutter/src/presentation/mypage/mypages.dart';
 import 'package:dart_flutter/src/presentation/mypage/viewmodel/mypages_cubit.dart';
+import 'package:dart_flutter/src/presentation/page_view_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class DartPageView extends StatefulWidget {
@@ -26,6 +27,99 @@ class _DartPageViewState extends State<DartPageView> {
   int _page = 0;
   late final PageController _pageController = PageController(initialPage: widget.initialPage);
   DateTime? currentBackPressTime;
+
+  @override
+  void initState() {
+    super.initState();
+    // 앱 진입횟수(로그인 완료 후) 카운트
+    addOpenAppCount();
+
+    // 앱 실행시 전면 팝업
+    SchedulerBinding.instance!.addPostFrameCallback((timeStamp) {
+      var gender = BlocProvider.of<PageViewCubit>(context).state.myInfo.personalInfo?.gender ?? "UNKNOWN";
+
+      if (getOpenAppCount() < 2 || !canShowPopup() || gender != "FEMALE") return;
+      show(
+          "친구초대이벤트",
+          'assets/images/popup_starbucks.jpg',
+          "https://docs.google.com/forms/d/e/1FAIpQLScG4YIlJ8aO3XH6HXrP3hSOxV-IEDAxDJRMfrCPqcl0Zkg63A/viewform"
+      );
+    });
+  }
+
+  bool canShowPopup() {
+    return BlocProvider.of<PageViewCubit>(context).getState();
+  }
+
+  void neverShowPopup() {
+    BlocProvider.of<PageViewCubit>(context).neverAgain();
+  }
+
+  void addOpenAppCount() {
+    BlocProvider.of<PageViewCubit>(context).addOpenAppCount();
+  }
+
+  int getOpenAppCount() {
+    return BlocProvider.of<PageViewCubit>(context).getOpenAppCount();
+  }
+
+  void show(String title, String imagePath, String url) {
+    showDialog(
+      barrierDismissible: true,
+      context: context,
+      builder: (BuildContext dialogContext) => AlertDialog(
+        surfaceTintColor: Colors.white,
+        title: Center(
+            child: Text(
+              title,
+              style: TextStyle(fontSize: SizeConfig.defaultSize * 1.7, fontWeight: FontWeight.w500),
+              textAlign: TextAlign.center,
+            )),
+        content: SizedBox(
+          width: SizeConfig.screenWidth * 0.8,
+          height: SizeConfig.screenHeight * 0.42,
+          child: SingleChildScrollView(
+            child: GestureDetector(
+              onTap: () {
+                AnalyticsUtil.logEvent("전면팝업_이미지_터치");
+                Navigator.push(context, MaterialPageRoute(builder: (context) => WebViewFullScreen(url: url, title: title)));
+              },
+              child: ListBody(
+                children: <Widget>[
+                  Image.asset(imagePath),
+                ],
+              ),
+            ),
+          ),
+        ),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () {
+              AnalyticsUtil.logEvent("전면팝업_다시열지않기_터치");
+              neverShowPopup();
+              Navigator.of(context).pop();
+            },
+            child: Text(
+              '다시 열지 않기',
+              style: TextStyle(
+                  fontSize: SizeConfig.defaultSize * 1.2, fontWeight: FontWeight.w600, color: Colors.grey),
+            ),
+          ),
+          TextButton(
+            onPressed: () {
+              AnalyticsUtil.logEvent("전면팝업_닫기_터치");
+              Navigator.of(context).pop();
+            },
+            child: Text(
+              '닫기',
+              style: TextStyle(
+                  fontSize: SizeConfig.defaultSize * 1.2, fontWeight: FontWeight.w600, color: const Color(0xffFE6059)),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 
   void _onTapNavigation(int page) {
     setState(() {
