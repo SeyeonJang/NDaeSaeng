@@ -31,9 +31,12 @@ class _DartPageViewState extends State<DartPageView> {
   @override
   void initState() {
     super.initState();
+    // 앱 진입횟수(로그인 완료 후) 카운트
+    addOpenAppCount();
+
     // 앱 실행시 전면 팝업
     SchedulerBinding.instance!.addPostFrameCallback((timeStamp) {
-      if (!canShowPopup()) return;
+      if (getOpenAppCount() < 2 || !canShowPopup()) return;
       show(
           "친구초대이벤트",
           'assets/images/popup_starbucks.jpg',
@@ -48,6 +51,14 @@ class _DartPageViewState extends State<DartPageView> {
 
   void neverShowPopup() {
     BlocProvider.of<PageViewCubit>(context).neverAgain();
+  }
+
+  void addOpenAppCount() {
+    BlocProvider.of<PageViewCubit>(context).addOpenAppCount();
+  }
+
+  int getOpenAppCount() {
+    return BlocProvider.of<PageViewCubit>(context).getOpenAppCount();
   }
 
   void show(String title, String imagePath, String url) {
