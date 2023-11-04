@@ -1,12 +1,11 @@
 import 'dart:io';
 import 'package:dart_flutter/src/common/auth/dart_auth_cubit.dart';
 import 'package:dart_flutter/src/common/util/analytics_util.dart';
+import 'package:dart_flutter/src/common/util/in_app_review_util.dart';
 import 'package:dart_flutter/src/common/util/toast_util.dart';
 import 'package:dart_flutter/src/domain/entity/personal_info.dart';
 import 'package:dart_flutter/src/domain/entity/user.dart';
 import 'package:dart_flutter/src/presentation/component/webview_fullscreen.dart';
-import 'package:dart_flutter/src/presentation/mypage/view/my_ask.dart';
-import 'package:dart_flutter/src/presentation/mypage/view/my_opinion.dart';
 import 'package:dart_flutter/src/presentation/mypage/view/my_tos1.dart';
 import 'package:dart_flutter/src/presentation/mypage/view/my_tos2.dart';
 import 'package:dart_flutter/src/presentation/landing/land_pages.dart';
@@ -19,7 +18,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:restart_app/restart_app.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:url_launcher/url_launcher.dart';
 import '../../../../res/config/size_config.dart';
 
 class MySettings extends StatelessWidget {
@@ -780,15 +778,7 @@ class _MyPageViewState extends State<MyPageView> {
                     TextButton(
                       onPressed: () {
                         AnalyticsUtil.logEvent("내정보_설정_스토어리뷰작성");
-                        launchUrl(
-                          Uri(
-                            scheme: 'https',
-                            host: 'dart.page.link',
-                            path:
-                            'TG78',
-                          ),
-                          mode: LaunchMode.inAppWebView,
-                        );
+                        InAppReviewUtil.openStore();
                       },
                       child: Text("스토어에서 엔대생 리뷰 작성하기",
                           style: TextStyle(fontSize: SizeConfig.defaultSize * 1.4, color: const Color(0xffFE6059))),
