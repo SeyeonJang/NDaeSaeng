@@ -84,7 +84,7 @@ class _StandbyLoadingState extends State<StandbyLoading> {
                         context,
                         MaterialPageRoute(
                             builder: (context) => BlocProvider<PageViewCubit>(
-                                create: (context) => PageViewCubit(),
+                                create: (context) => PageViewCubit()..fetchMyInformation(),
                                 child: const DartPageView(initialPage: 2,))
                             ),
                         (route) => false);

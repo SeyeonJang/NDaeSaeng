@@ -36,7 +36,9 @@ class _DartPageViewState extends State<DartPageView> {
 
     // 앱 실행시 전면 팝업
     SchedulerBinding.instance!.addPostFrameCallback((timeStamp) {
-      if (getOpenAppCount() < 2 || !canShowPopup()) return;
+      var gender = BlocProvider.of<PageViewCubit>(context).state.myInfo.personalInfo?.gender ?? "UNKNOWN";
+
+      if (getOpenAppCount() < 2 || !canShowPopup() || gender != "FEMALE") return;
       show(
           "친구초대이벤트",
           'assets/images/popup_starbucks.jpg',
