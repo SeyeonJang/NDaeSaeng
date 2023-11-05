@@ -5,12 +5,16 @@ class Comment {
   final User writer;
   final String content;
   final DateTime createdAt;
+  final int likes;
+  final bool liked;
 
   Comment({
     required this.id,
     required this.writer,
     required this.content,
-    required this.createdAt
+    required this.createdAt,
+    required this.likes,
+    required this.liked
   });
 
   factory Comment.fromJson(Map<String, dynamic> json) {
@@ -18,12 +22,16 @@ class Comment {
     User parsedWriter = User.fromJson(json['writer']);
     final String parsedContent = json['content'];
     final DateTime parsedCreatedAt = json['createdAt'];
+    final int parsedLikes = json['likes'];
+    final bool parsedLiked = json['liked'];
 
     return Comment(
       id: parsedId,
       writer: parsedWriter,
       content: parsedContent,
-      createdAt: parsedCreatedAt
+      createdAt: parsedCreatedAt,
+      likes: parsedLikes,
+      liked: parsedLiked
     );
   }
 
@@ -38,6 +46,6 @@ class Comment {
 
   @override
   String toString() {
-    return 'Comment{id: $id, writer: $writer, content: $content, createdAt: $createdAt}';
+    return 'Comment{id: $id, writer: $writer, content: $content, createdAt: $createdAt, likes: $likes, liked: $liked}';
   }
 }
