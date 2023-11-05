@@ -1,19 +1,23 @@
 import 'package:dart_flutter/src/domain/entity/option.dart';
 
 class Survey {
-  final int _id;
-  final String _question;
-  final List<Option> _options;
-  final bool _picked;
-  final int _pickedOption;
+  final int id;
+  final String question;
+  final List<Option> options;
+  final bool picked;
+  final int pickedOption;
+  final DateTime createdAt;
+  final String latestComment;
 
   Survey({
-    required int id,
-    required String question,
-    required List<Option> options,
-    required bool picked,
-    required int pickedOption
-  }) : _id = id, _question = question, _options = options, _picked = picked, _pickedOption = pickedOption;
+    required this.id,
+    required this.question,
+    required this.options,
+    required this.picked,
+    required this.pickedOption,
+    required this.createdAt,
+    required this.latestComment
+  });
 
   factory Survey.fromJson(Map<String, dynamic> json) {
     final int parsedId = json['id'];
@@ -27,33 +31,39 @@ class Survey {
 
     final bool parsedPicked = json['picked'];
     final int parsedPickedOption = json['pickedOption'];
+    final DateTime parsedCreatedAt = json['createdAt'];
+    final String parsedLatestComment = json['latestComment'];
 
     return Survey(
       id: parsedId,
       question: parsedQuestion,
       options: parsedOptions,
       picked: parsedPicked,
-      pickedOption: parsedPickedOption
+      pickedOption: parsedPickedOption,
+      createdAt: parsedCreatedAt,
+      latestComment: parsedLatestComment
     );
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = Map<String, dynamic>();
-    data['id'] = _id;
-    data['question'] = _question;
-    data['options'] = _options;
-    data['picked'] = _picked;
-    data['pickedOption'] = _pickedOption;
+    data['id'] = id;
+    data['question'] = question;
+    data['options'] = options;
+    data['picked'] = picked;
+    data['pickedOption'] = pickedOption;
+    data['createdAt'] = createdAt;
+    data['latestComment'] = latestComment;
     return data;
   }
 
   @override
   String toString() {
-    return 'Survey{_id: $_id, _question: $_question, _options: $_options, _picked: $_picked, _pickedOption: $_pickedOption}';
+    return 'Survey{id: $id, question: $question, options: $options, picked: $picked, pickedOption: $pickedOption, createdAt: $createdAt, latestComment: $latestComment}';
   }
 
   bool isPicked() {
-    if (_picked == true) {
+    if (picked == true) {
       return true;
     } else {
       return false;

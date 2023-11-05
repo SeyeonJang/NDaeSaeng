@@ -1,36 +1,36 @@
 class Option {
-  final int _id;
-  final String _name;
-  final double _percent;
+  final int id;
+  final String name;
+  final int headCount;
 
   Option({
-    required int id,
-    required String name,
-    required double percent
-  }) : _percent = percent, _name = name, _id = id;
+    required this.id,
+    required this.name,
+    required this.headCount
+    });
 
   factory Option.fromJson(Map<String, dynamic> json) {
     final int parsedId = json['id'];
     final String parsedName = json['name'];
-    final double parsedPercent = json['percent'];
+    final int parsedHeadCount = json['headCount'];
 
     return Option(
       id: parsedId,
       name: parsedName,
-      percent: parsedPercent
+      headCount: parsedHeadCount
     );
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = Map<String, dynamic>();
-    data['id'] = _id;
-    data['name'] = _name;
-    data['percent'] = _percent;
+    data['id'] = id;
+    data['name'] = name;
+    data['headCount'] = headCount;
     return data;
   }
 
   @override
   String toString() {
-    return 'Option{id: $_id, name: $_name, percent: $_percent}';
+    return 'Option{id: $id, name: $name, percent: $headCount}';
   }
 }
