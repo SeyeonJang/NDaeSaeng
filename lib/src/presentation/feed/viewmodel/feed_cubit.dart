@@ -7,6 +7,7 @@ import 'package:dart_flutter/src/domain/entity/user.dart';
 import 'package:dart_flutter/src/domain/use_case/user_use_case.dart';
 import 'package:dart_flutter/src/domain/use_case/feed_use_case.dart';
 import 'package:dart_flutter/src/presentation/feed/viewmodel/state/feed_state.dart';
+import 'package:intl/intl.dart';
 
 class FeedCubit extends Cubit<FeedState> {
   FeedCubit() : super(FeedState.init());
@@ -24,6 +25,10 @@ class FeedCubit extends Cubit<FeedState> {
     User userResponse = await _userUseCase.myInfo();
     state.setMyInfo(userResponse);
 
+    // pagination 넣기 전까지 임시로 씀
+    SurveyDetail surveyDetail = await _feedUseCase.mockUpSurveyDetail;
+    state.setSurvey(surveyDetail);
+
     state.setIsLoading(false);
     emit(state.copy());
   }
@@ -31,16 +36,16 @@ class FeedCubit extends Cubit<FeedState> {
   // TODO : Future<void> & getSurveys에 await
   void fetchPage(int pageKey) async {
     try {
-      final posts = (_feedUseCase.getSurveys(page: pageKey, size: _numberOfPostsPerRequest).content ?? []);
-      final isLastPage = posts.length < _numberOfPostsPerRequest;
+      final surveys = (_feedUseCase.getSurveys(page: pageKey, size: _numberOfPostsPerRequest).content ?? []);
+      final isLastPage = surveys.length < _numberOfPostsPerRequest;
       if (isLastPage) {
-        pagingController.appendLastPage(posts);
+        pagingController.appendLastPage(surveys);
       } else {
         final nextPageKey = pageKey + 1;
         AnalyticsUtil.logEvent('피드_게시글 불러오기(페이지네이션)', properties: {
           '새로 불러온 페이지 인덱스': nextPageKey
         });
-        pagingController.appendPage(posts, nextPageKey);
+        pagingController.appendPage(surveys, nextPageKey);
       }
     } catch (error) {
       print('[PAGINATION ERROR] $error');

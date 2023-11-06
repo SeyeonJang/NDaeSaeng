@@ -1,10 +1,10 @@
-import 'package:dart_flutter/src/domain/entity/survey_detail.dart';
+import 'package:dart_flutter/src/domain/entity/survey.dart';
 import 'package:flutter/material.dart';
 import 'package:dart_flutter/res/config/size_config.dart';
 import 'package:intl/intl.dart';
 
 class SurveyComponent extends StatelessWidget {
-  late SurveyDetail survey;
+  late Survey survey;
   Color mainColor = const Color(0xffFE6059);
   double marginHorizontal = SizeConfig.defaultSize * 2.3;
 
