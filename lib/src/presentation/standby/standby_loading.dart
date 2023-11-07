@@ -4,6 +4,7 @@ import 'package:dart_flutter/res/config/size_config.dart';
 import 'package:dart_flutter/src/common/auth/dart_auth_cubit.dart';
 import 'package:dart_flutter/src/common/util/analytics_util.dart';
 import 'package:dart_flutter/src/common/util/toast_util.dart';
+import 'package:dart_flutter/src/presentation/page_view_cubit.dart';
 import 'package:dart_flutter/src/presentation/standby/viewmodel/standby_cubit.dart';
 import 'package:dart_flutter/src/presentation/standby/viewmodel/state/standby_state.dart';
 import 'package:flutter/material.dart';
@@ -82,7 +83,10 @@ class _StandbyLoadingState extends State<StandbyLoading> {
                     Navigator.pushAndRemoveUntil(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const DartPageView(initialPage: 2,)),
+                            builder: (context) => BlocProvider<PageViewCubit>(
+                                create: (context) => PageViewCubit()..fetchMyInformation(),
+                                child: const DartPageView(initialPage: 2,))
+                            ),
                         (route) => false);
                   });
                 }
