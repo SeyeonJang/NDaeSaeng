@@ -2,7 +2,7 @@ import 'package:dart_flutter/res/config/size_config.dart';
 import 'package:dart_flutter/src/common/util/analytics_util.dart';
 import 'package:dart_flutter/src/domain/entity/location.dart';
 import 'package:dart_flutter/src/domain/entity/meet_team.dart';
-import 'package:dart_flutter/src/domain/use_case/meet_use_case.dart';
+import 'package:dart_flutter/src/presentation/component/cached_profile_image.dart';
 import 'package:dart_flutter/src/presentation/meet/viewmodel/state/meet_state.dart';
 import 'package:flutter/material.dart';
 import 'package:dart_flutter/src/domain/entity/user.dart';
@@ -357,16 +357,14 @@ class _OneFriendComponentState extends State<_OneFriendComponent> {
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    profileImageUrl == "DEFAULT"
-                        ? ClipOval(
-                          child: Image.asset('assets/images/profile-mockup3.png', width: SizeConfig.defaultSize * 4.3, fit: BoxFit.cover,),
-                          )
-                        : ClipOval(
-                        child: Image.network(profileImageUrl,
-                          width: SizeConfig.defaultSize * 4.3,
-                          height: SizeConfig.defaultSize * 4.3,
-                          fit: BoxFit.cover,)
+
+                    CachedProfileImage(
+                      profileUrl: profileImageUrl,
+                      width: SizeConfig.defaultSize * 4.3,
+                      height: SizeConfig.defaultSize * 4.3,
+                      cached: false,
                     ),
+
                       SizedBox(width: SizeConfig.defaultSize,),
                     Text(widget.friend.personalInfo?.name ?? "XXX", style: TextStyle(
                         fontSize: SizeConfig.defaultSize * 2,
@@ -559,15 +557,12 @@ class MemberCardView extends StatelessWidget {
                         onTap: () {
                           AnalyticsUtil.logEvent("과팅_팀만들기_카드_프사_터치");
                         },
-                        child: profileImageUrl == "DEFAULT"
-                            ? ClipOval(
-                              child: Image.asset('assets/images/profile-mockup3.png', width: SizeConfig.defaultSize * 6.2, fit: BoxFit.cover,),
-                              )
-                            : ClipOval(
-                              child: Image.network(profileImageUrl,
-                              width: SizeConfig.defaultSize * 6.2,
-                              height: SizeConfig.defaultSize * 6.2,
-                              fit: BoxFit.cover,)
+
+                        child: CachedProfileImage(
+                          profileUrl: profileImageUrl,
+                          width: SizeConfig.defaultSize * 6.2,
+                          height: SizeConfig.defaultSize * 6.2,
+                          cached: false,
                         ),
                       ),
                         SizedBox(width: SizeConfig.defaultSize * 0.8),

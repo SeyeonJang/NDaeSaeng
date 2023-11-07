@@ -1,5 +1,6 @@
 import 'package:dart_flutter/src/common/util/analytics_util.dart';
 import 'package:dart_flutter/src/domain/entity/type/blind_date_user_detail.dart';
+import 'package:dart_flutter/src/presentation/component/cached_profile_image.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../../res/config/size_config.dart';
@@ -31,17 +32,11 @@ class ChatProfile extends StatelessWidget {
                     '터치한 사람 프로필 URL': profile.profileImageUrl
                   });
                 },
-                child: ClipOval(
-                    child: profile.profileImageUrl == 'DEFAULT' || !profile.profileImageUrl.startsWith('https://')
-                        ? Image.asset(
-                        'assets/images/profile-mockup3.png',
-                        width: SizeConfig.screenWidth * 0.5,
-                        height: SizeConfig.screenWidth * 0.5
-                    )
-                        : Image.network(profile.profileImageUrl,
-                      width: SizeConfig.screenWidth * 0.5,
-                      height: SizeConfig.screenWidth * 0.5,
-                      fit: BoxFit.cover,)
+
+                child: CachedProfileImage(
+                  profileUrl: profile.profileImageUrl,
+                  width: SizeConfig.defaultSize * 0.5,
+                  height: SizeConfig.defaultSize * 0.5,
                 ),
               ),
                 SizedBox(height: SizeConfig.defaultSize * 1.6,),

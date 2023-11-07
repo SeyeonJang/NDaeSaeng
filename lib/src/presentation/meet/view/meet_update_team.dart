@@ -1,6 +1,7 @@
 import 'package:dart_flutter/res/config/size_config.dart';
 import 'package:dart_flutter/src/domain/entity/location.dart';
 import 'package:dart_flutter/src/domain/entity/meet_team.dart';
+import 'package:dart_flutter/src/presentation/component/cached_profile_image.dart';
 import 'package:dart_flutter/src/presentation/meet/view/meet_create_team.dart';
 import 'package:dart_flutter/src/presentation/meet/viewmodel/meet_cubit.dart';
 import 'package:dart_flutter/src/presentation/meet/viewmodel/state/meet_state.dart';
@@ -314,16 +315,12 @@ class _OneFriendComponentState extends State<_OneFriendComponent> {
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    profileImageUrl == "DEFAULT"
-                        ? ClipOval(
-                      child: Image.asset('assets/images/profile-mockup3.png', width: SizeConfig.defaultSize * 4.3, fit: BoxFit.cover,),
-                    )
-                        : ClipOval(
-                        child: Image.network(profileImageUrl,
-                          width: SizeConfig.defaultSize * 4.3,
-                          height: SizeConfig.defaultSize * 4.3,
-                          fit: BoxFit.cover,)
+                    CachedProfileImage(
+                      profileUrl: profileImageUrl,
+                      width: SizeConfig.defaultSize * 4.3,
+                      height: SizeConfig.defaultSize * 4.3,
                     ),
+
                       SizedBox(width: SizeConfig.defaultSize,),
                     Text(widget.friend.personalInfo?.name ?? "XXX", style: TextStyle(
                         fontSize: SizeConfig.defaultSize * 2,

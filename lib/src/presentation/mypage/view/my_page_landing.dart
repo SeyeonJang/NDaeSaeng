@@ -2,6 +2,7 @@ import 'package:dart_flutter/res/config/size_config.dart';
 import 'package:dart_flutter/src/common/util/analytics_util.dart';
 import 'package:dart_flutter/src/common/util/toast_util.dart';
 import 'package:dart_flutter/src/domain/entity/user.dart';
+import 'package:dart_flutter/src/presentation/component/cached_profile_image.dart';
 import 'package:dart_flutter/src/presentation/mypage/view/student_vertification.dart';
 import 'package:dart_flutter/src/presentation/mypage/viewmodel/mypages_cubit.dart';
 import 'package:dart_flutter/src/presentation/mypage/viewmodel/state/mypages_state.dart';
@@ -119,16 +120,7 @@ class _MyPageLandingViewState extends State<MyPageLandingView> {
                             )
                           ),
                         ),
-                        // profileImageUrl == "DEFAULT"
-                        //     ? ClipOval(
-                        //       child: Image.asset('assets/images/profile-mockup3.png', width: SizeConfig.defaultSize * 5.7, fit: BoxFit.cover,),
-                        //       )
-                        //     : ClipOval(
-                        //     child: Image.network(profileImageUrl,
-                        //       width: SizeConfig.defaultSize * 5.7,
-                        //       height: SizeConfig.defaultSize * 5.7,
-                        //         fit: BoxFit.cover)
-                        // )),
+
                         SizedBox(width: SizeConfig.defaultSize * 0.6),
                         Expanded(
                           child: Column(
@@ -540,15 +532,11 @@ class _FriendComponentState extends State<FriendComponent> {
                             //       colors: [Color(0xff7C83FD), Color(0xff7C83FD)]),
                             //   borderRadius: BorderRadius.circular(32),
                             // ),
-                            child: profileImageUrl == "DEFAULT"
-                                ? ClipOval(
-                              child: Image.asset('assets/images/profile-mockup3.png', width: SizeConfig.defaultSize * 4.5, fit: BoxFit.cover,),
-                            )
-                                : ClipOval(
-                                child: Image.network(profileImageUrl,
-                                  width: SizeConfig.defaultSize * 4.5,
-                                  height: SizeConfig.defaultSize * 4.5,
-                                  fit: BoxFit.cover,)
+
+                            child: CachedProfileImage(
+                              profileUrl: profileImageUrl,
+                              width: SizeConfig.defaultSize * 4.5,
+                              height: SizeConfig.defaultSize * 4.5,
                             ),
                         ),
                       ),
@@ -757,16 +745,13 @@ class _NotFriendComponentState extends State<NotFriendComponent> {
                             //       colors: [Color(0xff7C83FD), Color(0xff7C83FD)]),
                             //   borderRadius: BorderRadius.circular(32),
                             // ),
-                            child: profileImageUrl == "DEFAULT"
-                                ? ClipOval(
-                              child: Image.asset('assets/images/profile-mockup3.png', width: SizeConfig.defaultSize * 4.5, fit: BoxFit.fill,),
-                            )
-                                : ClipOval(
-                                child: Image.network(profileImageUrl,
-                                  width: SizeConfig.defaultSize * 4.5,
-                                  height: SizeConfig.defaultSize * 4.5,
-                                  fit: BoxFit.cover,)
-                            ),
+
+
+                          child: CachedProfileImage(
+                            profileUrl: profileImageUrl,
+                            width: SizeConfig.defaultSize * 4.5,
+                            height: SizeConfig.defaultSize * 4.5,
+                          ),
                         ),
                       ),
                     ),
