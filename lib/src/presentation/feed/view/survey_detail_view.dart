@@ -4,7 +4,6 @@ import 'package:dart_flutter/src/domain/entity/comment.dart';
 import 'package:dart_flutter/src/domain/entity/survey_detail.dart';
 import 'package:dart_flutter/src/presentation/feed/view/component/comment_component.dart';
 import 'package:dart_flutter/src/presentation/feed/view/component/option_component.dart';
-import 'package:dart_flutter/src/presentation/feed/view/component/survey_component.dart';
 import 'package:dart_flutter/src/presentation/feed/viewmodel/feed_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -12,8 +11,11 @@ import 'package:intl/intl.dart';
 class SurveyDetailView extends StatefulWidget {
   late SurveyDetail surveyDetail;
   late FeedCubit feedCubit;
+  late int pickedOption;
 
-  SurveyDetailView({super.key, required this.surveyDetail, required this.feedCubit});
+  SurveyDetailView({super.key, required this.surveyDetail, required this.feedCubit}) {
+   pickedOption = surveyDetail.pickedOption;
+  }
 
   @override
   State<SurveyDetailView> createState() => _SurveyDetailViewState();
@@ -88,9 +90,9 @@ class _SurveyDetailViewState extends State<SurveyDetailView> {
                               ],
                             ),
                               SizedBox(height: SizeConfig.defaultSize * 2,),
-                            OptionComponent(option: widget.surveyDetail.options.first, percent: optionFirstPercent, isMost: optionFirstPercent>optionSecondPercent,),
+                            OptionComponent(isPicked: widget.pickedOption == widget.surveyDetail.options.first.id, option: widget.surveyDetail.options.first, percent: optionFirstPercent, isMost: optionFirstPercent>optionSecondPercent,),
                               SizedBox(height: SizeConfig.defaultSize),
-                            OptionComponent(option: widget.surveyDetail.options.last, percent: optionSecondPercent, isMost: optionFirstPercent<optionSecondPercent,)
+                            OptionComponent(isPicked: widget.pickedOption == widget.surveyDetail.options.last.id, option: widget.surveyDetail.options.last, percent: optionSecondPercent, isMost: optionFirstPercent<optionSecondPercent,)
                           ],
                         ),
                       ],
@@ -114,7 +116,7 @@ class _SurveyDetailViewState extends State<SurveyDetailView> {
                         children: [
                           Padding(
                             padding: EdgeInsets.symmetric(vertical: SizeConfig.defaultSize, horizontal: marginHorizontal),
-                            child: CommentComponent(comment: widget.surveyDetail.comments[i]),
+                            child: CommentComponent(comment: widget.surveyDetail.comments[i], feedCubit: widget.feedCubit,),
                           ),
                           Divider(thickness: 1, height: 1, color: Colors.grey.shade300)
                         ],

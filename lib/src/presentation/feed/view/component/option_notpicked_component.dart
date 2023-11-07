@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 class OptionNotPickedComponent extends StatefulWidget {
   late Option option;
-  final Function(bool) onPickedChanged;
+  final Function(bool, int) onPickedChanged;
 
   OptionNotPickedComponent({super.key, required this.option, required this.onPickedChanged});
 
@@ -18,7 +18,7 @@ class _OptionNotPickedComponentState extends State<OptionNotPickedComponent> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        widget.onPickedChanged(true);
+        widget.onPickedChanged(true, widget.option.id);
       },
       child: Container(
         width: SizeConfig.screenWidth,

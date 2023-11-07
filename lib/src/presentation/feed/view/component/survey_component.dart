@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:dart_flutter/src/common/util/toast_util.dart';
 import 'package:dart_flutter/src/domain/entity/survey.dart';
 import 'package:dart_flutter/src/presentation/feed/view/component/option_component.dart';
@@ -12,8 +14,11 @@ class SurveyComponent extends StatefulWidget {
   late Survey survey;
   late FeedCubit feedCubit;
   late bool isPicked;
+  late int pickedOption;
+
   SurveyComponent({super.key, required this.survey, required this.feedCubit}) {
     isPicked = survey.isPicked();
+    pickedOption = survey.pickedOption;
   }
 
   @override
@@ -24,13 +29,20 @@ class _SurveyComponentState extends State<SurveyComponent> {
   Color mainColor = const Color(0xffFE6059);
   Color commentColor = const Color(0xffFFFAF9);
   double marginHorizontal = SizeConfig.defaultSize * 2.3;
-  // late bool isPicked;
 
-  void onPickedChanged(bool changed) {
+  void onPickedChanged(bool changed, int pickedOption) async {
     setState(() {
       widget.isPicked = changed;
-      print('isPicked 변경 : ${widget.isPicked}');
+      widget.pickedOption = pickedOption;
     });
+    try {
+      await widget.feedCubit.pickOption();
+    } catch (error) {
+      setState(() {
+        widget.isPicked = false;
+      });
+      ToastUtil.showMeetToast('내 투표 결과 전송에 실패했어요🥺\n투표에 다시 참여해주세요!', 2);
+    }
   }
 
   @override
@@ -91,11 +103,11 @@ class _SurveyComponentState extends State<SurveyComponent> {
                     ),
                       SizedBox(height: SizeConfig.defaultSize * 2,),
                     widget.isPicked
-                        ? OptionComponent(option: widget.survey.options.first, percent: optionFirstPercent, isMost: optionFirstPercent>optionSecondPercent,)
+                        ? OptionComponent(isPicked: widget.pickedOption == widget.survey.options.first.id, option: widget.survey.options.first, percent: optionFirstPercent, isMost: optionFirstPercent>optionSecondPercent,)
                         : OptionNotPickedComponent(option: widget.survey.options.first, onPickedChanged: onPickedChanged),
                       SizedBox(height: SizeConfig.defaultSize),
                     widget.isPicked
-                        ? OptionComponent(option: widget.survey.options.last, percent: optionSecondPercent, isMost: optionFirstPercent<optionSecondPercent,)
+                        ? OptionComponent(isPicked: widget.pickedOption == widget.survey.options.last.id, option: widget.survey.options.last, percent: optionSecondPercent, isMost: optionFirstPercent<optionSecondPercent,)
                         : OptionNotPickedComponent(option: widget.survey.options.last, onPickedChanged: onPickedChanged)
                   ],
                 ),
