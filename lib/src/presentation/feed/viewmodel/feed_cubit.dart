@@ -59,7 +59,7 @@ class FeedCubit extends Cubit<FeedState> {
     emit(state.copy());
   }
 
-  void pickOption() {
+  Future<void> pickOption() async {
     // TODO : pickOption
     // View 먼저 바꾸고 서버 전달
   }

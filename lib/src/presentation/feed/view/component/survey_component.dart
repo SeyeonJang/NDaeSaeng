@@ -30,11 +30,19 @@ class _SurveyComponentState extends State<SurveyComponent> {
   Color commentColor = const Color(0xffFFFAF9);
   double marginHorizontal = SizeConfig.defaultSize * 2.3;
 
-  void onPickedChanged(bool changed, int pickedOption) {
+  void onPickedChanged(bool changed, int pickedOption) async {
     setState(() {
       widget.isPicked = changed;
       widget.pickedOption = pickedOption;
     });
+    try {
+      await widget.feedCubit.pickOption();
+    } catch (error) {
+      setState(() {
+        widget.isPicked = false;
+      });
+      ToastUtil.showMeetToast('내 투표 결과 전송에 실패했어요🥺\n투표에 다시 참여해주세요!', 2);
+    }
   }
 
   @override
