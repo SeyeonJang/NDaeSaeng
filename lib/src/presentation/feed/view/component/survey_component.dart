@@ -84,7 +84,7 @@ class SurveyComponent extends StatelessWidget {
           GestureDetector(
             onTap: () async {
               await feedCubit.getSurveyDetail(survey.id).then((_) {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => SurveyDetailView(surveyDetail: feedCubit.state.surveyDetail)));
+                Navigator.push(context, MaterialPageRoute(builder: (context) => SurveyDetailView(surveyDetail: feedCubit.state.surveyDetail, feedCubit: feedCubit,)));
               });
             },
             child: Container(
