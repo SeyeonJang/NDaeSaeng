@@ -73,15 +73,15 @@ class _FeedState extends State<Feed> {
                 child: Column(
                   children: [
                     SizedBox(
-                      height: SizeConfig.screenHeight * 0.8,
+                      height: SizeConfig.screenHeight * 0.82,
                       child: PagedListView<int, Survey>(
                         pagingController: pagingController,
                           builderDelegate: PagedChildBuilderDelegate<Survey>(
                             itemBuilder: (_, survey, __) {
                               return Column(
                                 children: [
+                                  SurveyComponent(survey: survey, feedCubit: feedCubit,),
                                   SizedBox(height: SizeConfig.defaultSize,),
-                                  SurveyComponent(survey: survey),
                                 ],
                               );
                             })
