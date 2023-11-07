@@ -20,13 +20,11 @@ class CachedProfileImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ClipOval(
-      child: Center(
-          child: profileUrl == "DEFAULT" || !profileUrl.startsWith("https://")
-              ? defaultProfile()
-              : cached
-                ? buildCachedNetworkImage()
-                : buildImage()
-      ),
+      child: profileUrl == "DEFAULT" || !profileUrl.startsWith("https://")
+          ? defaultProfile()
+          : cached
+            ? buildCachedNetworkImage()
+            : buildImage(),
     );
   }
 

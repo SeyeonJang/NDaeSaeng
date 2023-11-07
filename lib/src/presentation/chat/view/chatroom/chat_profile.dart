@@ -35,8 +35,8 @@ class ChatProfile extends StatelessWidget {
 
                 child: CachedProfileImage(
                   profileUrl: profile.profileImageUrl,
-                  width: SizeConfig.defaultSize * 0.5,
-                  height: SizeConfig.defaultSize * 0.5,
+                  width: SizeConfig.screenWidth * 0.5,
+                  height: SizeConfig.screenWidth * 0.5,
                 ),
               ),
                 SizedBox(height: SizeConfig.defaultSize * 1.6,),
