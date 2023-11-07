@@ -20,6 +20,7 @@ class OptionComponent extends StatelessWidget {
       width: SizeConfig.screenWidth,
       height: SizeConfig.defaultSize * 4.5,
       decoration: BoxDecoration(
+        color: Colors.white,
         borderRadius: const BorderRadius.all(Radius.circular(9)),
         border: Border.all(color: isMost ? mainColor : Colors.grey.shade300)
       ),

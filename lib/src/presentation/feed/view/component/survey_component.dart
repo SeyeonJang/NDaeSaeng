@@ -1,17 +1,19 @@
 import 'package:dart_flutter/src/domain/entity/survey.dart';
 import 'package:dart_flutter/src/presentation/feed/view/component/option_component.dart';
 import 'package:dart_flutter/src/presentation/feed/view/survey_detail_view.dart';
+import 'package:dart_flutter/src/presentation/feed/viewmodel/feed_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:dart_flutter/res/config/size_config.dart';
 import 'package:intl/intl.dart';
 
 class SurveyComponent extends StatelessWidget {
   late Survey survey;
+  late FeedCubit feedCubit;
   Color mainColor = const Color(0xffFE6059);
   Color commentColor = const Color(0xffFFFAF9);
   double marginHorizontal = SizeConfig.defaultSize * 2.3;
 
-  SurveyComponent({super.key, required this.survey});
+  SurveyComponent({super.key, required this.survey, required this.feedCubit});
 
   @override
   Widget build(BuildContext context) {
@@ -80,8 +82,10 @@ class SurveyComponent extends StatelessWidget {
           ),
 
           GestureDetector(
-            onTap: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => const SurveyDetailView()));
+            onTap: () async {
+              await feedCubit.getSurveyDetail(survey.id).then((_) {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => SurveyDetailView(surveyDetail: feedCubit.state.surveyDetail)));
+              });
             },
             child: Container(
               width: SizeConfig.screenWidth,
