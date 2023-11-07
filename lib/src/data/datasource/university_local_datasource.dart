@@ -7,7 +7,7 @@ import 'package:sqflite/sqflite.dart';
 
 class UniversityLocalDatasource {
   static const String DATABASE_NAME = 'university';
-  static const int DATABASE_VERSION = 20231031; // 데이터베이스 버전 설정
+  static const int DATABASE_VERSION = 20231104; // 데이터베이스 버전 설정
 
   static Future<Database> getDatabase() async {
     var databasesPath = await getDatabasesPath();

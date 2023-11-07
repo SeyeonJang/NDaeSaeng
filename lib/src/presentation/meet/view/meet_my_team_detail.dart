@@ -175,7 +175,7 @@ class _TopBarSection extends StatelessWidget {
                           context: context,
                           builder: (BuildContext dialogContext) => AlertDialog(
                             title: Text('\'${team.name=='' ? '(팀명 없음)' : team.name}\' 팀을 삭제하시겠어요?', style: TextStyle(fontSize: SizeConfig.defaultSize * 1.8), textAlign: TextAlign.center,),
-                            content: Text("내 팀을 삭제하면 내가 받은 호감과 보낸 호감 내역이 모두 사라져요! 🥺\n( 채팅방은 그대로 남아있어요! )"),
+                            content: const Text("내 팀을 삭제하면 내가 받은 호감과 보낸 호감, 현재 팀으로 대화했던 채팅방이 모두 사라져요! 🥺"),
                             backgroundColor: Colors.white,
                             surfaceTintColor: Colors.white,
                             actions: <Widget>[
