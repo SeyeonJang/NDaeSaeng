@@ -1,3 +1,4 @@
+import 'package:dart_flutter/src/common/util/toast_util.dart';
 import 'package:dart_flutter/src/domain/entity/survey.dart';
 import 'package:dart_flutter/src/presentation/feed/view/component/option_component.dart';
 import 'package:dart_flutter/src/presentation/feed/view/survey_detail_view.dart';
@@ -83,9 +84,13 @@ class SurveyComponent extends StatelessWidget {
 
           GestureDetector(
             onTap: () async {
-              await feedCubit.getSurveyDetail(survey.id).then((_) {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => SurveyDetailView(surveyDetail: feedCubit.state.surveyDetail, feedCubit: feedCubit,)));
-              });
+              if (!survey.picked) {
+                ToastUtil.showMeetToast('선택지 중 하나를 선택해야\n댓글과 비율을 볼 수 있어요!', 2);
+              } else {
+                await feedCubit.getSurveyDetail(survey.id).then((_) {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => SurveyDetailView(surveyDetail: feedCubit.state.surveyDetail, feedCubit: feedCubit,)));
+                });
+              }
             },
             child: Container(
               width: SizeConfig.screenWidth,
