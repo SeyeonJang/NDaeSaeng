@@ -8,10 +8,11 @@ import 'package:intl/intl.dart';
 import '../../../../common/util/analytics_util.dart';
 
 class CommentComponent extends StatefulWidget {
+  late int surveyId;
   late Comment comment;
   late FeedCubit feedCubit;
 
-  CommentComponent({super.key, required this.comment, required this.feedCubit});
+  CommentComponent({super.key, required this.surveyId, required this.comment, required this.feedCubit});
 
   @override
   State<CommentComponent> createState() => _CommentComponentState();
@@ -52,7 +53,7 @@ class _CommentComponentState extends State<CommentComponent> {
     });
 
     try {
-      widget.feedCubit.postLikeComment(commentId);
+      widget.feedCubit.postLikeComment(widget.surveyId, commentId);
     } catch (e, trace) {
       // 좋아요 요청 실패시 원상복구
       setState(() {
@@ -68,7 +69,7 @@ class _CommentComponentState extends State<CommentComponent> {
       context: context,
       builder: (BuildContext dialogContext) => AlertDialog(
         title: Text('댓글을 삭제하시겠어요?', style: TextStyle(fontSize: SizeConfig.defaultSize * 1.8), textAlign: TextAlign.center,),
-        content: Text("삭제시에 복구할 수 없어요!"),
+        content: const Text("삭제시에 복구할 수 없어요!"),
         backgroundColor: Colors.white,
         surfaceTintColor: Colors.white,
         actions: <Widget>[
@@ -81,7 +82,7 @@ class _CommentComponentState extends State<CommentComponent> {
           TextButton(
             onPressed: () async {
               ToastUtil.showToast("삭제하기");
-              widget.feedCubit.deleteComment(commentId);
+              widget.feedCubit.deleteComment(widget.surveyId, commentId);
               Navigator.pop(dialogContext);
               // Navigator.pop(context, true);
             },
@@ -118,7 +119,7 @@ class _CommentComponentState extends State<CommentComponent> {
               }
               ),
 
-              widget.feedCubit.reportComment(commentId),
+              widget.feedCubit.reportComment(widget.surveyId, commentId),
               Navigator.pop(context, '신고'),
               ToastUtil.showMeetToast("사용자가 신고되었어요!", 1),
             },
@@ -195,7 +196,7 @@ class _CommentComponentState extends State<CommentComponent> {
 
         Row(
           children: [
-            Text(createdAt, style: TextStyle(color: Colors.grey, fontSize: SizeConfig.defaultSize * 1.2),),
+            Text('$createdAt   ', style: TextStyle(color: Colors.grey, fontSize: SizeConfig.defaultSize * 1.2),),
             Icon(Icons.thumb_up_alt_outlined, size: SizeConfig.defaultSize * 1.2, color: Colors.red,),
             Text(" $likes", style: TextStyle(color: Colors.red, fontSize: SizeConfig.defaultSize * 1.2),),
           ],

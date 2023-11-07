@@ -17,7 +17,7 @@ class FeedUseCase {
   }
 
   Future<void> postOption(int surveyId, int optionId) async {
-    _surveyRepository.postSurvey(surveyId, optionId);
+    await _surveyRepository.postSurvey(surveyId, optionId);
   }
 
   Future<void> postComment(int surveyId, String content) async {

@@ -116,7 +116,7 @@ class _SurveyDetailViewState extends State<SurveyDetailView> {
                         children: [
                           Padding(
                             padding: EdgeInsets.symmetric(vertical: SizeConfig.defaultSize, horizontal: marginHorizontal),
-                            child: CommentComponent(comment: widget.surveyDetail.comments[i], feedCubit: widget.feedCubit,),
+                            child: CommentComponent(surveyId: widget.surveyDetail.id, comment: widget.surveyDetail.comments[i], feedCubit: widget.feedCubit,),
                           ),
                           Divider(thickness: 1, height: 1, color: Colors.grey.shade100)
                         ],
@@ -167,7 +167,7 @@ class _SurveyDetailViewState extends State<SurveyDetailView> {
                             ToastUtil.showMeetToast('댓글 작성하고 눌러주세요!', 1);
                           } else {
                             _controller.clear();
-                            widget.feedCubit.postComment(myComment);
+                            widget.feedCubit.postComment(widget.surveyDetail.id, myComment);
                           }
                         },
                         icon: Icon(Icons.send_rounded, color: mainColor,)

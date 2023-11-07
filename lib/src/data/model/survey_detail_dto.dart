@@ -11,7 +11,7 @@ class SurveyDetailDto {
   String? createdTime;
   String? lastModifiedTime;
   String? category;
-  String? title;
+  String? content;
   int? totalHeadCount;
   List<Answers>? answers;
   int? userAnswerId;
@@ -22,7 +22,7 @@ class SurveyDetailDto {
         this.createdTime,
         this.lastModifiedTime,
         this.category,
-        this.title,
+        this.content,
         this.totalHeadCount,
         this.answers,
         this.userAnswerId,
@@ -33,7 +33,7 @@ class SurveyDetailDto {
     createdTime = json['createdTime'];
     lastModifiedTime = json['lastModifiedTime'];
     category = json['category'];
-    title = json['title'];
+    content = json['content'];
     totalHeadCount = json['totalHeadCount'];
     if (json['answers'] != null) {
       answers = <Answers>[];
@@ -56,7 +56,7 @@ class SurveyDetailDto {
     data['createdTime'] = this.createdTime;
     data['lastModifiedTime'] = this.lastModifiedTime;
     data['category'] = this.category;
-    data['title'] = this.title;
+    data['content'] = this.content;
     data['totalHeadCount'] = this.totalHeadCount;
     if (this.answers != null) {
       data['answers'] = this.answers!.map((v) => v.toJson()).toList();
@@ -71,13 +71,13 @@ class SurveyDetailDto {
   SurveyDetail newSurveyDetail() {
     return SurveyDetail(
         id: surveyId ?? 0,
-        question: title ?? "질문 불러오기에 실패했습니다.",
+        question: content ?? "질문 불러오기에 실패했습니다.",
         options: answers?.map((answer) => answer.toOption()).toList() ?? [],
         picked: userAnswerId == null ? false : true,
         pickedOption: userAnswerId ?? 0,
         createdAt: createdTime != null ? DateTime.parse(createdTime!) : DateTime.now(),
         latestComment: "작성된 댓글이 없습니다.",
-        comments: [],
+        comments: comments?.map((comment) => comment.newComment()).toList() ?? [],
     );
   }
 }

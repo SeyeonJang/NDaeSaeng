@@ -36,7 +36,7 @@ class _SurveyComponentState extends State<SurveyComponent> {
       isChanged = true;
     });
     try {
-      await widget.feedCubit.pickOption();
+      await widget.feedCubit.postOption(widget.survey.id, widget.pickedOption);
     } catch (error) {
       setState(() {
         widget.isPicked = false;
