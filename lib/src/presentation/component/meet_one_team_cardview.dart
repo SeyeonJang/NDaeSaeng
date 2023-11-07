@@ -1,9 +1,12 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dart_flutter/src/common/util/toast_util.dart';
+import 'package:dart_flutter/src/data/custom_cache_manager.dart';
 import 'package:dart_flutter/src/domain/entity/blind_date_team.dart';
-import 'package:dart_flutter/src/presentation/meet/view/meet_my_team_detail.dart';
+import 'package:dart_flutter/src/presentation/component/cached_profile_image.dart';
 import 'package:dart_flutter/src/presentation/meet/view/meet_other_team_detail.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import '../../../res/config/size_config.dart';
 import '../../common/util/analytics_util.dart';
 import '../meet/viewmodel/meet_cubit.dart';
@@ -124,12 +127,10 @@ class MeetOneTeamCardview extends StatelessWidget {
                               decoration: const BoxDecoration(
                                 shape: BoxShape.circle,
                               ),
-                              child: ClipOval(
-                                child: Center(
-                                  child: team.teamUsers[i].getProfileImageUrl() == "DEFAULT" || !team.teamUsers[i].getProfileImageUrl().startsWith("https://")
-                                    ? Image.asset('assets/images/profile-mockup3.png', width: SizeConfig.defaultSize * 4.5, height: SizeConfig.defaultSize * 4.5, fit: BoxFit.cover,)
-                                    : Image.network(team.teamUsers[i].getProfileImageUrl(), width: SizeConfig.defaultSize * 4.5, height: SizeConfig.defaultSize * 4.5, fit: BoxFit.cover,)
-                                ),
+                              child: CachedProfileImage(
+                                profileUrl: team.teamUsers[i].getProfileImageUrl(),
+                                width: SizeConfig.defaultSize * 4.5,
+                                height: SizeConfig.defaultSize * 4.5,
                               ),
                             ),
                           ),
@@ -170,3 +171,41 @@ class MeetOneTeamCardview extends StatelessWidget {
     );
   }
 }
+
+// class CachedProfileImage extends StatelessWidget {
+//   const CachedProfileImage({
+//     super.key,
+//     required this.profileUrl,
+//     this.width = 4.5,
+//     this.height = 4.5
+//   });
+//
+//   final String profileUrl;
+//   final double width;
+//   final double height;
+//
+//   Image defaultProfile() => Image.asset(
+//     'assets/images/profile-mockup3.png',
+//     width: width,
+//     height: height,
+//     fit: BoxFit.cover,
+//   );
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return ClipOval(
+//       child: Center(
+//         child: profileUrl == "DEFAULT" || !profileUrl.startsWith("https://")
+//           ? defaultProfile()
+//           : CachedNetworkImage(
+//               imageUrl: profileUrl,
+//               placeholder: (context, url) => defaultProfile(),
+//               width: width,
+//               height: height,
+//               fit: BoxFit.cover,
+//               cacheManager: CustomCacheManager.instance,
+//           )
+//       ),
+//     );
+//   }
+// }
