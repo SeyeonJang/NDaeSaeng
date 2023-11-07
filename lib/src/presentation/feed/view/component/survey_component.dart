@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:dart_flutter/src/common/util/toast_util.dart';
 import 'package:dart_flutter/src/domain/entity/survey.dart';
 import 'package:dart_flutter/src/presentation/feed/view/component/option_component.dart';
@@ -29,11 +27,13 @@ class _SurveyComponentState extends State<SurveyComponent> {
   Color mainColor = const Color(0xffFE6059);
   Color commentColor = const Color(0xffFFFAF9);
   double marginHorizontal = SizeConfig.defaultSize * 2.3;
+  bool isChanged = false;
 
   void onPickedChanged(bool changed, int pickedOption) async {
     setState(() {
       widget.isPicked = changed;
       widget.pickedOption = pickedOption;
+      isChanged = true;
     });
     try {
       await widget.feedCubit.pickOption();
@@ -103,11 +103,11 @@ class _SurveyComponentState extends State<SurveyComponent> {
                     ),
                       SizedBox(height: SizeConfig.defaultSize * 2,),
                     widget.isPicked
-                        ? OptionComponent(isPicked: widget.pickedOption == widget.survey.options.first.id, option: widget.survey.options.first, percent: optionFirstPercent, isMost: optionFirstPercent>optionSecondPercent,)
+                        ? OptionComponent(isPicked: widget.pickedOption == widget.survey.options.first.id, option: widget.survey.options.first, percent: optionFirstPercent, isMost: optionFirstPercent>optionSecondPercent, isChanged: isChanged)
                         : OptionNotPickedComponent(option: widget.survey.options.first, onPickedChanged: onPickedChanged),
                       SizedBox(height: SizeConfig.defaultSize),
                     widget.isPicked
-                        ? OptionComponent(isPicked: widget.pickedOption == widget.survey.options.last.id, option: widget.survey.options.last, percent: optionSecondPercent, isMost: optionFirstPercent<optionSecondPercent,)
+                        ? OptionComponent(isPicked: widget.pickedOption == widget.survey.options.last.id, option: widget.survey.options.last, percent: optionSecondPercent, isMost: optionFirstPercent<optionSecondPercent, isChanged: isChanged)
                         : OptionNotPickedComponent(option: widget.survey.options.last, onPickedChanged: onPickedChanged)
                   ],
                 ),

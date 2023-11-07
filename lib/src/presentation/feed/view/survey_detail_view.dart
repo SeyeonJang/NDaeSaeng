@@ -90,9 +90,9 @@ class _SurveyDetailViewState extends State<SurveyDetailView> {
                               ],
                             ),
                               SizedBox(height: SizeConfig.defaultSize * 2,),
-                            OptionComponent(isPicked: widget.pickedOption == widget.surveyDetail.options.first.id, option: widget.surveyDetail.options.first, percent: optionFirstPercent, isMost: optionFirstPercent>optionSecondPercent,),
+                            OptionComponent(isPicked: widget.pickedOption == widget.surveyDetail.options.first.id, option: widget.surveyDetail.options.first, percent: optionFirstPercent, isMost: optionFirstPercent>optionSecondPercent, isChanged: false),
                               SizedBox(height: SizeConfig.defaultSize),
-                            OptionComponent(isPicked: widget.pickedOption == widget.surveyDetail.options.last.id, option: widget.surveyDetail.options.last, percent: optionSecondPercent, isMost: optionFirstPercent<optionSecondPercent,)
+                            OptionComponent(isPicked: widget.pickedOption == widget.surveyDetail.options.last.id, option: widget.surveyDetail.options.last, percent: optionSecondPercent, isMost: optionFirstPercent<optionSecondPercent, isChanged: false)
                           ],
                         ),
                       ],
@@ -118,7 +118,7 @@ class _SurveyDetailViewState extends State<SurveyDetailView> {
                             padding: EdgeInsets.symmetric(vertical: SizeConfig.defaultSize, horizontal: marginHorizontal),
                             child: CommentComponent(comment: widget.surveyDetail.comments[i], feedCubit: widget.feedCubit,),
                           ),
-                          Divider(thickness: 1, height: 1, color: Colors.grey.shade300)
+                          Divider(thickness: 1, height: 1, color: Colors.grey.shade100)
                         ],
                       )
                   ],
