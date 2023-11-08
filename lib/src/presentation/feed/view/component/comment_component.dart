@@ -11,8 +11,9 @@ class CommentComponent extends StatefulWidget {
   late int surveyId;
   late Comment comment;
   late FeedCubit feedCubit;
+  late Function() refreshComment;
 
-  CommentComponent({super.key, required this.surveyId, required this.comment, required this.feedCubit});
+  CommentComponent({super.key, required this.surveyId, required this.comment, required this.feedCubit, required this.refreshComment});
 
   @override
   State<CommentComponent> createState() => _CommentComponentState();
@@ -43,6 +44,35 @@ class _CommentComponentState extends State<CommentComponent> {
       content = widget.comment.content;
       userId = widget.comment.writer.personalInfo?.id ?? 0;
     });
+    print("new $commentId");
+  }
+
+  @override
+  void didUpdateWidget(CommentComponent oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    // 여기서는 오래된 위젯의 정보와 새 위젯의 정보를 비교하여
+    // 필요한 경우 상태를 업데이트합니다.
+    if (widget.comment != oldWidget.comment) {
+      // 코멘트가 변경된 경우 상태를 업데이트합니다.
+      setState(() {
+        commentId = widget.comment.id;
+        liked = widget.comment.liked;
+        likes = widget.comment.likes;
+        universityName = widget.comment.writer.university?.name ?? "XX대학교";
+        nickname = widget.comment.writer.personalInfo?.id == null
+            ? "∙ 익명"
+            : "∙ 익명 ${widget.comment.writer.personalInfo!.id.toString()[widget.comment.writer.personalInfo!.id.toString().length - 1]}***";
+        createdAt = DateFormat('MM/dd HH:mm').format(widget.comment.createdAt);
+        content = widget.comment.content;
+        userId = widget.comment.writer.personalInfo?.id ?? 0;
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    print("$commentId $content}");
   }
 
   void pressedLikeButton() {
@@ -102,8 +132,9 @@ class _CommentComponentState extends State<CommentComponent> {
                 '댓글 내용': content,
                 '댓글 id': commentId
               });
-              widget.feedCubit.deleteComment(widget.surveyId, commentId);
               Navigator.pop(dialogContext);
+              await widget.feedCubit.deleteComment(widget.surveyId, commentId);
+              widget.refreshComment();
             },
             child: const Text('삭제', style: TextStyle(color: Color(0xffFF5C58)),),
           ),
@@ -199,14 +230,15 @@ class _CommentComponentState extends State<CommentComponent> {
                   },
                   itemBuilder: (BuildContext context) {
                     return [
-                      PopupMenuItem<String>(
-                        value: 'remove',
-                        child: Text("삭제하기", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.5)),
-                      ),
-                      PopupMenuItem<String>(
-                        value: 'report',
-                        child: Text("신고하기", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.5)),
-                      ),
+                      widget.feedCubit.state.userResponse.personalInfo?.id == userId
+                        ? PopupMenuItem<String>(
+                          value: 'remove',
+                          child: Text("삭제하기", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.5)),
+                        )
+                        : PopupMenuItem<String>(
+                          value: 'report',
+                          child: Text("신고하기", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.5)),
+                        )
                     ];
                   },
                 ),

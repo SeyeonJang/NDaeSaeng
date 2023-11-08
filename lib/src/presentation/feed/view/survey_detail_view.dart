@@ -37,8 +37,6 @@ class _SurveyDetailViewState extends State<SurveyDetailView> {
   void initState() {
     super.initState();
     _refreshComments();
-    setState(() {
-    });
   }
 
   void _refreshComments() {
@@ -141,13 +139,13 @@ class _SurveyDetailViewState extends State<SurveyDetailView> {
                         children: [
                           Padding(
                             padding: EdgeInsets.symmetric(vertical: SizeConfig.defaultSize, horizontal: marginHorizontal),
-                            child: CommentComponent(surveyId: widget.surveyDetail.id, comment: comments[i], feedCubit: widget.feedCubit,),
+                            child: CommentComponent(surveyId: widget.surveyDetail.id, comment: comments[i], feedCubit: widget.feedCubit, refreshComment: _refreshComments,),
                           ),
                           Divider(thickness: 1, height: 1, color: Colors.grey.shade100)
                         ],
                       )
                   ],
-                )
+                ),
               ],
             ),
           ),

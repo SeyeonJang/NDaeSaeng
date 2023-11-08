@@ -60,11 +60,11 @@ class FeedCubit extends Cubit<FeedState> {
   Future<void> postComment(int surveyId, String content) async {
     await _feedUseCase.postComment(surveyId, content);
     await getSurveyDetail(surveyId);
-    emit(state.copy());
   }
 
   Future<void> deleteComment(int surveyId, int commentId) async {
     await _feedUseCase.deleteComment(surveyId, commentId);
+    await getSurveyDetail(surveyId);
   }
 
   void reportComment(int surveyId, int commentId) {
@@ -73,5 +73,6 @@ class FeedCubit extends Cubit<FeedState> {
 
   Future<void> postLikeComment(int surveyId, int commentId) async {
     await _feedUseCase.postLikeComment(surveyId, commentId);
+    await getSurveyDetail(surveyId);
   }
 }
