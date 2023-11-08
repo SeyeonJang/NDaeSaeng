@@ -13,10 +13,14 @@ class SurveyComponent extends StatefulWidget {
   late FeedCubit feedCubit;
   late bool isPicked;
   late int pickedOption;
+  late double optionFirstPercent;
+  late double optionSecondPercent;
 
   SurveyComponent({super.key, required this.survey, required this.feedCubit}) {
     isPicked = survey.isPicked();
     pickedOption = survey.pickedOption;
+    optionFirstPercent = survey.options.first.headCount / (survey.options.first.headCount + survey.options.last.headCount);
+    optionSecondPercent = survey.options.last.headCount / (survey.options.first.headCount + survey.options.last.headCount);
   }
 
   @override
@@ -34,12 +38,22 @@ class _SurveyComponentState extends State<SurveyComponent> {
       widget.isPicked = changed;
       widget.pickedOption = pickedOption;
       isChanged = true;
+      if (widget.survey.options.first.id == pickedOption) {
+        widget.optionFirstPercent = (widget.survey.options.first.headCount + 1) / (widget.survey.options.first.headCount + widget.survey.options.last.headCount + 1);
+        widget.optionSecondPercent = (widget.survey.options.last.headCount) / (widget.survey.options.first.headCount + widget.survey.options.last.headCount + 1);
+      } else {
+        widget.optionFirstPercent = (widget.survey.options.first.headCount) / (widget.survey.options.first.headCount + widget.survey.options.last.headCount + 1);
+        widget.optionSecondPercent = (widget.survey.options.last.headCount + 1) / (widget.survey.options.first.headCount + widget.survey.options.last.headCount + 1);
+      }
     });
+
     try {
       await widget.feedCubit.postOption(widget.survey.id, widget.pickedOption);
     } catch (error) {
       setState(() {
         widget.isPicked = false;
+        widget.optionFirstPercent = widget.survey.options.first.headCount / (widget.survey.options.first.headCount + widget.survey.options.last.headCount);
+        widget.optionSecondPercent = widget.survey.options.last.headCount / (widget.survey.options.first.headCount + widget.survey.options.last.headCount);
       });
       ToastUtil.showMeetToast('내 투표 결과 전송에 실패했어요🥺\n투표에 다시 참여해주세요!', 2);
     }
@@ -50,8 +64,6 @@ class _SurveyComponentState extends State<SurveyComponent> {
     DateTime now = DateTime.now();
     String formattedSurveyDate = DateFormat('MM월 dd일').format(widget.survey.createdAt);
     String formattedNowDate = DateFormat('MM월 dd일').format(now);
-    double optionFirstPercent = widget.survey.options.first.headCount / (widget.survey.options.first.headCount + widget.survey.options.last.headCount);
-    double optionSecondPercent = widget.survey.options.last.headCount / (widget.survey.options.first.headCount + widget.survey.options.last.headCount);
 
     return Container(
       width: SizeConfig.screenWidth,
@@ -103,11 +115,11 @@ class _SurveyComponentState extends State<SurveyComponent> {
                     ),
                       SizedBox(height: SizeConfig.defaultSize * 2,),
                     widget.isPicked
-                        ? OptionComponent(isPicked: widget.pickedOption == widget.survey.options.first.id, option: widget.survey.options.first, percent: optionFirstPercent, isMost: optionFirstPercent>optionSecondPercent, isChanged: isChanged)
+                        ? OptionComponent(isPicked: widget.pickedOption == widget.survey.options.first.id, option: widget.survey.options.first, percent: widget.optionFirstPercent, isMost: widget.optionFirstPercent>widget.optionSecondPercent, isChanged: isChanged)
                         : OptionNotPickedComponent(option: widget.survey.options.first, onPickedChanged: onPickedChanged),
                       SizedBox(height: SizeConfig.defaultSize),
                     widget.isPicked
-                        ? OptionComponent(isPicked: widget.pickedOption == widget.survey.options.last.id, option: widget.survey.options.last, percent: optionSecondPercent, isMost: optionFirstPercent<optionSecondPercent, isChanged: isChanged)
+                        ? OptionComponent(isPicked: widget.pickedOption == widget.survey.options.last.id, option: widget.survey.options.last, percent: widget.optionSecondPercent, isMost: widget.optionFirstPercent<widget.optionSecondPercent, isChanged: isChanged)
                         : OptionNotPickedComponent(option: widget.survey.options.last, onPickedChanged: onPickedChanged)
                   ],
                 ),
