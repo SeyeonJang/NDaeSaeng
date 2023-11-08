@@ -8,6 +8,7 @@ import 'package:dart_flutter/src/domain/entity/ghost_friend.dart';
 import 'package:dart_flutter/src/domain/entity/location.dart';
 import 'package:dart_flutter/src/domain/entity/meet_team.dart';
 import 'package:dart_flutter/src/domain/entity/type/blind_date_user_detail.dart';
+import 'package:dart_flutter/src/presentation/component/cached_profile_image.dart';
 import 'package:dart_flutter/src/presentation/component/meet_create_cardview_novote.dart';
 import 'package:dart_flutter/src/presentation/meet/viewmodel/meet_cubit.dart';
 import 'package:dart_flutter/src/presentation/meet/viewmodel/state/meet_state.dart';
@@ -487,15 +488,11 @@ class MemberCardView extends StatelessWidget {
                         onTap: () {
                           AnalyticsUtil.logEvent("홈_팀만들기_카드_프사_터치");
                         },
-                        child: profileImageUrl == "DEFAULT"
-                            ? ClipOval(
-                              child: Image.asset('assets/images/profile-mockup3.png', width: SizeConfig.defaultSize * 6.2, fit: BoxFit.cover,),
-                              )
-                            : ClipOval(
-                              child: Image.network(profileImageUrl,
-                              width: SizeConfig.defaultSize * 6.2,
-                              height: SizeConfig.defaultSize * 6.2,
-                              fit: BoxFit.cover,)
+
+                        child: CachedProfileImage(
+                          profileUrl: profileImageUrl,
+                          width: SizeConfig.defaultSize * 6.2,
+                          height: SizeConfig.defaultSize * 6.2,
                         ),
                       ),
                         SizedBox(width: SizeConfig.defaultSize * 0.8),

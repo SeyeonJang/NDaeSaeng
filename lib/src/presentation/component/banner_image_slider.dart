@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:dart_flutter/res/config/size_config.dart';
 import 'package:dart_flutter/src/common/util/analytics_util.dart';
@@ -89,10 +90,9 @@ class _BannerImageSliderState extends State<BannerImageSlider> {
               },
               child: SizedBox(
                 width: MediaQuery.of(context).size.width,
-                child: Image(
-                  fit: BoxFit.fill,
-                  image: NetworkImage(bannerImage.imageUrl),
-                ),
+                child: CachedNetworkImage(
+                  imageUrl: bannerImage.imageUrl,
+                )
               ),
             );
           },
