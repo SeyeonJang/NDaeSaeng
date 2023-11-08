@@ -1,3 +1,4 @@
+import 'package:dart_flutter/src/common/util/analytics_util.dart';
 import 'package:dart_flutter/src/common/util/toast_util.dart';
 import 'package:dart_flutter/src/domain/entity/survey.dart';
 import 'package:dart_flutter/src/presentation/feed/view/component/option_component.dart';
@@ -35,6 +36,12 @@ class _SurveyComponentState extends State<SurveyComponent> {
   bool isTapped = false;
 
   void onPickedChanged(bool changed, int pickedOption) async {
+    AnalyticsUtil.logEvent('피드_선택지_선택', properties: {
+      '질문 id': widget.survey.id,
+      '질문 내용': widget.survey.question,
+      '옵션 id': pickedOption
+    });
+
     setState(() {
       widget.isPicked = changed;
       widget.pickedOption = pickedOption;
@@ -130,6 +137,11 @@ class _SurveyComponentState extends State<SurveyComponent> {
 
           GestureDetector(
             onTap: () async {
+              AnalyticsUtil.logEvent('ㅈ', properties: {
+                '질문 id': widget.survey.id,
+                '질문 내용': widget.survey.question
+              });
+
               if (!widget.isPicked) {
                 ToastUtil.showMeetToast('선택지 중 하나를 선택해야\n댓글과 비율을 볼 수 있어요!', 2);
               } else {

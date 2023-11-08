@@ -1,4 +1,5 @@
 import 'package:dart_flutter/res/config/size_config.dart';
+import 'package:dart_flutter/src/common/util/analytics_util.dart';
 import 'package:dart_flutter/src/domain/entity/survey.dart';
 import 'package:dart_flutter/src/presentation/feed/view/component/survey_component.dart';
 import 'package:dart_flutter/src/presentation/feed/viewmodel/feed_cubit.dart';
@@ -50,6 +51,7 @@ class _FeedState extends State<Feed> {
 
   @override
   Widget build(BuildContext context) {
+    AnalyticsUtil.logEvent('피드_접속');
     return Scaffold(
       backgroundColor: Colors.white,
       body: SingleChildScrollView(

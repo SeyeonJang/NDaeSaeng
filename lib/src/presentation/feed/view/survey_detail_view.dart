@@ -1,4 +1,5 @@
 import 'package:dart_flutter/res/config/size_config.dart';
+import 'package:dart_flutter/src/common/util/analytics_util.dart';
 import 'package:dart_flutter/src/common/util/toast_util.dart';
 import 'package:dart_flutter/src/domain/entity/comment.dart';
 import 'package:dart_flutter/src/domain/entity/survey_detail.dart';
@@ -49,7 +50,13 @@ class _SurveyDetailViewState extends State<SurveyDetailView> {
   }
 
   @override
-  Widget build(BuildContext context) {DateTime now = DateTime.now();
+  Widget build(BuildContext context) {
+    AnalyticsUtil.logEvent('피드_오늘의질문_상세보기_접속', properties: {
+      '질문 id': widget.feedCubit.state.surveyDetail.id,
+      '질문 내용': widget.feedCubit.state.surveyDetail.question
+    });
+
+    DateTime now = DateTime.now();
     String formattedSurveyDate = DateFormat('MM월 dd일').format(widget.surveyDetail.createdAt);
     String formattedNowDate = DateFormat('MM월 dd일').format(now);
     double optionFirstPercent = widget.surveyDetail.options.first.headCount / (widget.surveyDetail.options.first.headCount + widget.surveyDetail.options.last.headCount);
@@ -192,6 +199,10 @@ class _SurveyDetailViewState extends State<SurveyDetailView> {
                           isLoading = true;
                           _controller.clear();
                           await widget.feedCubit.postComment(widget.surveyDetail.id, myComment);
+                          AnalyticsUtil.logEvent('피드_오늘의질문_댓글_추가', properties: {
+                            '질문 id': widget.surveyDetail.id,
+                            '질문 내용': widget.surveyDetail.question
+                          });
                           _refreshComments();
                           isLoading = false;
                         },
