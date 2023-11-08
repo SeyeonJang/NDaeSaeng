@@ -60,8 +60,13 @@ class _SurveyComponentState extends State<SurveyComponent> {
     } catch (error) {
       setState(() {
         widget.isPicked = false;
-        widget.optionFirstPercent = widget.survey.options.first.headCount / (widget.survey.options.first.headCount + widget.survey.options.last.headCount);
-        widget.optionSecondPercent = widget.survey.options.last.headCount / (widget.survey.options.first.headCount + widget.survey.options.last.headCount);
+        if (widget.survey.options.first.headCount + widget.survey.options.last.headCount == 0) {
+          widget.optionFirstPercent = 0;
+          widget.optionSecondPercent = 0;
+        } else {
+          widget.optionFirstPercent = widget.survey.options.first.headCount / (widget.survey.options.first.headCount + widget.survey.options.last.headCount);
+          widget.optionSecondPercent = widget.survey.options.last.headCount / (widget.survey.options.first.headCount + widget.survey.options.last.headCount);
+        }
       });
       ToastUtil.showMeetToast('내 투표 결과 전송에 실패했어요🥺\n투표에 다시 참여해주세요!', 2);
     }
