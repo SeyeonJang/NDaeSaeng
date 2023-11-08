@@ -3,6 +3,8 @@ import 'package:dart_flutter/src/common/util/analytics_util.dart';
 import 'package:dart_flutter/src/common/util/toast_util.dart';
 import 'package:dart_flutter/src/presentation/chat/chat_pages.dart';
 import 'package:dart_flutter/src/presentation/chat/viewmodel/chat_cubit.dart';
+import 'package:dart_flutter/src/presentation/feed/view/feed.dart';
+import 'package:dart_flutter/src/presentation/feed/viewmodel/feed_cubit.dart';
 import 'package:dart_flutter/src/presentation/component/webview_fullscreen.dart';
 import 'package:dart_flutter/src/presentation/meet/meet_intro_pages.dart';
 import 'package:dart_flutter/src/presentation/meet/meet_pages.dart';
@@ -130,13 +132,12 @@ class _DartPageViewState extends State<DartPageView> {
       } else if (page == 1) {
         AnalyticsUtil.logEvent('하단 탭 터치_과팅');
       } else if (page == 2) {
-        AnalyticsUtil.logEvent('하단 탭 터치_채팅');
+        AnalyticsUtil.logEvent('하단 탭 터치_피드');
       } else if (page == 3) {
+        AnalyticsUtil.logEvent('하단 탭 터치_채팅');
+      } else if (page == 4) {
         AnalyticsUtil.logEvent('하단 탭 터치_내정보');
       }
-      // else if (page == 4) {
-      //   AnalyticsUtil.logEvent('하단 탭 터치_내정보');
-      // }
     });
   }
 
@@ -152,7 +153,7 @@ class _DartPageViewState extends State<DartPageView> {
           return Future.value(false);
         }
         return Future.value(true);
-      case 1 || 2 || 3:
+      case 1 || 2 || 3 || 4:
         _onTapNavigation(0);
         return Future.value(false);
       default:
@@ -177,6 +178,10 @@ class _DartPageViewState extends State<DartPageView> {
     BlocProvider<MeetCubit>(
       create: (context) => MeetCubit()..initMeet(),
       child: const MeetPages(),
+    ),
+    BlocProvider<FeedCubit>(
+      create: (context) => FeedCubit()..initFeed(),
+      child: Feed()
     ),
     BlocProvider<ChatCubit>(
         create: (context) => ChatCubit(),
@@ -216,7 +221,7 @@ class _DartPageViewState extends State<DartPageView> {
         type: BottomNavigationBarType.fixed,
         backgroundColor: Colors.white,
         selectedFontSize: SizeConfig.defaultSize * 1.15,
-        selectedItemColor: Color(0xffFE6059).withOpacity(0.8),
+        selectedItemColor: const Color(0xffFE6059).withOpacity(0.8),
         // selectedItemColor: _page == 3 ? Color(0xff7C83FD) : Color(0xffFE6059),
         unselectedFontSize: SizeConfig.defaultSize * 1.1,
         unselectedItemColor: Colors.grey.shade400,
@@ -259,6 +264,16 @@ class _DartPageViewState extends State<DartPageView> {
               ],
             ),
             label: "과팅",
+          ),
+          BottomNavigationBarItem(
+            icon: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Icon(Icons.forum_rounded, size: SizeConfig.defaultSize * 2.6),
+                SizedBox(height: SizeConfig.defaultSize * 0.4),
+              ],
+            ),
+            label: "N대생",
           ),
           BottomNavigationBarItem(
             icon: Column(
