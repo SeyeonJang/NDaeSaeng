@@ -36,7 +36,9 @@ class _CommentComponentState extends State<CommentComponent> {
       liked = widget.comment.liked;
       likes = widget.comment.likes;
       universityName = widget.comment.writer.university?.name ?? "XX대학교";
-      nickname = widget.comment.writer.personalInfo?.recommendationCode ?? "익명";
+      nickname = widget.comment.writer.personalInfo?.id == null
+          ? "∙ 익명"
+          : "∙ 익명 ${widget.comment.writer.personalInfo!.id.toString()[widget.comment.writer.personalInfo!.id.toString().length - 1]}***";
       createdAt = DateFormat('MM/dd HH:mm').format(widget.comment.createdAt);
       content = widget.comment.content;
       userId = widget.comment.writer.personalInfo?.id ?? 0;

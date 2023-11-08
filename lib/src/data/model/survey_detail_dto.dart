@@ -111,40 +111,46 @@ class Answers {
 class Comments {
   int? commentId;
   String? content;
-  int? likes;
+  int? like;
+  bool? isLiked;
+  bool? isReported;
   _User? user;
   String? createdTime;
 
-  Comments({this.commentId, this.content, this.likes, this.user});
+  Comments({this.commentId, this.content, this.like, this.user, this.isLiked, this.isReported});
 
   Comments.fromJson(Map<String, dynamic> json) {
-    commentId = json['commnetId'];
+    commentId = json['commentId'];
     content = json['content'];
-    likes = json['likes'];
+    like = json['like'];
     user = json['user'] != null ? new _User.fromJson(json['user']) : null;
     createdTime = json['createdTime'];
+    isLiked = json['isLiked'];
+    isReported = json['isReported'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['commnetId'] = this.commentId;
     data['content'] = this.content;
-    data['likes'] = this.likes;
+    data['like'] = this.like;
     if (this.user != null) {
       data['user'] = this.user!.toJson();
     }
     data['createdTime'] = this.createdTime;
+    data['isLiked'] = this.isLiked;
+    data['isReported'] = this.isReported;
     return data;
   }
 
   Comment newComment() {
     return Comment(
         id: commentId ?? 0,
-        writer: user!.newUser(),
+        writer: user?.newUser() ?? User(titleVotes: []),
         content: content ?? "",
         createdAt: createdTime != null ? DateTime.parse(createdTime!) : DateTime.now(),
-        likes: likes ?? 0,
-        liked: false
+        likes: like ?? 0,
+        liked: isLiked ?? false,
     );
   }
 }
