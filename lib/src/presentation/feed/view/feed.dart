@@ -18,6 +18,7 @@ class Feed extends StatefulWidget {
 class _FeedState extends State<Feed> {
   late FeedCubit feedCubit;
   late PagingController<int, Survey> pagingController;
+  final Map<int, int> doneSurveyAnswers = {};
 
   @override
   void didChangeDependencies() {
@@ -62,13 +63,10 @@ class _FeedState extends State<Feed> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Text("N대생", style: TextStyle(
-                    fontSize: SizeConfig.defaultSize * 1.8,
-                    fontWeight: FontWeight.w600)),
+                  Text("N대생", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.8, fontWeight: FontWeight.w600)),
                 ],
               ),
             ),
-
             Padding(
               padding: EdgeInsets.symmetric(horizontal: SizeConfig.defaultSize * 2),
               child: SingleChildScrollView(
@@ -77,17 +75,25 @@ class _FeedState extends State<Feed> {
                     SizedBox(
                       height: SizeConfig.screenHeight * 0.82,
                       child: PagedListView<int, Survey>(
-                        pagingController: pagingController,
-                          builderDelegate: PagedChildBuilderDelegate<Survey>(
-                            itemBuilder: (_, survey, __) {
-                              return Column(
-                                children: [
-                                  SurveyComponent(survey: survey, feedCubit: feedCubit,),
-                                  SizedBox(height: SizeConfig.defaultSize,),
-                                ],
-                              );
-                            })
-                          ),
+                          pagingController: pagingController,
+                          builderDelegate: PagedChildBuilderDelegate<Survey>(itemBuilder: (_, survey, __) {
+                            final int? cachedSurveyAnswer = doneSurveyAnswers[survey.id];
+                            if (cachedSurveyAnswer != null) {
+                              survey = survey.copyWith(picked: true, pickedOption: cachedSurveyAnswer);
+                            }
+
+                            return Column(
+                              children: [
+                                SurveyComponent(
+                                    survey: survey,
+                                    feedCubit: feedCubit,
+                                    onSurveySelected: (answer) => doneSurveyAnswers[survey.id] = answer),
+                                SizedBox(
+                                  height: SizeConfig.defaultSize,
+                                ),
+                              ],
+                            );
+                          })),
                     ),
                   ],
                 ),

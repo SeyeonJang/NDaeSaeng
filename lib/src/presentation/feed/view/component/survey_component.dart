@@ -16,8 +16,9 @@ class SurveyComponent extends StatefulWidget {
   late int pickedOption;
   late double optionFirstPercent;
   late double optionSecondPercent;
+  final void Function(int answer) onSurveySelected;
 
-  SurveyComponent({super.key, required this.survey, required this.feedCubit}) {
+  SurveyComponent({super.key, required this.survey, required this.feedCubit, required this.onSurveySelected}) {
     isPicked = survey.isPicked();
     pickedOption = survey.pickedOption;
     optionFirstPercent = survey.options.first.headCount / (survey.options.first.headCount + survey.options.last.headCount);
@@ -55,21 +56,24 @@ class _SurveyComponentState extends State<SurveyComponent> {
       }
     });
 
-    try {
-      await widget.feedCubit.postOption(widget.survey.id, widget.pickedOption);
-    } catch (error) {
-      setState(() {
-        widget.isPicked = false;
-        if (widget.survey.options.first.headCount + widget.survey.options.last.headCount == 0) {
-          widget.optionFirstPercent = 0;
-          widget.optionSecondPercent = 0;
-        } else {
-          widget.optionFirstPercent = widget.survey.options.first.headCount / (widget.survey.options.first.headCount + widget.survey.options.last.headCount);
-          widget.optionSecondPercent = widget.survey.options.last.headCount / (widget.survey.options.first.headCount + widget.survey.options.last.headCount);
-        }
-      });
-      ToastUtil.showMeetToast('내 투표 결과 전송에 실패했어요🥺\n투표에 다시 참여해주세요!', 2);
-    }
+    await widget.feedCubit.postOption(widget.survey.id, widget.pickedOption);
+    // try {
+    //   await widget.feedCubit.postOption(widget.survey.id, widget.pickedOption);
+    // } catch (error) {
+    //   setState(() {
+    //     widget.isPicked = false;
+    //     if (widget.survey.options.first.headCount + widget.survey.options.last.headCount == 0) {
+    //       widget.optionFirstPercent = 0;
+    //       widget.optionSecondPercent = 0;
+    //     } else {
+    //       widget.optionFirstPercent = widget.survey.options.first.headCount / (widget.survey.options.first.headCount + widget.survey.options.last.headCount);
+    //       widget.optionSecondPercent = widget.survey.options.last.headCount / (widget.survey.options.first.headCount + widget.survey.options.last.headCount);
+    //     }
+    //   });
+    //   ToastUtil.showMeetToast('내 투표 결과 전송에 실패했어요🥺\n투표에 다시 참여해주세요!', 2);
+    // }
+
+    widget.onSurveySelected.call(pickedOption);
   }
 
   @override
@@ -77,6 +81,8 @@ class _SurveyComponentState extends State<SurveyComponent> {
     DateTime now = DateTime.now();
     String formattedSurveyDate = DateFormat('MM월 dd일').format(widget.survey.createdAt);
     String formattedNowDate = DateFormat('MM월 dd일').format(now);
+
+    print("[reRender] ${widget.survey.question}");
 
     return Container(
       width: SizeConfig.screenWidth,

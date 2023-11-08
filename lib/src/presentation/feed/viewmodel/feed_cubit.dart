@@ -73,5 +73,6 @@ class FeedCubit extends Cubit<FeedState> {
 
   Future<void> postLikeComment(int surveyId, int commentId) async {
     await _feedUseCase.postLikeComment(surveyId, commentId);
+    await getSurveyDetail(surveyId);
   }
 }
