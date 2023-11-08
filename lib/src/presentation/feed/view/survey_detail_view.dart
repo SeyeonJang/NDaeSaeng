@@ -22,6 +22,7 @@ class SurveyDetailView extends StatefulWidget {
 }
 
 class _SurveyDetailViewState extends State<SurveyDetailView> {
+  bool isLoading = false;
   late Comment comment;
   final TextEditingController _controller = TextEditingController();
   final FocusNode _focusNode = FocusNode();
@@ -29,6 +30,23 @@ class _SurveyDetailViewState extends State<SurveyDetailView> {
   Color mainColor = const Color(0xffFE6059);
   Color backgroundColor = const Color(0xffFFFAF9);
   String myComment = '';
+  List<Comment> comments = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _refreshComments();
+    setState(() {
+    });
+  }
+
+  void _refreshComments() {
+    isLoading = true;
+    setState(() {
+      comments = widget.feedCubit.state.surveyDetail.comments;
+    });
+    isLoading = false;
+  }
 
   @override
   Widget build(BuildContext context) {DateTime now = DateTime.now();
@@ -107,16 +125,16 @@ class _SurveyDetailViewState extends State<SurveyDetailView> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          Text("댓글 ${widget.surveyDetail.comments.length}개"),
+                          Text("댓글 ${comments.length}개"),
                         ],
                       ),
                     ),
-                    for (int i=0; i<widget.surveyDetail.comments.length; i++)
+                    for (int i=0; i<comments.length; i++)
                       Column(
                         children: [
                           Padding(
                             padding: EdgeInsets.symmetric(vertical: SizeConfig.defaultSize, horizontal: marginHorizontal),
-                            child: CommentComponent(surveyId: widget.surveyDetail.id, comment: widget.surveyDetail.comments[i], feedCubit: widget.feedCubit,),
+                            child: CommentComponent(surveyId: widget.surveyDetail.id, comment: comments[i], feedCubit: widget.feedCubit,),
                           ),
                           Divider(thickness: 1, height: 1, color: Colors.grey.shade100)
                         ],
@@ -145,6 +163,7 @@ class _SurveyDetailViewState extends State<SurveyDetailView> {
                       child: Padding(
                         padding: EdgeInsets.only(left: SizeConfig.defaultSize),
                         child: TextField(
+                          enabled: !isLoading,
                           focusNode: _focusNode,
                           controller: _controller,
                           cursorColor: mainColor,
@@ -162,13 +181,19 @@ class _SurveyDetailViewState extends State<SurveyDetailView> {
                       ),
                     ),
                     IconButton(
-                        onPressed: () {
-                          if (myComment == '') {
+                        onPressed: () async {
+                          if (isLoading) return;
+                          if (myComment.isEmpty) {
                             ToastUtil.showMeetToast('댓글 작성하고 눌러주세요!', 1);
-                          } else {
-                            _controller.clear();
-                            widget.feedCubit.postComment(widget.surveyDetail.id, myComment);
+                            return;
                           }
+                          FocusScope.of(context).unfocus();  // 댓글 작성 후 키보드 사라지게하기
+
+                          isLoading = true;
+                          _controller.clear();
+                          await widget.feedCubit.postComment(widget.surveyDetail.id, myComment);
+                          _refreshComments();
+                          isLoading = false;
                         },
                         icon: Icon(Icons.send_rounded, color: mainColor,)
                     )
