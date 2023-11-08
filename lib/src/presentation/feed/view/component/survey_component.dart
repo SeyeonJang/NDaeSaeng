@@ -32,6 +32,7 @@ class _SurveyComponentState extends State<SurveyComponent> {
   Color commentColor = const Color(0xffFFFAF9);
   double marginHorizontal = SizeConfig.defaultSize * 2.3;
   bool isChanged = false;
+  bool isTapped = false;
 
   void onPickedChanged(bool changed, int pickedOption) async {
     setState(() {
@@ -132,8 +133,20 @@ class _SurveyComponentState extends State<SurveyComponent> {
               if (!widget.isPicked) {
                 ToastUtil.showMeetToast('선택지 중 하나를 선택해야\n댓글과 비율을 볼 수 있어요!', 2);
               } else {
+                if (isTapped) {
+                  return;
+                }
+                setState(() {
+                  isTapped = true;
+                });
+                ToastUtil.showMeetToast('실시간 댓글 접속중입니다 . . .', 2);
+
                 await widget.feedCubit.getSurveyDetail(widget.survey.id).then((_) {
                   Navigator.push(context, MaterialPageRoute(builder: (context) => SurveyDetailView(surveyDetail: widget.feedCubit.state.surveyDetail, feedCubit: widget.feedCubit,)));
+                });
+
+                setState(() {
+                  isTapped = false;
                 });
               }
             },
