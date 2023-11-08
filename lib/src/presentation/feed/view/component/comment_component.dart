@@ -55,6 +55,10 @@ class _CommentComponentState extends State<CommentComponent> {
     });
 
     try {
+      AnalyticsUtil.logEvent('피드_오늘의질문_댓글_좋아요_터치', properties: {
+        '질문 id': widget.surveyId,
+        '댓글 id': commentId
+      });
       widget.feedCubit.postLikeComment(widget.surveyId, commentId);
     } catch (e, trace) {
       // 좋아요 요청 실패시 원상복구
@@ -66,6 +70,11 @@ class _CommentComponentState extends State<CommentComponent> {
   }
 
   void pressedDeleteButton() {
+    AnalyticsUtil.logEvent('피드_오늘의질문_댓글_더보기_삭제하기_터치', properties: {
+      '질문 id': widget.surveyId,
+      '댓글 내용': content,
+      '댓글 id': commentId
+    });
 
     showDialog<String>(
       context: context,
@@ -77,16 +86,24 @@ class _CommentComponentState extends State<CommentComponent> {
         actions: <Widget>[
           TextButton(
             onPressed: () {
+              AnalyticsUtil.logEvent('피드_오늘의질문_댓글_더보기_삭제하기_취소', properties: {
+                '질문 id': widget.surveyId,
+                '댓글 내용': content,
+                '댓글 id': commentId
+              });
               Navigator.pop(dialogContext, '취소');
             },
             child: const Text('취소', style: TextStyle(color: Color(0xffFF5C58)),),
           ),
           TextButton(
             onPressed: () async {
-              ToastUtil.showToast("삭제하기");
+              AnalyticsUtil.logEvent('피드_오늘의질문_댓글_더보기_삭제하기_삭제확정', properties: {
+                '질문 id': widget.surveyId,
+                '댓글 내용': content,
+                '댓글 id': commentId
+              });
               widget.feedCubit.deleteComment(widget.surveyId, commentId);
               Navigator.pop(dialogContext);
-              // Navigator.pop(context, true);
             },
             child: const Text('삭제', style: TextStyle(color: Color(0xffFF5C58)),),
           ),
@@ -96,7 +113,11 @@ class _CommentComponentState extends State<CommentComponent> {
   }
 
   void pressedReportButton() {
-    AnalyticsUtil.logEvent('커뮤니티_투표_댓글_더보기_신고하기_버튼터치');
+    AnalyticsUtil.logEvent('피드_오늘의질문_댓글_더보기_신고하기_터치', properties: {
+      '질문 id': widget.surveyId,
+      '댓글 내용': content,
+      '댓글 id': commentId
+    });
     showDialog<String>(
       context: context,
       builder: (BuildContext context) => AlertDialog(
@@ -108,19 +129,21 @@ class _CommentComponentState extends State<CommentComponent> {
           TextButton(
             onPressed: () {
               Navigator.pop(context, '취소');
-              AnalyticsUtil.logEvent('커뮤니티_투표_댓글_더보기_신고하기_취소');
+              AnalyticsUtil.logEvent('피드_오늘의질문_댓글_더보기_신고하기_취소', properties: {
+                '질문 id': widget.surveyId,
+                '댓글 내용': content,
+                '댓글 id': commentId
+              });
             },
             child: const Text('취소', style: TextStyle(color: Color(0xffFE6059)),),
           ),
           TextButton(
             onPressed: () => {
-              AnalyticsUtil.logEvent('커뮤니티_투표_댓글_더보기_신고하기_신고확정', properties: {
-                'commentId': commentId,
-                'content': content,
-                'userId' : userId,
-              }
-              ),
-
+              AnalyticsUtil.logEvent('피드_오늘의질문_댓글_더보기_신고하기_신고확정', properties: {
+                '질문 id': widget.surveyId,
+                '댓글 내용': content,
+                '댓글 id': commentId
+              }),
               widget.feedCubit.reportComment(widget.surveyId, commentId),
               Navigator.pop(context, '신고'),
               ToastUtil.showMeetToast("사용자가 신고되었어요!", 1),

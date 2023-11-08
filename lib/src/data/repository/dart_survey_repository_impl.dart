@@ -13,7 +13,7 @@ class DartSurveyRepositoryImpl extends SurveyRepository {
 
   @override
   Future<Pagination<Survey>> getSurveys({int page = 0, int size = 10}) async {
-    var surveys = await DartApiRemoteDataSource.getSurveys(page: 0, size: 10);
+    var surveys = await DartApiRemoteDataSource.getSurveys(page: page, size: size);
     return surveys.newContent(
       surveys.content?.map((survey) => survey.newSurvey()).toList() ?? []
     );
