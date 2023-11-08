@@ -145,11 +145,11 @@ class _SurveyComponentState extends State<SurveyComponent> {
                     ),
                       SizedBox(height: SizeConfig.defaultSize * 2,),
                     widget.isPicked
-                        ? OptionComponent(isPicked: widget.pickedOption == widget.survey.options.first.id, option: widget.survey.options.first, percent: widget.optionFirstPercent, isMost: widget.optionFirstPercent>widget.optionSecondPercent, isChanged: isChanged)
+                        ? OptionComponent(isPicked: widget.pickedOption == widget.survey.options.first.id, option: widget.survey.options.first, percent: widget.optionFirstPercent, isMost: widget.optionFirstPercent>widget.optionSecondPercent, isChanged: isChanged, isFeed: true)
                         : OptionNotPickedComponent(option: widget.survey.options.first, onPickedChanged: onPickedChanged),
                       SizedBox(height: SizeConfig.defaultSize),
                     widget.isPicked
-                        ? OptionComponent(isPicked: widget.pickedOption == widget.survey.options.last.id, option: widget.survey.options.last, percent: widget.optionSecondPercent, isMost: widget.optionFirstPercent<widget.optionSecondPercent, isChanged: isChanged)
+                        ? OptionComponent(isPicked: widget.pickedOption == widget.survey.options.last.id, option: widget.survey.options.last, percent: widget.optionSecondPercent, isMost: widget.optionFirstPercent<widget.optionSecondPercent, isChanged: isChanged, isFeed: true)
                         : OptionNotPickedComponent(option: widget.survey.options.last, onPickedChanged: onPickedChanged)
                   ],
                 ),
@@ -197,7 +197,7 @@ class _SurveyComponentState extends State<SurveyComponent> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text('실시간 댓글', style: TextStyle(color: mainColor, fontSize: SizeConfig.defaultSize * 1.3),),
+                        Text('댓글', style: TextStyle(color: mainColor, fontSize: SizeConfig.defaultSize * 1.3),),
                         Icon(Icons.arrow_forward_ios_rounded, size: SizeConfig.defaultSize * 1.3, color: mainColor,)
                       ],
                     ),

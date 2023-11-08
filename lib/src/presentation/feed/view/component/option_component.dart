@@ -8,13 +8,15 @@ class OptionComponent extends StatefulWidget {
   late bool isMost;
   late bool isPicked;
   late bool isChanged;
+  late bool isFeed;
 
   OptionComponent({super.key,
     required this.option,
     required this.percent,
     required this.isMost,
     required this.isPicked,
-    required this.isChanged
+    required this.isChanged,
+    required this.isFeed
   });
 
   @override
@@ -29,13 +31,13 @@ class _OptionComponentState extends State<OptionComponent> {
   @override
   void initState() {
     super.initState();
-    width = widget.isChanged ? 0 : SizeConfig.screenWidth * 0.77 * widget.percent ;
+    width = widget.isChanged ? 0 : SizeConfig.screenWidth * (widget.isFeed ? 0.77 : 0.86) * widget.percent ;
     WidgetsBinding.instance.addPostFrameCallback((_) => _changeProperties());
   }
 
   void _changeProperties() {
     setState(() {
-      width = SizeConfig.screenWidth * 0.77 * widget.percent;
+      width = SizeConfig.screenWidth * (widget.isFeed ? 0.77 : 0.86) * widget.percent;
     });
   }
 
@@ -58,7 +60,7 @@ class _OptionComponentState extends State<OptionComponent> {
             height: SizeConfig.defaultSize * 4.5,
             decoration: BoxDecoration(
                 color: widget.isMost ? mainColor.withOpacity(0.7) : subColor,
-                borderRadius: const BorderRadius.only(topLeft: Radius.circular(9), bottomLeft: Radius.circular(9))
+                borderRadius: const BorderRadius.only(topLeft: Radius.circular(8), bottomLeft: Radius.circular(8))
             ),
           ),
           Container(

@@ -113,9 +113,9 @@ class _SurveyDetailViewState extends State<SurveyDetailView> {
                               ],
                             ),
                               SizedBox(height: SizeConfig.defaultSize * 2,),
-                            OptionComponent(isPicked: widget.pickedOption == widget.surveyDetail.options.first.id, option: widget.surveyDetail.options.first, percent: optionFirstPercent, isMost: optionFirstPercent>optionSecondPercent, isChanged: false),
+                            OptionComponent(isPicked: widget.pickedOption == widget.surveyDetail.options.first.id, option: widget.surveyDetail.options.first, percent: optionFirstPercent, isMost: optionFirstPercent>optionSecondPercent, isChanged: false, isFeed: false),
                               SizedBox(height: SizeConfig.defaultSize),
-                            OptionComponent(isPicked: widget.pickedOption == widget.surveyDetail.options.last.id, option: widget.surveyDetail.options.last, percent: optionSecondPercent, isMost: optionFirstPercent<optionSecondPercent, isChanged: false)
+                            OptionComponent(isPicked: widget.pickedOption == widget.surveyDetail.options.last.id, option: widget.surveyDetail.options.last, percent: optionSecondPercent, isMost: optionFirstPercent<optionSecondPercent, isChanged: false, isFeed: false,)
                           ],
                         ),
                       ],
