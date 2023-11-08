@@ -1,5 +1,6 @@
 import 'package:dart_flutter/res/config/size_config.dart';
 import 'package:dart_flutter/src/common/util/analytics_util.dart';
+import 'package:dart_flutter/src/domain/entity/option.dart';
 import 'package:dart_flutter/src/domain/entity/survey.dart';
 import 'package:dart_flutter/src/presentation/feed/view/component/survey_component.dart';
 import 'package:dart_flutter/src/presentation/feed/viewmodel/feed_cubit.dart';
@@ -19,6 +20,8 @@ class _FeedState extends State<Feed> {
   late FeedCubit feedCubit;
   late PagingController<int, Survey> pagingController;
   final Map<int, int> doneSurveyAnswers = {};
+  final Map<int, int> firstSurveyHeadCount = {};
+  final Map<int, int> secondSurveyHeadCount = {};
 
   @override
   void didChangeDependencies() {
@@ -78,8 +81,13 @@ class _FeedState extends State<Feed> {
                           pagingController: pagingController,
                           builderDelegate: PagedChildBuilderDelegate<Survey>(itemBuilder: (_, survey, __) {
                             final int? cachedSurveyAnswer = doneSurveyAnswers[survey.id];
+                            final int cachedFirstHeadCount = firstSurveyHeadCount[survey.id] ?? 1;
+                            final int cachedSecondHeadCount = secondSurveyHeadCount[survey.id] ?? 1;
                             if (cachedSurveyAnswer != null) {
-                              survey = survey.copyWith(picked: true, pickedOption: cachedSurveyAnswer);
+                              survey = survey.copyWith(
+                                  picked: true,
+                                  pickedOption: cachedSurveyAnswer,
+                                  options: [Option(id: survey.options.first.id, name: survey.options.first.name, headCount: cachedFirstHeadCount), Option(id: survey.options.last.id, name: survey.options.last.name, headCount: cachedSecondHeadCount)]);
                             }
 
                             return Column(
@@ -87,7 +95,10 @@ class _FeedState extends State<Feed> {
                                 SurveyComponent(
                                     survey: survey,
                                     feedCubit: feedCubit,
-                                    onSurveySelected: (answer) => doneSurveyAnswers[survey.id] = answer),
+                                    onSurveySelected: (answer) => doneSurveyAnswers[survey.id] = answer,
+                                    firstPercentChange: (count) => firstSurveyHeadCount[survey.id] = count,
+                                    secondPercentChange: (count) => secondSurveyHeadCount[survey.id] = count
+                                ),
                                 SizedBox(
                                   height: SizeConfig.defaultSize,
                                 ),

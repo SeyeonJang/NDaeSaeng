@@ -17,8 +17,10 @@ class SurveyComponent extends StatefulWidget {
   late double optionFirstPercent;
   late double optionSecondPercent;
   final void Function(int answer) onSurveySelected;
+  final void Function(int count) firstPercentChange;
+  final void Function(int count) secondPercentChange;
 
-  SurveyComponent({super.key, required this.survey, required this.feedCubit, required this.onSurveySelected}) {
+  SurveyComponent({super.key, required this.survey, required this.feedCubit, required this.onSurveySelected, required this.firstPercentChange, required this.secondPercentChange}) {
     isPicked = survey.isPicked();
     pickedOption = survey.pickedOption;
     optionFirstPercent = survey.options.first.headCount / (survey.options.first.headCount + survey.options.last.headCount);
@@ -35,6 +37,8 @@ class _SurveyComponentState extends State<SurveyComponent> {
   double marginHorizontal = SizeConfig.defaultSize * 2.3;
   bool isChanged = false;
   bool isTapped = false;
+  int firstHeadCount = 0;
+  int secondHeadCount = 0;
 
   void onPickedChanged(bool changed, int pickedOption) async {
     AnalyticsUtil.logEvent('피드_선택지_선택', properties: {
@@ -47,10 +51,15 @@ class _SurveyComponentState extends State<SurveyComponent> {
       widget.isPicked = changed;
       widget.pickedOption = pickedOption;
       isChanged = true;
+
       if (widget.survey.options.first.id == pickedOption) {
+        firstHeadCount = widget.survey.options.first.headCount + 1;
+        secondHeadCount = widget.survey.options.last.headCount;
         widget.optionFirstPercent = (widget.survey.options.first.headCount + 1) / (widget.survey.options.first.headCount + widget.survey.options.last.headCount + 1);
         widget.optionSecondPercent = (widget.survey.options.last.headCount) / (widget.survey.options.first.headCount + widget.survey.options.last.headCount + 1);
       } else {
+        firstHeadCount = widget.survey.options.first.headCount;
+        secondHeadCount = widget.survey.options.last.headCount + 1;
         widget.optionFirstPercent = (widget.survey.options.first.headCount) / (widget.survey.options.first.headCount + widget.survey.options.last.headCount + 1);
         widget.optionSecondPercent = (widget.survey.options.last.headCount + 1) / (widget.survey.options.first.headCount + widget.survey.options.last.headCount + 1);
       }
@@ -74,6 +83,8 @@ class _SurveyComponentState extends State<SurveyComponent> {
     // }
 
     widget.onSurveySelected.call(pickedOption);
+    widget.firstPercentChange.call(firstHeadCount);
+    widget.secondPercentChange.call(secondHeadCount);
   }
 
   @override
