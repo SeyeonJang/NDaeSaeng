@@ -9,15 +9,14 @@ class Survey {
   final DateTime createdAt;
   final String latestComment;
 
-  Survey({
-    required this.id,
-    required this.question,
-    required this.options,
-    required this.picked,
-    required this.pickedOption,
-    required this.createdAt,
-    required this.latestComment
-  });
+  Survey(
+      {required this.id,
+      required this.question,
+      required this.options,
+      required this.picked,
+      required this.pickedOption,
+      required this.createdAt,
+      required this.latestComment});
 
   factory Survey.fromJson(Map<String, dynamic> json) {
     final int parsedId = json['id'];
@@ -35,14 +34,13 @@ class Survey {
     final String parsedLatestComment = json['latestComment'];
 
     return Survey(
-      id: parsedId,
-      question: parsedQuestion,
-      options: parsedOptions,
-      picked: parsedPicked,
-      pickedOption: parsedPickedOption,
-      createdAt: parsedCreatedAt,
-      latestComment: parsedLatestComment
-    );
+        id: parsedId,
+        question: parsedQuestion,
+        options: parsedOptions,
+        picked: parsedPicked,
+        pickedOption: parsedPickedOption,
+        createdAt: parsedCreatedAt,
+        latestComment: parsedLatestComment);
   }
 
   Map<String, dynamic> toJson() {
@@ -68,5 +66,24 @@ class Survey {
     } else {
       return false;
     }
+  }
+
+  Survey copyWith({
+    int? id,
+    String? question,
+    List<Option>? options,
+    bool? picked,
+    int? pickedOption,
+    DateTime? createdAt,
+    String? latestComment,
+  }) {
+    return Survey(
+        id: id ?? this.id,
+        question: question ?? this.question,
+        options: options ?? this.options,
+        picked: picked ?? this.picked,
+        pickedOption: pickedOption ?? this.pickedOption,
+        createdAt: createdAt ?? this.createdAt,
+        latestComment: latestComment ?? this.latestComment);
   }
 }
