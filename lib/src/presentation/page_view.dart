@@ -50,7 +50,7 @@ class _DartPageViewState extends State<DartPageView> {
   }
 
   bool canShowPopup() {
-    return BlocProvider.of<PageViewCubit>(context).getState();
+    return BlocProvider.of<PageViewCubit>(context).getPopup();
   }
 
   void neverShowPopup() {
