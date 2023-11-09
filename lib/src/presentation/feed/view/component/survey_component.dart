@@ -140,7 +140,7 @@ class _SurveyComponentState extends State<SurveyComponent> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        Text(' ${widget.survey.question}', style: TextStyle(fontSize: SizeConfig.defaultSize * 1.6, fontWeight: FontWeight.w600),),
+                        Expanded(child: Text(' ${widget.survey.question}', style: TextStyle(fontSize: SizeConfig.defaultSize * 1.6, fontWeight: FontWeight.w600, overflow: TextOverflow.clip,),)),
                       ],
                     ),
                       SizedBox(height: SizeConfig.defaultSize * 2,),
