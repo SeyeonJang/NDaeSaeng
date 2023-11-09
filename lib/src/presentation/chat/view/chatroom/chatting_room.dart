@@ -13,6 +13,7 @@ import 'package:dart_flutter/src/domain/entity/user.dart';
 import 'package:dart_flutter/src/domain/mapper/student_mapper.dart';
 import 'package:dart_flutter/src/presentation/chat/view/chatroom/chat_profile.dart';
 import 'package:dart_flutter/src/presentation/chat/viewmodel/state/chatting_cubit.dart';
+import 'package:dart_flutter/src/presentation/component/cached_profile_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -223,17 +224,10 @@ class _ChattingRoomState extends State<ChattingRoom> with WidgetsBindingObserver
                     children: [
                       Row(
                         children: [
-                          ClipOval(
-                            child: widget.chatRoomDetail.otherTeam.teamUsers[i].getProfileImageUrl() == 'DEFAULT' || !widget.chatRoomDetail.otherTeam.teamUsers[i].getProfileImageUrl().startsWith('https://')
-                                ? Image.asset(
-                                'assets/images/profile-mockup3.png',
-                                width: SizeConfig.defaultSize * 3.7,
-                                height: SizeConfig.defaultSize * 3.7
-                                )
-                                : Image.network(widget.chatRoomDetail.otherTeam.teamUsers[i].getProfileImageUrl(),
-                                width: SizeConfig.defaultSize * 3.7,
-                                height: SizeConfig.defaultSize * 3.7,
-                                fit: BoxFit.cover,)
+                          CachedProfileImage(
+                            profileUrl: widget.chatRoomDetail.otherTeam.teamUsers[i].getProfileImageUrl(),
+                            width: SizeConfig.defaultSize * 3.7,
+                            height: SizeConfig.defaultSize * 3.7,
                           ),
                             SizedBox(width: SizeConfig.defaultSize * 1.3),
                           Text(widget.chatRoomDetail.otherTeam.teamUsers[i].getName() == 'DEFAULT' ? '닉네임없음' : widget.chatRoomDetail.otherTeam.teamUsers[i].getName(),
@@ -279,18 +273,13 @@ class _ChattingRoomState extends State<ChattingRoom> with WidgetsBindingObserver
                     children: [
                       Row(
                         children: [
-                          ClipOval(
-                              child: widget.chatRoomDetail.myTeam.teamUsers[i].getProfileImageUrl() == 'DEFAULT' || !widget.chatRoomDetail.myTeam.teamUsers[i].getProfileImageUrl().startsWith('https://')
-                                  ? Image.asset(
-                                  'assets/images/profile-mockup3.png',
-                                  width: SizeConfig.defaultSize * 3.7, // 이미지 크기
-                                  height: SizeConfig.defaultSize * 3.7
-                              )
-                                  : Image.network(widget.chatRoomDetail.myTeam.teamUsers[i].getProfileImageUrl(),
-                                width: SizeConfig.defaultSize * 3.7,
-                                height: SizeConfig.defaultSize * 3.7,
-                                fit: BoxFit.cover,)
+
+                          CachedProfileImage(
+                            profileUrl: widget.chatRoomDetail.myTeam.teamUsers[i].getProfileImageUrl(),
+                            width: SizeConfig.defaultSize * 3.7,
+                            height: SizeConfig.defaultSize * 3.7,
                           ),
+
                             SizedBox(width: SizeConfig.defaultSize * 1.3),
                           (widget.chatRoomDetail.myTeam.teamUsers[i].getId() == (widget.user.personalInfo?.id ?? 'DEFAULT'))
                           ? Text(widget.chatRoomDetail.myTeam.teamUsers[i].getName() == 'DEFAULT' ? '닉네임없음' : "${widget.chatRoomDetail.myTeam.teamUsers[i].getName()} (나)", style: TextStyle(

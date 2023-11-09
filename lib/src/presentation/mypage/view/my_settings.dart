@@ -201,12 +201,6 @@ class _MyPageViewState extends State<MyPageView> {
                               width: SizeConfig.defaultSize * 12,
                               height: SizeConfig.defaultSize * 12,
                               fit: BoxFit.cover);
-                          // print('================================================================');
-                          // print(state.userResponse.personalInfo!.profileImageUrl);
-                          // return Image.network(state.userResponse.personalInfo!.profileImageUrl,
-                          //         width: SizeConfig.defaultSize * 5.7,
-                          //         height: SizeConfig.defaultSize * 5.7,
-                          //         fit: BoxFit.cover);
                         }
                       }
                   ),
