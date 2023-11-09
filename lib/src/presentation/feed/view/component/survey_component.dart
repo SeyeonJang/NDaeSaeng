@@ -173,7 +173,7 @@ class _SurveyComponentState extends State<SurveyComponent> {
                 setState(() {
                   isTapped = true;
                 });
-                ToastUtil.showMeetToast('실시간 댓글 접속중입니다 . . .', 2);
+                ToastUtil.showMeetToast('댓글 접속중입니다 . . .', 2);
 
                 await widget.feedCubit.getSurveyDetail(widget.survey.id).then((_) {
                   Navigator.push(context, MaterialPageRoute(builder: (context) => SurveyDetailView(surveyDetail: widget.feedCubit.state.surveyDetail, feedCubit: widget.feedCubit,)));
