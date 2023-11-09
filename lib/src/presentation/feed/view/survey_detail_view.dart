@@ -109,7 +109,7 @@ class _SurveyDetailViewState extends State<SurveyDetailView> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
-                                Text(' ${widget.surveyDetail.question}', style: TextStyle(fontSize: SizeConfig.defaultSize * 1.6, fontWeight: FontWeight.w600),),
+                                Expanded(child: Text(' ${widget.surveyDetail.question}', style: TextStyle(fontSize: SizeConfig.defaultSize * 1.6, fontWeight: FontWeight.w600, overflow: TextOverflow.clip,),)),
                               ],
                             ),
                               SizedBox(height: SizeConfig.defaultSize * 2,),
