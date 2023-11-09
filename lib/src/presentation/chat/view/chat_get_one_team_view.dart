@@ -3,6 +3,7 @@ import 'package:dart_flutter/src/common/util/analytics_util.dart';
 import 'package:dart_flutter/src/domain/entity/proposal.dart';
 import 'package:dart_flutter/src/presentation/chat/view/chat_response_get_detail.dart';
 import 'package:dart_flutter/src/presentation/chat/viewmodel/chat_cubit.dart';
+import 'package:dart_flutter/src/presentation/component/cached_profile_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../res/config/size_config.dart';
@@ -91,8 +92,8 @@ class ChatGetOneTeamView extends StatelessWidget { // Component
                               decoration: const BoxDecoration(
                                 shape: BoxShape.circle,
                               ),
-                              child: CachedNetworkImage(
-                                imageUrl: proposal.requestingTeam.teamUsers[i].getProfileImageUrl(),
+                              child: CachedProfileImage(
+                                profileUrl: proposal.requestingTeam.teamUsers[i].getProfileImageUrl(),
                                 width: SizeConfig.defaultSize * 4,
                                 height: SizeConfig.defaultSize * 4,
                               ),

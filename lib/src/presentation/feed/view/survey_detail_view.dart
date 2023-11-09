@@ -68,7 +68,7 @@ class _SurveyDetailViewState extends State<SurveyDetailView> {
         body: Scaffold(
           backgroundColor: Colors.white,
           appBar: AppBar(
-            title: Text("실시간 댓글", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.8, fontWeight: FontWeight.w600),),
+            title: Text("댓글", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.8, fontWeight: FontWeight.w600),),
             surfaceTintColor: Colors.white,
           ),
           body: SingleChildScrollView(

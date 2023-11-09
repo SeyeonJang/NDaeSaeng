@@ -140,7 +140,7 @@ class _SurveyComponentState extends State<SurveyComponent> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        Text(' ${widget.survey.question}', style: TextStyle(fontSize: SizeConfig.defaultSize * 1.6, fontWeight: FontWeight.w600),),
+                        Expanded(child: Text(' ${widget.survey.question}', style: TextStyle(fontSize: SizeConfig.defaultSize * 1.6, fontWeight: FontWeight.w600, overflow: TextOverflow.clip,),)),
                       ],
                     ),
                       SizedBox(height: SizeConfig.defaultSize * 2,),
@@ -159,7 +159,7 @@ class _SurveyComponentState extends State<SurveyComponent> {
 
           GestureDetector(
             onTap: () async {
-              AnalyticsUtil.logEvent('ㅈ', properties: {
+              AnalyticsUtil.logEvent('피드_질문_댓글_버튼_터치', properties: {
                 '질문 id': widget.survey.id,
                 '질문 내용': widget.survey.question
               });
@@ -173,7 +173,7 @@ class _SurveyComponentState extends State<SurveyComponent> {
                 setState(() {
                   isTapped = true;
                 });
-                ToastUtil.showMeetToast('실시간 댓글 접속중입니다 . . .', 2);
+                ToastUtil.showMeetToast('댓글 접속중입니다 . . .', 2);
 
                 await widget.feedCubit.getSurveyDetail(widget.survey.id).then((_) {
                   Navigator.push(context, MaterialPageRoute(builder: (context) => SurveyDetailView(surveyDetail: widget.feedCubit.state.surveyDetail, feedCubit: widget.feedCubit,)));
@@ -203,7 +203,7 @@ class _SurveyComponentState extends State<SurveyComponent> {
                     ),
                     Padding(
                       padding: EdgeInsets.only(top: SizeConfig.defaultSize * 0.5),
-                      child: Text(widget.survey.latestComment, style: TextStyle(fontSize: SizeConfig.defaultSize * 1.3), overflow: TextOverflow.ellipsis,),
+                      child: Text(widget.survey.latestComment.replaceAll("\n", " "), style: TextStyle(fontSize: SizeConfig.defaultSize * 1.3), overflow: TextOverflow.ellipsis,),
                     )
                   ],
                 ),
