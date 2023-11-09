@@ -11,6 +11,8 @@ import 'package:dart_flutter/src/data/model/blind_date_team_detail_dto.dart';
 import 'package:dart_flutter/src/data/model/blind_date_team_dto.dart';
 import 'package:dart_flutter/src/data/model/question_dto.dart';
 import 'package:dart_flutter/src/data/model/meet_team_request_dto.dart';
+import 'package:dart_flutter/src/data/model/survey_detail_dto.dart';
+import 'package:dart_flutter/src/data/model/survey_dto.dart';
 import 'package:dart_flutter/src/data/model/title_vote_dto.dart';
 import 'package:dart_flutter/src/data/model/university_dto.dart';
 import 'package:dart_flutter/src/data/model/user_request_dto.dart';
@@ -395,10 +397,74 @@ class DartApiRemoteDataSource {
 
   // chat: 채팅방 생성 (제안 수락시 이어지는 로직)
   static Future<void> postChatRoom(final int proposalId) async {
-    final path = '/v1/chat/rooms';
+    const path = '/v1/chat/rooms';
     final body = {"proposalId": proposalId};
 
     await _httpUtil.request().post(path, data: body);
+  }
+
+  // survey: 투표 목록 조회
+  static Future<Pagination<SurveyDto>> getSurveys({final int page = 0, final int size = 10}) async {
+    const path = '/v1/surveys';
+    final params = {"page": page, "size": size};
+
+    final response = await _httpUtil.request().get(path, queryParameters: params);
+    Pagination<SurveyDto> pagination = Pagination.fromJson(response.data, (survey) => SurveyDto.fromJson(survey));
+    return pagination;
+  }
+
+  // survey: 투표 상세 조회
+  static Future<SurveyDetailDto> getSurvey(final int id) async {
+    const path = '/v1/surveys';
+    final pathUrl = "$path/$id";
+
+    final response = await _httpUtil.request().get(pathUrl);
+    return SurveyDetailDto.fromJson(response.data);
+  }
+
+  // survey: 투표하기
+  static Future<void> postSurvey(final int surveyId, final int answerId) async {
+    const path = '/v1/surveys';
+    final pathUrl = "$path/$surveyId/answers";
+    final body = {"answerId": answerId};
+
+    final response = await _httpUtil.request().post(pathUrl, data: body);
+  }
+
+  // survey: 투표 수정하기
+  // 기능없음!
+
+  // survey comment: 댓글 쓰기
+  static Future<void> postComment(final int surveyId, final String comment) async {
+    const path = '/v1/surveys';
+    final pathUrl = "$path/$surveyId/comments";
+    final body = {"content": comment};
+
+    final response = await _httpUtil.request().post(pathUrl, data: body);
+  }
+
+  // survey comment: 댓글 삭제
+  static Future<void> deleteComment(final int surveyId, final int commentId) async {
+    const path = '/v1/surveys';
+    final pathUrl = "$path/$surveyId/comments/$commentId";
+
+    final response = await _httpUtil.request().delete(pathUrl);
+  }
+
+  // survey comment: 댓글 신고
+  static Future<void> reportComment(final int surveyId, final int commentId) async {
+    const path = '/v1/surveys';
+    final pathUrl = "$path/$surveyId/comments/$commentId/reports";
+
+    final response = await _httpUtil.request().post(pathUrl);
+  }
+
+  // survey comment: 댓글 좋아요
+  static Future<void> likeComment(final int surveyId, final int commentId) async {
+    const path = '/v1/surveys';
+    final pathUrl = "$path/$surveyId/comments/$commentId/likes";
+
+    final response = await _httpUtil.request().post(pathUrl);
   }
 
   static String _getPathFromUrl(String url) {

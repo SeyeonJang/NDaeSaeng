@@ -1,4 +1,3 @@
-import 'package:dart_flutter/src/common/util/toast_util.dart';
 import 'package:dart_flutter/src/domain/entity/user.dart';
 import 'package:dart_flutter/src/domain/use_case/user_use_case.dart';
 import 'package:dart_flutter/src/presentation/page_view_state.dart';
@@ -7,7 +6,7 @@ import 'package:hydrated_bloc/hydrated_bloc.dart';
 class PageViewCubit extends HydratedCubit<PageViewState> {
   var _userUseCase = UserUseCase();
 
-  PageViewCubit() : super(PageViewState(myInfo: User(titleVotes: []), popup: true, openCount: 0));
+  PageViewCubit() : super(PageViewState(myInfo: User(titleVotes: []), showPopup: true, openCount: 0));
 
   void fetchMyInformation() async {
     var myInfo = await _userUseCase.myInfo();
@@ -16,11 +15,11 @@ class PageViewCubit extends HydratedCubit<PageViewState> {
   }
 
   void neverAgain() {
-    state.popup = false;
+    state.showPopup = false;
     emit(state.copy());
   }
 
-  bool getState() => state.popup;
+  bool getPopup() => state.showPopup;
 
   void addOpenAppCount() {
     state.openCount++;
