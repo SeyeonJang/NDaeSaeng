@@ -1,7 +1,10 @@
 import 'dart:io';
 
+import 'package:dart_flutter/res/environment/app_environment.dart';
+
 class AdHelper {
 
+  @Deprecated("테스트 광고 ID")
   static String get bannerAdUnitId {
     if (Platform.isAndroid) {
       return 'ca-app-pub-3940256099942544/6300978111';
@@ -12,6 +15,7 @@ class AdHelper {
     }
   }
 
+  @Deprecated("테스트 광고 ID")
   static String get interstitialAdUnitId {
     if (Platform.isAndroid) {
       return "ca-app-pub-3940256099942544/1033173712";
@@ -24,9 +28,9 @@ class AdHelper {
 
   static String get rewardedAdUnitId {
     if (Platform.isAndroid) {
-      return "ca-app-pub-3940256099942544/5224354917";
+      return AppEnvironment.getEnv.getAdmobRewardAos();
     } else if (Platform.isIOS) {
-      return "ca-app-pub-3940256099942544/1712485313";
+      return AppEnvironment.getEnv.getAdmobRewardIos();
     } else {
       throw new UnsupportedError("Unsupported platform");
     }

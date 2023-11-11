@@ -3,41 +3,74 @@ import 'package:dart_flutter/src/domain/entity/blind_date_team_detail.dart';
 import 'package:dart_flutter/src/presentation/component/meet_one_member_cardview_novote.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import '../../../../res/config/size_config.dart';
+import '../../../common/admob/ad_helper.dart';
 import '../../../common/util/toast_util.dart';
 import '../../../domain/mapper/student_mapper.dart';
 import '../viewmodel/meet_cubit.dart';
 import '../viewmodel/state/meet_state.dart';
 
-class MeetOtherTeamDetail extends StatelessWidget {
-  int teamId;
-  int myTeamId;
+class MeetOtherTeamDetail extends StatefulWidget {
+  final int teamId;
+  final int myTeamId;
 
   MeetOtherTeamDetail({super.key, required this.teamId, required this.myTeamId});
+
+  @override
+  State<MeetOtherTeamDetail> createState() => _MeetOtherTeamDetailState();
+}
+
+class _MeetOtherTeamDetailState extends State<MeetOtherTeamDetail> {
+  RewardedAd? _rewardedAd;
+
+  void _loadRewardedAd() {
+    RewardedAd.load(
+      adUnitId: AdHelper.rewardedAdUnitId,
+      request: AdRequest(),
+      rewardedAdLoadCallback: RewardedAdLoadCallback(
+        onAdLoaded: (ad) {
+          ad.fullScreenContentCallback = FullScreenContentCallback(
+            onAdDismissedFullScreenContent: (ad) {
+              setState(() {
+                ad.dispose();
+                _rewardedAd = null;
+              });
+              _loadRewardedAd();
+            },
+          );
+
+          setState(() {
+            _rewardedAd = ad;
+          });
+        },
+        onAdFailedToLoad: (err) {
+          print('Failed to load a rewarded ad: ${err.message}');
+        },
+      ),
+    );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _loadRewardedAd();
+  }
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<MeetCubit, MeetState>(
       builder: (context, state) {
+        final int leftProposal = state.leftProposalCount;
+        final bool canSendProposal = leftProposal > 0;
+        final DateTime lastAdmobTime = state.lastAdmobTime;
+        final bool canAdMob = lastAdmobTime.isBefore(DateTime.now().subtract(const Duration(minutes: 1)));  // 마지막 광고보고 1분이 지낫을때만
+
         return FutureBuilder<BlindDateTeamDetail>(
-          future: context.read<MeetCubit>().getBlindDateTeam(teamId),
+          future: context.read<MeetCubit>().getBlindDateTeam(widget.teamId),
           builder: (context, futureState) {
             if (futureState.connectionState == ConnectionState.waiting) {
-              return Scaffold(
-                body: Container(
-                  width: SizeConfig.screenWidth,
-                  height: SizeConfig.screenHeight,
-                  color: Colors.white,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const CircularProgressIndicator(color: Color(0xffFE6059)),
-                          SizedBox(height: SizeConfig.defaultSize * 5,),
-                        Text("팀 정보를 불러오고 있어요 . . .", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.8),)
-                      ],
-                    ),
-                ),
-              );
+              return const _teamLoadingProgress();
             } else if (futureState.hasError) {
               return Text('Error: ${futureState.error}');
             } else if (futureState.hasData) {
@@ -177,7 +210,7 @@ class MeetOtherTeamDetail extends StatelessWidget {
                                                         ]
                                                     )
                                                 ),
-                                                Text("호감을 보낼 수 있어요!", style: TextStyle(
+                                                Text(canSendProposal ? "호감을 보낼 수 있어요!" : "호감을 보내고 싶으신가요?", style: TextStyle(
                                                   fontSize: SizeConfig.defaultSize * 1.8,
                                                   fontWeight: FontWeight.w500,
                                                   color: Colors.black,
@@ -186,12 +219,12 @@ class MeetOtherTeamDetail extends StatelessWidget {
                                             ),
                                             Column(
                                               children: [
-                                                Text("상대 팀이 내 호감을 수락하면", style: TextStyle(
+                                                Text(canSendProposal ? "상대 팀이 내 호감을 수락하면" : "오늘의 호감을 모두 사용했어요.", style: TextStyle(
                                                   fontSize: SizeConfig.defaultSize * 1.5,
                                                   fontWeight: FontWeight.w500,
                                                   color: Colors.grey,
                                                 ),),
-                                                Text("바로 채팅을 시작할 수 있어요!", style: TextStyle(
+                                                Text(canSendProposal ? "바로 채팅을 시작할 수 있어요!" : "매일 00시, 호감이 충전되요!", style: TextStyle(
                                                   fontSize: SizeConfig.defaultSize * 1.5,
                                                   fontWeight: FontWeight.w500,
                                                   color: Colors.grey,
@@ -256,33 +289,75 @@ class MeetOtherTeamDetail extends StatelessWidget {
                                           onTap: () {
                                             AnalyticsUtil.logEvent('과팅_목록_이성팀상세보기_호감보내기_보내기');
                                             Navigator.pop(modalContext, true);
-                                            context.read<MeetCubit>().postProposal(myTeamId, blindDateTeamDetail.id);
-                                            showDialog<String>(
-                                                context: modalContext,
-                                                builder: (BuildContext dialogContext) {
-                                                  Future.delayed(const Duration(seconds: 2), () {
-                                                    Navigator.pop(dialogContext);
-                                                  });
-                                                  return AlertDialog(
+
+                                            if (!canSendProposal) {
+                                              if (!canAdMob) {
+                                                print("아직 광고를 볼 수 없습니다.");
+                                                return;
+                                              }
+                                              // 광고보고 호감 보내기 선택
+                                              _rewardedAd?.show(
+                                                onUserEarnedReward: (_, reward) {
+                                                  context.read<MeetCubit>().postProposal(
+                                                      widget.myTeamId, blindDateTeamDetail.id);
+                                                  context.read<MeetCubit>().setLastAdMobDate(DateTime.now());
+
+                                                  showDialog<String>(
+                                                      context: modalContext,
+                                                      builder: (BuildContext dialogContext) {
+                                                        return GestureDetector(
+                                                          onTap: () {
+                                                            Navigator.pop(dialogContext);
+                                                          },
+                                                          child: AlertDialog(
+                                                            surfaceTintColor: Colors.white,
+                                                            title: Container(alignment: Alignment.center, child: Text('내 호감이 성공적으로 전달됐어요!', style: TextStyle(fontSize: SizeConfig.defaultSize * 1.5, fontWeight: FontWeight.w600, color: const Color(0xffFF5C58)),)),
+                                                            content: Container(alignment: Alignment.center, height: SizeConfig.defaultSize * 4, child: const Text('곧 상대의 채팅 수락 결과를 알려드릴게요!',)),
+                                                          ),
+                                                        );
+                                                      }
+                                                  );
+                                                },
+                                              );
+                                            } else {
+                                              context.read<MeetCubit>().postProposal(
+                                                  widget.myTeamId, blindDateTeamDetail.id);
+
+                                              showDialog<String>(
+                                                  context: modalContext,
+                                                  builder: (BuildContext dialogContext) {
+                                                    Future.delayed(const Duration(seconds: 2), () {
+                                                      Navigator.pop(dialogContext);
+                                                    });
+                                                    return AlertDialog(
                                                       surfaceTintColor: Colors.white,
                                                       title: Container(alignment: Alignment.center, child: Text('내 호감이 성공적으로 전달됐어요!', style: TextStyle(fontSize: SizeConfig.defaultSize * 1.5, fontWeight: FontWeight.w600, color: const Color(0xffFF5C58)),)),
-                                                    content: Container(alignment: Alignment.center, height: SizeConfig.defaultSize * 4, child: const Text('곧 상대의 채팅 수락 결과를 알려드릴게요!',)),
-                                                  );
-                                                }
-                                            );
+                                                      content: Container(alignment: Alignment.center, height: SizeConfig.defaultSize * 4, child: const Text('곧 상대의 채팅 수락 결과를 알려드릴게요!',)),
+                                                    );
+                                                  }
+                                              );
+                                            }
                                           },
                                           child: Container(
                                             height: SizeConfig.defaultSize * 4.5,
                                             width: SizeConfig.defaultSize * 20,
                                             decoration: BoxDecoration(
                                               borderRadius: BorderRadius.circular(10),
-                                              color: const Color(0xffFF5C58),
+                                              color: canSendProposal
+                                                  ? Color(0xffFF5C58)
+                                                  : canAdMob
+                                                  ? Color(0xffFF5C58)
+                                                  : Colors.grey,
                                             ),
-                                            child: const Center(child: Text("호감 보내기", style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600),)),
-                                            // TODO : 포인트 재개하면 복구하기
-                                            // child: Center(child: Text("500 포인트로 채팅 요청", style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600),)),
+                                            child: Center(child: Text(
+                                              canSendProposal
+                                                  ? "남은 호감 수: $leftProposal"
+                                                  : canAdMob
+                                                  ? "광고보고 호감보내기"
+                                                  : "1분 뒤에 보낼수 있어요!", style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600),)),
                                           ),
-                                        ),
+                                        )
+
                                       ],
                                     )
                                   ],
@@ -335,6 +410,31 @@ class MeetOtherTeamDetail extends StatelessWidget {
           }
         );
       }
+    );
+  }
+}
+
+class _teamLoadingProgress extends StatelessWidget {
+  const _teamLoadingProgress({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Container(
+        width: SizeConfig.screenWidth,
+        height: SizeConfig.screenHeight,
+        color: Colors.white,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const CircularProgressIndicator(color: Color(0xffFE6059)),
+                SizedBox(height: SizeConfig.defaultSize * 5,),
+              Text("팀 정보를 불러오고 있어요 . . .", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.8),)
+            ],
+          ),
+      ),
     );
   }
 }
