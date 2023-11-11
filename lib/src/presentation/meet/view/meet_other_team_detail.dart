@@ -22,6 +22,7 @@ class MeetOtherTeamDetail extends StatefulWidget {
 }
 
 class _MeetOtherTeamDetailState extends State<MeetOtherTeamDetail> {
+  bool _isAdmobInit = false;
   RewardedAd? _rewardedAd;
 
   void _loadRewardedAd() {
@@ -35,6 +36,7 @@ class _MeetOtherTeamDetailState extends State<MeetOtherTeamDetail> {
               setState(() {
                 ad.dispose();
                 _rewardedAd = null;
+                _isAdmobInit = true;
               });
               _loadRewardedAd();
             },
@@ -42,6 +44,7 @@ class _MeetOtherTeamDetailState extends State<MeetOtherTeamDetail> {
 
           setState(() {
             _rewardedAd = ad;
+            _isAdmobInit = true;
           });
         },
         onAdFailedToLoad: (err) {
@@ -59,6 +62,12 @@ class _MeetOtherTeamDetailState extends State<MeetOtherTeamDetail> {
 
   @override
   Widget build(BuildContext context) {
+    // admob 광고 로딩 중
+    if (!_isAdmobInit) {
+      return const _teamLoadingProgress();
+    }
+
+    // 팀 상세페이지 조회
     return BlocBuilder<MeetCubit, MeetState>(
       builder: (context, state) {
         final int leftProposal = state.leftProposalCount;
@@ -296,6 +305,7 @@ class _MeetOtherTeamDetailState extends State<MeetOtherTeamDetail> {
                                                 return;
                                               }
                                               // 광고보고 호감 보내기 선택
+                                              AnalyticsUtil.logEvent('과팅_목록_이성팀상세보기_호감보내기_리워드광고시청');
                                               _rewardedAd?.show(
                                                 onUserEarnedReward: (_, reward) {
                                                   context.read<MeetCubit>().postProposal(
