@@ -21,6 +21,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'firebase_options.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 // 랜딩페이지
 void main() async {
@@ -43,6 +44,7 @@ void main() async {
   AppsflyerUtil.init();
   if (AppEnvironment.buildType.isProd) { await CrashlyticsUtil.init(enabled: true);}
   else {await CrashlyticsUtil.init();}
+  MobileAds.instance.initialize();
 
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
     statusBarColor: Colors.white,
