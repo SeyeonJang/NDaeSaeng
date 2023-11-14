@@ -169,47 +169,58 @@ class _MyPageViewState extends State<MyPageView> {
             onTap: () {
               _pickImage();
             },
-            child: ClipOval(
-              clipBehavior: Clip.antiAlias,
-              child: Container(
-                  // decoration: BoxDecoration( // 이미지 겉에 테두리 효과주는 코드
-                  //   gradient: LinearGradient(
-                  //       colors: [Color(0xffFE6059), Color(0xffFE6059)]),
-                  //   borderRadius: BorderRadius.circular(32),
-                  // ),
-
-                child: isSelectImage
-                    ? ClipOval(
-                      child: Image.file( // 이미지 파일에서 고르는 코드
-                        _selectedImage!,
-                        fit: BoxFit.cover,
-                        width: SizeConfig.defaultSize * 12,
-                        height: SizeConfig.defaultSize * 12,
-                      ))
-                    : ClipOval(
-                      child: BlocBuilder<MyPagesCubit, MyPagesState>(
-                      builder: (context, state) {
-                        if (profileImageUrl == "DEFAULT" || !profileImageUrl.startsWith("https://")) {
-                          return Image.asset('assets/images/profile-mockup2.png', width: SizeConfig.defaultSize * 12, fit: BoxFit.cover,);
-                        } else {
-                          return state.profileImageFile.path==''
-                              ? Image.network(profileImageUrl,
-                              width: SizeConfig.defaultSize * 12,
-                              height: SizeConfig.defaultSize * 12,
-                              fit: BoxFit.cover)
-                              : Image.file(state.profileImageFile,
-                              width: SizeConfig.defaultSize * 12,
-                              height: SizeConfig.defaultSize * 12,
-                              fit: BoxFit.cover);
+            child: Container(
+              child: Stack(
+                children: [
+                  ClipOval(
+                    child: isSelectImage
+                        ? Image.file( // 이미지 파일에서 고르는 코드
+                      _selectedImage!,
+                      fit: BoxFit.cover,
+                      width: SizeConfig.defaultSize * 15,
+                      height: SizeConfig.defaultSize * 15,
+                    )
+                        : BlocBuilder<MyPagesCubit, MyPagesState>(
+                        builder: (context, state) {
+                          if (profileImageUrl == "DEFAULT" || !profileImageUrl.startsWith("https://")) {
+                            return Image.asset('assets/images/profile-mockup2.png', width: SizeConfig.defaultSize * 15, fit: BoxFit.cover,);
+                          } else {
+                            return state.profileImageFile.path==''
+                                ? Image.network(profileImageUrl,
+                                width: SizeConfig.defaultSize * 15,
+                                height: SizeConfig.defaultSize * 15,
+                                fit: BoxFit.cover)
+                                : Image.file(state.profileImageFile,
+                                width: SizeConfig.defaultSize * 15,
+                                height: SizeConfig.defaultSize * 15,
+                                fit: BoxFit.cover);
+                          }
                         }
-                      }
+                    ),
                   ),
-                )
-              ),
+                  Positioned(
+                    bottom: SizeConfig.defaultSize * 0.5,
+                    right: SizeConfig.defaultSize * 0.5,
+                    child: Container(
+                      width: SizeConfig.defaultSize * 4,
+                      height: SizeConfig.defaultSize * 4,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(15),
+                        color: Colors.grey[100],
+                      ),
+                      child: Icon(
+                        Icons.camera_alt_rounded,
+                        size: SizeConfig.defaultSize * 2.7,
+                      ),
+                    ),
+                  ),
+                ]
+              )
             ),
           ),
         ),
         // const DtFlexSpacer(15),
+
 
         SizedBox(
           width: SizeConfig.defaultSize * 3,
