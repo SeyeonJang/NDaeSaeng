@@ -244,7 +244,8 @@ class _MeetCreateTeamInputState extends State<MeetCreateTeamInput> {
                                     SizedBox(height: SizeConfig.defaultSize),
                                   MeetCreateCardviewNovote(
                                       userResponse: BlindDateUserDetail(id: state.userResponse.personalInfo?.id ?? 0, name: (state.userResponse.personalInfo?.nickname=='DEFAULT' ? state.userResponse.personalInfo?.name : state.userResponse.personalInfo?.nickname) ?? '(알수없음)', profileImageUrl: state.userResponse.personalInfo?.profileImageUrl ?? 'DEFAULT', department: state.userResponse.university?.department ?? '(알수없음)', isCertifiedUser: (state.userResponse.personalInfo?.verification.isVerificationSuccess ?? false) ? true : false, birthYear: state.userResponse.personalInfo?.birthYear ?? 0, profileQuestionResponses: state.userResponse.titleVotes),
-                                      university: state.userResponse.university?.name ?? '(알수없음)'
+                                      university: state.userResponse.university?.name ?? '(알수없음)',
+                                      isProfileImageCached: false,
                                   ),
                                     SizedBox(height: SizeConfig.defaultSize),
                                   // 친구1
@@ -1390,16 +1391,18 @@ class _CreateTeamBottomSectionState extends State<_CreateTeamBottomSection> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
-                              Text(
-                                widget.locations.isEmpty
-                                  ? "선택해주세요"
-                                  : widget.locations.map((city) => city.name).join(', '),
-                                style: TextStyle(
-                                  fontSize: SizeConfig.defaultSize * 1.6,
-                                  color: Colors.black,
-                                  overflow: TextOverflow.ellipsis,
+                              Expanded(
+                                child: Text(
+                                  widget.locations.isEmpty
+                                    ? "선택해주세요"
+                                    : widget.locations.map((city) => city.name).join(', '),
+                                  style: TextStyle(
+                                    fontSize: SizeConfig.defaultSize * 1.6,
+                                    color: Colors.black,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                  textAlign: TextAlign.right,
                                 ),
-                                textAlign: TextAlign.right,
                               ),
                               const Text(" "),
                               Icon(Icons.edit_rounded, color: const Color(0xffFE6059), size: SizeConfig.defaultSize * 1.8)

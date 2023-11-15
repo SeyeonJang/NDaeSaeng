@@ -9,8 +9,9 @@ import '../../domain/entity/type/blind_date_user_detail.dart';
 class MeetCreateCardviewNovote extends StatelessWidget {
   final BlindDateUserDetail userResponse;
   final String university;
+  final bool isProfileImageCached;
 
-  const MeetCreateCardviewNovote({super.key, required this.userResponse, required this.university});
+  const MeetCreateCardviewNovote({super.key, required this.userResponse, required this.university, this.isProfileImageCached = true});
 
   @override
   Widget build(BuildContext context) {
@@ -50,6 +51,7 @@ class MeetCreateCardviewNovote extends StatelessWidget {
                             profileUrl: userResponse.profileImageUrl,
                             width: SizeConfig.defaultSize * 9,
                             height: SizeConfig.defaultSize * 9,
+                            cached: isProfileImageCached,
                           ),
                         ),
                         SizedBox(width: SizeConfig.defaultSize * 1.7),
