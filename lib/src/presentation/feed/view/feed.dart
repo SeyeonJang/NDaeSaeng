@@ -75,36 +75,41 @@ class _FeedState extends State<Feed> {
               child: SingleChildScrollView(
                 child: Column(
                   children: [
-                    SizedBox(
-                      height: SizeConfig.screenHeight * 0.82,
-                      child: PagedListView<int, Survey>(
-                          pagingController: pagingController,
-                          builderDelegate: PagedChildBuilderDelegate<Survey>(itemBuilder: (_, survey, __) {
-                            final int? cachedSurveyAnswer = doneSurveyAnswers[survey.id];
-                            final int cachedFirstHeadCount = firstSurveyHeadCount[survey.id] ?? 1;
-                            final int cachedSecondHeadCount = secondSurveyHeadCount[survey.id] ?? 1;
-                            if (cachedSurveyAnswer != null) {
-                              survey = survey.copyWith(
-                                  picked: true,
-                                  pickedOption: cachedSurveyAnswer,
-                                  options: [Option(id: survey.options.first.id, name: survey.options.first.name, headCount: cachedFirstHeadCount), Option(id: survey.options.last.id, name: survey.options.last.name, headCount: cachedSecondHeadCount)]);
-                            }
+                    RefreshIndicator(
+                      onRefresh: () async {
+                        pagingController.refresh();
+                      },
+                      child: SizedBox(
+                        height: SizeConfig.screenHeight * 0.82,
+                        child: PagedListView<int, Survey>(
+                            pagingController: pagingController,
+                            builderDelegate: PagedChildBuilderDelegate<Survey>(itemBuilder: (_, survey, __) {
+                              final int? cachedSurveyAnswer = doneSurveyAnswers[survey.id];
+                              final int cachedFirstHeadCount = firstSurveyHeadCount[survey.id] ?? 1;
+                              final int cachedSecondHeadCount = secondSurveyHeadCount[survey.id] ?? 1;
+                              if (cachedSurveyAnswer != null) {
+                                survey = survey.copyWith(
+                                    picked: true,
+                                    pickedOption: cachedSurveyAnswer,
+                                    options: [Option(id: survey.options.first.id, name: survey.options.first.name, headCount: cachedFirstHeadCount), Option(id: survey.options.last.id, name: survey.options.last.name, headCount: cachedSecondHeadCount)]);
+                              }
 
-                            return Column(
-                              children: [
-                                SurveyComponent(
-                                    survey: survey,
-                                    feedCubit: feedCubit,
-                                    onSurveySelected: (answer) => doneSurveyAnswers[survey.id] = answer,
-                                    firstPercentChange: (count) => firstSurveyHeadCount[survey.id] = count,
-                                    secondPercentChange: (count) => secondSurveyHeadCount[survey.id] = count
-                                ),
-                                SizedBox(
-                                  height: SizeConfig.defaultSize,
-                                ),
-                              ],
-                            );
-                          })),
+                              return Column(
+                                children: [
+                                  SurveyComponent(
+                                      survey: survey,
+                                      feedCubit: feedCubit,
+                                      onSurveySelected: (answer) => doneSurveyAnswers[survey.id] = answer,
+                                      firstPercentChange: (count) => firstSurveyHeadCount[survey.id] = count,
+                                      secondPercentChange: (count) => secondSurveyHeadCount[survey.id] = count
+                                  ),
+                                  SizedBox(
+                                    height: SizeConfig.defaultSize,
+                                  ),
+                                ],
+                              );
+                            })),
+                      ),
                     ),
                   ],
                 ),
