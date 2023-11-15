@@ -5,7 +5,7 @@ import 'package:dart_flutter/src/domain/entity/university.dart';
 import 'package:dart_flutter/src/domain/repository/university_repository.dart';
 import 'package:sqflite/sqflite.dart';
 
-class DartUniversityRepositoryImpl implements UniversityRepository {
+class LocalUniversityRepositoryImpl implements UniversityRepository {
   @override
   Future<List<University>> getUniversities() async {
     String query = '''

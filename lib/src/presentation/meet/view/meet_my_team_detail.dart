@@ -63,8 +63,11 @@ class MeetMyTeamDetail extends StatelessWidget {
                               ...List.generate(blindDateTeamDetail.teamUsers.length, (index) {
                                 return Column(
                                   children: [
-                                    // MeetOneMemberCardview(userResponse: StudentMapper.toBlindDateUserDetail(blindDateTeamDetail.teamUsers[index])),
-                                      MeetOneMemberCardviewNoVote(userResponse: StudentMapper.toBlindDateUserDetail(blindDateTeamDetail.teamUsers[index]), university: blindDateTeamDetail.universityName,),
+                                      MeetOneMemberCardviewNoVote(
+                                        userResponse: StudentMapper.toBlindDateUserDetail(blindDateTeamDetail.teamUsers[index]),
+                                        university: blindDateTeamDetail.universityName,
+                                        isProfileImageCached: false,
+                                      ),
                                     SizedBox(height: SizeConfig.defaultSize),
                                   ],
                                 );

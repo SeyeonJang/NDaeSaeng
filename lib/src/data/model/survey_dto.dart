@@ -60,6 +60,7 @@ class SurveyDto {
     return Survey(
         id: surveyId ?? 0,
         question: content ?? "질문 불러오기에 실패했습니다.",
+        category: category ?? "기타",
         options: answers?.map((answer) => answer.toOption()).toList() ?? [],
         picked: userAnswerId == null ? false : true,
         pickedOption: userAnswerId ?? 0,
