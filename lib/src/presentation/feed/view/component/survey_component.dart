@@ -99,6 +99,7 @@ class _SurveyComponentState extends State<SurveyComponent> {
     return Container(
       width: SizeConfig.screenWidth,
       height: SizeConfig.defaultSize * 30,
+      clipBehavior: Clip.antiAlias,
       decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(15),
