@@ -92,6 +92,7 @@ class _SurveyComponentState extends State<SurveyComponent> {
     DateTime now = DateTime.now();
     String formattedSurveyDate = DateFormat('MM월 dd일').format(widget.survey.createdAt);
     String formattedNowDate = DateFormat('MM월 dd일').format(now);
+    String category = widget.survey.category;
 
     print("[reRender] ${widget.survey.question}");
 
@@ -119,21 +120,11 @@ class _SurveyComponentState extends State<SurveyComponent> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Container(
-                            decoration: BoxDecoration(
-                              color: mainColor.withOpacity(0.1),
-                              borderRadius: BorderRadius.circular(5),
-                            ),
-                            child: Padding(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: SizeConfig.defaultSize,
-                                  vertical: SizeConfig.defaultSize * 0.4),
-                              child: Text(formattedSurveyDate, style: TextStyle(
-                                  color: mainColor,
-                                  fontSize: SizeConfig.defaultSize * 1.4)),
-                            )
-                        ),
-                        if (formattedNowDate == formattedSurveyDate) Text("오늘의 질문", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.4, color: Colors.grey),)
+                          _SurveyTag(color: mainColor, text:
+                          formattedNowDate == formattedSurveyDate
+                            ? "오늘의 질문"
+                            : category
+                          ),
                       ],
                     ),
                       SizedBox(height: SizeConfig.defaultSize * 1.5,),
@@ -212,6 +203,35 @@ class _SurveyComponentState extends State<SurveyComponent> {
           )
         ],
       ),
+    );
+  }
+}
+
+class _SurveyTag extends StatelessWidget {
+  const _SurveyTag({
+    super.key,
+    required this.color,
+    required this.text,
+  });
+
+  final Color color;
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        decoration: BoxDecoration(
+          color: color.withOpacity(0.1),
+          borderRadius: BorderRadius.circular(5),
+        ),
+        child: Padding(
+          padding: EdgeInsets.symmetric(
+              horizontal: SizeConfig.defaultSize,
+              vertical: SizeConfig.defaultSize * 0.4),
+          child: Text(text, style: TextStyle(
+              color: color,
+              fontSize: SizeConfig.defaultSize * 1.4)),
+        )
     );
   }
 }
