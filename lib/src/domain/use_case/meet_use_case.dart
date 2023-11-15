@@ -28,7 +28,7 @@ class MeetUseCase {
   }
 
   Future<List<MeetTeam>> getMyTeams() async {
-    return _meetRepository.getMyTeams();
+    return await _meetRepository.getMyTeams();
   }
 
   Future<void> removeTeam(String teamId) async {
