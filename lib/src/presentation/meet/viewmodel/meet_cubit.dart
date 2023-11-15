@@ -44,11 +44,6 @@ class MeetCubit extends Cubit<MeetState> {
     state.setIsLoading(true);
     emit(state.copy());
 
-    state.setIsLoading(false);
-    emit(state.copy());
-    state.setIsLoading(true);
-    emit(state.copy());
-
     User userResponse = await _userUseCase.myInfo();
     state.setMyInfo(userResponse);
     // print('initMeet : userResponse ok | $userResponse');
