@@ -244,7 +244,8 @@ class _MeetCreateTeamInputState extends State<MeetCreateTeamInput> {
                                     SizedBox(height: SizeConfig.defaultSize),
                                   MeetCreateCardviewNovote(
                                       userResponse: BlindDateUserDetail(id: state.userResponse.personalInfo?.id ?? 0, name: (state.userResponse.personalInfo?.nickname=='DEFAULT' ? state.userResponse.personalInfo?.name : state.userResponse.personalInfo?.nickname) ?? '(알수없음)', profileImageUrl: state.userResponse.personalInfo?.profileImageUrl ?? 'DEFAULT', department: state.userResponse.university?.department ?? '(알수없음)', isCertifiedUser: (state.userResponse.personalInfo?.verification.isVerificationSuccess ?? false) ? true : false, birthYear: state.userResponse.personalInfo?.birthYear ?? 0, profileQuestionResponses: state.userResponse.titleVotes),
-                                      university: state.userResponse.university?.name ?? '(알수없음)'
+                                      university: state.userResponse.university?.name ?? '(알수없음)',
+                                      isProfileImageCached: false,
                                   ),
                                     SizedBox(height: SizeConfig.defaultSize),
                                   // 친구1
@@ -898,26 +899,43 @@ class _MemberCardViewNoVoteState extends State<MemberCardViewNoVote> {
                       });
                       _pickImage();
                     },
-                    child: ClipOval(
-                      clipBehavior: Clip.antiAlias,
-                      child: Container(
-                          child: isSelectImage
-                              ? ClipOval(
-                              child: Image.file( // 이미지 파일에서 고르는 코드
-                                _selectedImage!,
-                                fit: BoxFit.cover,
-                                width: SizeConfig.defaultSize * 9,
-                                height: SizeConfig.defaultSize * 9,
-                              ))
-                              : ClipOval(
-                            child: Container(
-                            color: Colors.grey.shade200,
-                              width: SizeConfig.defaultSize * 9,
-                              height: SizeConfig.defaultSize * 9,
-                              alignment: Alignment.center,
-                              child: const Icon(Icons.add_rounded),
+                    child: Container(
+                      child: Stack(
+                          children: [
+                            ClipOval(
+                              clipBehavior: Clip.antiAlias,
+                                child: isSelectImage
+                                    ? Image.file( // 이미지 파일에서 고르는 코드
+                                  _selectedImage!,
+                                  fit: BoxFit.cover,
+                                  width: SizeConfig.defaultSize * 9,
+                                  height: SizeConfig.defaultSize * 9,
+                                )
+                                    : Container(
+                                  // color: Colors.grey.shade200,
+                                  width: SizeConfig.defaultSize * 9,
+                                  height: SizeConfig.defaultSize * 9,
+                                  alignment: Alignment.center,
+                                  child: Image.asset('assets/images/profile-mockup3.png', width: SizeConfig.defaultSize * 9, fit: BoxFit.cover,),
+                                )
                             ),
-                          )
+                            Positioned(
+                              bottom: SizeConfig.defaultSize * 0.2,
+                              right: SizeConfig.defaultSize * 0.2,
+                              child: Container(
+                                width: SizeConfig.defaultSize * 2.7,
+                                height: SizeConfig.defaultSize * 2.7,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(15),
+                                  color: Colors.grey[100],
+                                ),
+                                child: Icon(
+                                  Icons.camera_alt_rounded,
+                                  size: SizeConfig.defaultSize * 2.4,
+                                ),
+                              ),
+                            ),
+                        ],
                       ),
                     ),
                   ),
@@ -1373,16 +1391,18 @@ class _CreateTeamBottomSectionState extends State<_CreateTeamBottomSection> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
-                              Text(
-                                widget.locations.isEmpty
-                                  ? "선택해주세요"
-                                  : widget.locations.map((city) => city.name).join(', '),
-                                style: TextStyle(
-                                  fontSize: SizeConfig.defaultSize * 1.6,
-                                  color: Colors.black,
-                                  overflow: TextOverflow.ellipsis,
+                              Expanded(
+                                child: Text(
+                                  widget.locations.isEmpty
+                                    ? "선택해주세요"
+                                    : widget.locations.map((city) => city.name).join(', '),
+                                  style: TextStyle(
+                                    fontSize: SizeConfig.defaultSize * 1.6,
+                                    color: Colors.black,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                  textAlign: TextAlign.right,
                                 ),
-                                textAlign: TextAlign.right,
                               ),
                               const Text(" "),
                               Icon(Icons.edit_rounded, color: const Color(0xffFE6059), size: SizeConfig.defaultSize * 1.8)

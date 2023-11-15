@@ -1,12 +1,9 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dart_flutter/src/common/util/toast_util.dart';
-import 'package:dart_flutter/src/data/custom_cache_manager.dart';
 import 'package:dart_flutter/src/domain/entity/blind_date_team.dart';
 import 'package:dart_flutter/src/presentation/component/cached_profile_image.dart';
 import 'package:dart_flutter/src/presentation/meet/view/meet_other_team_detail.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import '../../../res/config/size_config.dart';
 import '../../common/util/analytics_util.dart';
 import '../meet/viewmodel/meet_cubit.dart';
@@ -43,7 +40,7 @@ class MeetOneTeamCardview extends StatelessWidget {
               context,
               MaterialPageRoute(
                 builder: (context) => BlocProvider<MeetCubit>(
-                  create: (_) => MeetCubit(),
+                  create: (_) => MeetCubit()..initProposalCount(),
                   child: MeetOtherTeamDetail(teamId: team.id, myTeamId: myTeamId,),
                 ),
               ),

@@ -29,6 +29,7 @@ class _SurveyDetailViewState extends State<SurveyDetailView> {
   final FocusNode _focusNode = FocusNode();
   double marginHorizontal = SizeConfig.defaultSize * 2.5;
   Color mainColor = const Color(0xffFE6059);
+  Color disabledColor = Colors.grey;
   Color backgroundColor = const Color(0xffFFFAF9);
   String myComment = '';
   List<Comment> comments = [];
@@ -204,7 +205,7 @@ class _SurveyDetailViewState extends State<SurveyDetailView> {
                           _refreshComments();
                           isLoading = false;
                         },
-                        icon: Icon(Icons.send_rounded, color: mainColor,)
+                        icon: Icon(Icons.send_rounded, color: isLoading ? disabledColor : mainColor,)
                     )
                   ],
                 ),

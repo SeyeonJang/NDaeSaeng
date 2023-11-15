@@ -13,7 +13,7 @@ class FeedUseCase {
   }
 
   Future<SurveyDetail> getSurvey(int id) async {
-    return _surveyRepository.getSurvey(id);
+    return await _surveyRepository.getSurvey(id);
   }
 
   Future<void> postOption(int surveyId, int optionId) async {
@@ -21,7 +21,7 @@ class FeedUseCase {
   }
 
   Future<void> postComment(int surveyId, String content) async {
-    _surveyRepository.postComment(surveyId, content);
+    await _surveyRepository.postComment(surveyId, content);
   }
 
   Future<void> deleteComment(int surveyId, int commentId) async {

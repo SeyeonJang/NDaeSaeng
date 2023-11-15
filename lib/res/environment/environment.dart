@@ -8,4 +8,6 @@ abstract class Environment {
   String getSupabaseApiKey();
   String getAppsflyerApiKey();
   String getAppsflyerAppId();
+  String getAdmobRewardAos();
+  String getAdmobRewardIos();
 }

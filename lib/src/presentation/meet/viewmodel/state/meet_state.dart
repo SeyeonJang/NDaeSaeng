@@ -36,6 +36,13 @@ class MeetState {
   late List<University> universities;
   late File profileImageFile;
 
+  late int leftProposalCount;
+  late DateTime lastAdmobTime;
+
+  void setLastAdmobTime(DateTime dateTime) {
+    lastAdmobTime = dateTime;
+  }
+
   MeetState ({
     required this.meetPageState,
     required this.serverLocations,
@@ -58,7 +65,9 @@ class MeetState {
     required this.pickedTeam,
     required this.proposalStatus,
     required this.universities,
-    required this.profileImageFile
+    required this.profileImageFile,
+    required this.leftProposalCount,
+    required this.lastAdmobTime,
   });
 
   MeetState.init() { // 초기값 설정
@@ -90,6 +99,8 @@ class MeetState {
       University(id: 0, name: '', department: '')
     ];
     profileImageFile = File('');
+    leftProposalCount = 0;
+    lastAdmobTime = DateTime.now();
   }
 
   MeetState copy() => MeetState(
@@ -114,7 +125,9 @@ class MeetState {
     pickedTeam: pickedTeam,
     proposalStatus: proposalStatus,
     universities: universities,
-    profileImageFile: profileImageFile
+    profileImageFile: profileImageFile,
+    leftProposalCount: leftProposalCount,
+    lastAdmobTime: lastAdmobTime,
   );
 
   void setAll(MeetState state) {
@@ -139,6 +152,8 @@ class MeetState {
       proposalStatus = state.proposalStatus;
       universities = state.universities;
       profileImageFile = state.profileImageFile;
+      leftProposalCount = state.leftProposalCount;
+      lastAdmobTime = state.lastAdmobTime;
   }
 
   MeetState setProposalStatus(bool proposalStatus) {

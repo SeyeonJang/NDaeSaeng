@@ -3,6 +3,7 @@ import 'package:dart_flutter/src/domain/entity/option.dart';
 class Survey {
   final int id;
   final String question;
+  final String category;
   final List<Option> options;
   final bool picked;
   final int pickedOption;
@@ -12,6 +13,7 @@ class Survey {
   Survey(
       {required this.id,
       required this.question,
+        required this. category,
       required this.options,
       required this.picked,
       required this.pickedOption,
@@ -21,6 +23,7 @@ class Survey {
   factory Survey.fromJson(Map<String, dynamic> json) {
     final int parsedId = json['id'];
     final String parsedQuestion = json['question'];
+    final String parsedCategory = json['category'];
 
     List<Option> parsedOptions = [];
     if (json['options'] != null) {
@@ -36,6 +39,7 @@ class Survey {
     return Survey(
         id: parsedId,
         question: parsedQuestion,
+        category: parsedCategory,
         options: parsedOptions,
         picked: parsedPicked,
         pickedOption: parsedPickedOption,
@@ -47,6 +51,7 @@ class Survey {
     final Map<String, dynamic> data = Map<String, dynamic>();
     data['id'] = id;
     data['question'] = question;
+    data['category'] = category;
     data['options'] = options;
     data['picked'] = picked;
     data['pickedOption'] = pickedOption;
@@ -57,7 +62,7 @@ class Survey {
 
   @override
   String toString() {
-    return 'Survey{id: $id, question: $question, options: $options, picked: $picked, pickedOption: $pickedOption, createdAt: $createdAt, latestComment: $latestComment}';
+    return 'Survey{id: $id, question: $question, category: $category, options: $options, picked: $picked, pickedOption: $pickedOption, createdAt: $createdAt, latestComment: $latestComment}';
   }
 
   bool isPicked() {
@@ -71,6 +76,7 @@ class Survey {
   Survey copyWith({
     int? id,
     String? question,
+    String? category,
     List<Option>? options,
     bool? picked,
     int? pickedOption,
@@ -80,6 +86,7 @@ class Survey {
     return Survey(
         id: id ?? this.id,
         question: question ?? this.question,
+        category: category ?? this.category,
         options: options ?? this.options,
         picked: picked ?? this.picked,
         pickedOption: pickedOption ?? this.pickedOption,
