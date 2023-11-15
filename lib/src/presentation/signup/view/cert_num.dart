@@ -1,5 +1,4 @@
-import 'package:dart_flutter/src/presentation/signup/view/tos1.dart';
-import 'package:dart_flutter/src/presentation/signup/view/tos2.dart';
+import 'package:dart_flutter/src/presentation/component/webview_fullscreen.dart';
 import 'package:dart_flutter/src/presentation/signup/viewmodel/signup_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -54,14 +53,14 @@ class CertNum extends StatelessWidget {
                 children: [
                   TextButton(
                     onPressed: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (_) => Tos1()));
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => WebViewFullScreen(url: "https://swye0n.tistory.com/14", title: "이용약관")));
                     },
                     child: Text("이용약관", style: TextStyle(fontSize: 14)),
                   ),
                   Text("및"),
                   TextButton(
                     onPressed: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (_) => Tos2()));
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => WebViewFullScreen(url: "https://swye0n.tistory.com/9", title: "개인정보 처리방침")));
                     },
                     child: Text("개인정보 처리방침", style: TextStyle(fontSize: 14)),
                   ),

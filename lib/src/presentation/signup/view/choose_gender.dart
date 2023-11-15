@@ -1,9 +1,8 @@
 import 'package:dart_flutter/src/common/util/analytics_util.dart';
+import 'package:dart_flutter/src/presentation/component/webview_fullscreen.dart';
 
 import '../../../../res/config/size_config.dart';
 import 'package:dart_flutter/src/common/auth/dart_auth_cubit.dart';
-import 'package:dart_flutter/src/presentation/signup/view/tos1.dart';
-import 'package:dart_flutter/src/presentation/signup/view/tos2.dart';
 import 'package:dart_flutter/src/presentation/signup/viewmodel/signup_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -102,7 +101,7 @@ class _ChooseGenderState extends State<ChooseGender> {
                     TextButton(
                       onPressed: () {
                         AnalyticsUtil.logEvent("회원가입_성별_이용약관");
-                        Navigator.push(context, MaterialPageRoute(builder: (_) => const Tos1()));
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => WebViewFullScreen(url: "https://swye0n.tistory.com/14", title: "이용약관")));
                       },
                       style: TextButton.styleFrom(
                         minimumSize: Size.zero,
@@ -115,7 +114,7 @@ class _ChooseGenderState extends State<ChooseGender> {
                     TextButton(
                       onPressed: () {
                         AnalyticsUtil.logEvent("회원가입_성별_개인정보");
-                        Navigator.push(context, MaterialPageRoute(builder: (_) => const Tos2()));
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => WebViewFullScreen(url: "https://swye0n.tistory.com/9", title: "개인정보 처리방침")));
                       },
                       style: TextButton.styleFrom(
                         minimumSize: Size.zero,

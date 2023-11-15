@@ -848,7 +848,7 @@ class _MyPageViewState extends State<MyPageView> {
                       TextButton(
                         onPressed: () {
                           AnalyticsUtil.logEvent("내정보_설정_이용약관");
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => const MyTos1()));
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => WebViewFullScreen(url: "https://swye0n.tistory.com/14", title: "이용약관")));
                         },
                         child: Text("이용약관",
                             style: TextStyle(fontSize: SizeConfig.defaultSize * 1.4, color: Colors.grey),
@@ -857,7 +857,7 @@ class _MyPageViewState extends State<MyPageView> {
                       TextButton(
                         onPressed: () {
                           AnalyticsUtil.logEvent("내정보_설정_개인정보처리방침");
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => const MyTos2()));
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => WebViewFullScreen(url: "https://swye0n.tistory.com/9", title: "개인정보 처리방침")));
                         },
                         child: Text("개인정보 처리방침",
                             style: TextStyle(fontSize: SizeConfig.defaultSize * 1.4, color: Colors.grey)),
