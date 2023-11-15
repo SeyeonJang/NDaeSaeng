@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:dart_flutter/src/common/util/in_app_review_util.dart';
 import 'package:dart_flutter/src/common/util/toast_util.dart';
 import 'package:dart_flutter/src/domain/use_case/banner_use_case.dart';
+import 'package:dart_flutter/src/domain/use_case/proposal_use_case.dart';
 import 'package:dart_flutter/src/presentation/meet/viewmodel/meet_board_counter.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
@@ -30,6 +31,7 @@ class MeetCubit extends Cubit<MeetState> {
   static final UniversityUseCase _universityUseCase = UniversityUseCase();
   static final GhostUseCase _ghostUseCase = GhostUseCase();
   static final BannerUseCase _bannerUseCase = BannerUseCase();
+  static final ProposalUseCase _proposalUseCase = ProposalUseCase();
   bool _initialized = false;
 
   // pagination
@@ -39,11 +41,6 @@ class MeetCubit extends Cubit<MeetState> {
   final PagingController<int, BlindDateTeam> pagingControllerSeen = PagingController(firstPageKey: 0);
 
   void initMeet({MeetTeam? initPickedTeam}) async {
-    state.setIsLoading(true);
-    emit(state.copy());
-
-    state.setIsLoading(false);
-    emit(state.copy());
     state.setIsLoading(true);
     emit(state.copy());
 
@@ -75,6 +72,17 @@ class MeetCubit extends Cubit<MeetState> {
     }
     if (initPickedTeam != null) setPickedTeam(initPickedTeam);
     // print('initMeet : setPickedTeam ok | ${state.myTeams[0]}');
+
+    // 일 호감 보내기 제한 (애드몹 관련)
+    DateTime now = DateTime.now();
+    DateTime today = DateTime(now.year, now.month, now.day, 0, 0); // 시간을 00:00으로 설정
+
+    if (_proposalUseCase.getLastUpdateDate().isBefore(today)) {
+      print("오늘의 호감 충전 로직");
+      await _proposalUseCase.setDailyProposal();  // 하트 충전
+    }
+    getLastAdMobDate();
+    state.leftProposalCount = _proposalUseCase.getLeftProposal();
 
     state.setIsLoading(false);
     emit(state.copy());
@@ -223,8 +231,37 @@ class MeetCubit extends Cubit<MeetState> {
   void postProposal(int requestingTeamId, int requestedTeamId) async {
     ProposalRequestDto newProposal = ProposalRequestDto(requestingTeamId: requestingTeamId, requestedTeamId: requestedTeamId);
     _meetUseCase.postProposal(newProposal);
+    _proposalUseCase.subOneProposal();  // 하트 1개 차감
     state.setProposalStatus(false);
     emit(state.copy());
+  }
+
+  void initProposalCount() {
+    state.setIsLoading(true);
+    state.copy();
+
+    getLeftProposal();
+    getLastAdMobDate();
+
+    state.setIsLoading(false);
+    state.copy();
+  }
+
+  int getLeftProposal() {
+    state.leftProposalCount = _proposalUseCase.getLeftProposal();
+    emit(state.copy());
+    return state.leftProposalCount;
+  }
+
+  DateTime getLastAdMobDate() {
+    state.setLastAdmobTime(_proposalUseCase.getLastAdmobDate());
+    emit(state.copy());
+    return state.lastAdmobTime;
+  }
+
+  Future<void> setLastAdMobDate(DateTime dateTime) async {
+    await _proposalUseCase.setLastAdMobDate(dateTime);
+    getLastAdMobDate();
   }
 
   // =================================================================

@@ -3,13 +3,13 @@ import 'package:dart_flutter/src/domain/entity/university.dart';
 import 'package:dart_flutter/src/domain/repository/university_repository.dart';
 
 class UniversityUseCase {
-  final UniversityRepository _dartUniversityRepository = DartUniversityRepositoryImpl();
+  final UniversityRepository _dartUniversityRepository = LocalUniversityRepositoryImpl();
 
-  Future<List<University>> getUniversities() {
-    return _dartUniversityRepository.getUniversities();
+  Future<List<University>> getUniversities() async {
+    return await _dartUniversityRepository.getUniversities();
   }
 
-  Future<List<University>> getUniversityByName(String name) {
-    return _dartUniversityRepository.getUniversitiesByName(name);
+  Future<List<University>> getUniversityByName(String name) async {
+    return await _dartUniversityRepository.getUniversitiesByName(name);
   }
 }

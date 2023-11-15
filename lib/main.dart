@@ -7,6 +7,7 @@ import 'package:dart_flutter/src/common/util/analytics_util.dart';
 import 'package:dart_flutter/src/common/util/appsflyer_util.dart';
 import 'package:dart_flutter/src/common/util/crashlytics_util.dart';
 import 'package:dart_flutter/src/common/util/push_notification_util.dart';
+import 'package:dart_flutter/src/common/util/shared_preferences_util.dart';
 import 'package:dart_flutter/src/common/util/timeago_util.dart';
 import 'package:dart_flutter/src/common/util/toast_util.dart';
 import 'package:dart_flutter/src/presentation/landing/land_pages.dart';
@@ -21,6 +22,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'firebase_options.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 // 랜딩페이지
 void main() async {
@@ -43,6 +45,8 @@ void main() async {
   AppsflyerUtil.init();
   if (AppEnvironment.buildType.isProd) { await CrashlyticsUtil.init(enabled: true);}
   else {await CrashlyticsUtil.init();}
+  await MobileAds.instance.initialize();
+  await SharedPreferencesUtil.init();
 
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
     statusBarColor: Colors.white,
