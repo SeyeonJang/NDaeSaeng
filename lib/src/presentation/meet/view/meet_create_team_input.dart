@@ -898,26 +898,43 @@ class _MemberCardViewNoVoteState extends State<MemberCardViewNoVote> {
                       });
                       _pickImage();
                     },
-                    child: ClipOval(
-                      clipBehavior: Clip.antiAlias,
-                      child: Container(
-                          child: isSelectImage
-                              ? ClipOval(
-                              child: Image.file( // 이미지 파일에서 고르는 코드
-                                _selectedImage!,
-                                fit: BoxFit.cover,
-                                width: SizeConfig.defaultSize * 9,
-                                height: SizeConfig.defaultSize * 9,
-                              ))
-                              : ClipOval(
-                            child: Container(
-                            color: Colors.grey.shade200,
-                              width: SizeConfig.defaultSize * 9,
-                              height: SizeConfig.defaultSize * 9,
-                              alignment: Alignment.center,
-                              child: const Icon(Icons.add_rounded),
+                    child: Container(
+                      child: Stack(
+                          children: [
+                            ClipOval(
+                              clipBehavior: Clip.antiAlias,
+                                child: isSelectImage
+                                    ? Image.file( // 이미지 파일에서 고르는 코드
+                                  _selectedImage!,
+                                  fit: BoxFit.cover,
+                                  width: SizeConfig.defaultSize * 9,
+                                  height: SizeConfig.defaultSize * 9,
+                                )
+                                    : Container(
+                                  // color: Colors.grey.shade200,
+                                  width: SizeConfig.defaultSize * 9,
+                                  height: SizeConfig.defaultSize * 9,
+                                  alignment: Alignment.center,
+                                  child: Image.asset('assets/images/profile-mockup3.png', width: SizeConfig.defaultSize * 9, fit: BoxFit.cover,),
+                                )
                             ),
-                          )
+                            Positioned(
+                              bottom: SizeConfig.defaultSize * 0.2,
+                              right: SizeConfig.defaultSize * 0.2,
+                              child: Container(
+                                width: SizeConfig.defaultSize * 2.7,
+                                height: SizeConfig.defaultSize * 2.7,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(15),
+                                  color: Colors.grey[100],
+                                ),
+                                child: Icon(
+                                  Icons.camera_alt_rounded,
+                                  size: SizeConfig.defaultSize * 2.4,
+                                ),
+                              ),
+                            ),
+                        ],
                       ),
                     ),
                   ),
