@@ -3,9 +3,7 @@ import 'package:dart_flutter/src/domain/entity/blind_date_team_detail.dart';
 import 'package:dart_flutter/src/presentation/component/meet_one_member_cardview_novote.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
 import '../../../../res/config/size_config.dart';
-import '../../../common/admob/ad_helper.dart';
 import '../../../common/util/toast_util.dart';
 import '../../../domain/mapper/student_mapper.dart';
 import '../viewmodel/meet_cubit.dart';
@@ -22,58 +20,13 @@ class MeetOtherTeamDetail extends StatefulWidget {
 }
 
 class _MeetOtherTeamDetailState extends State<MeetOtherTeamDetail> {
-  bool _isAdmobInit = false;
-  RewardedAd? _rewardedAd;
-
-  void _loadRewardedAd() {
-    RewardedAd.load(
-      adUnitId: AdHelper.rewardedAdUnitId,
-      request: AdRequest(),
-      rewardedAdLoadCallback: RewardedAdLoadCallback(
-        onAdLoaded: (ad) {
-          ad.fullScreenContentCallback = FullScreenContentCallback(
-            onAdDismissedFullScreenContent: (ad) {
-              setState(() {
-                ad.dispose();
-                _rewardedAd = null;
-                _isAdmobInit = true;
-              });
-              _loadRewardedAd();
-            },
-          );
-
-          setState(() {
-            _rewardedAd = ad;
-            _isAdmobInit = true;
-          });
-        },
-        onAdFailedToLoad: (err) {
-          print('Failed to load a rewarded ad: ${err.message}');
-        },
-      ),
-    );
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _loadRewardedAd();
-  }
-
   @override
   Widget build(BuildContext context) {
-    // admob 광고 로딩 중
-    if (!_isAdmobInit) {
-      return const _teamLoadingProgress();
-    }
-
     // 팀 상세페이지 조회
     return BlocBuilder<MeetCubit, MeetState>(
       builder: (context, state) {
         final int leftProposal = state.leftProposalCount;
         final bool canSendProposal = leftProposal > 0;
-        final DateTime lastAdmobTime = state.lastAdmobTime;
-        final bool canAdMob = lastAdmobTime.isBefore(DateTime.now().subtract(const Duration(minutes: 1)));  // 마지막 광고보고 1분이 지낫을때만
 
         return FutureBuilder<BlindDateTeamDetail>(
           future: context.read<MeetCubit>().getBlindDateTeam(widget.teamId),
@@ -121,33 +74,6 @@ class _MeetOtherTeamDetailState extends State<MeetOtherTeamDetail> {
                     padding: EdgeInsets.all(SizeConfig.defaultSize * 1.5),
                     child: Column(
                       children: [
-                        // Container(
-                        //   width: SizeConfig.screenWidth,
-                        //   height: SizeConfig.defaultSize * 5.5,
-                        //   decoration: BoxDecoration(
-                        //       color: Colors.white,
-                        //       borderRadius: BorderRadius.circular(10),
-                        //       border: Border.all(
-                        //           color: Colors.grey.shade200,
-                        //           width: 2
-                        //       )
-                        //   ),
-                        //   child: Padding(
-                        //     padding: EdgeInsets.only(left: SizeConfig.defaultSize * 2, right: SizeConfig.defaultSize * 1.5),
-                        //     child: Row(
-                        //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        //       children: [
-                        //         Text("우리 팀 이름", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.8),),  // TODO : 팀 이름
-                        //         Row(
-                        //           children: [
-                        //             Text("팀 바꾸기"),
-                        //             Icon(Icons.expand_more_rounded, color: Colors.grey,)
-                        //           ],
-                        //         )
-                        //       ],
-                        //     ),
-                        //   ),
-                        // ),
                         SizedBox(height: SizeConfig.defaultSize,),
 
                         state.proposalStatus == false || blindDateTeamDetail.proposalStatus == true
@@ -168,24 +94,6 @@ class _MeetOtherTeamDetailState extends State<MeetOtherTeamDetail> {
                                       fontWeight: FontWeight.w600,
                                       color: Colors.white
                                   ),)
-
-                                // TODO : 포인트 제도 생겼을 때 위 Text 지우고 아래 복구
-                                // child: Row(
-                                //   mainAxisAlignment: MainAxisAlignment.center,
-                                //   children: [
-                                //     Text("2000", style: TextStyle(
-                                //         decoration: TextDecoration.lineThrough,
-                                //         fontSize: SizeConfig.defaultSize * 1.5,
-                                //         fontWeight: FontWeight.w400,
-                                //         color: Colors.white
-                                //     ),),
-                                //     Text(" 500 포인트로 대화 시작하기", style: TextStyle(
-                                //         fontSize: SizeConfig.defaultSize * 2,
-                                //         fontWeight: FontWeight.w600,
-                                //         color: Colors.white
-                                //     ),),
-                                //   ],
-                                // ),
                               ),
                             ),
                           )
@@ -240,36 +148,6 @@ class _MeetOtherTeamDetailState extends State<MeetOtherTeamDetail> {
                                                 ),),
                                               ],
                                             )
-
-                                            // TODO : 포인트 제도 재개 시 복구하기
-                                            // Column(
-                                            //   children: [
-                                            //     Text("팀원 중 신청하는 사람의 포인트가 소모돼요!", style: TextStyle(
-                                            //       fontSize: SizeConfig.defaultSize * 1.5,
-                                            //       fontWeight: FontWeight.w500,
-                                            //       color: Colors.black,
-                                            //     ),),
-                                            //     Text("한 번 사용한 포인트는 되돌릴 수 없어요!", style: TextStyle(
-                                            //       fontSize: SizeConfig.defaultSize * 1.5,
-                                            //       fontWeight: FontWeight.w500,
-                                            //       color: Colors.black,
-                                            //     ),),
-                                            //   ],
-                                            // ),
-                                            // Column(
-                                            //   children: [
-                                            //     Text("현재 내 포인트 : 00000 포인트", style: TextStyle(
-                                            //       fontSize: SizeConfig.defaultSize * 1.5,
-                                            //       fontWeight: FontWeight.w500,
-                                            //       color: Colors.grey,
-                                            //     ),),
-                                            //     Text("현재 설정된 내 팀 : 아아아아아아아아 팀", style: TextStyle(
-                                            //       fontSize: SizeConfig.defaultSize * 1.5,
-                                            //       fontWeight: FontWeight.w500,
-                                            //       color: Colors.grey,
-                                            //     ),),
-                                            //   ],
-                                            // )
                                           ],
                                         ),
                                       )),
@@ -299,37 +177,6 @@ class _MeetOtherTeamDetailState extends State<MeetOtherTeamDetail> {
                                             AnalyticsUtil.logEvent('과팅_목록_이성팀상세보기_호감보내기_보내기');
                                             Navigator.pop(modalContext, true);
 
-                                            if (!canSendProposal) {
-                                              if (!canAdMob) {
-                                                print("아직 광고를 볼 수 없습니다.");
-                                                return;
-                                              }
-                                              // 광고보고 호감 보내기 선택
-                                              AnalyticsUtil.logEvent('과팅_목록_이성팀상세보기_호감보내기_리워드광고시청');
-                                              _rewardedAd?.show(
-                                                onUserEarnedReward: (_, reward) {
-                                                  context.read<MeetCubit>().postProposal(
-                                                      widget.myTeamId, blindDateTeamDetail.id);
-                                                  context.read<MeetCubit>().setLastAdMobDate(DateTime.now());
-
-                                                  showDialog<String>(
-                                                      context: modalContext,
-                                                      builder: (BuildContext dialogContext) {
-                                                        return GestureDetector(
-                                                          onTap: () {
-                                                            Navigator.pop(dialogContext);
-                                                          },
-                                                          child: AlertDialog(
-                                                            surfaceTintColor: Colors.white,
-                                                            title: Container(alignment: Alignment.center, child: Text('내 호감이 성공적으로 전달됐어요!', style: TextStyle(fontSize: SizeConfig.defaultSize * 1.5, fontWeight: FontWeight.w600, color: const Color(0xffFF5C58)),)),
-                                                            content: Container(alignment: Alignment.center, height: SizeConfig.defaultSize * 4, child: const Text('곧 상대의 채팅 수락 결과를 알려드릴게요!',)),
-                                                          ),
-                                                        );
-                                                      }
-                                                  );
-                                                },
-                                              );
-                                            } else {
                                               context.read<MeetCubit>().postProposal(
                                                   widget.myTeamId, blindDateTeamDetail.id);
 
@@ -346,7 +193,6 @@ class _MeetOtherTeamDetailState extends State<MeetOtherTeamDetail> {
                                                     );
                                                   }
                                               );
-                                            }
                                           },
                                           child: Container(
                                             height: SizeConfig.defaultSize * 4.5,
@@ -355,16 +201,10 @@ class _MeetOtherTeamDetailState extends State<MeetOtherTeamDetail> {
                                               borderRadius: BorderRadius.circular(10),
                                               color: canSendProposal
                                                   ? Color(0xffFF5C58)
-                                                  : canAdMob
-                                                  ? Color(0xffFF5C58)
                                                   : Colors.grey,
                                             ),
                                             child: Center(child: Text(
-                                              canSendProposal
-                                                  ? "남은 호감 수: $leftProposal"
-                                                  : canAdMob
-                                                  ? "광고보고 호감보내기"
-                                                  : "1분 뒤에 보낼수 있어요!", style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600),)),
+                                              "남은 호감 수: $leftProposal", style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600),)),
                                           ),
                                         )
 
@@ -387,24 +227,6 @@ class _MeetOtherTeamDetailState extends State<MeetOtherTeamDetail> {
                                 fontWeight: FontWeight.w600,
                                 color: Colors.white
                               ),)
-
-                                // TODO : 포인트 제도 생겼을 때 위 Text 지우고 아래 복구
-                                // child: Row(
-                                //   mainAxisAlignment: MainAxisAlignment.center,
-                                //   children: [
-                                //     Text("2000", style: TextStyle(
-                                //         decoration: TextDecoration.lineThrough,
-                                //         fontSize: SizeConfig.defaultSize * 1.5,
-                                //         fontWeight: FontWeight.w400,
-                                //         color: Colors.white
-                                //     ),),
-                                //     Text(" 500 포인트로 대화 시작하기", style: TextStyle(
-                                //         fontSize: SizeConfig.defaultSize * 2,
-                                //         fontWeight: FontWeight.w600,
-                                //         color: Colors.white
-                                //     ),),
-                                //   ],
-                                // ),
                             ),
                           ),
                         ),
