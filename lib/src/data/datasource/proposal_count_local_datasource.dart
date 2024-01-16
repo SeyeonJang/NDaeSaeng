@@ -7,7 +7,7 @@ class ProposalCountLocalDatasource {
   static const KEY_LAST_UPDATE_DATE = "last_update_date";
   static const KEY_LAST_ADMOB_DATE = "last_admob_date";
   static const ADMOB_INTERVAL = 60;
-  static const MAX_PROPOSAL = 3;
+  static const MAX_PROPOSAL = 2;
 
   static int getLeftProposal() {
     return prefs.getInt(KEY_PROPOSAL_COUNT) ?? 0;

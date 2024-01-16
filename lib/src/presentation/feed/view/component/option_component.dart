@@ -80,9 +80,11 @@ class _OptionComponentState extends State<OptionComponent> {
                   ),
                   Padding(
                     padding: EdgeInsets.only(right: SizeConfig.defaultSize * 1.2),
-                    child: Text('${(widget.percent*100).toStringAsFixed(0)}%', style: TextStyle(
-                      color: widget.isMost ? mainColor : Colors.grey
-                    ),),
+                    child: Text('${(widget.percent*100).toStringAsFixed(1)}%', style: TextStyle(
+                      color: widget.isMost ? mainColor : Colors.grey,
+                      fontSize: 11
+                    ),
+                    ),
                   )
                 ],
               ),
