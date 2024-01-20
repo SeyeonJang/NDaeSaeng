@@ -174,6 +174,9 @@ class _MeetOtherTeamDetailState extends State<MeetOtherTeamDetail> {
                                           SizedBox(width: SizeConfig.defaultSize,),
                                         GestureDetector(
                                           onTap: () {
+                                            if (!canSendProposal) {
+                                              return;
+                                            }
                                             AnalyticsUtil.logEvent('과팅_목록_이성팀상세보기_호감보내기_보내기');
                                             Navigator.pop(modalContext, true);
 

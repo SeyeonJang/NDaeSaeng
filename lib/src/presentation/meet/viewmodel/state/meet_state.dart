@@ -37,6 +37,8 @@ class MeetState {
   late File profileImageFile;
 
   late int leftProposalCount;
+
+  @Deprecated("애드몹 제거로 인해 사용하지 않음")
   late DateTime lastAdmobTime;
 
   void setLastAdmobTime(DateTime dateTime) {
