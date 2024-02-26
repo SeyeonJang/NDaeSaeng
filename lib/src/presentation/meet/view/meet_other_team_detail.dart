@@ -319,7 +319,7 @@ class _TopBarSection extends StatelessWidget {
                         AnalyticsUtil.logEvent('과팅_목록_이성팀상세보기_더보기_신고하기_버튼터치');
                         showDialog<String>(
                           context: context,
-                          builder: (BuildContext context) => AlertDialog(
+                          builder: (BuildContext dialogContext) => AlertDialog(
                             title: const Text('팀을 신고하시겠어요?'),
                             content: const Text('팀을 신고하면 엔대생에서 빠르게 신고 처리를 해드려요!'),
                             backgroundColor: Colors.white,
@@ -327,7 +327,7 @@ class _TopBarSection extends StatelessWidget {
                             actions: <Widget>[
                               TextButton(
                                 onPressed: () {
-                                  Navigator.pop(context, '취소');
+                                  Navigator.pop(dialogContext, '취소');
                                   AnalyticsUtil.logEvent('과팅_목록_이성팀상세보기_더보기_신고하기_취소');
                                 },
                                 child: const Text('취소', style: TextStyle(color: Color(0xffFE6059)),),
@@ -337,7 +337,8 @@ class _TopBarSection extends StatelessWidget {
                                   AnalyticsUtil.logEvent('과팅_목록_이성팀상세보기_더보기_신고하기_신고확정', properties: {
                                     '신고한 팀 ID' : team.id
                                   }),
-                                  Navigator.pop(context, '신고'),
+                                  Navigator.pop(dialogContext, '신고'),
+                                  Navigator.pop(context, '신고'),  // 과팅 목록 페이지로 이동
                                   ToastUtil.showMeetToast("사용자가 신고되었어요!", 1),
                                   // TODO : 신고 기능 (서버 연결)
                                 },
