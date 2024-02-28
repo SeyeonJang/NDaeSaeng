@@ -1095,7 +1095,7 @@ class _BodySectionState extends State<_BodySection> {
                             return Column(
                               children: [
                                 SizedBox(height: SizeConfig.defaultSize * 0.9,),
-                                MeetOneTeamCardview(team: blindDateTeam, isMyTeam: false, myTeamCount: widget.meetState.myTeams.length, myTeamId: nowTeam.id,)
+                                MeetOneTeamCardview(team: blindDateTeam, isMyTeam: false, myTeamCount: widget.meetState.myTeams.length, myTeamId: nowTeam.id, visible: true,)
                               ]);
                           },
                           ),

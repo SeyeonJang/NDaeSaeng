@@ -35,12 +35,12 @@ import 'package:dart_flutter/src/common/util/analytics_util.dart';
       super.key,
     });
 
-    static final List<String> items = ['--', '23', '22', '21', '20', '19', '18', '17', '16', '15', '14', '13', '12', '11', '10'];
+    // static final List<String> items = ['--', '24', '23', '22', '21', '20', '19', '18', '17', '16', '15', '14', '13', '12', '11', '10'];
     static final adminNumItems = [ // 학번
-      '--','23','22','21','20','19','18','17','16','15'
+      '--','24','23','22','21','20','19','18','17','16','15'
     ];
     static final ageItems = [ // 나이
-      '--','04','03','02','01','00','99','98','97','96','95'
+      '--','05','04','03','02','01','00','99','98','97','96','95'
     ];
     static int adminIndex = 0;
     static int ageIndex = 0;

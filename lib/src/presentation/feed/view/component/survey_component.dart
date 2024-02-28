@@ -98,7 +98,7 @@ class _SurveyComponentState extends State<SurveyComponent> {
 
     return Container(
       width: SizeConfig.screenWidth,
-      height: SizeConfig.defaultSize * 30,
+      height: SizeConfig.defaultSize * 25,
       clipBehavior: Clip.antiAlias,
       decoration: BoxDecoration(
           color: Colors.white,
@@ -149,6 +149,8 @@ class _SurveyComponentState extends State<SurveyComponent> {
             ),
           ),
 
+          /*
+          // 애플 정책(UGC)에 따른 댓글(상세페이지) 페이지 제거
           GestureDetector(
             onTap: () async {
               AnalyticsUtil.logEvent('피드_질문_댓글_버튼_터치', properties: {
@@ -157,7 +159,7 @@ class _SurveyComponentState extends State<SurveyComponent> {
               });
 
               if (!widget.isPicked) {
-                ToastUtil.showMeetToast('선택지 중 하나를 선택해야\n댓글과 비율을 볼 수 있어요!', 2);
+                ToastUtil.showMeetToast('선택지 중 하나를 선택해야\n 비율을 볼 수 있어요!', 2);
               } else {
                 if (isTapped) {
                   return;
@@ -202,6 +204,7 @@ class _SurveyComponentState extends State<SurveyComponent> {
               ),
             ),
           )
+          */
         ],
       ),
     );
