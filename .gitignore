@@ -80,3 +80,7 @@ lib/generated_plugin_registrant.dart
 environment_dev.dart
 environment_stage.dart
 environment_prod.dart
+environment_local.dart
+firebase_options.dart
+google-services.json
+upload_certificate.pem
