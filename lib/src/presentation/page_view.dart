@@ -37,7 +37,7 @@ class _DartPageViewState extends State<DartPageView> {
     addOpenAppCount();
 
     // 앱 실행시 전면 팝업
-    SchedulerBinding.instance!.addPostFrameCallback((timeStamp) {
+    SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
       var gender = BlocProvider.of<PageViewCubit>(context).state.myInfo.personalInfo?.gender ?? "UNKNOWN";
 
       if (getOpenAppCount() < 2 || !canShowPopup() || gender != "FEMALE") return;
@@ -181,7 +181,7 @@ class _DartPageViewState extends State<DartPageView> {
     ),
     BlocProvider<FeedCubit>(
       create: (context) => FeedCubit()..initFeed(),
-      child: Feed()
+      child: const Feed()
     ),
     BlocProvider<ChatCubit>(
         create: (context) => ChatCubit(),

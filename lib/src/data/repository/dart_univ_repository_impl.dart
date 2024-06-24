@@ -1,4 +1,3 @@
-import 'package:dart_flutter/src/data/datasource/dart_api_remote_datasource.dart';
 import 'package:dart_flutter/src/data/datasource/university_local_datasource.dart';
 import 'package:dart_flutter/src/data/model/university_dto.dart';
 import 'package:dart_flutter/src/domain/entity/university.dart';

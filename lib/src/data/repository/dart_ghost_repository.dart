@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:dart_flutter/src/data/datasource/supabase_remote_datasource.dart';
 import 'package:dart_flutter/src/domain/repository/ghost_repository.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 
 class DartGhostRepository implements GhostRepository {
   static const String SINGLE_TEAM_STORAGE_NAME = "single_team";

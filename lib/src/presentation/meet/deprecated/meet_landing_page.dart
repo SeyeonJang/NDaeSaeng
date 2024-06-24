@@ -1,5 +1,4 @@
 import 'package:dart_flutter/src/presentation/meet/viewmodel/meet_cubit.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:dart_flutter/res/config/size_config.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -21,7 +20,7 @@ class _MeetLandingPageState extends State<MeetLandingPage>
     super.initState();
     _animationController = AnimationController(
       vsync: this,
-      duration: Duration(milliseconds: 1000),
+      duration: const Duration(milliseconds: 1000),
     );
     _animation = Tween<double>(begin: 1.0, end: 0.99).animate(
       CurvedAnimation(
@@ -138,7 +137,7 @@ class ThreePeopleMatchingView extends StatelessWidget {
               color: Colors.grey.withOpacity(0.4),
               spreadRadius: 5,
               blurRadius: 7,
-              offset: Offset(0, 3), // changes position of shadow
+              offset: const Offset(0, 3), // changes position of shadow
             ),
           ],
         ),
@@ -228,7 +227,7 @@ class TwoPeopleMatchingView extends StatelessWidget {
               color: Colors.grey.withOpacity(0.4),
               spreadRadius: 5,
               blurRadius: 7,
-              offset: Offset(0, 3), // changes position of shadow
+              offset: const Offset(0, 3), // changes position of shadow
             ),
           ],
         ),

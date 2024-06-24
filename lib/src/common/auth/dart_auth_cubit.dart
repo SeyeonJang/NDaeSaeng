@@ -187,7 +187,7 @@ class DartAuthCubit extends HydratedCubit<DartAuthState> {
 
       User userResponse = await _userUseCase.myInfo();
 
-      String userId = userResponse.personalInfo!.id!.toString();
+      String userId = userResponse.personalInfo!.id.toString();
       AnalyticsUtil.setUserId(userId);
       CrashlyticsUtil.setUserId(userId);
       if (userResponse.university == null) {

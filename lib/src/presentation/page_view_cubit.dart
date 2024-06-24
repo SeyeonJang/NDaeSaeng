@@ -4,7 +4,7 @@ import 'package:dart_flutter/src/presentation/page_view_state.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 
 class PageViewCubit extends HydratedCubit<PageViewState> {
-  var _userUseCase = UserUseCase();
+  final _userUseCase = UserUseCase();
 
   PageViewCubit() : super(PageViewState(myInfo: User(titleVotes: []), showPopup: true, openCount: 0));
 

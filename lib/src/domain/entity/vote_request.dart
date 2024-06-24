@@ -1,6 +1,5 @@
 import 'dart:core';
 
-import 'package:dart_flutter/src/data/model/vote_request_dto.dart';
 
 class VoteRequest {
   late int questionId;
@@ -32,13 +31,13 @@ class VoteRequest {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['questionId'] = this.questionId;
-    data['pickedUserId'] = this.pickedUserId;
-    data['firstUserId'] = this.firstUserId;
-    data['secondUserId'] = this.secondUserId;
-    data['thirdUserId'] = this.thirdUserId;
-    data['fourthUserId'] = this.fourthUserId;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['questionId'] = questionId;
+    data['pickedUserId'] = pickedUserId;
+    data['firstUserId'] = firstUserId;
+    data['secondUserId'] = secondUserId;
+    data['thirdUserId'] = thirdUserId;
+    data['fourthUserId'] = fourthUserId;
     return data;
   }
 

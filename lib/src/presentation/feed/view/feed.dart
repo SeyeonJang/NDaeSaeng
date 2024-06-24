@@ -10,7 +10,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 class Feed extends StatefulWidget {
-  Feed({super.key});
+  const Feed({super.key});
 
   @override
   State<Feed> createState() => _FeedState();

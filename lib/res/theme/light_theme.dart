@@ -11,8 +11,8 @@ ThemeData lightTheme = ThemeData(
   ),
   colorScheme: ColorScheme.light(
     background: Colors.white,
-    primary: Color(0xff7C83FD),
-    primaryContainer: Color(0xff7C83FD).withOpacity(0.2),
+    primary: const Color(0xff7C83FD),
+    primaryContainer: const Color(0xff7C83FD).withOpacity(0.2),
     // secondary: Colors,
   )
 );

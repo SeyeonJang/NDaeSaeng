@@ -18,9 +18,9 @@ class ContactFriend {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['name'] = this.name;
-    data['phoneNumber'] = this.phoneNumber;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['name'] = name;
+    data['phoneNumber'] = phoneNumber;
     return data;
   }
 }

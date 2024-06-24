@@ -5,7 +5,7 @@ import 'package:dart_flutter/src/data/repository/dart_ghost_repository.dart';
 import 'package:dart_flutter/src/domain/repository/ghost_repository.dart';
 
 class GhostUseCase {
-  GhostRepository _ghostRepository = DartGhostRepository();
+  final GhostRepository _ghostRepository = DartGhostRepository();
 
   String getProfileImageUrl(String userId, String name) {
     return _ghostRepository.getProfileImageUrl(userId, name);

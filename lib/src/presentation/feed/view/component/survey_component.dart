@@ -1,9 +1,7 @@
 import 'package:dart_flutter/src/common/util/analytics_util.dart';
-import 'package:dart_flutter/src/common/util/toast_util.dart';
 import 'package:dart_flutter/src/domain/entity/survey.dart';
 import 'package:dart_flutter/src/presentation/feed/view/component/option_component.dart';
 import 'package:dart_flutter/src/presentation/feed/view/component/option_notpicked_component.dart';
-import 'package:dart_flutter/src/presentation/feed/view/survey_detail_view.dart';
 import 'package:dart_flutter/src/presentation/feed/viewmodel/feed_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:dart_flutter/res/config/size_config.dart';
@@ -213,7 +211,6 @@ class _SurveyComponentState extends State<SurveyComponent> {
 
 class _SurveyTag extends StatelessWidget {
   const _SurveyTag({
-    super.key,
     required this.color,
     required this.text,
   });

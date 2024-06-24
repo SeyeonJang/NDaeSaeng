@@ -16,7 +16,7 @@ class CertNum extends StatelessWidget {
           leading: IconButton(
               onPressed: () {
                 Navigator.pop(context);
-              }, icon: Icon(Icons.arrow_back)),
+              }, icon: const Icon(Icons.arrow_back)),
         ),
         body: Center(
           child: Column(
@@ -53,18 +53,18 @@ class CertNum extends StatelessWidget {
                 children: [
                   TextButton(
                     onPressed: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => WebViewFullScreen(url: "https://swye0n.tistory.com/14", title: "이용약관")));
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => const WebViewFullScreen(url: "https://swye0n.tistory.com/14", title: "이용약관")));
                     },
-                    child: Text("이용약관", style: TextStyle(fontSize: 14)),
+                    child: const Text("이용약관", style: TextStyle(fontSize: 14)),
                   ),
-                  Text("및"),
+                  const Text("및"),
                   TextButton(
                     onPressed: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => WebViewFullScreen(url: "https://swye0n.tistory.com/9", title: "개인정보 처리방침")));
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => const WebViewFullScreen(url: "https://swye0n.tistory.com/9", title: "개인정보 처리방침")));
                     },
-                    child: Text("개인정보 처리방침", style: TextStyle(fontSize: 14)),
+                    child: const Text("개인정보 처리방침", style: TextStyle(fontSize: 14)),
                   ),
-                  Text("에 동의하시면 계속 진행해주세요."),
+                  const Text("에 동의하시면 계속 진행해주세요."),
                 ]
               ),
               const SizedBox(height: 20),

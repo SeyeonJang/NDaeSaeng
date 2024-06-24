@@ -81,9 +81,7 @@ class _ChatResponseSendState extends State<ChatResponseSend> with AutomaticKeepA
 }
 
 class _NoResponseSendView extends StatefulWidget {
-  const _NoResponseSendView({
-    super.key,
-  });
+  const _NoResponseSendView();
 
   @override
   State<_NoResponseSendView> createState() => _NoResponseSendViewState();

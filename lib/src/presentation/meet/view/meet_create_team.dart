@@ -11,7 +11,7 @@ class MeetCreateTeam extends StatefulWidget {
   final VoidCallback onFinish;
   final MeetState state;
 
-  MeetCreateTeam({super.key, required this.onFinish, required this.state});
+  const MeetCreateTeam({super.key, required this.onFinish, required this.state});
 
   @override
   State<MeetCreateTeam> createState() => _MeetCreateTeamState();
@@ -123,21 +123,21 @@ class _MeetCreateTeamState extends State<MeetCreateTeam> {
                     onPressed: () {
                       Navigator.pop(sheetContext);
                     },
-                    child: Text('취소', style: TextStyle(color: Color(0xffFF5C58))),
+                    child: const Text('취소', style: TextStyle(color: Color(0xffFF5C58))),
                   ),
                   TextButton(
                     onPressed: () {
                       Navigator.pop(context, false);
                       widget.onFinish();
                     },
-                    child: Text('끝내기', style: TextStyle(color: Color(0xffFF5C58))),
+                    child: const Text('끝내기', style: TextStyle(color: Color(0xffFF5C58))),
                   )
                 ],
               ),
             );
           }
           );
-    };
+    }
 
     return WillPopScope(
       onWillPop: () async {
@@ -232,7 +232,7 @@ class _MeetCreateTeamState extends State<MeetCreateTeam> {
       friend.university?.name == state.userResponse.university?.name &&
       friend.personalInfo?.gender == state.userResponse.personalInfo?.gender
     ).toList();
-    print("UI에서 필터링한 친구목록 ${filteredFriends}");
+    print("UI에서 필터링한 친구목록 $filteredFriends");
     AnalyticsUtil.logEvent("과팅_팀만들기_팀원추가하기_접속", properties: {
       'friendsCount': filteredFriends.length
     });
@@ -245,7 +245,7 @@ class _MeetCreateTeamState extends State<MeetCreateTeam> {
           return Container(
               width: SizeConfig.screenWidth,
               height: SizeConfig.screenHeight,
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10))),
               child: Column(
@@ -270,7 +270,7 @@ class _MeetCreateTeamState extends State<MeetCreateTeam> {
                                 fontWeight: FontWeight.w600
                             ),),
                               SizedBox(height: SizeConfig.defaultSize * 0.5,),
-                            Text("같은 학교 친구 \'최대 2명\'과 과팅에 참여할 수 있어요!", style: TextStyle(
+                            Text("같은 학교 친구 '최대 2명'과 과팅에 참여할 수 있어요!", style: TextStyle(
                                 fontSize: SizeConfig.defaultSize * 1.3
                             ),),
                               SizedBox(height: SizeConfig.defaultSize,),
@@ -306,7 +306,6 @@ class _OneFriendComponent extends StatefulWidget {
   final void Function(User friend) onAddFriend;
 
   _OneFriendComponent({
-    super.key,
     required this.friend,
     required this.state,
     required this.count,
@@ -352,7 +351,7 @@ class _OneFriendComponentState extends State<_OneFriendComponent> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Container(
+              SizedBox(
                 width: SizeConfig.screenWidth * 0.75,
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -386,9 +385,8 @@ class _OneFriendComponentState extends State<_OneFriendComponent> {
                 ),
               ),
               TextButton(
-                child: Text("추가", style: TextStyle(color: Color(0xffFF5C58)),),
                 style: OutlinedButton.styleFrom(
-                    padding: EdgeInsets.all(0)
+                    padding: const EdgeInsets.all(0)
                 ),
                 onPressed: () {
                   AnalyticsUtil.logEvent("과팅_팀만들기_팀원추가하기_친구추가_터치");
@@ -399,6 +397,7 @@ class _OneFriendComponentState extends State<_OneFriendComponent> {
                   Navigator.pop(widget.sheetContext);
                   print(widget.nowNum+1);
                 },
+                child: const Text("추가", style: TextStyle(color: Color(0xffFF5C58)),),
               ),
             ],
           ),
@@ -415,7 +414,6 @@ class _CreateTeamTopSection extends StatefulWidget {
   final handleTeamNameChanged;
 
   _CreateTeamTopSection({
-    super.key,
     required this.userResponse,
     required this.state,
     this.handleTeamNameChanged
@@ -462,7 +460,7 @@ class _CreateTeamTopSectionState extends State<_CreateTeamTopSection> {
                         color: Colors.grey
                     )),
                 SizedBox(width: SizeConfig.defaultSize,),
-                Text("${widget.userResponse.university?.name ?? '학교를 불러오지 못 했어요'}",
+                Text(widget.userResponse.university?.name ?? '학교를 불러오지 못 했어요',
                     style: TextStyle(
                         fontWeight: FontWeight.w400,
                         fontSize: SizeConfig.defaultSize * 1.6,
@@ -493,7 +491,7 @@ class _CreateTeamTopSectionState extends State<_CreateTeamTopSection> {
                           widget.handleTeamNameChanged(value);
                         });
                       },
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         hintText: "이성에게 보여질 팀명을 입력해주세요!",
                         contentPadding: EdgeInsets.zero,
                         enabledBorder: UnderlineInputBorder(borderSide: BorderSide(width: 0.6)),
@@ -538,7 +536,7 @@ class MemberCardView extends StatelessWidget {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
           border: Border.all(
-            color: Color(0xffFF5C58).withOpacity(0.5),
+            color: const Color(0xffFF5C58).withOpacity(0.5),
             width: 1.5
           )
         ),
@@ -570,13 +568,13 @@ class MemberCardView extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Container(
+                          SizedBox(
                             height: SizeConfig.defaultSize * 3.3,
                             child: Row( // 위층 (이름 ~ 년생)
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                Container(
+                                SizedBox(
                                   width: SizeConfig.defaultSize * 26,
                                   height: SizeConfig.defaultSize * 3.3,
                                   child: Row(
@@ -665,7 +663,7 @@ class MemberCardView extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
                                 SizedBox(width: SizeConfig.defaultSize * 0.5,),
-                                    Container(
+                                    SizedBox(
                                 width: SizeConfig.screenWidth * 0.56,
                                 child: GestureDetector(
                                   onTap: () {
@@ -696,7 +694,7 @@ class MemberCardView extends StatelessWidget {
               ),
 
               // TODO : 받은 투표가 있다면 VoteView, 없으면 NoVoteView
-              Container(
+              SizedBox(
                 height: SizeConfig.defaultSize * 11.5,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -704,7 +702,7 @@ class MemberCardView extends StatelessWidget {
                     for (int i = 0; i < 3; i++)
                       userResponse.titleVotes.length > i ?
                       VoteView(userResponse.titleVotes[i].question.content ?? "(알수없음)", userResponse.titleVotes[i].count) :
-                      NoVoteView(),
+                      const NoVoteView(),
                   ],
                 ),
               )
@@ -721,7 +719,7 @@ class VoteView extends StatelessWidget { // 받은 투표 있을 때
   final int count;
 
   const VoteView(
-    this.questionName, this.count
+    this.questionName, this.count, {super.key}
   );
 
   @override
@@ -738,7 +736,7 @@ class VoteView extends StatelessWidget { // 받은 투표 있을 때
         height: SizeConfig.defaultSize * 3.5,
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(8),
-            color: Color(0xffFF5C58)
+            color: const Color(0xffFF5C58)
         ),
           alignment: Alignment.center,
           child: Padding(
@@ -785,7 +783,7 @@ class NoVoteView extends StatelessWidget { // 받은 투표 없을 때
         ),
         alignment: Alignment.center,
         child: Text("내정보 탭에서 받은 투표를 프로필로 넣어보세요!", style: TextStyle(
-          color: Color(0xffFF5C58),
+          color: const Color(0xffFF5C58),
           fontSize: SizeConfig.defaultSize * 1.3
         ),)
       ),
@@ -806,7 +804,6 @@ class _CreateTeamBottomSection extends StatefulWidget {
   final MeetTeam Function() createNewTeam;
 
   _CreateTeamBottomSection({
-    super.key,
     required this.onFinish,
     required this.serverLocations,
     required this.locations,
@@ -846,7 +843,7 @@ class _CreateTeamBottomSectionState extends State<_CreateTeamBottomSection> {
             color: Colors.white,
             borderRadius: BorderRadius.circular(0),
             border: Border.all(
-              color: Color(0xffeeeeee),
+              color: const Color(0xffeeeeee),
             )
         ),
         child: Padding(
@@ -884,7 +881,7 @@ class _CreateTeamBottomSectionState extends State<_CreateTeamBottomSection> {
                                               fontSize: SizeConfig.defaultSize *
                                                   2),
                                           textAlign: TextAlign.center,),
-                                        content: Container(
+                                        content: SizedBox(
                                           width: SizeConfig.screenWidth * 0.9,
                                           height: SizeConfig.screenHeight * 0.4,
                                           child: Column(
@@ -901,7 +898,7 @@ class _CreateTeamBottomSectionState extends State<_CreateTeamBottomSection> {
                                                   child: Column(
                                                     children: citiesData.map((favorite) {
                                                       return CheckboxListTile(
-                                                          activeColor: Color(0xffFE6059),
+                                                          activeColor: const Color(0xffFE6059),
                                                           title: Text(favorite['name']),
                                                           value: favorite['isChecked'],
                                                           onChanged: (val) {
@@ -943,7 +940,7 @@ class _CreateTeamBottomSectionState extends State<_CreateTeamBottomSection> {
                                                 widget.onSetCities(newCities);
                                                 Navigator.pop(dialogContext);
                                               },
-                                              child: Text('완료',
+                                              child: const Text('완료',
                                                   style: TextStyle(
                                                       color: Color(0xffFE6059)))
                                           ),
@@ -956,7 +953,7 @@ class _CreateTeamBottomSectionState extends State<_CreateTeamBottomSection> {
                         style: TextButton.styleFrom(
                             padding: EdgeInsets.zero
                         ),
-                        child: Container(
+                        child: SizedBox(
                           width: SizeConfig.screenWidth * 0.53,
                           child: Text(
                             widget.locations.isEmpty
@@ -982,8 +979,8 @@ class _CreateTeamBottomSectionState extends State<_CreateTeamBottomSection> {
                         fontSize: SizeConfig.defaultSize * 1.6),),
                     Switch(
                       value: light,
-                      activeColor: Color(0xffFE6059),
-                      activeTrackColor: Color(0xffFE6059).withOpacity(0.2),
+                      activeColor: const Color(0xffFE6059),
+                      activeTrackColor: const Color(0xffFE6059).withOpacity(0.2),
                       inactiveTrackColor: Colors.grey.shade200,
                       onChanged: (bool value) {
                         setState(() {
@@ -1020,7 +1017,7 @@ class _CreateTeamBottomSectionState extends State<_CreateTeamBottomSection> {
                   width: SizeConfig.screenHeight,
                   decoration: BoxDecoration(
                     color:((meetTeam.members.length == 1 || meetTeam.members.length == 2) && meetTeam.name != '' && meetTeam.locations.isNotEmpty)
-                        ? Color(0xffFF5C58) : Color(0xffddddddd),
+                        ? const Color(0xffFF5C58) : const Color(0xffddddddd),
                     borderRadius: BorderRadius.circular(10),
                   ),
                   alignment: Alignment.center,

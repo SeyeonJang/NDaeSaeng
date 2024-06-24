@@ -5,6 +5,8 @@ import 'package:image_picker/image_picker.dart';
 // 폰에서 시뮬 필요
 
 class SelectImage extends StatefulWidget {
+  const SelectImage({super.key});
+
   @override
   _SelectImageState createState() => _SelectImageState();
 }
@@ -34,7 +36,7 @@ class _SelectImageState extends State<SelectImage> {
             Container(
               width: 150,
               height: 150,
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 shape: BoxShape.circle,
                 color: Colors.grey,
               ),

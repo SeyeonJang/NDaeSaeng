@@ -16,7 +16,7 @@ class MeetUpdateTeam extends StatefulWidget {
   final MeetState meetState;
 
   // MeetUpdateTeam({super.key, required this.onFinish, required this.myTeam, required this.user});
-  MeetUpdateTeam({super.key, required this.onFinish, required this.meetState});
+  const MeetUpdateTeam({super.key, required this.onFinish, required this.meetState});
 
   @override
   State<MeetUpdateTeam> createState() => _MeetUpdateTeamState();
@@ -80,19 +80,19 @@ class _MeetUpdateTeamState extends State<MeetUpdateTeam> {
                   onPressed: () {
                     Navigator.pop(context, false);
                   },
-                  child: Text('취소', style: TextStyle(color: Color(0xffFF5C58))),
+                  child: const Text('취소', style: TextStyle(color: Color(0xffFF5C58))),
                 ),
                 TextButton(
                   onPressed: () {
                     widget.onFinish();
                     Navigator.pop(context, true);
                   },
-                  child: Text('끝내기', style: TextStyle(color: Color(0xffFF5C58))),
+                  child: const Text('끝내기', style: TextStyle(color: Color(0xffFF5C58))),
                 )
               ],
             );
           });
-    };
+    }
 
     return WillPopScope(
       onWillPop: () {
@@ -127,17 +127,17 @@ class _MeetUpdateTeamState extends State<MeetUpdateTeam> {
                                     ]),
                                 TextButton(
                                     onPressed: () {
-                                      MeetTeam myNewTeam = MeetTeam(id: 0, name: state.teamName, university: state.userResponse!.university, locations: state.getCities(), canMatchWithSameUniversity: state.isChecked, members: state.teamMembers.toList());
+                                      MeetTeam myNewTeam = MeetTeam(id: 0, name: state.teamName, university: state.userResponse.university, locations: state.getCities(), canMatchWithSameUniversity: state.isChecked, members: state.teamMembers.toList());
                                       if ((state.isMemberOneAdded || state.isMemberTwoAdded) && state.teamName!='' && state.getCities().isNotEmpty) {
                                         context.read<MeetCubit>().updateMyTeam(myNewTeam);
                                         print("${state.teamName} 이름 전달합니다");
-                                        print("${state.userResponse!.university}");
-                                        print("${myNewTeam.toString()}");
+                                        print("${state.userResponse.university}");
+                                        print(myNewTeam.toString());
                                         Navigator.pop(context);
                                       }
                                     },
                                     child: Text("완료", style: TextStyle(
-                                        color: Color(0xffFF5C58),
+                                        color: const Color(0xffFF5C58),
                                         fontSize: SizeConfig.defaultSize * 1.9,
                                         fontWeight: FontWeight.w500
                                     ))
@@ -210,7 +210,7 @@ class _MeetUpdateTeamState extends State<MeetUpdateTeam> {
           return Container(
               width: SizeConfig.screenWidth,
               height: SizeConfig.screenHeight,
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10))),
               child: Column(
@@ -235,7 +235,7 @@ class _MeetUpdateTeamState extends State<MeetUpdateTeam> {
                                 fontWeight: FontWeight.w600
                             ),),
                               SizedBox(height: SizeConfig.defaultSize * 0.5,),
-                            Text("같은 학교 친구 \'최대 2명\'과 과팅에 참여할 수 있어요!", style: TextStyle(
+                            Text("같은 학교 친구 '최대 2명'과 과팅에 참여할 수 있어요!", style: TextStyle(
                                 fontSize: SizeConfig.defaultSize * 1.3
                             ),),
                               SizedBox(height: SizeConfig.defaultSize,),
@@ -267,7 +267,6 @@ class _OneFriendComponent extends StatefulWidget {
   late int nowNum;
 
   _OneFriendComponent({
-    super.key,
     required this.friend,
     required this.count,
     required this.nowNum,
@@ -310,7 +309,7 @@ class _OneFriendComponentState extends State<_OneFriendComponent> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Container(
+              SizedBox(
                 width: SizeConfig.screenWidth * 0.75,
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -342,9 +341,8 @@ class _OneFriendComponentState extends State<_OneFriendComponent> {
                 ),
               ),
               TextButton(
-                child: Text("추가", style: TextStyle(color: Color(0xffFF5C58)),),
                 style: OutlinedButton.styleFrom(
-                    padding: EdgeInsets.all(0)
+                    padding: const EdgeInsets.all(0)
                 ),
                 onPressed: () {
                   widget.sheetContext.read<MeetCubit>().pressedMemberAddButton(widget.friend);
@@ -359,6 +357,7 @@ class _OneFriendComponentState extends State<_OneFriendComponent> {
                   Navigator.pop(widget.sheetContext);
                   print(widget.nowNum+1);
                 },
+                child: const Text("추가", style: TextStyle(color: Color(0xffFF5C58)),),
               ),
             ],
           ),
@@ -375,7 +374,6 @@ class _CreateTeamTopSection extends StatefulWidget {
   final handleTeamNameChanged;
 
   _CreateTeamTopSection({
-    super.key,
     required this.userResponse,
     required this.state,
     this.handleTeamNameChanged
@@ -418,7 +416,7 @@ class _CreateTeamTopSectionState extends State<_CreateTeamTopSection> {
                       color: Colors.grey
                   )),
               SizedBox(width: SizeConfig.defaultSize,),
-              Text("${widget.userResponse.university?.name ?? '학교를 불러오지 못 했어요'}",
+              Text(widget.userResponse.university?.name ?? '학교를 불러오지 못 했어요',
                   style: TextStyle(
                       fontWeight: FontWeight.w400,
                       fontSize: SizeConfig.defaultSize * 1.6,
@@ -445,7 +443,7 @@ class _CreateTeamTopSectionState extends State<_CreateTeamTopSection> {
                     decoration: InputDecoration(
                       hintText: "${widget.state.teamName} (다른 팀명을 입력하지 않으면 바뀌지 않아요!)",
                       contentPadding: EdgeInsets.zero,
-                      enabledBorder: UnderlineInputBorder(borderSide: BorderSide(width: 0.6)),
+                      enabledBorder: const UnderlineInputBorder(borderSide: BorderSide(width: 0.6)),
                     ),
 
                   )
@@ -466,7 +464,6 @@ class _CreateTeamBottomSection extends StatefulWidget {
 
 
   _CreateTeamBottomSection({
-    super.key,
     required this.state,
     required this.name,
   });
@@ -486,7 +483,7 @@ class _CreateTeamBottomSectionState extends State<_CreateTeamBottomSection> {
             color: Colors.white,
             borderRadius: BorderRadius.circular(0),
             border: Border.all(
-              color: Color(0xffeeeeee),
+              color: const Color(0xffeeeeee),
             )
         ),
         child: Padding(
@@ -526,7 +523,7 @@ class _CreateTeamBottomSectionState extends State<_CreateTeamBottomSection> {
                                               fontSize: SizeConfig.defaultSize *
                                                   2),
                                           textAlign: TextAlign.center,),
-                                        content: Container(
+                                        content: SizedBox(
                                           width: SizeConfig.screenWidth * 0.9,
                                           height: SizeConfig.screenHeight * 0.4,
                                           child: Column(
@@ -543,7 +540,7 @@ class _CreateTeamBottomSectionState extends State<_CreateTeamBottomSection> {
                                                   child: Column(
                                                     children: citiesData.map((favorite) {
                                                       return CheckboxListTile(
-                                                          activeColor: Color(0xffFE6059),
+                                                          activeColor: const Color(0xffFE6059),
                                                           title: Text(favorite['name']),
                                                           value: favorite['isChecked'],
                                                           onChanged: (val) {
@@ -581,7 +578,7 @@ class _CreateTeamBottomSectionState extends State<_CreateTeamBottomSection> {
                                                 // widget.onDoneCities(newCities);
                                                 Navigator.pop(dialogContext);
                                               },
-                                              child: Text('완료',
+                                              child: const Text('완료',
                                                   style: TextStyle(
                                                       color: Color(0xffFE6059)))
                                           ),
@@ -613,8 +610,8 @@ class _CreateTeamBottomSectionState extends State<_CreateTeamBottomSection> {
                         fontSize: SizeConfig.defaultSize * 1.6),),
                     Switch(
                       value: light,
-                      activeColor: Color(0xffFE6059),
-                      activeTrackColor: Color(0xffFE6059).withOpacity(0.2),
+                      activeColor: const Color(0xffFE6059),
+                      activeTrackColor: const Color(0xffFE6059).withOpacity(0.2),
                       inactiveTrackColor: Colors.grey.shade200,
                       onChanged: (bool value) {
                         setState(() {

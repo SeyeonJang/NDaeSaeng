@@ -11,8 +11,6 @@ import 'package:dart_flutter/src/common/util/shared_preferences_util.dart';
 import 'package:dart_flutter/src/common/util/timeago_util.dart';
 import 'package:dart_flutter/src/common/util/toast_util.dart';
 import 'package:dart_flutter/src/presentation/landing/land_pages.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -29,8 +27,8 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   // 초기화 순서에 유의할 것
-  const BUILD_TYPE = String.fromEnvironment('BUILD_TYPE', defaultValue: 'DEFAULT');
-  AppEnvironment.setupEnv(BuildType.from(BUILD_TYPE));
+  const buildType = String.fromEnvironment('BUILD_TYPE', defaultValue: 'DEFAULT');
+  AppEnvironment.setupEnv(BuildType.from(buildType));
   if (AppEnvironment.buildType.isLocal) ToastUtil.showToast("실행환경: Local");
   if (AppEnvironment.buildType.isDev) ToastUtil.showToast("실행환경: Develop");
   if (AppEnvironment.buildType.isStage) ToastUtil.showToast("실행환경: Staging");

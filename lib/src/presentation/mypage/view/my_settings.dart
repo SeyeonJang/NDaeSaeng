@@ -6,8 +6,6 @@ import 'package:dart_flutter/src/common/util/toast_util.dart';
 import 'package:dart_flutter/src/domain/entity/personal_info.dart';
 import 'package:dart_flutter/src/domain/entity/user.dart';
 import 'package:dart_flutter/src/presentation/component/webview_fullscreen.dart';
-import 'package:dart_flutter/src/presentation/mypage/view/my_tos1.dart';
-import 'package:dart_flutter/src/presentation/mypage/view/my_tos2.dart';
 import 'package:dart_flutter/src/presentation/landing/land_pages.dart';
 import 'package:dart_flutter/src/presentation/mypage/viewmodel/mypages_cubit.dart';
 import 'package:dart_flutter/src/presentation/mypage/viewmodel/state/mypages_state.dart';
@@ -848,7 +846,7 @@ class _MyPageViewState extends State<MyPageView> {
                       TextButton(
                         onPressed: () {
                           AnalyticsUtil.logEvent("내정보_설정_이용약관");
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => WebViewFullScreen(url: "https://swye0n.tistory.com/14", title: "이용약관")));
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => const WebViewFullScreen(url: "https://swye0n.tistory.com/14", title: "이용약관")));
                         },
                         child: Text("이용약관",
                             style: TextStyle(fontSize: SizeConfig.defaultSize * 1.4, color: Colors.grey),
@@ -857,7 +855,7 @@ class _MyPageViewState extends State<MyPageView> {
                       TextButton(
                         onPressed: () {
                           AnalyticsUtil.logEvent("내정보_설정_개인정보처리방침");
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => WebViewFullScreen(url: "https://swye0n.tistory.com/9", title: "개인정보 처리방침")));
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => const WebViewFullScreen(url: "https://swye0n.tistory.com/9", title: "개인정보 처리방침")));
                         },
                         child: Text("개인정보 처리방침",
                             style: TextStyle(fontSize: SizeConfig.defaultSize * 1.4, color: Colors.grey)),

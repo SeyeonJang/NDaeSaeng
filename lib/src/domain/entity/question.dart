@@ -12,10 +12,10 @@ class Question {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['questionId'] = this.questionId;
-    data['content'] = this.content;
-    data['icon'] = this.icon;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['questionId'] = questionId;
+    data['content'] = content;
+    data['icon'] = icon;
     return data;
   }
 

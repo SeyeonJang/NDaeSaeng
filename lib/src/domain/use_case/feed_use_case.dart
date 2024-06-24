@@ -2,7 +2,6 @@ import 'package:dart_flutter/src/common/pagination/pagination.dart';
 import 'package:dart_flutter/src/data/repository/dart_survey_repository_impl.dart';
 import 'package:dart_flutter/src/domain/entity/survey.dart';
 import 'package:dart_flutter/src/domain/entity/survey_detail.dart';
-import 'package:dart_flutter/src/domain/entity/user.dart';
 import 'package:dart_flutter/src/domain/repository/survey_repository.dart';
 
 class FeedUseCase {

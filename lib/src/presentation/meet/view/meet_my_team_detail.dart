@@ -124,7 +124,6 @@ class _TopBarSection extends StatelessWidget {
   BuildContext ancestorContext;
 
   _TopBarSection({
-    super.key,
     required this.team,
     required this.ancestorContext
   });

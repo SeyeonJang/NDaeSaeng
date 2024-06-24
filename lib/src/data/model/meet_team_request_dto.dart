@@ -1,4 +1,3 @@
-import 'package:dart_flutter/src/domain/entity/friend.dart';
 import 'package:dart_flutter/src/domain/entity/meet_team.dart';
 import 'package:dart_flutter/src/domain/entity/type/student.dart';
 
@@ -77,11 +76,11 @@ class _FriendDto {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['nickname'] = this.name;
-    data['birthYear'] = this.birthyear;
-    data['universityId'] = this.universityId;
-    data['profileImageUrl'] = this.profileImageUrl;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['nickname'] = name;
+    data['birthYear'] = birthyear;
+    data['universityId'] = universityId;
+    data['profileImageUrl'] = profileImageUrl;
     return data;
   }
 

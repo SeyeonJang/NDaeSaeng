@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class VoteResultView extends StatefulWidget {
-  VoteResultView({Key? key}) : super(key: key);
+  const VoteResultView({Key? key}) : super(key: key);
 
   @override
   State<VoteResultView> createState() => _VoteResultViewState();
@@ -21,12 +21,12 @@ class _VoteResultViewState extends State<VoteResultView> with SingleTickerProvid
     super.initState();
     _controller = AnimationController(
       vsync: this,
-      duration: Duration(seconds: 1),
+      duration: const Duration(seconds: 1),
     );
 
     _animation = Tween<Offset>(
-      begin: Offset(0,0.15),
-      end: Offset(0,0),
+      begin: const Offset(0,0.15),
+      end: const Offset(0,0),
     ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
 
     _controller.addStatusListener((status) {
@@ -129,7 +129,7 @@ class _VoteResultViewState extends State<VoteResultView> with SingleTickerProvid
                         BlocProvider.of<VoteCubit>(context).stepDone();
                       },
                       style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all(Color(0xff7C83FD)),
+                        backgroundColor: MaterialStateProperty.all(const Color(0xff7C83FD)),
                         padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.only(left: SizeConfig.defaultSize * 3, right: SizeConfig.defaultSize * 3, top: 0, bottom: 0)),
                       ),
                       child: Text(

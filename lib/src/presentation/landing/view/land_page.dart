@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:ui';
 import 'package:dart_flutter/res/config/size_config.dart';
 import 'package:dart_flutter/src/common/auth/dart_auth_cubit.dart';
 import 'package:dart_flutter/src/common/util/analytics_util.dart';
@@ -21,7 +20,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   late Timer _timer;
   int _currentPage = 0;
-  List<String> _images = [
+  final List<String> _images = [
     'assets/images/girl1.png',
     'assets/images/boy1.png',
     'assets/images/girl2.png',
@@ -37,7 +36,7 @@ class _LoginPageState extends State<LoginPage> {
     super.dispose();
   }
   void _startTimer() {
-    _timer = Timer.periodic(Duration(seconds: 3), (Timer timer) {
+    _timer = Timer.periodic(const Duration(seconds: 3), (Timer timer) {
       setState(() {
         _currentPage = (_currentPage + 1) % _images.length;
       });
@@ -82,7 +81,7 @@ class _LoginPageState extends State<LoginPage> {
       //     ],
       //   ),
       // ),
-      bottomNavigationBar: Container( // 로그인 버튼
+      bottomNavigationBar: SizedBox( // 로그인 버튼
         // color: Color(0xff7C83FD),
         // height: SizeConfig.screenHeight * 0.18,
         height: SizeConfig.screenHeight * 0.25,
@@ -96,14 +95,15 @@ class _LoginPageState extends State<LoginPage> {
                 width: SizeConfig.screenWidth * 0.8,
                 height: SizeConfig.defaultSize * 4.8,
                 decoration: BoxDecoration(
-                    color: Color(0xffFEE500),
+                    color: const Color(0xffFEE500),
                     borderRadius: BorderRadius.circular(10)),
                 child: GestureDetector(
                   onTap: () {
                     _clickLogin('카카오');
                     try {
-                      if (!BlocProvider.of<DartAuthCubit>(context).state.isLoading) BlocProvider.of<DartAuthCubit>(context).kakaoLogin();
-                      else {ToastUtil.showToast("로그인 처리 중입니다. 잠시만 기다려주세요.");};
+                      if (!BlocProvider.of<DartAuthCubit>(context).state.isLoading) {
+                        BlocProvider.of<DartAuthCubit>(context).kakaoLogin();
+                      } else {ToastUtil.showToast("로그인 처리 중입니다. 잠시만 기다려주세요.");}
                     } catch (e) {
                       ToastUtil.showToast("로그인에 실패하였습니다. 다시 시도해주세요.");
                     }
@@ -124,8 +124,9 @@ class _LoginPageState extends State<LoginPage> {
                 GestureDetector(
                   onTap: () {
                     _clickLogin('애플');
-                    if (!BlocProvider.of<DartAuthCubit>(context).state.isLoading) BlocProvider.of<DartAuthCubit>(context).appleLogin();
-                    else {ToastUtil.showToast("로그인 처리 중입니다. 잠시만 기다려주세요.");};
+                    if (!BlocProvider.of<DartAuthCubit>(context).state.isLoading) {
+                      BlocProvider.of<DartAuthCubit>(context).appleLogin();
+                    } else {ToastUtil.showToast("로그인 처리 중입니다. 잠시만 기다려주세요.");}
                   },
                   child: Container(
                     width: SizeConfig.screenWidth * 0.8,

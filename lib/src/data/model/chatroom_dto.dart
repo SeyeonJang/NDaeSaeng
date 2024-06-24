@@ -17,19 +17,19 @@ class ChatroomDto {
       RequestingTeam? requestingTeam,
       RequestingTeam? requestedTeam}) {
     if (chatRoomId != null) {
-      this._chatRoomId = chatRoomId;
+      _chatRoomId = chatRoomId;
     }
     if (latestChatMessageContent != null) {
-      this._latestChatMessageContent = latestChatMessageContent;
+      _latestChatMessageContent = latestChatMessageContent;
     }
     if (latestChatMessageTime != null) {
-      this._latestChatMessageTime = latestChatMessageTime;
+      _latestChatMessageTime = latestChatMessageTime;
     }
     if (requestingTeam != null) {
-      this._requestingTeam = requestingTeam;
+      _requestingTeam = requestingTeam;
     }
     if (requestedTeam != null) {
-      this._requestedTeam = requestedTeam;
+      _requestedTeam = requestedTeam;
     }
   }
 
@@ -112,20 +112,20 @@ class ChatroomDto {
     _chatRoomId = json['chatRoomId'];
     _latestChatMessageContent = json['latestChatMessageContent'];
     _latestChatMessageTime = json['latestChatMessageTime'];
-    _requestingTeam = json['requestingTeam'] != null ? new RequestingTeam.fromJson(json['requestingTeam']) : null;
-    _requestedTeam = json['requestedTeam'] != null ? new RequestingTeam.fromJson(json['requestedTeam']) : null;
+    _requestingTeam = json['requestingTeam'] != null ? RequestingTeam.fromJson(json['requestingTeam']) : null;
+    _requestedTeam = json['requestedTeam'] != null ? RequestingTeam.fromJson(json['requestedTeam']) : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['chatRoomId'] = this._chatRoomId;
-    data['latestChatMessageContent'] = this._latestChatMessageContent;
-    data['latestChatMessageTime'] = this._latestChatMessageTime;
-    if (this._requestingTeam != null) {
-      data['requestingTeam'] = this._requestingTeam!.toJson();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['chatRoomId'] = _chatRoomId;
+    data['latestChatMessageContent'] = _latestChatMessageContent;
+    data['latestChatMessageTime'] = _latestChatMessageTime;
+    if (_requestingTeam != null) {
+      data['requestingTeam'] = _requestingTeam!.toJson();
     }
-    if (this._requestedTeam != null) {
-      data['requestedTeam'] = this._requestedTeam!.toJson();
+    if (_requestedTeam != null) {
+      data['requestedTeam'] = _requestedTeam!.toJson();
     }
     return data;
   }
@@ -152,22 +152,22 @@ class RequestingTeam {
       List<TeamUsers>? teamUsers,
       List<TeamRegions>? teamRegions}) {
     if (teamId != null) {
-      this._teamId = teamId;
+      _teamId = teamId;
     }
     if (name != null) {
-      this._name = name;
+      _name = name;
     }
     if (isStudentIdCardVerified != null) {
-      this._isStudentIdCardVerified = isStudentIdCardVerified;
+      _isStudentIdCardVerified = isStudentIdCardVerified;
     }
     if (university != null) {
-      this._university = university;
+      _university = university;
     }
     if (teamUsers != null) {
-      this._teamUsers = teamUsers;
+      _teamUsers = teamUsers;
     }
     if (teamRegions != null) {
-      this._teamRegions = teamRegions;
+      _teamRegions = teamRegions;
     }
   }
 
@@ -199,34 +199,34 @@ class RequestingTeam {
     _teamId = json['teamId'];
     _name = json['name'];
     _isStudentIdCardVerified = json['isStudentIdCardVerified'];
-    _university = json['university'] != null ? new University.fromJson(json['university']) : null;
+    _university = json['university'] != null ? University.fromJson(json['university']) : null;
     if (json['teamUsers'] != null) {
       _teamUsers = <TeamUsers>[];
       json['teamUsers'].forEach((v) {
-        _teamUsers!.add(new TeamUsers.fromJson(v));
+        _teamUsers!.add(TeamUsers.fromJson(v));
       });
     }
     if (json['teamRegions'] != null) {
       _teamRegions = <TeamRegions>[];
       json['teamRegions'].forEach((v) {
-        _teamRegions!.add(new TeamRegions.fromJson(v));
+        _teamRegions!.add(TeamRegions.fromJson(v));
       });
     }
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['teamId'] = this._teamId;
-    data['name'] = this._name;
-    data['isStudentIdCardVerified'] = this._isStudentIdCardVerified;
-    if (this._university != null) {
-      data['university'] = this._university!.toJson();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['teamId'] = _teamId;
+    data['name'] = _name;
+    data['isStudentIdCardVerified'] = _isStudentIdCardVerified;
+    if (_university != null) {
+      data['university'] = _university!.toJson();
     }
-    if (this._teamUsers != null) {
-      data['teamUsers'] = this._teamUsers!.map((v) => v.toJson()).toList();
+    if (_teamUsers != null) {
+      data['teamUsers'] = _teamUsers!.map((v) => v.toJson()).toList();
     }
-    if (this._teamRegions != null) {
-      data['teamRegions'] = this._teamRegions!.map((v) => v.toJson()).toList();
+    if (_teamRegions != null) {
+      data['teamRegions'] = _teamRegions!.map((v) => v.toJson()).toList();
     }
     return data;
   }
@@ -243,10 +243,10 @@ class University {
 
   University({int? universityId, String? name}) {
     if (universityId != null) {
-      this._universityId = universityId;
+      _universityId = universityId;
     }
     if (name != null) {
-      this._name = name;
+      _name = name;
     }
   }
 
@@ -264,9 +264,9 @@ class University {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['universityId'] = this._universityId;
-    data['name'] = this._name;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['universityId'] = _universityId;
+    data['name'] = _name;
     return data;
   }
 
@@ -282,10 +282,10 @@ class TeamUsers {
 
   TeamUsers({int? userId, String? profileImageUrl}) {
     if (userId != null) {
-      this._userId = userId;
+      _userId = userId;
     }
     if (profileImageUrl != null) {
-      this._profileImageUrl = profileImageUrl;
+      _profileImageUrl = profileImageUrl;
     }
   }
 
@@ -303,9 +303,9 @@ class TeamUsers {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['userId'] = this._userId;
-    data['profileImageUrl'] = this._profileImageUrl;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['userId'] = _userId;
+    data['profileImageUrl'] = _profileImageUrl;
     return data;
   }
 }
@@ -316,10 +316,10 @@ class TeamRegions {
 
   TeamRegions({int? regionId, String? name}) {
     if (regionId != null) {
-      this._regionId = regionId;
+      _regionId = regionId;
     }
     if (name != null) {
-      this._name = name;
+      _name = name;
     }
   }
 
@@ -337,9 +337,9 @@ class TeamRegions {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['regionId'] = this._regionId;
-    data['name'] = this._name;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['regionId'] = _regionId;
+    data['name'] = _name;
     return data;
   }
 }

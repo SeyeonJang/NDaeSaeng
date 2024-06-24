@@ -1,7 +1,5 @@
 import 'package:dart_flutter/src/domain/entity/user.dart';
 
-import '../../../../domain/entity/question.dart';
-import '../../../../domain/entity/title_vote.dart';
 
 class StandbyState {
   late bool isLoading;

@@ -49,7 +49,7 @@ class _ChatPagesState extends State<ChatPages> {
         children: [
           Padding(
             padding: EdgeInsets.only(left: SizeConfig.defaultSize, right: SizeConfig.defaultSize),
-            child: Container(
+            child: SizedBox(
               width: SizeConfig.screenWidth * 0.7,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,

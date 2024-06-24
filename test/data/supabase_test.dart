@@ -6,7 +6,7 @@ void main() async {
   AppEnvironment.setupEnv(BuildType.dev);
   await Supabase.initialize(url: AppEnvironment.getEnv.getSupabaseUrl(), anonKey: AppEnvironment.getEnv.getSupabaseApiKey());
 
-  final _supabase = Supabase.instance.client;
-  final data = await _supabase.from('banner').select('*');
+  final supabase = Supabase.instance.client;
+  final data = await supabase.from('banner').select('*');
   print(data.toString());
 }

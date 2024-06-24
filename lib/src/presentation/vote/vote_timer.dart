@@ -67,7 +67,7 @@ class _VoteTimerState extends State<VoteTimer> {
     return Scaffold(
       backgroundColor: Colors.white,
       body: Padding(
-        padding: EdgeInsets.all(0),
+        padding: const EdgeInsets.all(0),
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -163,7 +163,7 @@ class _VoteTimerState extends State<VoteTimer> {
                                   return Container(
                                     width: SizeConfig.screenWidth,
                                     height: SizeConfig.screenHeight * 0.8,
-                                    decoration: BoxDecoration(
+                                    decoration: const BoxDecoration(
                                         color: Colors.white,
                                         borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10))),
                                     child: SingleChildScrollView(
@@ -251,9 +251,8 @@ class _VoteTimerState extends State<VoteTimer> {
                                                               myCodeCopy)); // 클립보드에 복사되었어요 <- 메시지 자동으로 Android에서 뜸 TODO : iOS는 확인하고 복사멘트 띄우기
                                                         },
                                                         style: ElevatedButton.styleFrom(
-                                                          primary: Colors.white,
-                                                          onPrimary: Color(0xff7C83FD),
-                                                          textStyle: TextStyle(
+                                                          foregroundColor: const Color(0xff7C83FD), backgroundColor: Colors.white,
+                                                          textStyle: const TextStyle(
                                                             color: Color(0xff7C83FD),
                                                           ),
                                                           // backgroundColor: Color(0xff7C83FD),
@@ -302,17 +301,17 @@ class _VoteTimerState extends State<VoteTimer> {
                                                 height: SizeConfig.defaultSize * 5.5,
                                                 alignment: Alignment.center,
                                                 decoration: BoxDecoration(
-                                                    color: Color(0xff7C83FD),
+                                                    color: const Color(0xff7C83FD),
                                                     // color: Colors.white,
                                                     border: Border.all(
-                                                      color: Color(0xff7C83FD),
+                                                      color: const Color(0xff7C83FD),
                                                     ),
                                                     boxShadow: [
                                                       BoxShadow(
                                                         color: Colors.grey.withOpacity(0.3),
                                                         spreadRadius: 5,
                                                         blurRadius: 4,
-                                                        offset: Offset(0,3), // changes position of shadow
+                                                        offset: const Offset(0,3), // changes position of shadow
                                                       ),
                                                     ],
                                                     borderRadius: BorderRadius.circular(15)),
@@ -395,10 +394,10 @@ class _VoteTimerState extends State<VoteTimer> {
                                                             contentPadding: EdgeInsets.symmetric(
                                                                 vertical: SizeConfig.defaultSize * 1.5, horizontal: SizeConfig.defaultSize * 1.5),
                                                             enabledBorder: OutlineInputBorder(
-                                                              borderRadius: BorderRadius.all(Radius.circular(15.0)),
+                                                              borderRadius: const BorderRadius.all(Radius.circular(15.0)),
                                                               borderSide: BorderSide(color: Colors.grey.shade300, width: 1.5),
                                                             ),
-                                                            focusedBorder: OutlineInputBorder(
+                                                            focusedBorder: const OutlineInputBorder(
                                                               borderRadius: BorderRadius.all(Radius.circular(10.0)),
                                                               borderSide: BorderSide(color: Color(0xff7C83FD)),
                                                             ),
@@ -407,7 +406,7 @@ class _VoteTimerState extends State<VoteTimer> {
                                                       ),
                                                       ElevatedButton( // 친구 추가 버튼
                                                         style: ElevatedButton.styleFrom(
-                                                          backgroundColor: widget.state.isLoading ? Colors.grey.shade400 : Color(0xff7C83FD),
+                                                          backgroundColor: widget.state.isLoading ? Colors.grey.shade400 : const Color(0xff7C83FD),
                                                           shape: RoundedRectangleBorder(
                                                             borderRadius: BorderRadius.circular(15), // 모서리 둥글기 설정
                                                           ),
@@ -479,7 +478,7 @@ class _VoteTimerState extends State<VoteTimer> {
                                                       style: TextStyle(
                                                           fontWeight: FontWeight.w700,
                                                           fontSize: SizeConfig.defaultSize * 1.9,
-                                                          color: Color(0xff7C83FD)
+                                                          color: const Color(0xff7C83FD)
                                                       ),),
                                                   ],
                                                 ),
@@ -520,14 +519,14 @@ class _VoteTimerState extends State<VoteTimer> {
                         width: SizeConfig.screenWidth * 0.85,
                         height: SizeConfig.defaultSize * 6,
                         decoration: BoxDecoration(
-                          color: Color(0xff7C83FD),
+                          color: const Color(0xff7C83FD),
                           borderRadius: BorderRadius.circular(13),
                           boxShadow: [
                             BoxShadow(
                               color: Colors.grey.withOpacity(0.4),
                               spreadRadius: 3,
                               blurRadius: 7,
-                              offset: Offset(0,1), // changes position of shadow
+                              offset: const Offset(0,1), // changes position of shadow
                             ),
                           ],
                         ),
@@ -608,7 +607,7 @@ class NotFriendComponent extends StatelessWidget {
                   "친구 학과": friend.university!.department
                 });
               },
-              child: Container(
+              child: SizedBox(
                 width: SizeConfig.screenWidth * 0.52,
                 child: Row(
                   children: [
@@ -699,7 +698,7 @@ class NotFriendComponent extends StatelessWidget {
                 Navigator.pop(context);
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: Color(0xff7C83FD),
+                backgroundColor: const Color(0xff7C83FD),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(15), // 모서리 둥글기 설정
                 ),
@@ -713,7 +712,7 @@ class NotFriendComponent extends StatelessWidget {
           ],
         ),
         SizedBox(height: SizeConfig.defaultSize * 0.1,),
-        Divider(
+        const Divider(
           color: Color(0xffddddddd),
         ),
       ],

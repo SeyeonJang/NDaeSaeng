@@ -19,7 +19,7 @@ class _BannerTestAdState extends State<BannerTestAd> {
     // AD 초기화
     BannerAd(
       adUnitId: AdHelper.bannerAdUnitId,
-      request: AdRequest(),
+      request: const AdRequest(),
       size: AdSize.banner,
       listener: BannerAdListener(
         onAdLoaded: (ad) {
@@ -40,14 +40,14 @@ class _BannerTestAdState extends State<BannerTestAd> {
     return SafeArea(
       child: Stack(
         children: [
-          Center(
+          const Center(
             child: Text("TEST"),
           ),
           // TODO: Display a banner when ready
           if (_bannerAd != null)
             Align(
               alignment: Alignment.topCenter,
-              child: Container(
+              child: SizedBox(
                 width: _bannerAd!.size.width.toDouble(),
                 height: _bannerAd!.size.height.toDouble(),
                 child: AdWidget(ad: _bannerAd!),

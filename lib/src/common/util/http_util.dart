@@ -26,8 +26,9 @@ class HttpUtil {
         },
         onError: (DioError e, handler) {
           _printHttpError(e);
-          if (e.response == null)
+          if (e.response == null) {
             return handler.next(e);//continue
+          }
 
           int? statusCode = e.response?.statusCode;
           switch(statusCode) {

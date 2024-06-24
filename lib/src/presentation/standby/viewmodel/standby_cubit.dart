@@ -1,4 +1,3 @@
-import 'package:dart_flutter/src/domain/entity/friend.dart';
 import 'package:dart_flutter/src/domain/entity/user.dart';
 import 'package:dart_flutter/src/domain/use_case/friend_use_case.dart';
 import 'package:dart_flutter/src/domain/use_case/user_use_case.dart';

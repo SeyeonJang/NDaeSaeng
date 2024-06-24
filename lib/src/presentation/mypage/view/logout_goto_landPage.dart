@@ -12,7 +12,7 @@ class LogoutTogoLandPage extends StatelessWidget {
     return BlocProvider<DartAuthCubit>(
         create: (BuildContext context) => DartAuthCubit(),
         // child: const LandPages(),
-        child: MyApp(),
+        child: const MyApp(),
     );
   }
 }

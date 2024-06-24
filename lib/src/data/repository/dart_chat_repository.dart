@@ -12,7 +12,7 @@ import 'package:dart_flutter/src/domain/repository/chat_repository.dart';
 import '../../domain/entity/chat_room_detail.dart';
 
 class DartChatRepository implements ChatRepository {
-  DartUserRepositoryImpl _userRepository = DartUserRepositoryImpl();
+  final DartUserRepositoryImpl _userRepository = DartUserRepositoryImpl();
 
   @override
   Future<ChatRoomDetail> getChatRoomDetail(int chatroomId) async {

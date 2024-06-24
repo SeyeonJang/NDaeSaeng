@@ -13,7 +13,7 @@ class MeetEditTeam extends StatefulWidget {
   final VoidCallback onFinish;
   final MeetTeam myTeam;
 
-  MeetEditTeam({super.key, required this.onFinish, required this.myTeam});
+  const MeetEditTeam({super.key, required this.onFinish, required this.myTeam});
 
   @override
   State<MeetEditTeam> createState() => _MeetEditTeamState();
@@ -37,25 +37,25 @@ class _MeetEditTeamState extends State<MeetEditTeam> {
           builder: (BuildContext context) {
             return AlertDialog(
               backgroundColor: Colors.white,
-              title: Text("팀 만들기를 종료하시겠어요?"),
+              title: const Text("팀 만들기를 종료하시겠어요?"),
               actions: [
                 TextButton(
                   onPressed: () {
                     Navigator.pop(context, false);
                   },
-                  child: Text('취소'),
+                  child: const Text('취소'),
                 ),
                 TextButton(
                   onPressed: () {
                     widget.onFinish();
                     Navigator.pop(context, true);
                   },
-                  child: Text('끝내기'),
+                  child: const Text('끝내기'),
                 )
               ],
             );
           });
-    };
+    }
 
     return WillPopScope(
       onWillPop: () {
@@ -98,7 +98,7 @@ class _MeetEditTeamState extends State<MeetEditTeam> {
                                 TextButton(
                                   onPressed: () {},
                                   child: Text("완료", style: TextStyle(
-                                    color: Color(0xffFF5C58),
+                                    color: const Color(0xffFF5C58),
                                     fontSize: SizeConfig.defaultSize * 1.9,
                                     fontWeight: FontWeight.w500
                                   ))
@@ -173,7 +173,7 @@ class _MeetEditTeamState extends State<MeetEditTeam> {
           return Container(
               width: SizeConfig.screenWidth,
               height: SizeConfig.screenHeight,
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10))),
               child: Column(
@@ -198,7 +198,7 @@ class _MeetEditTeamState extends State<MeetEditTeam> {
                                 fontWeight: FontWeight.w600
                             ),),
                               SizedBox(height: SizeConfig.defaultSize * 0.5,),
-                            Text("같은 학교 친구 \'최대 2명\'과 과팅에 참여할 수 있어요!", style: TextStyle(
+                            Text("같은 학교 친구 '최대 2명'과 과팅에 참여할 수 있어요!", style: TextStyle(
                                 fontSize: SizeConfig.defaultSize * 1.3
                             ),),
                               SizedBox(height: SizeConfig.defaultSize,),
@@ -230,7 +230,6 @@ class _OneFriendComponent extends StatefulWidget {
   late int nowNum;
 
   _OneFriendComponent({
-    super.key,
     required this.friend,
     required this.count,
     required this.nowNum,
@@ -273,7 +272,7 @@ class _OneFriendComponentState extends State<_OneFriendComponent> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Container(
+              SizedBox(
                 width: SizeConfig.screenWidth * 0.75,
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -305,15 +304,15 @@ class _OneFriendComponentState extends State<_OneFriendComponent> {
                 ),
               ),
               TextButton(
-                child: Text("추가", style: TextStyle(color: Color(0xffFF5C58)),),
                 style: OutlinedButton.styleFrom(
-                    padding: EdgeInsets.all(0)
+                    padding: const EdgeInsets.all(0)
                 ),
                 onPressed: () {
                   widget.sheetContext.read<MeetCubit>().pressedMemberAddButton(widget.friend);
                   Navigator.pop(widget.sheetContext);
                   print(widget.nowNum+1);
                 },
+                child: const Text("추가", style: TextStyle(color: Color(0xffFF5C58)),),
               ),
             ],
           ),
@@ -330,7 +329,6 @@ class _CreateTeamTopSection extends StatefulWidget {
   final handleTeamNameChanged;
 
   _CreateTeamTopSection({
-    super.key,
     required this.userResponse,
     required this.state,
     this.handleTeamNameChanged
@@ -373,7 +371,7 @@ class _CreateTeamTopSectionState extends State<_CreateTeamTopSection> {
                       color: Colors.grey
                   )),
               SizedBox(width: SizeConfig.defaultSize,),
-              Text("${widget.userResponse.university?.name ?? '학교를 불러오지 못 했어요'}",
+              Text(widget.userResponse.university?.name ?? '학교를 불러오지 못 했어요',
                   style: TextStyle(
                       fontWeight: FontWeight.w400,
                       fontSize: SizeConfig.defaultSize * 1.6,
@@ -396,7 +394,7 @@ class _CreateTeamTopSectionState extends State<_CreateTeamTopSection> {
                       // onTeamNameChanged(value); // Callback to parent widget
                       widget.handleTeamNameChanged(value);
                     },
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       hintText: "이성에게 보여질 팀명을 입력해주세요!",
                     ),
                   )
@@ -413,7 +411,6 @@ class _MemberCardView extends StatelessWidget {
   late User userResponse;
 
   _MemberCardView({
-    super.key,
     required this.userResponse,
   });
 
@@ -427,7 +424,7 @@ class _MemberCardView extends StatelessWidget {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
           border: Border.all(
-            color: Color(0xffFF5C58).withOpacity(0.5),
+            color: const Color(0xffFF5C58).withOpacity(0.5),
             width: 1.5
           )
         ),
@@ -494,7 +491,7 @@ class _MemberCardView extends StatelessWidget {
                             Row(
                               children: [
                                   SizedBox(width: SizeConfig.defaultSize * 0.5,),
-                                Container(
+                                SizedBox(
                                   width: SizeConfig.screenWidth * 0.56,
                                   child: Text(
                                     userResponse.university?.department ?? "??학부", // TODO : 학과 길면 ... 처리
@@ -517,9 +514,9 @@ class _MemberCardView extends StatelessWidget {
                 ],
               ),
               // TODO : 받은 투표가 있다면 VoteView, 없으면 다른 View
-              Container(
+              SizedBox(
                 height: SizeConfig.defaultSize * 11.5,
-                child: Column(
+                child: const Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     _VoteView(),
@@ -537,9 +534,7 @@ class _MemberCardView extends StatelessWidget {
 }
 
 class _VoteView extends StatelessWidget { // 받은 투표 있을 때
-  const _VoteView({
-    super.key,
-  });
+  const _VoteView();
 
   @override
   Widget build(BuildContext context) {
@@ -548,7 +543,7 @@ class _VoteView extends StatelessWidget { // 받은 투표 있을 때
       height: SizeConfig.defaultSize * 3.5,
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8),
-          color: Color(0xffFF5C58)
+          color: const Color(0xffFF5C58)
       ),
         alignment: Alignment.center,
         child: Padding(
@@ -572,9 +567,7 @@ class _VoteView extends StatelessWidget { // 받은 투표 있을 때
 }
 
 class _NoVoteView extends StatelessWidget { // 받은 투표 없을 때
-  const _NoVoteView({
-    super.key,
-  });
+  const _NoVoteView();
 
   @override
   Widget build(BuildContext context) {
@@ -587,7 +580,7 @@ class _NoVoteView extends StatelessWidget { // 받은 투표 없을 때
       ),
       alignment: Alignment.center,
       child: Text("내정보 탭에서 받은 투표를 프로필로 넣어보세요!", style: TextStyle(
-        color: Color(0xffFF5C58),
+        color: const Color(0xffFF5C58),
         fontSize: SizeConfig.defaultSize * 1.3
       ),)
     );
@@ -600,7 +593,6 @@ class _CreateTeamBottomSection extends StatefulWidget {
   BuildContext ancestorContext;
 
   _CreateTeamBottomSection({
-    super.key,
     required this.state,
     required this.name,
     required this.ancestorContext,
@@ -621,7 +613,7 @@ class _CreateTeamBottomSectionState extends State<_CreateTeamBottomSection> {
             color: Colors.white,
             borderRadius: BorderRadius.circular(0),
             border: Border.all(
-              color: Color(0xffeeeeee),
+              color: const Color(0xffeeeeee),
             )
         ),
         child: Padding(
@@ -660,7 +652,7 @@ class _CreateTeamBottomSectionState extends State<_CreateTeamBottomSection> {
                                               fontSize: SizeConfig.defaultSize *
                                                   2),
                                           textAlign: TextAlign.center,),
-                                        content: Container(
+                                        content: SizedBox(
                                           width: SizeConfig.screenWidth * 0.9,
                                           height: SizeConfig.screenHeight * 0.4,
                                           child: Column(
@@ -677,7 +669,7 @@ class _CreateTeamBottomSectionState extends State<_CreateTeamBottomSection> {
                                                   child: Column(
                                                     children: citiesData.map((favorite) {
                                                       return CheckboxListTile(
-                                                          activeColor: Color(0xffFE6059),
+                                                          activeColor: const Color(0xffFE6059),
                                                           title: Text(favorite['name']),
                                                           value: favorite['isChecked'],
                                                           onChanged: (val) {
@@ -716,7 +708,7 @@ class _CreateTeamBottomSectionState extends State<_CreateTeamBottomSection> {
                                                 context.read<MeetCubit>().pressedCitiesAddButton(newCities);
                                                 Navigator.pop(dialogContext);
                                               },
-                                              child: Text('완료',
+                                              child: const Text('완료',
                                                   style: TextStyle(
                                                       color: Color(0xffFE6059)))
                                           ),
@@ -748,8 +740,8 @@ class _CreateTeamBottomSectionState extends State<_CreateTeamBottomSection> {
                         fontSize: SizeConfig.defaultSize * 1.6),),
                     Switch(
                       value: light,
-                      activeColor: Color(0xffFE6059),
-                      activeTrackColor: Color(0xffFE6059).withOpacity(0.2),
+                      activeColor: const Color(0xffFE6059),
+                      activeTrackColor: const Color(0xffFE6059).withOpacity(0.2),
                       inactiveTrackColor: Colors.grey.shade200,
                       onChanged: (bool value) {
                         setState(() {

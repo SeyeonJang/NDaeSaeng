@@ -48,7 +48,7 @@ class BlindDateUserDetailDto {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = id;
     data['name'] = name;
     data['profileImageUrl'] = profileImageUrl;
@@ -57,7 +57,7 @@ class BlindDateUserDetailDto {
     data['birthYear'] = birthYear;
     if (profileQuestionResponses != null) {
       data['profileQuestionResponses'] =
-          this.profileQuestionResponses!.map((v) => v.toJson()).toList();
+          profileQuestionResponses!.map((v) => v.toJson()).toList();
     }
     return data;
   }

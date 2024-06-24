@@ -49,11 +49,11 @@ class _StandbyLandingPageState extends State<StandbyLandingPage> with TickerProv
 
     _controller = AnimationController(
       vsync: this,
-      duration: Duration(seconds: 1),
+      duration: const Duration(seconds: 1),
     );
     _animation = Tween<Offset>(
-      begin: Offset(0, 0.15),
-      end: Offset(0, 0),
+      begin: const Offset(0, 0.15),
+      end: const Offset(0, 0),
     ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
     _controller.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
@@ -68,12 +68,12 @@ class _StandbyLandingPageState extends State<StandbyLandingPage> with TickerProv
 
     _fadeController = AnimationController(
       vsync: this,
-      duration: Duration(seconds: 2),
+      duration: const Duration(seconds: 2),
     );
     _fadeAnimation = Tween<double>(begin: 0.3, end: 1).animate(_fadeController);
     _fadeController.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
-        Future.delayed(Duration(seconds: 3), () {
+        Future.delayed(const Duration(seconds: 3), () {
           setState(() {
             currentIndex = (currentIndex + 1) % questions.length;
           });
@@ -95,7 +95,7 @@ class _StandbyLandingPageState extends State<StandbyLandingPage> with TickerProv
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Color(0xff7C83FD),
+        backgroundColor: const Color(0xff7C83FD),
         resizeToAvoidBottomInset: false,
         body: SingleChildScrollView(
           child: Column(
@@ -137,7 +137,7 @@ class _StandbyLandingPageState extends State<StandbyLandingPage> with TickerProv
               Container(
                 width: SizeConfig.screenWidth,
                 height: SizeConfig.screenHeight * 1.0,
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.only(topRight: Radius.circular(25), topLeft: Radius.circular(25)),
                 ),
@@ -339,9 +339,9 @@ class _StandbyLandingPageState extends State<StandbyLandingPage> with TickerProv
                   ),
                 ),
               ),
-              Container(
+              SizedBox(
                 height: SizeConfig.defaultSize * 75,
-                child: OnboardingSlide(),
+                child: const OnboardingSlide(),
               ),
               Container(
                 height: SizeConfig.defaultSize * 3,
@@ -405,11 +405,11 @@ class _OnboardingSlideState extends State<OnboardingSlide> with TickerProviderSt
     // 첫 번째 화면 애니메이션
     _animationController = AnimationController(
       vsync: this,
-      duration: Duration(seconds: 1),
+      duration: const Duration(seconds: 1),
     );
     _animation = Tween<Offset>(
-      begin: Offset(0, 0.15),
-      end: Offset(0, 0),
+      begin: const Offset(0, 0.15),
+      end: const Offset(0, 0),
     ).animate(CurvedAnimation(parent: _animationController, curve: Curves.easeInOut));
     _animationController.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
@@ -425,7 +425,7 @@ class _OnboardingSlideState extends State<OnboardingSlide> with TickerProviderSt
     // 두 번째 화면 애니메이션
     _fadeInOutController = AnimationController(
       vsync: this,
-      duration: Duration(seconds: 1),
+      duration: const Duration(seconds: 1),
     );
     _fadeInOutAnimation = Tween<double>(
       begin: 0.0,
@@ -433,7 +433,7 @@ class _OnboardingSlideState extends State<OnboardingSlide> with TickerProviderSt
     ).animate(_fadeInOutController);
     _fadeInOutController2 = AnimationController(
       vsync: this,
-      duration: Duration(seconds: 1),
+      duration: const Duration(seconds: 1),
     );
     _fadeInOutAnimation2 = Tween<double>(
       begin: 0.0,
@@ -441,7 +441,7 @@ class _OnboardingSlideState extends State<OnboardingSlide> with TickerProviderSt
     ).animate(_fadeInOutController2);
     _fadeInOutController3 = AnimationController(
       vsync: this,
-      duration: Duration(seconds: 1),
+      duration: const Duration(seconds: 1),
     );
     _fadeInOutAnimation3 = Tween<double>(
       begin: 0.0,
@@ -449,7 +449,7 @@ class _OnboardingSlideState extends State<OnboardingSlide> with TickerProviderSt
     ).animate(_fadeInOutController3);
     _fadeInOutController4 = AnimationController(
       vsync: this,
-      duration: Duration(seconds: 1),
+      duration: const Duration(seconds: 1),
     );
     _fadeInOutAnimation4 = Tween<double>(
       begin: 0.0,
@@ -457,7 +457,7 @@ class _OnboardingSlideState extends State<OnboardingSlide> with TickerProviderSt
     ).animate(_fadeInOutController4);
     _fadeInOutController5 = AnimationController(
       vsync: this,
-      duration: Duration(seconds: 1),
+      duration: const Duration(seconds: 1),
     );
     _fadeInOutAnimation5 = Tween<double>(
       begin: 0.0,
@@ -468,12 +468,12 @@ class _OnboardingSlideState extends State<OnboardingSlide> with TickerProviderSt
       // 애니메이션 리스너 설정
       if (status == AnimationStatus.completed) {
         // 애니메이션이 완료되면 2초 대기 후 다시 실행
-        Future.delayed(Duration(seconds: 5), () {
+        Future.delayed(const Duration(seconds: 5), () {
           _fadeInOutController.reverse();
         });
       } else if (status == AnimationStatus.dismissed) {
         // 애니메이션이 처음으로 돌아가면 다시 실행
-        Future.delayed(Duration(seconds: 5), () {
+        Future.delayed(const Duration(seconds: 5), () {
           _fadeInOutController.forward();
         });
       }
@@ -482,12 +482,12 @@ class _OnboardingSlideState extends State<OnboardingSlide> with TickerProviderSt
       // 애니메이션 리스너 설정
       if (status == AnimationStatus.completed) {
         // 애니메이션이 완료되면 2초 대기 후 다시 실행
-        Future.delayed(Duration(seconds: 5), () {
+        Future.delayed(const Duration(seconds: 5), () {
           _fadeInOutController2.reverse();
         });
       } else if (status == AnimationStatus.dismissed) {
         // 애니메이션이 처음으로 돌아가면 다시 실행
-        Future.delayed(Duration(seconds: 5), () {
+        Future.delayed(const Duration(seconds: 5), () {
           _fadeInOutController2.forward();
         });
       }
@@ -496,12 +496,12 @@ class _OnboardingSlideState extends State<OnboardingSlide> with TickerProviderSt
       // 애니메이션 리스너 설정
       if (status == AnimationStatus.completed) {
         // 애니메이션이 완료되면 2초 대기 후 다시 실행
-        Future.delayed(Duration(seconds: 5), () {
+        Future.delayed(const Duration(seconds: 5), () {
           _fadeInOutController3.reverse();
         });
       } else if (status == AnimationStatus.dismissed) {
         // 애니메이션이 처음으로 돌아가면 다시 실행
-        Future.delayed(Duration(seconds: 5), () {
+        Future.delayed(const Duration(seconds: 5), () {
           _fadeInOutController3.forward();
         });
       }
@@ -510,12 +510,12 @@ class _OnboardingSlideState extends State<OnboardingSlide> with TickerProviderSt
       // 애니메이션 리스너 설정
       if (status == AnimationStatus.completed) {
         // 애니메이션이 완료되면 2초 대기 후 다시 실행
-        Future.delayed(Duration(seconds: 5), () {
+        Future.delayed(const Duration(seconds: 5), () {
           _fadeInOutController4.reverse();
         });
       } else if (status == AnimationStatus.dismissed) {
         // 애니메이션이 처음으로 돌아가면 다시 실행
-        Future.delayed(Duration(seconds: 5), () {
+        Future.delayed(const Duration(seconds: 5), () {
           _fadeInOutController4.forward();
         });
       }
@@ -524,37 +524,37 @@ class _OnboardingSlideState extends State<OnboardingSlide> with TickerProviderSt
       // 애니메이션 리스너 설정
       if (status == AnimationStatus.completed) {
         // 애니메이션이 완료되면 2초 대기 후 다시 실행
-        Future.delayed(Duration(seconds: 5), () {
+        Future.delayed(const Duration(seconds: 5), () {
           _fadeInOutController5.reverse();
         });
       } else if (status == AnimationStatus.dismissed) {
         // 애니메이션이 처음으로 돌아가면 다시 실행
-        Future.delayed(Duration(seconds: 5), () {
+        Future.delayed(const Duration(seconds: 5), () {
           _fadeInOutController5.forward();
         });
       }
     });
 
-    Future.delayed(Duration(seconds: 1), () {
+    Future.delayed(const Duration(seconds: 1), () {
       _fadeInOutController.forward();
     });
-    Future.delayed(Duration(seconds: 2), () {
+    Future.delayed(const Duration(seconds: 2), () {
       _fadeInOutController2.forward();
     });
-    Future.delayed(Duration(seconds: 3), () {
+    Future.delayed(const Duration(seconds: 3), () {
       _fadeInOutController3.forward();
     });
-    Future.delayed(Duration(seconds: 4), () {
+    Future.delayed(const Duration(seconds: 4), () {
       _fadeInOutController4.forward();
     });
-    Future.delayed(Duration(seconds: 5), () {
+    Future.delayed(const Duration(seconds: 5), () {
       _fadeInOutController5.forward();
     });
 
     // 세 번째 페이지 애니메이션
     _letterAnimationController = AnimationController(
       vsync: this,
-      duration: Duration(milliseconds: 1500),
+      duration: const Duration(milliseconds: 1500),
     );
     _letterAnimation = Tween<double>(begin: 1.0, end: 0.9).animate(
       CurvedAnimation(
@@ -566,12 +566,12 @@ class _OnboardingSlideState extends State<OnboardingSlide> with TickerProviderSt
 
     _fadeController = AnimationController(
       vsync: this,
-      duration: Duration(seconds: 2),
+      duration: const Duration(seconds: 2),
     );
     _fadeAnimation = Tween<double>(begin: 0.3, end: 1).animate(_fadeController);
     _fadeController.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
-        Future.delayed(Duration(seconds: 2), () {
+        Future.delayed(const Duration(seconds: 2), () {
           setState(() {
             currentIndex = (currentIndex + 1) % questions.length;
           });
@@ -628,7 +628,7 @@ class _OnboardingSlideState extends State<OnboardingSlide> with TickerProviderSt
                                   text: TextSpan(
                                       style: TextStyle(
                                           fontSize: SizeConfig.defaultSize * 2.2, fontWeight: FontWeight.w600),
-                                      children: <TextSpan>[
+                                      children: const <TextSpan>[
                                     TextSpan(text: "엔대생에서는 ", style: TextStyle(color: Colors.black)),
                                     TextSpan(
                                         text: "긍정적인 질문",
@@ -640,7 +640,7 @@ class _OnboardingSlideState extends State<OnboardingSlide> with TickerProviderSt
                                   text: TextSpan(
                                       style: TextStyle(
                                           fontSize: SizeConfig.defaultSize * 2.2, fontWeight: FontWeight.w600),
-                                      children: <TextSpan>[
+                                      children: const <TextSpan>[
                                     TextSpan(text: "내 친구들을 ", style: TextStyle(color: Colors.black)),
                                     TextSpan(text: "투표", style: TextStyle(color: Color(0xff7C83FD))),
                                     TextSpan(text: "할 수 있어요!", style: TextStyle(color: Colors.black)),
@@ -674,12 +674,12 @@ class _OnboardingSlideState extends State<OnboardingSlide> with TickerProviderSt
                                 height: SizeConfig.defaultSize * 2.5,
                               ),
 
-                              Container(
+                              SizedBox(
                                 width: SizeConfig.screenWidth * 0.83,
                                 height: SizeConfig.defaultSize * 18,
                                 child: Column(
                                   children: [
-                                    Row(
+                                    const Row(
                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
                                         FriendView(name: "강해린", enterYear: "23", department: "경영학과"),
@@ -689,7 +689,7 @@ class _OnboardingSlideState extends State<OnboardingSlide> with TickerProviderSt
                                     SizedBox(
                                       height: SizeConfig.defaultSize,
                                     ),
-                                    Row(
+                                    const Row(
                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
                                         FriendView(name: "이영지", enterYear: "21", department: "실용음악과"),
@@ -720,7 +720,7 @@ class _OnboardingSlideState extends State<OnboardingSlide> with TickerProviderSt
                                   text: TextSpan(
                                       style: TextStyle(
                                           fontSize: SizeConfig.defaultSize * 2.2, fontWeight: FontWeight.w600),
-                                      children: <TextSpan>[
+                                      children: const <TextSpan>[
                                     TextSpan(text: "내가 투표받으면 ", style: TextStyle(color: Colors.black)),
                                     TextSpan(
                                         text: "알림",
@@ -861,7 +861,7 @@ class _OnboardingSlideState extends State<OnboardingSlide> with TickerProviderSt
               controller: _pageController,
               count: 3,
               effect: WormEffect(
-                activeDotColor: Color(0xff7C83FD),
+                activeDotColor: const Color(0xff7C83FD),
                 dotColor: Colors.grey.shade200,
                 dotHeight: SizeConfig.defaultSize,
                 dotWidth: SizeConfig.defaultSize,
@@ -922,7 +922,7 @@ class _FriendNotExistsViewState extends State<FriendNotExistsView> {
                   return Container(
                     width: SizeConfig.screenWidth,
                     height: SizeConfig.screenHeight * 0.8,
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10))),
                     child: SingleChildScrollView(
@@ -1010,9 +1010,8 @@ class _FriendNotExistsViewState extends State<FriendNotExistsView> {
                                               myCodeCopy)); // 클립보드에 복사되었어요 <- 메시지 자동으로 Android에서 뜸 TODO : iOS는 확인하고 복사멘트 띄우기
                                         },
                                         style: ElevatedButton.styleFrom(
-                                          primary: Colors.white,
-                                          onPrimary: Color(0xff7C83FD),
-                                          textStyle: TextStyle(
+                                          foregroundColor: const Color(0xff7C83FD), backgroundColor: Colors.white,
+                                          textStyle: const TextStyle(
                                             color: Color(0xff7C83FD),
                                           ),
                                           // backgroundColor: Color(0xff7C83FD),
@@ -1062,10 +1061,10 @@ class _FriendNotExistsViewState extends State<FriendNotExistsView> {
                                 height: SizeConfig.defaultSize * 5.5,
                                 alignment: Alignment.center,
                                 decoration: BoxDecoration(
-                                    color: Color(0xff7C83FD),
+                                    color: const Color(0xff7C83FD),
                                     // color: Colors.white,
                                     border: Border.all(
-                                      color: Color(0xff7C83FD),
+                                      color: const Color(0xff7C83FD),
                                     ),
                                     borderRadius: BorderRadius.circular(15)),
                                 child: Text(
@@ -1149,10 +1148,10 @@ class _FriendNotExistsViewState extends State<FriendNotExistsView> {
                                             contentPadding: EdgeInsets.symmetric(
                                                 vertical: SizeConfig.defaultSize * 1.5, horizontal: SizeConfig.defaultSize * 1.5),
                                             enabledBorder: OutlineInputBorder(
-                                              borderRadius: BorderRadius.all(Radius.circular(15.0)),
+                                              borderRadius: const BorderRadius.all(Radius.circular(15.0)),
                                               borderSide: BorderSide(color: Colors.grey.shade300, width: 1.5),
                                             ),
-                                            focusedBorder: OutlineInputBorder(
+                                            focusedBorder: const OutlineInputBorder(
                                               borderRadius: BorderRadius.all(Radius.circular(10.0)),
                                               borderSide: BorderSide(color: Color(0xff7C83FD)),
                                             ),
@@ -1161,7 +1160,7 @@ class _FriendNotExistsViewState extends State<FriendNotExistsView> {
                                       ),
                                       ElevatedButton( // 친구 추가 버튼
                                         style: ElevatedButton.styleFrom(
-                                          backgroundColor: widget.disabledFunctions ? Colors.grey.shade400 : Color(0xff7C83FD),
+                                          backgroundColor: widget.disabledFunctions ? Colors.grey.shade400 : const Color(0xff7C83FD),
                                           shape: RoundedRectangleBorder(
                                             borderRadius: BorderRadius.circular(15), // 모서리 둥글기 설정
                                           ),
@@ -1236,7 +1235,7 @@ class _FriendNotExistsViewState extends State<FriendNotExistsView> {
                                       style: TextStyle(
                                           fontWeight: FontWeight.w700,
                                           fontSize: SizeConfig.defaultSize * 1.9,
-                                          color: Color(0xff7C83FD)
+                                          color: const Color(0xff7C83FD)
                                       ),),
                                   ],
                                 ),
@@ -1330,9 +1329,9 @@ class FriendExistsView extends StatelessWidget {
           height: SizeConfig.defaultSize * 8,
           alignment: Alignment.center,
           decoration: BoxDecoration(
-              color: Color(0xff7C83FD),
+              color: const Color(0xff7C83FD),
               border: Border.all(
-                color: Color(0xff7C83FD),
+                color: const Color(0xff7C83FD),
               ),
               borderRadius: BorderRadius.circular(15)),
           child: Column(
@@ -1417,7 +1416,7 @@ class _openAddFriendsState extends State<openAddFriends> {
                   return Container(
                     width: SizeConfig.screenWidth,
                     height: SizeConfig.screenHeight * 0.8,
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10))),
                     child: SingleChildScrollView(
@@ -1505,9 +1504,8 @@ class _openAddFriendsState extends State<openAddFriends> {
                                               myCodeCopy)); // 클립보드에 복사되었어요 <- 메시지 자동으로 Android에서 뜸 TODO : iOS는 확인하고 복사멘트 띄우기
                                         },
                                         style: ElevatedButton.styleFrom(
-                                          primary: Colors.white,
-                                          onPrimary: Color(0xff7C83FD),
-                                          textStyle: TextStyle(
+                                          foregroundColor: const Color(0xff7C83FD), backgroundColor: Colors.white,
+                                          textStyle: const TextStyle(
                                             color: Color(0xff7C83FD),
                                           ),
                                           // backgroundColor: Color(0xff7C83FD),
@@ -1556,10 +1554,10 @@ class _openAddFriendsState extends State<openAddFriends> {
                                 height: SizeConfig.defaultSize * 5.5,
                                 alignment: Alignment.center,
                                 decoration: BoxDecoration(
-                                    color: Color(0xff7C83FD),
+                                    color: const Color(0xff7C83FD),
                                     // color: Colors.white,
                                     border: Border.all(
-                                      color: Color(0xff7C83FD),
+                                      color: const Color(0xff7C83FD),
                                     ),
                                     borderRadius: BorderRadius.circular(15)),
                                 child: Text(
@@ -1643,10 +1641,10 @@ class _openAddFriendsState extends State<openAddFriends> {
                                             contentPadding: EdgeInsets.symmetric(
                                                 vertical: SizeConfig.defaultSize * 1.5, horizontal: SizeConfig.defaultSize * 1.5),
                                             enabledBorder: OutlineInputBorder(
-                                              borderRadius: BorderRadius.all(Radius.circular(15.0)),
+                                              borderRadius: const BorderRadius.all(Radius.circular(15.0)),
                                               borderSide: BorderSide(color: Colors.grey.shade300, width: 1.5),
                                             ),
-                                            focusedBorder: OutlineInputBorder(
+                                            focusedBorder: const OutlineInputBorder(
                                               borderRadius: BorderRadius.all(Radius.circular(10.0)),
                                               borderSide: BorderSide(color: Color(0xff7C83FD)),
                                             ),
@@ -1655,7 +1653,7 @@ class _openAddFriendsState extends State<openAddFriends> {
                                       ),
                                       ElevatedButton( // 친구 추가 버튼
                                         style: ElevatedButton.styleFrom(
-                                          backgroundColor: widget.disabledFunctions ? Colors.grey.shade400 : Color(0xff7C83FD),
+                                          backgroundColor: widget.disabledFunctions ? Colors.grey.shade400 : const Color(0xff7C83FD),
                                           shape: RoundedRectangleBorder(
                                             borderRadius: BorderRadius.circular(15), // 모서리 둥글기 설정
                                           ),
@@ -1730,7 +1728,7 @@ class _openAddFriendsState extends State<openAddFriends> {
                                       style: TextStyle(
                                           fontWeight: FontWeight.w700,
                                           fontSize: SizeConfig.defaultSize * 1.9,
-                                          color: Color(0xff7C83FD)
+                                          color: const Color(0xff7C83FD)
                                       ),),
                                   ],
                                 ),
@@ -1788,14 +1786,14 @@ class _openAddFriendsState extends State<openAddFriends> {
           decoration: BoxDecoration(
               color: Colors.white,
               border: Border.all(
-                color: Color(0xff7C83FD),
+                color: const Color(0xff7C83FD),
               ),
               boxShadow: [
                 BoxShadow(
                   color: Colors.grey.withOpacity(0.2),
                   spreadRadius: 5,
                   blurRadius: 5,
-                  offset: Offset(0,1), // changes position of shadow
+                  offset: const Offset(0,1), // changes position of shadow
                 ),
               ],
               borderRadius: BorderRadius.circular(15)),
@@ -1804,7 +1802,7 @@ class _openAddFriendsState extends State<openAddFriends> {
             style: TextStyle(
               fontSize: SizeConfig.defaultSize * 1.8,
               fontWeight: FontWeight.w800,
-              color: Color(0xff7C83FD),
+              color: const Color(0xff7C83FD),
             ),
           ),
         ),
@@ -1869,7 +1867,7 @@ class NotFriendComponent extends StatelessWidget {
                   "친구 학과": friend.university!.department
                 });
               },
-              child: Container(
+              child: SizedBox(
                 width: SizeConfig.screenWidth * 0.52,
                 child: Row(
                   children: [
@@ -1951,7 +1949,7 @@ class NotFriendComponent extends StatelessWidget {
                 // }
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: Color(0xff7C83FD),
+                backgroundColor: const Color(0xff7C83FD),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(15), // 모서리 둥글기 설정
                 ),
@@ -1965,7 +1963,7 @@ class NotFriendComponent extends StatelessWidget {
           ],
         ),
         SizedBox(height: SizeConfig.defaultSize * 0.1,),
-        Divider(
+        const Divider(
           color: Color(0xffddddddd),
         ),
       ],

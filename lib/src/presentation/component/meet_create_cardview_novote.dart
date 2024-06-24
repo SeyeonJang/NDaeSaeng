@@ -202,7 +202,7 @@ class VoteView extends StatelessWidget { // 받은 투표 있을 때
   final int count;
 
   const VoteView(
-      this.questionName, this.count
+      this.questionName, this.count, {super.key}
       );
 
   @override

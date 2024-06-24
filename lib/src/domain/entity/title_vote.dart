@@ -38,7 +38,7 @@ class TitleVote {
     if (identical(this, other)) return true; // Check if it's the same instance
     if (other is! TitleVote) return false; // Check if it's the same type
 
-    return this.question.questionId == other.question.questionId;
+    return question.questionId == other.question.questionId;
   }
 
   @override

@@ -1,8 +1,6 @@
 import 'package:dart_flutter/src/domain/entity/university.dart';
 import 'package:sqflite/sqflite.dart';
-import 'dart:async';
 
-import 'package:flutter/widgets.dart';
 import 'package:path/path.dart';
 
 void main() async {

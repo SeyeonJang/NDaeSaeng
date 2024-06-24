@@ -4,13 +4,13 @@ import 'package:flutter_test/flutter_test.dart';
 import '../../test_information.dart';
 
 void main() {
-  DartLocationRepository _repository = DartLocationRepository();
+  DartLocationRepository repository = DartLocationRepository();
   setUpAll(() =>
       TestInformation.dartInit()
   );
 
   test('지역 목록 가져오기', () async {
-    List<dynamic> result = await _repository.getLocations();
+    List<dynamic> result = await repository.getLocations();
     expect(result, isNotNull);
     print(result.toString());
   });

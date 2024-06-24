@@ -55,8 +55,9 @@ class _VotePagesState extends State<VotePages> with AutomaticKeepAliveClientMixi
   @override
   // bool get wantKeepAlive => true;
   bool get wantKeepAlive {
-    if (context.read<VoteCubit>().state.step.isStart)
+    if (context.read<VoteCubit>().state.step.isStart) {
       return false;
+    }
     return true;
   }
 
@@ -70,7 +71,7 @@ class _VotePagesState extends State<VotePages> with AutomaticKeepAliveClientMixi
           builder: (context, state) {
             if (state.step.isDone) {  // 투표 결과 페이지는 로딩없이 나타납니다.
               AnalyticsUtil.logEvent("투표_끝_접속");
-              return VoteResultView();
+              return const VoteResultView();
             }
             if (state.isLoading) {
               return const Center(child: CircularProgressIndicator());
@@ -114,9 +115,7 @@ class _VotePagesState extends State<VotePages> with AutomaticKeepAliveClientMixi
 }
 
 class _FixedConfettiWidget extends StatefulWidget {
-  const _FixedConfettiWidget({
-    super.key,
-  });
+  const _FixedConfettiWidget();
 
   @override
   State<_FixedConfettiWidget> createState() => _FixedConfettiWidgetState();

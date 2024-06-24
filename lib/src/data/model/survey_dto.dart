@@ -33,7 +33,7 @@ class SurveyDto {
     if (json['answers'] != null) {
       answers = <Answers>[];
       json['answers'].forEach((v) {
-        answers!.add(new Answers.fromJson(v));
+        answers!.add(Answers.fromJson(v));
       });
     }
     userAnswerId = json['userAnswerId'];
@@ -41,18 +41,18 @@ class SurveyDto {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['surveyId'] = this.surveyId;
-    data['createdTime'] = this.createdTime;
-    data['lastModifiedTime'] = this.lastModifiedTime;
-    data['category'] = this.category;
-    data['content'] = this.content;
-    data['totalHeadCount'] = this.totalHeadCount;
-    if (this.answers != null) {
-      data['answers'] = this.answers!.map((v) => v.toJson()).toList();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['surveyId'] = surveyId;
+    data['createdTime'] = createdTime;
+    data['lastModifiedTime'] = lastModifiedTime;
+    data['category'] = category;
+    data['content'] = content;
+    data['totalHeadCount'] = totalHeadCount;
+    if (answers != null) {
+      data['answers'] = answers!.map((v) => v.toJson()).toList();
     }
-    data['userAnswerId'] = this.userAnswerId;
-    data['latestComment'] = this.latestComment;
+    data['userAnswerId'] = userAnswerId;
+    data['latestComment'] = latestComment;
     return data;
   }
 
@@ -84,10 +84,10 @@ class Answers {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['answerId'] = this.answerId;
-    data['content'] = this.content;
-    data['headCount'] = this.headCount;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['answerId'] = answerId;
+    data['content'] = content;
+    data['headCount'] = headCount;
     return data;
   }
 

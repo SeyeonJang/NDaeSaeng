@@ -34,7 +34,7 @@ class VoteListInformView extends StatelessWidget {
                 BlocProvider.of<VoteListCubit>(context).firstTime();
               },
               style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(Color(0xff7C83FD)),
+                backgroundColor: MaterialStateProperty.all(const Color(0xff7C83FD)),
               ),
               child: Text("알림보기", style: TextStyle(fontSize: SizeConfig.defaultSize * 2, color: Colors.white))),
         ],

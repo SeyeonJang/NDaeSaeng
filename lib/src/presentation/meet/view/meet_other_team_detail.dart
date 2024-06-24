@@ -13,7 +13,7 @@ class MeetOtherTeamDetail extends StatefulWidget {
   final int teamId;
   final int myTeamId;
 
-  MeetOtherTeamDetail({super.key, required this.teamId, required this.myTeamId});
+  const MeetOtherTeamDetail({super.key, required this.teamId, required this.myTeamId});
 
   @override
   State<MeetOtherTeamDetail> createState() => _MeetOtherTeamDetailState();
@@ -203,11 +203,11 @@ class _MeetOtherTeamDetailState extends State<MeetOtherTeamDetail> {
                                             decoration: BoxDecoration(
                                               borderRadius: BorderRadius.circular(10),
                                               color: canSendProposal
-                                                  ? Color(0xffFF5C58)
+                                                  ? const Color(0xffFF5C58)
                                                   : Colors.grey,
                                             ),
                                             child: Center(child: Text(
-                                              "남은 호감 수: $leftProposal", style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600),)),
+                                              "남은 호감 수: $leftProposal", style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w600),)),
                                           ),
                                         )
 
@@ -250,9 +250,7 @@ class _MeetOtherTeamDetailState extends State<MeetOtherTeamDetail> {
 }
 
 class _teamLoadingProgress extends StatelessWidget {
-  const _teamLoadingProgress({
-    super.key,
-  });
+  const _teamLoadingProgress();
 
   @override
   Widget build(BuildContext context) {
@@ -278,7 +276,6 @@ class _TopBarSection extends StatelessWidget {
   BlindDateTeamDetail team;
 
   _TopBarSection({
-    super.key,
     required this.team
   });
 

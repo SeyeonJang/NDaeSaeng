@@ -13,7 +13,6 @@
 .dart_tool/
 .flutter-plugins
 .flutter-plugins-dependencies
-.fvm/flutter_sdk
 .packages
 .pub-cache/
 .pub/
@@ -84,3 +83,7 @@ environment_local.dart
 firebase_options.dart
 google-services.json
 upload_certificate.pem
+
+# FVM Version Cache
+.fvm/
+.vscode/

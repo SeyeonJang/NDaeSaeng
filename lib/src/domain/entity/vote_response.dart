@@ -19,7 +19,7 @@ class VoteResponse {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['voteId'] = voteId;
     if (question != null) {
       data['question'] = question!.toJson();
@@ -49,7 +49,7 @@ class PickingUser {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     if (user != null) {
       data['user'] = user!.toJson();
     }

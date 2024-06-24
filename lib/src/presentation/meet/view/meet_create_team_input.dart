@@ -272,7 +272,7 @@ class _MeetCreateTeamInputState extends State<MeetCreateTeamInput> {
                                             width: SizeConfig.screenWidth,
                                             height: SizeConfig.defaultSize * 6,
                                             decoration: BoxDecoration(
-                                              color: Color(0xff2F4858),
+                                              color: const Color(0xff2F4858),
                                               borderRadius: BorderRadius.circular(8),
                                             ),
                                             alignment: Alignment.center,
@@ -329,7 +329,6 @@ class _CreateTeamTopSection extends StatefulWidget {
   final handleTeamNameChanged;
 
   _CreateTeamTopSection({
-    super.key,
     required this.userResponse,
     required this.state,
     this.handleTeamNameChanged
@@ -427,7 +426,7 @@ class _CreateTeamTopSectionState extends State<_CreateTeamTopSection> {
                         //   padding: EdgeInsets.symmetric(vertical: 8.0),
                         //   child: Text("    Tip. 개성있거나 이성의 눈길을 끌만한 이름이 좋아요!"),
                         // ),
-                      Text(_controller.text.isEmpty ? "실제 예시 : 심리사랑꾼들 / 02즈 / 신촌좋아요" : " ", style: TextStyle(color: Colors.grey),),
+                      Text(_controller.text.isEmpty ? "실제 예시 : 심리사랑꾼들 / 02즈 / 신촌좋아요" : " ", style: const TextStyle(color: Colors.grey),),
                         SizedBox(height: SizeConfig.defaultSize * 0.5),
                       ],
                     ),
@@ -647,9 +646,7 @@ class MemberCardView extends StatelessWidget {
 
 
 class _MeetCreateTeamInformationButton extends StatelessWidget {
-  const _MeetCreateTeamInformationButton({
-    super.key,
-  });
+  const _MeetCreateTeamInformationButton();
 
   @override
   Widget build(BuildContext context) {
@@ -1236,7 +1233,6 @@ class _CreateTeamBottomSection extends StatefulWidget {
   final MeetTeam Function() createNewTeam;
 
   _CreateTeamBottomSection({
-    super.key,
     required this.onFinish,
     required this.serverLocations,
     required this.locations,

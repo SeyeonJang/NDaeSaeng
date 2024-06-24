@@ -37,7 +37,7 @@ class DartApiRemoteDataSource {
   });
 
   static void addAuthorizationToken(String accessToken) {
-    _httpUtil.addHeader('Authorization', 'Bearer ${accessToken}');
+    _httpUtil.addHeader('Authorization', 'Bearer $accessToken');
   }
 
   static get httpUtil {
@@ -201,7 +201,9 @@ class DartApiRemoteDataSource {
   static Future<void> postVotes(List<VoteRequestDto> votes) async {
     const path = '/v1/votes';
     final body = [];
-    votes.forEach((vote) => body.add(vote.toJson()));
+    for (var vote in votes) {
+      body.add(vote.toJson());
+    }
 
     final response = await _httpUtil.request().post(path, data: body);
   }

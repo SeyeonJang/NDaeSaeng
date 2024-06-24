@@ -1,4 +1,3 @@
-import 'package:dart_flutter/src/domain/entity/user.dart';
 
 class ChatMessage {
   final int userId;
@@ -24,7 +23,7 @@ class ChatMessage {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['userId'] = userId;
     data['message'] = message;
     data['sendTime'] = sendTime;

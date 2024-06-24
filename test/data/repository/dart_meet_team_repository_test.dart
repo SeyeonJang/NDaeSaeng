@@ -8,7 +8,7 @@ import '../../test_information.dart';
 
 void main() {
   String defaultIndex = "3717";
-  DartMeetRepository _meet = DartMeetRepository();
+  DartMeetRepository meet = DartMeetRepository();
   setUpAll(() => {
     TestInformation.dartInit()
   });
@@ -47,7 +47,7 @@ void main() {
   });
 
   test('전체 과팅 팀 갯수조회', () async {
-    var response = await _meet.getTeamCount();
+    var response = await meet.getTeamCount();
     expect(response, isNotNull);
     print(response);
   });

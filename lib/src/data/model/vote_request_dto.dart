@@ -13,10 +13,10 @@ class VoteRequestDto {
       required this.questionId});
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['questionId'] = this.questionId;
-    data['pickedUserId'] = this.pickedUserId;
-    data['candidateIds'] = this.candidateIds;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['questionId'] = questionId;
+    data['pickedUserId'] = pickedUserId;
+    data['candidateIds'] = candidateIds;
     return data;
   }
 

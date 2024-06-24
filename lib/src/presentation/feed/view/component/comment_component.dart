@@ -90,7 +90,7 @@ class _CommentComponentState extends State<CommentComponent> {
         '댓글 id': commentId
       });
       widget.feedCubit.postLikeComment(widget.surveyId, commentId);
-    } catch (e, trace) {
+    } catch (e) {
       // 좋아요 요청 실패시 원상복구
       setState(() {
         liked = !liked;

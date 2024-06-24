@@ -36,27 +36,27 @@ class MeetTeamResponseDto {
     if (json['teamUsers'] != null) {
       teamUsers = <UserDto>[];
       json['teamUsers'].forEach((v) {
-        teamUsers!.add(new UserDto.fromJson(v));
+        teamUsers!.add(UserDto.fromJson(v));
       });
     }
     if (json['teamRegions'] != null) {
       teamRegions = <TeamRegion>[];
       json['teamRegions'].forEach((v) {
-        teamRegions!.add(new TeamRegion.fromJson(v));
+        teamRegions!.add(TeamRegion.fromJson(v));
       });
     }
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['teamId'] = this.teamId;
-    data['name'] = this.name;
-    data['isVisibleToSameUniversity'] = this.isVisibleToSameUniversity;
-    if (this.teamUsers != null) {
-      data['teamUsers'] = this.teamUsers!.map((v) => v.toJson()).toList();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['teamId'] = teamId;
+    data['name'] = name;
+    data['isVisibleToSameUniversity'] = isVisibleToSameUniversity;
+    if (teamUsers != null) {
+      data['teamUsers'] = teamUsers!.map((v) => v.toJson()).toList();
     }
-    if (this.teamRegions != null) {
-      data['teamRegions'] = this.teamRegions!.map((v) => v.toJson()).toList();
+    if (teamRegions != null) {
+      data['teamRegions'] = teamRegions!.map((v) => v.toJson()).toList();
     }
     return data;
   }

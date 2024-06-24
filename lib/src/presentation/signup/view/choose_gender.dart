@@ -101,7 +101,7 @@ class _ChooseGenderState extends State<ChooseGender> {
                     TextButton(
                       onPressed: () {
                         AnalyticsUtil.logEvent("회원가입_성별_이용약관");
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => WebViewFullScreen(url: "https://swye0n.tistory.com/14", title: "이용약관")));
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => const WebViewFullScreen(url: "https://swye0n.tistory.com/14", title: "이용약관")));
                       },
                       style: TextButton.styleFrom(
                         minimumSize: Size.zero,
@@ -114,7 +114,7 @@ class _ChooseGenderState extends State<ChooseGender> {
                     TextButton(
                       onPressed: () {
                         AnalyticsUtil.logEvent("회원가입_성별_개인정보");
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => WebViewFullScreen(url: "https://swye0n.tistory.com/9", title: "개인정보 처리방침")));
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => const WebViewFullScreen(url: "https://swye0n.tistory.com/9", title: "개인정보 처리방침")));
                       },
                       style: TextButton.styleFrom(
                         minimumSize: Size.zero,

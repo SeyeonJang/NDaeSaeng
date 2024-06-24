@@ -18,7 +18,7 @@ class _RewardProposalAdState extends State<RewardProposalAd> {
   void _loadRewardedAd() {
     RewardedAd.load(
       adUnitId: AdHelper.rewardedAdUnitId,
-      request: AdRequest(),
+      request: const AdRequest(),
       rewardedAdLoadCallback: RewardedAdLoadCallback(
         onAdLoaded: (ad) {
           ad.fullScreenContentCallback = FullScreenContentCallback(
@@ -56,7 +56,7 @@ class _RewardProposalAdState extends State<RewardProposalAd> {
 
   @override
   Widget build(BuildContext context) {
-    return _buildFloatingActionButton() ?? Text("준비중");
+    return _buildFloatingActionButton() ?? const Text("준비중");
   }
 
   Widget? _buildFloatingActionButton() {
@@ -66,8 +66,8 @@ class _RewardProposalAdState extends State<RewardProposalAd> {
           context: context,
           builder: (context) {
             return AlertDialog(
-              title: Text('Need a hint?'),
-              content: Text('Watch an Ad to get a hint!'),
+              title: const Text('Need a hint?'),
+              content: const Text('Watch an Ad to get a hint!'),
               actions: [
                 TextButton(
                   child: Text('cancel'.toUpperCase()),
@@ -91,8 +91,8 @@ class _RewardProposalAdState extends State<RewardProposalAd> {
           },
         );
       },
-      label: Text('광고보고 호감보내기'),
-      icon: Icon(Icons.video_collection),
+      label: const Text('광고보고 호감보내기'),
+      icon: const Icon(Icons.video_collection),
     );
   }
 }
@@ -102,7 +102,6 @@ class _ButtonUI extends StatelessWidget {
   final Color color;
 
   const _ButtonUI({
-    super.key,
     required this.text,
     required this.color,
   });
@@ -116,7 +115,7 @@ class _ButtonUI extends StatelessWidget {
         borderRadius: BorderRadius.circular(10),
         color: color,
       ),
-      child: Center(child: Text(text, style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600),)),
+      child: Center(child: Text(text, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w600),)),
     );
   }
 }

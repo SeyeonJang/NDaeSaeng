@@ -329,7 +329,6 @@ class _VertificationViewState extends State<VertificationView> with SingleTicker
 
 class _VerificationPageInProgress extends StatelessWidget {
   const _VerificationPageInProgress({
-    super.key,
     required Animation<Offset> animation,
   }) : _animation = animation;
 
@@ -373,9 +372,7 @@ class _VerificationPageInProgress extends StatelessWidget {
 }
 
 class _VerificationPageInformationButton extends StatelessWidget {
-  const _VerificationPageInformationButton({
-    super.key,
-  });
+  const _VerificationPageInformationButton();
 
   @override
   Widget build(BuildContext context) {
@@ -450,7 +447,6 @@ class _VerificationPageInformationButton extends StatelessWidget {
 
 class _VerificationPageHeader extends StatelessWidget {
   const _VerificationPageHeader({
-    super.key,
     required this.isUploaded,
     required this.verification,
   });

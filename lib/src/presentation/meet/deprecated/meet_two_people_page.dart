@@ -1,4 +1,3 @@
-import 'package:carousel_slider/carousel_controller.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:dart_flutter/src/presentation/meet/viewmodel/meet_cubit.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +14,7 @@ class MeetTwoPeoplePage extends StatefulWidget {
 }
 
 class _MeetTwoPeoplePageState extends State<MeetTwoPeoplePage> {
-  CarouselController _carouselController = CarouselController();
+  final CarouselController _carouselController = CarouselController();
 
   void showAlert() {
     QuickAlert.show(
@@ -125,15 +124,15 @@ class _MeetTwoPeoplePageState extends State<MeetTwoPeoplePage> {
                           autocorrect: true,
                           decoration: InputDecoration(
                             hintText: '입력 예시: 서울, 인천, 경기 북부',
-                            hintStyle: TextStyle(color: Colors.grey),
+                            hintStyle: const TextStyle(color: Colors.grey),
                             filled: true,
                             fillColor: Colors.white,
                             contentPadding: EdgeInsets.symmetric(vertical: SizeConfig.defaultSize * 1.5, horizontal: SizeConfig.defaultSize * 1.5),
-                            enabledBorder: OutlineInputBorder(
+                            enabledBorder: const OutlineInputBorder(
                               borderRadius: BorderRadius.all(Radius.circular(12.0)),
                               borderSide: BorderSide(color: Colors.grey, width: 2),
                             ),
-                            focusedBorder: OutlineInputBorder(
+                            focusedBorder: const OutlineInputBorder(
                               borderRadius: BorderRadius.all(Radius.circular(10.0)),
                               borderSide: BorderSide(color: Colors.indigoAccent),
                             ),
@@ -200,9 +199,9 @@ class TwoPeopleCards extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (isFriendAdded == true) {
-      return index == 0 ? MyProfileView() : FriendProfileView();
+      return index == 0 ? const MyProfileView() : const FriendProfileView();
     }
-    return index == 0 ? MyProfileView() : NullView();
+    return index == 0 ? const MyProfileView() : const NullView();
   }
 }
 

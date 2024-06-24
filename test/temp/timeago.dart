@@ -3,7 +3,7 @@ import 'package:timeago/timeago.dart' as timeago;
 
 void main() {
   // Original
-  final fifteenAgo = DateTime.now().subtract(Duration(minutes: 15));
+  final fifteenAgo = DateTime.now().subtract(const Duration(minutes: 15));
 
   timeago.setLocaleMessages('ko', timeago.KoMessages());
 
@@ -12,8 +12,8 @@ void main() {
   print(timeago.format(fifteenAgo, locale: 'ko')); // hace 15 minutos
 
   print(timeago.format(DateTime.now(), locale: 'ko'));
-  print(timeago.format(DateTime.now().subtract(Duration(minutes: 1)), locale: 'ko'));
-  print(timeago.format(DateTime.now().subtract(Duration(hours: 1)), locale: 'ko'));
+  print(timeago.format(DateTime.now().subtract(const Duration(minutes: 1)), locale: 'ko'));
+  print(timeago.format(DateTime.now().subtract(const Duration(hours: 1)), locale: 'ko'));
 
   // MyUtil
   final TimeagoUtil timeagoUtil = TimeagoUtil();

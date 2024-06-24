@@ -1,12 +1,10 @@
 import 'package:dart_flutter/src/data/model/proposal_request_dto.dart';
-import 'package:dart_flutter/src/data/repository/dart_ghost_repository.dart';
 import 'package:dart_flutter/src/data/repository/dart_location_repository.dart';
 import 'package:dart_flutter/src/data/repository/dart_meet_repository.dart';
 import 'package:dart_flutter/src/domain/entity/blind_date_team.dart';
 import 'package:dart_flutter/src/domain/entity/location.dart';
 import 'package:dart_flutter/src/domain/entity/meet_team.dart';
 import 'package:dart_flutter/src/domain/repository/blind_date_team_repository.dart';
-import 'package:dart_flutter/src/domain/repository/ghost_repository.dart';
 import 'package:dart_flutter/src/domain/repository/location_repository.dart';
 import 'package:dart_flutter/src/domain/repository/meet_repository.dart';
 

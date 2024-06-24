@@ -16,7 +16,7 @@ class ChatConnection {
   ChatConnection(final String baseUrl, final int chatroomId) {
     try {
       _setStompClientInfromation(baseUrl);
-    } catch (e, trace) {
+    } catch (e) {
       throw StompAuthorizationException("STOMP 인증 토큰 정보가 없습니다.");
     }
     _subDestination = '$subscribeUri/$chatroomId';
@@ -44,7 +44,7 @@ class ChatConnection {
     try {
       _client.activate();
       await Future.delayed(const Duration(seconds: 1));
-    } catch (e, trace) {
+    } catch (e) {
       throw StompConnectionException("STOMP 연결에 실패했습니다.");
     }
   }

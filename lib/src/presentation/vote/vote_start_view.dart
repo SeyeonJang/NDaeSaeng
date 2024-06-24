@@ -1,6 +1,5 @@
 import 'package:dart_flutter/res/config/size_config.dart';
 import 'package:dart_flutter/src/common/util/analytics_util.dart';
-import 'package:dart_flutter/src/domain/entity/friend.dart';
 import 'package:dart_flutter/src/domain/entity/user.dart';
 import 'package:dart_flutter/src/presentation/vote/vimemodel/state/vote_state.dart';
 import 'package:dart_flutter/src/presentation/vote/vimemodel/vote_cubit.dart';
@@ -24,12 +23,12 @@ class _VoteStartViewState extends State<VoteStartView> with SingleTickerProvider
     super.initState();
     _controller = AnimationController(
       vsync: this,
-      duration: Duration(seconds: 1),
+      duration: const Duration(seconds: 1),
     );
 
     _animation = Tween<Offset>(
-      begin: Offset(0,0.15),
-      end: Offset(0,0),
+      begin: const Offset(0,0.15),
+      end: const Offset(0,0),
     ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
 
     _controller.addStatusListener((status) {
@@ -102,7 +101,7 @@ class _VoteStartViewState extends State<VoteStartView> with SingleTickerProvider
                         BlocProvider.of<VoteCubit>(context).stepStart();
                       },
                       style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all(Color(0xff7C83FD)),
+                        backgroundColor: MaterialStateProperty.all(const Color(0xff7C83FD)),
                         padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.only(left: SizeConfig.defaultSize * 3, right: SizeConfig.defaultSize * 3, top: SizeConfig.defaultSize * 0.5, bottom: SizeConfig.defaultSize * 0.5)),
                       ),
                       child: BlocBuilder<VoteCubit, VoteState>(

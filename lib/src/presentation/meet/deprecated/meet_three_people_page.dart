@@ -13,7 +13,7 @@ class MeetThreePeoplePage extends StatefulWidget {
 }
 
 class _MeetThreePeoplePageState extends State<MeetThreePeoplePage> {
-  CarouselController _carouselController = CarouselController();
+  final CarouselController _carouselController = CarouselController();
 
   void showAlert() {
     QuickAlert.show(
@@ -123,15 +123,15 @@ class _MeetThreePeoplePageState extends State<MeetThreePeoplePage> {
                           autocorrect: true,
                           decoration: InputDecoration(
                             hintText: '입력 예시: 서울, 인천, 경기 북부',
-                            hintStyle: TextStyle(color: Colors.grey),
+                            hintStyle: const TextStyle(color: Colors.grey),
                             filled: true,
                             fillColor: Colors.white,
                             contentPadding: EdgeInsets.symmetric(vertical: SizeConfig.defaultSize * 1.5, horizontal: SizeConfig.defaultSize * 1.5),
-                            enabledBorder: OutlineInputBorder(
+                            enabledBorder: const OutlineInputBorder(
                               borderRadius: BorderRadius.all(Radius.circular(12.0)),
                               borderSide: BorderSide(color: Colors.grey, width: 2),
                             ),
-                            focusedBorder: OutlineInputBorder(
+                            focusedBorder: const OutlineInputBorder(
                               borderRadius: BorderRadius.all(Radius.circular(10.0)),
                               borderSide: BorderSide(color: Colors.indigoAccent),
                             ),

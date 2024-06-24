@@ -22,7 +22,7 @@ class MeetOneMemberCardview extends StatelessWidget {
             color: Colors.grey.shade300,
             spreadRadius: 1,
             blurRadius: 2.0,
-            offset: Offset(0,1), // changes position of shadow
+            offset: const Offset(0,1), // changes position of shadow
           ),
         ],
       ),
@@ -53,13 +53,13 @@ class MeetOneMemberCardview extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Container(
+                        SizedBox(
                           height: SizeConfig.defaultSize * 3.3,
                           child: Row( // 위층 (이름 ~ 년생)
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              Container(
+                              SizedBox(
                                 width: SizeConfig.defaultSize * 26,
                                 height: SizeConfig.defaultSize * 3.3,
                                 child: Row(
@@ -110,7 +110,7 @@ class MeetOneMemberCardview extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
                               SizedBox(width: SizeConfig.defaultSize * 0.5,),
-                              Container(
+                              SizedBox(
                                 width: SizeConfig.screenWidth * 0.56,
                                 child: GestureDetector(
                                   onTap: () {
@@ -141,7 +141,7 @@ class MeetOneMemberCardview extends StatelessWidget {
             ),
 
             // TODO : 받은 투표가 있다면 VoteView, 없으면 NoVoteView
-            Container(
+            SizedBox(
               height: SizeConfig.defaultSize * 11.5,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -149,7 +149,7 @@ class MeetOneMemberCardview extends StatelessWidget {
                   for (int i = 0; i < 3; i++)
                     userResponse.profileQuestionResponses.length > i ?
                     VoteView(userResponse.profileQuestionResponses[i].question.content ?? "(알수없음)", userResponse.profileQuestionResponses[i].count) :
-                    NoVoteView(),
+                    const NoVoteView(),
                 ],
               ),
             )
@@ -165,7 +165,7 @@ class VoteView extends StatelessWidget { // 받은 투표 있을 때
   final int count;
 
   const VoteView(
-      this.questionName, this.count
+      this.questionName, this.count, {super.key}
       );
 
   @override
@@ -182,7 +182,7 @@ class VoteView extends StatelessWidget { // 받은 투표 있을 때
           height: SizeConfig.defaultSize * 3.5,
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(8),
-              color: Color(0xffFF5C58)
+              color: const Color(0xffFF5C58)
           ),
           alignment: Alignment.center,
           child: Padding(
@@ -236,7 +236,7 @@ class NoVoteView extends StatelessWidget { // 받은 투표 없을 때
           ),
           alignment: Alignment.center,
           child: Text("아직 받은 투표를 프로필에 넣지 않았어요!", style: TextStyle(
-              color: Color(0xffFF5C58),
+              color: const Color(0xffFF5C58),
               fontSize: SizeConfig.defaultSize * 1.3
           ),)
       ),

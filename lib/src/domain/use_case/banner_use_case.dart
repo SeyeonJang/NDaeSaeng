@@ -11,7 +11,7 @@ class BannerUseCase {
     var user = await _userRepository.myInfo();
 
     List<BannerImage> filteredBanners = [];
-    banners.forEach((banner) {
+    for (var banner in banners) {
       bool shouldAddBanner = true;
       for (var key in banner.conditions.keys) {
         switch (key) {
@@ -38,7 +38,7 @@ class BannerUseCase {
       if (shouldAddBanner) {
         filteredBanners.add(banner);
       }
-    });
+    }
     return filteredBanners;
   }
 }

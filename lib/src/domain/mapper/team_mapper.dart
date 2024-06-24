@@ -1,5 +1,4 @@
 import 'package:dart_flutter/src/domain/entity/blind_date_team_detail.dart';
-import 'package:dart_flutter/src/domain/entity/meet_team.dart';
 import 'package:dart_flutter/src/domain/entity/type/team.dart';
 
 class TeamMapper {

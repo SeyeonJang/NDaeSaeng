@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dart_flutter/src/common/util/analytics_util.dart';
 import 'package:dart_flutter/src/domain/entity/proposal.dart';
 import 'package:dart_flutter/src/presentation/chat/view/chat_response_get_detail.dart';

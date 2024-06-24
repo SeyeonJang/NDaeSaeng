@@ -1,5 +1,4 @@
 import 'package:dart_flutter/res/config/size_config.dart';
-import 'package:dart_flutter/src/presentation/meet/view/meet_board.dart';
 import 'package:dart_flutter/src/presentation/meet/view/meet_intro.dart';
 import 'package:flutter/material.dart';
 
@@ -13,7 +12,7 @@ class MeetIntroPages extends StatelessWidget {
       children: [
         Padding(
           padding: EdgeInsets.only(left: SizeConfig.defaultSize, right: SizeConfig.defaultSize),
-          child: Container(
+          child: SizedBox(
             width: SizeConfig.screenWidth * 0.7,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,

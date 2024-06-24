@@ -31,11 +31,11 @@ class _VoteListViewState extends State<VoteListView> with SingleTickerProviderSt
     BlocProvider.of<VoteListCubit>(context).initVotes();
 
     context.read<VoteListCubit>().pagingController.addPageRequestListener((pageKey) => context.read<VoteListCubit>().fetchPage(pageKey));
-    SchedulerBinding.instance!.addPostFrameCallback((_) => BlocProvider.of<VoteListCubit>(context).initVotes());
+    SchedulerBinding.instance.addPostFrameCallback((_) => BlocProvider.of<VoteListCubit>(context).initVotes());
 
     _animationController = AnimationController(
       vsync: this,
-      duration: Duration(milliseconds: 1500),
+      duration: const Duration(milliseconds: 1500),
     );
     _animation = Tween<double>(begin: 1.0, end: 0.95).animate(
       CurvedAnimation(
@@ -70,12 +70,12 @@ class _VoteListViewState extends State<VoteListView> with SingleTickerProviderSt
               context.read<VoteListCubit>().initVotes();
             },
             child: SingleChildScrollView(
-              physics: AlwaysScrollableScrollPhysics(), // 스크롤 항상 가능하도록 설정
-              child: Container( // Flexible
+              physics: const AlwaysScrollableScrollPhysics(), // 스크롤 항상 가능하도록 설정
+              child: SizedBox( // Flexible
                 height: SizeConfig.screenHeight * 0.8,
                 child: Padding(
                     padding: EdgeInsets.all(SizeConfig.defaultSize * 1.5),
-                    child: (state.votes.length == 0)
+                    child: (state.votes.isEmpty)
                         ? Center(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -138,7 +138,7 @@ class _VoteListViewState extends State<VoteListView> with SingleTickerProviderSt
                     )
                         : RefreshIndicator(
                       onRefresh: () async => context.read<VoteListCubit>().pagingController.refresh(),
-                      child: Container(
+                      child: SizedBox(
                         height: SizeConfig.screenHeight * 1.5,
                         child: PagedListView<int, VoteResponse>(
                           pagingController: BlocProvider.of<VoteListCubit>(context).pagingController,
@@ -225,7 +225,7 @@ class dart extends StatelessWidget {
         decoration: BoxDecoration(
           border: Border.all(
             width: SizeConfig.defaultSize * 0.06,
-            color: isVisited ? Colors.grey : Color(0xff7C83FD),
+            color: isVisited ? Colors.grey : const Color(0xff7C83FD),
           ),
           borderRadius: BorderRadius.circular(15),
         ),
@@ -234,9 +234,9 @@ class dart extends StatelessWidget {
           children: [
             Row(
               children: [
-                Icon(Icons.person_pin_rounded, size: SizeConfig.defaultSize * 4.5, color: Color(0xff7C83FD),),
+                Icon(Icons.person_pin_rounded, size: SizeConfig.defaultSize * 4.5, color: const Color(0xff7C83FD),),
                 SizedBox(width: SizeConfig.defaultSize * 0.7),
-                Container(
+                SizedBox(
                   width: SizeConfig.screenWidth * 0.61,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -245,20 +245,20 @@ class dart extends StatelessWidget {
                         text: TextSpan(
                           style: TextStyle(fontSize: SizeConfig.defaultSize * 1.5),
                             children: <TextSpan>[
-                              TextSpan(text:'${admissionYear.substring(2,4)}',
-                                  style: TextStyle(color: Color(0xff7C83FD), fontWeight: FontWeight.w600)),
-                              TextSpan(text:'학번 ',
+                              TextSpan(text:admissionYear.substring(2,4),
+                                  style: const TextStyle(color: Color(0xff7C83FD), fontWeight: FontWeight.w600)),
+                              const TextSpan(text:'학번 ',
                                 style: TextStyle(color: Colors.black, fontWeight: FontWeight.w400)),
                               TextSpan(text:'${getGender(gender)}학생',
-                                  style: TextStyle(color: Color(0xff7C83FD), fontWeight: FontWeight.w600)),
-                              TextSpan(text:'이 보냈어요!',
+                                  style: const TextStyle(color: Color(0xff7C83FD), fontWeight: FontWeight.w600)),
+                              const TextSpan(text:'이 보냈어요!',
                                   style: TextStyle(color: Colors.black, fontWeight: FontWeight.w400)),
                             ]
                         ),
                       ),
                       // Text("${admissionYear.substring(2,4)}학번 ${getGender(gender)}학생이 Dart를 보냈어요!", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.5, fontWeight: FontWeight.w500,)),
                       SizedBox(height: SizeConfig.defaultSize * 0.5,),
-                      Text("$question",
+                      Text(question,
                           style: TextStyle(
                             fontSize: SizeConfig.defaultSize * 1.3
                                 * ((question.length <= 25 ? 1 : 1 - ((question.length - 25) * 0.01))),
@@ -273,7 +273,7 @@ class dart extends StatelessWidget {
             ),
             Row(
               children: [
-                Text("$datetime", style: TextStyle(fontSize: SizeConfig.defaultSize * 1)),
+                Text(datetime, style: TextStyle(fontSize: SizeConfig.defaultSize * 1)),
                 SizedBox(width: SizeConfig.defaultSize * 0.5,)
               ],
             ),

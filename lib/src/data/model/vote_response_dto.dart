@@ -19,7 +19,7 @@ class VoteResponseDto {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['voteId'] = voteId;
     if (question != null) {
       data['question'] = question!.toJson();
@@ -50,7 +50,7 @@ class _PickingUserDto {
   PersonalInfoDto? user;
   UniversityDto? university;
 
-  _PickingUserDto({this.user, this.university});
+  _PickingUserDto();
 
   _PickingUserDto.fromJson(Map<String, dynamic> json) {
     user = json['user'] != null ? PersonalInfoDto.fromJson(json['user']) : null;
@@ -58,7 +58,7 @@ class _PickingUserDto {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     if (user != null) {
       data['user'] = user!.toJson();
     }

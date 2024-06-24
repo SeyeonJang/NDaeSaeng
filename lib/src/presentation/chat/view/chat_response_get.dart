@@ -83,9 +83,7 @@ class _ChatResponseGetState extends State<ChatResponseGet> with AutomaticKeepAli
 }
 
 class _NoResponseGetView extends StatefulWidget {
-  const _NoResponseGetView({
-    super.key,
-  });
+  const _NoResponseGetView();
 
   @override
   State<_NoResponseGetView> createState() => _NoResponseGetViewState();

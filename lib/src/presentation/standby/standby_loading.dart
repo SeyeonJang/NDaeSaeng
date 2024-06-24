@@ -13,7 +13,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../page_view.dart';
 
 class StandbyLoading extends StatefulWidget {
-  StandbyLoading({Key? key}) : super(key: key);
+  const StandbyLoading({Key? key}) : super(key: key);
 
   @override
   State<StandbyLoading> createState() => _StandbyLoadingState();

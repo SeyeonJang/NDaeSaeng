@@ -35,7 +35,7 @@ class MeetStandby extends StatelessWidget {
                 SizedBox(height: SizeConfig.defaultSize * 2,),
               Container(height: SizeConfig.defaultSize * 2, width: SizeConfig.screenWidth, color: Colors.grey.shade50,),
                 SizedBox(height: SizeConfig.defaultSize * 2,),
-              _MiddleSection(),
+              const _MiddleSection(),
             ],
           ),
         ),
@@ -53,7 +53,7 @@ class MeetStandby extends StatelessWidget {
             // }
             return state.friends.isEmpty || filteredFriends.isEmpty
                 ? InviteFriendButton(ancestorState: state,)
-                : (state.teamCount == 0 ? MakeTeamButton() : _BottomSection(ancestorContext: context))
+                : (state.teamCount == 0 ? const MakeTeamButton() : _BottomSection(ancestorContext: context))
             ;
           }
         )
@@ -68,7 +68,7 @@ class MakeTeamButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: SizeConfig.screenWidth,
       height: SizeConfig.defaultSize * 8.5,
       child: Padding(
@@ -95,7 +95,7 @@ class MakeTeamButton extends StatelessWidget {
                 border: Border.all(
                   color: Colors.white,
                 ),
-                color: Color(0xffFE6059),
+                color: const Color(0xffFE6059),
                 borderRadius: BorderRadius.circular(13),
               ),
               child: Text("과팅에 참여할 팀 만들기", style: TextStyle(
@@ -126,7 +126,7 @@ class _InviteFriendButtonState extends State<InviteFriendButton> {
   @override
   Widget build(BuildContext context) {
     var friendCode = "";
-    return Container(
+    return SizedBox(
       width: SizeConfig.screenWidth,
       height: SizeConfig.defaultSize * 8.5,
       child: Padding(
@@ -148,7 +148,7 @@ class _InviteFriendButtonState extends State<InviteFriendButton> {
                       return Container(
                         width: SizeConfig.screenWidth,
                         height: SizeConfig.screenHeight * 0.8,
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10))),
                         child: SingleChildScrollView(
@@ -236,9 +236,8 @@ class _InviteFriendButtonState extends State<InviteFriendButton> {
                                                   myCodeCopy)); // 클립보드에 복사되었어요 <- 메시지 자동으로 Android에서 뜸 TODO : iOS는 확인하고 복사멘트 띄우기
                                             },
                                             style: ElevatedButton.styleFrom(
-                                              primary: Colors.white,
-                                              onPrimary: Color(0xffFE6059),
-                                              textStyle: TextStyle(
+                                              foregroundColor: const Color(0xffFE6059), backgroundColor: Colors.white,
+                                              textStyle: const TextStyle(
                                                 color: Color(0xffFE6059),
                                               ),
                                               // backgroundColor: Color(0xff7C83FD),
@@ -287,10 +286,10 @@ class _InviteFriendButtonState extends State<InviteFriendButton> {
                                     height: SizeConfig.defaultSize * 5.5,
                                     alignment: Alignment.center,
                                     decoration: BoxDecoration(
-                                        color: Color(0xffFE6059),
+                                        color: const Color(0xffFE6059),
                                         // color: Colors.white,
                                         border: Border.all(
-                                          color: Color(0xffFE6059),
+                                          color: const Color(0xffFE6059),
                                         ),
                                         borderRadius: BorderRadius.circular(15)),
                                     child: Text(
@@ -372,10 +371,10 @@ class _InviteFriendButtonState extends State<InviteFriendButton> {
                                                 contentPadding: EdgeInsets.symmetric(
                                                     vertical: SizeConfig.defaultSize * 1.5, horizontal: SizeConfig.defaultSize * 1.5),
                                                 enabledBorder: OutlineInputBorder(
-                                                  borderRadius: BorderRadius.all(Radius.circular(15.0)),
+                                                  borderRadius: const BorderRadius.all(Radius.circular(15.0)),
                                                   borderSide: BorderSide(color: Colors.grey.shade300, width: 1.5),
                                                 ),
-                                                focusedBorder: OutlineInputBorder(
+                                                focusedBorder: const OutlineInputBorder(
                                                   borderRadius: BorderRadius.all(Radius.circular(10.0)),
                                                   borderSide: BorderSide(color: Color(0xffFE6059)),
                                                 ),
@@ -384,7 +383,7 @@ class _InviteFriendButtonState extends State<InviteFriendButton> {
                                           ),
                                           ElevatedButton( // 친구 추가 버튼
                                             style: ElevatedButton.styleFrom(
-                                              backgroundColor: widget.ancestorState.isLoading ? Colors.grey.shade400 : Color(0xffFE6059),
+                                              backgroundColor: widget.ancestorState.isLoading ? Colors.grey.shade400 : const Color(0xffFE6059),
                                               shape: RoundedRectangleBorder(
                                                 borderRadius: BorderRadius.circular(15), // 모서리 둥글기 설정
                                               ),
@@ -456,7 +455,7 @@ class _InviteFriendButtonState extends State<InviteFriendButton> {
                                           style: TextStyle(
                                               fontWeight: FontWeight.w700,
                                               fontSize: SizeConfig.defaultSize * 1.9,
-                                              color: Color(0xffFE6059)
+                                              color: const Color(0xffFE6059)
                                           ),),
                                       ],
                                     ),
@@ -501,7 +500,7 @@ class _InviteFriendButtonState extends State<InviteFriendButton> {
               border: Border.all(
                 color: Colors.white,
               ),
-              color: Color(0xffFE6059),
+              color: const Color(0xffFE6059),
               borderRadius: BorderRadius.circular(13),
             ),
             child: Text("과팅에 참여할 친구 초대하기", style: TextStyle(
@@ -521,8 +520,6 @@ class _BottomSection extends StatelessWidget {
   BuildContext ancestorContext;
 
   _BottomSection({
-    super.key,
-    // required this.state,
     required this.ancestorContext
   });
 
@@ -557,7 +554,7 @@ class _BottomSection extends StatelessWidget {
                     return Container(
                       width: SizeConfig.screenWidth,
                       height: SizeConfig.screenHeight,
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10))),
                       child: Padding(
@@ -726,7 +723,7 @@ class _BottomSection extends StatelessWidget {
                                 height: SizeConfig.defaultSize * 6,
                                 width: SizeConfig.screenHeight,
                                 decoration: BoxDecoration(
-                                  color: Color(0xffFF5C58),
+                                  color: const Color(0xffFF5C58),
                                   borderRadius: BorderRadius.circular(10),
                                 ),
                                 alignment: Alignment.center,
@@ -758,7 +755,7 @@ class _BottomSection extends StatelessWidget {
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(13),
                 ),
-                child: Text("내 팀 보기", style: TextStyle(color: Color(0xffFE6059), fontSize: SizeConfig.defaultSize * 2, fontWeight: FontWeight.w600)),
+                child: Text("내 팀 보기", style: TextStyle(color: const Color(0xffFE6059), fontSize: SizeConfig.defaultSize * 2, fontWeight: FontWeight.w600)),
               ),
             ),
             GestureDetector( // 팀 만들기 버튼 ********
@@ -782,7 +779,7 @@ class _BottomSection extends StatelessWidget {
                   border: Border.all(
                     color: Colors.white,
                   ),
-                  color: Color(0xffFE6059),
+                  color: const Color(0xffFE6059),
                   borderRadius: BorderRadius.circular(13),
                 ),
                 child: Text("팀 만들기", style: TextStyle(color: Colors.white, fontSize: SizeConfig.defaultSize * 2, fontWeight: FontWeight.w600)),
@@ -799,7 +796,6 @@ class _TopSection extends StatefulWidget {
   late int teams;
   late int notifications;
   _TopSection({
-    super.key,
     required this.teams,
     required this.notifications,
   });
@@ -817,7 +813,7 @@ class _TopSectionState extends State<_TopSection> with SingleTickerProviderState
     super.initState();
     _animationController = AnimationController(
       vsync: this,
-      duration: Duration(milliseconds: 1500),
+      duration: const Duration(milliseconds: 1500),
     );
     _animation = Tween<double>(begin: 1.0, end: 0.96).animate(
       CurvedAnimation(
@@ -862,7 +858,7 @@ class _TopSectionState extends State<_TopSection> with SingleTickerProviderState
                 }),
           ),
 
-          Text("${widget.teams}", style: TextStyle(fontSize: SizeConfig.defaultSize * 2.3, fontWeight: FontWeight.w600, color: Color(0xffFF5C58)),),
+          Text("${widget.teams}", style: TextStyle(fontSize: SizeConfig.defaultSize * 2.3, fontWeight: FontWeight.w600, color: const Color(0xffFF5C58)),),
             SizedBox(height: SizeConfig.defaultSize * 0.5),
           Text("지금까지 신청한 팀", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.6, fontWeight: FontWeight.w600),),
             SizedBox(height: SizeConfig.defaultSize * 2),
@@ -877,8 +873,8 @@ class _TopSectionState extends State<_TopSection> with SingleTickerProviderState
                 Text("과팅 오픈 알림받기 (${widget.notifications}명 대기중)", style: TextStyle(fontSize: SizeConfig.defaultSize * 1.6),),
                 Switch(
                   value: light,
-                  activeColor: Color(0xffFE6059),
-                  activeTrackColor: Color(0xffFE6059).withOpacity(0.2),
+                  activeColor: const Color(0xffFE6059),
+                  activeTrackColor: const Color(0xffFE6059).withOpacity(0.2),
                   inactiveTrackColor: Colors.grey.shade200,
                   onChanged: (bool value) {
                     setState(() { light = value; });
@@ -894,9 +890,7 @@ class _TopSectionState extends State<_TopSection> with SingleTickerProviderState
 }
 
 class _MiddleSection extends StatelessWidget {
-  const _MiddleSection({
-    super.key,
-  });
+  const _MiddleSection();
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -917,8 +911,8 @@ class _MiddleSection extends StatelessWidget {
               child: Container(alignment: Alignment.center,
                 width: SizeConfig.screenWidth * 0.8,
                   decoration: BoxDecoration(
-                    color: Color(0xffFE6059).withOpacity(0.06),
-                    borderRadius: BorderRadius.only(topLeft: Radius.circular(15), topRight: Radius.circular(15), bottomLeft: Radius.zero, bottomRight: Radius.circular(15)),
+                    color: const Color(0xffFE6059).withOpacity(0.06),
+                    borderRadius: const BorderRadius.only(topLeft: Radius.circular(15), topRight: Radius.circular(15), bottomLeft: Radius.zero, bottomRight: Radius.circular(15)),
                   ),
                 child: Padding(
                   padding: EdgeInsets.all(SizeConfig.defaultSize * 1.2),
@@ -935,8 +929,8 @@ class _MiddleSection extends StatelessWidget {
               child: Container(alignment: Alignment.center,
                   width: SizeConfig.screenWidth * 0.8,
                   decoration: BoxDecoration(
-                    color: Color(0xffFE6059).withOpacity(0.06),
-                    borderRadius: BorderRadius.only(topLeft: Radius.circular(15), topRight: Radius.circular(15), bottomLeft: Radius.circular(15), bottomRight: Radius.zero),
+                    color: const Color(0xffFE6059).withOpacity(0.06),
+                    borderRadius: const BorderRadius.only(topLeft: Radius.circular(15), topRight: Radius.circular(15), bottomLeft: Radius.circular(15), bottomRight: Radius.zero),
                   ),
                   child: Padding(
                     padding: EdgeInsets.all(SizeConfig.defaultSize * 1.4),
@@ -953,8 +947,8 @@ class _MiddleSection extends StatelessWidget {
               child: Container(alignment: Alignment.center,
                   width: SizeConfig.screenWidth * 0.8,
                   decoration: BoxDecoration(
-                    color: Color(0xffFE6059).withOpacity(0.06),
-                    borderRadius: BorderRadius.only(topLeft: Radius.circular(15), topRight: Radius.circular(15), bottomLeft: Radius.zero, bottomRight: Radius.circular(15)),
+                    color: const Color(0xffFE6059).withOpacity(0.06),
+                    borderRadius: const BorderRadius.only(topLeft: Radius.circular(15), topRight: Radius.circular(15), bottomLeft: Radius.zero, bottomRight: Radius.circular(15)),
                   ),
                   child: Padding(
                     padding: EdgeInsets.all(SizeConfig.defaultSize * 1.2),
@@ -979,7 +973,7 @@ class _MiddleSection extends StatelessWidget {
                 height: SizeConfig.defaultSize * 13,
                 decoration: BoxDecoration(
                   color: Colors.grey.shade50,
-                  borderRadius: BorderRadius.all(Radius.circular(13)),
+                  borderRadius: const BorderRadius.all(Radius.circular(13)),
                 ),
                 child: Padding(
                   padding: EdgeInsets.symmetric(horizontal: SizeConfig.defaultSize * 1.5, vertical: SizeConfig.defaultSize * 1.5),
@@ -1055,7 +1049,7 @@ class NotFriendComponent extends StatelessWidget {
                   "친구 학과": friend.university!.department
                 });
               },
-              child: Container(
+              child: SizedBox(
                 width: SizeConfig.screenWidth * 0.52,
                 child: Row(
                   children: [
@@ -1146,7 +1140,7 @@ class NotFriendComponent extends StatelessWidget {
                 Navigator.pop(context);
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: Color(0xffFE6059),
+                backgroundColor: const Color(0xffFE6059),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(15), // 모서리 둥글기 설정
                 ),
@@ -1160,7 +1154,7 @@ class NotFriendComponent extends StatelessWidget {
           ],
         ),
         SizedBox(height: SizeConfig.defaultSize * 0.1,),
-        Divider(
+        const Divider(
           color: Color(0xffddddddd),
         ),
       ],

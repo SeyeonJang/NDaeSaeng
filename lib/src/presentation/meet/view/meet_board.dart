@@ -242,8 +242,7 @@ class _TopSectionMakeTeam extends StatelessWidget { // 팀 X 과팅 나갈 친�
   final MeetState meetState;
   final BuildContext ancestorContext;
 
-  _TopSectionMakeTeam({
-    super.key,
+  const _TopSectionMakeTeam({
     required this.meetState,
     required this.ancestorContext
   });
@@ -303,8 +302,7 @@ class _TopSectionMakeTeam extends StatelessWidget { // 팀 X 과팅 나갈 친�
 class _TopSectionInviteFriend extends StatefulWidget { // 친구 O/X, 과팅 나갈 친구 X
  final MeetState meetState;
 
-  _TopSectionInviteFriend({
-    super.key,
+  const _TopSectionInviteFriend({
     required this.meetState
   });
 
@@ -706,7 +704,6 @@ class _BodySection extends StatefulWidget {
   final Function(int,int,int) onFilterChanged;
 
   _BodySection({
-    super.key,
     required this.meetState,
     required this.context,
     required this.pagingController,
@@ -1118,7 +1115,6 @@ class _TopSection extends StatefulWidget {
   final BuildContext context;
 
   const _TopSection({
-    super.key,
     required this.ancestorState,
     required this.context
   });

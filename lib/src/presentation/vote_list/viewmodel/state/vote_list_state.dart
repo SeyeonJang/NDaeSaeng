@@ -65,7 +65,7 @@ class VoteListState {
   }
 
   VoteListState setVoteId(int voteId) {
-    this.nowVoteId = voteId;
+    nowVoteId = voteId;
     return this;
   }
 

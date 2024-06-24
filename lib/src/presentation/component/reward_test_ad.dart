@@ -17,7 +17,7 @@ class _RewardTestAdState extends State<RewardTestAd> {
   void _loadRewardedAd() {
     RewardedAd.load(
       adUnitId: AdHelper.rewardedAdUnitId,
-      request: AdRequest(),
+      request: const AdRequest(),
       rewardedAdLoadCallback: RewardedAdLoadCallback(
         onAdLoaded: (ad) {
           ad.fullScreenContentCallback = FullScreenContentCallback(
@@ -55,7 +55,7 @@ class _RewardTestAdState extends State<RewardTestAd> {
 
   @override
   Widget build(BuildContext context) {
-    return _buildFloatingActionButton() ?? Text("힌트 버튼 로딩 중");
+    return _buildFloatingActionButton() ?? const Text("힌트 버튼 로딩 중");
   }
 
   Widget? _buildFloatingActionButton() {
@@ -66,8 +66,8 @@ class _RewardTestAdState extends State<RewardTestAd> {
           context: context,
           builder: (context) {
             return AlertDialog(
-              title: Text('Need a hint?'),
-              content: Text('Watch an Ad to get a hint!'),
+              title: const Text('Need a hint?'),
+              content: const Text('Watch an Ad to get a hint!'),
               actions: [
                 TextButton(
                   child: Text('cancel'.toUpperCase()),
@@ -91,8 +91,8 @@ class _RewardTestAdState extends State<RewardTestAd> {
           },
         );
       },
-      label: Text('Hint'),
-      icon: Icon(Icons.card_giftcard),
+      label: const Text('Hint'),
+      icon: const Icon(Icons.card_giftcard),
     )
         : null;
   }

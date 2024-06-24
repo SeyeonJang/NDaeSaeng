@@ -173,7 +173,7 @@ class _VoteViewState extends State<VoteView> with SingleTickerProviderStateMixin
               late User friend2;
               late User friend3;
 
-              if (shuffledFriends.length >= 1) {
+              if (shuffledFriends.isNotEmpty) {
                 friend1 = shuffledFriends[0];
               }
               if (shuffledFriends.length >= 2) {
@@ -216,7 +216,7 @@ class _VoteViewState extends State<VoteView> with SingleTickerProviderStateMixin
                     // ),
                     child: SlideTransition(
                       position: _animation,
-                      child: Container(
+                      child: SizedBox(
                           width: SizeConfig.defaultSize * 22,
                           height: SizeConfig.defaultSize * 22,
                           child: question.icon == null ?
@@ -250,7 +250,7 @@ class _VoteViewState extends State<VoteView> with SingleTickerProviderStateMixin
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            shuffledFriends.length >= 1
+                            shuffledFriends.isNotEmpty
                               ? ChoiceFriendButton(
                                   userId: friend1.personalInfo!.id, name: friend1.personalInfo!.name, enterYear: friend1.personalInfo!.admissionYear.toString().substring(2,4), department: friend1.university?.department ?? "XXXX학과",
                                   questionId: question.questionId!,
@@ -265,7 +265,7 @@ class _VoteViewState extends State<VoteView> with SingleTickerProviderStateMixin
                                   disabledFunction: state.isLoading,
                                   profileImageUrl: friend1.personalInfo!.profileImageUrl,
                                 )
-                              : (_status.isGranted ? ContactsButton(state: state, contactPerson: shuffledContacts.length == 0 ? ContactFriend(name: '(알수없음)', phoneNumber: '010-xxxx-xxxx') : shuffledContacts[0], question: question.content!,) : NoContactsButton()),
+                              : (_status.isGranted ? ContactsButton(state: state, contactPerson: shuffledContacts.isEmpty ? ContactFriend(name: '(알수없음)', phoneNumber: '010-xxxx-xxxx') : shuffledContacts[0], question: question.content!,) : const NoContactsButton()),
                             shuffledFriends.length >= 2
                               ? ChoiceFriendButton(
                                 userId: friend2.personalInfo!.id, name: friend2.personalInfo!.name, enterYear: friend2.personalInfo!.admissionYear.toString().substring(2,4), department: friend2.university?.department ?? "XXXX학과",
@@ -281,7 +281,7 @@ class _VoteViewState extends State<VoteView> with SingleTickerProviderStateMixin
                                 disabledFunction: state.isLoading,
                                 profileImageUrl: friend1.personalInfo!.profileImageUrl,
                                 )
-                              : (_status.isGranted ? ContactsButton(state: state, contactPerson: shuffledContacts.length < 1 ? ContactFriend(name: '(알수없음)', phoneNumber: '010-xxxx-xxxx') : shuffledContacts[1], question: question.content!) : NoContactsButton()),
+                              : (_status.isGranted ? ContactsButton(state: state, contactPerson: shuffledContacts.isEmpty ? ContactFriend(name: '(알수없음)', phoneNumber: '010-xxxx-xxxx') : shuffledContacts[1], question: question.content!) : const NoContactsButton()),
                           ],
                         ),
                         SizedBox(height: SizeConfig.defaultSize,),
@@ -303,8 +303,8 @@ class _VoteViewState extends State<VoteView> with SingleTickerProviderStateMixin
                                   disabledFunction: state.isLoading,
                                   profileImageUrl: friend1.personalInfo!.profileImageUrl,
                                )
-                              : (_status.isGranted ? ContactsButton(state: state, contactPerson: shuffledContacts.length < 2 ? ContactFriend(name: '(알수없음)', phoneNumber: '010-xxxx-xxxx'): shuffledContacts[2], question: question.content!) : NoContactsButton()),
-                            _status.isGranted ? ContactsButton(state: state, contactPerson: shuffledContacts.length < 3 ? ContactFriend(name: '(알수없음)', phoneNumber: '010-xxxx-xxxx') : shuffledContacts[3], question: question.content!) : NoContactsButton()
+                              : (_status.isGranted ? ContactsButton(state: state, contactPerson: shuffledContacts.length < 2 ? ContactFriend(name: '(알수없음)', phoneNumber: '010-xxxx-xxxx'): shuffledContacts[2], question: question.content!) : const NoContactsButton()),
+                            _status.isGranted ? ContactsButton(state: state, contactPerson: shuffledContacts.length < 3 ? ContactFriend(name: '(알수없음)', phoneNumber: '010-xxxx-xxxx') : shuffledContacts[3], question: question.content!) : const NoContactsButton()
                           ],
                         ),
                       ],
@@ -398,7 +398,7 @@ class _VoteStoryBarState extends State<VoteStoryBar> {
 
 class NoContactsButton extends StatefulWidget {
 
-  NoContactsButton({super.key});
+  const NoContactsButton({super.key});
 
   @override
   State<NoContactsButton> createState() => _NoContactsButtonState();
@@ -524,7 +524,7 @@ class ContactsButton extends StatelessWidget {
                             context.read<VoteCubit>().nextVoteWithContact();
                             ToastUtil.showToast("익명으로 메시지가 전송되었어요!");
                           },
-                          child: const Text('전송', style: TextStyle(color: const Color(0xff7C83FD))),
+                          child: const Text('전송', style: TextStyle(color: Color(0xff7C83FD))),
                         )
                       ],
                     ),

@@ -21,7 +21,7 @@ class ChatRealTime extends StatelessWidget {
           AnalyticsUtil.logEvent('채팅_실시간채팅_목록_접속');
           if (!state.isLoading) {
             return state.myChatRooms.isEmpty
-              ? Center(child: _NoChatView())
+              ? const Center(child: _NoChatView())
               : Padding(
                 padding: EdgeInsets.all(SizeConfig.defaultSize),
                 child: RefreshIndicator(
@@ -67,9 +67,7 @@ class ChatRealTime extends StatelessWidget {
 
 
 class _NoChatView extends StatefulWidget {
-  const _NoChatView({
-    super.key,
-  });
+  const _NoChatView();
 
   @override
   State<_NoChatView> createState() => _NoChatViewState();

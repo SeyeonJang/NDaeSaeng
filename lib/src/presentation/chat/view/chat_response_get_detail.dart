@@ -367,7 +367,6 @@ class _TopBarSection extends StatelessWidget {
   BlindDateTeamDetail team;
 
   _TopBarSection({
-    super.key,
     required this.team
   });
 

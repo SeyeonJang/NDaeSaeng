@@ -29,7 +29,7 @@ class VoteDetail {
       data['pickingUser'] = pickingUser!.toJson();
     }
     data['pickedTime'] = pickedTime?.toString();
-    data['candidates'] = candidates!.map((candidates) => candidates.toJson());
+    data['candidates'] = candidates.map((candidates) => candidates.toJson());
     return data;
   }
 

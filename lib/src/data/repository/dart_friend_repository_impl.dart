@@ -8,6 +8,7 @@ class DartFriendRepositoryImpl implements FriendRepository {
   static final FriendCache myFriendCache = FriendCache();
   static final FriendCache recommendedFriendCache = FriendCache();
 
+  @override
   Future<List<User>> getMyFriends() async {
     if (myFriendCache.isUpdateBefore(DateTime.now().subtract(cachingInterval))) {
       myFriendCache.setFriends(
@@ -18,6 +19,7 @@ class DartFriendRepositoryImpl implements FriendRepository {
     return myFriendCache.friends;
   }
 
+  @override
   Future<List<User>> getRecommendedFriends({bool put = false}) async {
     if (put || recommendedFriendCache.isUpdateBefore(DateTime.now().subtract(cachingInterval))) {
       recommendedFriendCache.setFriends((
@@ -27,24 +29,28 @@ class DartFriendRepositoryImpl implements FriendRepository {
     return recommendedFriendCache.friends;
   }
 
+  @override
   Future<String> addFriend(User friend) async {
     myFriendCache.addFriend(friend);
     recommendedFriendCache.deleteFriend(friend);
     return await DartApiRemoteDataSource.postFriend(friend.personalInfo!.id);
   }
 
+  @override
   Future<User> addFriendBy(String inviteCode) async {
     UserDto friend = await DartApiRemoteDataSource.postFriendBy(inviteCode);
     myFriendCache.addFriend(friend.newUser());
     return friend.newUser();
   }
 
+  @override
   Future<String> deleteFriend(User friend) async {
     myFriendCache.deleteFriend(friend);
     recommendedFriendCache.addFriend(friend);
     return await DartApiRemoteDataSource.deleteFriend(friend.personalInfo!.id);
   }
 
+  @override
   void cleanUpCache() {
     myFriendCache.clean();
   }
